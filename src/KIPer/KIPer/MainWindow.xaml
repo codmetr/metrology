@@ -1,0 +1,40 @@
+﻿<Window x:Class="KIPer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.galasoft.ch/ignore"
+        mc:Ignorable="d ignore"
+        Height="500"
+        Width="600"
+        Title="KIPer"
+        DataContext="{Binding Main, Source={StaticResource Locator}}" Icon="Content/icon-metrology.png">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ItemsControl Grid.Column="0" Grid.Row="0" Style="{StaticResource MenuCollectionStyle}">
+            <Button Style="{StaticResource ButtonTabStyle}" Content="Проверки"/>
+            <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы"/>
+            <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны"/>
+            <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки"/>
+        </ItemsControl>
+        <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}">
+            
+        </Border>
+    </Grid>
+</Window>

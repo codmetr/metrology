@@ -1,0 +1,37 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style TargetType="ItemsControl" x:Key="MenuCollectionStyle">
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+            
+        </Setter>
+    </Style>
+    
+    <Style TargetType="Button" x:Key="ButtonTabStyle">
+        <Setter Property="Height" Value="64"/>
+        <Setter Property="Width" Value="64"/>
+        <Setter Property="Margin" Value="3"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border BorderBrush="Black" BorderThickness="2" CornerRadius="2" Background="Gray">
+                        <ContentPresenter Content="{Binding Path=Content, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="Border" x:Key="HelpBorderStyle">
+        <Setter Property="BorderBrush" Value="CadetBlue"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Background" Value="LightGreen"/>
+    </Style>
+</ResourceDictionary>
