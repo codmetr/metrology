@@ -7,7 +7,7 @@
         mc:Ignorable="d ignore"
         Height="500"
         Width="600"
-        Title="KIPer"
+        Title="КИПер"
         DataContext="{Binding Main, Source={StaticResource Locator}}" Icon="Content/icon-metrology.png">
 
     <Window.Resources>

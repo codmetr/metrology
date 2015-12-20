@@ -1,3 +1,5 @@
 *.suo
 src/KIPer/KIPer/obj/
 src/KIPer/KIPer/bin/
+src/KIPer/MineLoop/bin/
+src/KIPer/MineLoop/obj/
