@@ -126,6 +126,12 @@
   <ItemGroup>
     <Resource Include="Content\icon-metrology.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MineLoop\MainLoop.csproj">
+      <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
+      <Name>MainLoop</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

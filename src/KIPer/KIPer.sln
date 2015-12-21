@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Drivers", "Drivers", "{9DCF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainLoop", "MineLoop\MainLoop.csproj", "{FA8F1885-A429-4F3A-93B7-CB3FCEF61072}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PACESeries", "Drivers\PACE5000\PACESeries.csproj", "{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +23,15 @@ Global
 		{FA8F1885-A429-4F3A-93B7-CB3FCEF61072}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA8F1885-A429-4F3A-93B7-CB3FCEF61072}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA8F1885-A429-4F3A-93B7-CB3FCEF61072}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A} = {9DCFA936-EB09-4076-8CEA-90AC31DB4EDC}
 	EndGlobalSection
 EndGlobal
