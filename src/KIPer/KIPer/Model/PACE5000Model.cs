@@ -5,9 +5,9 @@ using System.Text;
 
 namespace KIPer.Model
 {
-    public class DataItem
+    public class PACE5000Model
     {
-        public DataItem(string title)
+        public PACE5000Model(string title)
         {
             Title = title;
         }

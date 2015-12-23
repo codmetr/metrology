@@ -7,6 +7,6 @@ namespace KIPer.Model
 {
     public interface IDataService
     {
-        void GetData(Action<DataItem, Exception> callback);
+        void GetData(Action<PACE5000Model, Exception> callback);
     }
 }
