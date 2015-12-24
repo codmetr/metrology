@@ -14,7 +14,6 @@ namespace KIPer
         public MainWindow()
         {
             InitializeComponent();
-            Closing += (s, e) => ViewModelLocator.Cleanup();
         }
     }
 }

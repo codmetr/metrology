@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainLoop", "MineLoop\MainLo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PACESeries", "Drivers\PACE5000\PACESeries.csproj", "{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controls", "Controls", "{9BF53230-FBD5-4FD3-AC24-E173B3000CC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressureElementControls", "Controls\PressureElementControls\PressureElementControls.csproj", "{30E4408B-FFC2-495C-B7B4-8CF8E621D3DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,11 +31,16 @@ Global
 		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30E4408B-FFC2-495C-B7B4-8CF8E621D3DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30E4408B-FFC2-495C-B7B4-8CF8E621D3DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30E4408B-FFC2-495C-B7B4-8CF8E621D3DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30E4408B-FFC2-495C-B7B4-8CF8E621D3DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A} = {9DCFA936-EB09-4076-8CEA-90AC31DB4EDC}
+		{30E4408B-FFC2-495C-B7B4-8CF8E621D3DE} = {9BF53230-FBD5-4FD3-AC24-E173B3000CC9}
 	EndGlobalSection
 EndGlobal

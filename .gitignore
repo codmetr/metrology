@@ -4,3 +4,6 @@ src/KIPer/KIPer/bin/
 src/KIPer/MineLoop/bin/
 src/KIPer/MineLoop/obj/
 src/KIPer/Drivers/PACE5000/obj/
+src/KIPer/Controls/PressureElementControls/bin/
+src/KIPer/Drivers/PACE5000/bin/
+src/KIPer/Controls/PressureElementControls/obj/

@@ -7,7 +7,7 @@
         mc:Ignorable="d ignore"
         Height="500"
         Width="600"
-        Title="КИПер"
+        Title="КипТМ"
         DataContext="{Binding Main, Source={StaticResource Locator}}" Icon="Content/icon-metrology.png">
 
     <Window.Resources>
@@ -28,13 +28,17 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <ItemsControl Grid.Column="0" Grid.Row="0" Style="{StaticResource MenuCollectionStyle}">
-            <Button Style="{StaticResource ButtonTabStyle}" Content="Проверки"/>
-            <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы"/>
-            <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны"/>
-            <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки"/>
+            <Button Style="{StaticResource ButtonTabStyle}" Content="Проверки" Command="{Binding SelectChecks}"/>
+            <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
+            <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
+            <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>
         </ItemsControl>
-        <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}">
-            
+        <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}" x:Name="HelpBorder">
+            <TextBox Background="{Binding Background, ElementName=HelpBorder}" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="{Binding HelpMessage}"/>
         </Border>
+        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource ActualTabBorderStyle}">
+            <ContentPresenter Content="{Binding SelectedAction}"/>
+        </Border>
+        
     </Grid>
 </Window>
