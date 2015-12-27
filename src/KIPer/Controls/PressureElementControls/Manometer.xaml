@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:pressureElementControls="clr-namespace:PressureElementControls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -29,7 +30,13 @@
                             </LinearGradientBrush>
                         </Ellipse.Fill>
                     </Ellipse>
-                    <Ellipse Canvas.Left="45" Canvas.Top="45" Height="10" Width="10">
+                    <pressureElementControls:Pointer Canvas.Left="47" Canvas.Top="7" Height="45" Width="5" RenderTransformOrigin="0.5,0.955">
+                        <pressureElementControls:Pointer.RenderTransform>
+                            <RotateTransform Angle="90"/>
+                        </pressureElementControls:Pointer.RenderTransform>
+                    </pressureElementControls:Pointer>
+                    <!--
+                    <Ellipse Canvas.Top="47" Height="5" Width="5" Canvas.Left="47">
                         <Ellipse.Fill>
                             <RadialGradientBrush  GradientOrigin="0.75,0.25">
                                 <GradientStop Color="White" Offset="0"></GradientStop>
@@ -39,6 +46,7 @@
                             </RadialGradientBrush>
                         </Ellipse.Fill>
                     </Ellipse>
+                    -->
                 </Canvas>
             </Viewbox>
         </Border>
