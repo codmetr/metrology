@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace MainLoop
 {
-    class LoopDescriptor
+    internal class LoopDescriptor
     {
         private CancellationToken cancel;
         private object locker;

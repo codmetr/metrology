@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controls", "Controls", "{9B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressureElementControls", "Controls\PressureElementControls\PressureElementControls.csproj", "{30E4408B-FFC2-495C-B7B4-8CF8E621D3DE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Emulation", "Emulation", "{AFC29171-8CF7-4974-B9F7-CAAA0627D56A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComPortEmulation", "Emulation\ComPortEmulation\ComPortEmulation.csproj", "{906003D7-94BB-401B-8135-54267B2C713F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,10 @@ Global
 		{30E4408B-FFC2-495C-B7B4-8CF8E621D3DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30E4408B-FFC2-495C-B7B4-8CF8E621D3DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30E4408B-FFC2-495C-B7B4-8CF8E621D3DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{906003D7-94BB-401B-8135-54267B2C713F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{906003D7-94BB-401B-8135-54267B2C713F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{906003D7-94BB-401B-8135-54267B2C713F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{906003D7-94BB-401B-8135-54267B2C713F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,5 +50,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A} = {9DCFA936-EB09-4076-8CEA-90AC31DB4EDC}
 		{30E4408B-FFC2-495C-B7B4-8CF8E621D3DE} = {9BF53230-FBD5-4FD3-AC24-E173B3000CC9}
+		{906003D7-94BB-401B-8135-54267B2C713F} = {AFC29171-8CF7-4974-B9F7-CAAA0627D56A}
 	EndGlobalSection
 EndGlobal

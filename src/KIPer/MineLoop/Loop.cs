@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace MainLoop
 {
-    public class Loops
+    public class Loops : ILoops
     {
         /// <summary>
         /// Коллекция разделяемых ресурсов
@@ -16,10 +16,19 @@ namespace MainLoop
         /// </remarks>
         private readonly IDictionary<string, LoopDescriptor> _lockers;
 
+        /// <summary>
+        /// Набор потоков работы с разделяемыми ресурсами (1 поток на каждый ресурс)
+        /// </summary>
         private readonly IDictionary<string, Thread> _threads;
 
+        /// <summary>
+        /// Набор жетонов отмены для потоков работы с ремурсами
+        /// </summary>
         private readonly IDictionary<string, CancellationTokenSource> _cancelThreadCollection;
 
+        /// <summary>
+        /// Базовый конструктор
+        /// </summary>
         public Loops()
         {
             _lockers = new Dictionary<string, LoopDescriptor>();
@@ -27,6 +36,11 @@ namespace MainLoop
             _threads = new Dictionary<string, Thread>();
         }
 
+        /// <summary>
+        /// Добавить разделяемый ресурс и его ключ
+        /// </summary>
+        /// <param name="key">ключ ресурса</param>
+        /// <param name="locker">разделяемый ресурс</param>
         public void AddLocker(string key, object locker)
         {
             var cancel = new CancellationTokenSource();
@@ -80,6 +94,11 @@ namespace MainLoop
             }
         }
 
+        /// <summary>
+        /// Добавить 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="action"></param>
         public void StartImportantAction(string key, Action<object> action)
         {
             if(!_threads.ContainsKey(key))

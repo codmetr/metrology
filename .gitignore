@@ -7,3 +7,5 @@ src/KIPer/Drivers/PACE5000/obj/
 src/KIPer/Controls/PressureElementControls/bin/
 src/KIPer/Drivers/PACE5000/bin/
 src/KIPer/Controls/PressureElementControls/obj/
+src/KIPer/EmulationComPort/obj/
+src/KIPer/Emulation/ComPortEmulation/obj/

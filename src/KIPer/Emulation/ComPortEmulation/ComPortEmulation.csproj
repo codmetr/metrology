@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FA8F1885-A429-4F3A-93B7-CB3FCEF61072}</ProjectGuid>
+    <ProjectGuid>{906003D7-94BB-401B-8135-54267B2C713F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MainLoop</RootNamespace>
-    <AssemblyName>MineLoop</AssemblyName>
+    <RootNamespace>ComPortEmulation</RootNamespace>
+    <AssemblyName>ComPortEmulation</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,9 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ILoops.cs" />
-    <Compile Include="Loop.cs" />
-    <Compile Include="LoopDescriptor.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
