@@ -9,10 +9,16 @@
   DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
 */
 
+using System.Reflection;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
+using KIPer.Interfaces;
+using KIPer.StructureService;
 using Microsoft.Practices.ServiceLocation;
 using KIPer.Model;
+using System;
+
+//using StructureMap;
 
 namespace KIPer.ViewModel
 {
@@ -25,10 +31,11 @@ namespace KIPer.ViewModel
     /// </summary>
     public class ViewModelLocator
     {
-        static ViewModelLocator()
+        //private IContainer ioc;
+        public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-
+            
             if (ViewModelBase.IsInDesignModeStatic)
             {
                 SimpleIoc.Default.Register<IDataService, Design.DesignDataService>();
@@ -37,9 +44,14 @@ namespace KIPer.ViewModel
             {
                 SimpleIoc.Default.Register<IDataService, DataService>();
             }
-
+            
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<IServiceProvider, ServiceProvider>();
+
+            //ioc = new Container();
+            //ioc.Configure((reg)=>reg.ForRequestedType<>());
         }
+
 
         /// <summary>
         /// Gets the Main property.

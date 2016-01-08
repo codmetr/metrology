@@ -6,8 +6,8 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        Height="500" Width="600" Title="КипТМ"
-        x:Name="MainViewWindow" Icon="Content/icon-metrology.png"
+        Height="600" Width="800" Title="КипТМ"
+        x:Name="MainViewWindow" Icon="Content/icon.png"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -36,12 +36,13 @@
             <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
             <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
             <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>
+            <Button Style="{StaticResource ButtonTabStyle}" Content="Сервис" Command="{Binding SelectService}"/>
         </ItemsControl>
         <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}" x:Name="HelpBorder">
             <TextBox Background="{Binding Background, ElementName=HelpBorder}" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="{Binding HelpMessage}"/>
         </Border>
         <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource ActualTabBorderStyle}">
-            <ContentPresenter Content="{Binding SelectedAction}"/>
+            <ContentPresenter Content="{Binding SelectedAction}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Border>
         
     </Grid>

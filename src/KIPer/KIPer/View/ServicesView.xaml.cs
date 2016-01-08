@@ -16,13 +16,11 @@ using System.Windows.Shapes;
 namespace KIPer.View
 {
     /// <summary>
-    /// Interaction logic for PACE5000View.xaml
+    /// Interaction logic for ServicesView.xaml
     /// </summary>
-    public partial class PACE5000View : UserControl
+    public partial class ServicesView : UserControl
     {
-
-
-        public PACE5000View()
+        public ServicesView()
         {
             InitializeComponent();
         }

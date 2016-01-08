@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using KIPer.Interfaces;
 using KIPer.Model;
+using KIPer.View;
 
 namespace KIPer.ViewModel
 {
@@ -17,7 +20,9 @@ namespace KIPer.ViewModel
     {
         private readonly IDataService _dataService;
 
-        
+        private readonly ServiceViewModel _services;
+
+        private Dictionary<Type, Type> ViewModelViewDic;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -25,15 +30,16 @@ namespace KIPer.ViewModel
         public MainViewModel(IDataService dataService)
         {
             _dataService = dataService;
-            _dataService.GetData(
-                (item, error) =>
-                {
-                    if (error != null)
-                    {
-                        // Report error here
-                        return;
-                    }
-                });
+
+            _services = new ServiceViewModel(new List<IService>()
+            {
+                new Pace5000ViewModel(_dataService.Pace5000)
+            });
+            ViewModelViewDic = new Dictionary<Type, Type>()
+            {
+                {typeof(ServiceViewModel), typeof(ServicesView)},
+                {typeof(Pace5000ViewModel), typeof(PACE5000View)}
+            };
         }
 
         private string _helpMessage;
@@ -58,11 +64,9 @@ namespace KIPer.ViewModel
                 if(view==null)
                     return;
 
-
-                /*
                 try
-                { 
-                    foreach (var mod in _model.Viewes)
+                {
+                    foreach (var mod in ViewModelViewDic)
                     {
                         var typeModel = mod.Key;
                         var typeView = mod.Value;
@@ -76,10 +80,8 @@ namespace KIPer.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex.ToString());
                     throw;
                 }
-                */
             });}
         }
 
@@ -128,6 +130,19 @@ namespace KIPer.ViewModel
             {
                 SelectedAction = "Настройки";//todo установить выбор соответсвующего ViewModel
                 HelpMessage = "Список настроек";
+            });
+        }}
+
+
+        /// <summary>
+        /// Выбрана вкладка Настройки
+        /// </summary>
+        public ICommand SelectService{get
+        {
+            return new RelayCommand(() =>
+            {
+                SelectedAction = _services;
+                HelpMessage = "Сервисная вкладка для отладки различных механизмов";
             });
         }}
 

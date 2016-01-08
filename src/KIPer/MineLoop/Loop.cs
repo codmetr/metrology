@@ -41,10 +41,11 @@ namespace MainLoop
         /// </summary>
         /// <param name="key">ключ ресурса</param>
         /// <param name="locker">разделяемый ресурс</param>
-        public void AddLocker(string key, object locker)
+        /// <param name="initAction">метод инициализации локера (если он необходим)</param>
+        public void AddLocker(string key, object locker, Action<object> initAction)
         {
             var cancel = new CancellationTokenSource();
-            var parameter = new LoopDescriptor(locker, cancel.Token);
+            var parameter = new LoopDescriptor(locker, cancel.Token, initAction);
             _lockers.Add(key, parameter);
             _cancelThreadCollection.Add(key, cancel);
             var thread = new Thread(WorkLoop);
@@ -53,7 +54,17 @@ namespace MainLoop
         }
 
         /// <summary>
-        /// Main loop
+        /// Добавить разделяемый ресурс и его ключ
+        /// </summary>
+        /// <param name="key">ключ ресурса</param>
+        /// <param name="locker">разделяемый ресурс</param>
+        public void AddLocker(string key, object locker)
+        {
+            AddLocker(key, locker, null);
+        }
+
+        /// <summary>
+        /// Рабочий цикл для локера
         /// </summary>
         /// <param name="parameter">descripdor</param>
         private void WorkLoop(object parameter)
@@ -68,6 +79,8 @@ namespace MainLoop
                 {
                     lock (def.Locker)
                     {
+                        if(def.IsNeedInit)
+                            def.Init();
                         important(def.Locker);
                     }
                     continue;
@@ -77,6 +90,8 @@ namespace MainLoop
                 {
                     lock (def.Locker)
                     {
+                        if(def.IsNeedInit)
+                            def.Init();
                         middle(def.Locker);
                     }
                     continue;
@@ -86,6 +101,8 @@ namespace MainLoop
                 {
                     lock (def.Locker)
                     {
+                        if(def.IsNeedInit)
+                            def.Init();
                         unimportant(def.Locker);
                     }
                     continue;
@@ -95,10 +112,10 @@ namespace MainLoop
         }
 
         /// <summary>
-        /// Добавить 
+        /// Добавить действие в очередь важных действий
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="action"></param>
+        /// <param name="key">Ключ локера</param>
+        /// <param name="action">действие</param>
         public void StartImportantAction(string key, Action<object> action)
         {
             if(!_threads.ContainsKey(key))
@@ -106,6 +123,11 @@ namespace MainLoop
             _lockers[key].AddImportant(action);
         }
 
+        /// <summary>
+        /// Добавить действие в очередь действий средней важности
+        /// </summary>
+        /// <param name="key">Ключ локера</param>
+        /// <param name="action">действие</param>
         public void StartMiddleAction(string key, Action<object> action)
         {
             if(!_threads.ContainsKey(key))
@@ -113,11 +135,31 @@ namespace MainLoop
             _lockers[key].AddMiddle(action);
         }
 
+        /// <summary>
+        /// Добавить действие в очередь неважных действий
+        /// </summary>
+        /// <param name="key">Ключ локера</param>
+        /// <param name="action">действие</param>
         public void StartUnmportantAction(string key, Action<object> action)
         {
             if(!_threads.ContainsKey(key))
                 throw new InvalidProgramException(string.Format("key({0}) not found", key));
             _lockers[key].AddUnimportant(action);
         }
+
+        #region Implementation of IDisposable
+
+        /// <summary>
+        /// Выполняет определяемые приложением задачи, связанные с удалением, высвобождением или сбросом неуправляемых ресурсов.
+        /// </summary>
+        public void Dispose()
+        {
+            foreach (var cancellationTokenSource in _cancelThreadCollection.Values)
+            {
+                cancellationTokenSource.Cancel();
+            }
+        }
+
+        #endregion
     }
 }

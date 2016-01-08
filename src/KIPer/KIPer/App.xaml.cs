@@ -12,5 +12,7 @@ namespace KIPer
         {
             DispatcherHelper.Initialize();
         }
+
+        
     }
 }

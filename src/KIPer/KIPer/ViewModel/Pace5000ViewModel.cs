@@ -1,4 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
+using KIPer.Interfaces;
+using KIPer.Model;
 
 namespace KIPer.ViewModel
 {
@@ -8,13 +10,17 @@ namespace KIPer.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class Pace5000ViewModel : ViewModelBase
+    public class Pace5000ViewModel : ViewModelBase, IService
     {
+        private readonly PACE5000Model _model;
         /// <summary>
         /// Initializes a new instance of the Pace5000ViewModel class.
         /// </summary>
-        public Pace5000ViewModel()
+        public Pace5000ViewModel(PACE5000Model model)
         {
+            _model = model;
         }
+
+        public string Title { get { return _model.Title; } }
     }
 }

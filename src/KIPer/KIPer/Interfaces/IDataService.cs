@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using KIPer.Model;
 
-namespace KIPer.Model
+namespace KIPer.Interfaces
 {
     public interface IDataService
     {
-        void GetData(Action<PACE5000Model, Exception> callback);
+        PACE5000Model Pace5000 { get; }
     }
 }
