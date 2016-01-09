@@ -4,13 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:pressureElementControls="clr-namespace:PressureElementControls;assembly=PressureElementControls"
-             mc:Ignorable="d" 
+             xmlns:viewModel="clr-namespace:KIPer.ViewModel"
+             xmlns:converters="clr-namespace:KIPer.View.Converters"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:Pace5000ViewModel}"
              d:DesignHeight="600" d:DesignWidth="700">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="PACE5000ViewStyles.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
+            <converters:DoubleToTimespanConverter x:Key="DoubleToTimespanConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -23,8 +26,46 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Border Background="#FF002500" CornerRadius="10">
-            <pressureElementControls:Manometer Width="400" Margin="5"/>
+            <pressureElementControls:Manometer Width="400" Margin="5" Value="{Binding ManometerValue}"/>
         </Border>
-        <GroupBox Grid.Column="0" Grid.Row="1" Header="Автоматический опрос"></GroupBox>
+        <GroupBox Grid.Column="0" Grid.Row="1" Header="Автоматический опрос">
+            <StackPanel>
+                <CheckBox Content="Включить автоматический опрос" Margin="5,0,0,0" IsChecked="{Binding IsAutoRead, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Период опроса:" Margin="5,0,0,0"/>
+                    <TextBox Width="40" Margin="5,0,0,0"
+                             Text="{Binding AutoreadPeriod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleToTimespanConverter}}"
+                             IsEnabled="{Binding IsAutoRead, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="мс." Margin="5,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <GroupBox Header="Ручной опрос">
+                <StackPanel>
+                    <Button Content="Запросить текущее состояние устройства" Command="{Binding UpdateDeviceParameters}"/>
+                    <Border>
+                        <ScrollViewer MaxHeight="300">
+                            <ItemsControl ItemsSource="{Binding DeviceParameters, UpdateSourceTrigger=PropertyChanged}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Width="70" Text="{Binding Parameter}"/>
+                                            <TextBlock Text=" : "/>
+                                            <TextBlock Text="{Binding Vlaue}" Background="Aqua"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
     </Grid>
 </UserControl>

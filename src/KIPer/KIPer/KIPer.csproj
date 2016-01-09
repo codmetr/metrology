@@ -97,10 +97,12 @@
     <Compile Include="ViewModel\DeviceViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Pace5000ViewModel.cs" />
+    <Compile Include="ViewModel\ParameterValuePair.cs" />
     <Compile Include="ViewModel\ParameterViewModel.cs" />
     <Compile Include="ViewModel\ServiceViewModel.cs" />
     <Compile Include="ViewModel\TestsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\Converters\DoubleToTimespanConverter.cs" />
     <Compile Include="View\PACE5000View.xaml.cs">
       <DependentUpon>PACE5000View.xaml</DependentUpon>
     </Compile>
@@ -189,6 +191,7 @@
   <ItemGroup>
     <Resource Include="Content\icon.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
