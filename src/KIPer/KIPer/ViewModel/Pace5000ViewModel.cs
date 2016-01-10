@@ -61,6 +61,7 @@ namespace KIPer.ViewModel
 
         public ICommand UpdateDeviceParameters { get{return new RelayCommand(() =>
         {
+            //TODO: realise update parameters
             _deviceParameters.Add(new ParameterValuePair() {Parameter = "paremeter 1", Vlaue = "value1"});
             if (ManometerValue < 90)
                 ManometerValue += 10;

@@ -9,5 +9,7 @@ namespace KIPer.Interfaces
     public interface IDataService
     {
         PACE5000Model Pace5000 { get; }
+        void LoadSettings();
+        void InitDevices();
     }
 }

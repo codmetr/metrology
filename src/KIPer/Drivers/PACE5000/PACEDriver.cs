@@ -7,6 +7,13 @@ namespace PACESeries
 {
     public class PACEDriver
     {
+        private int _address;
+
+        public PACEDriver(int address)
+        {
+            _address = address;
+        }
+
         protected virtual void Send(string command)
         {
             
@@ -22,13 +29,15 @@ namespace PACESeries
             Send(command);
             return Receive();
         }
-        
 
-        int GetNumberCalibratinPoints(int channel)
+
+        public int GetNumberCalibratinPoints(int channel, Func<string, string> sendFunc)
         {
+            if (sendFunc == null)
+                sendFunc = SendCommand;
             var commandBase = string.Format(":CAL{0}:PRES:POIN", channel);
             var command = string.Format("{0}?", commandBase);
-            var answer = SendCommand(command);
+            var answer = sendFunc(command);
             if (!answer.StartsWith(commandBase))
                 throw new AnswerException(commandBase, answer);
             var stringValue = answer.Remove(0, commandBase.Length);
@@ -38,10 +47,12 @@ namespace PACESeries
             return result;
         }
 
-        int GetAltetude()
+        public int GetAltetude(Func<string, string> sendFunc)
         {
+            if (sendFunc == null)
+                sendFunc = SendCommand;
             const string command = "SENS:ALT?";
-            var answer = SendCommand(command);
+            var answer = sendFunc(command);
             const string answerBase = "SENS:ALT ";
             if (!answer.StartsWith(answerBase))
                 throw new AnswerException(answerBase, answer);

@@ -22,7 +22,7 @@ namespace KIPer.ViewModel
 
         private readonly ServiceViewModel _services;
 
-        private Dictionary<Type, Type> ViewModelViewDic;
+        private readonly Dictionary<Type, Type> ViewModelViewDic;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -30,6 +30,8 @@ namespace KIPer.ViewModel
         public MainViewModel(IDataService dataService)
         {
             _dataService = dataService;
+            _dataService.LoadSettings();
+            _dataService.InitDevices();
 
             _services = new ServiceViewModel(new List<IService>()
             {
