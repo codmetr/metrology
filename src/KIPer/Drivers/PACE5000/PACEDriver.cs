@@ -30,11 +30,13 @@ namespace PACESeries
             return Receive();
         }
 
+        public int GetNumberCalibratinPoints(int channel)
+        {
+            return GetNumberCalibratinPoints(channel, SendCommand);
+        }
 
         public int GetNumberCalibratinPoints(int channel, Func<string, string> sendFunc)
         {
-            if (sendFunc == null)
-                sendFunc = SendCommand;
             var commandBase = string.Format(":CAL{0}:PRES:POIN", channel);
             var command = string.Format("{0}?", commandBase);
             var answer = sendFunc(command);
@@ -47,10 +49,13 @@ namespace PACESeries
             return result;
         }
 
+        public int GetAltetude()
+        {
+            return GetAltetude(SendCommand);
+        }
+
         public int GetAltetude(Func<string, string> sendFunc)
         {
-            if (sendFunc == null)
-                sendFunc = SendCommand;
             const string command = "SENS:ALT?";
             var answer = sendFunc(command);
             const string answerBase = "SENS:ALT ";
