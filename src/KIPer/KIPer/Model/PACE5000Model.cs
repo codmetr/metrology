@@ -46,7 +46,7 @@ namespace KIPer.Model
 
             while (!cancel.IsCancellationRequested)
             {
-                loops.StartMiddleAction(loopKey, (mb)=> _driver.SendCommand());
+                loops.StartMiddleAction(loopKey, (mb) => _driver.GetAltetude());
             }
         }
     }

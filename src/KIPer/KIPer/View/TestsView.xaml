@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="KIPer.View.TestsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:KIPer.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModel:TestsViewModel}">
+    <UserControl.Resources>
+        
+        <DataTemplate x:Key="NoSelecteDataTemplate">
+            <Border BorderBrush="DarkOliveGreen" BorderThickness="2" CornerRadius="3">
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Margin="5" Text="Проверка: "/>
+                    <TextBox Margin="5" Text="{Binding TestType}"/>
+                    <TextBox Margin="5" Text="{Binding Path=Device.Model}"/>
+                    <TextBox Margin="5" Text="{Binding Path=Time}"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="SelecteDataTemplate">
+            <Border BorderBrush="DarkOliveGreen" BorderThickness="2" CornerRadius="3" Background="#FFD3CDC5">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Margin="5" Text="Проверка: "/>
+                        <TextBox Margin="5" Text="{Binding TestType}"/>
+                        <TextBox Margin="5" Text="{Binding Path=Device.Model}"/>
+                        <TextBox Margin="5" Text="{Binding Path=Time}"/>
+                    </StackPanel>
+                    <Border Background="#FF002B76">
+                        <StackPanel Orientation="Vertical">
+                            <Border BorderBrush="#FF224901">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBox Margin="5" Text="Проверка: " Foreground="White"/>
+                                    <TextBox Margin="5" Text="{Binding }" Foreground="White"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        
+        <Style TargetType="ItemsControl">
+            <Setter Property="ItemTemplate" Value="{StaticResource NoSelecteDataTemplate}"/>
+            
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ItemsControl Grid.Column="0" ItemsSource="{Binding TestsCollection}">
+        </ItemsControl>
+    </Grid>
+</UserControl>

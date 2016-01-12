@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 
@@ -10,49 +10,30 @@ namespace KIPer.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class TestViewModel : ViewModelBase
+    public class TestsViewModel : ViewModelBase, ITestsViewModel
     {
-        private string _user;
-        private DateTime _time;
-        private DeviceViewModel _device;
-        private ObservableCollection<ParameterViewModel> _parameters;
-        private string _testType;
-
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
         /// </summary>
-        public TestViewModel()
+        public TestsViewModel()
         {
+
         }
 
-        public string TestType
+        /// <summary>
+        /// Загрузка базовой конфигурации набора тестов
+        /// </summary>
+        /// <param name="tests"></param>
+        public void LoadTests(IEnumerable<ITestViewModel> tests)
         {
-            get { return _testType; }
-            set { Set(ref _testType, value); }
+            TestsCollection = new ObservableCollection<ITestViewModel>(tests);
         }
 
-        public string User
-        {
-            get { return _user; }
-            set { Set(ref _user, value); }
-        }
+        /// <summary>
+        /// Набор выполненных тестов (процедур поверок/калибровок/аттестаций и пр.) 
+        /// </summary>
+        public ObservableCollection<ITestViewModel> TestsCollection { get; set; }
 
-        public DateTime Time
-        {
-            get { return _time; }
-            set { Set(ref _time, value); }
-        }
-
-        public DeviceViewModel Device
-        {
-            get { return _device; }
-            set { Set(ref _device, value); }
-        }
-
-        public ObservableCollection<ParameterViewModel> Parameters
-        {
-            get { return _parameters; }
-            set { Set(ref _parameters, value); }
-        }
+        
     }
 }

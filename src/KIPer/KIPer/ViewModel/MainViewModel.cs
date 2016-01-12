@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -40,7 +42,9 @@ namespace KIPer.ViewModel
             ViewModelViewDic = new Dictionary<Type, Type>()
             {
                 {typeof(ServiceViewModel), typeof(ServicesView)},
-                {typeof(Pace5000ViewModel), typeof(PACE5000View)}
+                {typeof(Pace5000ViewModel), typeof(PACE5000View)},
+                {typeof(ITestsViewModel), typeof(TestsView)},
+                {typeof(ITestViewModel), typeof(TestView)}
             };
         }
 
@@ -156,12 +160,51 @@ namespace KIPer.ViewModel
         ////    base.Cleanup();
         ////}
 
-        private void Loadsettings()
+        public void Loadsettings()
         {
-            
+            _tests = new TestsViewModel();
+            _tests.LoadTests(new List<ITestViewModel>
+            {
+                new TestViewModel()
+                {
+                    TestType = "поверка",
+                    User = "Иван Иванович Иванов",
+                    Time = DateTime.Parse("11/11/11"),
+                    Device = new DeviceViewModel()
+                    {
+                        DeviceCommonType = "Датчик давления",
+                        DeviceManufacturer = "GE",
+                        Model = "UNIK 5000",
+                        SerialNumber = "111",
+                    },
+                    Etalons = new ObservableCollection<IDeviceViewModel>(new List<IDeviceViewModel>
+                    {
+                        new DeviceViewModel()
+                        {
+                            DeviceCommonType = "Датчик давления",
+                            DeviceManufacturer = "GE Druk",
+                            Model = "PACE5000",
+                            SerialNumber = "222",
+                        },
+                        new DeviceViewModel()
+                        {
+                            DeviceCommonType = "Многофункциональный калибратор",
+                            DeviceManufacturer = "GE Druk",
+                            Model = "DPI 620",
+                            SerialNumber = "333",
+                        }
+                    }),
+                    Parameters = new ObservableCollection<IParameterViewModel>(new List<IParameterViewModel>
+                    {
+                        new ParameterViewModel(){Unit = "мБар", PointMeashuring = "1000", Tolerance = "0.1", Error = "0.01"},
+                        new ParameterViewModel(){Unit = "мБар", PointMeashuring = "1100", Tolerance = "0.1", Error = "0.01"},
+                        new ParameterViewModel(){Unit = "мБар", PointMeashuring = "1200", Tolerance = "0.1", Error = "0.01"},
+                    })
+                }
+            });
         }
-    
-        private readonly List<TestViewModel> _tests = new List<TestViewModel>();
-        public IEnumerable<TestViewModel> Tests { get { return _tests; } }
+
+        private ITestsViewModel _tests;
+        public ITestsViewModel Tests { get { return _tests; } }
     }
 }

@@ -95,12 +95,17 @@
     <Compile Include="Settings\MineSettings.cs" />
     <Compile Include="StructureService\ServiceProvider.cs" />
     <Compile Include="ViewModel\DeviceViewModel.cs" />
+    <Compile Include="ViewModel\IDeviceViewModel.cs" />
+    <Compile Include="ViewModel\IParameterViewModel.cs" />
+    <Compile Include="ViewModel\ITestsViewModel.cs" />
+    <Compile Include="ViewModel\ITestViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\Pace5000ViewModel.cs" />
+    <Compile Include="ViewModel\Services\Pace5000ViewModel.cs" />
     <Compile Include="ViewModel\ParameterValuePair.cs" />
     <Compile Include="ViewModel\ParameterViewModel.cs" />
-    <Compile Include="ViewModel\ServiceViewModel.cs" />
+    <Compile Include="ViewModel\Services\ServiceViewModel.cs" />
     <Compile Include="ViewModel\TestsViewModel.cs" />
+    <Compile Include="ViewModel\TestViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Converters\DoubleToTimespanConverter.cs" />
     <Compile Include="View\PACE5000View.xaml.cs">
@@ -108,6 +113,9 @@
     </Compile>
     <Compile Include="View\ServicesView.xaml.cs">
       <DependentUpon>ServicesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TestsView.xaml.cs">
+      <DependentUpon>TestsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TestView.xaml.cs">
       <DependentUpon>TestView.xaml</DependentUpon>
@@ -137,6 +145,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ServicesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TestsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
