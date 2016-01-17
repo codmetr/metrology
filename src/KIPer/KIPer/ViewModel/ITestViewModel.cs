@@ -28,7 +28,7 @@ namespace KIPer.ViewModel
         /// <summary>
         /// Список проверяемых параметров
         /// </summary>
-        ObservableCollection<IParameterViewModel> Parameters { get; set; }
+        ObservableCollection<IParameterResultViewModel> Parameters { get; set; }
 
         /// <summary>
         /// Список используемых для проверки эталонов

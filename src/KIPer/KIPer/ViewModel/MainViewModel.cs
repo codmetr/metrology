@@ -26,6 +26,8 @@ namespace KIPer.ViewModel
 
         private readonly Dictionary<Type, Type> ViewModelViewDic;
 
+        
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -43,8 +45,8 @@ namespace KIPer.ViewModel
             {
                 {typeof(ServiceViewModel), typeof(ServicesView)},
                 {typeof(Pace5000ViewModel), typeof(PACE5000View)},
-                {typeof(ITestsViewModel), typeof(TestsView)},
-                {typeof(ITestViewModel), typeof(TestView)}
+                {typeof(TestsViewModel), typeof(TestsView)},
+                {typeof(TestViewModel), typeof(TestView)}
             };
         }
 
@@ -66,6 +68,8 @@ namespace KIPer.ViewModel
         public ICommand LoadView{get{return new RelayCommand<object>(
             (mainView) =>
             {
+                Loadsettings();
+
                 var view = mainView as Window;
                 if(view==null)
                     return;
@@ -98,7 +102,7 @@ namespace KIPer.ViewModel
         {
             return new RelayCommand(() =>
             {
-                SelectedAction = "Проверки";//todo установить выбор соответсвующего ViewModel
+                SelectedAction = _tests;//todo установить выбор соответсвующего ViewModel
                 HelpMessage = "Список Проверок";
             });
         }}
@@ -194,11 +198,11 @@ namespace KIPer.ViewModel
                             SerialNumber = "333",
                         }
                     }),
-                    Parameters = new ObservableCollection<IParameterViewModel>(new List<IParameterViewModel>
+                    Parameters = new ObservableCollection<IParameterResultViewModel>(new List<IParameterResultViewModel>
                     {
-                        new ParameterViewModel(){Unit = "мБар", PointMeashuring = "1000", Tolerance = "0.1", Error = "0.01"},
-                        new ParameterViewModel(){Unit = "мБар", PointMeashuring = "1100", Tolerance = "0.1", Error = "0.01"},
-                        new ParameterViewModel(){Unit = "мБар", PointMeashuring = "1200", Tolerance = "0.1", Error = "0.01"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1000", Tolerance = "0.1", Error = "0.01"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1100", Tolerance = "0.1", Error = "0.01"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1200", Tolerance = "0.1", Error = "0.01"},
                     })
                 }
             });

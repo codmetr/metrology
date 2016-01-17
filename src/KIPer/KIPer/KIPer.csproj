@@ -94,8 +94,10 @@
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\MineSettings.cs" />
     <Compile Include="StructureService\ServiceProvider.cs" />
+    <Compile Include="ViewModel\DeviceDescriptorViewModel.cs" />
     <Compile Include="ViewModel\DeviceViewModel.cs" />
     <Compile Include="ViewModel\IDeviceViewModel.cs" />
+    <Compile Include="ViewModel\IParameterResultViewModel.cs" />
     <Compile Include="ViewModel\IParameterViewModel.cs" />
     <Compile Include="ViewModel\ITestsViewModel.cs" />
     <Compile Include="ViewModel\ITestViewModel.cs" />

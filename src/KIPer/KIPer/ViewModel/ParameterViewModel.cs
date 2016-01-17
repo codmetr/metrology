@@ -8,18 +8,28 @@ namespace KIPer.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class ParameterViewModel : ViewModelBase, IParameterViewModel
+    public class ParameterViewModel : ViewModelBase, IParameterResultViewModel
     {
         private string _unit;
         private string _pointMeashuring;
         private string _error;
         private string _tolerance;
+        private string _nameParameter;
 
         /// <summary>
         /// Initializes a new instance of the ParameterViewModel class.
         /// </summary>
         public ParameterViewModel()
         {
+        }
+
+        /// <summary>
+        ///  Имя параметра
+        /// </summary>
+        public string NameParameter
+        {
+            get { return _nameParameter; }
+            set { Set(ref _nameParameter, value); }
         }
 
         /// <summary>

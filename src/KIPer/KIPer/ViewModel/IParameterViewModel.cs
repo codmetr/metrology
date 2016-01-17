@@ -3,6 +3,11 @@
     public interface IParameterViewModel
     {
         /// <summary>
+        ///  Имя параметра
+        /// </summary>
+        string NameParameter { get; set; }
+
+        /// <summary>
         /// Единицы измерения параметра
         /// </summary>
         string Unit { get; set; }
@@ -11,11 +16,6 @@
         /// Проверяемая величина параметра
         /// </summary>
         string PointMeashuring { get; set; }
-
-        /// <summary>
-        /// Погрешность
-        /// </summary>
-        string Error { get; set; }
 
         /// <summary>
         /// Допуск параметра на заданной точке

@@ -12,6 +12,8 @@ namespace KIPer.ViewModel
     /// </summary>
     public class TestsViewModel : ViewModelBase, ITestsViewModel
     {
+        private string _meashuredParameter;
+
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
         /// </summary>

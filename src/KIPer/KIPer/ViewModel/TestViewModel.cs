@@ -15,7 +15,7 @@ namespace KIPer.ViewModel
         private string _user;
         private DateTime _time;
         private IDeviceViewModel _device;
-        private ObservableCollection<IParameterViewModel> _parameters;
+        private ObservableCollection<IParameterResultViewModel> _parameters;
         private string _testType;
         private ObservableCollection<IDeviceViewModel> _etalons;
 
@@ -65,7 +65,7 @@ namespace KIPer.ViewModel
         /// <summary>
         /// Список проверяемых параметров
         /// </summary>
-        public ObservableCollection<IParameterViewModel> Parameters
+        public ObservableCollection<IParameterResultViewModel> Parameters
         {
             get { return _parameters; }
             set { Set(ref _parameters, value); }
