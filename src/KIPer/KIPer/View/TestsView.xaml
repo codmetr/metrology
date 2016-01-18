@@ -14,7 +14,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="5" Text="Проверка: "/>
                     <TextBlock Margin="5" Text="{Binding TestType}"/>
-                    <TextBlock Margin="5" Text="{Binding Path=Device.Model}"/>
+                    <TextBlock Margin="5" Text="{Binding Path=Device.DeviceType.Model}"/>
                     <TextBlock Margin="5" Text="{Binding Path=Time}"/>
                 </StackPanel>
             </Border>
@@ -30,7 +30,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Margin="5" Text="Проверка: "/>
                         <TextBlock Margin="5" Text="{Binding TestType}"/>
-                        <TextBlock Margin="5" Text="{Binding Path=Device.Model}"/>
+                        <TextBlock Margin="5" Text="{Binding Path=Device.DeviceType.Model}"/>
                         <TextBlock Margin="5" Text="{Binding Path=Time}"/>
                     </StackPanel>
                     <Border Background="#FF002B76">
@@ -48,7 +48,7 @@
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="5" Text="Класс устройства: "/>
-                                        <TextBlock Margin="5" Text="{Binding Device.DeviceCommonType}"/>
+                                        <TextBlock Margin="5" Text="{Binding Device.DeviceType.DeviceCommonType}"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="5" Text="Серийный номер: "/>
@@ -56,7 +56,7 @@
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="5" Text="Изготовитель: "/>
-                                        <TextBlock Margin="5" Text="{Binding Device.DeviceManufacturer}"/>
+                                        <TextBlock Margin="5" Text="{Binding Device.DeviceType.DeviceManufacturer}"/>
                                     </StackPanel>
                                 </StackPanel>
                                 

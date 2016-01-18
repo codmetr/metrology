@@ -26,7 +26,7 @@ namespace KIPer.ViewModel
 
         private readonly Dictionary<Type, Type> ViewModelViewDic;
 
-        
+
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -65,96 +65,116 @@ namespace KIPer.ViewModel
             set { Set(ref _selectedAction, value); }
         }
 
-        public ICommand LoadView{get{return new RelayCommand<object>(
-            (mainView) =>
+        public ICommand LoadView
+        {
+            get
             {
-                Loadsettings();
-
-                var view = mainView as Window;
-                if(view==null)
-                    return;
-
-                try
-                {
-                    foreach (var mod in ViewModelViewDic)
+                return new RelayCommand<object>(
+                    (mainView) =>
                     {
-                        var typeModel = mod.Key;
-                        var typeView = mod.Value;
-                        var template = new DataTemplate
+                        Loadsettings();
+
+                        var view = mainView as Window;
+                        if (view == null)
+                            return;
+
+                        try
                         {
-                            DataType = typeModel,
-                            VisualTree = new FrameworkElementFactory(typeView)
-                        };
-                        view.Resources.Add(new DataTemplateKey(typeModel), template);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-            });}
+                            foreach (var mod in ViewModelViewDic)
+                            {
+                                var typeModel = mod.Key;
+                                var typeView = mod.Value;
+                                var template = new DataTemplate
+                                {
+                                    DataType = typeModel,
+                                    VisualTree = new FrameworkElementFactory(typeView)
+                                };
+                                view.Resources.Add(new DataTemplateKey(typeModel), template);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw;
+                        }
+                    });
+            }
         }
 
         /// <summary>
         /// Выбрана вкладка Проверки
         /// </summary>
-        public ICommand SelectChecks{get
+        public ICommand SelectChecks
         {
-            return new RelayCommand(() =>
+            get
             {
-                SelectedAction = _tests;//todo установить выбор соответсвующего ViewModel
-                HelpMessage = "Список Проверок";
-            });
-        }}
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = _tests;//todo установить выбор соответсвующего ViewModel
+                    HelpMessage = "Список Проверок";
+                });
+            }
+        }
 
         /// <summary>
         /// Выбрана вкладка Приборы
         /// </summary>
-        public ICommand SelectTargetDevices{get
+        public ICommand SelectTargetDevices
         {
-            return new RelayCommand(() =>
+            get
             {
-                SelectedAction = "Приборы";//todo установить выбор соответсвующего ViewModel
-                HelpMessage = "Список проверяемых приборов";
-            });
-        }}
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = "Приборы";//todo установить выбор соответсвующего ViewModel
+                    HelpMessage = "Список проверяемых приборов";
+                });
+            }
+        }
 
         /// <summary>
         /// Выбрана вкладка Эталоны
         /// </summary>
-        public ICommand SelectEtalonDevices{get
+        public ICommand SelectEtalonDevices
         {
-            return new RelayCommand(() =>
+            get
             {
-                SelectedAction = "Приборы";//todo установить выбор соответсвующего ViewModel
-                HelpMessage = "Список эталонных приборов";
-            });
-        }}
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = "Приборы";//todo установить выбор соответсвующего ViewModel
+                    HelpMessage = "Список эталонных приборов";
+                });
+            }
+        }
 
         /// <summary>
         /// Выбрана вкладка Настройки
         /// </summary>
-        public ICommand SelectSettings{get
+        public ICommand SelectSettings
         {
-            return new RelayCommand(() =>
+            get
             {
-                SelectedAction = "Настройки";//todo установить выбор соответсвующего ViewModel
-                HelpMessage = "Список настроек";
-            });
-        }}
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = "Настройки";//todo установить выбор соответсвующего ViewModel
+                    HelpMessage = "Список настроек";
+                });
+            }
+        }
 
 
         /// <summary>
         /// Выбрана вкладка Настройки
         /// </summary>
-        public ICommand SelectService{get
+        public ICommand SelectService
         {
-            return new RelayCommand(() =>
+            get
             {
-                SelectedAction = _services;
-                HelpMessage = "Сервисная вкладка для отладки различных механизмов";
-            });
-        }}
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = _services;
+                    HelpMessage = "Сервисная вкладка для отладки различных механизмов";
+                });
+            }
+        }
 
 
         ////public override void Cleanup()
@@ -176,25 +196,19 @@ namespace KIPer.ViewModel
                     Time = DateTime.Parse("11/11/11"),
                     Device = new DeviceViewModel()
                     {
-                        DeviceCommonType = "Датчик давления",
-                        DeviceManufacturer = "GE",
-                        Model = "UNIK 5000",
+                        DeviceType = new DeviceTypeDescriptor("UNIK 5000","Датчик давления","GE"),
                         SerialNumber = "111",
                     },
                     Etalons = new ObservableCollection<IDeviceViewModel>(new List<IDeviceViewModel>
                     {
                         new DeviceViewModel()
                         {
-                            DeviceCommonType = "Датчик давления",
-                            DeviceManufacturer = "GE Druk",
-                            Model = "PACE5000",
+                            DeviceType = new DeviceTypeDescriptor("PACE5000","Датчик давления","GE Druk"),
                             SerialNumber = "222",
                         },
                         new DeviceViewModel()
                         {
-                            DeviceCommonType = "Многофункциональный калибратор",
-                            DeviceManufacturer = "GE Druk",
-                            Model = "DPI 620",
+                            DeviceType = new DeviceTypeDescriptor("DPI 620","Многофункциональный калибратор","GE Druk"),
                             SerialNumber = "333",
                         }
                     }),

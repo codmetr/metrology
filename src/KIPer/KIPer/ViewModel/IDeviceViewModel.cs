@@ -1,21 +1,14 @@
 ﻿namespace KIPer.ViewModel
 {
+    /// <summary>
+    /// Идентификатор конкретного устройства
+    /// </summary>
     public interface IDeviceViewModel
     {
         /// <summary>
-        /// Модель прибора
+        /// Тип устройства
         /// </summary>
-        string Model { get; set; }
-
-        /// <summary>
-        /// Класс устройств
-        /// </summary>
-        string DeviceCommonType { get; set; }
-
-        /// <summary>
-        /// Изготовитель
-        /// </summary>
-        string DeviceManufacturer { get; set; }
+        DeviceTypeDescriptor DeviceType { get; set; }
 
         /// <summary>
         /// Серийный номер

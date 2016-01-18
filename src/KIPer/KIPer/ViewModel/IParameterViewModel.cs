@@ -1,5 +1,8 @@
 ﻿namespace KIPer.ViewModel
 {
+    /// <summary>
+    /// Описатель параметра
+    /// </summary>
     public interface IParameterViewModel
     {
         /// <summary>

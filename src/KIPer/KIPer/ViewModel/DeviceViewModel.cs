@@ -3,17 +3,15 @@
 namespace KIPer.ViewModel
 {
     /// <summary>
-    /// This class contains properties that a View can data bind to.
+    /// Идентификатор конкретного устройства
     /// <para>
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
     public class DeviceViewModel : ViewModelBase, IDeviceViewModel
     {
-        private string _deviceCommonType;
         private string _serialNumber;
-        private string _deviceManufacturer;
-        private string _model;
+        private DeviceTypeDescriptor _deviceType;
 
         /// <summary>
         /// Initializes a new instance of the DeviceViewModel class.
@@ -25,28 +23,10 @@ namespace KIPer.ViewModel
         /// <summary>
         /// Модель прибора
         /// </summary>
-        public string Model
+        public DeviceTypeDescriptor DeviceType
         {
-            get { return _model; }
-            set { Set(ref _model, value); }
-        }
-
-        /// <summary>
-        /// Класс устройств
-        /// </summary>
-        public string DeviceCommonType
-        {
-            get { return _deviceCommonType; }
-            set { Set(ref _deviceCommonType, value); }
-        }
-
-        /// <summary>
-        /// Изготовитель
-        /// </summary>
-        public string DeviceManufacturer
-        {
-            get { return _deviceManufacturer; }
-            set { Set(ref _deviceManufacturer, value); }
+            get { return _deviceType; }
+            set { Set(ref _deviceType, value); }
         }
 
         /// <summary>
