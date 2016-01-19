@@ -10,7 +10,7 @@ namespace KIPer.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class TestViewModel : ViewModelBase, ITestViewModel
+    public class TestResultViewModel : ViewModelBase, ITestResultViewModel
     {
         private string _user;
         private DateTime _time;
@@ -22,7 +22,7 @@ namespace KIPer.ViewModel
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
         /// </summary>
-        public TestViewModel()
+        public TestResultViewModel()
         {
         }
 

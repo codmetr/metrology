@@ -45,8 +45,8 @@ namespace KIPer.ViewModel
             {
                 {typeof(ServiceViewModel), typeof(ServicesView)},
                 {typeof(Pace5000ViewModel), typeof(PACE5000View)},
-                {typeof(TestsViewModel), typeof(TestsView)},
-                {typeof(TestViewModel), typeof(TestView)}
+                {typeof(ArchivesViewModel), typeof(ArchivesView)},
+                {typeof(TestResultViewModel), typeof(ResultView)}
             };
         }
 
@@ -109,8 +109,23 @@ namespace KIPer.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = _tests;//todo установить выбор соответсвующего ViewModel
+                    SelectedAction = "Проверки";//todo установить выбор соответсвующего ViewModel
                     HelpMessage = "Список Проверок";
+                });
+            }
+        }
+
+        /// <summary>
+        /// Выбрана вкладка Архив
+        /// </summary>
+        public ICommand SelectArchive
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = _tests;//todo установить выбор соответсвующего ViewModel
+                    HelpMessage = "Архив Проверок";
                 });
             }
         }
@@ -186,10 +201,10 @@ namespace KIPer.ViewModel
 
         public void Loadsettings()
         {
-            _tests = new TestsViewModel();
-            _tests.LoadTests(new List<ITestViewModel>
+            _tests = new ArchivesViewModel();
+            _tests.LoadTests(new List<ITestResultViewModel>
             {
-                new TestViewModel()
+                new TestResultViewModel()
                 {
                     TestType = "поверка",
                     User = "Иван Иванович Иванов",
@@ -222,7 +237,7 @@ namespace KIPer.ViewModel
             });
         }
 
-        private ITestsViewModel _tests;
-        public ITestsViewModel Tests { get { return _tests; } }
+        private IArchivesViewModel _tests;
+        public IArchivesViewModel Tests { get { return _tests; } }
     }
 }

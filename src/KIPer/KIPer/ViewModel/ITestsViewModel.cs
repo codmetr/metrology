@@ -3,17 +3,17 @@ using System.Collections.ObjectModel;
 
 namespace KIPer.ViewModel
 {
-    public interface ITestsViewModel
+    public interface IArchivesViewModel
     {
         /// <summary>
         /// Загрузка базовой конфигурации набора тестов
         /// </summary>
         /// <param name="tests"></param>
-        void LoadTests(IEnumerable<ITestViewModel> tests);
+        void LoadTests(IEnumerable<ITestResultViewModel> tests);
 
         /// <summary>
         /// Набор выполненных тестов (процедур поверок/калибровок/аттестаций и пр.) 
         /// </summary>
-        ObservableCollection<ITestViewModel> TestsCollection { get; set; }
+        ObservableCollection<ITestResultViewModel> TestsCollection { get; set; }
     }
 }

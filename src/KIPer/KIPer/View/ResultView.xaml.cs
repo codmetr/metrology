@@ -18,9 +18,9 @@ namespace KIPer.View
     /// <summary>
     /// Interaction logic for TestView.xaml
     /// </summary>
-    public partial class TestView : UserControl
+    public partial class ResultView : UserControl
     {
-        public TestView()
+        public ResultView()
         {
             InitializeComponent();
         }

@@ -12,8 +12,6 @@ namespace KIPer.ViewModel
     public class DeviceTypeViewModel : ViewModelBase
     {
         private DeviceTypeDescriptor _device;
-        private IEnumerable<string> _checkParameters;
-        private IDictionary<string, DeviceTypeDescriptor> _etalonsByParameters;
         private IEnumerable<IMethodicViewModel> _methodics;
 
         /// <summary>

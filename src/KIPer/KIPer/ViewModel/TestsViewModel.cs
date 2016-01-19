@@ -10,14 +10,14 @@ namespace KIPer.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class TestsViewModel : ViewModelBase, ITestsViewModel
+    public class ArchivesViewModel : ViewModelBase, IArchivesViewModel
     {
         private string _meashuredParameter;
 
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
         /// </summary>
-        public TestsViewModel()
+        public ArchivesViewModel()
         {
 
         }
@@ -26,15 +26,15 @@ namespace KIPer.ViewModel
         /// Загрузка базовой конфигурации набора тестов
         /// </summary>
         /// <param name="tests"></param>
-        public void LoadTests(IEnumerable<ITestViewModel> tests)
+        public void LoadTests(IEnumerable<ITestResultViewModel> tests)
         {
-            TestsCollection = new ObservableCollection<ITestViewModel>(tests);
+            TestsCollection = new ObservableCollection<ITestResultViewModel>(tests);
         }
 
         /// <summary>
         /// Набор выполненных тестов (процедур поверок/калибровок/аттестаций и пр.) 
         /// </summary>
-        public ObservableCollection<ITestViewModel> TestsCollection { get; set; }
+        public ObservableCollection<ITestResultViewModel> TestsCollection { get; set; }
 
         
     }

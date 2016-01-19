@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace KIPer.ViewModel
 {
-    public interface ITestViewModel
+    public interface ITestResultViewModel
     {
         /// <summary>
         /// Тип проводимого теста (Поверка/Калибровка)
