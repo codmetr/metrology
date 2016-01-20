@@ -94,36 +94,43 @@
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\MineSettings.cs" />
     <Compile Include="StructureService\ServiceProvider.cs" />
-    <Compile Include="ViewModel\DeviceTypeDescriptor.cs" />
-    <Compile Include="ViewModel\DeviceTypeViewModel.cs" />
-    <Compile Include="ViewModel\DeviceViewModel.cs" />
-    <Compile Include="ViewModel\FunctionDescriptor.cs" />
-    <Compile Include="ViewModel\IDeviceViewModel.cs" />
-    <Compile Include="ViewModel\IMethodicViewModel.cs" />
-    <Compile Include="ViewModel\IParameterResultViewModel.cs" />
-    <Compile Include="ViewModel\IParameterViewModel.cs" />
-    <Compile Include="ViewModel\ITestsViewModel.cs" />
-    <Compile Include="ViewModel\ITestViewModel.cs" />
+    <Compile Include="ViewModel\DeviceTypes\DeviceTypeDescriptor.cs" />
+    <Compile Include="ViewModel\DeviceTypes\DeviceTypesViewModel.cs" />
+    <Compile Include="ViewModel\DeviceTypes\DeviceTypeViewModel.cs" />
+    <Compile Include="ViewModel\Archive\DeviceViewModel.cs" />
+    <Compile Include="ViewModel\DeviceTypes\FunctionDescriptor.cs" />
+    <Compile Include="ViewModel\Archive\IDeviceViewModel.cs" />
+    <Compile Include="ViewModel\DeviceTypes\IMethodicViewModel.cs" />
+    <Compile Include="ViewModel\Archive\IParameterResultViewModel.cs" />
+    <Compile Include="ViewModel\Archive\IParameterViewModel.cs" />
+    <Compile Include="ViewModel\Archive\IArchivesViewModel.cs" />
+    <Compile Include="ViewModel\Archive\ITestResultViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\MethodicViewModel.cs" />
+    <Compile Include="ViewModel\DeviceTypes\MethodicViewModel.cs" />
     <Compile Include="ViewModel\Services\Pace5000ViewModel.cs" />
-    <Compile Include="ViewModel\ParameterValuePair.cs" />
-    <Compile Include="ViewModel\ParameterViewModel.cs" />
+    <Compile Include="ViewModel\Services\ParameterValuePair.cs" />
+    <Compile Include="ViewModel\Archive\ParameterViewModel.cs" />
     <Compile Include="ViewModel\Services\ServiceViewModel.cs" />
-    <Compile Include="ViewModel\TestsViewModel.cs" />
-    <Compile Include="ViewModel\TestViewModel.cs" />
+    <Compile Include="ViewModel\Archive\ArchivesViewModel.cs" />
+    <Compile Include="ViewModel\Archive\TestResultViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Converters\DoubleToTimespanConverter.cs" />
-    <Compile Include="View\PACE5000View.xaml.cs">
+    <Compile Include="View\DeviceTypes\DeviceTypesView.xaml.cs">
+      <DependentUpon>DeviceTypesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DeviceTypes\DeviceTypeView.xaml.cs">
+      <DependentUpon>DeviceTypeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Services\PACE5000View.xaml.cs">
       <DependentUpon>PACE5000View.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ServicesView.xaml.cs">
+    <Compile Include="View\Services\ServicesView.xaml.cs">
       <DependentUpon>ServicesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ArchivesView.xaml.cs">
+    <Compile Include="View\Archive\ArchivesView.xaml.cs">
       <DependentUpon>ArchivesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ResultView.xaml.cs">
+    <Compile Include="View\Archive\ResultView.xaml.cs">
       <DependentUpon>ResultView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -142,23 +149,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\PACE5000View.xaml">
+    <Page Include="View\DeviceTypes\DeviceTypesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\PACE5000ViewStyles.xaml">
+    <Page Include="View\DeviceTypes\DeviceTypeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ServicesView.xaml">
+    <Page Include="View\Services\PACE5000View.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ArchivesView.xaml">
+    <Page Include="View\Services\PACE5000ViewStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ResultView.xaml">
+    <Page Include="View\Services\ServicesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Archive\ArchivesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Archive\ResultView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

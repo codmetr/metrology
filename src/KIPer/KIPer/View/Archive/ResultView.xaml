@@ -13,10 +13,6 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Border>
-            <!--<Expander IsExpanded="True">
-            <Expander.LayoutTransform>
-                <RotateTransform Angle="90"/>
-            </Expander.LayoutTransform>-->
             <ItemsControl x:Name="TestList" MinWidth="50" ItemsSource="{Binding Parameters}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

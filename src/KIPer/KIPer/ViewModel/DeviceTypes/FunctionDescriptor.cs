@@ -11,5 +11,6 @@ namespace KIPer.ViewModel
     /// </summary>
     public class FunctionDescriptor
     {
+        public string Name { get; set; }
     }
 }

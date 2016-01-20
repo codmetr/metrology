@@ -27,6 +27,9 @@ namespace KIPer.ViewModel
         private readonly Dictionary<Type, Type> ViewModelViewDic;
 
 
+        private IArchivesViewModel _tests;
+        private DeviceTypesViewModel _deviceTypes;
+
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -43,10 +46,17 @@ namespace KIPer.ViewModel
             });
             ViewModelViewDic = new Dictionary<Type, Type>()
             {
+                //Вкладка Сервис
                 {typeof(ServiceViewModel), typeof(ServicesView)},
                 {typeof(Pace5000ViewModel), typeof(PACE5000View)},
+
+                //Вкладка Архив
                 {typeof(ArchivesViewModel), typeof(ArchivesView)},
-                {typeof(TestResultViewModel), typeof(ResultView)}
+                {typeof(TestResultViewModel), typeof(ResultView)},
+                //Вкладка Архив
+                {typeof(DeviceTypesViewModel), typeof(DeviceTypesView)},
+                {typeof(DeviceTypeViewModel), typeof(DeviceTypeView)},
+
             };
         }
 
@@ -139,7 +149,7 @@ namespace KIPer.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = "Приборы";//todo установить выбор соответсвующего ViewModel
+                    SelectedAction = _deviceTypes;//todo установить выбор соответсвующего ViewModel
                     HelpMessage = "Список проверяемых приборов";
                 });
             }
@@ -235,9 +245,34 @@ namespace KIPer.ViewModel
                     })
                 }
             });
+
+            _deviceTypes = new DeviceTypesViewModel();
+            _deviceTypes.LoadTests(new List<DeviceTypeViewModel>
+            {
+                new DeviceTypeViewModel()
+                {
+                    Device = new DeviceTypeDescriptor("UNIK 5000","Датчик давления","GE"),
+                    Methodics = new List<IMethodicViewModel>
+                    {
+                        new MethodicViewModel()
+                        {
+                            Name = "Поверка",
+                            TypesEtalonParameters = new[]{"напряжение", "давление"},
+                            CalculatedParameters = new Dictionary<IParameterViewModel, FunctionDescriptor>()
+                            {
+                                {new ParameterViewModel(){NameParameter = "основная погрешность", Tolerance = "0.1", Unit = "давление"}, new FunctionDescriptor(){Name = "абсолютная разница"}}
+                            }
+                        }
+                    }
+                }
+            });
         }
 
-        private IArchivesViewModel _tests;
         public IArchivesViewModel Tests { get { return _tests; } }
+
+        public DeviceTypesViewModel DeviceTypes
+        {
+            get { return _deviceTypes; }
+        }
     }
 }

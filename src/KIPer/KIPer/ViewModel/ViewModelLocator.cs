@@ -46,8 +46,8 @@ namespace KIPer.ViewModel
             }
             
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<IServiceProvider, ServiceProvider>();
 
+            //SimpleIoc.Default.Register<IServiceProvider, ServiceProvider>();
             //ioc = new Container();
             //ioc.Configure((reg)=>reg.ForRequestedType<>());
         }

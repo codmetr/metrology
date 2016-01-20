@@ -13,6 +13,7 @@ namespace KIPer.ViewModel
     {
         private DeviceTypeDescriptor _device;
         private IEnumerable<IMethodicViewModel> _methodics;
+        private IMethodicViewModel _selectedMethodic;
 
         /// <summary>
         /// Initializes a new instance of the DeviceDescriptorViewModel class.
@@ -37,6 +38,15 @@ namespace KIPer.ViewModel
         {
             get { return _methodics; }
             set { Set(ref _methodics, value); }
+        }
+
+        /// <summary>
+        /// Выбранная методика
+        /// </summary>
+        public IMethodicViewModel SelectedMethodic
+        {
+            get { return _selectedMethodic; }
+            set { Set(ref _selectedMethodic, value); }
         }
     }
 }

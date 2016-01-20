@@ -23,7 +23,7 @@ namespace KIPer.ViewModel
         IDictionary<IParameterViewModel, FunctionDescriptor> CalculatedParameters { get; set; }
 
         /// <summary>
-        /// типы требуемых эталонных параметров
+        /// Типы требуемых эталонных параметров
         /// </summary>
         IEnumerable<string> TypesEtalonParameters { get; set; }
     }
