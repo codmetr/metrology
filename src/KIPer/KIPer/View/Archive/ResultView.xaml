@@ -7,6 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500"
              d:DataContext="{d:DesignInstance viewModel:TestResultViewModel}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -17,32 +24,20 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <DataTemplate.Resources>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Margin" Value="5"/>
-                                <Setter Property="Foreground" Value="DarkBlue"/>
-                            </Style>
-                            <Style TargetType="Border">
-                                <Setter Property="BorderBrush" Value="DarkBlue"/>
-                                <Setter Property="BorderThickness" Value="2"/>
-                                <Setter Property="CornerRadius" Value="2"/>
-                                <Setter Property="Background" Value="DarkGray"/>
-                            </Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource ItemedTextBoxStyle}"/>
+                            <Style TargetType="Border" BasedOn="{StaticResource ItemedBorderStyle}"/>
                         </DataTemplate.Resources>
                         <StackPanel Orientation="Horizontal">
                             <Border>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding NameParameter}" FontStyle="Italic" FontWeight="Bold" TextDecorations="Underline"/>
-                                    <TextBlock FontStyle="Italic" FontWeight="Bold" TextDecorations="Underline">:</TextBlock>
+                                    <TextBlock Text="{Binding NameParameter}" Style="{StaticResource ItemedValueTextBoxStyle}" TextDecorations="Underline"/>
+                                    <TextBlock Text=":" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                                     <TextBlock>Проверяемая точка:</TextBlock>
-                                    <TextBlock Text="{Binding PointMeashuring}" FontStyle="Italic" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Unit}" FontStyle="Italic" FontWeight="Bold"/>
-                                <!--</StackPanel>
-                            </Border>
-                            <Border>
-                                <StackPanel Orientation="Horizontal">-->
+                                    <TextBlock Text="{Binding PointMeashuring}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                                    <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                                     <TextBlock>Допуск:</TextBlock>
-                                    <TextBlock Text="{Binding Tolerance}" FontStyle="Italic" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Unit}" FontStyle="Italic" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Tolerance}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                                    <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                                 </StackPanel>
                             </Border>
                         </StackPanel>

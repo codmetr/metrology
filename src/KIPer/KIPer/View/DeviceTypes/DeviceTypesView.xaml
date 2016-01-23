@@ -9,43 +9,55 @@
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance viewModel:DeviceTypesViewModel}">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type viewModel:DeviceTypeViewModel}" x:Key="NoSelecteDataTemplate">
-            <Border BorderThickness="2" BorderBrush="Gray" Background="LightCyan">
-                <TextBlock Text="{Binding Device.Model}"/>
-            </Border>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:DeviceTypeViewModel}" x:Key="SelecteDataTemplate">
-            <Border BorderThickness="2" BorderBrush="LightCoral" Background="Magenta">
-                <TextBlock Text="{Binding Device.Model}"/>
-            </Border>
-        </DataTemplate>
-        <Style TargetType="ListBox" x:Key="TypesListStyle">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="ItemContainerStyle">
-                <Setter.Value>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="ContentTemplate" Value="{StaticResource NoSelecteDataTemplate}" />
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="ContentTemplate" Value="{StaticResource SelecteDataTemplate}" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type viewModel:DeviceTypeViewModel}" x:Key="NoSelecteDataTemplate">
+                <Border Style="{StaticResource NoSelectedBorderStyle}">
+                    <TextBlock Text="{Binding Device.Model}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:DeviceTypeViewModel}" x:Key="SelecteDataTemplate">
+                <Border Style="{StaticResource SelectedBorderStyle}">
+                    <TextBlock Text="{Binding Device.Model}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </DataTemplate>
+            <Style TargetType="ListBox" x:Key="TypesListStyle">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="ItemContainerStyle">
+                    <Setter.Value>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="ContentTemplate" Value="{StaticResource NoSelecteDataTemplate}" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource SelecteDataTemplate}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
         <GroupBox Header="Типы устройств"
                   Grid.Column="0">
-            <ListBox ItemsSource="{Binding Types}" x:Name="TypesList" Style="{StaticResource TypesListStyle}"/>
+            <ListBox x:Name="TypesList"
+                     ItemsSource="{Binding Types}"
+                     Style="{StaticResource TypesListStyle}"
+                     SelectedIndex="1"/>
         </GroupBox>
         <ContentPresenter
-            Grid.Column="1"
+            Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
             Content="{Binding ElementName=TypesList, Path=SelectedItem}"
             HorizontalAlignment="Stretch"/>
     </Grid>

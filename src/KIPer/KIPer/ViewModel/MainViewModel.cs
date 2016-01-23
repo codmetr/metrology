@@ -247,23 +247,34 @@ namespace KIPer.ViewModel
             });
 
             _deviceTypes = new DeviceTypesViewModel();
+            var methodics = new List<IMethodicViewModel>
+            {
+                new MethodicViewModel()
+                {
+                    Name = "Поверка",
+                    TypesEtalonParameters = new[] {"напряжение", "давление"},
+                    CalculatedParameters = new Dictionary<IParameterViewModel, FunctionDescriptor>()
+                    {
+                        {
+                            new ParameterViewModel()
+                            {
+                                NameParameter = "основная погрешность",
+                                Tolerance = "0.1",
+                                Unit = "давление"
+                            },
+                            new FunctionDescriptor() {Name = "абсолютная разница"}
+                        }
+                    },
+                    Points = new[] {"100 мм.рт.ст", "200 мм.рт.ст", "300 мм.рт.ст", "400 мм.рт.ст"}
+                }
+            };
             _deviceTypes.LoadTests(new List<DeviceTypeViewModel>
             {
                 new DeviceTypeViewModel()
                 {
                     Device = new DeviceTypeDescriptor("UNIK 5000","Датчик давления","GE"),
-                    Methodics = new List<IMethodicViewModel>
-                    {
-                        new MethodicViewModel()
-                        {
-                            Name = "Поверка",
-                            TypesEtalonParameters = new[]{"напряжение", "давление"},
-                            CalculatedParameters = new Dictionary<IParameterViewModel, FunctionDescriptor>()
-                            {
-                                {new ParameterViewModel(){NameParameter = "основная погрешность", Tolerance = "0.1", Unit = "давление"}, new FunctionDescriptor(){Name = "абсолютная разница"}}
-                            }
-                        }
-                    }
+                    SelectedMethodic = methodics[0],
+                    Methodics = methodics
                 }
             });
         }

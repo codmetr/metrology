@@ -4,69 +4,114 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:KIPer.ViewModel"
+             xmlns:generic="clr-namespace:System.Collections.Generic;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance viewModel:DeviceTypeViewModel}">
     <UserControl.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="Margin" Value="3"/>
-        </Style>
-        <DataTemplate DataType="{x:Type viewModel:IMethodicViewModel}" x:Key="NoSelecteDataTemplate">
-            <Border BorderThickness="2" BorderBrush="Gray" Background="LightCyan">
-                <TextBlock Text="{Binding Name}"/>
-            </Border>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:IMethodicViewModel}" x:Key="SelecteDataTemplate">
-            <Border BorderThickness="2" BorderBrush="LightCoral" Background="Magenta">
-                <TextBlock Text="{Binding Name}"/>
-            </Border>
-        </DataTemplate>
-        <Style TargetType="ListBox" x:Key="MethodicListStyle">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="ItemContainerStyle">
-                <Setter.Value>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="ContentTemplate" Value="{StaticResource NoSelecteDataTemplate}" />
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="ContentTemplate" Value="{StaticResource SelecteDataTemplate}" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <DataTemplate x:Key="NoSelecteCalcParamDataTemplate">
-            <Border BorderThickness="2" BorderBrush="Gray" Background="LightCyan">
-                <TextBlock Text="{Binding Item1.NameParameter}"/>
-            </Border>
-        </DataTemplate>
-        <DataTemplate x:Key="SelecteCalcParamDataTemplate">
-            <Border BorderThickness="2" BorderBrush="LightCoral" Background="Magenta">
-                <StackPanel>
-                    <TextBlock Text="Имя параметра"/>
-                    <TextBlock Text="{Binding Item1.NameParameter}"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <DataTemplate x:Key="ItemTemplate">
+                <Border Style="{StaticResource ItemedBorderStyle}">
+                    <TextBlock Text="{Binding}" Style="{StaticResource ItemedTextBoxStyle}"/>
+                </Border>
+            </DataTemplate>
 
-                    <TextBlock Text="Единицы измерения параметра"/>
-                    <TextBlock Text="{Binding Item1.Unit}"/>
-                </StackPanel>
-            </Border>
-        </DataTemplate>
-        <Style TargetType="ListBox" x:Key="CalcParamListStyle">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="ItemContainerStyle">
-                <Setter.Value>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="ContentTemplate" Value="{StaticResource NoSelecteCalcParamDataTemplate}" />
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="ContentTemplate" Value="{StaticResource SelecteCalcParamDataTemplate}" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
+            <DataTemplate DataType="{x:Type viewModel:IMethodicViewModel}" x:Key="NoSelecteDataTemplate">
+                <Border Style="{StaticResource NoSelectedBorderStyle}">
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:IMethodicViewModel}" x:Key="SelecteDataTemplate">
+                <Border Style="{StaticResource SelectedBorderStyle}">
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </DataTemplate>
+            <Style TargetType="ListBox" x:Key="MethodicListStyle">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="MinWidth" Value="100"/>
+                <Setter Property="MinHeight" Value="50"/>
+                <Setter Property="ItemContainerStyle">
+                    <Setter.Value>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="ContentTemplate" Value="{StaticResource NoSelecteDataTemplate}" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource SelecteDataTemplate}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <DataTemplate x:Key="NoSelecteCalcParamDataTemplate">
+                <Border Style="{StaticResource NoSelectedBorderStyle}">
+                    <TextBlock Text="{Binding Key.NameParameter}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </DataTemplate>
+            <DataTemplate x:Key="SelecteCalcParamDataTemplate">
+                <Border Style="{StaticResource SelectedBorderStyle}">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Имя параметра:" Style="{StaticResource DescriptionTextStyle}"/>
+                            <TextBlock Text="{Binding Key.NameParameter}" Style="{StaticResource ValueTextStyle}"/>
+                        </StackPanel>
+
+                        <Border Style="{StaticResource SelectedNoteBorderStyle}">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel.Resources>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource SelectedNoteFontColorStyle}"/>
+                                </StackPanel.Resources>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Единицы измерения:"
+                                               Style="{StaticResource DescriptionTextStyle}"
+                                               Foreground="{StaticResource SelectedNoteForegroundBrush}"/>
+                                    <TextBlock Text="{Binding Key.Unit}" 
+                                               Style="{StaticResource ValueTextStyle}"
+                                               Foreground="{StaticResource SelectedNoteForegroundBrush}"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Допуск:"
+                                               Style="{StaticResource DescriptionTextStyle}"
+                                               Foreground="{StaticResource SelectedNoteForegroundBrush}"/>
+                                    <TextBlock Text="{Binding Key.Tolerance}"
+                                               Style="{StaticResource ValueTextStyle}"
+                                               Foreground="{StaticResource SelectedNoteForegroundBrush}"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Формула:"
+                                               Style="{StaticResource DescriptionTextStyle}"
+                                               Foreground="{StaticResource SelectedNoteForegroundBrush}"/>
+                                    <TextBlock Text="{Binding Value.Name}"
+                                               Style="{StaticResource ValueTextStyle}"
+                                               Foreground="{StaticResource SelectedNoteForegroundBrush}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </DataTemplate>
+            <Style TargetType="ListBox" x:Key="CalcParamListStyle">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="ItemContainerStyle">
+                    <Setter.Value>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="ContentTemplate" Value="{StaticResource NoSelecteCalcParamDataTemplate}" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource SelecteCalcParamDataTemplate}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Border>
         <Grid>
@@ -76,11 +121,11 @@
             </Grid.RowDefinitions>
             <Border Grid.Row="0">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Device.DeviceCommonType}"/>
-                    <TextBlock>Модель:</TextBlock>
-                    <TextBlock Text="{Binding Device.Model}"/>
-                    <TextBlock>Производитель:</TextBlock>
-                    <TextBlock Text="{Binding Device.DeviceManufacturer}"/>
+                    <TextBlock Text="{Binding Device.DeviceCommonType}" Style="{StaticResource ValueTextStyle}"/>
+                    <TextBlock Style="{StaticResource DescriptionTextStyle}">Модель:</TextBlock>
+                    <TextBlock Text="{Binding Device.Model}" Style="{StaticResource ValueTextStyle}"/>
+                    <TextBlock Style="{StaticResource DescriptionTextStyle}">Производитель:</TextBlock>
+                    <TextBlock Text="{Binding Device.DeviceManufacturer}" Style="{StaticResource ValueTextStyle}"/>
                 </StackPanel>
             </Border>
             <GroupBox Grid.Row="1" Header="Методики">
@@ -88,36 +133,39 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <ListBox x:Name="MethodicsList"
-                             Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                             Grid.Row="0" Grid.Column="0"
                              ItemsSource="{Binding Methodics}"
                              SelectedItem="{Binding SelectedMethodic, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource MethodicListStyle}"/>
                     <GroupBox Header="Точки"
-                              Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
+                              Grid.Row="0" Grid.RowSpan="3" Grid.Column="1">
                         <ItemsControl
                             DataContext="{Binding SelectedMethodic}"
-                            ItemsSource="{Binding Path=Points}">
+                            ItemsSource="{Binding Path=Points}"
+                            ItemTemplate="{StaticResource ItemTemplate}">
                         </ItemsControl>
                     </GroupBox>
                     <GroupBox Header="Эталонные параметры"
-                              Grid.Row="0" Grid.Column="2">
+                              Grid.Row="1" Grid.Column="0">
                         <ItemsControl
                             DataContext="{Binding SelectedMethodic}"
-                            ItemsSource="{Binding Path=TypesEtalonParameters}">
+                            ItemsSource="{Binding Path=TypesEtalonParameters}"
+                            ItemTemplate="{StaticResource ItemTemplate}">
                         </ItemsControl>
                     </GroupBox>
                     <GroupBox Header="Вычисляемые параметры"
-                              Grid.Row="1" Grid.Column="2">
+                              Grid.Row="2" Grid.Column="0">
                         <ListBox 
                             DataContext="{Binding SelectedMethodic}"
                             ItemsSource="{Binding CalculatedParameters}"
+                            SelectedIndex="1"
                             Style="{StaticResource CalcParamListStyle}"/>
                     </GroupBox>
                 </Grid>

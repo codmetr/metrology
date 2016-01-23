@@ -7,73 +7,69 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModel:ArchivesViewModel}">
     <UserControl.Resources>
-
-        <SolidColorBrush x:Key="SelectedItemBrush" Color="DarkOliveGreen"/>
-        <DataTemplate x:Key="NoSelecteDataTemplate">
-            <Border BorderBrush="DarkOliveGreen" BorderThickness="2" CornerRadius="3">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="5" Text="Проверка: "/>
-                    <TextBlock Margin="5" Text="{Binding TestType}"/>
-                    <TextBlock Margin="5" Text="{Binding Path=Device.DeviceType.Model}"/>
-                    <TextBlock Margin="5" Text="{Binding Path=Time}"/>
-                </StackPanel>
-            </Border>
-        </DataTemplate>
-        <DataTemplate x:Key="SelecteDataTemplate">
-            <!--<DataTemplate.Resources>
-                <Style TargetType="TextBlock">
-                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border }, Path=Background}"/>
-                </Style>
-            </DataTemplate.Resources>-->
-            <Border BorderBrush="DarkOliveGreen" BorderThickness="2" CornerRadius="3" Background="#FFD3CDC5">
-                <StackPanel Orientation="Vertical">
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate x:Key="NoSelecteDataTemplate" DataType="{x:Type viewModel:ITestResultViewModel}">
+                <Border Style="{StaticResource NoSelectedBorderStyle}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Margin="5" Text="Проверка: "/>
                         <TextBlock Margin="5" Text="{Binding TestType}"/>
                         <TextBlock Margin="5" Text="{Binding Path=Device.DeviceType.Model}"/>
                         <TextBlock Margin="5" Text="{Binding Path=Time}"/>
                     </StackPanel>
-                    <Border Background="#FF002B76">
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel.Resources>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="BurlyWood"/>
-                                </Style>
-                            </StackPanel.Resources>
-                            <Border BorderBrush="#FF224901">
-                                <StackPanel Orientation="Vertical">
-                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="5" Text="Пользователь: "/>
-                                        <TextBlock Margin="5" Text="{Binding User}"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="5" Text="Класс устройства: "/>
-                                        <TextBlock Margin="5" Text="{Binding Device.DeviceType.DeviceCommonType}"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="5" Text="Серийный номер: "/>
-                                        <TextBlock Margin="5" Text="{Binding Device.SerialNumber}"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="5" Text="Изготовитель: "/>
-                                        <TextBlock Margin="5" Text="{Binding Device.DeviceType.DeviceManufacturer}"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
+                </Border>
+            </DataTemplate>
+            <DataTemplate x:Key="SelecteDataTemplate" DataType="{x:Type viewModel:ITestResultViewModel}">
+                <Border Style="{StaticResource SelectedBorderStyle}">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5" Text="Проверка: "/>
+                            <TextBlock Margin="5" Text="{Binding TestType}"/>
+                            <TextBlock Margin="5" Text="{Binding Path=Device.DeviceType.Model}"/>
+                            <TextBlock Margin="5" Text="{Binding Path=Time}"/>
                         </StackPanel>
-                    </Border>
-                </StackPanel>
-            </Border>
-        </DataTemplate>
-        
-        <Style TargetType="ListBoxItem" x:Key="ListItemStyle">
-            <Setter Property="ContentTemplate" Value="{StaticResource NoSelecteDataTemplate}" />
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="ContentTemplate" Value="{StaticResource SelecteDataTemplate}" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+                        <Border Background="{StaticResource SelectedNoteBrush}">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel.Resources>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource SelectedNoteFontColorStyle}"/>
+                                </StackPanel.Resources>
+                                <Border BorderBrush="{StaticResource SelectedNoteBorderBrush}">
+                                    <StackPanel Orientation="Vertical">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="5" Text="Пользователь: "/>
+                                            <TextBlock Margin="5" Text="{Binding User}"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="5" Text="Класс устройства: "/>
+                                            <TextBlock Margin="5" Text="{Binding Device.DeviceType.DeviceCommonType}"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="5" Text="Серийный номер: "/>
+                                            <TextBlock Margin="5" Text="{Binding Device.SerialNumber}"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="5" Text="Изготовитель: "/>
+                                            <TextBlock Margin="5" Text="{Binding Device.DeviceType.DeviceManufacturer}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </DataTemplate>
+
+            <Style TargetType="ListBoxItem" x:Key="ListItemStyle">
+                <Setter Property="ContentTemplate" Value="{StaticResource NoSelecteDataTemplate}" />
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="ContentTemplate" Value="{StaticResource SelecteDataTemplate}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
