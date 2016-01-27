@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:KIPer.ViewModel"
-             xmlns:generic="clr-namespace:System.Collections.Generic;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance viewModel:DeviceTypeViewModel}">
@@ -55,10 +54,11 @@
             <DataTemplate x:Key="SelecteCalcParamDataTemplate">
                 <Border Style="{StaticResource SelectedBorderStyle}">
                     <StackPanel Orientation="Vertical">
-                        <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Key.NameParameter}" Style="{StaticResource ValueTextStyle}"/>
+                        <!--<StackPanel Orientation="Horizontal">
                             <TextBlock Text="Имя параметра:" Style="{StaticResource DescriptionTextStyle}"/>
                             <TextBlock Text="{Binding Key.NameParameter}" Style="{StaticResource ValueTextStyle}"/>
-                        </StackPanel>
+                        </StackPanel>-->
 
                         <Border Style="{StaticResource SelectedNoteBorderStyle}">
                             <StackPanel Orientation="Vertical">

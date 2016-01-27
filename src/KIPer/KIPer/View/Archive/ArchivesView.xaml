@@ -13,22 +13,32 @@
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate x:Key="NoSelecteDataTemplate" DataType="{x:Type viewModel:ITestResultViewModel}">
                 <Border Style="{StaticResource NoSelectedBorderStyle}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="5" Text="Проверка: "/>
-                        <TextBlock Margin="5" Text="{Binding TestType}"/>
-                        <TextBlock Margin="5" Text="{Binding Path=Device.DeviceType.Model}"/>
-                        <TextBlock Margin="5" Text="{Binding Path=Time}"/>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5" Text="Проверка: "/>
+                            <TextBlock Margin="5" Text="{Binding TestType}" Style="{StaticResource ValueTextStyle}"/>
+                            <TextBlock Margin="5" Text="{Binding Path=Device.DeviceType.Model}" Style="{StaticResource ValueTextStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5" Text="Дата: "/>
+                            <TextBlock Margin="5" Text="{Binding Path=Time}" Style="{StaticResource ValueTextStyle}"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </DataTemplate>
             <DataTemplate x:Key="SelecteDataTemplate" DataType="{x:Type viewModel:ITestResultViewModel}">
                 <Border Style="{StaticResource SelectedBorderStyle}">
                     <StackPanel Orientation="Vertical">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Margin="5" Text="Проверка: "/>
-                            <TextBlock Margin="5" Text="{Binding TestType}"/>
-                            <TextBlock Margin="5" Text="{Binding Path=Device.DeviceType.Model}"/>
-                            <TextBlock Margin="5" Text="{Binding Path=Time}"/>
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5" Text="Проверка: "/>
+                                <TextBlock Margin="5" Text="{Binding TestType}" Style="{StaticResource ValueTextStyle}"/>
+                                <TextBlock Margin="5" Text="{Binding Path=Device.DeviceType.Model}" Style="{StaticResource ValueTextStyle}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5" Text="Дата: "/>
+                                <TextBlock Margin="5" Text="{Binding Path=Time}" Style="{StaticResource ValueTextStyle}"/>
+                            </StackPanel>
                         </StackPanel>
                         <Border Background="{StaticResource SelectedNoteBrush}">
                             <StackPanel Orientation="Vertical">

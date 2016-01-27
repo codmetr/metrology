@@ -11,7 +11,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="PACE5000ViewStyles.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <converters:DoubleToTimespanConverter x:Key="DoubleToTimespanConverter"/>
         </ResourceDictionary>

@@ -24,6 +24,57 @@ namespace KIPer.ViewModel
         /// </summary>
         public TestResultViewModel()
         {
+            if (IsInDesignMode)
+            {
+                TestType = "поверка";
+                User = "Иван Иванович Иванов";
+                Time = DateTime.Parse("11/11/11");
+                Device = new DeviceViewModel()
+                {
+                    DeviceType = new DeviceTypeDescriptor("UNIK 5000", "Датчик давления", "GE"),
+                    SerialNumber = "111",
+                };
+                Etalons = new ObservableCollection<IDeviceViewModel>(new IDeviceViewModel[]
+                {
+                    new DeviceViewModel()
+                    {
+                        DeviceType = new DeviceTypeDescriptor("PACE5000", "Датчик давления", "GE Druk"),
+                        SerialNumber = "222",
+                    },
+                    new DeviceViewModel()
+                    {
+                        DeviceType = new DeviceTypeDescriptor("DPI 620", "Многофункциональный калибратор", "GE Druk"),
+                        SerialNumber = "333",
+                    }
+                });
+                Parameters = new ObservableCollection<IParameterResultViewModel>(new IParameterResultViewModel[]
+                {
+                    new ParameterViewModel()
+                    {
+                        NameParameter = "Давление",
+                        Unit = "мБар",
+                        PointMeashuring = "1000",
+                        Tolerance = "0.1",
+                        Error = "0.01"
+                    },
+                    new ParameterViewModel()
+                    {
+                        NameParameter = "Давление",
+                        Unit = "мБар",
+                        PointMeashuring = "1100",
+                        Tolerance = "0.1",
+                        Error = "0.01"
+                    },
+                    new ParameterViewModel()
+                    {
+                        NameParameter = "Давление",
+                        Unit = "мБар",
+                        PointMeashuring = "1200",
+                        Tolerance = "0.1",
+                        Error = "0.01"
+                    },
+                });
+            }
         }
 
         /// <summary>

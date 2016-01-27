@@ -8,8 +8,7 @@
         mc:Ignorable="d ignore"
         Height="600" Width="800" Title="КипТМ"
         x:Name="MainViewWindow" Icon="Content/icon.png"
-        DataContext="{Binding Main, Source={StaticResource Locator}}"
-        Background="#FF005100">
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadView}" CommandParameter="{Binding ElementName=MainViewWindow}" />
@@ -23,7 +22,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource MineWindowBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>

@@ -7,7 +7,6 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KIPer.Interfaces;
-using KIPer.Model;
 using KIPer.View;
 
 namespace KIPer.ViewModel
@@ -29,7 +28,7 @@ namespace KIPer.ViewModel
 
         private IArchivesViewModel _tests;
         private DeviceTypesViewModel _deviceTypes;
-
+        private DeviceTypesViewModel _etalonTypes;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -53,9 +52,13 @@ namespace KIPer.ViewModel
                 //Вкладка Архив
                 {typeof(ArchivesViewModel), typeof(ArchivesView)},
                 {typeof(TestResultViewModel), typeof(ResultView)},
-                //Вкладка Архив
+                
+                //Вкладка Приборы
                 {typeof(DeviceTypesViewModel), typeof(DeviceTypesView)},
                 {typeof(DeviceTypeViewModel), typeof(DeviceTypeView)},
+
+                //Вкладка Эталоны
+                {typeof(EtalonTypeViewModel), typeof(EtalonTypeView)},
 
             };
         }
@@ -164,7 +167,7 @@ namespace KIPer.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = "Приборы";//todo установить выбор соответсвующего ViewModel
+                    SelectedAction = _etalonTypes;//todo установить выбор соответсвующего ViewModel
                     HelpMessage = "Список эталонных приборов";
                 });
             }
@@ -211,6 +214,19 @@ namespace KIPer.ViewModel
 
         public void Loadsettings()
         {
+            var etalonTypes = new[]
+            {
+                new EtalonTypeViewModel()
+                {
+                    Device = new DeviceTypeDescriptor("PACE5000", "Датчик давления", "GE Druk"),
+                    TypesEtalonParameters = new[] {"давление", "авиационная высота", "авиационная скорость"}
+                },
+                new EtalonTypeViewModel()
+                {
+                    Device = new DeviceTypeDescriptor("DPI 620", "Многофункциональный калибратор", "GE Druk"),
+                    TypesEtalonParameters = new[] {"напряжение", "ток", "относительное сопротивление"}
+                }
+            };
             _tests = new ArchivesViewModel();
             _tests.LoadTests(new List<ITestResultViewModel>
             {
@@ -224,20 +240,20 @@ namespace KIPer.ViewModel
                         DeviceType = new DeviceTypeDescriptor("UNIK 5000","Датчик давления","GE"),
                         SerialNumber = "111",
                     },
-                    Etalons = new ObservableCollection<IDeviceViewModel>(new List<IDeviceViewModel>
+                    Etalons = new ObservableCollection<IDeviceViewModel>(new IDeviceViewModel[]
                     {
                         new DeviceViewModel()
                         {
-                            DeviceType = new DeviceTypeDescriptor("PACE5000","Датчик давления","GE Druk"),
+                            DeviceType = etalonTypes[0].Device,
                             SerialNumber = "222",
                         },
                         new DeviceViewModel()
                         {
-                            DeviceType = new DeviceTypeDescriptor("DPI 620","Многофункциональный калибратор","GE Druk"),
+                            DeviceType = etalonTypes[1].Device,
                             SerialNumber = "333",
                         }
                     }),
-                    Parameters = new ObservableCollection<IParameterResultViewModel>(new List<IParameterResultViewModel>
+                    Parameters = new ObservableCollection<IParameterResultViewModel>(new IParameterResultViewModel[]
                     {
                         new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1000", Tolerance = "0.1", Error = "0.01"},
                         new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1100", Tolerance = "0.1", Error = "0.01"},
@@ -245,9 +261,11 @@ namespace KIPer.ViewModel
                     })
                 }
             });
+            _etalonTypes = new DeviceTypesViewModel();
+            _etalonTypes.LoadTypes(etalonTypes);
 
             _deviceTypes = new DeviceTypesViewModel();
-            var methodics = new List<IMethodicViewModel>
+            var methodics = new IMethodicViewModel[]
             {
                 new MethodicViewModel()
                 {
@@ -268,7 +286,7 @@ namespace KIPer.ViewModel
                     Points = new[] {"100 мм.рт.ст", "200 мм.рт.ст", "300 мм.рт.ст", "400 мм.рт.ст"}
                 }
             };
-            _deviceTypes.LoadTests(new List<DeviceTypeViewModel>
+            _deviceTypes.LoadTypes(new []
             {
                 new DeviceTypeViewModel()
                 {
@@ -281,9 +299,8 @@ namespace KIPer.ViewModel
 
         public IArchivesViewModel Tests { get { return _tests; } }
 
-        public DeviceTypesViewModel DeviceTypes
-        {
-            get { return _deviceTypes; }
-        }
+        public DeviceTypesViewModel DeviceTypes { get { return _deviceTypes; } }
+
+        public DeviceTypesViewModel EtalonTypes { get { return _etalonTypes; } }
     }
 }

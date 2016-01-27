@@ -7,6 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance viewModel:ServiceViewModel}">
+    <!--<UserControl.Resources><ResourceDictionary><ResourceDictionary.MergedDictionaries><ResourceDictionary Source="../../Skins/MainSkin.xaml"/></ResourceDictionary.MergedDictionaries></ResourceDictionary></UserControl.Resources>-->
+    <UserControl.Resources>
+        <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
+    </UserControl.Resources>
     <ItemsControl ItemsSource="{Binding Services}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>

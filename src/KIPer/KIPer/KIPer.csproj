@@ -98,6 +98,7 @@
     <Compile Include="ViewModel\DeviceTypes\DeviceTypesViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypeViewModel.cs" />
     <Compile Include="ViewModel\Archive\DeviceViewModel.cs" />
+    <Compile Include="ViewModel\DeviceTypes\EtalonTypeViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\FunctionDescriptor.cs" />
     <Compile Include="ViewModel\Archive\IDeviceViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\IMethodicViewModel.cs" />
@@ -120,6 +121,9 @@
     </Compile>
     <Compile Include="View\DeviceTypes\DeviceTypeView.xaml.cs">
       <DependentUpon>DeviceTypeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DeviceTypes\EtalonTypeView.xaml.cs">
+      <DependentUpon>EtalonTypeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Services\PACE5000View.xaml.cs">
       <DependentUpon>PACE5000View.xaml</DependentUpon>
@@ -145,6 +149,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Skins\ColorLightSkin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Skins\ContentSkins.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Skins\ColorGraySkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Skins\MainSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -154,6 +170,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\DeviceTypes\DeviceTypeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DeviceTypes\EtalonTypeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -224,7 +244,9 @@
   <ItemGroup>
     <Resource Include="Content\icon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Model\Archive\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

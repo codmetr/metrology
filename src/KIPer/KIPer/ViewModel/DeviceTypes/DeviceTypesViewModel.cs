@@ -14,7 +14,7 @@ namespace KIPer.ViewModel
     /// </summary>
     public class DeviceTypesViewModel : ViewModelBase
     {
-        private ObservableCollection<DeviceTypeViewModel> _types;
+        private ObservableCollection<object> _types;
 
         /// <summary>
         /// Initializes a new instance of the DeviceTypesViewModel class.
@@ -24,15 +24,15 @@ namespace KIPer.ViewModel
         }
 
         /// <summary>
-        /// Загрузка базовой конфигурации набора тестов
+        /// Загрузка набора типов устройств
         /// </summary>
-        /// <param name="types"></param>
-        public void LoadTests(IEnumerable<DeviceTypeViewModel> types)
+        /// <param name="types">Набора поддерживаемых типов поверяемых приборов</param>
+        public void LoadTypes(IEnumerable<object> types)
         {
-            Types = new ObservableCollection<DeviceTypeViewModel>(types);
+            Types = new ObservableCollection<object>(types);
         }
 
-        public ObservableCollection<DeviceTypeViewModel> Types
+        public ObservableCollection<object> Types
         {
             get { return _types; }
             set { Set(ref _types, value); }
