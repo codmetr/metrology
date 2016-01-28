@@ -23,8 +23,7 @@
                     <TextBlock Text="{Binding Device.Model}" Style="{StaticResource ValueTextStyle}"/>
                 </Border>
             </DataTemplate>
-            <Style TargetType="ListBox" x:Key="TypesListStyle">
-                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Style TargetType="ListBox" x:Key="TypesListStyle" BasedOn="{StaticResource CollectionMineListStyle}">
                 <Setter Property="ItemContainerStyle">
                     <Setter.Value>
                         <Style TargetType="ListBoxItem">

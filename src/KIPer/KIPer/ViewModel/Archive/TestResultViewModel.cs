@@ -49,7 +49,7 @@ namespace KIPer.ViewModel
                 });
                 Parameters = new ObservableCollection<IParameterResultViewModel>(new IParameterResultViewModel[]
                 {
-                    new ParameterViewModel()
+                    new ParameterResultViewModel()
                     {
                         NameParameter = "Давление",
                         Unit = "мБар",
@@ -57,7 +57,7 @@ namespace KIPer.ViewModel
                         Tolerance = "0.1",
                         Error = "0.01"
                     },
-                    new ParameterViewModel()
+                    new ParameterResultViewModel()
                     {
                         NameParameter = "Давление",
                         Unit = "мБар",
@@ -65,7 +65,7 @@ namespace KIPer.ViewModel
                         Tolerance = "0.1",
                         Error = "0.01"
                     },
-                    new ParameterViewModel()
+                    new ParameterResultViewModel()
                     {
                         NameParameter = "Давление",
                         Unit = "мБар",

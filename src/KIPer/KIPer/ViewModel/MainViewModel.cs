@@ -232,9 +232,9 @@ namespace KIPer.ViewModel
             {
                 new TestResultViewModel()
                 {
-                    TestType = "поверка",
+                    TestType = "Поверка",
                     User = "Иван Иванович Иванов",
-                    Time = DateTime.Parse("11/11/11"),
+                    Time = DateTime.Parse("11/10/2015"),
                     Device = new DeviceViewModel()
                     {
                         DeviceType = new DeviceTypeDescriptor("UNIK 5000","Датчик давления","GE"),
@@ -255,9 +255,84 @@ namespace KIPer.ViewModel
                     }),
                     Parameters = new ObservableCollection<IParameterResultViewModel>(new IParameterResultViewModel[]
                     {
-                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1000", Tolerance = "0.1", Error = "0.01"},
-                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1100", Tolerance = "0.1", Error = "0.01"},
-                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1200", Tolerance = "0.1", Error = "0.01"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1000", Tolerance = "0.1", Error = "0.06"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1100", Tolerance = "0.1", Error = "0.01"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1200", Tolerance = "0.1", Error = "0.05"},
+                    })
+                },
+                new TestResultViewModel()
+                {
+                    TestType = "Аттестация",
+                    User = "Иван Иванович Иванов",
+                    Time = DateTime.Parse("11/11/2015"),
+                    Device = new DeviceViewModel()
+                    {
+                        DeviceType = new DeviceTypeDescriptor("UNIK 5000","Датчик давления","GE"),
+                        SerialNumber = "111",
+                    },
+                    Etalons = new ObservableCollection<IDeviceViewModel>(new IDeviceViewModel[]
+                    {
+                        new DeviceViewModel()
+                        {
+                            DeviceType = etalonTypes[0].Device,
+                            SerialNumber = "222",
+                        },
+                        new DeviceViewModel()
+                        {
+                            DeviceType = etalonTypes[1].Device,
+                            SerialNumber = "333",
+                        }
+                    }),
+                    Parameters = new ObservableCollection<IParameterResultViewModel>(new IParameterResultViewModel[]
+                    {
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "800", Tolerance = "0.2", Error = "0.01"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "900", Tolerance = "0.2", Error = "0.02"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1000", Tolerance = "0.2", Error = "0.05"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1100", Tolerance = "0.2", Error = "0.06"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1200", Tolerance = "0.2", Error = "0.04"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1300", Tolerance = "0.2", Error = "0.02"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1400", Tolerance = "0.2", Error = "0.06"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1500", Tolerance = "0.2", Error = "0.02"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1600", Tolerance = "0.2", Error = "0.03"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1700", Tolerance = "0.2", Error = "0.04"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1800", Tolerance = "0.2", Error = "0.05"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1900", Tolerance = "0.2", Error = "0.02"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "2000", Tolerance = "0.2", Error = "0.03"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "2100", Tolerance = "0.2", Error = "0.04"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "2200", Tolerance = "0.2", Error = "0.05"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "2300", Tolerance = "0.2", Error = "0.02"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "2400", Tolerance = "0.2", Error = "0.01"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "2500", Tolerance = "0.2", Error = "0.06"},
+                    })
+                },
+                new TestResultViewModel()
+                {
+                    TestType = "Поверка",
+                    User = "Иван Иванович Иванов",
+                    Time = DateTime.Parse("11/12/2015"),
+                    Device = new DeviceViewModel()
+                    {
+                        DeviceType = new DeviceTypeDescriptor("UNIK 5000","Датчик давления","GE"),
+                        SerialNumber = "111",
+                    },
+                    Etalons = new ObservableCollection<IDeviceViewModel>(new IDeviceViewModel[]
+                    {
+                        new DeviceViewModel()
+                        {
+                            DeviceType = etalonTypes[0].Device,
+                            SerialNumber = "222",
+                        },
+                        new DeviceViewModel()
+                        {
+                            DeviceType = etalonTypes[1].Device,
+                            SerialNumber = "333",
+                        }
+                    }),
+                    Parameters = new ObservableCollection<IParameterResultViewModel>(new IParameterResultViewModel[]
+                    {
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1000", Tolerance = "0.1", Error = "0.05"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1100", Tolerance = "0.1", Error = "0.02"},
+                        new ParameterResultViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1200", Tolerance = "0.1", Error = "0.01"},
                     })
                 }
             });
@@ -274,7 +349,7 @@ namespace KIPer.ViewModel
                     CalculatedParameters = new Dictionary<IParameterViewModel, FunctionDescriptor>()
                     {
                         {
-                            new ParameterViewModel()
+                            new ParameterResultViewModel()
                             {
                                 NameParameter = "основная погрешность",
                                 Tolerance = "0.1",
@@ -283,7 +358,50 @@ namespace KIPer.ViewModel
                             new FunctionDescriptor() {Name = "абсолютная разница"}
                         }
                     },
-                    Points = new[] {"100 мм.рт.ст", "200 мм.рт.ст", "300 мм.рт.ст", "400 мм.рт.ст"}
+                    Points = new[]
+                    {
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1000", Tolerance = "0.1"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1100", Tolerance = "0.1"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1200", Tolerance = "0.1"},
+                    }
+                },
+                new MethodicViewModel()
+                {
+                    Name = "Аттестация",
+                    TypesEtalonParameters = new[] {"напряжение", "давление"},
+                    CalculatedParameters = new Dictionary<IParameterViewModel, FunctionDescriptor>()
+                    {
+                        {
+                            new ParameterResultViewModel()
+                            {
+                                NameParameter = "основная погрешность",
+                                Tolerance = "0.2",
+                                Unit = "давление"
+                            },
+                            new FunctionDescriptor() {Name = "абсолютная разница"}
+                        }
+                    },
+                    Points = new[]
+                    {
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "800", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "900", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1000", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1100", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1200", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1300", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1400", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1500", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1600", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1700", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1800", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "1900", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "2000", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "2100", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "2200", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "2300", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "2400", Tolerance = "0.2"},
+                        new ParameterViewModel(){NameParameter = "Давление", Unit = "мБар", PointMeashuring = "2500", Tolerance = "0.2"},
+                    }
                 }
             };
             _deviceTypes.LoadTypes(new []

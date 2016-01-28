@@ -12,6 +12,28 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModel:IParameterResultViewModel}" x:Key="ParameterResultTemplate">
+                <DataTemplate.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource ItemedTextBoxStyle}"/>
+                    <Style TargetType="Border" BasedOn="{StaticResource ItemedBorderStyle}"/>
+                </DataTemplate.Resources>
+                <Border>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding NameParameter}" Style="{StaticResource ItemedValueTextBoxStyle}" TextDecorations="Underline"/>
+                        <TextBlock Text=":" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                        <TextBlock>Проверяемая точка:</TextBlock>
+                        <TextBlock Text="{Binding PointMeashuring}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                        <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                        <TextBlock>Допуск:</TextBlock>
+                        <TextBlock Text="{Binding Tolerance}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                        <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                        <TextBlock>Результат:</TextBlock>
+                        <TextBlock Text="{Binding Error}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                        <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                    </StackPanel>
+                </Border>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -20,31 +42,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Border>
-            <ItemsControl x:Name="TestList" MinWidth="50" ItemsSource="{Binding Parameters}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <DataTemplate.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource ItemedTextBoxStyle}"/>
-                            <Style TargetType="Border" BasedOn="{StaticResource ItemedBorderStyle}"/>
-                        </DataTemplate.Resources>
-                        <StackPanel Orientation="Horizontal">
-                            <Border>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding NameParameter}" Style="{StaticResource ItemedValueTextBoxStyle}" TextDecorations="Underline"/>
-                                    <TextBlock Text=":" Style="{StaticResource ItemedValueTextBoxStyle}"/>
-                                    <TextBlock>Проверяемая точка:</TextBlock>
-                                    <TextBlock Text="{Binding PointMeashuring}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
-                                    <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
-                                    <TextBlock>Допуск:</TextBlock>
-                                    <TextBlock Text="{Binding Tolerance}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
-                                    <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            <!--</Expander>-->
+            <ItemsControl x:Name="TestList" MinWidth="50" ItemsSource="{Binding Parameters}" ItemTemplate="{StaticResource ParameterResultTemplate}"/>
         </Border>
     </Grid>
 </UserControl>

@@ -26,7 +26,7 @@ namespace KIPer.ViewModel
         /// <summary>
         /// Проверяемые точки
         /// </summary>
-        public IEnumerable<string> Points { get; set; }
+        public IEnumerable<IParameterViewModel> Points { get; set; }
 
         /// <summary>
         /// Типы вычисляемых параметров и функции их вычисления

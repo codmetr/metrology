@@ -2,26 +2,12 @@
 
 namespace KIPer.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class ParameterViewModel : ViewModelBase, IParameterResultViewModel
+    public class ParameterViewModel : ViewModelBase, IParameterViewModel
     {
         private string _unit;
         private string _pointMeashuring;
-        private string _error;
         private string _tolerance;
         private string _nameParameter;
-
-        /// <summary>
-        /// Initializes a new instance of the ParameterViewModel class.
-        /// </summary>
-        public ParameterViewModel()
-        {
-        }
 
         /// <summary>
         ///  Имя параметра
@@ -48,15 +34,6 @@ namespace KIPer.ViewModel
         {
             get { return _pointMeashuring; }
             set { Set(ref _pointMeashuring, value); }
-        }
-
-        /// <summary>
-        /// Погрешность
-        /// </summary>
-        public string Error
-        {
-            get { return _error; }
-            set { Set(ref _error, value); }
         }
 
         /// <summary>

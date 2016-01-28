@@ -54,11 +54,13 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Width="70" Text="{Binding Parameter}"/>
-                                            <TextBlock Text=" : "/>
-                                            <TextBlock Text="{Binding Vlaue}" Background="Aqua"/>
-                                        </StackPanel>
+                                        <Border Style="{StaticResource ItemedBorderStyle}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Width="70" Text="{Binding Parameter}" Style="{StaticResource ItemedTextBoxStyle}"/>
+                                                <TextBlock Text=" : "/>
+                                                <TextBlock Text="{Binding Vlaue}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                                            </StackPanel>
+                                        </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
