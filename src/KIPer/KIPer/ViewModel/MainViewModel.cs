@@ -122,8 +122,8 @@ namespace KIPer.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = "Проверки";//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Список Проверок";
+                    SelectedAction = "Здесь будет выполняться сами поверки/калибровки/аттестации";//todo установить выбор соответсвующего ViewModel
+                    HelpMessage = "Выполнение поверки";
                 });
             }
         }
@@ -138,7 +138,7 @@ namespace KIPer.ViewModel
                 return new RelayCommand(() =>
                 {
                     SelectedAction = _tests;//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Архив Проверок";
+                    HelpMessage = "Архив Проверок:\nсписок пойденных поверок";
                 });
             }
         }
@@ -153,7 +153,7 @@ namespace KIPer.ViewModel
                 return new RelayCommand(() =>
                 {
                     SelectedAction = _deviceTypes;//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Список проверяемых приборов";
+                    HelpMessage = "Список поддерживаемых типов проверяемых приборов";
                 });
             }
         }
@@ -168,7 +168,7 @@ namespace KIPer.ViewModel
                 return new RelayCommand(() =>
                 {
                     SelectedAction = _etalonTypes;//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Список эталонных приборов";
+                    HelpMessage = "Список поддерживаемых типов эталонных приборов";
                 });
             }
         }
@@ -182,8 +182,8 @@ namespace KIPer.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = "Настройки";//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Список настроек";
+                    SelectedAction = "Здесь будут элементы управления настройками приложения";//todo установить выбор соответсвующего ViewModel
+                    HelpMessage = "Настройки приложения";
                 });
             }
         }

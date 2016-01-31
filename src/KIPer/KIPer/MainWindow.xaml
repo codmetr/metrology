@@ -39,12 +39,14 @@
             <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>
             <Button Style="{StaticResource ButtonTabStyle}" Content="Сервис" Command="{Binding SelectService}"/>
         </ItemsControl>
-        <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}" x:Name="HelpBorder">
-            <TextBox 
-                Background="{Binding Background, ElementName=HelpBorder}"
-                HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                TextAlignment="Center" TextWrapping="Wrap" BorderThickness="0"
-                Text="{Binding HelpMessage}"/>
+        <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}" x:Name="HelpBorder" Height="35">
+            <ScrollViewer>
+                <TextBox 
+                    Background="{Binding Background, ElementName=HelpBorder}"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                    TextAlignment="Center" TextWrapping="Wrap" BorderThickness="0"
+                    Text="{Binding HelpMessage}"/>
+            </ScrollViewer>
         </Border>
         <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource ActualTabBorderStyle}">
             <ContentPresenter Content="{Binding SelectedAction}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>

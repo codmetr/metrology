@@ -10,3 +10,5 @@ src/KIPer/Controls/PressureElementControls/obj/
 src/KIPer/EmulationComPort/obj/
 src/KIPer/Emulation/ComPortEmulation/obj/
 src/KIPer/Emulation/ComPortEmulation/bin/
+src/KIPer/SetupKipTM/bin/
+src/KIPer/SetupKipTM/obj/

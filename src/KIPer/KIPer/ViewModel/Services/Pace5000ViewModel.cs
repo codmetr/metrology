@@ -59,15 +59,42 @@ namespace KIPer.ViewModel
             private set { Set(ref _deviceParameters, value); }
         }
 
-        public ICommand UpdateDeviceParameters { get{return new RelayCommand(() =>
+        public ICommand UpdateDeviceParameters
         {
-            //TODO: realise update parameters
-            _deviceParameters.Add(new ParameterValuePair() {Parameter = "paremeter 1", Vlaue = "value1"});
-            if (ManometerValue < 90)
-                ManometerValue += 10;
-            else
-                ManometerValue -= 1;
-        });} }
+            get
+            {
+                return new RelayCommand(() =>
+                    {
+                        //TODO: realise update parameters
+                        _deviceParameters.Add(new ParameterValuePair() { Parameter = "paremeter 1", Vlaue = "value1" });
+                        if (ManometerValue < 90)
+                            ManometerValue += 10;
+                        else
+                            ManometerValue -= 1;
+                    });
+            }
+        }
+
+        public ICommand ChangePressure
+        {
+            get
+            {
+                return new RelayCommand<object>((param) =>
+                {
+                    var strval = param.ToString();
+                    int val;
+                    if (!int.TryParse(strval, out val))
+                        return;
+                    var currentVal = ManometerValue;
+                    currentVal += val;
+                    if (currentVal < 0)
+                        currentVal = 0;
+                    else if (currentVal > 100)
+                        currentVal = 100;
+                    ManometerValue = currentVal;
+                });
+            }
+        }
 
     }
 }

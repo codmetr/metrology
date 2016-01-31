@@ -81,7 +81,7 @@
     </Style>
     <Style TargetType="TextBlock" x:Key="ItemedValueTextBoxStyle" BasedOn="{StaticResource ItemedTextBoxStyle}">
         <Setter Property="FontStyle" Value="Italic"/>
-        <Setter Property="FontWeight" Value="Bold"/>
+        <!--<Setter Property="FontWeight" Value="Bold"/>-->
     </Style>
     <Style TargetType="Border" x:Key="ItemedBorderStyle" BasedOn="{StaticResource CommonBorderStyle}">
         <!--<Setter Property="BorderBrush" Value="{StaticResource ItemedTextBoxBorderBrush}"/>-->
