@@ -10,6 +10,7 @@
 */
 
 using System.Reflection;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using KIPer.Interfaces;
