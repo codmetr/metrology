@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace KipTM.View.Checks
+namespace KipTM.View
 {
     /// <summary>
     /// Interaction logic for CheckView.xaml

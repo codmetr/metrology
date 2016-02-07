@@ -8,6 +8,8 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KIPer.Interfaces;
 using KIPer.View;
+using KipTM.View;
+using KipTM.ViewModel;
 
 namespace KIPer.ViewModel
 {
@@ -29,6 +31,8 @@ namespace KIPer.ViewModel
         private IArchivesViewModel _tests;
         private DeviceTypesViewModel _deviceTypes;
         private DeviceTypesViewModel _etalonTypes;
+        private CheckViewModel _check;
+
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -59,6 +63,9 @@ namespace KIPer.ViewModel
 
                 //Вкладка Эталоны
                 {typeof(EtalonTypeViewModel), typeof(EtalonTypeView)},
+
+                //Вкладка Проверка
+                {typeof(CheckViewModel), typeof(CheckView)},
 
             };
         }
@@ -122,7 +129,7 @@ namespace KIPer.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = "Здесь будет выполняться сами поверки/калибровки/аттестации";//todo установить выбор соответсвующего ViewModel
+                    SelectedAction = _check;
                     HelpMessage = "Выполнение поверки";
                 });
             }
@@ -413,6 +420,8 @@ namespace KIPer.ViewModel
                     Methodics = methodics
                 }
             });
+
+            _check = new CheckViewModel();
         }
 
         public IArchivesViewModel Tests { get { return _tests; } }
@@ -420,5 +429,7 @@ namespace KIPer.ViewModel
         public DeviceTypesViewModel DeviceTypes { get { return _deviceTypes; } }
 
         public DeviceTypesViewModel EtalonTypes { get { return _etalonTypes; } }
+
+        public CheckViewModel Check { get { return _check; } }
     }
 }
