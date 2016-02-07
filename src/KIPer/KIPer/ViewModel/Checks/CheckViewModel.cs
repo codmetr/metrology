@@ -1,4 +1,6 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Collections.ObjectModel;
+using GalaSoft.MvvmLight;
+using KIPer.ViewModel;
 
 namespace KipTM.ViewModel.Checks
 {
@@ -16,5 +18,7 @@ namespace KipTM.ViewModel.Checks
         public CheckViewModel()
         {
         }
+
+        public ObservableCollection<IParameterResultViewModel> Parameters { get; set; }
     }
 }

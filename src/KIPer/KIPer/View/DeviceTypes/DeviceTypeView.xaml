@@ -165,11 +165,44 @@
                              Style="{StaticResource MethodicListStyle}"/>
                     <GroupBox Header="Точки"
                               Grid.Row="0" Grid.RowSpan="3" Grid.Column="1">
-                        <ItemsControl
+                        <!--<ItemsControl
                             DataContext="{Binding SelectedMethodic}"
                             ItemsSource="{Binding Path=Points}"
                             ItemTemplate="{StaticResource ParameterResultTemplate}">
-                        </ItemsControl>
+                        </ItemsControl>-->
+                        <DataGrid DataContext="{Binding SelectedMethodic}"
+                            ItemsSource="{Binding Path=Points}" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Параметр">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding NameParameter}" Style="{StaticResource ItemedValueTextBoxStyle}" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Проверяемая точка">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding PointMeashuring}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                                                <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Допуск" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding Tolerance}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                                                <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
                     </GroupBox>
                     <GroupBox Header="Эталонные параметры"
                               Grid.Row="1" Grid.Column="0">

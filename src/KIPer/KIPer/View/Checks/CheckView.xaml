@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -13,6 +13,32 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <GroupBox Header="Характеристики поверки" Grid.Column="0" Grid.Row="0">
+            <StackPanel>
+                <TextBlock>Тип устройства:</TextBlock>
+                <ComboBox></ComboBox>
+                <TextBlock>Тип поверки:</TextBlock>
+                <ComboBox></ComboBox>
+                <TextBlock>Серийный номер:</TextBlock>
+                <TextBox></TextBox>
+                <TextBlock>Дата прошлой поверки:</TextBlock>
+                <TextBox></TextBox>
+            </StackPanel>
+        </GroupBox>
+        <StackPanel Grid.Column="0" Grid.Row="1">
+            <Button>Сохранить</Button>
+            <Button>Протокол</Button>
+        </StackPanel>
+        
+        
     </Grid>
 </UserControl>

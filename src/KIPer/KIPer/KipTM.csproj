@@ -120,6 +120,12 @@
     <Compile Include="ViewModel\Archive\ArchivesViewModel.cs" />
     <Compile Include="ViewModel\Archive\TestResultViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\Archive\ParamResCollectionView.xaml.cs">
+      <DependentUpon>ParamResCollectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Archive\ParamResDataGridView.xaml.cs">
+      <DependentUpon>ParamResDataGridView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Checks\CheckView.xaml.cs">
       <DependentUpon>CheckView.xaml</DependentUpon>
     </Compile>
@@ -176,6 +182,14 @@
     <Page Include="Skins\MainSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Archive\ParamResCollectionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Archive\ParamResDataGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Checks\CheckView.xaml">
       <SubType>Designer</SubType>
