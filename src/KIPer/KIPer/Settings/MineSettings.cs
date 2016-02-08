@@ -40,9 +40,9 @@ namespace KIPer.Settings
             return res;
         }
 
-        public IEnumerable<EtalonSettings> Etalons;
+        public List<EtalonSettings> Etalons;
 
-        public IEnumerable<ComPortSettings> Ports;
+        public List<ComPortSettings> Ports;
 
 
     }

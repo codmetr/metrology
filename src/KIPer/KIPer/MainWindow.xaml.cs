@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using KIPer.ViewModel;
 
 namespace KIPer
@@ -14,6 +15,8 @@ namespace KIPer
         public MainWindow()
         {
             InitializeComponent();
+            Closing += (s, e) => ViewModelLocator.Cleanup();
         }
+       
     }
 }

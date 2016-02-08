@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using KIPer.Interfaces;
 using KIPer.Settings;
 using PACESeries;
+using SQLiteArchive;
 
 namespace KIPer.Model
 {
@@ -13,8 +14,15 @@ namespace KIPer.Model
     {
         MainLoop.ILoops _loops = new MainLoop.Loops();
         MineSettings _settings = new MineSettings();
-        private string _settingsPath = ".\\settings.xml";
+        private string _settingsFileName = "settings";
         private PACE5000Model _pace5000;
+        private IArchive _archive;
+
+
+        public DataService(IArchive archive)
+        {
+            _archive = archive;
+        }
 
         public void InitDevices()
         {
@@ -29,19 +37,12 @@ namespace KIPer.Model
 
         public void LoadSettings()
         {
-            if(!File.Exists(_settingsPath))
-            {
-                _settings = MineSettings.GetDefault();
-                return;
-            }
-            var xmlSerializer = new XmlSerializer(typeof (MineSettings));
-            using (FileStream fs = new FileStream(_settingsPath, FileMode.Open))
-            {
-                XmlReader reader = XmlReader.Create(fs);
+            _settings = _archive.Load(_settingsFileName, MineSettings.GetDefault());
+        }
 
-                _settings = (MineSettings) xmlSerializer.Deserialize(reader);
-                fs.Close();
-            }
+        public void SaveSettings()
+        {
+            _archive.Save(_settingsFileName, _settings);
         }
 
         public PACE5000Model Pace5000

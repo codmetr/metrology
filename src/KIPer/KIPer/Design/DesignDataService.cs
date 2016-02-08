@@ -12,6 +12,11 @@ namespace KIPer.Design
             //throw new NotImplementedException();
         }
 
+        public void SaveSettings()
+        {
+            throw new NotImplementedException();
+        }
+
         public void InitDevices()
         {
             //throw new NotImplementedException();

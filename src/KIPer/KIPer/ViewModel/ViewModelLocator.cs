@@ -14,12 +14,9 @@ using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using KIPer.Interfaces;
-using KIPer.StructureService;
 using Microsoft.Practices.ServiceLocation;
 using KIPer.Model;
 using System;
-
-//using StructureMap;
 
 namespace KIPer.ViewModel
 {
@@ -36,7 +33,8 @@ namespace KIPer.ViewModel
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-            
+
+            SimpleIoc.Default.Register<SQLiteArchive.IArchive, SQLiteArchive.Archive>();
             if (ViewModelBase.IsInDesignModeStatic)
             {
                 SimpleIoc.Default.Register<IDataService, Design.DesignDataService>();
@@ -73,6 +71,7 @@ namespace KIPer.ViewModel
         /// </summary>
         public static void Cleanup()
         {
+            ServiceLocator.Current.GetInstance<IDataService>().SaveSettings();
         }
     }
 }

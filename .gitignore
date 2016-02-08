@@ -13,3 +13,4 @@ src/KIPer/Emulation/ComPortEmulation/bin/
 src/KIPer/SetupKipTM/bin/
 src/KIPer/SetupKipTM/obj/
 src/KIPer/Archive/SQLiteArchive/obj/
+src/KIPer/Archive/SQLiteArchive/bin/

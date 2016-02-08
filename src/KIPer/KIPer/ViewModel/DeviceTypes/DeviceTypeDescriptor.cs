@@ -9,7 +9,7 @@ namespace KIPer.ViewModel
     /// <summary>
     /// Базовый описатель типа устройства
     /// </summary>
-    public class DeviceTypeDescriptor
+    public class DeviceTypeDescriptor : IDeviceTypeDescriptor
     {
         public DeviceTypeDescriptor(string model, string deviceCommonType, string deviceManufacturer)
         {

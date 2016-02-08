@@ -9,7 +9,7 @@ namespace KIPer.ViewModel
     /// <summary>
     /// Описатель функции используемой для рассчета вычисляемых параметров
     /// </summary>
-    public class FunctionDescriptor
+    public class FunctionDescriptor : IFunctionDescriptor
     {
         public string Name { get; set; }
     }

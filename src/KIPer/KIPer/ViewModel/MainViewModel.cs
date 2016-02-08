@@ -421,7 +421,7 @@ namespace KIPer.ViewModel
                 }
             });
 
-            _check = new CheckViewModel();
+            _check = new CheckViewModel(_dataService);
         }
 
         public IArchivesViewModel Tests { get { return _tests; } }

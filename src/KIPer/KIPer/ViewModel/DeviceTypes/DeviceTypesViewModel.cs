@@ -12,7 +12,7 @@ namespace KIPer.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class DeviceTypesViewModel : ViewModelBase
+    public class DeviceTypesViewModel : ViewModelBase, IDeviceTypesViewModel
     {
         private ObservableCollection<object> _types;
 

@@ -105,6 +105,9 @@
     <Compile Include="ViewModel\DeviceTypes\EtalonTypeViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\FunctionDescriptor.cs" />
     <Compile Include="ViewModel\Archive\IDeviceViewModel.cs" />
+    <Compile Include="ViewModel\DeviceTypes\IDeviceTypeDescriptor.cs" />
+    <Compile Include="ViewModel\DeviceTypes\IDeviceTypesViewModel.cs" />
+    <Compile Include="ViewModel\DeviceTypes\IFunctionDescriptor.cs" />
     <Compile Include="ViewModel\DeviceTypes\IMethodicViewModel.cs" />
     <Compile Include="ViewModel\Archive\IParameterResultViewModel.cs" />
     <Compile Include="ViewModel\Archive\IParameterViewModel.cs" />
@@ -259,6 +262,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Archive\SQLiteArchive\SQLiteArchive.csproj">
+      <Project>{5ddfab0d-1f66-4337-bd2f-ece434d68794}</Project>
+      <Name>SQLiteArchive</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Controls\PressureElementControls\PressureElementControls.csproj">
       <Project>{30e4408b-ffc2-495c-b7b4-8cf8e621d3de}</Project>
       <Name>PressureElementControls</Name>
