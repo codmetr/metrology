@@ -11,7 +11,7 @@ namespace KIPer.ViewModel
     /// </summary>
     public class DeviceTypeViewModel : ViewModelBase
     {
-        private DeviceTypeDescriptor _device;
+        private IDeviceTypeDescriptor _device;
         private IEnumerable<IMethodicViewModel> _methodics;
         private IMethodicViewModel _selectedMethodic;
 
@@ -25,7 +25,7 @@ namespace KIPer.ViewModel
         /// <summary>
         /// Тип устройства
         /// </summary>
-        public DeviceTypeDescriptor Device
+        public IDeviceTypeDescriptor Device
         {
             get { return _device; }
             set { Set(ref _device, value); }

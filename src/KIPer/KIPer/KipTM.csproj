@@ -98,6 +98,7 @@
     <Compile Include="Settings\MineSettings.cs" />
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckViewModel.cs" />
+    <Compile Include="ViewModel\Checks\MechanicalManometerViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypeDescriptor.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypesViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypeViewModel.cs" />
@@ -130,6 +131,9 @@
     </Compile>
     <Compile Include="View\Checks\CheckView.xaml.cs">
       <DependentUpon>CheckView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Checks\MechanicalManometerView.xaml.cs">
+      <DependentUpon>MechanicalManometerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Converters\DoubleToTimespanConverter.cs" />
     <Compile Include="View\DeviceTypes\DeviceTypesView.xaml.cs">
@@ -194,6 +198,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Checks\CheckView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Checks\MechanicalManometerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

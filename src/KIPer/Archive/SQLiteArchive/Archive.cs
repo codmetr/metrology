@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,11 @@ namespace SQLiteArchive
     public class Archive : IArchive
     {
         public string _archiveFileFormat = "./Archive/{0}.xml";
+
+        public Archive()
+        {
+            //var conn = new SQLiteConnection()
+        }
 
         public void Save<T>(string key, T entity)
         {
@@ -49,5 +55,7 @@ namespace SQLiteArchive
             }
             return result;
         }
+
+
     }
 }

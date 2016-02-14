@@ -47,9 +47,16 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ErrorLine.xaml.cs">
+      <DependentUpon>ErrorLine.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Scale.xaml.cs">
       <DependentUpon>Scale.xaml</DependentUpon>
     </Compile>
+    <Page Include="ErrorLine.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Manometer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

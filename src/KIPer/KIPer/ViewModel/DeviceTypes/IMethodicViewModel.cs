@@ -20,7 +20,7 @@ namespace KIPer.ViewModel
         /// <summary>
         /// Типы вычисляемых параметров и функции их вычисления
         /// </summary>
-        IDictionary<IParameterViewModel, FunctionDescriptor> CalculatedParameters { get; set; }
+        IDictionary<IParameterViewModel, IFunctionDescriptor> CalculatedParameters { get; set; }
 
         /// <summary>
         /// Типы требуемых эталонных параметров

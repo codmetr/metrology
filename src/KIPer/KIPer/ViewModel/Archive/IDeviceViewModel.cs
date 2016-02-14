@@ -8,7 +8,7 @@
         /// <summary>
         /// Тип устройства
         /// </summary>
-        DeviceTypeDescriptor DeviceType { get; set; }
+        IDeviceTypeDescriptor DeviceType { get; set; }
 
         /// <summary>
         /// Серийный номер

@@ -11,7 +11,7 @@ namespace KIPer.ViewModel
     public class DeviceViewModel : ViewModelBase, IDeviceViewModel
     {
         private string _serialNumber;
-        private DeviceTypeDescriptor _deviceType;
+        private IDeviceTypeDescriptor _deviceType;
 
         /// <summary>
         /// Initializes a new instance of the DeviceViewModel class.
@@ -23,7 +23,7 @@ namespace KIPer.ViewModel
         /// <summary>
         /// Модель прибора
         /// </summary>
-        public DeviceTypeDescriptor DeviceType
+        public IDeviceTypeDescriptor DeviceType
         {
             get { return _deviceType; }
             set { Set(ref _deviceType, value); }

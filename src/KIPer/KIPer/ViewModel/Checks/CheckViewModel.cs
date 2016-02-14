@@ -5,6 +5,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using KIPer.Interfaces;
 using KIPer.ViewModel;
+using KipTM.ViewModel.Checks;
 
 namespace KipTM.ViewModel
 {
@@ -17,12 +18,14 @@ namespace KipTM.ViewModel
     public class CheckViewModel : ViewModelBase
     {
         private IDataService _dataService;
+        private object _check;
         /// <summary>
         /// Initializes a new instance of the CheckViewModel class.
         /// </summary>
-        public CheckViewModel(IDataService dataService)
+        public CheckViewModel(IDataService dataService, object check)
         {
             _dataService = dataService;
+            _check = check;
         }
 
         public ObservableCollection<IParameterResultViewModel> Parameters { get; set; }
@@ -42,5 +45,7 @@ namespace KipTM.ViewModel
         public ICommand Save { get; set; }
 
         public ICommand Report { get; set; }
+        
+        public object Check { get { return _check; } }
     }
 }

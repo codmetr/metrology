@@ -17,8 +17,8 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -49,6 +49,8 @@
         <archive:ParamResDataGridView
             Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
             DataContext="{Binding Parameters}"/>
-        
+        <ContentPresenter
+            Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"
+            Content="{Binding Check}"/>
     </Grid>
 </UserControl>

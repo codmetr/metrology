@@ -11,7 +11,7 @@ namespace KIPer.ViewModel
     /// </summary>
     public class EtalonTypeViewModel : ViewModelBase
     {
-        private DeviceTypeDescriptor _device;
+        private IDeviceTypeDescriptor _device;
         private IEnumerable<string> _typesEtalonParameters;
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace KIPer.ViewModel
         /// <summary>
         /// Тип устройства
         /// </summary>
-        public DeviceTypeDescriptor Device
+        public IDeviceTypeDescriptor Device
         {
             get { return _device; }
             set { Set(ref _device, value); }

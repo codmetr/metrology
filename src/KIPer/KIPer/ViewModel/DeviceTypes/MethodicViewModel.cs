@@ -31,7 +31,7 @@ namespace KIPer.ViewModel
         /// <summary>
         /// Типы вычисляемых параметров и функции их вычисления
         /// </summary>
-        public IDictionary<IParameterViewModel, FunctionDescriptor> CalculatedParameters { get; set; }
+        public IDictionary<IParameterViewModel, IFunctionDescriptor> CalculatedParameters { get; set; }
  
         /// <summary>
         /// типы требуемых эталонных параметров

@@ -9,7 +9,9 @@ using GalaSoft.MvvmLight.Command;
 using KIPer.Interfaces;
 using KIPer.View;
 using KipTM.View;
+using KipTM.View.Checks;
 using KipTM.ViewModel;
+using KipTM.ViewModel.Checks;
 
 namespace KIPer.ViewModel
 {
@@ -66,6 +68,7 @@ namespace KIPer.ViewModel
 
                 //Вкладка Проверка
                 {typeof(CheckViewModel), typeof(CheckView)},
+                {typeof(MechanicalManometerViewModel), typeof(MechanicalManometerView)},
 
             };
         }
@@ -353,7 +356,7 @@ namespace KIPer.ViewModel
                 {
                     Name = "Поверка",
                     TypesEtalonParameters = new[] {"напряжение", "давление"},
-                    CalculatedParameters = new Dictionary<IParameterViewModel, FunctionDescriptor>()
+                    CalculatedParameters = new Dictionary<IParameterViewModel, IFunctionDescriptor>()
                     {
                         {
                             new ParameterResultViewModel()
@@ -376,7 +379,7 @@ namespace KIPer.ViewModel
                 {
                     Name = "Аттестация",
                     TypesEtalonParameters = new[] {"напряжение", "давление"},
-                    CalculatedParameters = new Dictionary<IParameterViewModel, FunctionDescriptor>()
+                    CalculatedParameters = new Dictionary<IParameterViewModel, IFunctionDescriptor>()
                     {
                         {
                             new ParameterResultViewModel()
@@ -421,7 +424,7 @@ namespace KIPer.ViewModel
                 }
             });
 
-            _check = new CheckViewModel(_dataService);
+            _check = new CheckViewModel(_dataService, new MechanicalManometerViewModel());
         }
 
         public IArchivesViewModel Tests { get { return _tests; } }
