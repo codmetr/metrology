@@ -24,6 +24,15 @@ namespace ADTS
     }
     #endregion
 
+    #region Calibration channel
+
+    public enum CalibChannel
+    {
+        PT,
+        PS,
+    }
+    #endregion
+
     #region Parameters
     public enum Parameters
     {

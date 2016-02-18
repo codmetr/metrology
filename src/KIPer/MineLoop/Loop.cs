@@ -140,7 +140,7 @@ namespace MainLoop
         /// </summary>
         /// <param name="key">Ключ локера</param>
         /// <param name="action">действие</param>
-        public void StartUnmportantAction(string key, Action<object> action)
+        public void StartUnimportantAction(string key, Action<object> action)
         {
             if(!_threads.ContainsKey(key))
                 throw new InvalidProgramException(string.Format("key({0}) not found", key));

@@ -34,7 +34,8 @@ namespace MainLoop
             unimportantActions = new Queue<Action<object>>();
         }
 
-        public LoopDescriptor(object locker, CancellationToken cancel, Action<object> initAction = null):this()
+        public LoopDescriptor(object locker, CancellationToken cancel, Action<object> initAction = null)
+            : this()
         {
             _initAction = initAction;
             this.locker = locker;
@@ -42,7 +43,8 @@ namespace MainLoop
             _isNeedInit = _initAction != null;
         }
 
-        public LoopDescriptor(object locker, CancellationToken cancel, Action<object> initAction, TimeSpan waiting):this(locker, cancel, initAction)
+        public LoopDescriptor(object locker, CancellationToken cancel, Action<object> initAction, TimeSpan waiting)
+            : this(locker, cancel, initAction)
         {
             this.waiting = waiting;
         }
@@ -51,14 +53,14 @@ namespace MainLoop
         /// <summary>
         /// For locker need call Init action
         /// </summary>
-        public bool IsNeedInit{get { return _isNeedInit; }}
+        public bool IsNeedInit { get { return _isNeedInit; } }
 
         /// <summary>
         /// Init locker
         /// </summary>
         public void Init()
         {
-            if(!_isNeedInit)
+            if (!_isNeedInit)
                 return;
             _isNeedInit = false;
             if (_initAction != null)
@@ -111,7 +113,7 @@ namespace MainLoop
         /// <returns>important action</returns>
         public Action<object> GetImportant()
         {
-            if(_importantCount<=0)
+            if (_importantCount <= 0)
                 return null;
             Action<object> result;
             lock (importantActions)
@@ -145,7 +147,7 @@ namespace MainLoop
         /// <returns>unimportant action</returns>
         public Action<object> GetUnimportant()
         {
-            if(_unimportantCount<=0)
+            if (_unimportantCount <= 0)
                 return null;
             Action<object> result;
             lock (unimportantActions)
@@ -159,17 +161,17 @@ namespace MainLoop
         /// <summary>
         /// Need cancel all action for this locker 
         /// </summary>
-        public bool IsCancel{get { return _cancel.IsCancellationRequested; }}
+        public bool IsCancel { get { return _cancel.IsCancellationRequested; } }
 
         /// <summary>
         /// Locker
         /// </summary>
-        public Object Locker{get { return locker; }}
+        public Object Locker { get { return locker; } }
 
         /// <summary>
         /// Wainting interval in work loop
         /// </summary>
-        public TimeSpan Waiting{get { return waiting; }}
+        public TimeSpan Waiting { get { return waiting; } }
 
     }
 }

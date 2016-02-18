@@ -55,6 +55,9 @@
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\Lib\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\Lib\StructureMap.dll</HintPath>
     </Reference>
@@ -88,6 +91,8 @@
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Interfaces\ITest.cs" />
     <Compile Include="Interfaces\ITestConfirurator.cs" />
+    <Compile Include="Model\Checks\ADTSCheckMethodic.cs" />
+    <Compile Include="Model\DeviceManager.cs" />
     <Compile Include="Model\PACE5000Model.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
@@ -97,6 +102,7 @@
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\MineSettings.cs" />
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
+    <Compile Include="ViewModel\Checks\ADTSCalibrationViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckViewModel.cs" />
     <Compile Include="ViewModel\Checks\MechanicalManometerViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypeDescriptor.cs" />
@@ -270,6 +276,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ADTS\ADTS.csproj">
+      <Project>{e032255a-ad56-44cd-8525-87293538e958}</Project>
+      <Name>ADTS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Archive\SQLiteArchive\SQLiteArchive.csproj">
       <Project>{5ddfab0d-1f66-4337-bd2f-ece434d68794}</Project>
       <Name>SQLiteArchive</Name>
@@ -281,6 +291,10 @@
     <ProjectReference Include="..\Drivers\PACE5000\PACESeries.csproj">
       <Project>{3d3db0eb-5b92-4d8f-8547-82ff7184c59a}</Project>
       <Name>PACESeries</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IEEE488Transport\IEEE488.csproj">
+      <Project>{3fec76c3-b933-4461-aa8d-85360d3f41c4}</Project>
+      <Name>IEEE488</Name>
     </ProjectReference>
     <ProjectReference Include="..\MineLoop\MainLoop.csproj">
       <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>

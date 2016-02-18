@@ -7,6 +7,28 @@ namespace ADTS
 {
     public class ADTSParser
     {
+        #region GetCommandCalibrationAbort()
+
+        public string GetCommandCalibrationAbort()
+        {
+            const string cmd = "CAL:ABOR";
+            return cmd;
+        }
+        #endregion
+
+        #region GetCommandSetAdjustCalibration
+        public string GetCommandSetAdjustCalibration(CalibChannel channel, double span, double zero, int[] res)
+        {
+            const string cmdFrame = "CAL:ADJ {0},{1},{2}";
+            var cmd = string.Format(cmdFrame, channel == CalibChannel.PT ? "PT" : "PS", span.ToString("##.##"), zero.ToString("###.##"));
+            for (int i = 0; i < 12; i++)
+            {
+                cmd = cmd + string.Format(",{0}", res[i]);
+            }
+            return cmd;
+        }
+        #endregion
+
         #region GetState
         public string GetCommandGetState()
         {

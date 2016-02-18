@@ -2,7 +2,7 @@
 
 namespace MainLoop
 {
-    public interface ILoops:IDisposable
+    public interface ILoops : IDisposable
     {
         /// <summary>
         /// Добавить разделяемый ресурс и его ключ
@@ -38,6 +38,6 @@ namespace MainLoop
         /// </summary>
         /// <param name="key">Ключ локера</param>
         /// <param name="action">действие</param>
-        void StartUnmportantAction(string key, Action<object> action);
+        void StartUnimportantAction(string key, Action<object> action);
     }
 }
