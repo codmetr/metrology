@@ -16,5 +16,11 @@ namespace ADTS
             var cmd = _parser.GetCommandCalibrationAbort();
             return transport.Send(_address, cmd);
         }
+
+        public bool StartCalibrationStart(IEEE488.ITransportIEEE488 transport, CalibChannel channel)
+        {
+            var cmd = _parser.GetCommandCalibrationStart(channel);
+            return transport.Send(_address, cmd);
+        }
     }
 }

@@ -5,8 +5,6 @@ using System.Text;
 
 namespace ADTS
 {
-    static class Service
-    {
         #region Набор статических методов для работы с ADTS
         /// <summary>
         /// Набор статических методов для работы с ADTS
@@ -203,5 +201,4 @@ namespace ADTS
         }
         #endregion Набор статических методов для работы с ADTS
 
-    }
 }

@@ -12,12 +12,12 @@ namespace KipTM.Model.Checks
 
         public bool InitADTS()
         {
-            
+            throw new NotImplementedException();
         }
 
         public bool InitPASE()
         {
-            
+            throw  new NotImplementedException();
         }
     }
 }

@@ -5,6 +5,14 @@ using System.Text;
 
 namespace ADTS
 {
+    enum PeremeterTypes
+    {
+        Real,
+        Integer,
+        Boolean,
+        String,
+    }
+
     #region Bool
     public enum Bool
     {
@@ -30,6 +38,7 @@ namespace ADTS
     {
         PT,
         PS,
+        PTPS,
     }
     #endregion
 

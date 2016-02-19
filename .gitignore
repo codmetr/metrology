@@ -17,3 +17,5 @@ src/KIPer/Archive/SQLiteArchive/bin/
 doc/ADTS-405_403/Thumbs.db
 src/KIPer/ADTS/obj/
 src/KIPer/IEEE488Transport/obj/
+src/KIPer/ADTS/bin/
+src/KIPer/IEEE488Transport/bin/
