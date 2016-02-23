@@ -11,6 +11,8 @@ namespace ADTS
         Integer,
         Boolean,
         String,
+        State,
+        PressureUnit
     }
 
     #region Bool

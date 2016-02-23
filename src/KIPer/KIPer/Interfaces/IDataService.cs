@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using KIPer.Model;
+using KipTM.Model;
 
-namespace KIPer.Interfaces
+namespace KipTM.Interfaces
 {
     public interface IDataService
     {

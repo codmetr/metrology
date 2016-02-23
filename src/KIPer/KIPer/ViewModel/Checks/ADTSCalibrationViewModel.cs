@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using KIPer.ViewModel;
+using KipTM.ViewModel;
 
 namespace KipTM.ViewModel.Checks
 {

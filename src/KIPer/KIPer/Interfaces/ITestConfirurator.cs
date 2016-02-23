@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KIPer.Interfaces
+namespace KipTM.Interfaces
 {
     interface ITestConfirurator
     {

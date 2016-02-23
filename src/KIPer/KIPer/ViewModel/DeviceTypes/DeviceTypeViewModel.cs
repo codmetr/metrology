@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 
-namespace KIPer.ViewModel
+namespace KipTM.ViewModel
 {
     /// <summary>
     /// Комплексный описатель типа устройства

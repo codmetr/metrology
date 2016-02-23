@@ -26,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -87,10 +88,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Design\DesignDataService.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Interfaces\ICheckPoint.cs" />
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Interfaces\ITest.cs" />
     <Compile Include="Interfaces\ITestConfirurator.cs" />
+    <Compile Include="Model\ADTSModel.cs" />
     <Compile Include="Model\Checks\ADTSCheckMethodic.cs" />
     <Compile Include="Model\DeviceManager.cs" />
     <Compile Include="Model\PACE5000Model.cs" />
@@ -261,6 +264,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>KipTM</CustomToolNamespace>
     </EmbeddedResource>
     <None Include="App.config" />
     <None Include="packages.config" />

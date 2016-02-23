@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KIPer.ViewModel
+namespace KipTM.ViewModel
 {
     public class ParameterValuePair
     {

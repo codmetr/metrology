@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
-using KIPer.Interfaces;
-using KIPer.ViewModel;
+using KipTM.Interfaces;
+using KipTM.ViewModel;
 using KipTM.ViewModel.Checks;
 
 namespace KipTM.ViewModel

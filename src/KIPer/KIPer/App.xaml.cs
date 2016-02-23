@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using GalaSoft.MvvmLight.Threading;
 
-namespace KIPer
+namespace KipTM
 {
     /// <summary>
     /// Interaction logic for App.xaml

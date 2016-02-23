@@ -1,4 +1,4 @@
-﻿namespace KIPer.ViewModel
+﻿namespace KipTM.ViewModel
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.

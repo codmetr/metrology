@@ -1,7 +1,7 @@
 ﻿/*
   In App.xaml:
   <Application.Resources>
-      <vm:ViewModelLocatorTemplate xmlns:vm="clr-namespace:KIPer.ViewModel"
+      <vm:ViewModelLocatorTemplate xmlns:vm="clr-namespace:KipTM.ViewModel"
                                    x:Key="Locator" />
   </Application.Resources>
   
@@ -13,12 +13,12 @@ using System.Reflection;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
-using KIPer.Interfaces;
+using KipTM.Interfaces;
 using Microsoft.Practices.ServiceLocation;
-using KIPer.Model;
+using KipTM.Model;
 using System;
 
-namespace KIPer.ViewModel
+namespace KipTM.ViewModel
 {
     /// <summary>
     /// This class contains static references to all the view models in the

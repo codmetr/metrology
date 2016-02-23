@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace KIPer.ViewModel
+namespace KipTM.ViewModel
 {
     /// <summary>
     /// Идентификатор конкретного устройства

@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="KIPer.View.PACE5000View"
+﻿<UserControl x:Class="KipTM.View.PACE5000View"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:pressureElementControls="clr-namespace:PressureElementControls;assembly=PressureElementControls"
-             xmlns:viewModel="clr-namespace:KIPer.ViewModel"
-             xmlns:converters="clr-namespace:KIPer.View.Converters"
+             xmlns:viewModel="clr-namespace:KipTM.ViewModel"
+             xmlns:converters="clr-namespace:KipTM.View.Converters"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:Pace5000ViewModel}"
              d:DesignHeight="600" d:DesignWidth="700">
     <UserControl.Resources>

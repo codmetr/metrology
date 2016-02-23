@@ -3,10 +3,10 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using KIPer.Interfaces;
-using KIPer.Model;
+using KipTM.Interfaces;
+using KipTM.Model;
 
-namespace KIPer.ViewModel
+namespace KipTM.ViewModel
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.

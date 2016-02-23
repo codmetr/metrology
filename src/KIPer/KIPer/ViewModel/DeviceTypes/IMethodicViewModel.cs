@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KIPer.ViewModel
+namespace KipTM.ViewModel
 {
     /// <summary>
     /// Методика проверки

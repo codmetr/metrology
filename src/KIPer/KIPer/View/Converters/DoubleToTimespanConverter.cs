@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace KIPer.View.Converters
+namespace KipTM.View.Converters
 {
     public class DoubleToTimespanConverter : IValueConverter
     {

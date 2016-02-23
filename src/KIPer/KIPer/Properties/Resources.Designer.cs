@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace KipTM.Properties {
+namespace KipTM {
     using System;
     
     

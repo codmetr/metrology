@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows;
-using KIPer.ViewModel;
+using KipTM.ViewModel;
 
-namespace KIPer
+namespace KipTM
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

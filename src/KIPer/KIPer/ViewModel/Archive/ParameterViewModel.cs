@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace KIPer.ViewModel
+namespace KipTM.ViewModel
 {
     public class ParameterViewModel : ViewModelBase, IParameterViewModel
     {

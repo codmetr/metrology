@@ -3,12 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
-using KIPer.Interfaces;
-using KIPer.Settings;
+using KipTM.Interfaces;
+using KipTM.Settings;
+using KipTM.Model;
 using PACESeries;
 using SQLiteArchive;
 
-namespace KIPer.Model
+namespace KipTM.Model
 {
     public class DataService : IDataService
     {

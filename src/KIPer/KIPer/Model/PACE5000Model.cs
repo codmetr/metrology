@@ -6,7 +6,7 @@ using System.Threading;
 using MainLoop;
 using PACESeries;
 
-namespace KIPer.Model
+namespace KipTM.Model
 {
     public class PACE5000Model
     {

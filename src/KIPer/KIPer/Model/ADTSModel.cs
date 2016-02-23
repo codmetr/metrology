@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KipTM.Interfaces
+namespace KipTM.Model
 {
-    public interface ITestDescriptor
+    public class ADTSModel
     {
-        IEnumerable<ICheckPoint> Checks { get; } 
+        internal static string Key { get { return "ADTS"; } }
     }
 }

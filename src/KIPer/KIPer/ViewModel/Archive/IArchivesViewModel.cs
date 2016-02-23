@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace KIPer.ViewModel
+namespace KipTM.ViewModel
 {
     public interface IArchivesViewModel
     {

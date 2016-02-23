@@ -1,4 +1,4 @@
-﻿namespace KIPer.ViewModel
+﻿namespace KipTM.ViewModel
 {
     public interface IFunctionDescriptor
     {

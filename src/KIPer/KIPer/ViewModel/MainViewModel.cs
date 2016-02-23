@@ -6,14 +6,14 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using KIPer.Interfaces;
-using KIPer.View;
+using KipTM.Interfaces;
+using KipTM.View;
 using KipTM.View;
 using KipTM.View.Checks;
 using KipTM.ViewModel;
 using KipTM.ViewModel.Checks;
 
-namespace KIPer.ViewModel
+namespace KipTM.ViewModel
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.

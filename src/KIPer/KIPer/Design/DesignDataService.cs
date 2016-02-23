@@ -1,8 +1,8 @@
 ﻿using System;
-using KIPer.Interfaces;
-using KIPer.Model;
+using KipTM.Interfaces;
+using KipTM.Model;
 
-namespace KIPer.Design
+namespace KipTM.Design
 {
     public class DesignDataService : IDataService
     {

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KipTM.Interfaces
+namespace KipTM
 {
-    public interface ITestDescriptor
+    class Enums
     {
-        IEnumerable<ICheckPoint> Checks { get; } 
+        public const string KeyPortADTS = "IEEE488ADTS";
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -7,7 +8,44 @@ namespace ADTS
 {
     public class ADTSParser
     {
-        #region CalibrationAbort()
+        private const string KeyGetDate = "SYST:DATE?";
+        private const string KeySetState = "SOUR:STAT <state>";
+        private const string KeyGetState = "SOUR:STAT?";
+        private const string KeyStartMainCalibration = "CAL:MAIN:CHAN <channel>";
+        private const string KeySetValueActualPressure = "CAL:MAIN:VAL <value>";
+        private const string KeyGetCalibrationResult = "CAL:MAIN:RES?";
+        private const string KeySetMainCalibrationAccept = "CAL:MAIN:ACC <state>";
+        private const string KeySetUnitPressure = "UNIT:PRES <units>";
+        private const string KeyGetUnitPressure = "UNIT:PRES?";
+        private const string KeySetRate = "SOUR:RATE <parameter>,<aim>";
+        private const string KeyGetRate = "SOUR:RATE? <parameter>";
+        private const string KeySetAim = "SOUR:PRES <parameter>,<aim>";
+        private const string KeyGetAim = "SOUR:PRES? <parameter>";
+        private const string KeyGetStatusOfADTS = "STAT:OPER:CON?";
+        private const string KeyGetPressure = "MEAS:PRES? <parameter>";
+
+        #region GetSystemDate "SYST:DATE?"
+
+        public string GetCommandGetSystemDate()
+        {
+            return KeyGetDate;
+        }
+
+        public bool ParseGetSystemDate(string message, out DateTime? date)
+        {
+            date = null;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>()
+            {
+                {"year", PeremeterTypes.Integer},
+                {"month", PeremeterTypes.Integer},
+                {"day", PeremeterTypes.Integer}
+            });
+            date = new DateTime((int)answer["year"], (int)answer["month"], (int)answer["day"]);
+            return true;
+        }
+        #endregion
+
+        #region CalibrationAbort "CAL:ABOR"
 
         public string GetCommandCalibrationAbort()
         {
@@ -16,12 +54,11 @@ namespace ADTS
         }
         #endregion
 
-        #region CalibrationStart
+        #region CalibrationStart "CAL:MAIN:CHAN <channel>"
         public string GetCommandCalibrationStart(CalibChannel channel)
         {
-            const string cmdFrame = "CAL:CHEC:CHAN {0}";
-            var cmd = string.Format(cmdFrame, channel == CalibChannel.PT ? "PT" : channel == CalibChannel.PS ? "PS" : "PSPT");
-            return cmd;
+            return CompilCommand(KeyStartMainCalibration,
+                new Dictionary<string, string>() {{"<channel>", CalibChannelToString(channel)}});
         }
         #endregion
 
@@ -34,15 +71,21 @@ namespace ADTS
         }
         #endregion
 
-        #region MainCalibrationAccept "CAL:MAIN:ACC <state>";
-        public string GetCommandMainCalibrationAccept(bool accept)
+        #region CalibrationSetValue "CAL:MAIN:VAL <value>";
+        public string GetCommandCalibrationSetValue(double value)
         {
-            const string cmdFrame = "CAL:MAIN:ACC {0}";
-            var cmd = string.Format(cmdFrame, accept ? "Yes" : "No");
-            return cmd;
+            return CompilCommand(KeySetValueActualPressure,
+                new Dictionary<string, string>() {{"<value>", value.ToString()}});
         }
         #endregion
 
+        #region MainCalibrationAccept "CAL:MAIN:ACC <state>";
+        public string GetCommandMainCalibrationAccept(bool accept)
+        {
+            return CompilCommand(KeySetMainCalibrationAccept,
+                new Dictionary<string, string>() { { "<state>", accept ? "Yes" : "No" } });
+        }
+        #endregion
 
         #region SetAdjustCalibration "CAL:ADJ <channel>,<span>,<zero>,<res(0)>,...,<res(11)>"
         public string GetCommandSetAdjustCalibration(CalibChannel channel, double span, double zero, int[] res)
@@ -100,7 +143,29 @@ namespace ADTS
 
         #endregion
 
-        #region GetState
+        #region GetCalibrationResult "CAL:MAIN:RES?"
+
+        public string GetCommandGetCalibrationResult()
+        {
+            return KeyGetCalibrationResult;
+        }
+
+        public bool ParseKeyGetCalibrationResult(string message, out double? slope, out double? zero)
+        {
+            slope = null;
+            zero = null;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>()
+            {
+                {"slope", PeremeterTypes.Real},
+                {"zero", PeremeterTypes.Real}
+            });
+            slope = (double)answer["slope"];
+            zero = (double)answer["zero"];
+            return true;
+        }
+        #endregion
+
+        #region GetState "SOUR:STAT?"
         public string GetCommandGetState()
         {
             const string cmd = "SOUR:STAT?";
@@ -126,27 +191,120 @@ namespace ADTS
         }
         #endregion
 
-        #region SetState
+        #region SetState "SOUR:STAT <state>"
         public string GetCommandSetState(State state)
         {
-            const string cmdFrame = "SOUR:STAT {0}";
-            switch (state)
-            {
-                case State.Control:
-                    return string.Format(cmdFrame, "ON");
-                case State.Measure:
-                    return string.Format(cmdFrame, "OFF");
-                case State.Hold:
-                    return string.Format(cmdFrame, "HOLD");
-            }
-            return null;
+            return CompilCommand(KeySetState,
+                new Dictionary<string, string>() { { "<state>", StateToString(state) } });
         }
         #endregion
 
+        #region SetParameterRate "SOUR:RATE <parameter>,<aim>"
 
+        public string GetCommandSetParameterRate(Parameters param, double value)
+        {
+            return CompilCommand(KeySetRate, new Dictionary<string, string>()
+            {
+                {"<parameter>", PressureTypeToString(param)},
+                {"<aim>", value.ToString()}
+            });
+        }
+        #endregion
+
+        #region SetParameterAim "SOUR:PRES <parameter>,<aim>"
+
+        public string GetCommandSetParameterAim(Parameters param, double value)
+        {
+            if (param == Parameters.None)
+                throw new Exception(string.Format("can not set aim Parameters.None"));
+            return CompilCommand(KeySetAim, new Dictionary<string, string>()
+            {
+                {"<parameter>", PressureTypeToString(param)},
+                {"<aim>", value.ToString()}
+            });
+        }
+        #endregion
+
+        #region SetPressureUnit "UNIT:PRES <units>"
+
+        public string GetCommandSetPressureUnit(PressureUnits unit)
+        {
+            string unitstr = null;
+            if (unit == PressureUnits.None)
+                    throw new Exception(string.Format("can not set pressure unit PressureUnits.None"));
+            unitstr = PressureUnitToString(unit);
+            return CompilCommand(KeySetUnitPressure, new Dictionary<string, string>() {{"<units>", unitstr}});
+        }
+        #endregion
+
+        #region SetPressureUnit "UNIT:PRES?"
+
+        public string GetCommandGetPressureUnit()
+        {
+            return KeyGetUnitPressure;
+        }
+
+        public bool ParseGetPressureUnit(string message, out PressureUnits? unit)
+        {
+            unit = null;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "unit", PeremeterTypes.PressureUnit } });
+            unit = (PressureUnits)answer["unit"];
+            return true;
+        }
+        #endregion
+
+        #region GetPressure "MEAS:PRES? <parameter>"
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public string GetCommandMeasurePress(Parameters param)
+        {
+            if (param == Parameters.None)
+                throw new Exception(string.Format("can not get pressure Parameters.None"));
+            return CompilCommand(KeyGetPressure, new Dictionary<string, string>()
+            {{"<parameter>", PressureTypeToString(param)},});
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool ParseMeasurePress(string message, out double? value)
+        {
+            value = null;
+            double doubleVal;
+            if (!double.TryParse(message, NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out doubleVal))
+                return false;
+            value = doubleVal;
+            return true;
+        }
+        #endregion
+
+        #region GetStatus "STAT:OPER:CON?"
+
+        public string GetCommandGetStatus()
+        {
+            return KeyGetStatusOfADTS;
+        }
+
+        public bool ParseGetStatus(string message, out int? status)
+        {
+            status = null;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>() {{"status", PeremeterTypes.Integer}});
+            status = (int)answer["status"];
+            return true;
+        }
+
+        #endregion
+
+        #region Protocol parser
         private string CompilCommand(string frame, IDictionary<string, string> parameters)
         {
-            string result;
+            string result= frame;
             if((frame.Contains('<') || frame.Contains('>')) && (parameters == null || parameters.Count==0))
                 throw new Exception(string.Format("Try compil colmmand by frame[\"{0}\"] with parameters and not set parameters", frame));
             var countStartNameChar = frame.Count(el=>el=='<');
@@ -155,14 +313,14 @@ namespace ADTS
                 throw new Exception(string.Format("Frame[\"{0}\"] contains \'<\' simbols less then \'>\'", frame));
             if (countStartNameChar > countEndNameChar)
                 throw new Exception(string.Format("Frame[\"{0}\"] contains \'<\' simbols more then \'>\'", frame));
-            var parts = frame.Split(new[] {'<', '>'});
-            result = frame;
+            
+            var parts = frame.Split(new[] {' ', ','});
             for (int i = 1; i < parts.Length; i++)
             {
                 var key = parts[i];
                 if(!parameters.ContainsKey(key))
                     throw new Exception(string.Format("Frame[\"{0}\"] contains not setted parameter:{1}", frame, key));
-                result = result.Replace(string.Format("<{0}>", key), parameters[key]);
+                result = result.Replace(string.Format("{0}", key), parameters[key]);
             }
             return result;
         }
@@ -181,10 +339,10 @@ namespace ADTS
                 switch (parameterTypes[key])
                 {
                     case PeremeterTypes.Real:
-                        float floatVal;
-                        if(!float.TryParse(parameter, out floatVal))
-                            throw new Exception(string.Format("Can not cast \"{0}\" to float", parameter));
-                        result.Add(key, floatVal);
+                        double doubleVal;
+                        if (!double.TryParse(parameter, out doubleVal))
+                            throw new Exception(string.Format("Can not cast \"{0}\" to double", parameter));
+                        result.Add(key, doubleVal);
                         break;
                     case PeremeterTypes.Integer:
                         int intVal;
@@ -205,11 +363,155 @@ namespace ADTS
                     case PeremeterTypes.String:
                         result.Add(key, parameter);
                         break;
+                    case PeremeterTypes.State:
+                        if(parameter == "ON")
+                            result.Add(key, State.Control);
+                        else if(parameter == "OFF")
+                            result.Add(key, State.Measure);
+                        else if(parameter == "HOLD")
+                            result.Add(key, State.Hold);
+                        else
+                            throw new Exception(string.Format("Can not cast \"{0}\" to State", parameter));
+                        break;
+                    case PeremeterTypes.PressureUnit:
+                        if (parameter == "MBAR")
+                            result.Add(key, PressureUnits.MBar);
+                        else if(parameter == "INH2O4")
+                            result.Add(key, PressureUnits.inH2O4);
+                        else if(parameter == "INH2O20")
+                            result.Add(key, PressureUnits.inH2O20);
+                        else if(parameter == "INHG")
+                            result.Add(key, PressureUnits.inHg);
+                        else if(parameter == "MMHG")
+                            result.Add(key, PressureUnits.mmHg);
+                        else if(parameter == "PA")
+                            result.Add(key, PressureUnits.Pa);
+                        else if(parameter == "HPA")
+                            result.Add(key, PressureUnits.hPa);
+                        else if(parameter == "PSI")
+                            result.Add(key, PressureUnits.psi);
+                        else if(parameter == "INH2O60F")
+                            result.Add(key, PressureUnits.inH2O60F);
+                        else if(parameter == "KGCM2")
+                            result.Add(key, PressureUnits.KgCm2);
+                        else if(parameter == "%FS")
+                            result.Add(key, PressureUnits.FS);
+                        else if(parameter == "MMH2O4")
+                            result.Add(key, PressureUnits.mmH2O4);
+                        else
+                            throw new Exception(string.Format("Can not cast \"{0}\" to PressureUnit", parameter));
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
             return result;
         }
+
+        private string PressureUnitToString(PressureUnits unit)
+        {
+            string unitstr = null;
+            switch (unit)
+            {
+                case PressureUnits.None:
+                    throw new Exception(string.Format("can not set pressure unit PressureUnits.None"));
+                    break;
+                case PressureUnits.MBar:
+                    unitstr = "MBAR";
+                    break;
+                case PressureUnits.inH2O4:
+                    unitstr = "INH2O4";
+                    break;
+                case PressureUnits.inH2O20:
+                    unitstr = "INH2O20";
+                    break;
+                case PressureUnits.inHg:
+                    unitstr = "INHG";
+                    break;
+                case PressureUnits.mmHg:
+                    unitstr = "MMHG";
+                    break;
+                case PressureUnits.Pa:
+                    unitstr = "PA";
+                    break;
+                case PressureUnits.hPa:
+                    unitstr = "HPA";
+                    break;
+                case PressureUnits.psi:
+                    unitstr = "PSI";
+                    break;
+                case PressureUnits.inH2O60F:
+                    unitstr = "INH2O60F";
+                    break;
+                case PressureUnits.KgCm2:
+                    unitstr = "KGCM2";
+                    break;
+                case PressureUnits.FS:
+                    unitstr = "%FS";
+                    break;
+                case PressureUnits.mmH2O4:
+                    unitstr = "MMH2O4";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("unit");
+            }
+            return unitstr;
+        }
+
+        private string PressureTypeToString(Parameters param)
+        {
+            switch (param)
+            {
+                case Parameters.ALT:
+                    return "ALT";
+                case Parameters.CAS:
+                    return "CAS";
+                case Parameters.TAS:
+                    return "TAS";
+                case Parameters.MACH:
+                    return "MACH";
+                case Parameters.EPR:
+                    return "EPR";
+                case Parameters.PS:
+                    return "PS";
+                case Parameters.PT:
+                    return "PT";
+                case Parameters.QC:
+                    return "QC";
+                default:
+                    throw new ArgumentOutOfRangeException("param");
+            }
+        }
+
+        private string CalibChannelToString(CalibChannel channel)
+        {
+            switch (channel)
+            {
+                case CalibChannel.PT:
+                    return "PT";
+                case CalibChannel.PS:
+                    return "PS";
+                case CalibChannel.PTPS:
+                    return "PSPT";
+                default:
+                    throw new ArgumentOutOfRangeException("channel");
+            }
+        }
+
+        private string StateToString(State state)
+        {
+            switch (state)
+            {
+                case State.Control:
+                    return "ON";
+                case State.Measure:
+                    return "OFF";
+                case State.Hold:
+                    return "HOLD";
+                default:
+                    throw new ArgumentOutOfRangeException("state");
+            }
+        }
+        #endregion
     }
 }
