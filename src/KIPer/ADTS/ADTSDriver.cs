@@ -33,7 +33,7 @@ namespace ADTS
         /// <param name="transport"></param>
         /// <param name="channel"></param>
         /// <returns></returns>
-        public bool StartCalibrationStart(IEEE488.ITransportIEEE488 transport, CalibChannel channel)
+        public bool StartCalibration(IEEE488.ITransportIEEE488 transport, CalibChannel channel)
         {
             var cmd = _parser.GetCommandCalibrationStart(channel);
             return transport.Send(_address, cmd);
@@ -160,7 +160,7 @@ namespace ADTS
         /// <param name="transport"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public bool GetStatus(IEEE488.ITransportIEEE488 transport, out int? status)
+        public bool GetStatus(IEEE488.ITransportIEEE488 transport, out Status? status)
         {
             status = null;
             var cmd = _parser.GetCommandGetStatus();

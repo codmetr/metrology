@@ -291,11 +291,11 @@ namespace ADTS
             return KeyGetStatusOfADTS;
         }
 
-        public bool ParseGetStatus(string message, out int? status)
+        public bool ParseGetStatus(string message, out Status? status)
         {
             status = null;
             var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>() {{"status", PeremeterTypes.Integer}});
-            status = (int)answer["status"];
+            status = (Status)(int)answer["status"];
             return true;
         }
 

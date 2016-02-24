@@ -30,9 +30,7 @@ namespace KipTM.Model
         public DeviceManager(ComPortSettings portAdts, ComPortSettings portPace, DeviceSettings pace, DeviceSettings adts, Logger logger = null)
         {
             int address;
-
             _loops = new Loops();
-
 
             // ADTS
             ADTS.ADTSDriver adtsDriver;
