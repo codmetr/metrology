@@ -21,7 +21,7 @@ namespace KipTM.Settings
                     Rate = 9600,
                     Parity = Parity.None,
                     CountBits = 8,
-                    CountStopBits = 1
+                    CountStopBits = StopBits.One
                 },
                 new ComPortSettings()
                 {
@@ -30,7 +30,7 @@ namespace KipTM.Settings
                     Rate = 9600,
                     Parity = Parity.None,
                     CountBits = 8,
-                    CountStopBits = 1
+                    CountStopBits = StopBits.One
                 }
             };
             res.Etalons = new List<EtalonSettings>()
@@ -40,7 +40,7 @@ namespace KipTM.Settings
                     Device = new DeviceSettings()
                     {
                         Address = "0",
-                        Name = KipTM.Model.PACE5000Model.Key,
+                        Name = KipTM.Model.Devices.PACE5000Model.Key,
                         NamePort = "COM1"
                     },
                     Port = res.Ports.FirstOrDefault(el=>el.Name == "COM1")
@@ -51,7 +51,7 @@ namespace KipTM.Settings
                 new DeviceSettings()
                 {
                     Address = "0",
-                    Name = KipTM.Model.ADTSModel.Key,
+                    Name = KipTM.Model.Devices.ADTSModel.Key,
                     NamePort = "COM2"
                 },
             };

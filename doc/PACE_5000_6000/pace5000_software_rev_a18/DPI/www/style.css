@@ -1,0 +1,480 @@
+A {
+  COLOR: #adc6de;
+}
+
+TD.pagelink {
+  COLOR: #adc6de;
+  FONT-WEIGHT: bold; 
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+A.pagelink {
+  COLOR: #542d81;
+  FONT-WEIGHT: bold; 
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+A.pagelinkdisabled {
+  COLOR: #cccccc;
+  FONT-WEIGHT: bold; 
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+A.pagelink:hover {
+  COLOR: #ff6600; 
+  FONT-WEIGHT: bold; 
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+TD.datalink {
+  COLOR: #542d81;
+  FONT-WEIGHT: bold; 
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+A.datalink {
+  COLOR: #542d81;
+  FONT-WEIGHT: bold; 
+  TEXT-DECORATION: none
+}
+
+A.datalink:hover {
+  COLOR: #ff6600; 
+  FONT-WEIGHT: bold; 
+  TEXT-DECORATION: none
+}
+
+TD.topnavcenter {
+  BACKGROUND-COLOR: #542d81;
+  COLOR: #ffffff;
+  PADDING-TOP: 1px;
+  PADDING-BOTTOM: 1px;
+  TEXT-ALIGN: center;
+  FONT-WEIGHT: bold; 
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+TD.topnav {
+  BACKGROUND-COLOR: #deefff;
+  COLOR: #ffffff;
+  PADDING-LEFT: 10px;
+  PADDING-TOP: 1px;
+  PADDING-BOTTOM: 1px;
+  TEXT-ALIGN: left;
+  FONT-WEIGHT: bold; 
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+A.topnav {
+  COLOR: #000000;
+  TEXT-DECORATION: none
+}
+
+A.topnav:hover {
+  COLOR: #cc6600; 
+  TEXT-DECORATION: none
+}
+
+A.topnavcurr {
+  COLOR: #ffff00;
+  TEXT-DECORATION: none
+}
+
+TD.botnav {
+  BACKGROUND-COLOR: #542d81;
+  COLOR: #ffffff;
+  PADDING-LEFT: 20px;
+  PADDING-TOP: 1px;
+  PADDING-BOTTOM: 1px;
+  TEXT-ALIGN: left;
+  FONT-WEIGHT: normal; 
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+A.botnav {
+  COLOR: #ffffff;
+  TEXT-DECORATION: none
+}
+
+A.botnav:hover {
+  COLOR: #deefff; 
+  TEXT-DECORATION: none
+}
+
+.color1back {
+  BACKGROUND-COLOR: #ff6600
+}
+
+.color2back {
+  BACKGROUND-COLOR: #999999
+}
+
+TD.product {
+  COLOR: #ff6702;
+  TEXT-ALIGN: right;
+  FONT-WEIGHT: bold; 
+  FONT-SIZE: 20px; 
+  FONT-STYLE: italic;
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+TD.backpanel {
+  TEXT-ALIGN: center;
+  FONT-SIZE: 10px;
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+TD.banner {
+  TEXT-ALIGN: right;
+  FONT-SIZE: 10px;
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.report {
+  COLOR: #000000;
+  TEXT-ALIGN: left;
+  VERTICAL-ALIGN: top;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Courier, Courier New, monospace
+}
+
+.datalabel {
+  COLOR: #000000;
+  TEXT-ALIGN: right;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datalabeltop {
+  COLOR: #000000;
+  TEXT-ALIGN: right;
+  VERTICAL-ALIGN: top;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datalabellefttop {
+  COLOR: #000000;
+  TEXT-ALIGN: left;
+  VERTICAL-ALIGN: top;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datalabelleft {
+  COLOR: #000000;
+  TEXT-ALIGN: left;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datalabelright {
+  COLOR: #000000;
+  TEXT-ALIGN: right;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datalabelcenter {
+  COLOR: #000000;
+  TEXT-ALIGN: center;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datalabellarge {
+  COLOR: #000000;
+  TEXT-ALIGN: center;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 14px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datalabelleftlarge {
+  COLOR: #000000;
+  TEXT-ALIGN: left;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 14px; 
+  FONT-WEIGHT: bold;
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.dataverbage {
+  COLOR: #000000;
+  TEXT-ALIGN: left;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 11px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datavalue {
+  COLOR: #000000;
+  TEXT-ALIGN: left;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datavaluetop {
+  COLOR: #000000;
+  TEXT-ALIGN: left;
+  VERTICAL-ALIGN: top;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datavaluecenter {
+  COLOR: #000000;
+  TEXT-ALIGN: center;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datavalueright {
+  COLOR: #000000;
+  TEXT-ALIGN: right;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datavalro {
+  COLOR: #000000;
+  TEXT-ALIGN: left;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 12px; 
+  FONT-WEIGHT: bold;
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datavalrotop {
+  COLOR: #000000;
+  TEXT-ALIGN: left;
+  VERTICAL-ALIGN: top;
+  FONT-SIZE: 12px; 
+  FONT-WEIGHT: bold;
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.hometitle {
+  COLOR: #000000;
+  TEXT-ALIGN: center;
+  PADDING-TOP: 30px;
+  FONT-SIZE: 20px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datatitle {
+  COLOR: #000000;
+  TEXT-ALIGN: center;
+  PADDING-TOP: 2px;
+  FONT-SIZE: 16px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.datatitlehelp {
+  COLOR: #000000;
+  TEXT-ALIGN: right;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 16px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+A.datatitlehelp:hover {
+  COLOR: #000000;
+  TEXT-DECORATION: none
+}
+
+A.datatitlehelp {
+  COLOR: #000000;
+  TEXT-DECORATION: none
+}
+
+.databutton {
+  COLOR: #000000;
+  TEXT-ALIGN: center;
+  FONT-SIZE: 12px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.tabletitle {
+  COLOR: #000000;
+  TEXT-ALIGN: center;
+  FONT-SIZE: 12px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.tabletitleleft {
+  COLOR: #000000;
+  TEXT-ALIGN: left;
+  FONT-SIZE: 12px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.tableback {
+  BORDER: 1px solid black;
+  BACKGROUND-COLOR: #cccccc
+}
+
+.tableheader {
+  PADDING: 2px;
+  BACKGROUND-COLOR: white;
+  FONT-SIZE: 12px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.tablefield {
+  PADDING: 2px;
+  BACKGROUND-COLOR: white;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.tablefieldcenter {
+  PADDING: 2px;
+  BACKGROUND-COLOR: white;
+  TEXT-ALIGN: center;
+  FONT-SIZE: 12px; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.tableblank {
+  PADDING: 2px;
+  BACKGROUND-COLOR: #cccccc
+}
+
+.tablelight {
+  BORDER: 1px solid black;
+  BACKGROUND-COLOR: #e6e6e6
+}
+
+.smbutton {
+  PADDING: 0px;
+}
+
+.regbutton {
+  FONT-SIZE: 12px;
+  FONT-WEIGHT: normal;
+}
+
+TD.line {
+  BORDER-TOP: 1px solid black;
+}
+
+.roinput {
+  BORDER: 0px
+}
+
+.bpback {
+  BORDER: 2px solid black;
+  BACKGROUND-COLOR: #000000
+}
+
+TD.bpeth {
+  COLOR: #ffffff;
+  BACKGROUND-COLOR: #0000ff;
+  WIDTH: 16px;
+  HEIGHT: 16px;
+  TEXT-ALIGN: center;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 10px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+TD.bpdev {
+  COLOR: #ffffff;
+  BACKGROUND-COLOR: #008000;
+  WIDTH: 16px;
+  HEIGHT: 16px;
+  TEXT-ALIGN: center;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 12px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+TD.bpdevon {
+  COLOR: #ffffff;
+  BACKGROUND-COLOR: #542d81;
+  WIDTH: 16px;
+  HEIGHT: 16px;
+  TEXT-ALIGN: center;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 12px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+TD.bppower {
+  COLOR: #ffffff;
+  BACKGROUND-COLOR: #999999;
+  WIDTH: 16px;
+  HEIGHT: 16px;
+  TEXT-ALIGN: center;
+  VERTICAL-ALIGN: middle;
+  FONT-SIZE: 10px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+TD.bpblank {
+  BACKGROUND-COLOR: #000000;
+  WIDTH: 2px;
+  HEIGHT: 17px
+}
+
+A.bp {
+  COLOR: #ffffff;
+  TEXT-DECORATION: none
+}
+
+A.bpcurr {
+  COLOR: #ffff00; 
+  TEXT-DECORATION: none
+}
+
+A.bp:hover {
+  COLOR: #cc6600;
+  FONT-SIZE: 10px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+A.about {
+  COLOR: white;
+  FONT-SIZE: 12px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif;
+  TEXT-DECORATION: none
+}
+
+A.status {
+  COLOR: white;
+  FONT-SIZE: 12px; 
+  FONT-WEIGHT: bold; 
+  FONT-FAMILY: Arial, Helvetica, sans-serif;
+  TEXT-DECORATION: none
+}
+

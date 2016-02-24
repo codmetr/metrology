@@ -93,13 +93,14 @@
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Interfaces\ITest.cs" />
     <Compile Include="Interfaces\ITestConfirurator.cs" />
-    <Compile Include="Model\ADTSModel.cs" />
+    <Compile Include="Model\Devices\ADTSModel.cs" />
     <Compile Include="Model\Checks\ADTSCheckMethodic.cs" />
     <Compile Include="Model\DeviceManager.cs" />
-    <Compile Include="Model\PACE5000Model.cs" />
+    <Compile Include="Model\Devices\PACE5000Model.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
     <Compile Include="Interfaces\ITestDescriptor.cs" />
+    <Compile Include="Model\IDeviceManager.cs" />
     <Compile Include="Settings\ComPortSettings.cs" />
     <Compile Include="Settings\EtalonSettings.cs" />
     <Compile Include="Settings\DeviceSettings.cs" />

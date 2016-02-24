@@ -14,6 +14,6 @@ namespace KipTM.Settings
         public int Rate;
         public Parity Parity;
         public int CountBits;
-        public int CountStopBits;
+        public StopBits CountStopBits;
     }
 }

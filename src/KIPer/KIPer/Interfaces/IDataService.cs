@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using KipTM.Model;
+using KipTM.Model.Devices;
 
 namespace KipTM.Interfaces
 {
     public interface IDataService
     {
-        PACE5000Model Pace5000 { get; }
+        IDeviceManager DeviceManager { get; }
         void LoadSettings();
         void SaveSettings();
         void InitDevices();

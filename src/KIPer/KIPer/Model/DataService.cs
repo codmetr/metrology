@@ -5,7 +5,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using KipTM.Interfaces;
 using KipTM.Settings;
-using KipTM.Model;
+using KipTM.Model.Devices;
 using PACESeries;
 using SQLiteArchive;
 
@@ -16,8 +16,8 @@ namespace KipTM.Model
         MainLoop.ILoops _loops = new MainLoop.Loops();
         MineSettings _settings = new MineSettings();
         private string _settingsFileName = "settings";
-        private PACE5000Model _pace5000;
         private IArchive _archive;
+        private DeviceManager _deviceManager;
 
 
         public DataService(IArchive archive)
@@ -28,12 +28,19 @@ namespace KipTM.Model
         public void InitDevices()
         {
             var paceSettings = _settings.Etalons.FirstOrDefault(el => el.Device.Name == PACE5000Model.Key);
-            if (paceSettings != null)
-            {
-                int address;
-                if (int.TryParse(paceSettings.Device.Address, out address))
-                    _pace5000 = new PACE5000Model("PACE 5000 - модульный контроллер давления/цифровой манометр", _loops, paceSettings.Port.Name, new PACEDriver(address));
-            }
+            var adtsSettings = _settings.Etalons.FirstOrDefault(el => el.Device.Name == ADTSModel.Key);
+
+            if(paceSettings == null)
+                throw new NullReferenceException(string.Format("PACE settings not found by key \"{0}\"", PACE5000Model.Key));
+            if(adtsSettings == null)
+                throw new NullReferenceException(string.Format("ADTS settings not found by key \"{0}\"", ADTSModel.Key));
+
+            _deviceManager = new DeviceManager(adtsSettings.Port, paceSettings.Port, adtsSettings.Device, paceSettings.Device);
+        }
+
+        public IDeviceManager DeviceManager
+        {
+            get { return _deviceManager; }
         }
 
         public void LoadSettings()
@@ -44,11 +51,6 @@ namespace KipTM.Model
         public void SaveSettings()
         {
             _archive.Save(_settingsFileName, _settings);
-        }
-
-        public PACE5000Model Pace5000
-        {
-            get { return _pace5000; }
         }
     }
 }

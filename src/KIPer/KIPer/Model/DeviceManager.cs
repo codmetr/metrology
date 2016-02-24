@@ -7,61 +7,89 @@ using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
 using IEEE488;
+using KipTM.Model.Devices;
+using KipTM.Settings;
 using MainLoop;
 using NLog;
 using PACESeries;
 
 namespace KipTM.Model
 {
-    public class DeviceManager
+    public class DeviceManager : IDeviceManager
     {
         private readonly NLog.Logger _logger;
 
         private readonly ILoops _loops = new Loops();
 
-        private DateTime? _pressureTime;
-        private double? _pressure;
+        private PACE5000Model _paceModel;
+        private ADTSModel _adtsModel;
 
-        private DateTime? _pitotTime;
-        private double? _pitot;
-
-        private DateTime? _pressureUnitTime;
-        private PressureUnits? _pressureUnit;
-
-        private DateTime? _stateTime;
-        private State? _state;
-
-        private readonly ADTS.ADTSDriver _adts;
-        private readonly PACEDriver _pace;
-
-        private bool _isNeedAutoupdate;
         private readonly IDictionary<string, Tuple<ITransportIEEE488, SerialPort>> _ports = new Dictionary<string, Tuple<ITransportIEEE488, SerialPort>>();
 
 
-        public DeviceManager(ADTSDriver adts, PACEDriver pace, Logger logger = null)
+        public DeviceManager(ComPortSettings portAdts, ComPortSettings portPace, DeviceSettings pace, DeviceSettings adts, Logger logger = null)
         {
-            _adts = adts;
-            _pace = pace;
+            int address;
+
+            _loops = new Loops();
+
+
+            // ADTS
+            ADTS.ADTSDriver adtsDriver;
+            if (int.TryParse(adts.Address, out address))
+                adtsDriver = new ADTSDriver(address);
+            else
+                throw new Exception(string.Format("Can not parse address for ADTS from \"{0}\"", adts.Address ?? "NULL"));
+            
+            var serialName = string.Format("COM{0}", portAdts.NumberCom);
+            var port = new SerialPort(serialName, portAdts.Rate, portAdts.Parity, portAdts.CountBits,
+                portAdts.CountStopBits);
+            ITransportIEEE488 ieee488 = new TransportIEEE488(port);
+            _ports.Add(serialName, new Tuple<ITransportIEEE488, SerialPort>(ieee488, port));
+            _loops.AddLocker(serialName, ieee488);
+            _adtsModel = new ADTSModel(adts.Name, _loops, serialName, adtsDriver);
+
+            // PACE
+            PACEDriver paceDriver;
+            if (int.TryParse(pace.Address, out address))
+                paceDriver = new PACEDriver(address);
+            else
+                throw new Exception(string.Format("Can not parse address for PACE from \"{0}\"", pace.Address ?? "NULL"));
+
+            if (portAdts.NumberCom != portPace.NumberCom)
+            {
+                serialName = string.Format("COM{0}", portPace.NumberCom);
+                port = new SerialPort(serialName, portPace.Rate, portPace.Parity, portPace.CountBits,
+                    portPace.CountStopBits);
+                ieee488 = new TransportIEEE488(port);
+                _ports.Add(serialName, new Tuple<ITransportIEEE488, SerialPort>(ieee488, port));
+                _loops.AddLocker(serialName, ieee488);
+            }
+            _paceModel = new PACE5000Model("PACE 5000 - модульный контроллер давления/цифровой манометр", _loops, serialName, paceDriver);
             _logger = logger;
         }
 
         public void Init()
         {
-            _loops.StartUnimportantAction(KipTM.Enums.KeyPortADTS, UpdateUnit);
+            _adtsModel.Init();
             StartAutoUpdate();
         }
 
         #region IDeviceManager
+
+
+        public PACE5000Model Pace5000
+        {
+            get { return _paceModel; }
+        }
+
 
         /// <summary>
         /// Запуск автоопроса модуля дискретных входов
         /// </summary>
         public void StartAutoUpdate()
         {
-            _isNeedAutoupdate = true;
-            _loops.StartUnimportantAction(KipTM.Enums.KeyPortADTS, AutoUpdateState);
-            _loops.StartUnimportantAction(KipTM.Enums.KeyPortADTS, AutoUpdatePressure);
-            _loops.StartUnimportantAction(KipTM.Enums.KeyPortADTS, AutoUpdatePitot);
+            _adtsModel.StartAutoUpdate();
         }
 
         /// <summary>
@@ -69,29 +97,9 @@ namespace KipTM.Model
         /// </summary>
         public void StopAutoUpdate()
         {
-            _isNeedAutoupdate = false;
+            _adtsModel.StopAutoUpdate();
         }
 
-        public DateTime? StartCalibration(CalibChannel channel)
-        {
-            var isCommpete = new AutoResetEvent(false);
-            DateTime? date = null;
-            _loops.StartUnimportantAction(KipTM.Enums.KeyPortADTS, (transport) =>
-            {
-                var ieee488 = transport as ITransportIEEE488;
-                if (ieee488 == null)
-                {
-                    isCommpete.Set();
-                    return;
-                }
-
-                _adts.GetDate(ieee488, out date);
-
-                isCommpete.Set();
-            });
-            isCommpete.WaitOne();
-            return date;
-        }
         #endregion
 
         #region implementation IDisposable
@@ -117,69 +125,5 @@ namespace KipTM.Model
         }
         #endregion
 
-        #region Service members
-
-        void AutoUpdateState(object transport)
-        {
-            var ieee488 = transport as ITransportIEEE488;
-            if(ieee488==null)
-                return;
-
-            if(!_isNeedAutoupdate)
-                return;
-            if(!_adts.GetState(ieee488, out _state))
-                return;
-            _stateTime = DateTime.Now;
-            if(!_isNeedAutoupdate)
-                return;
-
-            _loops.StartUnimportantAction(KipTM.Enums.KeyPortADTS, AutoUpdateState);
-        }
-
-        void AutoUpdatePressure(object transport)
-        {
-            var ieee488 = transport as ITransportIEEE488;
-            if(ieee488==null)
-                return;
-
-            if (!_isNeedAutoupdate)
-                return;
-            if (!_adts.ReadMeasure(ieee488, Parameters.PS,  out _pressure))
-                return;
-            _pressureTime = DateTime.Now;
-            if (!_isNeedAutoupdate)
-                return;
-
-            _loops.StartUnimportantAction(KipTM.Enums.KeyPortADTS, AutoUpdatePressure);
-        }
-
-        void AutoUpdatePitot(object transport)
-        {
-            var ieee488 = transport as ITransportIEEE488;
-            if(ieee488==null)
-                return;
-
-            if (!_isNeedAutoupdate)
-                return;
-            if (!_adts.ReadMeasure(ieee488, Parameters.PT, out _pitot))
-                return;
-            _pitotTime = DateTime.Now;
-            if (!_isNeedAutoupdate)
-                return;
-
-            _loops.StartUnimportantAction(KipTM.Enums.KeyPortADTS, AutoUpdatePitot);
-        }
-
-        void UpdateUnit(object transport)
-        {
-            var ieee488 = transport as ITransportIEEE488;
-            if(ieee488==null)
-                return;
-
-            if (!_adts.GetUnits(ieee488, out _pressureUnit))
-                return;
-            _pressureUnitTime = DateTime.Now;
-        }
-        #endregion
     }
 }

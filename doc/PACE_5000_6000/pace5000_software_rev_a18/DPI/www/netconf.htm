@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dtd html 4.0 transitional//EN">
+<html>
+<head>
+
+<title>Network Configuration</title> 
+<link href="style.css" type=text/css rel=stylesheet>
+<script type="text/javascript" src="utils.js"></script>
+<script type="text/javascript" src="netconf.js"></script>
+
+</head>
+
+<body text=#000000 bgColor=#ffffff onLoad="initPage()">
+<!-- this top enclosing table is used to fix NN4 background image tiling issues -->
+
+
+
+<table cellSpacing=0 cellPadding=0 width="600" border=0>
+  <tr>
+    <td width=60>&nbsp;</td>
+    <td class=datatitle width=480>Network Settings</td>
+    <td width=60>&nbsp;</td>
+  </tr>
+  <tr>
+    <td class=color1back colspan=3><img height=2 src="spacer.gif" width=600 border=0></td>
+  </tr>
+</table>
+
+
+<table cellSpacing=5 cellPadding=0 width="600" border=0>
+<tr>  
+    <td class=tabletitleleft colspan=2>Description:</td>
+    <td class=datavalue id="Description"></td>
+  </tr>  
+</table>
+
+
+<form name=theform action = "netconf.asp" method=post>
+<table cellSpacing=5 cellPadding=0 width="600" border=0>
+  <tr>
+    <td width=100><img height=1 src="spacer.gif" alt="" border=0></td>
+	<td width=50><img height=1 src="spacer.gif" alt="" border=0></td>
+    <td width=430><img height=1 src="spacer.gif" alt="" border=0></td>
+  </tr>
+  <tr>
+    <td class=tabletitleleft colspan=3>IP Configuration</td>
+  </tr>
+  <tr>
+    <td class=datavalueright>
+      <input type=radio name=dynip onClick="changeDynIp(true);">
+    </td>
+    <td class=datalabelleft colspan=2>Obtain IP address automatically</td>
+  </tr>
+  <tr>
+    <td colspan=3><img height=2 src="spacer.gif" alt = "" border=0></td>
+  </tr>
+  
+  <tr>  
+    <td class=datalabelright colspan=2>DHCP Host Name:</td>
+    <td class=datavalue>
+      <input type=text name=dhcphname size=16 maxlength=16>
+    </td>
+  </tr>
+  <tr>
+    <td colspan=3><img height=4 src="spacer.gif" border=0></td>
+  </tr>
+  <tr>
+    <td class=datavalueright>
+       <input type=radio name=dynip onClick="changeDynIp(false);">
+    </td>
+
+    <td class=datalabelleft colspan=2>Use the following IP configuration:</td>
+
+  </tr>
+  <tr>     
+
+    <td class=datalabel colspan=2>IP Address:</td>
+
+    <td class=datavalue>
+      <input type=text name=ipaddrstatic size=16 maxlength=15>
+    </td>
+  </tr>
+  <tr>
+
+    <td class=datalabel colspan=2>Subnet Mask:</td>
+
+    <td class=datavalue>
+      <input type=text name=ipmask size=16 maxlength=15>
+    </td>
+  </tr>
+  <tr>
+
+    <td class=datalabel colspan=2>Default Gateway:</td>
+
+    <td class=datavalue>
+      <input type=text name=ipgw size=16 maxlength=15>
+    </td>
+  </tr>
+
+  <tr>
+    <td class=datalabel colspan=2>DNS Server:</td>
+    <td class=datavalue>
+      <input type=text name=dnsip size=16 maxlength=15>
+    </td>
+  </tr>
+  <tr><td colspan=3><hr width=100%></td></tr>
+</table>
+
+
+
+<div id="appdiv">
+<table cellSpacing=5 cellPadding=0 border=0 width="600" id="oktbl">
+  <tr>
+    <td width=240><img height=1 src="spacer.gif" alt = "" border=0></td>
+    <td width=100><img height=1 src="spacer.gif" alt = "" border=0></td>
+    <td width=100><img height=1 src="spacer.gif" alt = "" border=0></td>
+    <td width=135><img height=1 src="spacer.gif" alt = "" border=0></td>
+  </tr>
+  <tr>
+    <td class=databutton>
+       Password: <input type=password name=password>
+    </td>
+    <td class=databutton>
+       <input type=button value="Apply" onClick="return applyForm()">
+    </td>
+    <td class=databutton>
+       <input type=button value="Cancel" onClick="return cancelForm()">
+    </td>
+    <td id="statmesg" name=statmesg class=tabletitleleft > </td>
+    <td></td>
+  </tr>  
+  <tr>
+    <td colspan=4><hr width="100%" /></td>
+  </tr>
+</table>
+</div>
+</form>
+
+</body>
+</html>

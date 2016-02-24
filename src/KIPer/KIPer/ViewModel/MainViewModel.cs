@@ -47,7 +47,7 @@ namespace KipTM.ViewModel
 
             _services = new ServiceViewModel(new List<IService>()
             {
-                new Pace5000ViewModel(_dataService.Pace5000)
+                new Pace5000ViewModel(_dataService.DeviceManager.Pace5000)
             });
             ViewModelViewDic = new Dictionary<Type, Type>()
             {

@@ -4,7 +4,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using KipTM.Interfaces;
-using KipTM.Model;
+using KipTM.Model.Devices;
 
 namespace KipTM.ViewModel
 {
