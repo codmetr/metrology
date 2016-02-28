@@ -93,6 +93,9 @@
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Interfaces\ITest.cs" />
     <Compile Include="Interfaces\ITestConfirurator.cs" />
+    <Compile Include="Model\Checks\ADTSCheckEnum.cs" />
+    <Compile Include="Model\Checks\CheckErrorArgumentEvent.cs" />
+    <Compile Include="Model\Checks\CheckProgressEventArgs.cs" />
     <Compile Include="Model\Devices\ADTSModel.cs" />
     <Compile Include="Model\Checks\ADTSCheckMethodic.cs" />
     <Compile Include="Model\DeviceManager.cs" />
@@ -101,6 +104,7 @@
     <Compile Include="Interfaces\IDataService.cs" />
     <Compile Include="Interfaces\ITestDescriptor.cs" />
     <Compile Include="Model\IDeviceManager.cs" />
+    <Compile Include="Services.cs" />
     <Compile Include="Settings\ComPortSettings.cs" />
     <Compile Include="Settings\EtalonSettings.cs" />
     <Compile Include="Settings\DeviceSettings.cs" />

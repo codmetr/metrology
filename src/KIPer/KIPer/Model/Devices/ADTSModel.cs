@@ -48,6 +48,9 @@ namespace KipTM.Model.Devices
             _waitStatusPool = new Dictionary<EventWaitHandle, Func<Status, bool>>();
         }
 
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public void Init()
         {
             _loops.StartUnimportantAction(_loopKey, UpdateUnit);
@@ -73,6 +76,13 @@ namespace KipTM.Model.Devices
             _isNeedAutoupdate = false;
         }
 
+        /// <summary>
+        /// Запуск процесса калибровки
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <param name="date"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
         public bool StartCalibration(CalibChannel channel, out DateTime? date, CancellationToken cancel)
         {
             bool result = false;
@@ -121,6 +131,15 @@ namespace KipTM.Model.Devices
             return result;
         }
 
+        /// <summary>
+        /// Задать цель для Ps
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="pressure"></param>
+        /// <param name="rate"></param>
+        /// <param name="unit"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
         public bool SetPressure(Parameters parameter, double pressure, double rate, PressureUnits unit, CancellationToken cancel)
         {
             bool result = false;
@@ -163,18 +182,28 @@ namespace KipTM.Model.Devices
             return result;
         }
 
-        public EventWaitHandle WaitStatusADTS(Func<Status, bool> waitFunc)
+        /// <summary>
+        /// Ожидать достяжения Ps необходимого давления
+        /// </summary>
+        /// <returns></returns>
+        public EventWaitHandle WaitPressureSetted()
         {
-            if(waitFunc == null)
-                return null;
-            var wh = new AutoResetEvent(false);
-            lock (_waitStatusPool)
-            {
-                _waitStatusPool.Add(wh, waitFunc);
-            }
-            return wh;
+            return WaitStatusADTS(status => status == Status.PsAtSetPointAndInControlMode);
         }
 
+        /// <summary>
+        /// Ожидать достяжения Pt необходимого давления
+        /// </summary>
+        /// <returns></returns>
+        public EventWaitHandle WaitPitotSetted()
+        {
+            return WaitStatusADTS(status => status == Status.PtAtSetPointAndInControlMode);
+        }
+
+        /// <summary>
+        /// Перестат ожидать
+        /// </summary>
+        /// <param name="waitHandle"></param>
         public void StopWaitStatus(EventWaitHandle waitHandle)
         {
             lock (_waitStatusPool)
@@ -184,6 +213,12 @@ namespace KipTM.Model.Devices
             }
         }
 
+        /// <summary>
+        /// Задать действительное значение давления
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
         public bool SetActualValue(double value, CancellationToken cancel)
         {
             bool result = false;
@@ -215,6 +250,13 @@ namespace KipTM.Model.Devices
             return result;
         }
 
+        /// <summary>
+        /// Получить результат калибровки
+        /// </summary>
+        /// <param name="slope"></param>
+        /// <param name="zero"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
         public bool GetCalibrationResult(out double? slope, out double? zero, CancellationToken cancel)
         {
             bool result = false;
@@ -258,6 +300,12 @@ namespace KipTM.Model.Devices
 
         }
 
+        /// <summary>
+        /// Подтвердить или отменить калибровку
+        /// </summary>
+        /// <param name="accept"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
         public bool AcceptCalibration(bool accept, CancellationToken cancel)
         {
             bool result = false;
@@ -335,6 +383,23 @@ namespace KipTM.Model.Devices
             if (handler != null) handler(obj);
         }
         #endregion
+
+        /// <summary>
+        /// Ожидать статус ADTS
+        /// </summary>
+        /// <param name="waitFunc">Функция проверки статуса</param>
+        /// <returns></returns>
+        private EventWaitHandle WaitStatusADTS(Func<Status, bool> waitFunc)
+        {
+            if (waitFunc == null)
+                return null;
+            var wh = new AutoResetEvent(false);
+            lock (_waitStatusPool)
+            {
+                _waitStatusPool.Add(wh, waitFunc);
+            }
+            return wh;
+        }
 
         void AutoUpdateStatus(object transport)
         {
