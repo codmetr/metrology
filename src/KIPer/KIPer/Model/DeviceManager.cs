@@ -15,7 +15,7 @@ using PACESeries;
 
 namespace KipTM.Model
 {
-    public class DeviceManager : IDeviceManager
+    public class DeviceManager : IDeviceManager, IDisposable
     {
         private readonly NLog.Logger _logger;
 

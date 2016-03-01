@@ -29,7 +29,7 @@ namespace KipTM.ViewModel.Checks
             set { Set(ref _titleBtnNext, value); }
         }
 
-        public ICommand NextCommand { get{return new RelayCommand(()=>{});} }
+        public ICommand StepCommand { get{return new RelayCommand(()=>{});} }
 
         public ObservableCollection<IParameterResultViewModel> Results { get; set; } 
     }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
-using KipTM.ViewModel;
 
 namespace KipTM.ViewModel.Checks
 {

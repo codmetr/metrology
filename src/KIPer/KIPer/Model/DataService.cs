@@ -11,9 +11,8 @@ using SQLiteArchive;
 
 namespace KipTM.Model
 {
-    public class DataService : IDataService
+    public class DataService : IDataService, IDisposable
     {
-        MainLoop.ILoops _loops = new MainLoop.Loops();
         MineSettings _settings = new MineSettings();
         private string _settingsFileName = "settings";
         private IArchive _archive;
@@ -28,14 +27,18 @@ namespace KipTM.Model
         public void InitDevices()
         {
             var paceSettings = _settings.Etalons.FirstOrDefault(el => el.Device.Name == PACE5000Model.Key);
-            var adtsSettings = _settings.Etalons.FirstOrDefault(el => el.Device.Name == ADTSModel.Key);
+            var adtsSettings = _settings.Devices.FirstOrDefault(el => el.Name == ADTSModel.Key);
 
             if(paceSettings == null)
                 throw new NullReferenceException(string.Format("PACE settings not found by key \"{0}\"", PACE5000Model.Key));
             if(adtsSettings == null)
                 throw new NullReferenceException(string.Format("ADTS settings not found by key \"{0}\"", ADTSModel.Key));
 
-            _deviceManager = new DeviceManager(adtsSettings.Port, paceSettings.Port, adtsSettings.Device, paceSettings.Device);
+            var adtsPort = _settings.Ports.FirstOrDefault(el => el.Name == adtsSettings.NamePort);
+            if (adtsPort == null)
+                throw new NullReferenceException(string.Format("ADTS port not found by key \"{0}\"", adtsSettings.NamePort));
+
+            _deviceManager = new DeviceManager(adtsPort, paceSettings.Port, adtsSettings, paceSettings.Device);
         }
 
         public IDeviceManager DeviceManager
@@ -51,6 +54,11 @@ namespace KipTM.Model
         public void SaveSettings()
         {
             _archive.Save(_settingsFileName, _settings);
+        }
+
+        public void Dispose()
+        {
+            _deviceManager.Dispose();
         }
     }
 }

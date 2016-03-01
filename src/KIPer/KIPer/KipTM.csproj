@@ -96,6 +96,7 @@
     <Compile Include="Model\Checks\ADTSCheckEnum.cs" />
     <Compile Include="Model\Checks\CheckErrorArgumentEvent.cs" />
     <Compile Include="Model\Checks\CheckProgressEventArgs.cs" />
+    <Compile Include="Model\Checks\ICheckMethodic.cs" />
     <Compile Include="Model\Devices\ADTSModel.cs" />
     <Compile Include="Model\Checks\ADTSCheckMethodic.cs" />
     <Compile Include="Model\DeviceManager.cs" />
@@ -142,6 +143,9 @@
     </Compile>
     <Compile Include="View\Archive\ParamResDataGridView.xaml.cs">
       <DependentUpon>ParamResDataGridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Checks\ADTSCalibrationView.xaml.cs">
+      <DependentUpon>ADTSCalibrationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Checks\CheckView.xaml.cs">
       <DependentUpon>CheckView.xaml</DependentUpon>
@@ -208,6 +212,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Archive\ParamResDataGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Checks\ADTSCalibrationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

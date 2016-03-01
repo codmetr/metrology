@@ -10,9 +10,7 @@ using Tools;
 
 namespace KipTM.Model.Checks
 {
-
-
-    public class ADTSCheckMethodic
+    public class ADTSCheckMethodic : ICheckMethodic
     {
         private ADTSModel _adts;
         private CancellationTokenSource _cancelSource;

@@ -69,6 +69,7 @@ namespace KipTM.ViewModel
                 //Вкладка Проверка
                 {typeof(CheckViewModel), typeof(CheckView)},
                 {typeof(MechanicalManometerViewModel), typeof(MechanicalManometerView)},
+                {typeof(ADTSCalibrationViewModel), typeof(ADTSCalibrationView)},
 
             };
         }
@@ -424,7 +425,12 @@ namespace KipTM.ViewModel
                 }
             });
 
-            _check = new CheckViewModel(_dataService, new MechanicalManometerViewModel());
+            var cheks = new Dictionary<string, object>()
+            {
+                {"Поверка механического манометра", new MechanicalManometerViewModel()},
+                {"Калибровка ADTS", new ADTSCalibrationViewModel()},
+            };
+            _check = new CheckViewModel(_dataService, cheks);
         }
 
         public IArchivesViewModel Tests { get { return _tests; } }
