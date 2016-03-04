@@ -93,10 +93,14 @@
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Interfaces\ITest.cs" />
     <Compile Include="Interfaces\ITestConfirurator.cs" />
+    <Compile Include="Model\Archive\ParameterDescriptor.cs" />
+    <Compile Include="Model\Archive\ParameterResult.cs" />
+    <Compile Include="Model\Checks\ADTSCalibration\ADTSCalibrationInit.cs" />
     <Compile Include="Model\Checks\ADTSCheckEnum.cs" />
-    <Compile Include="Model\Checks\CheckErrorArgumentEvent.cs" />
-    <Compile Include="Model\Checks\CheckProgressEventArgs.cs" />
+    <Compile Include="Model\Checks\EventArgError.cs" />
+    <Compile Include="Model\Checks\EventArgCheckProgress.cs" />
     <Compile Include="Model\Checks\ICheckMethodic.cs" />
+    <Compile Include="Model\Checks\ITestStep.cs" />
     <Compile Include="Model\Devices\ADTSModel.cs" />
     <Compile Include="Model\Checks\ADTSCheckMethodic.cs" />
     <Compile Include="Model\DeviceManager.cs" />
@@ -321,9 +325,7 @@
   <ItemGroup>
     <Resource Include="Content\icon.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Archive\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="icon.ico" />
   </ItemGroup>

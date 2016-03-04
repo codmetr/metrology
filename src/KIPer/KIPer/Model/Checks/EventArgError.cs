@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace KipTM.Model.Checks
 {
-    public class CheckErrorEventArgs : EventArgs
+    public class EventArgError : EventArgs
     {
         public string ErrorString;
-        public ADTSCheckError Error;
+        public object Error;
     }
 }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace KipTM.Model.Checks
 {
@@ -8,20 +10,22 @@ namespace KipTM.Model.Checks
         /// Инициализация 
         /// </summary>
         /// <returns></returns>
-        bool Init();
+        bool Init(IDictionary<string, object> parameters);
 
         /// <summary>
         /// Запуск калибровки
         /// </summary>
-        /// <param name="channels"></param>
-        /// <param name="GetRealValue"></param>
-        /// <param name="GetAccept"></param>
         /// <returns></returns>
-        bool Start(string channels, Func<double> GetRealValue, Func<bool> GetAccept );
+        bool Start();
 
         /// <summary>
-        /// Отмена
+        /// Список шагов
         /// </summary>
-        void Cancel();
+        IEnumerable<ITestStep> Steps { get; } 
+
+        /// <summary>
+        /// Остановка проверки
+        /// </summary>
+        void Stop();
     }
 }
