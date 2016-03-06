@@ -96,6 +96,8 @@
     <Compile Include="Model\Archive\ParameterDescriptor.cs" />
     <Compile Include="Model\Archive\ParameterResult.cs" />
     <Compile Include="Model\Checks\ADTSCalibration\ADTSCalibrationInit.cs" />
+    <Compile Include="Model\Checks\ADTSCalibration\ADTSCalibrationPoint.cs" />
+    <Compile Include="Model\Checks\ADTSCalibration\ADTSCalibrationFinish.cs" />
     <Compile Include="Model\Checks\ADTSCheckEnum.cs" />
     <Compile Include="Model\Checks\EventArgError.cs" />
     <Compile Include="Model\Checks\EventArgCheckProgress.cs" />

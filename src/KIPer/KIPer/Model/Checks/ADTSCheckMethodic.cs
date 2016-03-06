@@ -72,11 +72,18 @@ namespace KipTM.Model.Checks
             if (_getAccept == null)
                 throw new NullReferenceException("\"GetAccept\" not fount in parameters as Func<bool>");
 
-            Steps = new List<ITestStep>()
+            var steps = new List<ITestStep>()
             {
                 new ADTSCalibrationInit("Инициализация калибровки", _adts, _calibChan, _logger),
             };
-
+            Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
+                : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
+            foreach (var point in Points)
+            {
+                steps.Add(new ADTSCalibrationPoint("", _adts, param, point, Rate, Unit, _getRealValue, _logger));
+            }
+            steps.Add(new ADTSCalibrationFinish("", _adts, _getAccept, _logger));
+            Steps = steps;
             return true;
         }
 
