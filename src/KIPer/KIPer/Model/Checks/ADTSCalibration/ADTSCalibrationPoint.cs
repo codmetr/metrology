@@ -16,17 +16,19 @@ namespace KipTM.Model.Checks.ADTSCalibration
         private readonly ADTSModel _adts;
         private readonly Parameters _param;
         private readonly double _point;
+        private readonly double _tolerance;
         private readonly double _rate;
         private readonly PressureUnits _unit;
         private readonly Func<double> _getRealValue;
         private readonly NLog.Logger _logger;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
-        public ADTSCalibrationPoint(string name, ADTSModel adts, Parameters param, double point, double rate, PressureUnits unit, Func<double> getRealValue, Logger logger)
+        public ADTSCalibrationPoint(string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate, PressureUnits unit, Func<double> getRealValue, Logger logger)
         {
             Name = name;
             _adts = adts;
             _param = param;
+            _tolerance = tolerance;
             _point = point;
             _rate = rate;
             _unit = unit;
@@ -73,9 +75,19 @@ namespace KipTM.Model.Checks.ADTSCalibration
                 return false;
             }
             var realValue = _getRealValue();
-            _logger.With(l => l.Trace(string.Format("Real value {0}", realValue)));
+            bool correctPoint = Math.Abs(Math.Abs(_point) - Math.Abs(realValue)) <= _tolerance;
+            _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
+            OnResultsAdded(new EventArgResultParam(new Dictionary<string, object>()
+            {
+                {
+                    string.Format("Real pressure on point {0} ({1})", _point, correctPoint ? "correct" : "incorrect"),
+                    realValue
+                }
+            }));
+
             if (_adts.SetActualValue(realValue, cancel))
             {
+                _logger.With(l => l.Trace(string.Format("[ERROR] Can not set real value")));
                 OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetRealValue });
                 return false;
             }
@@ -85,6 +97,9 @@ namespace KipTM.Model.Checks.ADTSCalibration
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 return false;
             }
+            OnProgressChanged(new EventArgCheckProgress(100,
+                string.Format("Точка {0}: Реальное значени {1}({2})",
+                    _point, realValue, correctPoint ? "correct" : "incorrect")));
             return true;
         }
 
@@ -94,15 +109,23 @@ namespace KipTM.Model.Checks.ADTSCalibration
             return true;
         }
 
+        public event EventHandler<EventArgResultParam> ResultsAdded;
+
         public event EventHandler<EventArgCheckProgress> ProgressChanged;
+
+        public event EventHandler<EventArgError> Error;
+
+        protected virtual void OnResultsAdded(EventArgResultParam e)
+        {
+            EventHandler<EventArgResultParam> handler = ResultsAdded;
+            if (handler != null) handler(this, e);
+        }
 
         protected virtual void OnProgressChanged(EventArgCheckProgress e)
         {
             EventHandler<EventArgCheckProgress> handler = ProgressChanged;
             if (handler != null) handler(this, e);
         }
-
-        public event EventHandler<EventArgError> Error;
 
         protected virtual void OnError(EventArgError e)
         {

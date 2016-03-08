@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GalaSoft.MvvmLight;
+using KipTM.Model.Devices;
 
 namespace KipTM.ViewModel
 {

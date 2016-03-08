@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Interfaces;
+using KipTM.Model.Checks;
+using KipTM.Model.Devices;
 using KipTM.View;
 using KipTM.View;
 using KipTM.View.Checks;
@@ -43,6 +46,7 @@ namespace KipTM.ViewModel
         {
             _dataService = dataService;
             _dataService.LoadSettings();
+            _dataService.LoadResults();
             _dataService.InitDevices();
 
             _services = new ServiceViewModel(new List<IService>()
@@ -225,7 +229,12 @@ namespace KipTM.ViewModel
 
         public void Loadsettings()
         {
-            var etalonTypes = new[]
+            List<EtalonTypeViewModel> etalonTypes = new List<EtalonTypeViewModel>();
+            foreach (var etalon in _dataService.Settings.Etalons)
+            {
+                etalonTypes.Add(new EtalonTypeViewModel(){Device = new DeviceTypeDescriptor(etalon.Device.Model, etalon.Device.DeviceCommonType, etalon.Device.DeviceManufacturer)});
+            }
+            /*var etalonTypes = new[]
             {
                 new EtalonTypeViewModel()
                 {
@@ -237,8 +246,9 @@ namespace KipTM.ViewModel
                     Device = new DeviceTypeDescriptor("DPI 620", "Многофункциональный калибратор", "GE Druk"),
                     TypesEtalonParameters = new[] {"напряжение", "ток", "относительное сопротивление"}
                 }
-            };
+            };*/
             _tests = new ArchivesViewModel();
+            _dataService.ResultsArchive;
             _tests.LoadTests(new List<ITestResultViewModel>
             {
                 new TestResultViewModel()
@@ -428,7 +438,7 @@ namespace KipTM.ViewModel
             var cheks = new Dictionary<string, object>()
             {
                 {"Поверка механического манометра", new MechanicalManometerViewModel()},
-                {"Калибровка ADTS", new ADTSCalibrationViewModel()},
+                {"Калибровка ADTS", new ADTSCalibrationViewModel(_dataService.Methodics.First(el=>el is ADTSCheckMethodic) as ADTSCheckMethodic)},
             };
             _check = new CheckViewModel(_dataService, cheks);
         }

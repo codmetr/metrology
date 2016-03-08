@@ -38,6 +38,11 @@ namespace KipTM.Model.Devices
         #endregion
 
         internal static string Key { get { return "ADTS"; } }
+        internal static string Model { get { return "ADTS405"; } }
+        internal static string DeviceCommonType { get { return "Калибратор давления"; } }
+        internal static string DeviceManufacturer { get { return "GE Druk"; } }
+        internal static IEnumerable<string> TypesEtalonParameters = new[]
+        {"давление", "авиационная высота", "авиационная скорость"};
 
         public ADTSModel(string title, ILoops loops, string loopKey, ADTSDriver driver)
         {

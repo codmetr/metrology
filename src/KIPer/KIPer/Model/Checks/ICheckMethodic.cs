@@ -10,7 +10,7 @@ namespace KipTM.Model.Checks
         /// Инициализация 
         /// </summary>
         /// <returns></returns>
-        bool Init(IDictionary<string, object> parameters);
+        bool Init(ADTSCheckParameters parameters);
 
         /// <summary>
         /// Запуск калибровки

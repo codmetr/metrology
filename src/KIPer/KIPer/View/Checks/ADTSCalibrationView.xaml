@@ -29,6 +29,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -36,7 +37,28 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <GroupBox Header="Состояние ADTS" Grid.Column="0" Grid.Row="0">
+            <GroupBox Header="Точки поверки ADTS" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
+                <ScrollViewer>
+                    <ItemsControl>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Column="0"/>
+                                    <TextBlock Grid.Column="1"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><StackPanel/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </GroupBox>
+            <GroupBox Header="Состояние ADTS" Grid.Column="1" Grid.Row="0">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Style="{StaticResource TitleStyle}">PS:</TextBlock>
@@ -70,7 +92,7 @@
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Ввод корректировки ADTS" Grid.Column="0" Grid.Row="1">
+            <GroupBox Header="Ввод корректировки ADTS" Grid.Column="1" Grid.Row="1">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                     <Button Style="{StaticResource ErrorBtnStyle}">-100</Button>
                     <Button Style="{StaticResource ErrorBtnStyle}">-10</Button>

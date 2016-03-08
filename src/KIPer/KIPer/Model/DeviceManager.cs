@@ -21,8 +21,8 @@ namespace KipTM.Model
 
         private readonly ILoops _loops = new Loops();
 
-        private PACE5000Model _paceModel;
-        private ADTSModel _adtsModel;
+        private readonly PACE5000Model _paceModel;
+        private readonly ADTSModel _adtsModel;
 
         private readonly IDictionary<string, Tuple<ITransportIEEE488, SerialPort>> _ports = new Dictionary<string, Tuple<ITransportIEEE488, SerialPort>>();
 
@@ -79,6 +79,11 @@ namespace KipTM.Model
         public PACE5000Model Pace5000
         {
             get { return _paceModel; }
+        }
+
+        public ADTSModel ADTS
+        {
+            get { return _adtsModel; }
         }
 
 

@@ -42,10 +42,16 @@ namespace KipTM.Model.Checks.ADTSCalibration
             }
             if (_adts.GetCalibrationResult(out slope, out zero, cancel))
             {
+                _logger.With(l => l.Trace(string.Format("[ERROR] Can not get result calibration")));
                 OnError(new EventArgError() { Error = ADTSCheckError.ErrorGetResultCalibration });
                 return false;
             }
             _logger.With(l => l.Trace(string.Format("Calibration result: slope {0}; zero: {1}", (object)slope ?? "NULL", (object)zero ?? "NULL")));
+            OnResultsAdded(new EventArgResultParam(new Dictionary<string, object>()
+            {
+                { string.Format("Calibration results: Slope"), slope },
+                { string.Format("Calibration results: Zero"), zero },
+            }));
             //OnProgress(new EventArgCheckProgress(percentGetRes, string.Format("Результат калибровки наклон:{0} ноль:{1}", (object)slope ?? "NULL", (object)zero ?? "NULL")));
 
             if (cancel.IsCancellationRequested)
@@ -55,6 +61,10 @@ namespace KipTM.Model.Checks.ADTSCalibration
             }
             var accept = _getAccept();
             _logger.With(l => l.Trace(string.Format("Calibration accept: {0}", accept ? "accept" : "deny")));
+            OnResultsAdded(new EventArgResultParam(new Dictionary<string, object>()
+            {
+                { string.Format("Calibration accept"), accept },
+            }));
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
@@ -65,7 +75,8 @@ namespace KipTM.Model.Checks.ADTSCalibration
                 OnError(new EventArgError() { Error = ADTSCheckError.ErrorAcceptResultCalibration });
                 return false;
             }
-            OnProgressChanged(new EventArgCheckProgress(100, string.Format("{0} результата калибровки", accept ? "Подтверждение" : "Отмена")));
+            OnProgressChanged(new EventArgCheckProgress(100,
+                string.Format("{0} результата калибровки", accept ? "Подтверждение" : "Отмена")));
             return true;
         }
 
@@ -75,15 +86,23 @@ namespace KipTM.Model.Checks.ADTSCalibration
             return true;
         }
 
+        public event EventHandler<EventArgResultParam> ResultsAdded;
+
         public event EventHandler<EventArgCheckProgress> ProgressChanged;
+
+        public event EventHandler<EventArgError> Error;
+
+        protected virtual void OnResultsAdded(EventArgResultParam e)
+        {
+            EventHandler<EventArgResultParam> handler = ResultsAdded;
+            if (handler != null) handler(this, e);
+        }
 
         protected virtual void OnProgressChanged(EventArgCheckProgress e)
         {
             EventHandler<EventArgCheckProgress> handler = ProgressChanged;
             if (handler != null) handler(this, e);
         }
-
-        public event EventHandler<EventArgError> Error;
 
         protected virtual void OnError(EventArgError e)
         {

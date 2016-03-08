@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
+using KipTM.Model.Archive;
 
 namespace KipTM.ViewModel
 {
@@ -26,8 +27,13 @@ namespace KipTM.ViewModel
         /// Загрузка базовой конфигурации набора тестов
         /// </summary>
         /// <param name="tests"></param>
-        public void LoadTests(IEnumerable<ITestResultViewModel> tests)
+        public void LoadTests(List<TestResult> tests)
         {
+            var testsSet = new List<ITestResultViewModel>();
+            foreach (var test in tests)
+            {
+                var testResVM = new TestResultViewModel();
+            }
             TestsCollection = new ObservableCollection<ITestResultViewModel>(tests);
         }
 

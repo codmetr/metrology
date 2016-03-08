@@ -28,7 +28,7 @@ namespace KipTM.Model.Checks
             _cancelSource = new CancellationTokenSource();
         }
 
-        public IEnumerable<double> Points { get; set; }
+        public IDictionary<double, double> Points { get; set; }
 
         public PressureUnits Unit { get; set; }
 
@@ -38,37 +38,16 @@ namespace KipTM.Model.Checks
         /// Инициализация 
         /// </summary>
         /// <returns></returns>
-        public bool Init(IDictionary<string, object> parameters)
+        public bool Init(ADTSCheckParameters parameters)
         {
             _logger.With(l => l.Trace("Init ADTSCheckMethodic"));
             _adts.Init();
             _adts.StartAutoUpdate();
 
-            if(!parameters.ContainsKey("channels"))
-                throw new KeyNotFoundException("\"channels\" not fount in parameters");
-            var channels = parameters["channels"] as string;
-            if(string.IsNullOrEmpty(channels))
-                throw new NullReferenceException("\"channels\" not fount in parameters as string");
-            if (channels == "PT")
-                _calibChan = CalibChannel.PT;
-            else if (channels == "PTPS")
-                _calibChan = CalibChannel.PS;
-            else if (channels == "PS")
-                _calibChan = CalibChannel.PS;
-            else
-            {
-                throw new KeyNotFoundException(string.Format("\"channels\" can not parsed from \"{0}\"", channels));
-            }
+            _calibChan = parameters.CalibChannel;
 
-            if (!parameters.ContainsKey("GetRealValue"))
-                throw new KeyNotFoundException("\"GetRealValue\" not fount in parameters");
-            _getRealValue = parameters["GetRealValue"] as Func<double>;
-            if (_getRealValue == null)
-                throw new NullReferenceException("\"GetRealValue\" not fount in parameters as Func<double>");
-
-            if (!parameters.ContainsKey("GetAccept"))
-                throw new KeyNotFoundException("\"GetAccept\" not fount in parameters");
-            _getAccept = parameters["GetAccept"] as Func<bool>;
+            _getRealValue = parameters.GetRealValue;
+            _getAccept = parameters.GetAccept;
             if (_getAccept == null)
                 throw new NullReferenceException("\"GetAccept\" not fount in parameters as Func<bool>");
 
@@ -80,9 +59,9 @@ namespace KipTM.Model.Checks
                 : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
             foreach (var point in Points)
             {
-                steps.Add(new ADTSCalibrationPoint("", _adts, param, point, Rate, Unit, _getRealValue, _logger));
+                steps.Add(new ADTSCalibrationPoint(string.Format("Калибровка точки {0}", point), _adts, param, point.Key, point.Value, Rate, Unit, _getRealValue, _logger));
             }
-            steps.Add(new ADTSCalibrationFinish("", _adts, _getAccept, _logger));
+            steps.Add(new ADTSCalibrationFinish("Подтверждение калибровки", _adts, _getAccept, _logger));
             Steps = steps;
             return true;
         }
@@ -125,7 +104,7 @@ namespace KipTM.Model.Checks
             Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
                 : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
             TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
-            foreach (var point in Points)
+            foreach (var point in Points.Keys)
             {
                 var percent = percentInitCalib + indexPoint*percentOnePoint;
                 _logger.With( l => l.Trace(string.Format("Start calibration {0}, point[{4}//{5}] {1}; unit {2}; rate {3}",

@@ -1,4 +1,6 @@
-﻿namespace KipTM.ViewModel
+﻿using KipTM.Model.Devices;
+
+namespace KipTM.ViewModel
 {
     /// <summary>
     /// Идентификатор конкретного устройства

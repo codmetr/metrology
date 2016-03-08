@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using KipTM.Model.Devices;
 
 namespace KipTM.ViewModel
 {
@@ -12,12 +13,16 @@ namespace KipTM.ViewModel
     {
         private string _serialNumber;
         private IDeviceTypeDescriptor _deviceType;
+        private readonly DeviceDescriptor _device;
 
         /// <summary>
         /// Initializes a new instance of the DeviceViewModel class.
         /// </summary>
-        public DeviceViewModel()
+        public DeviceViewModel(DeviceDescriptor device)
         {
+            _device = device;
+            _deviceType = _device.DeviceType;
+            _serialNumber = _device.SerialNumber;
         }
 
         /// <summary>

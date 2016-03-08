@@ -14,6 +14,8 @@ namespace KipTM.Model.Checks
 
         bool Stop();
 
+        event EventHandler<EventArgResultParam> ResultsAdded;
+
         event EventHandler<EventArgCheckProgress> ProgressChanged;
 
         event EventHandler<EventArgError> Error;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
+using KipTM.Model.Archive;
+using KipTM.Model.Devices;
 
 namespace KipTM.ViewModel
 {
@@ -19,11 +21,13 @@ namespace KipTM.ViewModel
         private string _testType;
         private ObservableCollection<IDeviceViewModel> _etalons;
 
+        private readonly TestResult _result;
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
         /// </summary>
-        public TestResultViewModel()
+        public TestResultViewModel(TestResult result)
         {
+            _result = result;
             if (IsInDesignMode)
             {
                 TestType = "поверка";
@@ -74,6 +78,14 @@ namespace KipTM.ViewModel
                         Error = "0.01"
                     },
                 });
+            }
+            else
+            {
+                _testType = _result.Note;
+                _user = _result.User;
+                _time = _result.Timestamp;
+                _device = new DeviceViewModel(_result.TargetDevice);
+                //TODO
             }
         }
 

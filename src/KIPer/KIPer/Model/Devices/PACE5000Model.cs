@@ -10,12 +10,13 @@ namespace KipTM.Model.Devices
 {
     public class PACE5000Model
     {
-        private PACESeries.PACEDriver _driver;
+        private readonly PACESeries.PACEDriver _driver;
         private ILoops _loops;
         private string _loopKey;
         public PACE5000Model(string title, ILoops loops, string loopKey, PACEDriver driver)
         {
             Title = title;
+            _loops = loops;
             _loopKey = loopKey;
             _driver = driver;
         }
@@ -27,6 +28,10 @@ namespace KipTM.Model.Devices
         }
 
         internal static string Key{get { return "PACE5000"; }}
+        internal static string Model { get { return "PACE5000"; } }
+        internal static string DeviceCommonType { get { return "Калибратор давления"; } }
+        internal static string DeviceManufacturer { get { return "GE Druk"; } }
+        internal static IEnumerable<string> TypesEtalonParameters = new[] { "давление", "авиационная высота", "авиационная скорость" };
 
         public void SetAutoread(TimeSpan autoreadPeriod)
         {

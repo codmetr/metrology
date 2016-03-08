@@ -5,7 +5,10 @@ namespace KipTM.Model
     public interface IDeviceManager
     {
         void Init();
+
         PACE5000Model Pace5000 { get; }
+        
+        ADTSModel ADTS { get; }
 
         /// <summary>
         /// Запуск автоопроса модуля дискретных входов

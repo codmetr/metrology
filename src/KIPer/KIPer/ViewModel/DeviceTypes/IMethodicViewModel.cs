@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using KipTM.Model.Devices;
 
 namespace KipTM.ViewModel
 {
