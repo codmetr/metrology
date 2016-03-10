@@ -11,7 +11,7 @@ namespace KipTM.Model.Archive
         private readonly DateTime _timestamp;
         private readonly ParameterDescriptor _descriptor;
         private readonly object _value;
-        private bool _isCorrect;
+        private readonly bool _isCorrect;
 
         public ParameterResult(DateTime timestamp, ParameterDescriptor descriptor, object value, bool isCorrect)
         {

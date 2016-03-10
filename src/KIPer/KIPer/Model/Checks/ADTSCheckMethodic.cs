@@ -13,6 +13,8 @@ namespace KipTM.Model.Checks
 {
     public class ADTSCheckMethodic : ICheckMethodic
     {
+        private const string TitleMethodic = "Калибровка ADTS";
+
         private readonly ADTSModel _adts;
         private readonly CancellationTokenSource _cancelSource;
         private readonly NLog.Logger _logger;
@@ -27,6 +29,8 @@ namespace KipTM.Model.Checks
             _adts = adts;
             _cancelSource = new CancellationTokenSource();
         }
+
+        public string Title{get { return TitleMethodic; }}
 
         public IDictionary<double, double> Points { get; set; }
 

@@ -12,9 +12,33 @@ namespace KipTM.Interfaces
 {
     public interface IDataService
     {
+        /// <summary>
+        /// Пул сконфигурируемых устройств
+        /// </summary>
         IDeviceManager DeviceManager { get; }
-        IEnumerable<ICheckMethodic> Methodics { get; }
+        /// <summary>
+        /// Список типов поддерживаемых устройств
+        /// </summary>
+        IEnumerable<IDeviceTypeDescriptor> DeviceTypes { get; }
+        /// <summary>
+        /// Список типов поддерживаемых эталонов
+        /// </summary>
+        IEnumerable<IDeviceTypeDescriptor> EtalonTypes { get; }
+        /// <summary>
+        /// Набор сконфигурированных эталонов
+        /// </summary>
+        IEnumerable<DeviceDescriptor> Etalons { get; }
+        /// <summary>
+        /// Набор поддерживаемых методик
+        /// </summary>
+        IDictionary<string, ICheckMethodic> Methodics { get; }
+        /// <summary>
+        /// Архив результатов проверок
+        /// </summary>
         ResultsArchive ResultsArchive { get; }
+        /// <summary>
+        /// Настройки
+        /// </summary>
         MainSettings Settings { get; }
         void LoadSettings();
         void SaveSettings();

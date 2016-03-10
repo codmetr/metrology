@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using KipTM.Model.Archive;
 
 namespace KipTM.ViewModel
 {
@@ -8,8 +9,8 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Загрузка базовой конфигурации набора тестов
         /// </summary>
-        /// <param name="tests"></param>
-        void LoadTests(IEnumerable<ITestResultViewModel> tests);
+        /// <param name="results"></param>
+        void LoadTests(ResultsArchive results);
 
         /// <summary>
         /// Набор выполненных тестов (процедур поверок/калибровок/аттестаций и пр.) 

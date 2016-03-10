@@ -127,6 +127,7 @@
     <Compile Include="ViewModel\Checks\ADTSCalibrationViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckViewModel.cs" />
     <Compile Include="ViewModel\Checks\MechanicalManometerViewModel.cs" />
+    <Compile Include="ViewModel\Checks\MethodicViewModelAttribute.cs" />
     <Compile Include="ViewModel\Checks\PointCheckableViewModel.cs" />
     <Compile Include="Model\Devices\DeviceTypeDescriptor.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypesViewModel.cs" />

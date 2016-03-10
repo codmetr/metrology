@@ -14,6 +14,7 @@ namespace KipTM.ViewModel.Checks
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
+    [MethodicViewModelAttribute(typeof(ADTSCheckMethodic))]
     public class ADTSCalibrationViewModel : ViewModelBase
     {
         private string _titleBtnNext;

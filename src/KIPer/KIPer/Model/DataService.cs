@@ -23,14 +23,20 @@ namespace KipTM.Model
         MainSettings _settings = new MainSettings();
         private readonly IArchive _archive;
         private IDeviceManager _deviceManager;
-        private readonly List<ICheckMethodic> _methodics;
+        private readonly Dictionary<string, ICheckMethodic> _methodics;
         private ResultsArchive _resultsArchive;
+        private readonly List<IDeviceTypeDescriptor> _deviceTypes;
+        private readonly List<IDeviceTypeDescriptor> _ethalonTypes;
+        private readonly List<DeviceDescriptor> _etalons;
 
 
         public DataService(IArchive archive)
         {
             _archive = archive;
-            _methodics = new List<ICheckMethodic>();
+            _deviceTypes = new List<IDeviceTypeDescriptor>();
+            _ethalonTypes = new List<IDeviceTypeDescriptor>();
+            _etalons = new List<DeviceDescriptor>();
+            _methodics = new Dictionary<string, ICheckMethodic>();
             _resultsArchive = new ResultsArchive();
         }
 
@@ -48,25 +54,66 @@ namespace KipTM.Model
             if (adtsPort == null)
                 throw new NullReferenceException(string.Format("ADTS port not found by key \"{0}\"", adtsSettings.NamePort));
 
-            _deviceManager = new DeviceManager(adtsPort, paceSettings.Port, adtsSettings, paceSettings.Device, NLog.LogManager.GetCurrentClassLogger(typeof(DeviceManager)));
-            _methodics.Add(new ADTSCheckMethodic(_deviceManager.ADTS, NLog.LogManager.GetCurrentClassLogger(typeof(ADTSCheckMethodic))));
+            _deviceTypes.Add(new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer));
+
+            _ethalonTypes.Add(new DeviceTypeDescriptor(PACE5000Model.Model, PACE5000Model.DeviceCommonType, PACE5000Model.DeviceManufacturer));
+
+            _deviceManager = new DeviceManager(adtsPort, paceSettings.Port, adtsSettings, paceSettings.Device, NLog.LogManager.GetLogger("DeviceManager"));
+
+            _methodics.Add(ADTSModel.Key, new ADTSCheckMethodic(_deviceManager.ADTS, NLog.LogManager.GetLogger("ADTSCheckMethodic")));
         }
 
+        /// <summary>
+        /// Пул сконфигурируемых устройств
+        /// </summary>
         public IDeviceManager DeviceManager
         {
             get { return _deviceManager; }
         }
 
-        public IEnumerable<ICheckMethodic> Methodics
+        /// <summary>
+        /// Список типов поддерживаемых устройств
+        /// </summary>
+        public IEnumerable<IDeviceTypeDescriptor> DeviceTypes
+        {
+            get { return _deviceTypes; }
+        }
+
+        /// <summary>
+        /// Список типов поддерживаемых эталонов
+        /// </summary>
+        public IEnumerable<IDeviceTypeDescriptor> EtalonTypes
+        {
+            get { return _ethalonTypes; }
+        }
+
+        /// <summary>
+        /// Набор сконфигурированных эталонов
+        /// </summary>
+        public IEnumerable<DeviceDescriptor> Etalons
+        {
+            get { return _etalons; }
+        }
+
+        /// <summary>
+        /// Набор поддерживаемых методик
+        /// </summary>
+        public IDictionary<string, ICheckMethodic> Methodics
         {
             get { return _methodics; }
         }
 
+        /// <summary>
+        /// Архив результатов проверок
+        /// </summary>
         public ResultsArchive ResultsArchive
         {
             get { return _resultsArchive; }
         }
 
+        /// <summary>
+        /// Настройки
+        /// </summary>
         public MainSettings Settings
         {
             get { return _settings; }
@@ -86,6 +133,9 @@ namespace KipTM.Model
         public void LoadSettings()
         {
             _settings = _archive.Load(SettingsFileName, MainSettings.GetDefault());
+
+            // TODO Загружать настройки эталона из настроек
+            _etalons.Add(new DeviceDescriptor(new DeviceTypeDescriptor(PACE5000Model.Model, PACE5000Model.DeviceCommonType, PACE5000Model.DeviceManufacturer), "123"));
         }
 
         public void SaveSettings()

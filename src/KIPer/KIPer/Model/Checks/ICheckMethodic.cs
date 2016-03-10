@@ -7,6 +7,11 @@ namespace KipTM.Model.Checks
     public interface ICheckMethodic
     {
         /// <summary>
+        /// Название методики
+        /// </summary>
+        string Title { get; }
+
+        /// <summary>
         /// Инициализация 
         /// </summary>
         /// <returns></returns>

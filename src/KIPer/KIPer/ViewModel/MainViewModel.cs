@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Interfaces;
-using KipTM.Model.Checks;
-using KipTM.Model.Devices;
-using KipTM.View;
 using KipTM.View;
 using KipTM.View.Checks;
-using KipTM.ViewModel;
 using KipTM.ViewModel.Checks;
 
 namespace KipTM.ViewModel
@@ -32,11 +25,10 @@ namespace KipTM.ViewModel
 
         private readonly Dictionary<Type, Type> ViewModelViewDic;
 
-
         private IArchivesViewModel _tests;
         private DeviceTypesViewModel _deviceTypes;
         private DeviceTypesViewModel _etalonTypes;
-        private CheckViewModel _check;
+        private CheckViewModel _checks;
 
 
         /// <summary>
@@ -100,7 +92,7 @@ namespace KipTM.ViewModel
                 return new RelayCommand<object>(
                     (mainView) =>
                     {
-                        Loadsettings();
+                        Load();
 
                         var view = mainView as Window;
                         if (view == null)
@@ -137,7 +129,7 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = _check;
+                    SelectedAction = _checks;
                     HelpMessage = "Выполнение поверки";
                 });
             }
@@ -227,13 +219,18 @@ namespace KipTM.ViewModel
         ////    base.Cleanup();
         ////}
 
-        public void Loadsettings()
+        public void Load()
         {
-            List<EtalonTypeViewModel> etalonTypes = new List<EtalonTypeViewModel>();
-            foreach (var etalon in _dataService.Settings.Etalons)
-            {
-                etalonTypes.Add(new EtalonTypeViewModel(){Device = new DeviceTypeDescriptor(etalon.Device.Model, etalon.Device.DeviceCommonType, etalon.Device.DeviceManufacturer)});
-            }
+            _tests = new ArchivesViewModel();
+            _tests.LoadTests(_dataService.ResultsArchive);
+
+            _etalonTypes = new DeviceTypesViewModel();
+            _etalonTypes.LoadTypes(_dataService.EtalonTypes);
+
+            _deviceTypes = new DeviceTypesViewModel();
+            _deviceTypes.LoadTypes(_dataService.DeviceTypes);
+
+            _checks = new CheckViewModel(_dataService, _dataService.Methodics);
             /*var etalonTypes = new[]
             {
                 new EtalonTypeViewModel()
@@ -246,7 +243,7 @@ namespace KipTM.ViewModel
                     Device = new DeviceTypeDescriptor("DPI 620", "Многофункциональный калибратор", "GE Druk"),
                     TypesEtalonParameters = new[] {"напряжение", "ток", "относительное сопротивление"}
                 }
-            };*/
+            };
             _tests = new ArchivesViewModel();
             _dataService.ResultsArchive;
             _tests.LoadTests(new List<ITestResultViewModel>
@@ -441,6 +438,7 @@ namespace KipTM.ViewModel
                 {"Калибровка ADTS", new ADTSCalibrationViewModel(_dataService.Methodics.First(el=>el is ADTSCheckMethodic) as ADTSCheckMethodic)},
             };
             _check = new CheckViewModel(_dataService, cheks);
+            */
         }
 
         public IArchivesViewModel Tests { get { return _tests; } }
@@ -449,6 +447,6 @@ namespace KipTM.ViewModel
 
         public DeviceTypesViewModel EtalonTypes { get { return _etalonTypes; } }
 
-        public CheckViewModel Check { get { return _check; } }
+        public CheckViewModel Checks { get { return _checks; } }
     }
 }

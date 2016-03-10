@@ -18,7 +18,11 @@ namespace KipTM.Design
             get { return _deviceManager; }
         }
 
-        public IEnumerable<ICheckMethodic> Methodics { get; private set; }
+        public IEnumerable<IDeviceTypeDescriptor> DeviceTypes { get; private set; }
+        public IEnumerable<IDeviceTypeDescriptor> EtalonTypes { get; private set; }
+        public IEnumerable<DeviceDescriptor> Etalons { get; private set; }
+
+        public IDictionary<string, ICheckMethodic> Methodics { get; private set; }
         public ResultsArchive ResultsArchive { get; private set; }
         public MainSettings Settings { get; private set; }
 

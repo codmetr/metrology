@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using KipTM.Interfaces;
+using KipTM.Model.Checks;
 using KipTM.ViewModel;
 using KipTM.ViewModel.Checks;
 
@@ -19,40 +21,40 @@ namespace KipTM.ViewModel
     public class CheckViewModel : ViewModelBase
     {
         private IDataService _dataService;
-        private readonly IDictionary<string, object> _checks;
+        private readonly IDictionary<string, ICheckMethodic> _checks;
         private object _selectedCheck;
-        private string _selectedCheckType;
+        private ICheckMethodic _selectedCheckType;
 
         /// <summary>
         /// Initializes a new instance of the CheckViewModel class.
         /// </summary>
-        public CheckViewModel(IDataService dataService, IDictionary<string, object> checks)
+        public CheckViewModel(IDataService dataService, IDictionary<string, ICheckMethodic> checks)
         {
             _dataService = dataService;
             _checks = checks;
             if (_checks.Count > 0)
             {
                 var selected = _checks.First();
-                CheckTypes = _checks.Keys;
-                SelectedCheckType = selected.Key;
+                DeviceTypes = _checks.Keys;
+                CheckTypes = _checks.Values;
             }
         }
 
         public ObservableCollection<IParameterResultViewModel> Parameters { get; set; }
 
         public IEnumerable<string> DeviceTypes { get; set; }
- 
-        public IEnumerable<string> CheckTypes { get; set; }
+
+        public IEnumerable<ICheckMethodic> CheckTypes { get; set; }
  
         public string SelectedDeviceType { get; set; }
 
-        public string SelectedCheckType
+        public ICheckMethodic SelectedCheckType
         {
             get { return _selectedCheckType; }
             set
             {
                 _selectedCheckType = value;
-                Check = _checks[_selectedCheckType];
+                Check = GetViewModelFor(_selectedCheckType);
             }
         }
 
@@ -68,6 +70,20 @@ namespace KipTM.ViewModel
         {
             get { return _selectedCheck; }
             set { Set(ref _selectedCheck, value); }
+        }
+
+        public object GetViewModelFor(ICheckMethodic methodic)
+        {
+            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (Type t in a.GetTypes())
+                {
+                    if(!Attribute.IsDefined(t, typeof (MethodicViewModelAttribute)))
+                        break;
+                    return Activator.CreateInstance(t, methodic);
+                }
+            }
+            return null;
         }
     }
 }

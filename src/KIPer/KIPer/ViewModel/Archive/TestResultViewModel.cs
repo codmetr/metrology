@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using GalaSoft.MvvmLight;
 using KipTM.Model.Archive;
 using KipTM.Model.Devices;
@@ -33,23 +34,11 @@ namespace KipTM.ViewModel
                 TestType = "поверка";
                 User = "Иван Иванович Иванов";
                 Time = DateTime.Parse("11/11/11");
-                Device = new DeviceViewModel()
-                {
-                    DeviceType = new DeviceTypeDescriptor("UNIK 5000", "Датчик давления", "GE"),
-                    SerialNumber = "111",
-                };
+                Device = new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("UNIK 5000", "Датчик давления", "GE"), "111"));
                 Etalons = new ObservableCollection<IDeviceViewModel>(new IDeviceViewModel[]
                 {
-                    new DeviceViewModel()
-                    {
-                        DeviceType = new DeviceTypeDescriptor("PACE5000", "Датчик давления", "GE Druk"),
-                        SerialNumber = "222",
-                    },
-                    new DeviceViewModel()
-                    {
-                        DeviceType = new DeviceTypeDescriptor("DPI 620", "Многофункциональный калибратор", "GE Druk"),
-                        SerialNumber = "333",
-                    }
+                    new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("PACE5000", "Датчик давления", "GE Druk"), "222")),
+                    new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("DPI 620", "Многофункциональный калибратор", "GE Druk"), "333")),
                 });
                 Parameters = new ObservableCollection<IParameterResultViewModel>(new IParameterResultViewModel[]
                 {
@@ -85,7 +74,7 @@ namespace KipTM.ViewModel
                 _user = _result.User;
                 _time = _result.Timestamp;
                 _device = new DeviceViewModel(_result.TargetDevice);
-                //TODO
+                _etalons = new ObservableCollection<IDeviceViewModel>(_result.Etalon.Select(el=>new DeviceViewModel(el)));
             }
         }
 
