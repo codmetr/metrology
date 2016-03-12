@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -26,6 +27,7 @@ namespace KipTM.ViewModel.Checks
         public ADTSCalibrationViewModel(ADTSCheckMethodic methodic)
         {
             _methodic = methodic;
+            Points = new List<PointCheckableViewModel>(methodic.Steps.Select(el=>new PointCheckableViewModel(el.Name)));
         }
 
         public string TitleBtnNext

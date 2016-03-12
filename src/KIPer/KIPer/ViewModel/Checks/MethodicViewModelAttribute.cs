@@ -8,7 +8,7 @@ namespace KipTM.ViewModel.Checks
 {
     public class MethodicViewModelAttribute:Attribute
     {
-        private Type _modelType;
+        private readonly Type _modelType;
 
         /// <summary>
         /// Указание какой модели репдназначен данный ViewModel
@@ -18,5 +18,7 @@ namespace KipTM.ViewModel.Checks
         {
             _modelType = modelType;
         }
+
+        public Type ModelType{get { return _modelType; }}
     }
 }

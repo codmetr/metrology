@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Documents;
 using System.Xml;
 using System.Xml.Serialization;
+using ADTS;
 using KipTM.Interfaces;
 using KipTM.Model.Archive;
 using KipTM.Model.Checks;
@@ -60,7 +62,13 @@ namespace KipTM.Model
 
             _deviceManager = new DeviceManager(adtsPort, paceSettings.Port, adtsSettings, paceSettings.Device, NLog.LogManager.GetLogger("DeviceManager"));
 
-            _methodics.Add(ADTSModel.Key, new ADTSCheckMethodic(_deviceManager.ADTS, NLog.LogManager.GetLogger("ADTSCheckMethodic")));
+            var adtsCheck = new ADTSCheckMethodic(_deviceManager.ADTS, NLog.LogManager.GetLogger("ADTSCheckMethodic"));
+            adtsCheck.Init(new ADTSCheckParameters(CalibChannel.PS,
+                _settings.Methodic.First(el => el.Name == ADTSCheckMethodic.KeySettingsPS)
+                    .Points.ToDictionary(
+                        elK => double.Parse(elK.Point, NumberStyles.Any, CultureInfo.InvariantCulture),
+                        elK => double.Parse(elK.Tolerance, NumberStyles.Any, CultureInfo.InvariantCulture)), ()=>0.0, () => true)); //todo: придумать способ запроса состояний у пользователя
+            _methodics.Add(ADTSModel.Key, adtsCheck);
         }
 
         /// <summary>

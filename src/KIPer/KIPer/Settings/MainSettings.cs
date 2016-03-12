@@ -4,6 +4,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KipTM.Model.Checks;
 
 namespace KipTM.Settings
 {
@@ -69,7 +70,7 @@ namespace KipTM.Settings
             {
                 new MethodicSettings()
                 {
-                    Name="ADTSCalibrationPs",
+                    Name=ADTSCheckMethodic.KeySettingsPS,
                     Points = new List<PointTolerancePair>()
                     {
                         new PointTolerancePair(){Point = "27.62",   Tolerance = "0.1"},
@@ -84,7 +85,7 @@ namespace KipTM.Settings
                 },
                 new MethodicSettings()
                 {
-                    Name="ADTSCalibrationPt",
+                    Name=ADTSCheckMethodic.KeySettingsPT,
                     Points = new List<PointTolerancePair>()
                     {
                         new PointTolerancePair(){Point = "27.62",   Tolerance = "0.24"},

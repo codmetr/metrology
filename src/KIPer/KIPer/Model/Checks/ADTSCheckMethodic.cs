@@ -7,12 +7,17 @@ using System.Threading.Tasks;
 using ADTS;
 using KipTM.Model.Checks.ADTSCalibration;
 using KipTM.Model.Devices;
+using KipTM.Settings;
 using Tools;
 
 namespace KipTM.Model.Checks
 {
     public class ADTSCheckMethodic : ICheckMethodic
     {
+        public const string KeySettingsPS = "ADTSCalibrationPs";
+        public const string KeySettingsPT = "ADTSCalibrationPt";
+        public const string KeySettingsPSPT = "ADTSCalibrationPsPt";
+
         private const string TitleMethodic = "Калибровка ADTS";
 
         private readonly ADTSModel _adts;
@@ -61,7 +66,7 @@ namespace KipTM.Model.Checks
             };
             Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
                 : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
-            foreach (var point in Points)
+            foreach (var point in parameters.Points)
             {
                 steps.Add(new ADTSCalibrationPoint(string.Format("Калибровка точки {0}", point), _adts, param, point.Key, point.Value, Rate, Unit, _getRealValue, _logger));
             }

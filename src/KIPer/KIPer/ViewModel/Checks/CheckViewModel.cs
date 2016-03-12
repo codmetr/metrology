@@ -7,7 +7,6 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using KipTM.Interfaces;
 using KipTM.Model.Checks;
-using KipTM.ViewModel;
 using KipTM.ViewModel.Checks;
 
 namespace KipTM.ViewModel
@@ -74,15 +73,8 @@ namespace KipTM.ViewModel
 
         public object GetViewModelFor(ICheckMethodic methodic)
         {
-            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                foreach (Type t in a.GetTypes())
-                {
-                    if(!Attribute.IsDefined(t, typeof (MethodicViewModelAttribute)))
-                        break;
-                    return Activator.CreateInstance(t, methodic);
-                }
-            }
+            if (methodic is ADTSCheckMethodic)
+                return new ADTSCalibrationViewModel(methodic as ADTSCheckMethodic);
             return null;
         }
     }
