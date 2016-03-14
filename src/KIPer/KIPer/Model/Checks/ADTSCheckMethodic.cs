@@ -43,6 +43,16 @@ namespace KipTM.Model.Checks
 
         public double Rate { get; set; }
 
+        public void SetFuncGetValue(Func<double> getValue)
+        {
+            _getRealValue = getValue;
+        }
+
+        public void SetFuncGetAccept(Func<bool> getAccept)
+        {
+            _getAccept = getAccept;
+        }
+
         /// <summary>
         /// Инициализация 
         /// </summary>

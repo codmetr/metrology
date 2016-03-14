@@ -39,7 +39,7 @@
             </Grid.RowDefinitions>
             <GroupBox Header="Точки поверки ADTS" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
                 <ScrollViewer>
-                    <ItemsControl>
+                    <ItemsControl ItemsSource="{Binding Points}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -47,8 +47,8 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox Grid.Column="0"/>
-                                    <TextBlock Grid.Column="1"/>
+                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

@@ -67,7 +67,9 @@ namespace KipTM.Model
                 _settings.Methodic.First(el => el.Name == ADTSCheckMethodic.KeySettingsPS)
                     .Points.ToDictionary(
                         elK => double.Parse(elK.Point, NumberStyles.Any, CultureInfo.InvariantCulture),
-                        elK => double.Parse(elK.Tolerance, NumberStyles.Any, CultureInfo.InvariantCulture)), ()=>0.0, () => true)); //todo: придумать способ запроса состояний у пользователя
+                        elK => double.Parse(elK.Tolerance, NumberStyles.Any, CultureInfo.InvariantCulture)),
+                        null, //todo: придумать способ запроса состояний у пользователя
+                        null)); //todo: придумать способ запроса решения о применении у пользователя
             _methodics.Add(ADTSModel.Key, adtsCheck);
         }
 
