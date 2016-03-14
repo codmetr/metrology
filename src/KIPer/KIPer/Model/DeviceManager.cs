@@ -42,7 +42,8 @@ namespace KipTM.Model
             var serialName = string.Format("COM{0}", portAdts.NumberCom);
             var port = new SerialPort(serialName, portAdts.Rate, portAdts.Parity, portAdts.CountBits,
                 portAdts.CountStopBits);
-            ITransportIEEE488 ieee488 = new TransportIEEE488(port);
+            //ITransportIEEE488 ieee488 = new TransportIEEE488(port);
+            ITransportIEEE488 ieee488 = new FakeTransport();//todo Заменить на настоящий транспорт
             _ports.Add(serialName, new Tuple<ITransportIEEE488, SerialPort>(ieee488, port));
             _loops.AddLocker(serialName, ieee488);
             _adtsModel = new ADTSModel(adts.Name, _loops, serialName, adtsDriver);

@@ -8,21 +8,21 @@ namespace ADTS
 {
     public class ADTSParser
     {
-        private const string KeyGetDate = "SYST:DATE?";
-        private const string KeySetState = "SOUR:STAT <state>";
-        private const string KeyGetState = "SOUR:STAT?";
-        private const string KeyStartMainCalibration = "CAL:MAIN:CHAN <channel>";
-        private const string KeySetValueActualPressure = "CAL:MAIN:VAL <value>";
-        private const string KeyGetCalibrationResult = "CAL:MAIN:RES?";
-        private const string KeySetMainCalibrationAccept = "CAL:MAIN:ACC <state>";
-        private const string KeySetUnitPressure = "UNIT:PRES <units>";
-        private const string KeyGetUnitPressure = "UNIT:PRES?";
-        private const string KeySetRate = "SOUR:RATE <parameter>,<aim>";
-        private const string KeyGetRate = "SOUR:RATE? <parameter>";
-        private const string KeySetAim = "SOUR:PRES <parameter>,<aim>";
-        private const string KeyGetAim = "SOUR:PRES? <parameter>";
-        private const string KeyGetStatusOfADTS = "STAT:OPER:CON?";
-        private const string KeyGetPressure = "MEAS:PRES? <parameter>";
+        internal const string KeyGetDate = "SYST:DATE?";
+        internal const string KeySetState = "SOUR:STAT <state>";
+        internal const string KeyGetState = "SOUR:STAT?";
+        internal const string KeyStartMainCalibration = "CAL:MAIN:CHAN <channel>";
+        internal const string KeySetValueActualPressure = "CAL:MAIN:VAL <value>";
+        internal const string KeyGetCalibrationResult = "CAL:MAIN:RES?";
+        internal const string KeySetMainCalibrationAccept = "CAL:MAIN:ACC <state>";
+        internal const string KeySetUnitPressure = "UNIT:PRES <units>";
+        internal const string KeyGetUnitPressure = "UNIT:PRES?";
+        internal const string KeySetRate = "SOUR:RATE <parameter>,<aim>";
+        internal const string KeyGetRate = "SOUR:RATE? <parameter>";
+        internal const string KeySetAim = "SOUR:PRES <parameter>,<aim>";
+        internal const string KeyGetAim = "SOUR:PRES? <parameter>";
+        internal const string KeyGetStatusOfADTS = "STAT:OPER:CON?";
+        internal const string KeyGetPressure = "MEAS:PRES? <parameter>";
 
         #region GetSystemDate "SYST:DATE?"
 
