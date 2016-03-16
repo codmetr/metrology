@@ -19,11 +19,11 @@ namespace KipTM.Model.Checks.ADTSCalibration
         private readonly double _tolerance;
         private readonly double _rate;
         private readonly PressureUnits _unit;
-        private readonly Func<double> _getRealValue;
+        private readonly Func<double, CancellationToken, double> _getRealValue;
         private readonly NLog.Logger _logger;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
-        public ADTSCalibrationPoint(string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate, PressureUnits unit, Func<double> getRealValue, Logger logger)
+        public ADTSCalibrationPoint(string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate, PressureUnits unit, Func<double, CancellationToken, double> getRealValue, Logger logger)
         {
             Name = name;
             _adts = adts;

@@ -102,6 +102,7 @@
     <Compile Include="Model\Checks\ADTSCalibration\ADTSCalibrationFinish.cs" />
     <Compile Include="Model\Checks\ADTSCheckEnum.cs" />
     <Compile Include="Model\Checks\ADTSCheckParameters.cs" />
+    <Compile Include="Model\Checks\EthalonChannel.cs" />
     <Compile Include="Model\Checks\EventArgError.cs" />
     <Compile Include="Model\Checks\EventArgCheckProgress.cs" />
     <Compile Include="Model\Checks\EventArgResultParam.cs" />
