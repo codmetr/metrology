@@ -19,11 +19,11 @@ namespace KipTM.Model.Checks.ADTSCalibration
         private readonly double _tolerance;
         private readonly double _rate;
         private readonly PressureUnits _unit;
-        private readonly Func<double, CancellationToken, double> _getRealValue;
+        private readonly IEthalonChannel _ethalonChannel;
         private readonly NLog.Logger _logger;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
-        public ADTSCalibrationPoint(string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate, PressureUnits unit, Func<double, CancellationToken, double> getRealValue, Logger logger)
+        public ADTSCalibrationPoint(string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate, PressureUnits unit, IEthalonChannel ethalonChannel, Logger logger)
         {
             Name = name;
             _adts = adts;
@@ -33,7 +33,7 @@ namespace KipTM.Model.Checks.ADTSCalibration
             _rate = rate;
             _unit = unit;
             _logger = logger;
-            _getRealValue = getRealValue;
+            _ethalonChannel = ethalonChannel;
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
@@ -74,7 +74,13 @@ namespace KipTM.Model.Checks.ADTSCalibration
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 return false;
             }
-            var realValue = _getRealValue();
+            var realValue = _ethalonChannel.GetEthalonValue(_point, cancel);
+
+            if (cancel.IsCancellationRequested)
+            {
+                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
+                return false;
+            }
             bool correctPoint = Math.Abs(Math.Abs(_point) - Math.Abs(realValue)) <= _tolerance;
             _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
             OnResultsAdded(new EventArgResultParam(new Dictionary<string, object>()

@@ -102,12 +102,15 @@
     <Compile Include="Model\Checks\ADTSCalibration\ADTSCalibrationFinish.cs" />
     <Compile Include="Model\Checks\ADTSCheckEnum.cs" />
     <Compile Include="Model\Checks\ADTSCheckParameters.cs" />
-    <Compile Include="Model\Checks\EthalonChannel.cs" />
+    <Compile Include="Model\Checks\IEthalonChannel.cs" />
     <Compile Include="Model\Checks\EventArgError.cs" />
     <Compile Include="Model\Checks\EventArgCheckProgress.cs" />
     <Compile Include="Model\Checks\EventArgResultParam.cs" />
     <Compile Include="Model\Checks\ICheckMethodic.cs" />
     <Compile Include="Model\Checks\ITestStep.cs" />
+    <Compile Include="Model\Checks\IUserChannel.cs" />
+    <Compile Include="Model\Checks\UserChannel.cs" />
+    <Compile Include="Model\Checks\UserEchalonChannel.cs" />
     <Compile Include="Model\Devices\ADTSModel.cs" />
     <Compile Include="Model\Checks\ADTSCheckMethodic.cs" />
     <Compile Include="Model\DeviceManager.cs" />

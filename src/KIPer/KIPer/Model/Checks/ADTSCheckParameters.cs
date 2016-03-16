@@ -10,15 +10,15 @@ namespace KipTM.Model.Checks
     public class ADTSCheckParameters
     {
         private readonly CalibChannel _calibChannel;
-        private readonly IDictionary<double, double> _points; 
-        private readonly Func<double> _getRealValue;
+        private readonly IDictionary<double, double> _points;
+        private readonly IEthalonChannel _ethalonChannel;
         private readonly Func<bool> _getAccept;
 
-        public ADTSCheckParameters(CalibChannel calibChannel, IDictionary<double, double> points, Func<double> getRealValue, Func<bool> getAccept)
+        public ADTSCheckParameters(CalibChannel calibChannel, IDictionary<double, double> points, IEthalonChannel ethalonChannel, Func<bool> getAccept)
         {
             _calibChannel = calibChannel;
             _points = points;
-            _getRealValue = getRealValue;
+            _ethalonChannel = ethalonChannel;
             _getAccept = getAccept;
         }
 
@@ -32,9 +32,9 @@ namespace KipTM.Model.Checks
             get { return _points; }
         }
 
-        public Func<double> GetRealValue
+        public IEthalonChannel EthalonChannel
         {
-            get { return _getRealValue; }
+            get { return _ethalonChannel; }
         }
 
         public Func<bool> GetAccept
