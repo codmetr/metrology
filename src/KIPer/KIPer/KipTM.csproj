@@ -111,6 +111,7 @@
     <Compile Include="Model\Checks\IUserChannel.cs" />
     <Compile Include="Model\Checks\UserChannel.cs" />
     <Compile Include="Model\Checks\UserEchalonChannel.cs" />
+    <Compile Include="Model\Checks\UserQueryType.cs" />
     <Compile Include="Model\Devices\ADTSModel.cs" />
     <Compile Include="Model\Checks\ADTSCheckMethodic.cs" />
     <Compile Include="Model\DeviceManager.cs" />

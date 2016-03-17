@@ -14,6 +14,12 @@ namespace KipTM.Model.Checks
     {
         private EventWaitHandle _wh = null;
         private bool _agreeValue;
+        private UserQueryType _queryType;
+
+        /// <summary>
+        /// Тип ожидаемого действия пользователя
+        /// </summary>
+        public UserQueryType QueryType{get { return _queryType; }}
 
         /// <summary>
         /// Уточняющее сообщение для получения эталонного значения
@@ -25,6 +31,13 @@ namespace KipTM.Model.Checks
         /// </summary>
         /// <remarks>Так же, при необходимости устанавливается в значение по умолчанию</remarks>
         public double RealValue { get; set; }
+
+
+        /// <summary>
+        /// Эталонное значение от пользователя
+        /// </summary>
+        /// <remarks>Так же, при необходимости устанавливается в значение по умолчанию</remarks>
+        public bool AcceptValue { get; set; }
 
         /// <summary>
         /// Значение, показывающее, что пользователь подтвердил введенное эталонное значение
@@ -43,20 +56,34 @@ namespace KipTM.Model.Checks
         /// <summary>
         /// Запрос на получение эталонного значение параметра от пользователя
         /// </summary>
-        public void NeedQuey()
+        public void NeedQuey(UserQueryType queryType)
         {
-            NeedQuery(null);
+            NeedQuery(queryType, null);
         }
 
         /// <summary>
         /// Запрос на получение эталонного значение параметра от пользователя
         /// </summary>
         /// <param name="wh">Симофор по которому можно будет понять, что пользователь подтвердил ввод</param>
-        public void NeedQuery(EventWaitHandle wh)
+        public void NeedQuery(UserQueryType queryType, EventWaitHandle wh)
         {
+            _queryType = queryType;
             _wh = wh;
+
             AgreeValue = false;
+            AcceptValue = false;
+            OnQueryStarted();
         }
 
+        /// <summary>
+        /// Поступил запрос на действие пользователя
+        /// </summary>
+        public event EventHandler QueryStarted;
+
+        protected virtual void OnQueryStarted()
+        {
+            EventHandler handler = QueryStarted;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
     }
 }

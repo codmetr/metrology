@@ -25,8 +25,8 @@ namespace KipTM.Model.Checks
         private readonly NLog.Logger _logger;
 
         private CalibChannel _calibChan;
-        private Func<double> _getRealValue;
-        private Func<bool> _getAccept;
+        private IEthalonChannel _ethalonChannel;
+        private IUserChannel _userChannel;
 
         public ADTSCheckMethodic(ADTSModel adts, NLog.Logger logger)
         {
@@ -43,14 +43,14 @@ namespace KipTM.Model.Checks
 
         public double Rate { get; set; }
 
-        public void SetFuncGetValue(Func<double> getValue)
+        public void SetEthalonChannel(IEthalonChannel ethalonChannel)
         {
-            _getRealValue = getValue;
+            _ethalonChannel = ethalonChannel;
         }
 
-        public void SetFuncGetAccept(Func<bool> getAccept)
+        public void SetFuncGetAccept(IUserChannel userChannel)
         {
-            _getAccept = getAccept;
+            _userChannel = userChannel;
         }
 
         /// <summary>
@@ -65,10 +65,10 @@ namespace KipTM.Model.Checks
 
             _calibChan = parameters.CalibChannel;
 
-            _getRealValue = parameters.GetRealValue;
-            _getAccept = parameters.GetAccept;
-            if (_getAccept == null)
-                throw new NullReferenceException("\"GetAccept\" not fount in parameters as Func<bool>");
+            _ethalonChannel = parameters.EthalonChannel;
+            _userChannel = parameters.UserChannel;
+            if (_userChannel == null)
+                throw new NullReferenceException("\"UserChannel\" not fount in parameters as IUserChannel");
 
             var steps = new List<ITestStep>()
             {
@@ -78,9 +78,9 @@ namespace KipTM.Model.Checks
                 : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
             foreach (var point in parameters.Points)
             {
-                steps.Add(new ADTSCalibrationPoint(string.Format("Калибровка точки {0}", point), _adts, param, point.Key, point.Value, Rate, Unit, _getRealValue, _logger));
+                steps.Add(new ADTSCalibrationPoint(string.Format("Калибровка точки {0}", point), _adts, param, point.Key, point.Value, Rate, Unit, _ethalonChannel, _logger));
             }
-            steps.Add(new ADTSCalibrationFinish("Подтверждение калибровки", _adts, _getAccept, _logger));
+            steps.Add(new ADTSCalibrationFinish("Подтверждение калибровки", _adts, _userChannel, _logger));
             Steps = steps;
             return true;
         }

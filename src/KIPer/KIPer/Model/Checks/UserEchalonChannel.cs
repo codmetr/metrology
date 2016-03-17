@@ -19,19 +19,19 @@ namespace KipTM.Model.Checks
         }
 
 
-        public double GetEthalonValue(double point, CancellationToken calcel)
+        public double GetEthalonValue(double point, CancellationToken cancel)
         {
             var result = double.NaN;
             _userChannel.Message = string.Format("Укажите эталонное значение");
             _userChannel.RealValue = point;
             var wh = new AutoResetEvent(false);
-            _userChannel.NeedQuery(wh);
+            _userChannel.NeedQuery(UserQueryType.GetRealValue, wh);
             while (!wh.WaitOne(_waitPeriod))
             {
-                if(calcel.IsCancellationRequested)
+                if(cancel.IsCancellationRequested)
                     break;
             }
-            if(calcel.IsCancellationRequested)
+            if(cancel.IsCancellationRequested)
                 return result;
             result = _userChannel.RealValue;
             return result;

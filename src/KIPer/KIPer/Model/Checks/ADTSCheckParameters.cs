@@ -12,14 +12,14 @@ namespace KipTM.Model.Checks
         private readonly CalibChannel _calibChannel;
         private readonly IDictionary<double, double> _points;
         private readonly IEthalonChannel _ethalonChannel;
-        private readonly Func<bool> _getAccept;
+        private readonly IUserChannel _userChannel;
 
-        public ADTSCheckParameters(CalibChannel calibChannel, IDictionary<double, double> points, IEthalonChannel ethalonChannel, Func<bool> getAccept)
+        public ADTSCheckParameters(CalibChannel calibChannel, IDictionary<double, double> points, IEthalonChannel ethalonChannel, IUserChannel userChannel)
         {
             _calibChannel = calibChannel;
             _points = points;
             _ethalonChannel = ethalonChannel;
-            _getAccept = getAccept;
+            _userChannel = userChannel;
         }
 
         public CalibChannel CalibChannel
@@ -37,9 +37,9 @@ namespace KipTM.Model.Checks
             get { return _ethalonChannel; }
         }
 
-        public Func<bool> GetAccept
+        public IUserChannel UserChannel
         {
-            get { return _getAccept; }
+            get { return _userChannel; }
         }
     }
 }

@@ -14,17 +14,19 @@ namespace KipTM.Model.Checks.ADTSCalibration
     class ADTSCalibrationFinish:ITestStep
     {
         private readonly ADTSModel _adts;
-        private readonly Func<bool> _getAccept;
+        private readonly IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
         private readonly CancellationTokenSource _cancellationTokenSource;
+        private readonly TimeSpan _checkCancelPeriod;
 
-        public ADTSCalibrationFinish(string name, ADTSModel adts, Func<bool> getAccept, Logger logger)
+        public ADTSCalibrationFinish(string name, ADTSModel adts, IUserChannel userChannel, Logger logger)
         {
             Name = name;
             _adts = adts;
             _logger = logger;
-            _getAccept = getAccept;
+            _userChannel = userChannel;
             _cancellationTokenSource = new CancellationTokenSource();
+            _checkCancelPeriod = TimeSpan.FromMilliseconds(10);
         }
 
         public string Name { get; private set; }
@@ -59,8 +61,23 @@ namespace KipTM.Model.Checks.ADTSCalibration
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 return false;
             }
-            var accept = _getAccept();
+            _userChannel.Message = string.Format("Применить результат калибровки?");//TODO: локализовать
+            var wh = new AutoResetEvent(false);
+            _userChannel.NeedQuery(UserQueryType.GetRealValue, wh);
+            while (!wh.WaitOne(_checkCancelPeriod))
+            {
+                if (cancel.IsCancellationRequested)
+                    break;
+            }
+            bool accept = _userChannel.AcceptValue;
+            if (cancel.IsCancellationRequested)
+            {
+                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
+                return false;
+            }
+
             _logger.With(l => l.Trace(string.Format("Calibration accept: {0}", accept ? "accept" : "deny")));
+
             OnResultsAdded(new EventArgResultParam(new Dictionary<string, object>()
             {
                 { string.Format("Calibration accept"), accept },
