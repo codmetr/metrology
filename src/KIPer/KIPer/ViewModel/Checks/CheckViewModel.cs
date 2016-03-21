@@ -7,6 +7,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using KipTM.Interfaces;
 using KipTM.Model.Checks;
+using KipTM.Settings;
 using KipTM.ViewModel.Checks;
 
 namespace KipTM.ViewModel
@@ -19,7 +20,7 @@ namespace KipTM.ViewModel
     /// </summary>
     public class CheckViewModel : ViewModelBase
     {
-        private IDataService _dataService;
+        private MainSettings _settings;
         private readonly IDictionary<string, ICheckMethodic> _checks;
         private object _selectedCheck;
         private ICheckMethodic _selectedCheckType;
@@ -27,9 +28,9 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the CheckViewModel class.
         /// </summary>
-        public CheckViewModel(IDataService dataService, IDictionary<string, ICheckMethodic> checks)
+        public CheckViewModel(MainSettings settings, IDictionary<string, ICheckMethodic> checks)
         {
-            _dataService = dataService;
+            _settings = settings;
             _checks = checks;
             if (_checks.Count > 0)
             {
@@ -74,7 +75,7 @@ namespace KipTM.ViewModel
         public object GetViewModelFor(ICheckMethodic methodic)
         {
             if (methodic is ADTSCheckMethodic)
-                return new ADTSCalibrationViewModel(methodic as ADTSCheckMethodic);
+                return new ADTSCalibrationViewModel(methodic as ADTSCheckMethodic, _settings);
             return null;
         }
     }

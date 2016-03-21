@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace KipTM.Model.Archive
 {
-    public class ParameterResult
+    public class PointResult
     {
         private readonly DateTime _timestamp;
-        private readonly ParameterDescriptor _descriptor;
+        private readonly PointDescriptor _descriptor;
         private readonly object _value;
         private readonly bool _isCorrect;
 
-        public ParameterResult(DateTime timestamp, ParameterDescriptor descriptor, object value, bool isCorrect)
+        public PointResult(DateTime timestamp, PointDescriptor descriptor, object value, bool isCorrect)
         {
             _timestamp = timestamp;
             _descriptor = descriptor;
@@ -26,7 +26,7 @@ namespace KipTM.Model.Archive
             get { return _timestamp; }
         }
 
-        public ParameterDescriptor Descriptor
+        public PointDescriptor Descriptor
         {
             get { return _descriptor; }
         }

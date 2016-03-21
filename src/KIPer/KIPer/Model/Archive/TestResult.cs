@@ -19,6 +19,6 @@ namespace KipTM.Model.Archive
 
         public IEnumerable<DeviceDescriptor> Etalon { get; set; }
 
-        public IEnumerable<ParameterResult> Parameters { get; set; } 
+        public IEnumerable<PointResult> Parameters { get; set; } 
     }
 }

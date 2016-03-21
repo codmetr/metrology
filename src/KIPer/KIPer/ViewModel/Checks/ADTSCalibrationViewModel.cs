@@ -4,9 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Windows.Input;
+using ADTS;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using KipTM.Model.Channels;
 using KipTM.Model.Checks;
+using KipTM.Settings;
 using KipTM.ViewModel;
 
 namespace KipTM.ViewModel.Checks
@@ -22,6 +25,9 @@ namespace KipTM.ViewModel.Checks
     {
         private string _titleBtnNext;
         private ADTSCheckMethodic _methodic;
+        private UserChannel _userChannel;
+        private UserEchalonChannel _userEchalonChannel;
+        private MethodicSettings _methodicSettings;
         private bool _waitUserReaction;
 
         private Action _doStep = () => { };
@@ -33,11 +39,15 @@ namespace KipTM.ViewModel.Checks
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
         /// </summary>
-        public ADTSCalibrationViewModel(ADTSCheckMethodic methodic)
+        public ADTSCalibrationViewModel(ADTSCheckMethodic methodic, MainSettings settings)
         {
             _cancellation = new CancellationTokenSource();
+            _userChannel = new UserChannel();
+            _userEchalonChannel = new UserEchalonChannel();
             _methodic = methodic;
-            _methodic.SetFuncGetValue(GetRealValue);
+            _methodicSettings = settings.Methodic.First(el => el.Name == ADTSCheckMethodic.KeySettingsPS);
+            _methodic.Init(new ADTSCheckParameters(CalibChannel.PS, _methodicSettings, _userEchalonChannel, _userChannel));
+
             Points = new List<PointCheckableViewModel>(methodic.Steps.Select(el=>new PointCheckableViewModel(el.Name)));
             TitleBtnNext = "Старт";
             _doStep = Start;

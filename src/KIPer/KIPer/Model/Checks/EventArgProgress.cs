@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace KipTM.Model.Checks
 {
-    public class EventArgCheckProgress
+    public class EventArgProgress
     {
-        public EventArgCheckProgress(double? progress, string note)
+        public EventArgProgress(double? progress, string note)
         {
             Note = note;
             Progress = progress;

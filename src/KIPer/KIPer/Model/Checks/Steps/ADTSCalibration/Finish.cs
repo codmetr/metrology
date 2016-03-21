@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using ADTS;
+using KipTM.Model.Channels;
 using KipTM.Model.Devices;
 using NLog;
 using Tools;
 
-namespace KipTM.Model.Checks.ADTSCalibration
+namespace KipTM.Model.Checks.Steps.ADTSCalibration
 {
-    class ADTSCalibrationFinish:ITestStep
+    class Finish : TestStep
     {
         private readonly ADTSModel _adts;
         private readonly IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
-        private readonly CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource;
         private readonly TimeSpan _checkCancelPeriod;
 
-        public ADTSCalibrationFinish(string name, ADTSModel adts, IUserChannel userChannel, Logger logger)
+        public Finish(string name, ADTSModel adts, IUserChannel userChannel, Logger logger)
         {
             Name = name;
             _adts = adts;
@@ -31,7 +28,7 @@ namespace KipTM.Model.Checks.ADTSCalibration
 
         public string Name { get; private set; }
 
-        public bool Run()
+        public override void Start(EventWaitHandle whEnd)
         {
             var cancel = _cancellationTokenSource.Token;
             double? slope;
@@ -40,16 +37,18 @@ namespace KipTM.Model.Checks.ADTSCalibration
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
+                whEnd.Set();
+                return;
             }
             if (_adts.GetCalibrationResult(out slope, out zero, cancel))
             {
                 _logger.With(l => l.Trace(string.Format("[ERROR] Can not get result calibration")));
-                OnError(new EventArgError() { Error = ADTSCheckError.ErrorGetResultCalibration });
-                return false;
+                //OnError(new EventArgError() { Error = ADTSCheckError.ErrorGetResultCalibration });
+                whEnd.Set();
+                return;
             }
             _logger.With(l => l.Trace(string.Format("Calibration result: slope {0}; zero: {1}", (object)slope ?? "NULL", (object)zero ?? "NULL")));
-            OnResultsAdded(new EventArgResultParam(new Dictionary<string, object>()
+            OnResultUpdated(new EventArgTestResult(new Dictionary<string, object>()
             {
                 { string.Format("Calibration results: Slope"), slope },
                 { string.Format("Calibration results: Zero"), zero },
@@ -59,7 +58,8 @@ namespace KipTM.Model.Checks.ADTSCalibration
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
+                whEnd.Set();
+                return;
             }
             _userChannel.Message = string.Format("Применить результат калибровки?");//TODO: локализовать
             var wh = new AutoResetEvent(false);
@@ -73,58 +73,39 @@ namespace KipTM.Model.Checks.ADTSCalibration
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
+                whEnd.Set();
+                return;
             }
 
             _logger.With(l => l.Trace(string.Format("Calibration accept: {0}", accept ? "accept" : "deny")));
 
-            OnResultsAdded(new EventArgResultParam(new Dictionary<string, object>()
+            OnResultUpdated(new EventArgTestResult(new Dictionary<string, object>()
             {
                 { string.Format("Calibration accept"), accept },
             }));
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
+                whEnd.Set();
+                return;
             }
             if (_adts.AcceptCalibration(accept, cancel))
             {
-                OnError(new EventArgError() { Error = ADTSCheckError.ErrorAcceptResultCalibration });
-                return false;
+                //OnError(new EventArgError() { Error = ADTSCheckError.ErrorAcceptResultCalibration });
+                whEnd.Set();
+                return;
             }
-            OnProgressChanged(new EventArgCheckProgress(100,
+            OnProgressChanged(new EventArgProgress(100,
                 string.Format("{0} результата калибровки", accept ? "Подтверждение" : "Отмена")));
-            return true;
+            whEnd.Set();
+            return;
         }
 
-        public bool Stop()
+        public override bool Stop()
         {
             _cancellationTokenSource.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
             return true;
-        }
-
-        public event EventHandler<EventArgResultParam> ResultsAdded;
-
-        public event EventHandler<EventArgCheckProgress> ProgressChanged;
-
-        public event EventHandler<EventArgError> Error;
-
-        protected virtual void OnResultsAdded(EventArgResultParam e)
-        {
-            EventHandler<EventArgResultParam> handler = ResultsAdded;
-            if (handler != null) handler(this, e);
-        }
-
-        protected virtual void OnProgressChanged(EventArgCheckProgress e)
-        {
-            EventHandler<EventArgCheckProgress> handler = ProgressChanged;
-            if (handler != null) handler(this, e);
-        }
-
-        protected virtual void OnError(EventArgError e)
-        {
-            EventHandler<EventArgError> handler = Error;
-            if (handler != null) handler(this, e);
         }
     }
 }

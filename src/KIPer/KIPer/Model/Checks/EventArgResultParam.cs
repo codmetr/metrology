@@ -3,16 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KipTM.Model.Params;
 
 namespace KipTM.Model.Checks
 {
-    public class EventArgResultParam
+    public class EventArgTestResult
     {
-        public EventArgResultParam(IDictionary<string, object> parameters)
+        public EventArgTestResult(ParameterDescriptor descr, ParameterResult res)
         {
-            Parameters = parameters;
+            Result = new Dictionary<ParameterDescriptor, ParameterResult>() { { descr, res } };
         }
 
-        public IDictionary<string, object> Parameters { get; private set; }
+        public EventArgTestResult(IDictionary<ParameterDescriptor, ParameterResult> results)
+        {
+            Result = results;
+        }
+
+        public IDictionary<ParameterDescriptor, ParameterResult> Result { get; private set; }
     }
 }

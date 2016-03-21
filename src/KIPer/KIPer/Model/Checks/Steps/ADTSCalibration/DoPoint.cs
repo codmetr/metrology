@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using ADTS;
+using KipTM.Model.Channels;
 using KipTM.Model.Devices;
+using KipTM.Model.Params;
 using NLog;
 using Tools;
 
-namespace KipTM.Model.Checks.ADTSCalibration
+namespace KipTM.Model.Checks.Steps.ADTSCalibration
 {
-    class ADTSCalibrationPoint:ITestStep
+    class DoPoint : TestStep
     {
         private readonly ADTSModel _adts;
         private readonly Parameters _param;
@@ -21,9 +20,9 @@ namespace KipTM.Model.Checks.ADTSCalibration
         private readonly PressureUnits _unit;
         private readonly IEthalonChannel _ethalonChannel;
         private readonly NLog.Logger _logger;
-        private readonly CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource;
 
-        public ADTSCalibrationPoint(string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate, PressureUnits unit, IEthalonChannel ethalonChannel, Logger logger)
+        public DoPoint(string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate, PressureUnits unit, IEthalonChannel ethalonChannel, Logger logger)
         {
             Name = name;
             _adts = adts;
@@ -39,24 +38,22 @@ namespace KipTM.Model.Checks.ADTSCalibration
 
         public string Name { get; private set; }
 
-        public bool Run()
+        public override void Start(EventWaitHandle whEnd)
         {
             TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
             var cancel = _cancellationTokenSource.Token;
-            //var percent = percentInitCalib + indexPoint * percentOnePoint;
-            //_logger.With(l => l.Trace(string.Format("Start calibration {0}, point[{4}//{5}] {1}; unit {2}; rate {3}",
-            //    _param, point, Rate, Unit, indexPoint + 1, countPoints)));
-            //OnProgressChanged(new EventArgCheckProgress(percent, string.Format("Калибровка значения {0}", point)));
             if (_adts.SetPressure(_param, _point, _rate, _unit, cancel))
             {
                 _logger.With(l => l.Trace(string.Format("[ERROR] Set point")));
-                OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetPressurePoint });
-                return false;
+                //OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetPressurePoint });
+                whEnd.Set();
+                return;
             }
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
+                whEnd.Set();
+                return;
             }
             EventWaitHandle wh = _param == Parameters.PT ? _adts.WaitPitotSetted() : _adts.WaitPressureSetted();
 
@@ -65,78 +62,59 @@ namespace KipTM.Model.Checks.ADTSCalibration
                 if (cancel.IsCancellationRequested)
                 {
                     _adts.StopWaitStatus(wh);
-                    return false;
+                    whEnd.Set();
+                    return;
                 }
             }
 
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
+                whEnd.Set();
+                return;
             }
             var realValue = _ethalonChannel.GetEthalonValue(_point, cancel);
 
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
+                whEnd.Set();
+                return;
             }
             bool correctPoint = Math.Abs(Math.Abs(_point) - Math.Abs(realValue)) <= _tolerance;
             _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
-            OnResultsAdded(new EventArgResultParam(new Dictionary<string, object>()
-            {
-                {
-                    string.Format("Real pressure on point {0} ({1})", _point, correctPoint ? "correct" : "incorrect"),
-                    realValue
-                }
-            }));
+            OnResultUpdated( new EventArgTestResult(new ParameterDescriptor("EthalonValue", _point, ParameterType.RealValue),
+                    new ParameterResult(DateTime.Now, realValue)));
+            OnResultUpdated( new EventArgTestResult(new ParameterDescriptor("IsCorrect", _point, ParameterType.IsCorrect),
+                    new ParameterResult(DateTime.Now, correctPoint)));
+
 
             if (_adts.SetActualValue(realValue, cancel))
             {
                 _logger.With(l => l.Trace(string.Format("[ERROR] Can not set real value")));
-                OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetRealValue });
-                return false;
+                //OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetRealValue });
+                whEnd.Set();
+                return;
             }
 
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
+                whEnd.Set();
+                return;
             }
-            OnProgressChanged(new EventArgCheckProgress(100,
+            OnProgressChanged(new EventArgProgress(100,
                 string.Format("Точка {0}: Реальное значени {1}({2})",
                     _point, realValue, correctPoint ? "correct" : "incorrect")));
-            return true;
+            whEnd.Set();
+            return;
         }
 
-        public bool Stop()
+        public override bool Stop()
         {
             _cancellationTokenSource.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
             return true;
-        }
-
-        public event EventHandler<EventArgResultParam> ResultsAdded;
-
-        public event EventHandler<EventArgCheckProgress> ProgressChanged;
-
-        public event EventHandler<EventArgError> Error;
-
-        protected virtual void OnResultsAdded(EventArgResultParam e)
-        {
-            EventHandler<EventArgResultParam> handler = ResultsAdded;
-            if (handler != null) handler(this, e);
-        }
-
-        protected virtual void OnProgressChanged(EventArgCheckProgress e)
-        {
-            EventHandler<EventArgCheckProgress> handler = ProgressChanged;
-            if (handler != null) handler(this, e);
-        }
-
-        protected virtual void OnError(EventArgError e)
-        {
-            EventHandler<EventArgError> handler = Error;
-            if (handler != null) handler(this, e);
         }
     }
 }

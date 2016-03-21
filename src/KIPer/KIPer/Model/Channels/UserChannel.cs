@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using KipTM.Model.Checks;
 
-namespace KipTM.Model.Checks
+namespace KipTM.Model.Channels
 {
     /// <summary>
     /// Запрос на получение эталонного значение от пользователя

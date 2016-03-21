@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KipTM.Model.Archive
 {
-    public class ParameterDescriptor
+    public class PointDescriptor
     {
         public string Name { get; set; }
         public string Point { get; set; }

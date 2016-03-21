@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
-using KipTM.Model.Checks.ADTSCalibration;
+using KipTM.Model.Channels;
+using KipTM.Model.Checks.Steps;
+using KipTM.Model.Checks.Steps.ADTSCalibration;
 using KipTM.Model.Devices;
 using KipTM.Settings;
 using Tools;
@@ -72,15 +74,23 @@ namespace KipTM.Model.Checks
 
             var steps = new List<ITestStep>()
             {
-                new ADTSCalibrationInit("Инициализация калибровки", _adts, _calibChan, _logger),
+                new Init("Инициализация калибровки", _adts, _calibChan, _logger),
             };
             Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
                 : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
-            foreach (var point in parameters.Points)
+            foreach (var point in parameters.Settings.Points)
             {
-                steps.Add(new ADTSCalibrationPoint(string.Format("Калибровка точки {0}", point), _adts, param, point.Key, point.Value, Rate, Unit, _ethalonChannel, _logger));
+                double pointValue;
+                if(!double.TryParse(point.Point, out pointValue))
+                    continue;
+                double pointTolerance;
+                if (!double.TryParse(point.Tolerance, out pointTolerance))
+                    continue;
+
+
+                steps.Add(new DoPoint(string.Format("Калибровка точки {0}", point), _adts, param, pointValue, pointTolerance, Rate, Unit, _ethalonChannel, _logger));
             }
-            steps.Add(new ADTSCalibrationFinish("Подтверждение калибровки", _adts, _userChannel, _logger));
+            steps.Add(new Finish("Подтверждение калибровки", _adts, _userChannel, _logger));
             Steps = steps;
             return true;
         }
@@ -106,11 +116,11 @@ namespace KipTM.Model.Checks
                 return false;
             }
             _logger.With(l => l.Trace(string.Format("Start ADTS calibration by channel {0}", _calibChan)));
-            OnProgress(new EventArgCheckProgress(0, "Калибровка запущена"));
+            OnProgress(new EventArgProgress(0, "Калибровка запущена"));
             if (!_adts.StartCalibration(_calibChan, out calibDate, cancel))
             {
                 _logger.With(l => l.Trace(string.Format("[ERROR] start clibration")));
-                OnError(new EventArgError() {Error = ADTSCheckError.ErrorStartCalibration});
+                //OnError(new EventArgError() {Error = ADTSCheckError.ErrorStartCalibration});
                 return false;
             }
             if (cancel.IsCancellationRequested)
@@ -128,11 +138,11 @@ namespace KipTM.Model.Checks
                 var percent = percentInitCalib + indexPoint*percentOnePoint;
                 _logger.With( l => l.Trace(string.Format("Start calibration {0}, point[{4}//{5}] {1}; unit {2}; rate {3}",
                     param, point, Rate, Unit, indexPoint + 1, countPoints)));
-                OnProgress(new EventArgCheckProgress(percent, string.Format("Калибровка значения {0}", point)));
+                OnProgress(new EventArgProgress(percent, string.Format("Калибровка значения {0}", point)));
                 if(_adts.SetPressure(param, point, Rate, Unit, cancel))
                 {
                     _logger.With(l => l.Trace(string.Format("[ERROR] Set point")));
-                    OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetPressurePoint });
+                    //OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetPressurePoint });
                     return false;
                 }
                 if (cancel.IsCancellationRequested)
@@ -160,7 +170,7 @@ namespace KipTM.Model.Checks
                 _logger.With(l => l.Trace(string.Format("Real value {0}", realValue)));
                 if (_adts.SetActualValue(realValue, cancel))
                 {
-                    OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetRealValue });
+                    //OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetRealValue });
                     return false;
                 }
 
@@ -182,11 +192,11 @@ namespace KipTM.Model.Checks
             }
             if (_adts.GetCalibrationResult(out slope, out zero, cancel))
             {
-                OnError(new EventArgError() { Error = ADTSCheckError.ErrorGetResultCalibration });
+                //OnError(new EventArgError() { Error = ADTSCheckError.ErrorGetResultCalibration });
                 return false;
             }
             _logger.With(l => l.Trace(string.Format("Calibration result: slope {0}; zero: {1}", (object)slope ?? "NULL", (object)zero ?? "NULL")));
-            OnProgress(new EventArgCheckProgress(percentGetRes, string.Format("Результат калибровки наклон:{0} ноль:{1}", (object)slope??"NULL", (object)zero??"NULL")));
+            OnProgress(new EventArgProgress(percentGetRes, string.Format("Результат калибровки наклон:{0} ноль:{1}", (object)slope??"NULL", (object)zero??"NULL")));
 
             if (cancel.IsCancellationRequested)
             {
@@ -202,10 +212,10 @@ namespace KipTM.Model.Checks
             }
             if (_adts.AcceptCalibration(accept, cancel))
             {
-                OnError(new EventArgError() { Error = ADTSCheckError.ErrorAcceptResultCalibration });
+                //OnError(new EventArgError() { Error = ADTSCheckError.ErrorAcceptResultCalibration });
                 return false;
             }
-            OnProgress(new EventArgCheckProgress(100, string.Format("{0} результата калибровки", accept?"Подтверждение":"Отмена")));
+            OnProgress(new EventArgProgress(100, string.Format("{0} результата калибровки", accept?"Подтверждение":"Отмена")));
 
             return true;
         }
@@ -233,7 +243,7 @@ namespace KipTM.Model.Checks
         /// <summary>
         /// Изменился прогресс
         /// </summary>
-        public EventHandler<EventArgCheckProgress> Progress;
+        public EventHandler<EventArgProgress> Progress;
 
         #region Service methods
         protected virtual void OnError(EventArgError obj)
@@ -242,7 +252,7 @@ namespace KipTM.Model.Checks
             if (handler != null) handler(this, obj);
         }
 
-        protected virtual void OnProgress(EventArgCheckProgress obj)
+        protected virtual void OnProgress(EventArgProgress obj)
         {
             var handler = Progress;
             if (handler != null) handler(this, obj);

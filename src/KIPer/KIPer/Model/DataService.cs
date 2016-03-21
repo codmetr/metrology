@@ -63,13 +63,6 @@ namespace KipTM.Model
             _deviceManager = new DeviceManager(adtsPort, paceSettings.Port, adtsSettings, paceSettings.Device, NLog.LogManager.GetLogger("DeviceManager"));
 
             var adtsCheck = new ADTSCheckMethodic(_deviceManager.ADTS, NLog.LogManager.GetLogger("ADTSCheckMethodic"));
-            adtsCheck.Init(new ADTSCheckParameters(CalibChannel.PS,
-                _settings.Methodic.First(el => el.Name == ADTSCheckMethodic.KeySettingsPS)
-                    .Points.ToDictionary(
-                        elK => double.Parse(elK.Point, NumberStyles.Any, CultureInfo.InvariantCulture),
-                        elK => double.Parse(elK.Tolerance, NumberStyles.Any, CultureInfo.InvariantCulture)),
-                        null, //todo: придумать способ запроса состояний у пользователя
-                        null)); //todo: придумать способ запроса решения о применении у пользователя
             _methodics.Add(ADTSModel.Key, adtsCheck);
         }
 

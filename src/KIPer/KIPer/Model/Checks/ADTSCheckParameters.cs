@@ -4,20 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ADTS;
+using KipTM.Model.Channels;
+using KipTM.Settings;
 
 namespace KipTM.Model.Checks
 {
     public class ADTSCheckParameters
     {
         private readonly CalibChannel _calibChannel;
-        private readonly IDictionary<double, double> _points;
+        private readonly MethodicSettings _settings;
         private readonly IEthalonChannel _ethalonChannel;
         private readonly IUserChannel _userChannel;
 
-        public ADTSCheckParameters(CalibChannel calibChannel, IDictionary<double, double> points, IEthalonChannel ethalonChannel, IUserChannel userChannel)
+        public ADTSCheckParameters(CalibChannel calibChannel, MethodicSettings settings, IEthalonChannel ethalonChannel, IUserChannel userChannel)
         {
             _calibChannel = calibChannel;
-            _points = points;
+            _settings = settings;
             _ethalonChannel = ethalonChannel;
             _userChannel = userChannel;
         }
@@ -27,9 +29,9 @@ namespace KipTM.Model.Checks
             get { return _calibChannel; }
         }
 
-        public IDictionary<double, double> Points
+        public MethodicSettings Settings
         {
-            get { return _points; }
+            get { return _settings; }
         }
 
         public IEthalonChannel EthalonChannel

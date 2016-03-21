@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace KipTM.Model.Checks
@@ -10,13 +11,13 @@ namespace KipTM.Model.Checks
     {
         string Name { get;}
 
-        bool Run();
+        void Start(EventWaitHandle whEnd);
 
         bool Stop();
 
-        event EventHandler<EventArgResultParam> ResultsAdded;
+        event EventHandler<EventArgTestResult> ResultUpdated;
 
-        event EventHandler<EventArgCheckProgress> ProgressChanged;
+        event EventHandler<EventArgProgress> ProgressChanged;
 
         event EventHandler<EventArgError> Error;
     }
