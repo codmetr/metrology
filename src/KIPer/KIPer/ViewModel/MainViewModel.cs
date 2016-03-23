@@ -5,6 +5,8 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Interfaces;
+using KipTM.Model;
+using KipTM.Settings;
 using KipTM.View;
 using KipTM.View.Checks;
 using KipTM.ViewModel.Checks;
@@ -20,6 +22,9 @@ namespace KipTM.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
+        private IMethodicsService _methodicService;
+        private MainSettings _settings;
+        private ArchiveService _archive;
 
         private readonly ServiceViewModel _services;
 
@@ -34,9 +39,13 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IDataService dataService)
+        public MainViewModel(IDataService dataService, IMethodicsService methodicService, MainSettings settings, ArchiveService archive)
         {
             _dataService = dataService;
+            _methodicService = methodicService;
+            _settings = settings;
+            _archive = archive;
+
             _dataService.LoadSettings();
             _dataService.LoadResults();
             _dataService.InitDevices();
@@ -230,7 +239,7 @@ namespace KipTM.ViewModel
             _deviceTypes = new DeviceTypesViewModel();
             _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
-            _checks = new CheckViewModel(_dataService, _dataService.Methodics);
+            _checks = new CheckViewModel(_settings, _methodicService.Methodics, _archive.PropertyPool);
             /*var etalonTypes = new[]
             {
                 new EtalonTypeViewModel()

@@ -7,6 +7,7 @@ using System.Windows.Input;
 using ADTS;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using KipTM.Archive;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Settings;
@@ -27,7 +28,7 @@ namespace KipTM.ViewModel.Checks
         private ADTSCheckMethodic _methodic;
         private UserChannel _userChannel;
         private UserEchalonChannel _userEchalonChannel;
-        private MethodicSettings _methodicSettings;
+        private IPropertyPool _propertyPool;
         private bool _waitUserReaction;
 
         private Action _doStep = () => { };
@@ -39,16 +40,17 @@ namespace KipTM.ViewModel.Checks
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
         /// </summary>
-        public ADTSCalibrationViewModel(ADTSCheckMethodic methodic, MainSettings settings)
+        public ADTSCalibrationViewModel(ADTSCheckMethodic methodic, MainSettings settings, IPropertyPool propertyPool)
         {
             _cancellation = new CancellationTokenSource();
             _userChannel = new UserChannel();
             _userEchalonChannel = new UserEchalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
             _methodic = methodic;
-            _methodicSettings = settings.Methodic.First(el => el.Name == ADTSCheckMethodic.KeySettingsPS);
+            _propertyPool = propertyPool;
             // Базовая инициализация
-            _methodic.Init(new ADTSCheckParameters(CalibChannel.PS, _methodicSettings, _userEchalonChannel, _userChannel));
-
+            var points = _propertyPool.GetProperty<List<ADTSChechPoint>>(ADTSCheckMethodic.KeyPoints);
+            var channel = _propertyPool.GetProperty<CalibChannel>(ADTSCheckMethodic.KeyChannel);
+            _methodic.Init(new ADTSCheckParameters(channel, points));
 
             Points = new List<PointCheckableViewModel>(methodic.Steps.Select(el=>new PointCheckableViewModel(el.Name)));
             TitleBtnNext = "Старт";

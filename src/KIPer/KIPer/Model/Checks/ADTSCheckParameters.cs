@@ -12,16 +12,12 @@ namespace KipTM.Model.Checks
     public class ADTSCheckParameters
     {
         private readonly CalibChannel _calibChannel;
-        private readonly MethodicSettings _settings;
-        private readonly IEthalonChannel _ethalonChannel;
-        private readonly IUserChannel _userChannel;
+        private readonly IEnumerable<ADTSChechPoint> _points;
 
-        public ADTSCheckParameters(CalibChannel calibChannel, MethodicSettings settings, IEthalonChannel ethalonChannel, IUserChannel userChannel)
+        public ADTSCheckParameters(CalibChannel calibChannel, IEnumerable<ADTSChechPoint> points)
         {
             _calibChannel = calibChannel;
-            _settings = settings;
-            _ethalonChannel = ethalonChannel;
-            _userChannel = userChannel;
+            _points = points;
         }
 
         public CalibChannel CalibChannel
@@ -29,19 +25,9 @@ namespace KipTM.Model.Checks
             get { return _calibChannel; }
         }
 
-        public MethodicSettings Settings
+        public IEnumerable<ADTSChechPoint> Points
         {
-            get { return _settings; }
-        }
-
-        public IEthalonChannel EthalonChannel
-        {
-            get { return _ethalonChannel; }
-        }
-
-        public IUserChannel UserChannel
-        {
-            get { return _userChannel; }
+            get { return _points; }
         }
     }
 }

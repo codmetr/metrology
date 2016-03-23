@@ -25,14 +25,6 @@ namespace KipTM.Interfaces
         /// </summary>
         IEnumerable<IDeviceTypeDescriptor> EtalonTypes { get; }
         /// <summary>
-        /// Набор сконфигурированных эталонов
-        /// </summary>
-        IEnumerable<DeviceDescriptor> Etalons { get; }
-        /// <summary>
-        /// Набор поддерживаемых методик
-        /// </summary>
-        IDictionary<string, ICheckMethodic> Methodics { get; }
-        /// <summary>
         /// Архив результатов проверок
         /// </summary>
         ResultsArchive ResultsArchive { get; }

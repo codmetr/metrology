@@ -25,7 +25,6 @@ namespace KipTM.Model
         MainSettings _settings = new MainSettings();
         private readonly IArchive _archive;
         private IDeviceManager _deviceManager;
-        private readonly Dictionary<string, ICheckMethodic> _methodics;
         private ResultsArchive _resultsArchive;
         private readonly List<IDeviceTypeDescriptor> _deviceTypes;
         private readonly List<IDeviceTypeDescriptor> _ethalonTypes;
@@ -38,7 +37,6 @@ namespace KipTM.Model
             _deviceTypes = new List<IDeviceTypeDescriptor>();
             _ethalonTypes = new List<IDeviceTypeDescriptor>();
             _etalons = new List<DeviceDescriptor>();
-            _methodics = new Dictionary<string, ICheckMethodic>();
             _resultsArchive = new ResultsArchive();
         }
 
@@ -62,8 +60,6 @@ namespace KipTM.Model
 
             _deviceManager = new DeviceManager(adtsPort, paceSettings.Port, adtsSettings, paceSettings.Device, NLog.LogManager.GetLogger("DeviceManager"));
 
-            var adtsCheck = new ADTSCheckMethodic(_deviceManager.ADTS, NLog.LogManager.GetLogger("ADTSCheckMethodic"));
-            _methodics.Add(ADTSModel.Key, adtsCheck);
         }
 
         /// <summary>
@@ -96,14 +92,6 @@ namespace KipTM.Model
         public IEnumerable<DeviceDescriptor> Etalons
         {
             get { return _etalons; }
-        }
-
-        /// <summary>
-        /// Набор поддерживаемых методик
-        /// </summary>
-        public IDictionary<string, ICheckMethodic> Methodics
-        {
-            get { return _methodics; }
         }
 
         /// <summary>

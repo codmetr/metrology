@@ -66,44 +66,6 @@ namespace KipTM.Settings
                     NamePort = "COM2"
                 },
             };
-            res.Methodic = new List<MethodicSettings>()
-            {
-                new MethodicSettings()
-                {
-                    Name=ADTSCheckMethodic.KeySettingsPS,
-                    Points = new List<PointTolerancePair>()
-                    {
-                        new PointTolerancePair(){Point = "27.62",   Tolerance = "0.1"},
-                        new PointTolerancePair(){Point = "72.00",   Tolerance = "0.1"},
-                        new PointTolerancePair(){Point = "189.00",  Tolerance = "0.1"},
-                        new PointTolerancePair(){Point = "466.00",  Tolerance = "0.1"},
-                        new PointTolerancePair(){Point = "697.00",  Tolerance = "0.1"},
-                        new PointTolerancePair(){Point = "843.00",  Tolerance = "0.1"},
-                        new PointTolerancePair(){Point = "1013.00", Tolerance = "0.1"},
-                        new PointTolerancePair(){Point = "1100.00", Tolerance = "0.1"},
-                    }
-                },
-                new MethodicSettings()
-                {
-                    Name=ADTSCheckMethodic.KeySettingsPT,
-                    Points = new List<PointTolerancePair>()
-                    {
-                        new PointTolerancePair(){Point = "27.62",   Tolerance = "0.24"},
-                        new PointTolerancePair(){Point = "72.00",   Tolerance = "0.24"},
-                        new PointTolerancePair(){Point = "189.00",  Tolerance = "0.25"},
-                        new PointTolerancePair(){Point = "466.00",  Tolerance = "0.25"},
-                        new PointTolerancePair(){Point = "697.00",  Tolerance = "0.26"},
-                        new PointTolerancePair(){Point = "843.00",  Tolerance = "0.27"},
-                        new PointTolerancePair(){Point = "1013.00", Tolerance = "0.27"},
-                        new PointTolerancePair(){Point = "1100.00", Tolerance = "0.28"},
-                        new PointTolerancePair(){Point = "1655.00", Tolerance = "0.32"},
-                        new PointTolerancePair(){Point = "2200.00", Tolerance = "0.36"},
-                        new PointTolerancePair(){Point = "2590.00", Tolerance = "0.40"},
-                        new PointTolerancePair(){Point = "3000.00", Tolerance = "0.46"},
-                        new PointTolerancePair(){Point = "3500.00", Tolerance = "0.49"},
-                    }
-                },
-            };
             return res;
         }
 
@@ -112,8 +74,6 @@ namespace KipTM.Settings
         public List<DeviceSettings> Devices;
 
         public List<ComPortSettings> Ports;
-
-        public List<MethodicSettings> Methodic;
 
     }
 }

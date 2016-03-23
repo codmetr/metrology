@@ -22,14 +22,17 @@ namespace KipTM.Archive
         /// Типы устройств
         /// </summary>
         public List<string> DeviceTypes { get; set; }
+
         /// <summary>
         /// Формы технического обслуживания
         /// </summary>
         public List<string> FormsTO { get; set; }
+
         /// <summary>
         /// Типы воздужных судов
         /// </summary>
         public List<string> AircraftTypes { get; set; }
+
         /// <summary>
         /// Пользователи
         /// </summary>

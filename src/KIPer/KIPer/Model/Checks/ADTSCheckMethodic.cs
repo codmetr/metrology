@@ -20,6 +20,9 @@ namespace KipTM.Model.Checks
         public const string KeySettingsPT = "ADTSCalibrationPt";
         public const string KeySettingsPSPT = "ADTSCalibrationPsPt";
 
+        public const string KeyPoints = "Points";
+        public const string KeyChannel = "Channel";
+
         private const string TitleMethodic = "Калибровка ADTS";
 
         private readonly ADTSModel _adts;
@@ -62,34 +65,26 @@ namespace KipTM.Model.Checks
         public bool Init(ADTSCheckParameters parameters)
         {
             _logger.With(l => l.Trace("Init ADTSCheckMethodic"));
-            _adts.Init();
-            _adts.StartAutoUpdate();
 
             _calibChan = parameters.CalibChannel;
 
-            _ethalonChannel = parameters.EthalonChannel;
-            _userChannel = parameters.UserChannel;
             if (_userChannel == null)
                 throw new NullReferenceException("\"UserChannel\" not fount in parameters as IUserChannel");
 
-            var steps = new List<ITestStep>()
-            {
-                new Init("Инициализация калибровки", _adts, _calibChan, _logger),
-            };
+            var steps = new List<ITestStep>();
+
+            // добавление шага инициализации
+            steps.Add(new Init("Инициализация калибровки", _adts, _calibChan, _logger));
+
+            // добавление шага прохождения точек
             Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
                 : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
-            foreach (var point in parameters.Settings.Points)
+            foreach (var point in parameters.Points)
             {
-                double pointValue;
-                if(!double.TryParse(point.Point, out pointValue))
-                    continue;
-                double pointTolerance;
-                if (!double.TryParse(point.Tolerance, out pointTolerance))
-                    continue;
-
-
-                steps.Add(new DoPoint(string.Format("Калибровка точки {0}", point), _adts, param, pointValue, pointTolerance, Rate, Unit, _ethalonChannel, _logger));
+                steps.Add(new DoPoint(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, Rate, Unit, _ethalonChannel, _logger));
             }
+
+            // добавление шага подтверждения калибровки
             steps.Add(new Finish("Подтверждение калибровки", _adts, _userChannel, _logger));
             Steps = steps;
             return true;
@@ -166,7 +161,7 @@ namespace KipTM.Model.Checks
                     _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                     return false;
                 }
-                var realValue = _getRealValue();
+                var realValue = _ethalonChannel.GetEthalonValue(point, cancel);
                 _logger.With(l => l.Trace(string.Format("Real value {0}", realValue)));
                 if (_adts.SetActualValue(realValue, cancel))
                 {
@@ -203,7 +198,21 @@ namespace KipTM.Model.Checks
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 return false;
             }
-            var accept = _getAccept();
+
+            _userChannel.Message = "Применить результаты калибровки?";
+            var whAccept = new ManualResetEvent(false);
+            TimeSpan waitAcceptPeriod = TimeSpan.FromMilliseconds(50);
+            _userChannel.NeedQuery(UserQueryType.GetAccept, whAccept);
+            while (whAccept.WaitOne(waitAcceptPeriod))
+            {
+                if (cancel.IsCancellationRequested)
+                {
+                    _logger.With(l => l.Trace(string.Format("Cancel calibration")));
+                    return false;
+                }
+            }
+            var accept = _userChannel.AcceptValue;
+
             _logger.With(l => l.Trace(string.Format("Calibration accept: {0}", accept ? "accept" : "deny")));
             if (cancel.IsCancellationRequested)
             {

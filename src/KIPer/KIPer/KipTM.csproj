@@ -103,10 +103,12 @@
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Interfaces\IService.cs" />
+    <Compile Include="Model\ArchiveService.cs" />
     <Compile Include="Model\Archive\ArchivePool.cs" />
     <Compile Include="Model\Archive\PointDescriptor.cs" />
     <Compile Include="Model\Archive\PointResult.cs" />
     <Compile Include="Model\Archive\TestResult.cs" />
+    <Compile Include="Model\Checks\ADTSChechPoint.cs" />
     <Compile Include="Model\Checks\EventArgEnd.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\Init.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\DoPoint.cs" />
@@ -131,6 +133,8 @@
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
     <Compile Include="Model\IDeviceManager.cs" />
+    <Compile Include="Model\IMethodicsService.cs" />
+    <Compile Include="Model\MethodicsService.cs" />
     <Compile Include="Model\Params\ParameterDescriptor.cs" />
     <Compile Include="Model\Params\ParameterResult.cs" />
     <Compile Include="Model\Params\ParameterType.cs" />
@@ -139,8 +143,6 @@
     <Compile Include="Settings\EtalonSettings.cs" />
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\MainSettings.cs" />
-    <Compile Include="Settings\MethodicSettings.cs" />
-    <Compile Include="Settings\PointTolerancePair.cs" />
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTSCalibrationViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckViewModel.cs" />

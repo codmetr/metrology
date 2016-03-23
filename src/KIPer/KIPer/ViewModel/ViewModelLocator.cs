@@ -13,7 +13,9 @@ using System.Reflection;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
+using KipTM.Archive;
 using KipTM.Interfaces;
+using KipTM.Settings;
 using Microsoft.Practices.ServiceLocation;
 using KipTM.Model;
 using System;
@@ -43,7 +45,8 @@ namespace KipTM.ViewModel
             {
                 SimpleIoc.Default.Register<IDataService, DataService>();
             }
-            
+            SimpleIoc.Default.Register<MainSettings>();
+            SimpleIoc.Default.Register<ArchiveService>();
             SimpleIoc.Default.Register<MainViewModel>();
 
             //SimpleIoc.Default.Register<IServiceProvider, ServiceProvider>();
