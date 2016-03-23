@@ -43,10 +43,12 @@ namespace KipTM.ViewModel.Checks
         {
             _cancellation = new CancellationTokenSource();
             _userChannel = new UserChannel();
-            _userEchalonChannel = new UserEchalonChannel();
+            _userEchalonChannel = new UserEchalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
             _methodic = methodic;
             _methodicSettings = settings.Methodic.First(el => el.Name == ADTSCheckMethodic.KeySettingsPS);
+            // Базовая инициализация
             _methodic.Init(new ADTSCheckParameters(CalibChannel.PS, _methodicSettings, _userEchalonChannel, _userChannel));
+
 
             Points = new List<PointCheckableViewModel>(methodic.Steps.Select(el=>new PointCheckableViewModel(el.Name)));
             TitleBtnNext = "Старт";
@@ -86,6 +88,8 @@ namespace KipTM.ViewModel.Checks
         private void Start()
         {
             TitleBtnNext = "Далее";
+            
+
             _doStep = NextStep;
         }
 
