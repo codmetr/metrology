@@ -30,10 +30,10 @@ namespace KipTM.Model
             get { return _propertyPool; }
         }
 
-        public ArchiveBase ChecksArchive
-        {
-            get { return _checksArchive; }
-        }
+        //public ArchiveBase ChecksArchive
+        //{
+        //    get { return _checksArchive; }
+        //}
 
         public ChecksPool ChecksPool
         {

@@ -42,15 +42,31 @@ namespace KipTM.ViewModel
                 CheckTypes = _checks.Values;
             }
         }
-
-        public ObservableCollection<IParameterResultViewModel> Parameters { get; set; }
-
+        /// <summary>
+        /// Доступные типы устройства
+        /// </summary>
         public IEnumerable<string> DeviceTypes { get; set; }
 
+        public IEnumerable<string> Channels { get; set; } 
+
+        /// <summary>
+        /// Дострупные для выбранного типа устройства методики
+        /// </summary>
         public IEnumerable<ICheckMethodic> CheckTypes { get; set; }
  
+        /// <summary>
+        /// Выбранный канал
+        /// </summary>
+        public string SelectedChannel { get; set; }
+
+        /// <summary>
+        /// Тип устройства
+        /// </summary>
         public string SelectedDeviceType { get; set; }
 
+        /// <summary>
+        /// Выбранная методика
+        /// </summary>
         public ICheckMethodic SelectedCheckType
         {
             get { return _selectedCheckType; }
@@ -61,8 +77,19 @@ namespace KipTM.ViewModel
             }
         }
 
+        /// <summary>
+        /// Инвентарный номер
+        /// </summary>
+        public string InventarNumber { get; set; }
+
+        /// <summary>
+        /// Серийный номер
+        /// </summary>
         public string SerialNumber { get; set; }
 
+        /// <summary>
+        /// Дата предыдущей поверки/калибровки
+        /// </summary>
         public DateTime PreviousCheckTime { get; set; }
 
         public ICommand Save { get; set; }

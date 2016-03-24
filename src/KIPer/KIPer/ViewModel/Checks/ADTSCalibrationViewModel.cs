@@ -31,7 +31,6 @@ namespace KipTM.ViewModel.Checks
         private IPropertyPool _propertyPool;
         private bool _waitUserReaction;
 
-        private Action _doStep = () => { };
         private double _realValue;
 
         private CancellationTokenSource _cancellation;
@@ -54,7 +53,6 @@ namespace KipTM.ViewModel.Checks
 
             Points = new List<PointCheckableViewModel>(methodic.Steps.Select(el=>new PointCheckableViewModel(el.Name)));
             TitleBtnNext = "Старт";
-            _doStep = Start;
         }
 
         public string TitleBtnNext
@@ -71,9 +69,11 @@ namespace KipTM.ViewModel.Checks
 
         public IEnumerable<PointCheckableViewModel> Points { get; private set; }
 
-        public ICommand StepCommand { get{return new RelayCommand(_doStep);} }
+        public ICommand NextStep { get { return new RelayCommand(DoNextStep); } }
 
-        public ObservableCollection<IParameterResultViewModel> Results { get; set; }
+        public ICommand Start { get { return new GalaSoft.MvvmLight.Command.RelayCommand(DoStart); } }
+
+        public ObservableCollection<StepViewModel> Steps { get; set; }
 
         public double RealValue
         {
@@ -87,15 +87,16 @@ namespace KipTM.ViewModel.Checks
             set { Set(ref _accept, value); }
         }
 
-        private void Start()
+
+
+
+
+        private void DoStart()
         {
             TitleBtnNext = "Далее";
-            
-
-            _doStep = NextStep;
         }
 
-        private void NextStep()
+        private void DoNextStep()
         {}
 
         private void End()
@@ -112,7 +113,6 @@ namespace KipTM.ViewModel.Checks
         {
             var cancel = _cancellation.Token;
             var wh = new AutoResetEvent(false);
-            _doStep = () => wh.Set();
             while (!wh.WaitOne(TimeSpan.FromMilliseconds(100)) && !cancel.IsCancellationRequested)
             {
                 Thread.Sleep(100);

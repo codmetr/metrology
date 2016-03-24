@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
-using KipTM.Model.Archive;
+using KipTM.Archive.DTO;
 
 namespace KipTM.ViewModel
 {

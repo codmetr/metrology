@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using KipTM.Model.Archive;
+using KipTM.Archive.DTO;
 
 namespace KipTM.ViewModel
 {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using KipTM.Archive.DTO;
 using KipTM.Interfaces;
 using KipTM.Model;
-using KipTM.Model.Archive;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 using KipTM.Settings;

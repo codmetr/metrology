@@ -37,9 +37,9 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <GroupBox Header="Точки поверки ADTS" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
-                <ScrollViewer>
-                    <ItemsControl ItemsSource="{Binding Points}">
+            <GroupBox Header="Результаты" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding Points}" MinWidth="100">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -102,6 +102,29 @@
                     <Button Style="{StaticResource ErrorBtnStyle}">+10</Button>
                     <Button Style="{StaticResource ErrorBtnStyle}">+100</Button>
                 </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Шаги" Grid.Column="2" Grid.Row="0" Grid.RowSpan="3">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding Steps}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
             </GroupBox>
 
         </Grid>

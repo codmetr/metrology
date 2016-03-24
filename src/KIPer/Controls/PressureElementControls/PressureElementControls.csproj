@@ -54,6 +54,9 @@
     <Compile Include="Scale.xaml.cs">
       <DependentUpon>Scale.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StateIndicator.xaml.cs">
+      <DependentUpon>StateIndicator.xaml</DependentUpon>
+    </Compile>
     <Page Include="ErrorLine.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -71,6 +74,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Scale.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StateIndicator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -41,6 +41,8 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+                <TextBlock>Инвентарный номер:</TextBlock>
+                <TextBox Text="{Binding InventarNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock>Серийный номер:</TextBlock>
                 <TextBox Text="{Binding SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock>Дата прошлой поверки:</TextBlock>

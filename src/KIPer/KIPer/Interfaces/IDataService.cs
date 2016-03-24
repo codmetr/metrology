@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using KipTM.Archive.DTO;
 using KipTM.Model;
-using KipTM.Model.Archive;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 using KipTM.Settings;

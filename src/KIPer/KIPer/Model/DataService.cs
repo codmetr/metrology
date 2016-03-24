@@ -7,8 +7,8 @@ using System.Windows.Documents;
 using System.Xml;
 using System.Xml.Serialization;
 using ADTS;
+using KipTM.Archive.DTO;
 using KipTM.Interfaces;
-using KipTM.Model.Archive;
 using KipTM.Model.Checks;
 using KipTM.Settings;
 using KipTM.Model.Devices;
@@ -59,7 +59,6 @@ namespace KipTM.Model
             _ethalonTypes.Add(new DeviceTypeDescriptor(PACE5000Model.Model, PACE5000Model.DeviceCommonType, PACE5000Model.DeviceManufacturer));
 
             _deviceManager = new DeviceManager(adtsPort, paceSettings.Port, adtsSettings, paceSettings.Device, NLog.LogManager.GetLogger("DeviceManager"));
-
         }
 
         /// <summary>

@@ -104,10 +104,10 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Model\ArchiveService.cs" />
-    <Compile Include="Model\Archive\ArchivePool.cs" />
-    <Compile Include="Model\Archive\PointDescriptor.cs" />
-    <Compile Include="Model\Archive\PointResult.cs" />
-    <Compile Include="Model\Archive\TestResult.cs" />
+    <Compile Include="Archive\DTO\ArchivePool.cs" />
+    <Compile Include="Archive\DTO\PointDescriptor.cs" />
+    <Compile Include="Archive\DTO\PointResult.cs" />
+    <Compile Include="Archive\DTO\TestResult.cs" />
     <Compile Include="Model\Checks\ADTSChechPoint.cs" />
     <Compile Include="Model\Checks\EventArgEnd.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\Init.cs" />
@@ -132,6 +132,7 @@
     <Compile Include="Model\Devices\PACE5000Model.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
+    <Compile Include="Model\DictionaryService.cs" />
     <Compile Include="Model\IDeviceManager.cs" />
     <Compile Include="Model\IMethodicsService.cs" />
     <Compile Include="Model\MethodicsService.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="ViewModel\Checks\MethodicViewModelAttribute.cs" />
     <Compile Include="ViewModel\Checks\PointCheckableViewModel.cs" />
     <Compile Include="Model\Devices\DeviceTypeDescriptor.cs" />
+    <Compile Include="ViewModel\Checks\StepViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypesViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypeViewModel.cs" />
     <Compile Include="ViewModel\Archive\DeviceViewModel.cs" />
