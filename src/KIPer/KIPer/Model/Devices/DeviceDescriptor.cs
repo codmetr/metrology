@@ -7,9 +7,8 @@ namespace KipTM.Model.Devices
     /// </summary>
     public class DeviceDescriptor
     {
-        public DeviceDescriptor(DeviceTypeDescriptor deviceType, string serialNumber)
+        public DeviceDescriptor(DeviceTypeDescriptor deviceType)
         {
-            SerialNumber = serialNumber;
             DeviceType = deviceType;
         }
 
@@ -18,6 +17,6 @@ namespace KipTM.Model.Devices
         /// <summary>
         /// Серийный номер
         /// </summary>
-        public string SerialNumber { get; private set; }
+        public string SerialNumber { get; set; }
     }
 }

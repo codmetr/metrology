@@ -16,6 +16,7 @@ namespace KipTM.Model.Checks
 {
     public class ADTSCheckMethodic : ICheckMethodic
     {
+        public static string Key = "Калибровка ADTS";
         public const string KeySettingsPS = "ADTSCalibrationPs";
         public const string KeySettingsPT = "ADTSCalibrationPt";
         public const string KeySettingsPSPT = "ADTSCalibrationPsPt";

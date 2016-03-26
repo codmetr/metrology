@@ -141,6 +141,7 @@
     <Compile Include="Model\Params\ParameterType.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="Settings\ComPortSettings.cs" />
+    <Compile Include="Settings\DeviceTypeSettings.cs" />
     <Compile Include="Settings\EtalonSettings.cs" />
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\MainSettings.cs" />

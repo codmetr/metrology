@@ -6,7 +6,7 @@
              xmlns:archive="clr-namespace:KipTM.View.Archive"
              xmlns:checks="clr-namespace:KipTM.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="600"
+             d:DesignHeight="500" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance checks:CheckViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -18,6 +18,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -25,40 +26,113 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="Характеристики поверки" Grid.Column="0" Grid.Row="0">
-            <StackPanel>
-                <TextBlock>Тип устройства:</TextBlock>
-                <ComboBox
-                    ItemsSource="{Binding DeviceTypes}"
-                    SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock>Тип поверки:</TextBlock>
-                <ComboBox
-                    ItemsSource="{Binding CheckTypes}"
-                    SelectedItem="{Binding SelectedCheckType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Title}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-                <TextBlock>Инвентарный номер:</TextBlock>
-                <TextBox Text="{Binding InventarNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock>Серийный номер:</TextBlock>
-                <TextBox Text="{Binding SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock>Дата прошлой поверки:</TextBlock>
-                <DatePicker SelectedDate="{Binding PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            </StackPanel>
-        </GroupBox>
-        <StackPanel Grid.Column="0" Grid.Row="1">
+        <StackPanel Grid.Column="0" Grid.Row="0">
+            <GroupBox Header="Условия поверки">
+                <StackPanel>
+                    <TextBlock>Дата поверки:</TextBlock>
+                    <DatePicker FirstDayOfWeek="Monday" DisplayDate="{Binding CheckDateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock>Лаборатория:</TextBlock>
+                    <TextBox Text="{Binding Laboratory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock>Температура:</TextBlock>
+                    <TextBox Text="{Binding Temperature, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock>Влажность:</TextBlock>
+                    <TextBox Text="{Binding Humidity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Проверяемое утсройство">
+                <StackPanel>
+                    <TextBlock>Тип устройства:</TextBlock>
+                    <ComboBox
+                        ItemsSource="{Binding DeviceTypes}"
+                        SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock>Изготовитель:</TextBlock>
+                    <TextBox Text="{Binding Manufacturer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock>Инвентарный номер:</TextBlock>
+                    <TextBox Text="{Binding InventarNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock>Серийный номер:</TextBlock>
+                    <TextBox Text="{Binding SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock>Дата прошлой поверки:</TextBlock>
+                    <DatePicker SelectedDate="{Binding PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock>Тип поверки:</TextBlock>
+                    <ComboBox
+                        ItemsSource="{Binding CheckTypes}"
+                        SelectedItem="{Binding SelectedCheckType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock>Канал:</TextBlock>
+                    <ComboBox
+                        ItemsSource="{Binding Channels}"
+                        SelectedItem="{Binding SelectedChannel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Expander Header="Настройки подключения">
+                        <StackPanel>
+                            <TextBlock>Порт:</TextBlock>
+                            <ComboBox
+                                ItemsSource="{Binding Ports}"
+                                SelectedItem="{Binding SelectedPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock>Адрес:</TextBlock>
+                            <TextBox Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <GroupBox Header="Эталон">
+                <StackPanel>
+                    <TextBlock>Настройки эталона:</TextBlock>
+                    <GroupBox Header="Эталон">
+                        <StackPanel>
+                            <ComboBox
+                                ItemsSource="{Binding DeviceTypes}"
+                                SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock>Изготовитель:</TextBlock>
+                            <TextBox Text="{Binding Manufacturer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock>Инвентарный номер:</TextBlock>
+                            <TextBox Text="{Binding InventarNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock>Серийный номер:</TextBlock>
+                            <TextBox Text="{Binding SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock>Дата прошлой поверки:</TextBlock>
+                            <DatePicker SelectedDate="{Binding PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock>Тип поверки:</TextBlock>
+                            <ComboBox
+                                ItemsSource="{Binding CheckTypes}"
+                                SelectedItem="{Binding SelectedCheckType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Title}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBlock>Канал:</TextBlock>
+                            <ComboBox
+                                ItemsSource="{Binding Channels}"
+                                SelectedItem="{Binding SelectedChannel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Expander Header="Настройки подключения">
+                                <StackPanel>
+                                    <TextBlock>Порт:</TextBlock>
+                                    <ComboBox
+                                        ItemsSource="{Binding Ports}"
+                                        SelectedItem="{Binding SelectedPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock>Адрес:</TextBlock>
+                                    <TextBox Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
             <Button Command="{Binding Save}">Сохранить</Button>
             <Button Command="{Binding Report}">Протокол</Button>
         </StackPanel>
 
-        <archive:ParamResDataGridView Visibility="Collapsed"
-            Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
-            DataContext="{Binding Parameters}"/>
-        <ContentPresenter
-            Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"
-            Content="{Binding Check}"/>
+        <GroupBox Header="Ход проверик" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
+            <ContentPresenter Content="{Binding Check}"/>
+        </GroupBox>
     </Grid>
 </UserControl>

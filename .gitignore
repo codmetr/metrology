@@ -19,3 +19,5 @@ src/KIPer/ADTS/obj/
 src/KIPer/IEEE488Transport/obj/
 src/KIPer/ADTS/bin/
 src/KIPer/IEEE488Transport/bin/
+src/KIPer/UnitTestPACESeries/bin/
+src/KIPer/UnitTestPACESeries/obj/

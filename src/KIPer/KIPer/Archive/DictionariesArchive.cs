@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using KipTM.Archive.DataTypes;
+using KipTM.Model.Checks;
+using KipTM.Model.Devices;
 
 namespace KipTM.Archive
 {
@@ -14,9 +16,8 @@ namespace KipTM.Archive
         {
             return new List<ArchivedKeyValuePair>
             {
-                new ArchivedKeyValuePair(DictionariesPool.AircraftTypesKey, GetDefaultForAircraftTypes()),
                 new ArchivedKeyValuePair(DictionariesPool.DeviceTypesKey, GetDefaultForDeviceTypes()),
-                new ArchivedKeyValuePair(DictionariesPool.FormsTOKey, GetDefaultForFormsTO()),
+                new ArchivedKeyValuePair(DictionariesPool.CheckTypesKey, GetDefaultForCheckTypes()),
                 new ArchivedKeyValuePair(DictionariesPool.UsersKey, GetDefaultForUsers()),
             };
         }
@@ -31,13 +32,14 @@ namespace KipTM.Archive
             };
         }
 
-        private static object GetDefaultForFormsTO()
+        private static object GetDefaultForCheckTypes()
         {
-            return new List<string>()
+            return new List<ArchivedKeyValuePair>
             {
-                "TO1",
-                "ТО2",
-                "ТО3",
+                new ArchivedKeyValuePair(ADTSModel.Key, new List<string>()
+                {
+                    ADTSCheckMethodic.Key,
+                }),
             };
         }
 
@@ -45,20 +47,9 @@ namespace KipTM.Archive
         {
             return new List<string>()
             {
-                "СВС-В1-72",
-                "СВС-В1-72",
-                "СВС-В1-72",
+                ADTSModel.Key,
             };
         }
 
-        private static object GetDefaultForAircraftTypes()
-        {
-            return new List<string>()
-            {
-                "Ил-76",
-                "Ил-76КТ",
-                "Ил-76ЛЛ",
-            };
-        }
     }
 }

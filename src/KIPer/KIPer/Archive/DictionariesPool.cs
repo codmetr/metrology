@@ -6,15 +6,13 @@ namespace KipTM.Archive
     public class DictionariesPool
     {
         public static string DeviceTypesKey { get { return "DeviceTypes"; } }
-        public static string FormsTOKey { get { return "FormsTO"; } }
-        public static string AircraftTypesKey { get { return "AircraftTypes"; } }
+        public static string CheckTypesKey { get { return "CheckTypes"; } }
         public static string UsersKey { get { return "Users"; } }
 
         public DictionariesPool()
         {
             DeviceTypes = new List<string>();
-            FormsTO = new List<string>();
-            AircraftTypes = new List<string>();
+            CheckTypes = new Dictionary<string, List<string>>();
             Users = new List<string>();
         }
 
@@ -24,14 +22,9 @@ namespace KipTM.Archive
         public List<string> DeviceTypes { get; set; }
 
         /// <summary>
-        /// Формы технического обслуживания
+        /// Справочкник типов поддерживаемых проверок для типа устройства
         /// </summary>
-        public List<string> FormsTO { get; set; }
-
-        /// <summary>
-        /// Типы воздужных судов
-        /// </summary>
-        public List<string> AircraftTypes { get; set; }
+        public Dictionary<string, List<string>> CheckTypes { get; set; }
 
         /// <summary>
         /// Пользователи
@@ -50,12 +43,21 @@ namespace KipTM.Archive
                     res.DeviceTypes = tempElement.Value as List<string>;
             }
 
-            // Заполнение списка формы технического обслуживания
-            tempElement = archive.Data.First(el => el.Key == FormsTOKey);
-            if (tempElement != null)
+            // Заполнение справочкника типов поддерживаемых проверок для типа устройства
+            var subArchive = archive.GetArchive(CheckTypesKey);
+            if (subArchive != null)
             {
-                if (tempElement.Value is List<string>)
-                    res.FormsTO = tempElement.Value as List<string>;
+                foreach (var pair in subArchive.Data)
+                {
+                    var devType = pair.Key as string;
+                    var checkTypes = pair.Value as List<string>;
+                    if (devType != null && checkTypes != null)
+                    {
+                        if (res.CheckTypes==null)
+                            res.CheckTypes = new Dictionary<string, List<string>>();
+                        res.CheckTypes.Add(devType, checkTypes);
+                    }
+                }
             }
 
             // Заполнение списка типов воздужных судов

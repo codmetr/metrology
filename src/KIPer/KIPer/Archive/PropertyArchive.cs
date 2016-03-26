@@ -2,6 +2,7 @@
 using ADTS;
 using KipTM.Archive.DataTypes;
 using KipTM.Model.Checks;
+using KipTM.Model.Devices;
 
 namespace KipTM.Archive
 {
@@ -22,6 +23,14 @@ namespace KipTM.Archive
 
         #region GetDefault
         public static List<ArchivedKeyValuePair> GetDefaultData()
+        {
+            return new List<ArchivedKeyValuePair>
+            {
+                new ArchivedKeyValuePair(ADTSModel.Key, GetDefaultForADTS()),
+            };
+        }
+
+        public static List<ArchivedKeyValuePair> GetDefaultForADTS()
         {
             return new List<ArchivedKeyValuePair>
             {

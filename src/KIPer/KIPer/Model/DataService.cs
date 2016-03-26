@@ -42,8 +42,8 @@ namespace KipTM.Model
 
         public void InitDevices()
         {
-            var paceSettings = _settings.Etalons.FirstOrDefault(el => el.Device.Name == PACE5000Model.Key);
-            var adtsSettings = _settings.Devices.FirstOrDefault(el => el.Name == ADTSModel.Key);
+            var paceSettings = _settings.LastEtalons.FirstOrDefault(el => el.Device.Name == PACE5000Model.Key);
+            var adtsSettings = _settings.LastDevices.FirstOrDefault(el => el.Name == ADTSModel.Key);
 
             if(paceSettings == null)
                 throw new NullReferenceException(string.Format("PACE settings not found by key \"{0}\"", PACE5000Model.Key));

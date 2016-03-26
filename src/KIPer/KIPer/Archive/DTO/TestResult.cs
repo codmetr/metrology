@@ -10,12 +10,16 @@ namespace KipTM.Archive.DTO
 
         public string Note { get; set; }
 
+        public string CheckType { get; set; }
+
+        public string Channel { get; set; }
+
         public DateTime Timestamp { get; set; }
 
         public DeviceDescriptor TargetDevice { get; set; }
 
-        public IEnumerable<DeviceDescriptor> Etalon { get; set; }
+        public List<DeviceDescriptor> Etalon { get; set; }
 
-        public IEnumerable<PointResult> Parameters { get; set; } 
+        public List<PointResult> Parameters { get; set; } 
     }
 }

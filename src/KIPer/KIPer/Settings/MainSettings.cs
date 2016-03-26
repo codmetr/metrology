@@ -34,7 +34,19 @@ namespace KipTM.Settings
                     CountStopBits = StopBits.One
                 }
             };
-            res.Etalons = new List<EtalonSettings>()
+            res.Devices = new List<DeviceTypeSettings>()
+            {
+                new DeviceTypeSettings()
+                {
+                    Name = KipTM.Model.Devices.ADTSModel.Key,
+                    Model = KipTM.Model.Devices.ADTSModel.Model,
+                    DeviceCommonType = KipTM.Model.Devices.ADTSModel.DeviceCommonType,
+                    DeviceManufacturer = KipTM.Model.Devices.ADTSModel.DeviceManufacturer,
+                    TypesEtalonParameters = new List<string>(KipTM.Model.Devices.ADTSModel.TypesEtalonParameters),
+                    AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key},
+                }
+            };
+            res.LastEtalons = new List<EtalonSettings>()
             {
                 new EtalonSettings()
                 {
@@ -52,7 +64,7 @@ namespace KipTM.Settings
                     Port = res.Ports.FirstOrDefault(el=>el.Name == "COM1")
                 }
             };
-            res.Devices = new List<DeviceSettings>()
+            res.LastDevices = new List<DeviceSettings>()
             {
                 new DeviceSettings()
                 {
@@ -69,9 +81,11 @@ namespace KipTM.Settings
             return res;
         }
 
-        public List<EtalonSettings> Etalons;
+        public List<DeviceTypeSettings> Devices;
 
-        public List<DeviceSettings> Devices;
+        public List<EtalonSettings> LastEtalons;
+
+        public List<DeviceSettings> LastDevices;
 
         public List<ComPortSettings> Ports;
 
