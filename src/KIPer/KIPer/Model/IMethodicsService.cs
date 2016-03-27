@@ -6,8 +6,8 @@ namespace KipTM.Model
     public interface IMethodicsService
     {
         /// <summary>
-        /// Набор поддерживаемых методик
+        /// Набор поддерживаемых методик для конкретного типа устройств
         /// </summary>
-        IDictionary<string, ICheckMethodic> Methodics { get; }
+        IDictionary<string, ICheckMethodic> MethodicsForType(string DeviceKey);
     }
 }

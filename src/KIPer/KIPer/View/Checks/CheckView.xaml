@@ -44,29 +44,35 @@
                     <TextBlock>Тип устройства:</TextBlock>
                     <ComboBox
                         ItemsSource="{Binding DeviceTypes}"
-                        SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Value.Model}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                     <TextBlock>Изготовитель:</TextBlock>
-                    <TextBox Text="{Binding Manufacturer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="{Binding SelectedDeviceType.DeviceManufacturer, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>Инвентарный номер:</TextBlock>
-                    <TextBox Text="{Binding InventarNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Text="{Binding Result.TargetDevice.InventarNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>Серийный номер:</TextBlock>
-                    <TextBox Text="{Binding SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Text="{Binding Result.TargetDevice.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>Дата прошлой поверки:</TextBlock>
-                    <DatePicker SelectedDate="{Binding PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DatePicker SelectedDate="{Binding Result.TargetDevice.PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>Тип поверки:</TextBlock>
                     <ComboBox
                         ItemsSource="{Binding CheckTypes}"
                         SelectedItem="{Binding SelectedCheckType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Title}"/>
+                                <TextBlock Text="{Binding Value.Title}"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <TextBlock>Канал:</TextBlock>
                     <ComboBox
                         ItemsSource="{Binding Channels}"
-                        SelectedItem="{Binding SelectedChannel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        SelectedItem="{Binding Result.Channel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Expander Header="Настройки подключения">
                         <StackPanel>
                             <TextBlock>Порт:</TextBlock>

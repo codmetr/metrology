@@ -105,8 +105,6 @@
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Model\ArchiveService.cs" />
     <Compile Include="Archive\DTO\ArchivePool.cs" />
-    <Compile Include="Archive\DTO\PointDescriptor.cs" />
-    <Compile Include="Archive\DTO\PointResult.cs" />
     <Compile Include="Archive\DTO\TestResult.cs" />
     <Compile Include="Model\Checks\ADTSChechPoint.cs" />
     <Compile Include="Model\Checks\EventArgEnd.cs" />

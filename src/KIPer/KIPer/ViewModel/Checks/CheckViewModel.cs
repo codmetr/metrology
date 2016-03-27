@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight;
 using KipTM.Archive;
 using KipTM.Archive.DTO;
 using KipTM.Interfaces;
+using KipTM.Model;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 using KipTM.Settings;
@@ -25,47 +26,67 @@ namespace KipTM.ViewModel
     {
         private DictionariesPool _dictionaries;
         private MainSettings _settings;
-        private readonly IDictionary<string, ICheckMethodic> _checks;
+        private readonly IMethodicsService _methodics;
+        private IDictionary<string, ICheckMethodic> _check;
         private readonly IPropertyPool _propertyPool;
         private object _selectedCheck;
-        private ICheckMethodic _selectedCheckType;
+        private KeyValuePair<string, ICheckMethodic> _selectedCheckType;
         private TestResult _result;
-        private DeviceTypeDescriptor _deviceTypeDescriptor;
+        private readonly IDictionary<string, DeviceTypeDescriptor> _avalableDeviceTypes; 
+        private string _devTypeKey;
+        private KeyValuePair<string, DeviceTypeDescriptor> _selectedType;
 
         /// <summary>
         /// Initializes a new instance of the CheckViewModel class.
         /// </summary>
-        public CheckViewModel(MainSettings settings, IDictionary<string, ICheckMethodic> checks, IPropertyPool propertyPool, DictionariesPool dictionaries)
+        public CheckViewModel(MainSettings settings, IMethodicsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries)
         {
             _result = new TestResult();
             _settings = settings;
-            _checks = checks;
+            _methodics = methodics;
             _propertyPool = propertyPool;
             _dictionaries = dictionaries;
-            var firstType =  _dictionaries.DeviceTypes.First();
-            var settingsDevice = _settings.LastDevices.First(el=>el.)
-            _result.TargetDevice = new DeviceDescriptor(new DeviceTypeDescriptor(el.Model, el.DeviceCommonType, el.DeviceManufacturer)));
-            if (_checks.Count > 0)
+
+            // заполнение списка поддерживаемых устройств и выбор первого элемента
+            var avalableDeviceTypes = new Dictionary<string, DeviceTypeDescriptor>();
+            _devTypeKey = null;
+            foreach (var deviceType in _dictionaries.DeviceTypes)
             {
-                var selected = _checks.First();
-                CheckTypes = _checks.Values;
+                var setDevice = _settings.Devices.First(el => el.Key == deviceType);
+                if (setDevice == null)
+                    continue;
+                if (_devTypeKey == null)
+                    _devTypeKey = deviceType;
+                avalableDeviceTypes.Add(deviceType, new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
             }
+            _avalableDeviceTypes = avalableDeviceTypes;
+            _selectedType = _avalableDeviceTypes.First();
+            if (_devTypeKey != null)
+            {
+                _result.TargetDevice = new DeviceDescriptor(_selectedType.Value);
+                _check = _methodics.MethodicsForType(_devTypeKey);
+            }
+            
         }
         #region Перечисления
         /// <summary>
         /// Доступные типы устройства
         /// </summary>
-        public IEnumerable<string> DeviceTypes { get { return _dictionaries.DeviceTypes; } }
+        public IDictionary<string, DeviceTypeDescriptor> DeviceTypes { get { return _avalableDeviceTypes; } }
 
         /// <summary>
         /// Каналы устройства
         /// </summary>
-        public IEnumerable<string> Channels { get; set; } 
+        public IEnumerable<string> Channels { get; set; }
 
         /// <summary>
         /// Дострупные для выбранного типа устройства методики
         /// </summary>
-        public IEnumerable<ICheckMethodic> CheckTypes { get; set; }
+        public IDictionary<string, ICheckMethodic> CheckTypes
+        {
+            get { return _check; }
+            set { Set(ref _check, value); }
+        }
         #endregion
 
         #region Фактические настройки
@@ -96,45 +117,79 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Тип устройства
         /// </summary>
-        public string SelectedDeviceType { get; set; }
+        public KeyValuePair<string, DeviceTypeDescriptor> SelectedDeviceType
+        {
+            get { return _selectedType; }
+            set
+            {
+                if (_selectedType.Key == value.Key)
+                    return;
+                _result.TargetDevice.DeviceType = value.Value;
+                CheckTypes = _methodics.MethodicsForType(value.Key);
+                RaisePropertyChanged("Manufacturer");
+            }
+        }
+
+
+        public TestResult Result
+        {
+            get { return _result; }
+            set { Set(ref _result, value); }
+        }
+        /// <summary>
+        /// Инвентарный номер
+        /// </summary>
+        public string Manufacturer { get { return _result.TargetDevice.DeviceType.DeviceManufacturer; } }
 
         /// <summary>
         /// Инвентарный номер
         /// </summary>
-        public string Manufacturer { get; set; }
-
-        /// <summary>
-        /// Инвентарный номер
-        /// </summary>
-        public string InventarNumber { get; set; }
+        public string InventarNumber
+        {
+            get { return _result.TargetDevice.InventarNumber; }
+            set { _result.TargetDevice.InventarNumber = value; }
+        }
 
         /// <summary>
         /// Серийный номер
         /// </summary>
-        public string SerialNumber { get; set; }
+        public string SerialNumber
+        {
+            get { return _result.TargetDevice.SerialNumber; }
+            set { _result.TargetDevice.SerialNumber = value; }
+        }
 
         /// <summary>
         /// Дата предыдущей поверки/калибровки
         /// </summary>
-        public DateTime PreviousCheckTime { get; set; }
+        public DateTime PreviousCheckTime
+        {
+            get { return _result.TargetDevice.PreviousCheckTime; }
+            set { _result.TargetDevice.PreviousCheckTime = value; }
+        }
 
         /// <summary>
         /// Выбранная методика
         /// </summary>
-        public ICheckMethodic SelectedCheckType
+        public KeyValuePair<string, ICheckMethodic> SelectedCheckType
         {
             get { return _selectedCheckType; }
             set
             {
                 _selectedCheckType = value;
-                Check = GetViewModelFor(_selectedCheckType);
+                _result.CheckType = _selectedCheckType.Key;
+                Check = GetViewModelFor(_selectedCheckType.Value);
             }
         }
  
         /// <summary>
         /// Выбранный канал
         /// </summary>
-        public string SelectedChannel { get; set; }
+        public string SelectedChannel
+        {
+            get { return _result.Channel; }
+            set { _result.Channel = value; }
+        }
 
         /// <summary>
         /// Выбранный порт

@@ -4,6 +4,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 
 namespace KipTM.Settings
@@ -38,12 +39,12 @@ namespace KipTM.Settings
             {
                 new DeviceTypeSettings()
                 {
-                    Name = KipTM.Model.Devices.ADTSModel.Key,
+                    Key = KipTM.Model.Devices.ADTSModel.Key,
                     Model = KipTM.Model.Devices.ADTSModel.Model,
                     DeviceCommonType = KipTM.Model.Devices.ADTSModel.DeviceCommonType,
                     DeviceManufacturer = KipTM.Model.Devices.ADTSModel.DeviceManufacturer,
                     TypesEtalonParameters = new List<string>(KipTM.Model.Devices.ADTSModel.TypesEtalonParameters),
-                    AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key},
+                    AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key, UserEchalonChannel.Key},
                 }
             };
             res.LastEtalons = new List<EtalonSettings>()

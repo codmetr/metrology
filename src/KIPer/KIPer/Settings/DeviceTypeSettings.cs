@@ -8,7 +8,10 @@ namespace KipTM.Settings
 {
     public class DeviceTypeSettings
     {
-        public string Name;
+        /// <summary>
+        /// Ключь типа
+        /// </summary>
+        public string Key;
 
         /// <summary>
         /// Модель прибора
