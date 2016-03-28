@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KipTM.Interfaces;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 
@@ -15,8 +16,11 @@ namespace KipTM.Model
         public MethodicsService()
         {
             _methodics = new Dictionary<string, Dictionary<string, ICheckMethodic>>();
-            //var adtsCheck = new ADTSCheckMethodic(deviceManager.ADTS, NLog.LogManager.GetLogger("ADTSCheckMethodic"));
-            //_methodics.Add(ADTSModel.Key, adtsCheck);
+            var adtsCheck = new ADTSCheckMethodic(NLog.LogManager.GetLogger("ADTSCheckMethodic"));
+            _methodics.Add(ADTSModel.Key,new Dictionary<string, ICheckMethodic>()
+            {
+                {ADTSCheckMethodic.Key, adtsCheck}
+            }); 
 
         }
 

@@ -47,6 +47,9 @@ namespace KipTM.Archive.DTO
         /// </summary>
         public string Channel { get; set; }
 
+        /// <summary>
+        /// Ключь типа проверяемого устройства
+        /// </summary>
         public string TargetDeviceKey { get; set; }
 
         /// <summary>

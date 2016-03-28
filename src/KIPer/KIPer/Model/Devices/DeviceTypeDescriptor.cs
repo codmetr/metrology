@@ -1,4 +1,5 @@
-﻿using KipTM.ViewModel;
+﻿using System.Collections.Generic;
+using KipTM.ViewModel;
 
 namespace KipTM.Model.Devices
 {
@@ -28,5 +29,6 @@ namespace KipTM.Model.Devices
         /// Изготовитель
         /// </summary>
         public string DeviceManufacturer { get; private set; }
+
     }
 }

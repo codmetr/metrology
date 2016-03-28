@@ -46,6 +46,7 @@ namespace KipTM.ViewModel.Checks
             _userEchalonChannel = new UserEchalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
             _methodic = methodic;
             _propertyPool = propertyPool;
+            
             // Базовая инициализация
             var points = _propertyPool.GetProperty<List<ADTSChechPoint>>(ADTSCheckMethodic.KeyPoints);
             var channel = _propertyPool.GetProperty<CalibChannel>(ADTSCheckMethodic.KeyChannel);
@@ -87,20 +88,20 @@ namespace KipTM.ViewModel.Checks
             set { Set(ref _accept, value); }
         }
 
-
-
-
-
         private void DoStart()
         {
             TitleBtnNext = "Далее";
         }
 
         private void DoNextStep()
-        {}
+        {
+            
+        }
 
         private void End()
-        {}
+        {
+            
+        }
 
         private void Cancel()
         {
@@ -119,7 +120,6 @@ namespace KipTM.ViewModel.Checks
             }
             if (cancel.IsCancellationRequested)
                 return default(double);
-            NextStep();
             return RealValue;
         }
 
@@ -128,7 +128,6 @@ namespace KipTM.ViewModel.Checks
             var cancel = _cancellation.Token;
             var wh = new AutoResetEvent(false);
             TitleBtnNext = "Подтвердите или отмените результат калибровки";
-            _doStep = () => wh.Set();
             while (!wh.WaitOne(TimeSpan.FromMilliseconds(100)) && !cancel.IsCancellationRequested)
             {
                 Thread.Sleep(100);
@@ -136,7 +135,6 @@ namespace KipTM.ViewModel.Checks
             if (cancel.IsCancellationRequested)
                 return false;
             TitleBtnNext = "Старт";
-            NextStep();
             return Accept;
         }
     }

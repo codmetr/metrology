@@ -130,7 +130,6 @@
     <Compile Include="Model\Devices\PACE5000Model.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
-    <Compile Include="Model\DictionaryService.cs" />
     <Compile Include="Model\IDeviceManager.cs" />
     <Compile Include="Model\IMethodicsService.cs" />
     <Compile Include="Model\MethodicsService.cs" />

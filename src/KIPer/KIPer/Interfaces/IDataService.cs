@@ -32,7 +32,6 @@ namespace KipTM.Interfaces
         /// Настройки
         /// </summary>
         MainSettings Settings { get; }
-        void LoadSettings();
         void SaveSettings();
         void LoadResults();
         void SaveResults();

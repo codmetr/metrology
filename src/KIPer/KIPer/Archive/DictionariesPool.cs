@@ -60,14 +60,7 @@ namespace KipTM.Archive
                 }
             }
 
-            // Заполнение списка типов воздужных судов
-            tempElement = archive.Data.First(el => el.Key == AircraftTypesKey);
-            if (tempElement != null)
-            {
-                if (tempElement.Value is List<string>)
-                    res.AircraftTypes = tempElement.Value as List<string>;
-            }
-
+            
             // Заполнение списка пользователи
             tempElement = archive.Data.First(el => el.Key == UsersKey);
             if (tempElement != null)

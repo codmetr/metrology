@@ -34,11 +34,11 @@ namespace KipTM.ViewModel
                 TestType = "поверка";
                 User = "Иван Иванович Иванов";
                 Time = DateTime.Parse("11/11/11");
-                Device = new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("UNIK 5000", "Датчик давления", "GE"), "111"));
+                Device = new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("UNIK 5000", "Датчик давления", "GE")){SerialNumber = "111"});
                 Etalons = new ObservableCollection<IDeviceViewModel>(new IDeviceViewModel[]
                 {
-                    new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("PACE5000", "Датчик давления", "GE Druk"), "222")),
-                    new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("DPI 620", "Многофункциональный калибратор", "GE Druk"), "333")),
+                    new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("PACE5000", "Датчик давления", "GE Druk")){SerialNumber = "222"}),
+                    new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("DPI 620", "Многофункциональный калибратор", "GE Druk")){SerialNumber = "333"}),
                 });
                 Parameters = new ObservableCollection<IParameterResultViewModel>(new IParameterResultViewModel[]
                 {

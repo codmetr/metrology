@@ -26,7 +26,7 @@ namespace KipTM.Model.Checks
 
         private const string TitleMethodic = "Калибровка ADTS";
 
-        private readonly ADTSModel _adts;
+        private ADTSModel _adts;
         private readonly CancellationTokenSource _cancelSource;
         private readonly NLog.Logger _logger;
 
@@ -34,10 +34,9 @@ namespace KipTM.Model.Checks
         private IEthalonChannel _ethalonChannel;
         private IUserChannel _userChannel;
 
-        public ADTSCheckMethodic(ADTSModel adts, NLog.Logger logger)
+        public ADTSCheckMethodic(NLog.Logger logger)
         {
             _logger = logger;
-            _adts = adts;
             _cancelSource = new CancellationTokenSource();
         }
 
@@ -57,6 +56,12 @@ namespace KipTM.Model.Checks
         public void SetFuncGetAccept(IUserChannel userChannel)
         {
             _userChannel = userChannel;
+        }
+
+        public void SetADTS(ADTSModel adts)
+        {
+            _adts = adts;
+            
         }
 
         /// <summary>

@@ -19,10 +19,10 @@ namespace KipTM.Model
 {
     public class DataService : IDataService, IDisposable
     {
-        private const string SettingsFileName = "settings";
+        
         private const string ResultsArchiveFileName = "results";
 
-        MainSettings _settings = new MainSettings();
+        readonly MainSettings _settings;
         private readonly IArchive _archive;
         private IDeviceManager _deviceManager;
         private ResultsArchive _resultsArchive;
@@ -31,9 +31,10 @@ namespace KipTM.Model
         private readonly List<DeviceDescriptor> _etalons;
 
 
-        public DataService(IArchive archive)
+        public DataService(IArchive archive, MainSettings settings)
         {
             _archive = archive;
+            _settings = settings;
             _deviceTypes = new List<IDeviceTypeDescriptor>();
             _ethalonTypes = new List<IDeviceTypeDescriptor>();
             _etalons = new List<DeviceDescriptor>();
@@ -42,8 +43,12 @@ namespace KipTM.Model
 
         public void InitDevices()
         {
-            var paceSettings = _settings.LastEtalons.FirstOrDefault(el => el.Device.Name == PACE5000Model.Key);
-            var adtsSettings = _settings.LastDevices.FirstOrDefault(el => el.Name == ADTSModel.Key);
+            DeviceSettings paceSettings = null;
+            if (_settings.LastEtalons != null) 
+                paceSettings = _settings.LastEtalons.FirstOrDefault(el => el.Name == PACE5000Model.Key);
+            DeviceSettings adtsSettings = null;
+            if (_settings.LastDevices != null)
+                adtsSettings = _settings.LastDevices.FirstOrDefault(el => el.Name == ADTSModel.Key);
 
             if(paceSettings == null)
                 throw new NullReferenceException(string.Format("PACE settings not found by key \"{0}\"", PACE5000Model.Key));
@@ -54,11 +59,15 @@ namespace KipTM.Model
             if (adtsPort == null)
                 throw new NullReferenceException(string.Format("ADTS port not found by key \"{0}\"", adtsSettings.NamePort));
 
+            var pacePort = _settings.Ports.FirstOrDefault(el => el.Name == paceSettings.NamePort);
+            if (pacePort == null)
+                throw new NullReferenceException(string.Format("PACE port not found by key \"{0}\"", paceSettings.NamePort));
+
             _deviceTypes.Add(new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer));
 
             _ethalonTypes.Add(new DeviceTypeDescriptor(PACE5000Model.Model, PACE5000Model.DeviceCommonType, PACE5000Model.DeviceManufacturer));
 
-            _deviceManager = new DeviceManager(adtsPort, paceSettings.Port, adtsSettings, paceSettings.Device, NLog.LogManager.GetLogger("DeviceManager"));
+            _deviceManager = new DeviceManager(adtsPort, pacePort, adtsSettings, paceSettings, NLog.LogManager.GetLogger("DeviceManager"));
         }
 
         /// <summary>
@@ -120,17 +129,9 @@ namespace KipTM.Model
             _archive.Save(ResultsArchiveFileName, _resultsArchive);
         }
 
-        public void LoadSettings()
-        {
-            _settings = _archive.Load(SettingsFileName, MainSettings.GetDefault());
-
-            // TODO Загружать настройки эталона из настроек
-            _etalons.Add(new DeviceDescriptor(new DeviceTypeDescriptor(PACE5000Model.Model, PACE5000Model.DeviceCommonType, PACE5000Model.DeviceManufacturer), "123"));
-        }
-
         public void SaveSettings()
         {
-            _archive.Save(SettingsFileName, _settings);
+            _archive.Save(MainSettings.SettingsFileName, _settings);
         }
         #endregion
 

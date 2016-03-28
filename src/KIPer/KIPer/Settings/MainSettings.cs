@@ -11,6 +11,8 @@ namespace KipTM.Settings
 {
     public class MainSettings
     {
+        public const string SettingsFileName = "settings";
+
         public static MainSettings GetDefault()
         {
             var res = new MainSettings();
@@ -47,23 +49,19 @@ namespace KipTM.Settings
                     AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key, UserEchalonChannel.Key},
                 }
             };
-            res.LastEtalons = new List<EtalonSettings>()
+            res.LastEtalons = new List<DeviceSettings>()
             {
-                new EtalonSettings()
+                new DeviceSettings()
                 {
-                    Device = new DeviceSettings()
-                    {
-                        Address = "0",
-                        Name = KipTM.Model.Devices.PACE5000Model.Key,
-                        Model = KipTM.Model.Devices.PACE5000Model.Model,
-                        DeviceCommonType = KipTM.Model.Devices.PACE5000Model.DeviceCommonType,
-                        DeviceManufacturer = KipTM.Model.Devices.PACE5000Model.DeviceManufacturer,
-                        TypesEtalonParameters = new List<string>(KipTM.Model.Devices.PACE5000Model.TypesEtalonParameters),
-                        SerialNumber = "123",
-                        NamePort = "COM1"
-                    },
-                    Port = res.Ports.FirstOrDefault(el=>el.Name == "COM1")
-                }
+                    Address = "0",
+                    Name = KipTM.Model.Devices.PACE5000Model.Key,
+                    Model = KipTM.Model.Devices.PACE5000Model.Model,
+                    DeviceCommonType = KipTM.Model.Devices.PACE5000Model.DeviceCommonType,
+                    DeviceManufacturer = KipTM.Model.Devices.PACE5000Model.DeviceManufacturer,
+                    TypesEtalonParameters = new List<string>(KipTM.Model.Devices.PACE5000Model.TypesEtalonParameters),
+                    SerialNumber = "123",
+                    NamePort = "COM1"
+                },
             };
             res.LastDevices = new List<DeviceSettings>()
             {
@@ -84,7 +82,7 @@ namespace KipTM.Settings
 
         public List<DeviceTypeSettings> Devices;
 
-        public List<EtalonSettings> LastEtalons;
+        public List<DeviceSettings> LastEtalons;
 
         public List<DeviceSettings> LastDevices;
 

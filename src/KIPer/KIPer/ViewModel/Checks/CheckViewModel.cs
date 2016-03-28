@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using KipTM.Archive;
 using KipTM.Archive.DTO;
 using KipTM.Interfaces;
@@ -24,6 +26,7 @@ namespace KipTM.ViewModel
     /// </summary>
     public class CheckViewModel : ViewModelBase
     {
+        private readonly IDeviceManager _deviceManager;
         private DictionariesPool _dictionaries;
         private MainSettings _settings;
         private readonly IMethodicsService _methodics;
@@ -35,17 +38,25 @@ namespace KipTM.ViewModel
         private readonly IDictionary<string, DeviceTypeDescriptor> _avalableDeviceTypes; 
         private string _devTypeKey;
         private KeyValuePair<string, DeviceTypeDescriptor> _selectedType;
+        private Dictionary<Type, Type> _viewDict;
 
+        /// <summary>
+        /// For disiner
+        /// </summary>
+        public CheckViewModel()
+        {}
         /// <summary>
         /// Initializes a new instance of the CheckViewModel class.
         /// </summary>
-        public CheckViewModel(MainSettings settings, IMethodicsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries)
+        public CheckViewModel(MainSettings settings, IMethodicsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries, IDeviceManager deviceManager, Dictionary<Type, Type> viewDict)
         {
             _result = new TestResult();
             _settings = settings;
             _methodics = methodics;
             _propertyPool = propertyPool;
             _dictionaries = dictionaries;
+            _deviceManager = deviceManager;
+            _viewDict = new Dictionary<Type, Type>();
 
             // заполнение списка поддерживаемых устройств и выбор первого элемента
             var avalableDeviceTypes = new Dictionary<string, DeviceTypeDescriptor>();
@@ -65,9 +76,49 @@ namespace KipTM.ViewModel
             {
                 _result.TargetDevice = new DeviceDescriptor(_selectedType.Value);
                 _check = _methodics.MethodicsForType(_devTypeKey);
+                _selectedCheckType = _check.First();
+                Channels = _dictionaries.CheckTypes[_devTypeKey];
+                _result.Channel = Channels.First();
             }
             
         }
+
+        /// <summary>
+        /// Действия при загрузке окна
+        /// </summary>
+        public ICommand LoadView
+        {
+            get
+            {
+                return new RelayCommand<object>(
+                    (mainView) =>
+                    {
+                        var view = mainView as Window;
+                        if (view == null)
+                            return;
+
+                        try
+                        {
+                            foreach (var mod in _viewDict)
+                            {
+                                var typeModel = mod.Key;
+                                var typeView = mod.Value;
+                                var template = new DataTemplate
+                                {
+                                    DataType = typeModel,
+                                    VisualTree = new FrameworkElementFactory(typeView)
+                                };
+                                view.Resources.Add(new DataTemplateKey(typeModel), template);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw;
+                        }
+                    });
+            }
+        }
+
         #region Перечисления
         /// <summary>
         /// Доступные типы устройства
@@ -222,7 +273,11 @@ namespace KipTM.ViewModel
         public object GetViewModelFor(ICheckMethodic methodic)
         {
             if (methodic is ADTSCheckMethodic)
-                return new ADTSCalibrationViewModel(methodic as ADTSCheckMethodic, _settings, _propertyPool);
+            {
+                var adtsMethodic = methodic as ADTSCheckMethodic;
+                adtsMethodic.SetADTS(_deviceManager.ADTS);
+                return new ADTSCalibrationViewModel(adtsMethodic, _settings, _propertyPool);
+            }
             return null;
         }
     }

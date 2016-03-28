@@ -96,7 +96,7 @@
                                 ItemsSource="{Binding DeviceTypes}"
                                 SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock>Изготовитель:</TextBlock>
-                            <TextBox Text="{Binding Manufacturer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Text="{Binding Manufacturer, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock>Инвентарный номер:</TextBlock>
                             <TextBox Text="{Binding InventarNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock>Серийный номер:</TextBlock>

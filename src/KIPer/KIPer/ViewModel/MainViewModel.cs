@@ -35,6 +35,9 @@ namespace KipTM.ViewModel
         private DeviceTypesViewModel _etalonTypes;
         private CheckViewModel _checks;
 
+        private string _helpMessage;
+        private object _selectedAction;
+
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -46,7 +49,6 @@ namespace KipTM.ViewModel
             _settings = settings;
             _archive = archive;
 
-            _dataService.LoadSettings();
             _dataService.LoadResults();
             _dataService.InitDevices();
 
@@ -75,158 +77,8 @@ namespace KipTM.ViewModel
                 {typeof(CheckViewModel), typeof(CheckView)},
                 {typeof(MechanicalManometerViewModel), typeof(MechanicalManometerView)},
                 {typeof(ADTSCalibrationViewModel), typeof(ADTSCalibrationView)},
-
             };
         }
-
-        private string _helpMessage;
-        public string HelpMessage
-        {
-            get { return _helpMessage; }
-            set { Set(ref _helpMessage, value); }
-        }
-
-        private object _selectedAction;
-
-        public object SelectedAction
-        {
-            get { return _selectedAction; }
-            set { Set(ref _selectedAction, value); }
-        }
-
-        public ICommand LoadView
-        {
-            get
-            {
-                return new RelayCommand<object>(
-                    (mainView) =>
-                    {
-                        Load();
-
-                        var view = mainView as Window;
-                        if (view == null)
-                            return;
-
-                        try
-                        {
-                            foreach (var mod in ViewModelViewDic)
-                            {
-                                var typeModel = mod.Key;
-                                var typeView = mod.Value;
-                                var template = new DataTemplate
-                                {
-                                    DataType = typeModel,
-                                    VisualTree = new FrameworkElementFactory(typeView)
-                                };
-                                view.Resources.Add(new DataTemplateKey(typeModel), template);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            throw;
-                        }
-                    });
-            }
-        }
-
-        /// <summary>
-        /// Выбрана вкладка Проверки
-        /// </summary>
-        public ICommand SelectChecks
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    SelectedAction = _checks;
-                    HelpMessage = "Выполнение поверки";
-                });
-            }
-        }
-
-        /// <summary>
-        /// Выбрана вкладка Архив
-        /// </summary>
-        public ICommand SelectArchive
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    SelectedAction = _tests;//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Архив Проверок:\nсписок пойденных поверок";
-                });
-            }
-        }
-
-        /// <summary>
-        /// Выбрана вкладка Приборы
-        /// </summary>
-        public ICommand SelectTargetDevices
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    SelectedAction = _deviceTypes;//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Список поддерживаемых типов проверяемых приборов";
-                });
-            }
-        }
-
-        /// <summary>
-        /// Выбрана вкладка Эталоны
-        /// </summary>
-        public ICommand SelectEtalonDevices
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    SelectedAction = _etalonTypes;//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Список поддерживаемых типов эталонных приборов";
-                });
-            }
-        }
-
-        /// <summary>
-        /// Выбрана вкладка Настройки
-        /// </summary>
-        public ICommand SelectSettings
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    SelectedAction = "Здесь будут элементы управления настройками приложения";//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Настройки приложения";
-                });
-            }
-        }
-
-
-        /// <summary>
-        /// Выбрана вкладка Настройки
-        /// </summary>
-        public ICommand SelectService
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    SelectedAction = _services;
-                    HelpMessage = "Сервисная вкладка для отладки различных механизмов";
-                });
-            }
-        }
-
-
-        ////public override void Cleanup()
-        ////{
-        ////    // Clean up if needed
-
-        ////    base.Cleanup();
-        ////}
 
         public void Load()
         {
@@ -239,7 +91,15 @@ namespace KipTM.ViewModel
             _deviceTypes = new DeviceTypesViewModel();
             _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
-            _checks = new CheckViewModel(_settings, _methodicService.Methodics, _archive.PropertyPool);
+            _checks = new CheckViewModel(_settings, _methodicService, _archive.PropertyPool, _archive.DictionariesPool,
+                _dataService.DeviceManager, new Dictionary<Type, Type>()
+                {
+                    {typeof (MechanicalManometerViewModel), typeof (MechanicalManometerView)},
+                    {typeof (ADTSCalibrationViewModel), typeof (ADTSCalibrationView)},
+                });
+
+            #region Old
+
             /*var etalonTypes = new[]
             {
                 new EtalonTypeViewModel()
@@ -448,7 +308,164 @@ namespace KipTM.ViewModel
             };
             _check = new CheckViewModel(_dataService, cheks);
             */
+
+            #endregion
         }
+
+        /// <summary>
+        /// Поясняющее сообщение 
+        /// </summary>
+        public string HelpMessage
+        {
+            get { return _helpMessage; }
+            set { Set(ref _helpMessage, value); }
+        }
+
+        /// <summary>
+        /// Выбранная вкладка
+        /// </summary>
+        public object SelectedAction
+        {
+            get { return _selectedAction; }
+            set { Set(ref _selectedAction, value); }
+        }
+
+        /// <summary>
+        /// Действия при загрузке окна
+        /// </summary>
+        public ICommand LoadView
+        {
+            get
+            {
+                return new RelayCommand<object>(
+                    (mainView) =>
+                    {
+                        Load();
+
+                        var view = mainView as Window;
+                        if (view == null)
+                            return;
+
+                        try
+                        {
+                            foreach (var mod in ViewModelViewDic)
+                            {
+                                var typeModel = mod.Key;
+                                var typeView = mod.Value;
+                                var template = new DataTemplate
+                                {
+                                    DataType = typeModel,
+                                    VisualTree = new FrameworkElementFactory(typeView)
+                                };
+                                view.Resources.Add(new DataTemplateKey(typeModel), template);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw;
+                        }
+                    });
+            }
+        }
+
+        /// <summary>
+        /// Выбрана вкладка Проверки
+        /// </summary>
+        public ICommand SelectChecks
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = _checks;
+                    HelpMessage = "Выполнение поверки";
+                });
+            }
+        }
+
+        /// <summary>
+        /// Выбрана вкладка Архив
+        /// </summary>
+        public ICommand SelectArchive
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = _tests;//todo установить выбор соответсвующего ViewModel
+                    HelpMessage = "Архив Проверок:\nсписок пойденных поверок";
+                });
+            }
+        }
+
+        /// <summary>
+        /// Выбрана вкладка Приборы
+        /// </summary>
+        public ICommand SelectTargetDevices
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = _deviceTypes;//todo установить выбор соответсвующего ViewModel
+                    HelpMessage = "Список поддерживаемых типов проверяемых приборов";
+                });
+            }
+        }
+
+        /// <summary>
+        /// Выбрана вкладка Эталоны
+        /// </summary>
+        public ICommand SelectEtalonDevices
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = _etalonTypes;//todo установить выбор соответсвующего ViewModel
+                    HelpMessage = "Список поддерживаемых типов эталонных приборов";
+                });
+            }
+        }
+
+        /// <summary>
+        /// Выбрана вкладка Настройки
+        /// </summary>
+        public ICommand SelectSettings
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = "Здесь будут элементы управления настройками приложения";//todo установить выбор соответсвующего ViewModel
+                    HelpMessage = "Настройки приложения";
+                });
+            }
+        }
+
+
+        /// <summary>
+        /// Выбрана вкладка Настройки
+        /// </summary>
+        public ICommand SelectService
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = _services;
+                    HelpMessage = "Сервисная вкладка для отладки различных механизмов";
+                });
+            }
+        }
+
+
+        ////public override void Cleanup()
+        ////{
+        ////    // Clean up if needed
+
+        ////    base.Cleanup();
+        ////}
 
         public IArchivesViewModel Tests { get { return _tests; } }
 
