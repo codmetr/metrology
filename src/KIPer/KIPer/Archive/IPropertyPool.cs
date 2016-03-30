@@ -17,5 +17,12 @@ namespace KipTM.Archive
         /// </summary>
         /// <returns></returns>
         IEnumerable<string> GetAllKeys();
+
+        /// <summary>
+        /// Получить хранилище свойств по ключу
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        IPropertyPool ByKey(string key);
     }
 }

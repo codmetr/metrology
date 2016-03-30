@@ -36,8 +36,6 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
-        public string Name { get; private set; }
-
         public override void Start(EventWaitHandle whEnd)
         {
             TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);

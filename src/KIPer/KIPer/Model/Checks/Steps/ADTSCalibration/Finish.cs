@@ -27,8 +27,6 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             _checkCancelPeriod = TimeSpan.FromMilliseconds(10);
         }
 
-        public string Name { get; private set; }
-
         public override void Start(EventWaitHandle whEnd)
         {
             var cancel = _cancellationTokenSource.Token;

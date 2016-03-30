@@ -113,8 +113,8 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}"/>
-                                    <TextBlock Grid.Column="1" Text="{Binding Name}"/>
+                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsOk}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Title}"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

@@ -54,6 +54,16 @@ namespace KipTM.Archive
         }
 
         /// <summary>
+        /// Получить хранилище свойств по ключу
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public IPropertyPool ByKey(string key)
+        {
+            return GetPool(key);
+        }
+
+        /// <summary>
         /// Дополнить архив значением
         /// </summary>
         /// <typeparam name="T">Тип устанавливаемого параметра</typeparam>

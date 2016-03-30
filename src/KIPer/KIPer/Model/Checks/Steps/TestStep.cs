@@ -14,6 +14,7 @@ namespace KipTM.Model.Checks.Steps
         public string Name
         {
             get { return _name; }
+            protected set { _name = value; }
         }
 
         /// <summary>

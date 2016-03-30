@@ -76,7 +76,7 @@ namespace KipTM.ViewModel
             {
                 _result.TargetDevice = new DeviceDescriptor(_selectedType.Value);
                 _check = _methodics.MethodicsForType(_devTypeKey);
-                _selectedCheckType = _check.First();
+                SelectedCheckType = _check.First();
                 Channels = _dictionaries.CheckTypes[_devTypeKey];
                 _result.Channel = Channels.First();
             }

@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using KipTM.Archive;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
+using KipTM.Model.Devices;
 using KipTM.Settings;
 using KipTM.ViewModel;
 
@@ -48,11 +49,13 @@ namespace KipTM.ViewModel.Checks
             _propertyPool = propertyPool;
             
             // Базовая инициализация
-            var points = _propertyPool.GetProperty<List<ADTSChechPoint>>(ADTSCheckMethodic.KeyPoints);
-            var channel = _propertyPool.GetProperty<CalibChannel>(ADTSCheckMethodic.KeyChannel);
+            var adts = _propertyPool.ByKey(ADTSModel.Key).ByKey(methodic.ChannelKey);
+            var points = adts.GetProperty<List<ADTSChechPoint>>(ADTSCheckMethodic.KeyPoints);
+            var channel = adts.GetProperty<CalibChannel>(ADTSCheckMethodic.KeyChannel);
             _methodic.Init(new ADTSCheckParameters(channel, points));
 
-            Points = new List<PointCheckableViewModel>(methodic.Steps.Select(el=>new PointCheckableViewModel(el.Name)));
+            Points = new List<PointCheckableViewModel>(points.Select(el => new PointCheckableViewModel(el.Pressure.ToString("F2"))));
+            Steps = new ObservableCollection<StepViewModel>(_methodic.Steps.Select(el=>new StepViewModel(el)));
             TitleBtnNext = "Старт";
         }
 

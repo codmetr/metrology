@@ -48,6 +48,29 @@ namespace KipTM.Model.Checks
 
         public double Rate { get; set; }
 
+        public CalibChannel Channel{get { return _calibChan; } set { _calibChan = value; }}
+
+        public string ChannelKey
+        {
+            get
+            {
+                switch (_calibChan)
+                {
+                    case CalibChannel.PT:
+                        return KeySettingsPS;
+                        break;
+                    case CalibChannel.PS:
+                        return KeySettingsPT;
+                        break;
+                    case CalibChannel.PTPS:
+                        return KeySettingsPSPT;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
         public void SetEthalonChannel(IEthalonChannel ethalonChannel)
         {
             _ethalonChannel = ethalonChannel;
@@ -74,8 +97,8 @@ namespace KipTM.Model.Checks
 
             _calibChan = parameters.CalibChannel;
 
-            if (_userChannel == null)
-                throw new NullReferenceException("\"UserChannel\" not fount in parameters as IUserChannel");
+            //if (_userChannel == null)
+            //    throw new NullReferenceException("\"UserChannel\" not fount in parameters as IUserChannel");
 
             var steps = new List<ITestStep>();
 

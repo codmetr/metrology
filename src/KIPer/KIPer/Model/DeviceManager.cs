@@ -51,7 +51,10 @@ namespace KipTM.Model
             // PACE
             PACEDriver paceDriver;
             if (int.TryParse(pace.Address, out address))
-                paceDriver = new PACEDriver(address);
+            {
+                var transport = new PACEVisaTransport(address);
+                paceDriver = new PACEDriver(address, transport);
+            }
             else
                 throw new Exception(string.Format("Can not parse address for PACE from \"{0}\"", pace.Address ?? "NULL"));
 

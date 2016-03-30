@@ -103,16 +103,6 @@
                             <TextBox Text="{Binding SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock>Дата прошлой поверки:</TextBlock>
                             <DatePicker SelectedDate="{Binding PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock>Тип поверки:</TextBlock>
-                            <ComboBox
-                                ItemsSource="{Binding CheckTypes}"
-                                SelectedItem="{Binding SelectedCheckType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Title}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
                             <TextBlock>Канал:</TextBlock>
                             <ComboBox
                                 ItemsSource="{Binding Channels}"
