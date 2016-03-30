@@ -6,19 +6,18 @@ using Modbus.Device;
 
 namespace PACESeries
 {
-    class PACEModbusDriver:PACEDriver
+    public class PACEVisaTransport : ITransport
     {
-        private IModbusMaster master;
-        public PACEModbusDriver(int address) : base(address)
+        public PACEVisaTransport(int address)
         {
         }
 
-        protected override void Send(string command)
+        public void Send(string command, int address)
         {
 
         }
 
-        protected override string Receive()
+        public string Receive(int address)
         {
             return null;
         }

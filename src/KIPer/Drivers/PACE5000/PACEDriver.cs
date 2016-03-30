@@ -7,27 +7,19 @@ namespace PACESeries
 {
     public class PACEDriver
     {
-        private int _address;
+        private readonly int _address;
+        private readonly ITransport _transport;
 
-        public PACEDriver(int address)
+        public PACEDriver(int address, ITransport transport)
         {
             _address = address;
-        }
-
-        protected virtual void Send(string command)
-        {
-            
-        }
-
-        protected virtual string Receive()
-        {
-            return null;
+            _transport = transport;
         }
 
         public string SendCommand(string command)
         {
-            Send(command);
-            return Receive();
+            _transport.Send(command, _address);
+            return _transport.Receive(_address);
         }
 
         public int GetNumberCalibratinPoints(int channel)
