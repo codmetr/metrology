@@ -19,6 +19,15 @@ namespace PressureElementControls
     /// </summary>
     public partial class StateIndicator : UserControl
     {
+        public static readonly DependencyProperty StateProperty = DependencyProperty.Register(
+            "State", typeof (int), typeof (StateIndicator), new PropertyMetadata(0));
+
+        public int State
+        {
+            get { return (int) GetValue(StateProperty); }
+            set { SetValue(StateProperty, value); }
+        }
+
         public StateIndicator()
         {
             InitializeComponent();

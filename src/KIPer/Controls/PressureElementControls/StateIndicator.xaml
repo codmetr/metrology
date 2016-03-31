@@ -4,8 +4,45 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
-    </Grid>
+             d:DesignHeight="100" d:DesignWidth="100">
+    <UserControl.Resources>
+        
+        <SolidColorBrush x:Key="BorderBrush" Color="Green"/>
+        <SolidColorBrush x:Key="InternalPlaceBrush" Color="White"/>
+        <Pen x:Key="Border" DashCap="Flat" Brush="{StaticResource BorderBrush}" />
+    </UserControl.Resources>
+    <Viewbox>
+        <Canvas Height="100" Width="100">
+            <Image>
+                <Image.Source>
+                    <DrawingImage>
+                        <DrawingImage.Drawing>
+                            <DrawingGroup>
+                                <GeometryDrawing Pen="{StaticResource Border}"
+								Geometry="
+								M 50,0
+                                A 50, 50 0 0 1 50,100
+                                A 50, 50 0 0 1 50,0
+                                L 50,5
+                                A 45, 45 0 0 1 50,95
+                                A 45, 45 0 0 1 50,5
+								Z">
+                                    <GeometryDrawing.Brush>
+                                        <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
+                                            <GradientStop Color="Green" Offset="0"/>
+                                            <!--<GradientStop Color="White" Offset="1"/>-->
+                                        </LinearGradientBrush>
+                                    </GeometryDrawing.Brush>
+                                </GeometryDrawing>
+                                <!--<GeometryDrawing Pen="{StaticResource Border}"
+								Geometry="
+								M 2,2
+								Z" Brush="#333333"/>-->
+                            </DrawingGroup>
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
+        </Canvas>
+    </Viewbox>
 </UserControl>
