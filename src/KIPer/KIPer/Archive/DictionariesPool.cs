@@ -59,7 +59,6 @@ namespace KipTM.Archive
                     }
                 }
             }
-
             
             // Заполнение списка пользователи
             tempElement = archive.Data.First(el => el.Key == UsersKey);

@@ -47,7 +47,7 @@ namespace KipTM.ViewModel
             {
                 SimpleIoc.Default.Register<IDataService, DataService>();
             }
-            SimpleIoc.Default.Register<IMethodicsService, MethodicsService>();
+            SimpleIoc.Default.Register<IMethodsService, MethodsService>();
             SimpleIoc.Default.Register<MainViewModel>();
 
             //SimpleIoc.Default.Register<IServiceProvider, ServiceProvider>();

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
 using IEEE488;
+using KipTM.Model.Channels;
 using KipTM.Model.Devices;
 using KipTM.Settings;
 using MainLoop;
@@ -24,11 +25,15 @@ namespace KipTM.Model
         private readonly PACE5000Model _paceModel;
         private readonly ADTSModel _adtsModel;
 
+        private readonly IDictionary<string, IEthalonChannel> _ethalonChannels;
+
         private readonly IDictionary<string, Tuple<ITransportIEEE488, SerialPort>> _ports = new Dictionary<string, Tuple<ITransportIEEE488, SerialPort>>();
 
 
         public DeviceManager(ComPortSettings portAdts, ComPortSettings portPace, DeviceSettings pace, DeviceSettings adts, Logger logger = null)
         {
+            _logger = logger;
+
             int address;
             _loops = new Loops();
 
@@ -68,7 +73,11 @@ namespace KipTM.Model
                 _loops.AddLocker(serialName, ieee488);
             }
             _paceModel = new PACE5000Model("PACE 5000 - модульный контроллер давления/цифровой манометр", _loops, serialName, paceDriver);
-            _logger = logger;
+
+            _ethalonChannels = new Dictionary<string, IEthalonChannel>()
+            {
+                {PACE5000Model.Key, new PACEEchalonChannel(_paceModel)}
+            };
         }
 
         public void Init()
@@ -90,6 +99,10 @@ namespace KipTM.Model
             get { return _adtsModel; }
         }
 
+        public IDictionary<string, IEthalonChannel> EthalonChannels
+        {
+            get { return _ethalonChannels; }
+        }
 
         /// <summary>
         /// Запуск автоопроса модуля дискретных входов

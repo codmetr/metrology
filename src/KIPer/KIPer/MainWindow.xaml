@@ -6,7 +6,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        Height="768" Width="1024" Title="КипТМ"
+        Height="768" Width="1280" Title="КипТМ"
         x:Name="MainViewWindow" Icon="Content/icon.png"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <i:Interaction.Triggers>

@@ -46,8 +46,18 @@ namespace KipTM.Settings
                     DeviceCommonType = KipTM.Model.Devices.ADTSModel.DeviceCommonType,
                     DeviceManufacturer = KipTM.Model.Devices.ADTSModel.DeviceManufacturer,
                     TypesEtalonParameters = new List<string>(KipTM.Model.Devices.ADTSModel.TypesEtalonParameters),
-                    AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key, UserEchalonChannel.Key},
-                }
+                    //AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key, UserEchalonChannel.Key},
+                },
+                new DeviceTypeSettings()
+                {
+                    Key = KipTM.Model.Devices.PACE5000Model.Key,
+                    Model = KipTM.Model.Devices.PACE5000Model.Model,
+                    DeviceCommonType = KipTM.Model.Devices.PACE5000Model.DeviceCommonType,
+                    DeviceManufacturer = KipTM.Model.Devices.PACE5000Model.DeviceManufacturer,
+                    TypesEtalonParameters = new List<string>(KipTM.Model.Devices.ADTSModel.TypesEtalonParameters),
+                    //AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key, UserEchalonChannel.Key},
+                },
+
             };
             res.LastEtalons = new List<DeviceSettings>()
             {

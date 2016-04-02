@@ -22,11 +22,11 @@ namespace KipTM.ViewModel.Checks
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    [MethodicViewModelAttribute(typeof(ADTSCheckMethodic))]
-    public class ADTSCalibrationViewModel : ViewModelBase
+    [MethodicViewModelAttribute(typeof(ADTSCheckMethod))]
+    public class ADTSCalibrationViewModel : ViewModelBase, IMethodViewModel
     {
         private string _titleBtnNext;
-        private ADTSCheckMethodic _methodic;
+        private ADTSCheckMethod _methodic;
         private UserChannel _userChannel;
         private UserEchalonChannel _userEchalonChannel;
         private IPropertyPool _propertyPool;
@@ -36,11 +36,12 @@ namespace KipTM.ViewModel.Checks
 
         private CancellationTokenSource _cancellation;
         private bool _accept;
+        private IEnumerable<StepViewModel> _steps;
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
         /// </summary>
-        public ADTSCalibrationViewModel(ADTSCheckMethodic methodic, MainSettings settings, IPropertyPool propertyPool)
+        public ADTSCalibrationViewModel(ADTSCheckMethod methodic, IPropertyPool propertyPool)
         {
             _cancellation = new CancellationTokenSource();
             _userChannel = new UserChannel();
@@ -49,13 +50,12 @@ namespace KipTM.ViewModel.Checks
             _propertyPool = propertyPool;
             
             // Базовая инициализация
-            var adts = _propertyPool.ByKey(ADTSModel.Key).ByKey(methodic.ChannelKey);
-            var points = adts.GetProperty<List<ADTSChechPoint>>(ADTSCheckMethodic.KeyPoints);
-            var channel = adts.GetProperty<CalibChannel>(ADTSCheckMethodic.KeyChannel);
-            _methodic.Init(new ADTSCheckParameters(channel, points));
+            var adts = _propertyPool.ByKey(methodic.ChannelKey);
+            _methodic.Init(adts);
+            _methodic.StepsChanged += OnStepsChanged;
 
-            Points = new List<PointCheckableViewModel>(points.Select(el => new PointCheckableViewModel(el.Pressure.ToString("F2"))));
-            Steps = new ObservableCollection<StepViewModel>(_methodic.Steps.Select(el=>new StepViewModel(el)));
+            Results = new ObservableCollection<ParameterResultViewModel>();
+            Steps = _methodic.Steps.Select(el=>new StepViewModel(el));
             TitleBtnNext = "Старт";
         }
 
@@ -71,13 +71,15 @@ namespace KipTM.ViewModel.Checks
             set { Set(ref _waitUserReaction, value); }
         }
 
-        public IEnumerable<PointCheckableViewModel> Points { get; private set; }
-
-        public ICommand NextStep { get { return new RelayCommand(DoNextStep); } }
+        public ObservableCollection<ParameterResultViewModel> Results { get; private set; }
 
         public ICommand Start { get { return new GalaSoft.MvvmLight.Command.RelayCommand(DoStart); } }
 
-        public ObservableCollection<StepViewModel> Steps { get; set; }
+        public IEnumerable<StepViewModel> Steps
+        {
+            get { return _steps; }
+            set { Set(ref _steps, value); }
+        }
 
         public double RealValue
         {
@@ -94,51 +96,18 @@ namespace KipTM.ViewModel.Checks
         private void DoStart()
         {
             TitleBtnNext = "Далее";
+            _methodic.Start();
         }
 
-        private void DoNextStep()
+        private void OnStepsChanged(object sender, EventArgs eventArgs)
         {
-            
+            Steps = new ObservableCollection<StepViewModel>(_methodic.Steps.Select(el => new StepViewModel(el)));
         }
 
-        private void End()
+        public override void Cleanup()
         {
-            
-        }
-
-        private void Cancel()
-        {
-            _methodic.Cancel();
-            _cancellation.Cancel();
-            _cancellation = new CancellationTokenSource();
-        }
-
-        private double GetRealValue()
-        {
-            var cancel = _cancellation.Token;
-            var wh = new AutoResetEvent(false);
-            while (!wh.WaitOne(TimeSpan.FromMilliseconds(100)) && !cancel.IsCancellationRequested)
-            {
-                Thread.Sleep(100);
-            }
-            if (cancel.IsCancellationRequested)
-                return default(double);
-            return RealValue;
-        }
-
-        private bool GetAccept()
-        {
-            var cancel = _cancellation.Token;
-            var wh = new AutoResetEvent(false);
-            TitleBtnNext = "Подтвердите или отмените результат калибровки";
-            while (!wh.WaitOne(TimeSpan.FromMilliseconds(100)) && !cancel.IsCancellationRequested)
-            {
-                Thread.Sleep(100);
-            }
-            if (cancel.IsCancellationRequested)
-                return false;
-            TitleBtnNext = "Старт";
-            return Accept;
+            if (_methodic.StepsChanged != null) _methodic.StepsChanged -= OnStepsChanged;
+            base.Cleanup();
         }
     }
 }

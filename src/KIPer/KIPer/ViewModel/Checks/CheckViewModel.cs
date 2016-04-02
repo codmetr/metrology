@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using ADTS;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Archive;
 using KipTM.Archive.DTO;
 using KipTM.Interfaces;
 using KipTM.Model;
+using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 using KipTM.Settings;
@@ -29,16 +32,22 @@ namespace KipTM.ViewModel
         private readonly IDeviceManager _deviceManager;
         private DictionariesPool _dictionaries;
         private MainSettings _settings;
-        private readonly IMethodicsService _methodics;
-        private IDictionary<string, ICheckMethodic> _check;
+        private readonly IMethodsService _methodics;
+        private IDictionary<string, ICheckMethod> _check;
         private readonly IPropertyPool _propertyPool;
         private object _selectedCheck;
-        private KeyValuePair<string, ICheckMethodic> _selectedCheckType;
+        private KeyValuePair<string, ICheckMethod> _selectedCheckType;
         private TestResult _result;
-        private readonly IDictionary<string, DeviceTypeDescriptor> _avalableDeviceTypes; 
+        private IDictionary<string, DeviceTypeDescriptor> _avalableDeviceTypes; 
         private string _devTypeKey;
         private KeyValuePair<string, DeviceTypeDescriptor> _selectedType;
-        private Dictionary<Type, Type> _viewDict;
+
+        private IDictionary<string, DeviceTypeDescriptor> _avalableEthalonTypes; 
+        private string _ethalonTypeKey;
+        private KeyValuePair<string, DeviceTypeDescriptor> _selectedEthalonType;
+
+        private DeviceDescriptor _ethalon;
+        private bool _isAnalogEthalon;
 
         /// <summary>
         /// For disiner
@@ -48,7 +57,7 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the CheckViewModel class.
         /// </summary>
-        public CheckViewModel(MainSettings settings, IMethodicsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries, IDeviceManager deviceManager, Dictionary<Type, Type> viewDict)
+        public CheckViewModel(MainSettings settings, IMethodsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries, IDeviceManager deviceManager)
         {
             _result = new TestResult();
             _settings = settings;
@@ -56,8 +65,14 @@ namespace KipTM.ViewModel
             _propertyPool = propertyPool;
             _dictionaries = dictionaries;
             _deviceManager = deviceManager;
-            _viewDict = new Dictionary<Type, Type>();
 
+            LoadAvalableCheckDevices();
+
+            LoadAvalableEthalons();
+        }
+
+        private void LoadAvalableCheckDevices()
+        {
             // заполнение списка поддерживаемых устройств и выбор первого элемента
             var avalableDeviceTypes = new Dictionary<string, DeviceTypeDescriptor>();
             _devTypeKey = null;
@@ -68,54 +83,54 @@ namespace KipTM.ViewModel
                     continue;
                 if (_devTypeKey == null)
                     _devTypeKey = deviceType;
-                avalableDeviceTypes.Add(deviceType, new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
+                avalableDeviceTypes.Add(deviceType,
+                    new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
             }
             _avalableDeviceTypes = avalableDeviceTypes;
             _selectedType = _avalableDeviceTypes.First();
+
             if (_devTypeKey != null)
             {
                 _result.TargetDevice = new DeviceDescriptor(_selectedType.Value);
-                _check = _methodics.MethodicsForType(_devTypeKey);
+                _check = _methodics.MethodsForType(_devTypeKey);
                 SelectedCheckType = _check.First();
-                Channels = _dictionaries.CheckTypes[_devTypeKey];
+                Channels = _propertyPool.ByKey(_devTypeKey).GetAllKeys();
                 _result.Channel = Channels.First();
             }
-            
         }
 
-        /// <summary>
-        /// Действия при загрузке окна
-        /// </summary>
-        public ICommand LoadView
+        private void LoadAvalableEthalons()
         {
-            get
+            var avalableEthalonTypes = new Dictionary<string, DeviceTypeDescriptor>();
+            _ethalonTypeKey = null;
+            var ethalons = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel).GetProperty<List<string>>(CommonPropertyKeys.KeyEthalons);
+            foreach (var deviceEthalon in ethalons)
             {
-                return new RelayCommand<object>(
-                    (mainView) =>
-                    {
-                        var view = mainView as Window;
-                        if (view == null)
-                            return;
+                var setDevice = _settings.Devices.FirstOrDefault(el => el.Key == deviceEthalon);
+                if (_ethalonTypeKey == null)
+                {
+                    _ethalonTypeKey = deviceEthalon;
+                    if (_ethalonTypeKey == UserEchalonChannel.Key)
+                        IsAnalogEthalon = true;
+                }
+                if (setDevice == null)
+                {
+                    avalableEthalonTypes.Add(deviceEthalon, null);
+                    continue;
+                }
+                avalableEthalonTypes.Add(deviceEthalon,
+                    new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
+            }
+            _avalableEthalonTypes = avalableEthalonTypes;
+            _selectedEthalonType = _avalableEthalonTypes.First();
 
-                        try
-                        {
-                            foreach (var mod in _viewDict)
-                            {
-                                var typeModel = mod.Key;
-                                var typeView = mod.Value;
-                                var template = new DataTemplate
-                                {
-                                    DataType = typeModel,
-                                    VisualTree = new FrameworkElementFactory(typeView)
-                                };
-                                view.Resources.Add(new DataTemplateKey(typeModel), template);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            throw;
-                        }
-                    });
+            var ethalonDevType = new DeviceTypeDescriptor("", "", "");
+            if (_devTypeKey != null)
+            {
+                if(_ethalonTypeKey != UserEchalonChannel.Key)
+                    ethalonDevType = _selectedEthalonType.Value;
+                Ethalon = new DeviceDescriptor(ethalonDevType);
+                _result.Etalon = new List<DeviceDescriptor>() { _ethalon };
             }
         }
 
@@ -133,11 +148,17 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Дострупные для выбранного типа устройства методики
         /// </summary>
-        public IDictionary<string, ICheckMethodic> CheckTypes
+        public IDictionary<string, ICheckMethod> CheckTypes
         {
             get { return _check; }
             set { Set(ref _check, value); }
         }
+
+        /// <summary>
+        /// Доступные типы устройства
+        /// </summary>
+        public IDictionary<string, DeviceTypeDescriptor> EthalonTypes { get { return _avalableEthalonTypes; } }
+
         #endregion
 
         #region Фактические настройки
@@ -175,12 +196,12 @@ namespace KipTM.ViewModel
             {
                 if (_selectedType.Key == value.Key)
                     return;
-                _result.TargetDevice.DeviceType = value.Value;
-                CheckTypes = _methodics.MethodicsForType(value.Key);
+                _devTypeKey = _selectedType.Key;
+                _result.TargetDevice.DeviceType = _selectedType.Value;
+                CheckTypes = _methodics.MethodsForType(_selectedType.Key);
                 RaisePropertyChanged("Manufacturer");
             }
         }
-
 
         public TestResult Result
         {
@@ -222,7 +243,7 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Выбранная методика
         /// </summary>
-        public KeyValuePair<string, ICheckMethodic> SelectedCheckType
+        public KeyValuePair<string, ICheckMethod> SelectedCheckType
         {
             get { return _selectedCheckType; }
             set
@@ -239,7 +260,12 @@ namespace KipTM.ViewModel
         public string SelectedChannel
         {
             get { return _result.Channel; }
-            set { _result.Channel = value; }
+            set
+            {
+                _result.Channel = value;
+                var properties = _propertyPool.ByKey(_devTypeKey).ByKey(value);
+                _selectedCheckType.Value.Init(properties);
+            }
         }
 
         /// <summary>
@@ -256,7 +282,73 @@ namespace KipTM.ViewModel
 
         #region Настройки эталона
 
+        /// <summary>
+        /// Тип устройства
+        /// </summary>
+        public KeyValuePair<string, DeviceTypeDescriptor> SelectedEthalonType
+        {
+            get { return _selectedEthalonType; }
+            set
+            {
+                Set(ref _selectedEthalonType, value);
+                IsAnalogEthalon = _selectedEthalonType.Key == UserEchalonChannel.Key;
+                if (!IsAnalogEthalon)
+                {
+                    Ethalon.DeviceType = _selectedEthalonType.Value;
+                    return;
+                }
+            }
+        }
 
+        public bool IsAnalogEthalon
+        {
+            get { return _isAnalogEthalon; }
+            set
+            {
+                Set(ref _isAnalogEthalon, value); 
+                RaisePropertyChanged("IsNoAnalogEthalon");
+            }
+        }
+
+        public bool IsNoAnalogEthalon
+        {
+            get { return !_isAnalogEthalon; }
+        }
+
+        /// <summary>
+        /// Инвентарный номер
+        /// </summary>
+        public string EthalonDeviceType
+        {
+            get { return Ethalon.DeviceType.Model; }
+            set
+            {
+                if(!IsAnalogEthalon)
+                    throw new SettingsPropertyIsReadOnlyException("EthalonDeviceType can not set in no user channel");
+                Ethalon.DeviceType = new DeviceTypeDescriptor(value, Ethalon.DeviceType.DeviceCommonType, Ethalon.DeviceType.DeviceManufacturer);
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Инвентарный номер
+        /// </summary>
+        public string EthalonManufacturer
+        {
+            get { return Ethalon.DeviceType.DeviceManufacturer; }
+            set
+            {
+                if(!IsAnalogEthalon)
+                    throw new SettingsPropertyIsReadOnlyException("EthalonManufacturer can not set in no user channel");
+                Ethalon.DeviceType = new DeviceTypeDescriptor(Ethalon.DeviceType.Model, _ethalon.DeviceType.DeviceCommonType, value);
+            }
+        }
+
+        public DeviceDescriptor Ethalon
+        {
+            get { return _ethalon; }
+            protected set { Set(ref _ethalon, value); }
+        }
         #endregion
         #endregion
 
@@ -270,13 +362,13 @@ namespace KipTM.ViewModel
             set { Set(ref _selectedCheck, value); }
         }
 
-        public object GetViewModelFor(ICheckMethodic methodic)
+        public object GetViewModelFor(ICheckMethod methodic)
         {
-            if (methodic is ADTSCheckMethodic)
+            if (methodic is ADTSCheckMethod)
             {
-                var adtsMethodic = methodic as ADTSCheckMethodic;
+                var adtsMethodic = methodic as ADTSCheckMethod;
                 adtsMethodic.SetADTS(_deviceManager.ADTS);
-                return new ADTSCalibrationViewModel(adtsMethodic, _settings, _propertyPool);
+                return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey));
             }
             return null;
         }

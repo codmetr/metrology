@@ -7,6 +7,7 @@ namespace KipTM.Archive
 {
     class DictionariesArchive:ArchiveBase
     {
+        #region GetDefault
         public static ArchiveBase GetDefault()
         {
             return new ArchiveBase(GetDefaultData());
@@ -38,7 +39,7 @@ namespace KipTM.Archive
             {
                 new ArchivedKeyValuePair(ADTSModel.Key, new List<string>()
                 {
-                    ADTSCheckMethodic.Key,
+                    ADTSCheckMethod.Key,
                 }),
             };
         }
@@ -50,6 +51,6 @@ namespace KipTM.Archive
                 ADTSModel.Key,
             };
         }
-
+        #endregion
     }
 }

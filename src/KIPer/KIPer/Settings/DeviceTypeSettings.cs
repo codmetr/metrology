@@ -34,6 +34,6 @@ namespace KipTM.Settings
         public List<string> TypesEtalonParameters;
 
 
-        public List<string> AvilableEthalonTypes;
+        //public List<string> AvilableEthalonTypes;
     }
 }

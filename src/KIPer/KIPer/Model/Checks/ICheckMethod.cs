@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using KipTM.Archive;
 
 namespace KipTM.Model.Checks
 {
-    public interface ICheckMethodic
+    public interface ICheckMethod
     {
         /// <summary>
         /// Название методики
@@ -15,7 +16,7 @@ namespace KipTM.Model.Checks
         /// Инициализация 
         /// </summary>
         /// <returns></returns>
-        bool Init(ADTSCheckParameters parameters);
+        bool Init(IPropertyPool propertyes);
 
         /// <summary>
         /// Запуск калибровки

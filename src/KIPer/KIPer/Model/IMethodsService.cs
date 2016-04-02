@@ -3,11 +3,11 @@ using KipTM.Model.Checks;
 
 namespace KipTM.Model
 {
-    public interface IMethodicsService
+    public interface IMethodsService
     {
         /// <summary>
         /// Набор поддерживаемых методик для конкретного типа устройств
         /// </summary>
-        IDictionary<string, ICheckMethodic> MethodicsForType(string DeviceKey);
+        IDictionary<string, ICheckMethod> MethodsForType(string DeviceKey);
     }
 }

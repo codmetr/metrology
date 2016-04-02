@@ -14,10 +14,8 @@ namespace KipTM.ViewModel.Checks
         private readonly ITestStep _step;
         private string _title;
         private double _progress;
-        private bool _isError;
-        private bool _isOk;
-        private bool _isRun;
         private string _note;
+        private StepState _state;
 
         /// <summary>
         /// Initializes a new instance of the StepViewModel class.
@@ -27,9 +25,7 @@ namespace KipTM.ViewModel.Checks
             _step = step;
             Title = _step.Name;
             Progress = 0.0;
-            IsError = false;
-            IsOk = false;
-            IsRun = false;
+            _state = StepState.Base;
             Note = string.Empty;
 
             _step.Error += _step_Error;
@@ -48,22 +44,10 @@ namespace KipTM.ViewModel.Checks
             set { Set(ref _progress, value); }
         }
 
-        public bool IsError
+        public int State
         {
-            get { return _isError; }
-            set { Set(ref _isError, value); }
-        }
-
-        public bool IsOk
-        {
-            get { return _isOk; }
-            set { Set(ref _isOk, value); }
-        }
-
-        public bool IsRun
-        {
-            get { return _isRun; }
-            set { Set(ref _isRun, value); }
+            get { return (int)_state; }
+            set { Set(ref _state, (StepState)value); }
         }
 
         public string Note
@@ -80,7 +64,7 @@ namespace KipTM.ViewModel.Checks
 
         void _step_Error(object sender, EventArgError e)
         {
-            IsError = true;
+            _state = StepState.Error;
             Note = e.ErrorString;
         }
     }

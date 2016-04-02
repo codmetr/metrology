@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
+using KipTM.Archive;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks.Steps;
 using KipTM.Model.Checks.Steps.ADTSCalibration;
@@ -14,7 +15,7 @@ using Tools;
 
 namespace KipTM.Model.Checks
 {
-    public class ADTSCheckMethodic : ICheckMethodic
+    public class ADTSCheckMethod : ICheckMethod
     {
         public static string Key = "Калибровка ADTS";
         public const string KeySettingsPS = "ADTSCalibrationPs";
@@ -24,7 +25,7 @@ namespace KipTM.Model.Checks
         public const string KeyPoints = "Points";
         public const string KeyChannel = "Channel";
 
-        private const string TitleMethodic = "Калибровка ADTS";
+        private const string TitleMethod = "Калибровка ADTS";
 
         private ADTSModel _adts;
         private readonly CancellationTokenSource _cancelSource;
@@ -34,13 +35,13 @@ namespace KipTM.Model.Checks
         private IEthalonChannel _ethalonChannel;
         private IUserChannel _userChannel;
 
-        public ADTSCheckMethodic(NLog.Logger logger)
+        public ADTSCheckMethod(NLog.Logger logger)
         {
             _logger = logger;
             _cancelSource = new CancellationTokenSource();
         }
 
-        public string Title{get { return TitleMethodic; }}
+        public string Title{get { return TitleMethod; }}
 
         public IDictionary<double, double> Points { get; set; }
 
@@ -76,7 +77,7 @@ namespace KipTM.Model.Checks
             _ethalonChannel = ethalonChannel;
         }
 
-        public void SetFuncGetAccept(IUserChannel userChannel)
+        public void SetUserChannel(IUserChannel userChannel)
         {
             _userChannel = userChannel;
         }
@@ -85,6 +86,17 @@ namespace KipTM.Model.Checks
         {
             _adts = adts;
             
+        }
+
+        /// <summary>
+        /// Инициализация 
+        /// </summary>
+        /// <returns></returns>
+        public bool Init(IPropertyPool propertyes)
+        {
+            var points = propertyes.GetProperty<List<ADTSChechPoint>>(ADTSCheckMethod.KeyPoints);
+            var channel = propertyes.GetProperty<CalibChannel>(ADTSCheckMethod.KeyChannel);
+            return Init(new ADTSCheckParameters(channel, points));
         }
 
         /// <summary>
@@ -258,7 +270,15 @@ namespace KipTM.Model.Checks
             return true;
         }
 
-        public IEnumerable<ITestStep> Steps { get; private set; }
+        public IEnumerable<ITestStep> Steps
+        {
+            get { return _steps; }
+            private set
+            {
+                _steps = value;
+                OnStepsChanged();
+            }
+        }
 
         public void Stop()
         {
@@ -283,6 +303,18 @@ namespace KipTM.Model.Checks
         /// </summary>
         public EventHandler<EventArgProgress> Progress;
 
+        /// <summary>
+        /// Изменился набор точек
+        /// </summary>
+        public EventHandler PointsChanged;
+
+        /// <summary>
+        /// Изменился набор шагов
+        /// </summary>
+        public EventHandler StepsChanged;
+
+        private IEnumerable<ITestStep> _steps;
+
         #region Service methods
         protected virtual void OnError(EventArgError obj)
         {
@@ -294,6 +326,18 @@ namespace KipTM.Model.Checks
         {
             var handler = Progress;
             if (handler != null) handler(this, obj);
+        }
+
+        protected virtual void OnPointsChanged()
+        {
+            var handler = PointsChanged;
+            if (handler != null) handler(this, null);
+        }
+
+        protected virtual void OnStepsChanged()
+        {
+            var handler = StepsChanged;
+            if (handler != null) handler(this, null);
         }
         #endregion
     }

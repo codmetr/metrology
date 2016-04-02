@@ -89,6 +89,7 @@
     </ApplicationDefinition>
     <Compile Include="Archive\ArchiveBase.cs" />
     <Compile Include="Archive\ChecksPool.cs" />
+    <Compile Include="Archive\CommonPropertyKeys.cs" />
     <Compile Include="Archive\DataPool.cs" />
     <Compile Include="Archive\DataTypes\ArchivedKeyValuePair.cs" />
     <Compile Include="Archive\DataTypes\CheckData.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Model\ArchiveService.cs" />
     <Compile Include="Archive\DTO\ArchivePool.cs" />
     <Compile Include="Archive\DTO\TestResult.cs" />
+    <Compile Include="Model\Channels\PACEEchalonChannel.cs" />
     <Compile Include="Model\Checks\ADTSChechPoint.cs" />
     <Compile Include="Model\Checks\EventArgEnd.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\Init.cs" />
@@ -116,7 +118,7 @@
     <Compile Include="Model\Checks\EventArgError.cs" />
     <Compile Include="Model\Checks\EventArgProgress.cs" />
     <Compile Include="Model\Checks\EventArgResultParam.cs" />
-    <Compile Include="Model\Checks\ICheckMethodic.cs" />
+    <Compile Include="Model\Checks\ICheckMethod.cs" />
     <Compile Include="Model\Checks\Steps\ITestStep.cs" />
     <Compile Include="Model\Channels\IUserChannel.cs" />
     <Compile Include="Model\Checks\Steps\TestStep.cs" />
@@ -124,15 +126,15 @@
     <Compile Include="Model\Channels\UserEchalonChannel.cs" />
     <Compile Include="Model\Channels\UserQueryType.cs" />
     <Compile Include="Model\Devices\ADTSModel.cs" />
-    <Compile Include="Model\Checks\ADTSCheckMethodic.cs" />
+    <Compile Include="Model\Checks\ADTSCheckMethod.cs" />
     <Compile Include="Model\DeviceManager.cs" />
     <Compile Include="Model\Devices\DeviceDescriptor.cs" />
     <Compile Include="Model\Devices\PACE5000Model.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
     <Compile Include="Model\IDeviceManager.cs" />
-    <Compile Include="Model\IMethodicsService.cs" />
-    <Compile Include="Model\MethodicsService.cs" />
+    <Compile Include="Model\IMethodsService.cs" />
+    <Compile Include="Model\MethodsService.cs" />
     <Compile Include="Model\Params\ParameterDescriptor.cs" />
     <Compile Include="Model\Params\ParameterResult.cs" />
     <Compile Include="Model\Params\ParameterType.cs" />
@@ -145,10 +147,11 @@
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTSCalibrationViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckViewModel.cs" />
+    <Compile Include="ViewModel\Checks\IMethodViewModel.cs" />
     <Compile Include="ViewModel\Checks\MechanicalManometerViewModel.cs" />
     <Compile Include="ViewModel\Checks\MethodicViewModelAttribute.cs" />
-    <Compile Include="ViewModel\Checks\PointCheckableViewModel.cs" />
     <Compile Include="Model\Devices\DeviceTypeDescriptor.cs" />
+    <Compile Include="ViewModel\Checks\StepState.cs" />
     <Compile Include="ViewModel\Checks\StepViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypesViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypeViewModel.cs" />

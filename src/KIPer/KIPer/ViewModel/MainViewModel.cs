@@ -22,7 +22,7 @@ namespace KipTM.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
-        private IMethodicsService _methodicService;
+        private IMethodsService _methodicService;
         private MainSettings _settings;
         private ArchiveService _archive;
 
@@ -42,7 +42,7 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IDataService dataService, IMethodicsService methodicService, MainSettings settings, ArchiveService archive)
+        public MainViewModel(IDataService dataService, IMethodsService methodicService, MainSettings settings, ArchiveService archive)
         {
             _dataService = dataService;
             _methodicService = methodicService;
@@ -91,12 +91,8 @@ namespace KipTM.ViewModel
             _deviceTypes = new DeviceTypesViewModel();
             _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
-            _checks = new CheckViewModel(_settings, _methodicService, _archive.PropertyPool, _archive.DictionariesPool,
-                _dataService.DeviceManager, new Dictionary<Type, Type>()
-                {
-                    {typeof (MechanicalManometerViewModel), typeof (MechanicalManometerView)},
-                    {typeof (ADTSCalibrationViewModel), typeof (ADTSCalibrationView)},
-                });
+            _checks = new CheckViewModel(_settings, _methodicService, _archive.PropertyPool, _archive.DictionariesPool, _dataService.DeviceManager);
+            SelectChecks.Execute(null);
 
             #region Old
 

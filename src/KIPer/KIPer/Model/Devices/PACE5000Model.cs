@@ -35,7 +35,12 @@ namespace KipTM.Model.Devices
 
         public void SetAutoread(TimeSpan autoreadPeriod)
         {
-            
+            throw new NotImplementedException();
+        }
+
+        public double GetPressure()
+        {
+            throw new NotImplementedException();
         }
 
         private void AutoreadFunction(object parameters)

@@ -22,7 +22,7 @@ namespace KipTM.Design
         public IEnumerable<IDeviceTypeDescriptor> EtalonTypes { get; private set; }
         public IEnumerable<DeviceDescriptor> Etalons { get; private set; }
 
-        public IDictionary<string, ICheckMethodic> Methodics { get; private set; }
+        public IDictionary<string, ICheckMethod> Methodics { get; private set; }
         public ResultsArchive ResultsArchive { get; private set; }
         public MainSettings Settings { get; private set; }
 

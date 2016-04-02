@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ADTS;
 using KipTM.Archive.DataTypes;
+using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 
@@ -34,8 +35,8 @@ namespace KipTM.Archive
         {
             return new List<ArchivedKeyValuePair>
             {
-                new ArchivedKeyValuePair(ADTSCheckMethodic.KeySettingsPS, GetDefaultForADTSCheckPS()),
-                new ArchivedKeyValuePair(ADTSCheckMethodic.KeySettingsPT, GetDefaultForADTSCheckPT())
+                new ArchivedKeyValuePair(ADTSCheckMethod.KeySettingsPS, GetDefaultForADTSCheckPS()),
+                new ArchivedKeyValuePair(ADTSCheckMethod.KeySettingsPT, GetDefaultForADTSCheckPT())
             };
         }
 
@@ -43,8 +44,9 @@ namespace KipTM.Archive
         {
             return new List<ArchivedKeyValuePair>()
             {
-                new ArchivedKeyValuePair(ADTSCheckMethodic.KeyChannel, CalibChannel.PS),
-                new ArchivedKeyValuePair(ADTSCheckMethodic.KeyPoints, GetDefaultForADTSCheckPSPoints())
+                new ArchivedKeyValuePair(ADTSCheckMethod.KeyChannel, CalibChannel.PS),
+                new ArchivedKeyValuePair(ADTSCheckMethod.KeyPoints, GetDefaultForADTSCheckPSPoints()),
+                new ArchivedKeyValuePair(CommonPropertyKeys.KeyEthalons, GetDefaultForADTSEthalonTypes()),
             };
         }
 
@@ -52,8 +54,9 @@ namespace KipTM.Archive
         {
             return new List<ArchivedKeyValuePair>()
             {
-                new ArchivedKeyValuePair(ADTSCheckMethodic.KeyChannel, CalibChannel.PT),
-                new ArchivedKeyValuePair(ADTSCheckMethodic.KeyPoints, GetDefaultForADTSCheckPTPoints())
+                new ArchivedKeyValuePair(ADTSCheckMethod.KeyChannel, CalibChannel.PT),
+                new ArchivedKeyValuePair(ADTSCheckMethod.KeyPoints, GetDefaultForADTSCheckPTPoints()),
+                new ArchivedKeyValuePair(CommonPropertyKeys.KeyEthalons, GetDefaultForADTSEthalonTypes()),
             };
         }
 
@@ -92,6 +95,16 @@ namespace KipTM.Archive
                 new ADTSChechPoint(){Pressure = 3500.00, Tolerance = 0.49},
             };
             return points;
+        }
+
+        public static List<string> GetDefaultForADTSEthalonTypes()
+        {
+            var ethalons = new List<string>()
+            {
+                UserEchalonChannel.Key,
+                PACE5000Model.Key,
+            };
+            return ethalons;
         }
         #endregion
     }

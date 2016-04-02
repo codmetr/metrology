@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="100">
+             d:DesignHeight="100" d:DesignWidth="100" x:Name="Root">
     <UserControl.Resources>
         
         <SolidColorBrush x:Key="BorderBrush" Color="Green"/>
@@ -13,31 +13,123 @@
     </UserControl.Resources>
     <Viewbox>
         <Canvas Height="100" Width="100">
-            <Image>
+            <Image Canvas.Left="0" Canvas.Top="0">
                 <Image.Source>
                     <DrawingImage>
                         <DrawingImage.Drawing>
                             <DrawingGroup>
+                                <GeometryDrawing
+                                    Pen="{StaticResource Border}"
+								    Geometry="
+								    M 50,0
+                                    A 50, 50 0 0 1 50,100
+                                    A 50, 50 0 0 1 50,0
+                                    L 50,5
+                                    A 45, 45 0 0 1 50,95
+                                    A 45, 45 0 0 1 50,5
+								    Z" Brush="{StaticResource BorderBrush}"/>
                                 <GeometryDrawing Pen="{StaticResource Border}"
 								Geometry="
-								M 50,0
-                                A 50, 50 0 0 1 50,100
-                                A 50, 50 0 0 1 50,0
-                                L 50,5
-                                A 45, 45 0 0 1 50,95
-                                A 45, 45 0 0 1 50,5
-								Z">
-                                    <GeometryDrawing.Brush>
-                                        <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
-                                            <GradientStop Color="Green" Offset="0"/>
-                                            <!--<GradientStop Color="White" Offset="1"/>-->
-                                        </LinearGradientBrush>
-                                    </GeometryDrawing.Brush>
-                                </GeometryDrawing>
-                                <!--<GeometryDrawing Pen="{StaticResource Border}"
-								Geometry="
-								M 2,2
-								Z" Brush="#333333"/>-->
+								    M 50,5
+                                    A 45, 45 0 0 1 50,95
+                                    A 45, 45 0 0 1 50,5
+								    Z" Brush="{StaticResource InternalPlaceBrush}"/>
+                            </DrawingGroup>
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
+            <Image Canvas.Left="30" Canvas.Top="20" x:Name="ImagePoint1">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=Root, Path=State, UpdateSourceTrigger=PropertyChanged}" Value="1">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+                <Image.Source>
+                    <DrawingImage>
+                        <DrawingImage.Drawing>
+                            <DrawingGroup>
+                                <GeometryDrawing 
+                                    Pen="{StaticResource Border}"
+								    Geometry=
+                                        "M 30,20 
+                                        L 80,50
+                                        L 30,80
+                                        L 30,70
+                                        L 60,50
+                                        L 30,30
+								        Z" Brush="{StaticResource BorderBrush}"/>
+                            </DrawingGroup>
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
+            <Image Canvas.Left="20" Canvas.Top="30" x:Name="ImagePoint2">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=Root, Path=State, UpdateSourceTrigger=PropertyChanged}" Value="2">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+                <Image.Source>
+                    <DrawingImage>
+                        <DrawingImage.Drawing>
+                            <DrawingGroup>
+                                <GeometryDrawing 
+                                    Pen="{StaticResource Border}"
+								    Geometry=
+                                        "M 20,40 
+                                        L 30,40
+                                        L 50,63
+                                        L 70,30
+                                        L 80,30
+                                        L 50,80
+								        Z" Brush="{StaticResource BorderBrush}"/>
+                            </DrawingGroup>
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
+            <Image Canvas.Left="20" Canvas.Top="20" x:Name="ImagePoint3">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=Root, Path=State, UpdateSourceTrigger=PropertyChanged}" Value="3">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+                <Image.Source>
+                    <DrawingImage>
+                        <DrawingImage.Drawing>
+                            <DrawingGroup>
+                                <GeometryDrawing 
+                                    Pen="{StaticResource Border}"
+								    Geometry=
+                                        "M 20,20 
+                                        L 30,20
+                                        L 50,43
+                                        L 70,20
+                                        L 80,20
+                                        L 57,50
+                                        L 80,80
+                                        L 70,80
+                                        L 50,57
+                                        L 30,80
+                                        L 20,80
+                                        L 43,50
+								        Z" Brush="{StaticResource BorderBrush}"/>
                             </DrawingGroup>
                         </DrawingImage.Drawing>
                     </DrawingImage>
