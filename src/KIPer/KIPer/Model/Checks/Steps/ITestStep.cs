@@ -15,10 +15,29 @@ namespace KipTM.Model.Checks
 
         bool Stop();
 
+        /// <summary>
+        /// Шаг запущен
+        /// </summary>
+        event EventHandler<EventArgs> Started;
+
+        /// <summary>
+        /// Шаг запущен
+        /// </summary>
         event EventHandler<EventArgTestResult> ResultUpdated;
 
+        /// <summary>
+        /// Изменение прогресса шага (0-100 %)
+        /// </summary>
         event EventHandler<EventArgProgress> ProgressChanged;
 
+        /// <summary>
+        /// Получены какие-то результаты шага
+        /// </summary>
         event EventHandler<EventArgError> Error;
+
+        /// <summary>
+        /// Шаг окончен
+        /// </summary>
+        event EventHandler<EventArgEnd> End;
     }
 }

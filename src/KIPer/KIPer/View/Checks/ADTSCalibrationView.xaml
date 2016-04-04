@@ -25,6 +25,8 @@
             <Setter Property="Margin" Value="3"/>
             <Setter Property="Width" Value="40"/>
         </Style>
+        
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <GroupBox Header="Калибровка ADTS">
         <Grid>
@@ -37,6 +39,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <GroupBox Header="Результаты" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -95,13 +98,13 @@
             </GroupBox>
             <GroupBox Header="Ввод корректировки ADTS" Grid.Column="1" Grid.Row="1">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-                    <Button Style="{StaticResource ErrorBtnStyle}">-100</Button>
-                    <Button Style="{StaticResource ErrorBtnStyle}">-10</Button>
-                    <Button Style="{StaticResource ErrorBtnStyle}">-1</Button>
-                    <TextBlock Style="{StaticResource ValueStyle}" Width="50"></TextBlock>
-                    <Button Style="{StaticResource ErrorBtnStyle}">+1</Button>
-                    <Button Style="{StaticResource ErrorBtnStyle}">+10</Button>
-                    <Button Style="{StaticResource ErrorBtnStyle}">+100</Button>
+                    <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="-100">-100</Button>
+                    <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="-10">-10</Button>
+                    <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="-1">-1</Button>
+                    <TextBlock Style="{StaticResource ValueStyle}" Width="50" Text="{Binding RealValue, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="+1">+1</Button>
+                    <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="+10">+10</Button>
+                    <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="+100">+100</Button>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Шаги" Grid.Column="2" Grid.Row="0" Grid.RowSpan="3">
@@ -115,7 +118,7 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <pressureElementControls:StateIndicator Grid.Column="0" State="{Binding State}" Height="16" Width="16"/>
+                                        <pressureElementControls:StateIndicator Grid.Column="0" State="{Binding State, UpdateSourceTrigger=PropertyChanged}" Height="16" Width="16"/>
                                         <TextBlock Grid.Column="1" Text="{Binding Title}" Margin="3,0,0,0"/>
                                     </Grid>
                                 </Border>
@@ -129,7 +132,24 @@
                     </ItemsControl>
                 </ScrollViewer>
             </GroupBox>
-
+            <TextBlock Grid.Column="1" Grid.Row="2"
+                       VerticalAlignment="Bottom" TextWrapping="Wrap" TextAlignment="Center" Margin="5"
+                       Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}"/>
+            <StackPanel Grid.Column="1" Grid.Row="3"
+                        HorizontalAlignment="Center" Orientation="Horizontal">
+                <!--<pressureElementControls:StateIndicator State="{Binding TempVal, UpdateSourceTrigger=PropertyChanged}" Height="16" Width="16"/>-->
+                <Button
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                    Width="150" Height="30" Margin="5"
+                    Content="Подтвердить"
+                    Visibility="{Binding AcceptEnabled, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Accept}"/>
+                <Button
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                    Width="150" Height="30" Margin="5"
+                    Content="{Binding TitleBtnNext, UpdateSourceTrigger=PropertyChanged}"
+                    Command="{Binding Start}"/>
+            </StackPanel>
         </Grid>
     </GroupBox>
 </UserControl>

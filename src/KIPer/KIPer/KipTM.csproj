@@ -153,6 +153,7 @@
     <Compile Include="Model\Devices\DeviceTypeDescriptor.cs" />
     <Compile Include="ViewModel\Checks\StepState.cs" />
     <Compile Include="ViewModel\Checks\StepViewModel.cs" />
+    <Compile Include="ViewModel\CommandWrapper.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypesViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypeViewModel.cs" />
     <Compile Include="ViewModel\Archive\DeviceViewModel.cs" />

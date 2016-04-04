@@ -28,6 +28,8 @@ namespace KipTM.ViewModel.Checks
             _state = StepState.Base;
             Note = string.Empty;
 
+            _step.Started += _step_Started;
+            _step.End += _step_End;
             _step.Error += _step_Error;
             _step.ProgressChanged += _step_ProgressChanged;
         }
@@ -64,8 +66,30 @@ namespace KipTM.ViewModel.Checks
 
         void _step_Error(object sender, EventArgError e)
         {
-            _state = StepState.Error;
+            State = (int)StepState.Error;
             Note = e.ErrorString;
+        }
+
+        void _step_End(object sender, EventArgEnd e)
+        {
+            State = e.Result ? (int)StepState.Ok : (int)StepState.Error;
+            Note = "";
+        }
+
+        void _step_Started(object sender, System.EventArgs e)
+        {
+            State = (int)StepState.Run;
+            Note = "";
+        }
+
+        public override void Cleanup()
+        {
+            _step.Started -= _step_Started;
+            _step.End -= _step_End;
+            _step.Error -= _step_Error;
+            _step.ProgressChanged -= _step_ProgressChanged;
+
+            base.Cleanup();
         }
     }
 }

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using ADTS;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 using KipTM.Archive;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
@@ -27,7 +29,7 @@ namespace KipTM.ViewModel.Checks
     {
         private string _titleBtnNext;
         private ADTSCheckMethod _methodic;
-        private UserChannel _userChannel;
+        private IUserChannel _userChannel;
         private UserEchalonChannel _userEchalonChannel;
         private IPropertyPool _propertyPool;
         private bool _waitUserReaction;
@@ -37,6 +39,8 @@ namespace KipTM.ViewModel.Checks
         private CancellationTokenSource _cancellation;
         private bool _accept;
         private IEnumerable<StepViewModel> _steps;
+        private string _note;
+        private Action _currentAction;
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
@@ -54,15 +58,34 @@ namespace KipTM.ViewModel.Checks
             _methodic.Init(adts);
             _methodic.StepsChanged += OnStepsChanged;
 
+            _userChannel.QueryStarted += _userChannel_QueryStarted;
+
             Results = new ObservableCollection<ParameterResultViewModel>();
             Steps = _methodic.Steps.Select(el=>new StepViewModel(el));
             TitleBtnNext = "Старт";
+            _currentAction = DoStart;
+        }
+
+        public void SlectUserEthalonChannel()
+        {
+            _methodic.SetEthalonChannel(_userEchalonChannel);
+        }
+
+        public void SetEthalonChannel(IEthalonChannel ethalon)
+        {
+            _methodic.SetEthalonChannel(ethalon);
         }
 
         public string TitleBtnNext
         {
             get { return _titleBtnNext; }
             set { Set(ref _titleBtnNext, value); }
+        }
+
+        public string Note
+        {
+            get { return _note; }
+            set { Set(ref _note, value); }
         }
 
         public bool WaitUserReaction
@@ -73,7 +96,11 @@ namespace KipTM.ViewModel.Checks
 
         public ObservableCollection<ParameterResultViewModel> Results { get; private set; }
 
-        public ICommand Start { get { return new GalaSoft.MvvmLight.Command.RelayCommand(DoStart); } }
+        public ICommand CorrectRealValue { get { return new CommandWrapper(DoCorrectRealVal); } }
+
+        public ICommand Start { get { return new GalaSoft.MvvmLight.Command.RelayCommand(_currentAction); } }
+
+        public ICommand Accept { get { return new RelayCommand(DoAccept); } }
 
         public IEnumerable<StepViewModel> Steps
         {
@@ -87,16 +114,55 @@ namespace KipTM.ViewModel.Checks
             set { Set(ref _realValue, value); }
         }
 
-        public bool Accept
+        public bool AcceptEnabled
         {
             get { return _accept; }
             set { Set(ref _accept, value); }
         }
 
+        private void DoCorrectRealVal(object param)
+        {
+            double correction;
+            if (double.TryParse((string) param, NumberStyles.Any, CultureInfo.InvariantCulture, out correction))
+                RealValue = RealValue + correction;
+        }
+
         private void DoStart()
         {
             TitleBtnNext = "Далее";
-            _methodic.Start();
+            Task.Run(()=>_methodic.Start());
+        }
+
+        private void DoNext()
+        {
+            TitleBtnNext = "Далее";
+            if (_userChannel.QueryType == UserQueryType.GetAccept)
+            {
+                _userChannel.RealValue = RealValue;
+                _userChannel.AgreeValue = true;
+            }
+        }
+
+        private void DoAccept()
+        {
+            TitleBtnNext = "Старт";
+            if (_userChannel.QueryType == UserQueryType.GetAccept)
+            {
+                _userChannel.AcceptValue = true;
+                _userChannel.AgreeValue = true;
+            }
+            AcceptEnabled = false;
+        }
+
+        private void DoCancel()
+        {
+            TitleBtnNext = "Старт";
+            if (_userChannel.QueryType == UserQueryType.GetAccept)
+            {
+                _userChannel.AcceptValue = false;
+                _userChannel.AgreeValue = true;
+            }
+            AcceptEnabled = false;
         }
 
         private void OnStepsChanged(object sender, EventArgs eventArgs)
@@ -104,9 +170,28 @@ namespace KipTM.ViewModel.Checks
             Steps = new ObservableCollection<StepViewModel>(_methodic.Steps.Select(el => new StepViewModel(el)));
         }
 
+        void _userChannel_QueryStarted(object sender, EventArgs e)
+        {
+            if (_userChannel.QueryType == UserQueryType.GetRealValue)
+            {
+                TitleBtnNext = "Далее";
+                Note = string.Format("Укажите эталонное значение и нажмите \"{0}\"", TitleBtnNext);
+                RealValue = _userChannel.RealValue;
+                _currentAction = DoNext;
+            }
+            else if (_userChannel.QueryType == UserQueryType.GetAccept)
+            {
+                TitleBtnNext = "Отмена";
+                Note = string.Format("Что бы применить результат калибровки нажмите \"Подтвердить\", в противном случае нажмите \"{0}\"", TitleBtnNext);
+                AcceptEnabled = true;
+                _currentAction = DoCancel;
+            }
+        }
+
         public override void Cleanup()
         {
-            if (_methodic.StepsChanged != null) _methodic.StepsChanged -= OnStepsChanged;
+            if (_methodic != null && _methodic.StepsChanged != null) _methodic.StepsChanged -= OnStepsChanged;
+            if (_userChannel != null) _userChannel.QueryStarted -= _userChannel_QueryStarted;
             base.Cleanup();
         }
     }

@@ -29,10 +29,12 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
         {
             var cancel = _cancellationTokenSource.Token;
             DateTime? calibDate;
+            OnStarted();
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             _logger.With(l => l.Trace(string.Format("Start ADTS calibration by channel {0}", _calibChan)));
@@ -42,6 +44,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
                 _logger.With(l => l.Trace(string.Format("[ERROR] start clibration")));
                 //OnError(new EventArgError() { Error = ADTSCheckError.ErrorStartCalibration });
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             if (calibDate!=null)
@@ -50,11 +53,13 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             OnProgressChanged(new EventArgProgress(100,
                 string.Format("Калибровка запущена (Дата: {0})", calibDate == null ? "null" : calibDate.Value.ToString())));
             whEnd.Set();
+            OnEnd(new EventArgEnd(true));
             return;
         }
 

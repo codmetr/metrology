@@ -35,7 +35,7 @@ namespace KipTM.ViewModel
         private readonly IMethodsService _methodics;
         private IDictionary<string, ICheckMethod> _check;
         private readonly IPropertyPool _propertyPool;
-        private object _selectedCheck;
+        private IMethodViewModel _selectedCheck;
         private KeyValuePair<string, ICheckMethod> _selectedCheckType;
         private TestResult _result;
         private IDictionary<string, DeviceTypeDescriptor> _avalableDeviceTypes; 
@@ -160,8 +160,6 @@ namespace KipTM.ViewModel
         public IDictionary<string, DeviceTypeDescriptor> EthalonTypes { get { return _avalableEthalonTypes; } }
 
         #endregion
-
-        #region Фактические настройки
         
         #region Условия проверки
         /// <summary>
@@ -209,7 +207,7 @@ namespace KipTM.ViewModel
             set { Set(ref _result, value); }
         }
         /// <summary>
-        /// Инвентарный номер
+        /// Производитель
         /// </summary>
         public string Manufacturer { get { return _result.TargetDevice.DeviceType.DeviceManufacturer; } }
 
@@ -297,6 +295,10 @@ namespace KipTM.ViewModel
                     Ethalon.DeviceType = _selectedEthalonType.Value;
                     return;
                 }
+                else
+                {
+                    Check.SlectUserEthalonChannel();
+                }
             }
         }
 
@@ -331,7 +333,7 @@ namespace KipTM.ViewModel
         }
 
         /// <summary>
-        /// Инвентарный номер
+        /// Производитель эталона
         /// </summary>
         public string EthalonManufacturer
         {
@@ -350,19 +352,18 @@ namespace KipTM.ViewModel
             protected set { Set(ref _ethalon, value); }
         }
         #endregion
-        #endregion
 
         public ICommand Save { get; set; }
 
         public ICommand Report { get; set; }
 
-        public object Check
+        public IMethodViewModel Check
         {
             get { return _selectedCheck; }
             set { Set(ref _selectedCheck, value); }
         }
 
-        public object GetViewModelFor(ICheckMethod methodic)
+        public IMethodViewModel GetViewModelFor(ICheckMethod methodic)
         {
             if (methodic is ADTSCheckMethod)
             {

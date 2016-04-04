@@ -23,6 +23,8 @@ namespace KipTM.Model.Checks
         public const string KeySettingsPSPT = "ADTSCalibrationPsPt";
 
         public const string KeyPoints = "Points";
+        public const string KeyRate = "Rate";
+        public const string KeyUnit = "Unit";
         public const string KeyChannel = "Channel";
 
         private const string TitleMethod = "Калибровка ADTS";
@@ -43,11 +45,7 @@ namespace KipTM.Model.Checks
 
         public string Title{get { return TitleMethod; }}
 
-        public IDictionary<double, double> Points { get; set; }
-
-        public PressureUnits Unit { get; set; }
-
-        public double Rate { get; set; }
+        public IEnumerable<ADTSChechPoint> Points { get; set; }
 
         public CalibChannel Channel{get { return _calibChan; } set { _calibChan = value; }}
 
@@ -75,11 +73,25 @@ namespace KipTM.Model.Checks
         public void SetEthalonChannel(IEthalonChannel ethalonChannel)
         {
             _ethalonChannel = ethalonChannel;
+            foreach (var testStep in Steps)
+            {
+                var step = testStep as DoPoint;
+                if(step==null)
+                    continue;
+                step.SetEthalonChannel(ethalonChannel);
+            }
         }
 
         public void SetUserChannel(IUserChannel userChannel)
         {
             _userChannel = userChannel;
+            foreach (var testStep in Steps)
+            {
+                var step = testStep as Finish;
+                if (step == null)
+                    continue;
+                step.SetUserChannel(_userChannel);
+            }
         }
 
         public void SetADTS(ADTSModel adts)
@@ -96,7 +108,9 @@ namespace KipTM.Model.Checks
         {
             var points = propertyes.GetProperty<List<ADTSChechPoint>>(ADTSCheckMethod.KeyPoints);
             var channel = propertyes.GetProperty<CalibChannel>(ADTSCheckMethod.KeyChannel);
-            return Init(new ADTSCheckParameters(channel, points));
+            var rate = propertyes.GetProperty<double>(ADTSCheckMethod.KeyRate);
+            var unit = propertyes.GetProperty<PressureUnits>(ADTSCheckMethod.KeyUnit);
+            return Init(new ADTSCheckParameters(channel, points, rate, unit));
         }
 
         /// <summary>
@@ -122,7 +136,7 @@ namespace KipTM.Model.Checks
                 : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
             foreach (var point in parameters.Points)
             {
-                steps.Add(new DoPoint(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, Rate, Unit, _ethalonChannel, _logger));
+                steps.Add(new DoPoint(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger));
             }
 
             // добавление шага подтверждения калибровки
@@ -138,6 +152,28 @@ namespace KipTM.Model.Checks
         public bool Start()
         {
             var cancel = _cancelSource.Token;
+            ManualResetEvent whStep = new ManualResetEvent(false);
+            var waitPeriod = TimeSpan.FromMilliseconds(10);
+            foreach (var testStep in Steps)
+            {
+                whStep.Reset();
+                testStep.Start(whStep);
+                while (!whStep.WaitOne(waitPeriod))
+                {
+                    if (cancel.IsCancellationRequested)
+                    {
+                        testStep.Stop();
+                        break;
+                    }
+                }
+                if (cancel.IsCancellationRequested)
+                {
+                    break;
+                }
+            }
+            return true;
+
+            /*
             var countPoints = Points.Count();
 
             const double percentInitCalib = 5.0;
@@ -169,13 +205,13 @@ namespace KipTM.Model.Checks
             Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
                 : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
             TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
-            foreach (var point in Points.Keys)
+            foreach (var point in Points)
             {
                 var percent = percentInitCalib + indexPoint*percentOnePoint;
                 _logger.With( l => l.Trace(string.Format("Start calibration {0}, point[{4}//{5}] {1}; unit {2}; rate {3}",
-                    param, point, Rate, Unit, indexPoint + 1, countPoints)));
-                OnProgress(new EventArgProgress(percent, string.Format("Калибровка значения {0}", point)));
-                if(_adts.SetPressure(param, point, Rate, Unit, cancel))
+                    param, point.Pressure, Rate, Unit, indexPoint + 1, countPoints)));
+                OnProgress(new EventArgProgress(percent, string.Format("Калибровка значения {0}", point.Pressure)));
+                if(_adts.SetPressure(param, point.Pressure, Rate, Unit, cancel))
                 {
                     _logger.With(l => l.Trace(string.Format("[ERROR] Set point")));
                     //OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetPressurePoint });
@@ -202,7 +238,7 @@ namespace KipTM.Model.Checks
                     _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                     return false;
                 }
-                var realValue = _ethalonChannel.GetEthalonValue(point, cancel);
+                var realValue = _ethalonChannel.GetEthalonValue(point.Pressure, cancel);
                 _logger.With(l => l.Trace(string.Format("Real value {0}", realValue)));
                 if (_adts.SetActualValue(realValue, cancel))
                 {
@@ -267,7 +303,7 @@ namespace KipTM.Model.Checks
             }
             OnProgress(new EventArgProgress(100, string.Format("{0} результата калибровки", accept?"Подтверждение":"Отмена")));
 
-            return true;
+            return true;*/
         }
 
         public IEnumerable<ITestStep> Steps

@@ -12,7 +12,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
     class Finish : TestStep
     {
         private readonly ADTSModel _adts;
-        private readonly IUserChannel _userChannel;
+        private IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
         private CancellationTokenSource _cancellationTokenSource;
         private readonly TimeSpan _checkCancelPeriod;
@@ -32,11 +32,12 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             var cancel = _cancellationTokenSource.Token;
             double? slope;
             double? zero;
-
+            OnStarted();
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             if (_adts.GetCalibrationResult(out slope, out zero, cancel))
@@ -44,6 +45,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
                 _logger.With(l => l.Trace(string.Format("[ERROR] Can not get result calibration")));
                 //OnError(new EventArgError() { Error = ADTSCheckError.ErrorGetResultCalibration });
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             _logger.With(l => l.Trace(string.Format("Calibration result: slope {0}; zero: {1}", (object)slope ?? "NULL", (object)zero ?? "NULL")));
@@ -57,6 +59,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             _userChannel.Message = string.Format("Применить результат калибровки?");//TODO: локализовать
@@ -72,6 +75,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
 
@@ -83,17 +87,20 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             if (_adts.AcceptCalibration(accept, cancel))
             {
                 //OnError(new EventArgError() { Error = ADTSCheckError.ErrorAcceptResultCalibration });
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             OnProgressChanged(new EventArgProgress(100,
                 string.Format("{0} результата калибровки", accept ? "Подтверждение" : "Отмена")));
             whEnd.Set();
+            OnEnd(new EventArgEnd(true));
             return;
         }
 
@@ -102,6 +109,11 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
             return true;
+        }
+
+        public void SetUserChannel(IUserChannel userChannel)
+        {
+            _userChannel = userChannel;
         }
     }
 }

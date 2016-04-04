@@ -46,6 +46,8 @@ namespace KipTM.Archive
             {
                 new ArchivedKeyValuePair(ADTSCheckMethod.KeyChannel, CalibChannel.PS),
                 new ArchivedKeyValuePair(ADTSCheckMethod.KeyPoints, GetDefaultForADTSCheckPSPoints()),
+                new ArchivedKeyValuePair(ADTSCheckMethod.KeyRate, 50.0),
+                new ArchivedKeyValuePair(ADTSCheckMethod.KeyUnit, PressureUnits.MBar),
                 new ArchivedKeyValuePair(CommonPropertyKeys.KeyEthalons, GetDefaultForADTSEthalonTypes()),
             };
         }
@@ -56,6 +58,8 @@ namespace KipTM.Archive
             {
                 new ArchivedKeyValuePair(ADTSCheckMethod.KeyChannel, CalibChannel.PT),
                 new ArchivedKeyValuePair(ADTSCheckMethod.KeyPoints, GetDefaultForADTSCheckPTPoints()),
+                new ArchivedKeyValuePair(ADTSCheckMethod.KeyRate, 50.0),
+                new ArchivedKeyValuePair(ADTSCheckMethod.KeyUnit, PressureUnits.MBar),
                 new ArchivedKeyValuePair(CommonPropertyKeys.KeyEthalons, GetDefaultForADTSEthalonTypes()),
             };
         }

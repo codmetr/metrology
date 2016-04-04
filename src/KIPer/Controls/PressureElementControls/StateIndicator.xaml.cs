@@ -24,8 +24,14 @@ namespace PressureElementControls
 
         public int State
         {
-            get { return (int) GetValue(StateProperty); }
-            set { SetValue(StateProperty, value); }
+            get
+            {
+                return (int) GetValue(StateProperty);
+            }
+            set
+            {
+                SetValue(StateProperty, value);
+            }
         }
 
         public StateIndicator()

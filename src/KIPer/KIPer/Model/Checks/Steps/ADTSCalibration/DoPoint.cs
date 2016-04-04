@@ -18,7 +18,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
         private readonly double _tolerance;
         private readonly double _rate;
         private readonly PressureUnits _unit;
-        private readonly IEthalonChannel _ethalonChannel;
+        private IEthalonChannel _ethalonChannel;
         private readonly NLog.Logger _logger;
         private CancellationTokenSource _cancellationTokenSource;
 
@@ -40,17 +40,21 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
         {
             TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
             var cancel = _cancellationTokenSource.Token;
-            if (_adts.SetPressure(_param, _point, _rate, _unit, cancel))
+
+            OnStarted();
+            if (!_adts.SetPressure(_param, _point, _rate, _unit, cancel))
             {
                 _logger.With(l => l.Trace(string.Format("[ERROR] Set point")));
                 //OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetPressurePoint });
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             EventWaitHandle wh = _param == Parameters.PT ? _adts.WaitPitotSetted() : _adts.WaitPressureSetted();
@@ -61,6 +65,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
                 {
                     _adts.StopWaitStatus(wh);
                     whEnd.Set();
+                    OnEnd(new EventArgEnd(false));
                     return;
                 }
             }
@@ -69,6 +74,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             var realValue = _ethalonChannel.GetEthalonValue(_point, cancel);
@@ -77,6 +83,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             bool correctPoint = Math.Abs(Math.Abs(_point) - Math.Abs(realValue)) <= _tolerance;
@@ -87,7 +94,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
                     new ParameterResult(DateTime.Now, correctPoint)));
 
 
-            if (_adts.SetActualValue(realValue, cancel))
+            if (!_adts.SetActualValue(realValue, cancel))
             {
                 _logger.With(l => l.Trace(string.Format("[ERROR] Can not set real value")));
                 //OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetRealValue });
@@ -99,12 +106,14 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 whEnd.Set();
+                OnEnd(new EventArgEnd(false));
                 return;
             }
             OnProgressChanged(new EventArgProgress(100,
                 string.Format("Точка {0}: Реальное значени {1}({2})",
                     _point, realValue, correctPoint ? "correct" : "incorrect")));
             whEnd.Set();
+            OnEnd(new EventArgEnd(true));
             return;
         }
 
@@ -113,6 +122,11 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
             return true;
+        }
+
+        public void SetEthalonChannel(IEthalonChannel ehalon)
+        {
+            _ethalonChannel = ehalon;
         }
     }
 }

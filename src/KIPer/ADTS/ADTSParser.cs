@@ -340,13 +340,13 @@ namespace ADTS
                 {
                     case PeremeterTypes.Real:
                         double doubleVal;
-                        if (!double.TryParse(parameter, out doubleVal))
+                        if (!double.TryParse(parameter, NumberStyles.Any, CultureInfo.InvariantCulture, out doubleVal))
                             throw new Exception(string.Format("Can not cast \"{0}\" to double", parameter));
                         result.Add(key, doubleVal);
                         break;
                     case PeremeterTypes.Integer:
                         int intVal;
-                        if (!int.TryParse(parameter, out intVal))
+                        if (!int.TryParse(parameter, NumberStyles.Any, CultureInfo.InvariantCulture, out intVal))
                             throw new Exception(string.Format("Can not cast \"{0}\" to int", parameter));
                         result.Add(key, intVal);
                         break;
