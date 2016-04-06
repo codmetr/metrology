@@ -6,7 +6,7 @@
              xmlns:checks="clr-namespace:KipTM.ViewModel.Checks"
              xmlns:pressureElementControls="clr-namespace:PressureElementControls;assembly=PressureElementControls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="600" d:DataContext="{d:DesignInstance checks:ADTSCalibrationViewModel}">
+             d:DesignHeight="300" d:DesignWidth="700" d:DataContext="{d:DesignInstance checks:ADTSCalibrationViewModel}">
     <UserControl.Resources>
         <Style TargetType="TextBlock" x:Key="TitleStyle">
             <Setter Property="Margin" Value="3"/>
@@ -20,12 +20,12 @@
         <Style TargetType="TextBlock" x:Key="ValueStateStyle" BasedOn="{StaticResource ValueStyle}">
             <Setter Property="Width" Value="50"/>
         </Style>
-        
+
         <Style TargetType="Button" x:Key="ErrorBtnStyle">
             <Setter Property="Margin" Value="3"/>
             <Setter Property="Width" Value="40"/>
         </Style>
-        
+
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <GroupBox Header="Калибровка ADTS">
@@ -43,21 +43,25 @@
             </Grid.RowDefinitions>
             <GroupBox Header="Результаты" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding Points}" MinWidth="100">
+                    <ItemsControl ItemsSource="{Binding Results}" MinWidth="200">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}"/>
-                                    <TextBlock Grid.Column="1" Text="{Binding Name}"/>
-                                </Grid>
+                                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="3">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="1" Text="{Binding Key.Name}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Value.Value}" Style="{StaticResource ValueStateStyle}"/>
+                                    </Grid>
+                                </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate><StackPanel/></ItemsPanelTemplate>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </ScrollViewer>

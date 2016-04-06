@@ -129,20 +129,35 @@ namespace KipTM.Model.Checks
             var steps = new List<ITestStep>();
 
             // добавление шага инициализации
-            steps.Add(new Init("Инициализация калибровки", _adts, _calibChan, _logger));
+            ITestStep step = new Init("Инициализация калибровки", _adts, _calibChan, _logger);
+            steps.Add(step);
+            step.ResultUpdated += step_ResultUpdated;
 
             // добавление шага прохождения точек
             Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
                 : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
             foreach (var point in parameters.Points)
             {
-                steps.Add(new DoPoint(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger));
+                step = new DoPoint(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger);
+                step.ResultUpdated += step_ResultUpdated;
+                steps.Add(step);
             }
 
             // добавление шага подтверждения калибровки
-            steps.Add(new Finish("Подтверждение калибровки", _adts, _userChannel, _logger));
+            step = new Finish("Подтверждение калибровки", _adts, _userChannel, _logger);
+            steps.Add(step);
+            if (Steps != null)
+                foreach (var testStep in Steps)
+                {
+                    if (testStep != null) testStep.ResultUpdated -= step_ResultUpdated;
+                }
             Steps = steps;
             return true;
+        }
+
+        void step_ResultUpdated(object sender, EventArgTestResult e)
+        {
+            OnResultUpdated(e);
         }
 
         /// <summary>
@@ -349,6 +364,11 @@ namespace KipTM.Model.Checks
         /// </summary>
         public EventHandler StepsChanged;
 
+        /// <summary>
+        /// Получен результат
+        /// </summary>
+        public EventHandler<EventArgTestResult> ResultUpdated;
+
         private IEnumerable<ITestStep> _steps;
 
         #region Service methods
@@ -374,6 +394,12 @@ namespace KipTM.Model.Checks
         {
             var handler = StepsChanged;
             if (handler != null) handler(this, null);
+        }
+
+        protected virtual void OnResultUpdated(EventArgTestResult e)
+        {
+            var handler = ResultUpdated;
+            if (handler != null) handler(this, e);
         }
         #endregion
     }

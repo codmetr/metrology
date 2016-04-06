@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ADTS;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -13,6 +14,7 @@ using KipTM.Archive;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
+using KipTM.Model.Params;
 using KipTM.Settings;
 using KipTM.ViewModel;
 
@@ -41,6 +43,7 @@ namespace KipTM.ViewModel.Checks
         private IEnumerable<StepViewModel> _steps;
         private string _note;
         private Action _currentAction;
+        private Dispatcher _dispatcher;
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
@@ -57,13 +60,23 @@ namespace KipTM.ViewModel.Checks
             var adts = _propertyPool.ByKey(methodic.ChannelKey);
             _methodic.Init(adts);
             _methodic.StepsChanged += OnStepsChanged;
+            _methodic.ResultUpdated += ResultUpdated;
 
             _userChannel.QueryStarted += _userChannel_QueryStarted;
 
-            Results = new ObservableCollection<ParameterResultViewModel>();
+            Results = new ObservableCollection<KeyValuePair<ParameterDescriptor, ParameterResult>>();
             Steps = _methodic.Steps.Select(el=>new StepViewModel(el));
             TitleBtnNext = "Старт";
             _currentAction = DoStart;
+            _dispatcher = Dispatcher.CurrentDispatcher;
+        }
+
+        private void ResultUpdated(object sender, EventArgTestResult eventArgTestResult)
+        {
+            foreach (var result in eventArgTestResult.Result)
+            {
+                _dispatcher.Invoke(()=>Results.Add(result));
+            }
         }
 
         public void SlectUserEthalonChannel()
@@ -94,11 +107,11 @@ namespace KipTM.ViewModel.Checks
             set { Set(ref _waitUserReaction, value); }
         }
 
-        public ObservableCollection<ParameterResultViewModel> Results { get; private set; }
+        public ObservableCollection<KeyValuePair<ParameterDescriptor, ParameterResult>> Results { get; private set; }
 
         public ICommand CorrectRealValue { get { return new CommandWrapper(DoCorrectRealVal); } }
 
-        public ICommand Start { get { return new GalaSoft.MvvmLight.Command.RelayCommand(_currentAction); } }
+        public ICommand Start { get { return new GalaSoft.MvvmLight.Command.RelayCommand(()=>_currentAction()); } }
 
         public ICommand Accept { get { return new RelayCommand(DoAccept); } }
 
@@ -131,12 +144,13 @@ namespace KipTM.ViewModel.Checks
         {
             TitleBtnNext = "Далее";
             Task.Run(()=>_methodic.Start());
+            //_currentAction = DoNext;
         }
 
         private void DoNext()
         {
             TitleBtnNext = "Далее";
-            if (_userChannel.QueryType == UserQueryType.GetAccept)
+            if (_userChannel.QueryType == UserQueryType.GetRealValue)
             {
                 _userChannel.RealValue = RealValue;
                 _userChannel.AgreeValue = true;
