@@ -21,3 +21,7 @@ src/KIPer/ADTS/bin/
 src/KIPer/IEEE488Transport/bin/
 src/KIPer/UnitTestPACESeries/bin/
 src/KIPer/UnitTestPACESeries/obj/
+src/KIPer/IEEE488UnitTest/bin/
+src/KIPer/IEEE488UnitTest/obj/
+src/KIPer/KipTM.sln.DotSettings.user
+src/KIPer/IEEE488Terminal/obj/

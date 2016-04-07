@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ag488.cs" />
     <Compile Include="ITransportIEEE488.cs" />
     <Compile Include="TransportIEEE488.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
