@@ -1,29 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using Ivi.Visa.Interop;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Agilent.TMFramework.Connectivity;
 
-namespace IEEE488UnitTest
+namespace VISAConsole
 {
-
-    [TestClass]
-    public class UnitTest1
+    class Program
     {
-        [TestMethod]
-        public void TestMethod1()
+        private static FormattedIO488 ioArbFG;
+        static void Main(string[] args)
         {
             var rm = new ResourceManager();
-            //FormattedIO488 ioArbFG = new FormattedIO488Class();
+            ioArbFG = new FormattedIO488Class();
             IMessage msg;
             try
             {
                 msg = (rm.Open("GPIB0::16", Ivi.Visa.Interop.AccessMode.NO_LOCK, 2000, "")) as IMessage;
-                //ioArbFG.IO = msg;
+                ioArbFG.IO = msg;
+                string m_strReturn;
+                ioArbFG.WriteString("*IDN?", true);
+                m_strReturn = ioArbFG.ReadString();
             }
             catch (SystemException ex)
             {
                 ex.ToString();
-               //ioArbFG.IO = null;
+                //ioArbFG.IO = null;
                 return;
             }
 

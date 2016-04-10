@@ -25,3 +25,10 @@ src/KIPer/IEEE488UnitTest/bin/
 src/KIPer/IEEE488UnitTest/obj/
 src/KIPer/KipTM.sln.DotSettings.user
 src/KIPer/IEEE488Terminal/obj/
+src/KIPer/IEEE488Terminal/bin/
+src/KIPer/Drivers/PACEVISADriver/obj/
+src/KIPer/VISAConsole/bin/
+src/KIPer/Drivers/PACEVISADriver/bin/
+src/KIPer/VISAConsole/obj/
+src/KIPer/Drivers/PACE1000VisaTest/obj/
+src/KIPer/Drivers/PACE1000VisaTest/bin/
