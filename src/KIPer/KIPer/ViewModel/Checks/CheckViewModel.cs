@@ -53,7 +53,8 @@ namespace KipTM.ViewModel
         /// For disiner
         /// </summary>
         public CheckViewModel()
-        {}
+        {
+        }
         /// <summary>
         /// Initializes a new instance of the CheckViewModel class.
         /// </summary>
@@ -110,19 +111,21 @@ namespace KipTM.ViewModel
                 if (_ethalonTypeKey == null)
                 {
                     _ethalonTypeKey = deviceEthalon;
-                    if (_ethalonTypeKey == UserEchalonChannel.Key)
-                        IsAnalogEthalon = true;
                 }
                 if (setDevice == null)
                 {
-                    avalableEthalonTypes.Add(deviceEthalon, null);
+                    if (_ethalonTypeKey == UserEchalonChannel.Key)
+                        avalableEthalonTypes.Add(deviceEthalon, 
+                            new DeviceTypeDescriptor("Аналоговый прибор", "Приборы без аппаратного интерфейса", ""));
+                    else
+                        avalableEthalonTypes.Add(deviceEthalon, null);
                     continue;
                 }
                 avalableEthalonTypes.Add(deviceEthalon,
                     new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
             }
             _avalableEthalonTypes = avalableEthalonTypes;
-            _selectedEthalonType = _avalableEthalonTypes.First();
+            SelectedEthalonType = _avalableEthalonTypes.First();
 
             var ethalonDevType = new DeviceTypeDescriptor("", "", "");
             if (_devTypeKey != null)

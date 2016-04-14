@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:archive="clr-namespace:KipTM.View.Archive"
              xmlns:checks="clr-namespace:KipTM.ViewModel"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance checks:CheckViewModel}">
     <UserControl.Resources>
@@ -75,6 +75,10 @@
                         SelectedItem="{Binding SelectedChannel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Expander Header="Настройки подключения">
                         <StackPanel>
+                            <TextBlock>Настройки подключения</TextBlock>
+                            <ComboBox
+                                ItemsSource="{Binding Ports}"
+                                SelectedItem="{Binding SelectedPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock>Порт:</TextBlock>
                             <ComboBox
                                 ItemsSource="{Binding Ports}"
@@ -94,7 +98,13 @@
                         <StackPanel>
                             <ComboBox
                                 ItemsSource="{Binding EthalonTypes}"
-                                SelectedItem="{Binding SelectedEthalonType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                SelectedItem="{Binding SelectedEthalonType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Value.Model}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                             <TextBlock Text="Тип аналоговога прибора:">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">

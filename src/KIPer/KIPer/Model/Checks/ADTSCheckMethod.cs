@@ -57,13 +57,10 @@ namespace KipTM.Model.Checks
                 {
                     case CalibChannel.PT:
                         return KeySettingsPS;
-                        break;
                     case CalibChannel.PS:
                         return KeySettingsPT;
-                        break;
                     case CalibChannel.PTPS:
                         return KeySettingsPSPT;
-                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
