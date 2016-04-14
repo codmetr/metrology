@@ -18,6 +18,15 @@ namespace KipTM.Model.Channels
         }
 
 
+        public bool Activate()
+        {
+            return true;
+        }
+
+        public void Stop()
+        {
+        }
+
         public double GetEthalonValue(double point, CancellationToken cancel)
         {
             var result = double.NaN;

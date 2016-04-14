@@ -296,6 +296,7 @@ namespace KipTM.ViewModel
                 if (!IsAnalogEthalon)
                 {
                     Ethalon.DeviceType = _selectedEthalonType.Value;
+                    Check.SetEthalonChannel(_selectedEthalonType.Key, null); //ToDo добавить настройки подключения
                     return;
                 }
                 else
@@ -372,7 +373,7 @@ namespace KipTM.ViewModel
             {
                 var adtsMethodic = methodic as ADTSCheckMethod;
                 adtsMethodic.SetADTS(_deviceManager.ADTS);
-                return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey));
+                return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey), (key, settings) => _deviceManager.GetEthalonChannel(key, settings));
             }
             return null;
         }

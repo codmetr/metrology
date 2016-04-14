@@ -1,4 +1,5 @@
-﻿using KipTM.Model.Channels;
+﻿using System;
+using KipTM.Model.Channels;
 
 namespace KipTM.ViewModel.Checks
 {
@@ -6,7 +7,10 @@ namespace KipTM.ViewModel.Checks
     {
         void SlectUserEthalonChannel();
 
-        void SetEthalonChannel(IEthalonChannel ethalon);
+        void SetEthalonChannel(string ethalonTypeKey, object settings);
 
+        event EventHandler Started;
+
+        event EventHandler Stoped;
     }
 }

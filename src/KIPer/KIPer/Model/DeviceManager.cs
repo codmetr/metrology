@@ -88,6 +88,10 @@ namespace KipTM.Model
 
         #region IDeviceManager
 
+        public IEthalonChannel GetEthalonChannel(string deviceKey, object settongs)
+        {
+            throw new NotImplementedException();
+        }
 
         public PACE5000Model Pace5000
         {

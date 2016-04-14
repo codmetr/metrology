@@ -45,16 +45,21 @@ namespace KipTM.ViewModel.Checks
         private Action _currentAction;
         private Dispatcher _dispatcher;
 
+        private Func<string, object, IEthalonChannel> _ethalonPool;
+        private string _ethalonTypeKey;
+        private object _settings;
+
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
         /// </summary>
-        public ADTSCalibrationViewModel(ADTSCheckMethod methodic, IPropertyPool propertyPool)
+        public ADTSCalibrationViewModel(ADTSCheckMethod methodic, IPropertyPool propertyPool, Func<string, object, IEthalonChannel> ethalonPool)
         {
             _cancellation = new CancellationTokenSource();
             _userChannel = new UserChannel();
             _userEchalonChannel = new UserEchalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
             _methodic = methodic;
             _propertyPool = propertyPool;
+            _ethalonPool = ethalonPool;
             
             // Базовая инициализация
             var adts = _propertyPool.ByKey(methodic.ChannelKey);
@@ -82,12 +87,19 @@ namespace KipTM.ViewModel.Checks
         public void SlectUserEthalonChannel()
         {
             _methodic.SetEthalonChannel(_userEchalonChannel);
+            _ethalonTypeKey = null;
+            _settings = null;
         }
 
-        public void SetEthalonChannel(IEthalonChannel ethalon)
+        public void SetEthalonChannel(string ethalonTypeKey, object settings)
         {
-            _methodic.SetEthalonChannel(ethalon);
+            _ethalonTypeKey = ethalonTypeKey;
+            _settings = settings;
         }
+
+        public event EventHandler Started;
+
+        public event EventHandler Stoped;
 
         public string TitleBtnNext
         {
@@ -143,7 +155,12 @@ namespace KipTM.ViewModel.Checks
         private void DoStart()
         {
             TitleBtnNext = "Далее";
+            // Задаем эталон
+            if(_ethalonTypeKey == null && _settings == null)
+                _methodic.SetEthalonChannel(_ethalonPool(_ethalonTypeKey, _settings));
+            // Запускаем
             Task.Run(()=>_methodic.Start());
+            OnStarted();
             //_currentAction = DoNext;
         }
 
@@ -166,6 +183,7 @@ namespace KipTM.ViewModel.Checks
                 _userChannel.AgreeValue = true;
             }
             AcceptEnabled = false;
+            OnStoped();
         }
 
         private void DoCancel()
@@ -177,6 +195,19 @@ namespace KipTM.ViewModel.Checks
                 _userChannel.AgreeValue = true;
             }
             AcceptEnabled = false;
+            OnStoped();
+        }
+
+        protected virtual void OnStarted()
+        {
+            EventHandler handler = Started;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnStoped()
+        {
+            EventHandler handler = Stoped;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
 
         private void OnStepsChanged(object sender, EventArgs eventArgs)

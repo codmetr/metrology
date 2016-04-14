@@ -10,7 +10,8 @@ namespace PACE1000VisaTest
         [TestMethod]
         public void TestMethodGetIDN()
         {
-            var pace = new PASE1000("GPIB0::16");
+            var transport = new VisaDriver.Visa("GPIB0::16");
+            var pace = new PASE1000(transport);
             var idn = pace.GetIdentificator();
             pace.Dispose();
             Assert.IsNotNull(idn);
@@ -19,7 +20,8 @@ namespace PACE1000VisaTest
         [TestMethod]
         public void TestMethodGetPressure()
         {
-            var pace = new PASE1000("GPIB0::16");
+            var transport = new VisaDriver.Visa("GPIB0::16");
+            var pace = new PASE1000(transport);
             var value = pace.GetPressure();
             pace.Dispose();
             Assert.IsFalse(double.IsNaN(value));
@@ -28,7 +30,8 @@ namespace PACE1000VisaTest
         [TestMethod]
         public void TestMethodGetDate()
         {
-            var pace = new PASE1000("GPIB0::16");
+            var transport = new VisaDriver.Visa("GPIB0::16");
+            var pace = new PASE1000(transport);
             var value = pace.GetDate();
             pace.Dispose();
             Assert.IsNotNull(value);
@@ -37,7 +40,8 @@ namespace PACE1000VisaTest
         [TestMethod]
         public void TestMethodGetPressureUnit()
         {
-            var pace = new PASE1000("GPIB0::16");
+            var transport = new VisaDriver.Visa("GPIB0::16");
+            var pace = new PASE1000(transport);
             var value = pace.GetPressureUnit();
             pace.Dispose();
             Assert.IsNotNull(value);
@@ -46,7 +50,8 @@ namespace PACE1000VisaTest
         [TestMethod]
         public void TestMethodSetPressureUnit()
         {
-            var pace = new PASE1000("GPIB0::16");
+            var transport = new VisaDriver.Visa("GPIB0::16");
+            var pace = new PASE1000(transport);
             var value = pace.GetPressureUnit();
             var mmGh = pace.SetPressureUnit("MMHG");
             var mbar = pace.SetPressureUnit("MBAR");
@@ -60,7 +65,8 @@ namespace PACE1000VisaTest
         [TestMethod]
         public void TestMethodGetPressureDefinely()
         {
-            var pace = new PASE1000("GPIB0::16");
+            var transport = new VisaDriver.Visa("GPIB0::16");
+            var pace = new PASE1000(transport);
             var value = pace.GetUnitSpeed();
             pace.Dispose();
             Assert.IsNotNull(value);

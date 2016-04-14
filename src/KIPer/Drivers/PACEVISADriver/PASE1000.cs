@@ -2,31 +2,18 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using Ivi.Visa.Interop;
+using VisaDriver;
 
 
 namespace PACEVISADriver
 {
     public class PASE1000:IDisposable
     {
-        private Ivi.Visa.Interop.ResourceManager rm;
-        private Ivi.Visa.Interop.FormattedIO488 ioArbFG;
-        private Ivi.Visa.Interop.IMessage msg;
+        private readonly Visa _transport;
 
-        public PASE1000(string address)
+        public PASE1000(Visa transport)
         {
-            try
-            {
-                rm = new ResourceManager();
-                ioArbFG = new FormattedIO488Class();
-                this.msg = (rm.Open(address, Ivi.Visa.Interop.AccessMode.NO_LOCK, 2000, "")) as IMessage;
-                this.ioArbFG.IO = msg;
-            }
-            catch (SystemException ex)
-            {
-                this.ioArbFG.IO = null;
-                throw;
-            }
+            _transport = transport;
         }
 
         /// <summary>
@@ -35,8 +22,8 @@ namespace PACEVISADriver
         /// <returns></returns>
         public string GetIdentificator()
         {
-            ioArbFG.WriteString("*IDN?", true);
-            string m_strReturn = ioArbFG.ReadString();
+            _transport.WriteString("*IDN?");
+            string m_strReturn = _transport.ReadString();
 
             if (m_strReturn != null)
             {
@@ -54,8 +41,8 @@ namespace PACEVISADriver
         /// <returns></returns>
         public double GetPressure()
         {
-            ioArbFG.WriteString(":SENSe:PRESsure?", true);
-            string m_strReturn = ioArbFG.ReadString();
+            _transport.WriteString(":SENSe:PRESsure?");
+            string m_strReturn = _transport.ReadString();
 
             if (m_strReturn != null)
             {
@@ -73,10 +60,10 @@ namespace PACEVISADriver
         /// <returns></returns>
         public DateTime? GetDate()
         {
-            ioArbFG.WriteString(":SYST:DATE?", true);
-            string m_strDate= ioArbFG.ReadString();
-            ioArbFG.WriteString(":SYST:TIME?", true);
-            string m_strTime= ioArbFG.ReadString();
+            _transport.WriteString(":SYST:DATE?");
+            string m_strDate = _transport.ReadString();
+            _transport.WriteString(":SYST:TIME?");
+            string m_strTime = _transport.ReadString();
 
             if (m_strDate != null)
             {
@@ -104,8 +91,8 @@ namespace PACEVISADriver
         /// <returns></returns>
         public string GetPressureUnit()
         {
-            ioArbFG.WriteString(":UNIT:PRES?", true);
-            string m_strReturn = ioArbFG.ReadString();
+            _transport.WriteString(":UNIT:PRES?");
+            string m_strReturn = _transport.ReadString();
 
             if (m_strReturn != null)
             {
@@ -123,7 +110,7 @@ namespace PACEVISADriver
         /// <returns></returns>
         public bool SetPressureUnit(string unit)
         {
-            ioArbFG.WriteString(string.Format(":UNIT:PRES {0}", unit), true);
+            _transport.WriteString(string.Format(":UNIT:PRES {0}", unit));
             var resUnit = GetPressureUnit();
             return resUnit != null && resUnit == unit;
         }
@@ -134,8 +121,8 @@ namespace PACEVISADriver
         /// <returns></returns>
         public string GetUnitSpeed()
         {
-            ioArbFG.WriteString("UNIT:SPEed?", true);
-            string m_strReturn = ioArbFG.ReadString();
+            _transport.WriteString("UNIT:SPEed?");
+            string m_strReturn = _transport.ReadString();
 
             if (m_strReturn != null)
             {
@@ -149,7 +136,7 @@ namespace PACEVISADriver
 
         public void Dispose()
         {
-            ioArbFG.IO.Close();
+            _transport.Dispose();
         }
     }
 }

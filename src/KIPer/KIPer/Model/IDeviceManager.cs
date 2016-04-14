@@ -8,6 +8,8 @@ namespace KipTM.Model
     {
         void Init();
 
+        IEthalonChannel GetEthalonChannel(string deviceKey, object settongs);
+
         PACE5000Model Pace5000 { get; }
         
         ADTSModel ADTS { get; }

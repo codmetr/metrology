@@ -16,6 +16,16 @@ namespace KipTM.Model.Channels
             _paseModel = paseModel;
         }
 
+        public bool Activate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Stop()
+        {
+            throw new NotImplementedException();
+        }
+
         public double GetEthalonValue(double point, CancellationToken cancel)
         {
             var result = double.NaN;

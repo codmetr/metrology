@@ -32,3 +32,5 @@ src/KIPer/Drivers/PACEVISADriver/bin/
 src/KIPer/VISAConsole/obj/
 src/KIPer/Drivers/PACE1000VisaTest/obj/
 src/KIPer/Drivers/PACE1000VisaTest/bin/
+src/KIPer/Drivers/VisaDriver/obj/
+src/KIPer/Drivers/VisaDriver/bin/

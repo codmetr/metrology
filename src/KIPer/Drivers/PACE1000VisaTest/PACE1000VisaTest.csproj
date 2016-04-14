@@ -62,6 +62,10 @@
       <Project>{7b13e9cb-efd0-445e-b985-9c30032dc8d3}</Project>
       <Name>PACEVISADriver</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VisaDriver\VisaDriver.csproj">
+      <Project>{cbea7a6c-2ea6-4329-99ee-4290a9801a0a}</Project>
+      <Name>VisaDriver</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
