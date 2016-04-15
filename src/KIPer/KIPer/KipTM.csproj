@@ -139,6 +139,9 @@
     <Compile Include="Model\Params\ParameterDescriptor.cs" />
     <Compile Include="Model\Params\ParameterResult.cs" />
     <Compile Include="Model\Params\ParameterType.cs" />
+    <Compile Include="Model\TransportChannels\ITransportChannelType.cs" />
+    <Compile Include="Model\TransportChannels\Visa\VisaChannelDescriptor.cs" />
+    <Compile Include="Model\TransportChannels\Visa\VisaSettings.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="Settings\ComPortSettings.cs" />
     <Compile Include="Settings\DeviceTypeSettings.cs" />

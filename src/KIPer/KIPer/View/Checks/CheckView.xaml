@@ -6,13 +6,14 @@
              xmlns:archive="clr-namespace:KipTM.View.Archive"
              xmlns:checks="clr-namespace:KipTM.ViewModel"
              mc:Ignorable="d"
-             d:DesignHeight="500" d:DesignWidth="600"
+             d:DesignHeight="550" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance checks:CheckViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -138,7 +139,8 @@
                             <TextBox Text="{Binding SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock>Дата прошлой поверки:</TextBlock>
                             <DatePicker SelectedDate="{Binding PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                             <Expander Header="Настройки подключения">
+                             <Expander Header="Настройки подключения"
+                                       Visibility="{Binding IsAnalogEthalon, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
                                 <StackPanel>
                                     <TextBlock>Порт:</TextBlock>
                                     <ComboBox
