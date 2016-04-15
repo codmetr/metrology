@@ -53,6 +53,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CommandWrapper.cs" />
     <Compile Include="TerminalModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -92,6 +93,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Drivers\VisaDriver\VisaDriver.csproj">
+      <Project>{cbea7a6c-2ea6-4329-99ee-4290a9801a0a}</Project>
+      <Name>VisaDriver</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IEEE488Transport\IEEE488.csproj">
       <Project>{3fec76c3-b933-4461-aa8d-85360d3f41c4}</Project>
       <Name>IEEE488</Name>

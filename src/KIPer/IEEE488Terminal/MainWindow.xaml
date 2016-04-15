@@ -1,20 +1,26 @@
 ﻿<Window x:Class="IEEE488Terminal.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="IEEE488Terminal" Height="350" Width="525">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:ieee488Terminal="clr-namespace:IEEE488Terminal"
+        Title="IEEE488Terminal" Height="350" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Button>Connect</Button>
-            <TextBlock Margin="5">boardnum:</TextBlock>
-            <TextBlock Margin="5">pad:</TextBlock>
-            <TextBlock Margin="5">sad:</TextBlock>
-            <TextBlock Margin="5">tmo:</TextBlock>
-            <TextBlock Margin="5">eot:</TextBlock>
-            <TextBlock Margin="5">eos:</TextBlock>
+            <Button Command="{Binding Connect}">Connect</Button>
+            <UniformGrid Rows="1">
+                <TextBlock Margin="5">boardnum:</TextBlock>
+                <TextBox Margin="5" Text="{Binding Boardnum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Margin="5">pad:</TextBlock>
+                <TextBlock Margin="5">sad:</TextBlock>
+                <TextBlock Margin="5">tmo:</TextBlock>
+                <TextBlock Margin="5">eot:</TextBlock>
+                <TextBlock Margin="5">eos:</TextBlock>
+            </UniformGrid>
         </StackPanel>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Log}"></ListBox>
     </Grid>
 </Window>

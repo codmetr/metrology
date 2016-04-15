@@ -21,6 +21,7 @@ namespace IEEE488Terminal
     {
         public MainWindow()
         {
+            DataContext = new TerminalViewModel();
             InitializeComponent();
         }
     }

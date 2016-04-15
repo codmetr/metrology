@@ -41,9 +41,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ag488.cs" />
+    <Compile Include="VisaIEEE488.cs" />
     <Compile Include="ITransportIEEE488.cs" />
     <Compile Include="TransportIEEE488.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Drivers\VisaDriver\VisaDriver.csproj">
+      <Project>{cbea7a6c-2ea6-4329-99ee-4290a9801a0a}</Project>
+      <Name>VisaDriver</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
