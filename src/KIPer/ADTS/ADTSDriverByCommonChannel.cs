@@ -5,24 +5,15 @@ using System.Text;
 
 namespace ADTS
 {
-    public class ADTSDriver
+    public class ADTSDriverByCommonChannel
     {
         private readonly int _address;
         private readonly ADTSParser _parser;
-        private IEEE488.ITransportIEEE488 _transport;
 
-        public ADTSDriver(int address, IEEE488.ITransportIEEE488 transport)
+        public ADTSDriverByCommonChannel(int address)
         {
             _parser = new ADTSParser();
             _address = address;
-            _transport = transport;
-        }
-
-        public bool Open()
-        {
-            if (_transport == null)
-                return false;
-            return _transport.Open(_address);
         }
 
         /// <summary>
@@ -30,10 +21,10 @@ namespace ADTS
         /// </summary>
         /// <param name="transport"></param>
         /// <returns></returns>
-        public bool CalibrationAbort()
+        public bool CalibrationAbort(IEEE488.ITransportIEEE488 transport)
         {
             var cmd = _parser.GetCommandCalibrationAbort();
-            return _transport.Send(cmd);
+            return transport.Send(_address, cmd);
         }
 
         /// <summary>
@@ -42,10 +33,10 @@ namespace ADTS
         /// <param name="transport"></param>
         /// <param name="channel"></param>
         /// <returns></returns>
-        public bool StartCalibration(CalibChannel channel)
+        public bool StartCalibration(IEEE488.ITransportIEEE488 transport, CalibChannel channel)
         {
             var cmd = _parser.GetCommandCalibrationStart(channel);
-            return _transport.Send(cmd);
+            return transport.Send(_address, cmd);
         }
 
         /// <summary>
@@ -54,13 +45,13 @@ namespace ADTS
         /// <param name="transport"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public bool GetDate(out DateTime? date)
+        public bool GetDate(IEEE488.ITransportIEEE488 transport, out DateTime? date)
         {
             date = null;
             var cmd = _parser.GetCommandGetSystemDate();
-            if (!_transport.Send(cmd))
+            if(!transport.Send(_address, cmd))
                 return false;
-            var answer = _transport.Receive();
+            var answer = transport.Receive(_address);
             return _parser.ParseGetSystemDate(answer, out date);
         }
 
@@ -70,10 +61,10 @@ namespace ADTS
         /// <param name="transport"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public bool SetState(State state)
+        public bool SetState(IEEE488.ITransportIEEE488 transport, State state)
         {
             var cmd = _parser.GetCommandSetState(state);
-            return _transport.Send(cmd);
+            return transport.Send(_address, cmd);
         }
 
         /// <summary>
@@ -82,13 +73,13 @@ namespace ADTS
         /// <param name="transport"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public bool GetState(out State? state)
+        public bool GetState(IEEE488.ITransportIEEE488 transport, out State? state)
         {
             state = null;
             var cmd = _parser.GetCommandGetState();
-            if (!_transport.Send(cmd))
+            if (!transport.Send(_address, cmd))
                 return false;
-            var answer = _transport.Receive();
+            var answer = transport.Receive(_address);
             return _parser.ParseGetState(answer, out state);
         }
 
@@ -98,10 +89,10 @@ namespace ADTS
         /// <param name="transport"></param>
         /// <param name="unit"></param>
         /// <returns></returns>
-        public bool SetUnits(PressureUnits unit)
+        public bool SetUnits(IEEE488.ITransportIEEE488 transport, PressureUnits unit)
         {
             var cmd = _parser.GetCommandSetPressureUnit(unit);
-            return _transport.Send(cmd);
+            return transport.Send(_address, cmd);
         }
 
         /// <summary>
@@ -110,13 +101,13 @@ namespace ADTS
         /// <param name="transport"></param>
         /// <param name="unit"></param>
         /// <returns></returns>
-        public bool GetUnits(out PressureUnits? unit)
+        public bool GetUnits(IEEE488.ITransportIEEE488 transport, out PressureUnits? unit)
         {
             unit = null;
             var cmd = _parser.GetCommandGetPressureUnit();
-            if (!_transport.Send(cmd))
+            if (!transport.Send(_address, cmd))
                 return false;
-            var answer = _transport.Receive();
+            var answer = transport.Receive(_address);
             return _parser.ParseGetPressureUnit(answer, out unit);
         }
 
@@ -127,10 +118,10 @@ namespace ADTS
         /// <param name="param"></param>
         /// <param name="rate"></param>
         /// <returns></returns>
-        public bool SetRate(Parameters param, double rate)
+        public bool SetRate(IEEE488.ITransportIEEE488 transport, Parameters param, double rate)
         {
             var cmd = _parser.GetCommandSetParameterRate(param, rate);
-            return _transport.Send(cmd);
+            return transport.Send(_address, cmd);
         }
 
         /// <summary>
@@ -140,10 +131,10 @@ namespace ADTS
         /// <param name="param"></param>
         /// <param name="aim"></param>
         /// <returns></returns>
-        public bool SetAim(Parameters param, double aim)
+        public bool SetAim(IEEE488.ITransportIEEE488 transport, Parameters param, double aim)
         {
             var cmd = _parser.GetCommandSetParameterAim(param, aim);
-            return _transport.Send(cmd);
+            return transport.Send(_address, cmd);
         }
 
         /// <summary>
@@ -153,13 +144,13 @@ namespace ADTS
         /// <param name="param"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool ReadMeasure(Parameters param, out double? value)
+        public bool ReadMeasure(IEEE488.ITransportIEEE488 transport, Parameters param, out double? value)
         {
             value = null;
             var cmd = _parser.GetCommandMeasurePress(param);
-            if (!_transport.Send(cmd))
+            if (!transport.Send(_address, cmd))
                 return false;
-            var answer = _transport.Receive();
+            var answer = transport.Receive(_address);
             return _parser.ParseMeasurePress(answer, out value);
         }
 
@@ -169,13 +160,13 @@ namespace ADTS
         /// <param name="transport"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public bool GetStatus(out Status? status)
+        public bool GetStatus(IEEE488.ITransportIEEE488 transport, out Status? status)
         {
             status = null;
             var cmd = _parser.GetCommandGetStatus();
-            if(!_transport.Send(cmd))
+            if(!transport.Send(_address, cmd))
                 return false;
-            var answer = _transport.Receive();
+            var answer = transport.Receive(_address);
             return _parser.ParseGetStatus(answer, out status);
         }
 
@@ -185,10 +176,10 @@ namespace ADTS
         /// <param name="transport"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool SetCalibrationValue(double value)
+        public bool SetCalibrationValue(IEEE488.ITransportIEEE488 transport, double value)
         {
             var cmd = _parser.GetCommandCalibrationSetValue(value);
-            return _transport.Send(cmd);
+            return transport.Send(_address, cmd);
         }
 
         /// <summary>
@@ -198,14 +189,14 @@ namespace ADTS
         /// <param name="slope"></param>
         /// <param name="zero"></param>
         /// <returns></returns>
-        public bool GetCamibrationResult(out double? slope, out double? zero)
+        public bool GetCamibrationResult(IEEE488.ITransportIEEE488 transport, out double? slope, out double? zero)
         {
             slope = null;
             zero = null;
             var cmd = _parser.GetCommandGetCalibrationResult();
-            if (!_transport.Send(cmd))
+            if (!transport.Send(_address, cmd))
                 return false;
-            var answer = _transport.Receive();
+            var answer = transport.Receive(_address);
             return _parser.ParseKeyGetCalibrationResult(answer, out slope, out zero);
         }
 
@@ -215,10 +206,10 @@ namespace ADTS
         /// <param name="transport"></param>
         /// <param name="accept"></param>
         /// <returns></returns>
-        public bool SetCalibrationAccept(bool accept)
+        public bool SetCalibrationAccept(IEEE488.ITransportIEEE488 transport, bool accept)
         {
             var cmd = _parser.GetCommandMainCalibrationAccept(accept);
-            return _transport.Send(cmd);
+            return transport.Send(_address, cmd);
         }
     }
 }

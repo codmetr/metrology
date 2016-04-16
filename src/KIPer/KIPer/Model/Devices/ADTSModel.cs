@@ -13,7 +13,7 @@ namespace KipTM.Model.Devices
     public class ADTSModel
     {
         #region Local members
-        private readonly ADTSDriver _adts;
+        private readonly ADTSDriverByCommonChannel _adts;
         private readonly ILoops _loops;
         private readonly string _loopKey;
         private bool _isNeedAutoupdate;
@@ -44,7 +44,7 @@ namespace KipTM.Model.Devices
         internal static IEnumerable<string> TypesEtalonParameters = new[]
         {"давление", "авиационная высота", "авиационная скорость"};
 
-        public ADTSModel(string title, ILoops loops, string loopKey, ADTSDriver driver)
+        public ADTSModel(string title, ILoops loops, string loopKey, ADTSDriverByCommonChannel driver)
         {
             Title = title;
             _loops = loops;

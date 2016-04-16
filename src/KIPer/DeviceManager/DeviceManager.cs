@@ -1,21 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using ADTS;
-using IEEE488;
-using KipTM.Model.Channels;
-using KipTM.Model.Devices;
-using KipTM.Model.TransportChannels;
-using KipTM.Settings;
+using DeviceManager.TransportChannels;
 using MainLoop;
-using NLog;
-using PACESeries;
 
-namespace KipTM.Model
+namespace DeviceManager
 {
     public class DeviceManager : IDeviceManager, IDisposable
     {
@@ -30,7 +20,7 @@ namespace KipTM.Model
 
         private readonly IDictionary<string, Tuple<ITransportIEEE488, SerialPort>> _ports = new Dictionary<string, Tuple<ITransportIEEE488, SerialPort>>();
 
-        private readonly IDictionary<ITransportChannelType, object> _devicesOnPorts = new Dictionary<string, Tuple<ITransportIEEE488, SerialPort>>();
+        private readonly IDictionary<ITransportChannelDescriptor, object> _devicesOnPorts = new Dictionary<string, Tuple<ITransportIEEE488, SerialPort>>();
 
 
         public DeviceManager(ComPortSettings portAdts, ComPortSettings portPace, DeviceSettings pace, DeviceSettings adts, Logger logger = null)
@@ -96,9 +86,8 @@ namespace KipTM.Model
             throw new NotImplementedException();
         }
 
-        public T GetDevice<T>(string key, ITransportChannelType transportDescription)
+        public T GetDevice<T>(string key, ITransportChannelDescriptor transportDescription)
         {
-            if()
         }
 
         public PACE5000Model Pace5000

@@ -35,7 +35,7 @@ namespace KipTM.Archive
         public List<ArchivedKeyValuePair> Data
         {
             get { return _data; }
-            set { _data = value; }
+            private set { _data = value; }
         }
 
         public ArchiveBase GetArchive(string key)

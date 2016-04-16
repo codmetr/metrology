@@ -55,6 +55,7 @@ namespace KipTM.ViewModel
         public CheckViewModel()
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the CheckViewModel class.
         /// </summary>

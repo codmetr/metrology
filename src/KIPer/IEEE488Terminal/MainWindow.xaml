@@ -9,18 +9,21 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <Button Command="{Binding Connect}">Connect</Button>
-            <UniformGrid Rows="1">
-                <TextBlock Margin="5">boardnum:</TextBlock>
-                <TextBox Margin="5" Text="{Binding Boardnum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Margin="5">pad:</TextBlock>
-                <TextBlock Margin="5">sad:</TextBlock>
-                <TextBlock Margin="5">tmo:</TextBlock>
-                <TextBlock Margin="5">eot:</TextBlock>
-                <TextBlock Margin="5">eos:</TextBlock>
-            </UniformGrid>
-        </StackPanel>
-        <ListBox Grid.Row="1" ItemsSource="{Binding Log}"></ListBox>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Command="{Binding Connect}" Padding="5" Grid.Row="0" Grid.Column="0">Connect</Button>
+        <UniformGrid Rows="1"  Grid.Row="0" Grid.Column="1">
+            <TextBlock Margin="5">boardnum:</TextBlock>
+            <TextBox Margin="5" Text="{Binding Boardnum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Margin="5">Command:</TextBlock>
+            <TextBox Margin="5" Text="{Binding Command, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Command="{Binding Send}">Send</Button>
+            <Button Command="{Binding SendReceive}">Send Receive</Button>
+        </UniformGrid>
+
+        <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Log}"></ListBox>
     </Grid>
 </Window>
