@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ADTS
 {
-    public class ADTSDriver
+    public class ADTSDriver:IDisposable
     {
         private readonly int _address;
         private readonly ADTSParser _parser;
@@ -219,6 +219,12 @@ namespace ADTS
         {
             var cmd = _parser.GetCommandMainCalibrationAccept(accept);
             return _transport.Send(cmd);
+        }
+
+        public void Dispose()
+        {
+            if (_transport != null)
+                _transport.Close(_address);
         }
     }
 }

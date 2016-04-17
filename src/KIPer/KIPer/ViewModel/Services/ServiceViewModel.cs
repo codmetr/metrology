@@ -18,8 +18,11 @@ namespace KipTM.ViewModel
         public ServiceViewModel(IEnumerable<IService> services)
         {
             Services = services;
+            Channel = new SelectChannelViewModel();
         }
 
         public IEnumerable<IService> Services { get; private set; } 
+
+        public SelectChannelViewModel Channel { get; private set; }
     }
 }

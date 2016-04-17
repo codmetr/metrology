@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using KipTM.Settings;
 using MainLoop;
 using NLog;
 using PACESeries;
+using PACEVISADriver;
 
 namespace KipTM.Model
 {
@@ -30,52 +32,64 @@ namespace KipTM.Model
 
         private readonly IDictionary<string, Tuple<ITransportIEEE488, SerialPort>> _ports = new Dictionary<string, Tuple<ITransportIEEE488, SerialPort>>();
 
-        private readonly IDictionary<ITransportChannelType, object> _devicesOnPorts = new Dictionary<string, Tuple<ITransportIEEE488, SerialPort>>();
+        private readonly IDictionary<ITransportChannelType, object> _devicesOnPorts = new Dictionary<ITransportChannelType, object>();
+
+        private IDictionary<Type, Func<object, object>> _devicesFabrics;
+
+        private IDictionary<string, Func<object, ITransportIEEE488>> _channelsFabrics;
 
 
-        public DeviceManager(ComPortSettings portAdts, ComPortSettings portPace, DeviceSettings pace, DeviceSettings adts, Logger logger = null)
+        public DeviceManager(Logger logger = null)
         {
             _logger = logger;
 
-            int address;
             _loops = new Loops();
 
-            // ADTS
-            ADTS.ADTSDriverByCommonChannel adtsDriver;
-            if (int.TryParse(adts.Address, out address))
-                adtsDriver = new ADTSDriverByCommonChannel(address);
-            else
-                throw new Exception(string.Format("Can not parse address for ADTS from \"{0}\"", adts.Address ?? "NULL"));
-            
-            var serialName = string.Format("COM{0}", portAdts.NumberCom);
-            var port = new SerialPort(serialName, portAdts.Rate, portAdts.Parity, portAdts.CountBits,
-                portAdts.CountStopBits);
-            //ITransportIEEE488 ieee488 = new TransportIEEE488(port);
-            ITransportIEEE488 ieee488 = new FakeTransport();//todo Заменить на настоящий транспорт
-            _ports.Add(serialName, new Tuple<ITransportIEEE488, SerialPort>(ieee488, port));
-            _loops.AddLocker(serialName, ieee488);
-            _adtsModel = new ADTSModel(adts.Name, _loops, serialName, adtsDriver);
-
-            // PACE
-            PACEDriver paceDriver;
-            if (int.TryParse(pace.Address, out address))
+            _devicesFabrics = new Dictionary<Type, Func<object, object>>()
             {
-                var transport = new PACEVisaTransport(address);
-                paceDriver = new PACEDriver(address, transport);
-            }
-            else
-                throw new Exception(string.Format("Can not parse address for PACE from \"{0}\"", pace.Address ?? "NULL"));
+                {
+                    typeof(ADTSDriver),
+                    options =>
+                        {
+                            var tupleParam = options as Tuple<int, ITransportIEEE488>;
+                            if (tupleParam == null)
+                                throw new TargetParameterCountException(string.Format(
+                                    "option mast be type: {0}; now type: {1}",
+                                    typeof (Tuple<int, ITransportIEEE488>), options.GetType()));
+                            return new ADTSDriver(tupleParam.Item1, tupleParam.Item2);
+                        }
+                },
 
-            if (portAdts.NumberCom != portPace.NumberCom)
+                {
+                    typeof(PASE1000Driver),
+                    options =>
+                        {
+                            var tupleParam = options as Tuple<int, ITransportIEEE488>;
+                            if (tupleParam == null)
+                                throw new TargetParameterCountException(string.Format(
+                                    "option mast be type: {0}; now type: {1}",
+                                    typeof (Tuple<int, ITransportIEEE488>), options.GetType()));
+                            return new PASE1000Driver(tupleParam.Item1, tupleParam.Item2);
+                        }
+                },
+            };
+
+            _channelsFabrics = new Dictionary<string, Func<object, ITransportIEEE488>>()
             {
-                serialName = string.Format("COM{0}", portPace.NumberCom);
-                port = new SerialPort(serialName, portPace.Rate, portPace.Parity, portPace.CountBits,
-                    portPace.CountStopBits);
-                ieee488 = new TransportIEEE488(port);
-                _ports.Add(serialName, new Tuple<ITransportIEEE488, SerialPort>(ieee488, port));
-                _loops.AddLocker(serialName, ieee488);
-            }
-            _paceModel = new PACE5000Model("PACE 5000 - модульный контроллер давления/цифровой манометр", _loops, serialName, paceDriver);
+                {VisaChannelDescriptor.KeyType, opt =>
+                {
+                    return new FakeTransport();//todo Заменить на настоящий транспорт
+                    return new VisaIEEE488();
+                }}
+            };
+
+
+            _adtsModel = new ADTSModel(string.Format("{0} {1}", ADTSModel.Model, ADTSModel.DeviceCommonType), _loops,
+                VisaChannelDescriptor.KeyType, this);
+
+            _paceModel = new PACE5000Model(
+                string.Format("{0} {1}", PACE5000Model.Model, PACE5000Model.DeviceCommonType), _loops,
+                VisaChannelDescriptor.KeyType, this);
 
             _ethalonChannels = new Dictionary<string, IEthalonChannel>()
             {
@@ -83,22 +97,24 @@ namespace KipTM.Model
             };
         }
 
-        public void Init()
-        {
-            _adtsModel.Init();
-            StartAutoUpdate();
-        }
-
         #region IDeviceManager
 
-        public IEthalonChannel GetEthalonChannel(string deviceKey, object settongs)
+        public IEthalonChannel GetEthalonChannel(string deviceKey, object settings)
         {
-            throw new NotImplementedException();
+            return _ethalonChannels[deviceKey];
         }
 
-        public T GetDevice<T>(string key, ITransportChannelType transportDescription)
+        public T GetDevice<T>(int address, ITransportChannelType transportDescription)
         {
-            if()
+            if(!_devicesFabrics.ContainsKey(typeof(T)))
+                throw new IndexOutOfRangeException(string.Format("For type [{0}] not found fabric", typeof(T)));
+
+            if (!_channelsFabrics.ContainsKey(transportDescription.Key))
+                throw new IndexOutOfRangeException(string.Format("For channel [{0}] not found fabric", transportDescription.Key));
+
+            var chann = _channelsFabrics[transportDescription.Key](transportDescription.Settings);
+
+            return (T)_devicesFabrics[typeof (T)](new Tuple<int, ITransportIEEE488>(address, chann));
         }
 
         public PACE5000Model Pace5000
@@ -114,22 +130,6 @@ namespace KipTM.Model
         public IDictionary<string, IEthalonChannel> EthalonChannels
         {
             get { return _ethalonChannels; }
-        }
-
-        /// <summary>
-        /// Запуск автоопроса модуля дискретных входов
-        /// </summary>
-        public void StartAutoUpdate()
-        {
-            _adtsModel.StartAutoUpdate();
-        }
-
-        /// <summary>
-        /// Остановка автоопроса модуля дискретных входов
-        /// </summary>
-        public void StopAutoUpdate()
-        {
-            _adtsModel.StopAutoUpdate();
         }
 
         #endregion
@@ -150,7 +150,6 @@ namespace KipTM.Model
         /// </param>
         protected virtual void Dispose(bool disposeAll)
         {
-            StopAutoUpdate();
             _loops.Dispose();
             if (!disposeAll)
                 return;

@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="KipTM.View.ADTSView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:pressureElementControls="clr-namespace:PressureElementControls;assembly=PressureElementControls"
+             xmlns:viewModel="clr-namespace:KipTM.ViewModel"
+             xmlns:converters="clr-namespace:KipTM.View.Converters"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:Pace5000ViewModel}"
+             d:DesignHeight="600" d:DesignWidth="700">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:DoubleToTimespanConverter x:Key="DoubleToTimespanConverter"/>
+
+            <Style TargetType="TextBlock" x:Key="TitleStyle">
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="Width" Value="50"/>
+            </Style>
+            <Style TargetType="TextBlock" x:Key="ValueStyle">
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="Background" Value="#FF818147"/>
+            </Style>
+
+            <Style TargetType="TextBlock" x:Key="ValueStateStyle" BasedOn="{StaticResource ValueStyle}">
+                <Setter Property="Width" Value="50"/>
+            </Style>
+
+            <Style TargetType="Button" x:Key="ErrorBtnStyle">
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="Width" Value="40"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions><!--Background="#FF002500" -->
+        <!--<Border CornerRadius="10" BorderBrush="Black" BorderThickness="2">
+            <pressureElementControls:Manometer Width="400" Margin="5" Value="{Binding ManometerValue}"/>
+        </Border>-->
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <GroupBox Header="Состояние ADTS" Grid.Column="1" Grid.Row="0">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource TitleStyle}">PS:</TextBlock>
+                        <TextBlock Style="{StaticResource ValueStateStyle}"></TextBlock>
+                        <TextBlock Style="{StaticResource TitleStyle}">Rate PS:</TextBlock>
+                        <TextBlock Style="{StaticResource ValueStateStyle}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource TitleStyle}">PT:</TextBlock>
+                        <TextBlock Style="{StaticResource ValueStateStyle}"></TextBlock>
+                        <TextBlock Style="{StaticResource TitleStyle}">Rate PT:</TextBlock>
+                        <TextBlock Style="{StaticResource ValueStateStyle}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource TitleStyle}">QC:</TextBlock>
+                        <TextBlock Style="{StaticResource ValueStateStyle}"></TextBlock>
+                        <TextBlock Style="{StaticResource TitleStyle}">Rate QC:</TextBlock>
+                        <TextBlock Style="{StaticResource ValueStateStyle}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource TitleStyle}">ALT:</TextBlock>
+                        <TextBlock Style="{StaticResource ValueStateStyle}"></TextBlock>
+                        <TextBlock Style="{StaticResource TitleStyle}">Rate ALT:</TextBlock>
+                        <TextBlock Style="{StaticResource ValueStateStyle}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource TitleStyle}">CAS:</TextBlock>
+                        <TextBlock Style="{StaticResource ValueStateStyle}"></TextBlock>
+                        <TextBlock Style="{StaticResource TitleStyle}">Rate CAS:</TextBlock>
+                        <TextBlock Style="{StaticResource ValueStateStyle}"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</UserControl>

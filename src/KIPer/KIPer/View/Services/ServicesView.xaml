@@ -11,6 +11,11 @@
     <UserControl.Resources>
         <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
     </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
     <ItemsControl ItemsSource="{Binding Services}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
@@ -27,4 +32,6 @@
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>
+        <ContentPresenter Grid.Column="1" Content="{Binding Channel}"/>
+        </Grid>
 </UserControl>

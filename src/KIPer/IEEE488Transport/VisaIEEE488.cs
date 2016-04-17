@@ -13,6 +13,7 @@ namespace IEEE488
         
         public VisaIEEE488()
         {
+            _visa = null;
         }
 
         public bool Open(int address)
@@ -33,7 +34,7 @@ namespace IEEE488
             return true;
         }
 
-        public bool Send(int address, string data)
+        public bool Send(string data)
         {
             if (_visa == null)
                 throw new Exception("Call Send after \"Open\"");
@@ -41,7 +42,7 @@ namespace IEEE488
             return true;
         }
 
-        public string Receive(int address)
+        public string Receive()
         {
             if (_visa == null)
                 throw new Exception("Call Receive after \"Open\"");

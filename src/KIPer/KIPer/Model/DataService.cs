@@ -67,7 +67,7 @@ namespace KipTM.Model
 
             _ethalonTypes.Add(new DeviceTypeDescriptor(PACE5000Model.Model, PACE5000Model.DeviceCommonType, PACE5000Model.DeviceManufacturer));
 
-            _deviceManager = new DeviceManager(adtsPort, pacePort, adtsSettings, paceSettings, NLog.LogManager.GetLogger("DeviceManager"));
+            _deviceManager = new DeviceManager(NLog.LogManager.GetLogger("DeviceManager"));
         }
 
         /// <summary>

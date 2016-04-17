@@ -11,6 +11,7 @@ using ADTS;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Archive;
+using KipTM.Model;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
@@ -45,21 +46,21 @@ namespace KipTM.ViewModel.Checks
         private Action _currentAction;
         private Dispatcher _dispatcher;
 
-        private Func<string, object, IEthalonChannel> _ethalonPool;
+        private IDeviceManager _deviceManager;
         private string _ethalonTypeKey;
         private object _settings;
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
         /// </summary>
-        public ADTSCalibrationViewModel(ADTSCheckMethod methodic, IPropertyPool propertyPool, Func<string, object, IEthalonChannel> ethalonPool)
+        public ADTSCalibrationViewModel(ADTSCheckMethod methodic, IPropertyPool propertyPool, IDeviceManager deviceManager)
         {
             _cancellation = new CancellationTokenSource();
             _userChannel = new UserChannel();
             _userEchalonChannel = new UserEchalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
             _methodic = methodic;
             _propertyPool = propertyPool;
-            _ethalonPool = ethalonPool;
+            _deviceManager = deviceManager;
             
             // Базовая инициализация
             var adts = _propertyPool.ByKey(methodic.ChannelKey);
@@ -157,7 +158,7 @@ namespace KipTM.ViewModel.Checks
             TitleBtnNext = "Далее";
             // Задаем эталон
             if(_ethalonTypeKey == null && _settings == null)
-                _methodic.SetEthalonChannel(_ethalonPool(_ethalonTypeKey, _settings));
+                _methodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _settings));
             // Запускаем
             Task.Run(()=>_methodic.Start());
             OnStarted();

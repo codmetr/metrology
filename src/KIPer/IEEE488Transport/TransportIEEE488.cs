@@ -25,12 +25,12 @@ namespace IEEE488
             throw new NotImplementedException();
         }
 
-        public bool Send(int address, string data)
+        public bool Send(string data)
         {
             throw new NotImplementedException();
         }
 
-        public string Receive(int address)
+        public string Receive()
         {
             throw new NotImplementedException();
         }

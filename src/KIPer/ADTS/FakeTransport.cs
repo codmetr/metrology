@@ -25,14 +25,14 @@ namespace ADTS
             return true;
         }
 
-        public bool Send(int address, string data)
+        public bool Send(string data)
         {
             request = data;
             answer = GetFakeAnswer(request);
             return true;
         }
 
-        public string Receive(int address)
+        public string Receive()
         {
             return answer;
         }

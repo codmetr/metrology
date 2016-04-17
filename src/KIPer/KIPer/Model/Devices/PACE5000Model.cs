@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using ADTS;
+using KipTM.Model.TransportChannels;
 using MainLoop;
 using PACESeries;
 
@@ -10,15 +12,16 @@ namespace KipTM.Model.Devices
 {
     public class PACE5000Model
     {
-        private readonly PACESeries.PACEDriver _driver;
+        private IDeviceManager _deviceManager;
+        private PACESeries.PACEDriver _driver;
         private ILoops _loops;
         private string _loopKey;
-        public PACE5000Model(string title, ILoops loops, string loopKey, PACEDriver driver)
+        public PACE5000Model(string title, ILoops loops, string loopKey, IDeviceManager deviceManager)
         {
             Title = title;
             _loops = loops;
             _loopKey = loopKey;
-            _driver = driver;
+            _deviceManager = deviceManager;
         }
 
         public string Title
@@ -32,6 +35,15 @@ namespace KipTM.Model.Devices
         internal static string DeviceCommonType { get { return "Калибратор давления"; } }
         internal static string DeviceManufacturer { get { return "GE Druk"; } }
         internal static IEnumerable<string> TypesEtalonParameters = new[] { "давление", "авиационная высота", "авиационная скорость" };
+
+
+        /// <summary>
+        /// Инициализация
+        /// </summary>
+        public void Start(int address, ITransportChannelType transport)
+        {
+            _driver = _deviceManager.GetDevice<PACESeries.PACEDriver>(address, transport);
+        }
 
         public void SetAutoread(TimeSpan autoreadPeriod)
         {

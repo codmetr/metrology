@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
 using IEEE488;
+using KipTM.Model.TransportChannels;
 using MainLoop;
 
 namespace KipTM.Model.Devices
@@ -13,11 +14,18 @@ namespace KipTM.Model.Devices
     public class ADTSModel
     {
         #region Local members
-        private readonly ADTSDriverByCommonChannel _adts;
+
+        private IDeviceManager _deviceManager;
+        private ADTSDriver _adts;
         private readonly ILoops _loops;
         private readonly string _loopKey;
         private bool _isNeedAutoupdate;
 
+
+        private TimeSpan _periodUpdatePressure = TimeSpan.FromMilliseconds(100);
+        private TimeSpan _periodUpdatePitot = TimeSpan.FromMilliseconds(100);
+        private TimeSpan _periodUpdateState = TimeSpan.FromMilliseconds(100);
+        private TimeSpan _periodUpdateStatus = TimeSpan.FromMilliseconds(100);
 
         private DateTime? _pressureTime;
         private double? _pressure;
@@ -44,20 +52,21 @@ namespace KipTM.Model.Devices
         internal static IEnumerable<string> TypesEtalonParameters = new[]
         {"давление", "авиационная высота", "авиационная скорость"};
 
-        public ADTSModel(string title, ILoops loops, string loopKey, ADTSDriverByCommonChannel driver)
+        public ADTSModel(string title, ILoops loops, string loopKey, IDeviceManager deviceManager)
         {
             Title = title;
             _loops = loops;
             _loopKey = loopKey;
-            _adts = driver;
+            _deviceManager = deviceManager;
             _waitStatusPool = new Dictionary<EventWaitHandle, Func<Status, bool>>();
         }
 
         /// <summary>
         /// Инициализация
         /// </summary>
-        public void Init()
+        public void Start(int address, ITransportChannelType transport)
         {
+            _adts = _deviceManager.GetDevice<ADTSDriver>(address, transport);
             _loops.StartUnimportantAction(_loopKey, UpdateUnit);
         }
 
@@ -98,26 +107,19 @@ namespace KipTM.Model.Devices
                 return false;
             _loops.StartMiddleAction(_loopKey, (transport) =>
             {
-                var ieee488 = transport as ITransportIEEE488;
-                if (ieee488 == null || cancel.IsCancellationRequested)
+                if (!_adts.GetDate(out dateValue) || cancel.IsCancellationRequested)
                 {
                     isCommpete.Set();
                     return;
                 }
 
-                if (!_adts.GetDate(ieee488, out dateValue) || cancel.IsCancellationRequested)
+                if (!_adts.SetState(State.Control) || cancel.IsCancellationRequested)
                 {
                     isCommpete.Set();
                     return;
                 }
 
-                if (!_adts.SetState(ieee488, State.Control) || cancel.IsCancellationRequested)
-                {
-                    isCommpete.Set();
-                    return;
-                }
-
-                if (!_adts.StartCalibration(ieee488, channel) || cancel.IsCancellationRequested)
+                if (!_adts.StartCalibration(channel) || cancel.IsCancellationRequested)
                 {
                     isCommpete.Set();
                     return;
@@ -153,25 +155,18 @@ namespace KipTM.Model.Devices
                 return false;
             _loops.StartMiddleAction(_loopKey, (transport) =>
             {
-                var ieee488 = transport as ITransportIEEE488;
-                if (ieee488 == null || cancel.IsCancellationRequested)
+                if (!_adts.SetUnits(unit) || cancel.IsCancellationRequested)
+                {
+                    isCommpete.Set();
+                    return;
+                }
+                if (!_adts.SetRate(parameter, rate) || cancel.IsCancellationRequested)
                 {
                     isCommpete.Set();
                     return;
                 }
 
-                if (!_adts.SetUnits(ieee488, unit) || cancel.IsCancellationRequested)
-                {
-                    isCommpete.Set();
-                    return;
-                }
-                if (!_adts.SetRate(ieee488, parameter, rate) || cancel.IsCancellationRequested)
-                {
-                    isCommpete.Set();
-                    return;
-                }
-
-                if (!_adts.SetAim(ieee488, parameter, pressure) || cancel.IsCancellationRequested)
+                if (!_adts.SetAim(parameter, pressure) || cancel.IsCancellationRequested)
                 {
                     isCommpete.Set();
                     return;
@@ -232,14 +227,7 @@ namespace KipTM.Model.Devices
                 return false;
             _loops.StartMiddleAction(_loopKey, (transport) =>
             {
-                var ieee488 = transport as ITransportIEEE488;
-                if (ieee488 == null || cancel.IsCancellationRequested)
-                {
-                    isCommpete.Set();
-                    return;
-                }
-
-                if (!_adts.SetCalibrationValue(ieee488, value) || cancel.IsCancellationRequested)
+                if (!_adts.SetCalibrationValue(value) || cancel.IsCancellationRequested)
                 {
                     isCommpete.Set();
                     return;
@@ -276,14 +264,7 @@ namespace KipTM.Model.Devices
             double? zeroValue = null;
             _loops.StartMiddleAction(_loopKey, (transport) =>
             {
-                var ieee488 = transport as ITransportIEEE488;
-                if (ieee488 == null || cancel.IsCancellationRequested)
-                {
-                    isCommpete.Set();
-                    return;
-                }
-
-                if (!_adts.GetCamibrationResult(ieee488, out slopeValue, out zeroValue) || cancel.IsCancellationRequested)
+                if (!_adts.GetCamibrationResult(out slopeValue, out zeroValue) || cancel.IsCancellationRequested)
                 {
                     isCommpete.Set();
                     return;
@@ -319,14 +300,7 @@ namespace KipTM.Model.Devices
                 return false;
             _loops.StartMiddleAction(_loopKey, (transport) =>
             {
-                var ieee488 = transport as ITransportIEEE488;
-                if (ieee488 == null || cancel.IsCancellationRequested)
-                {
-                    isCommpete.Set();
-                    return;
-                }
-
-                if (!_adts.SetCalibrationAccept(ieee488, accept) || cancel.IsCancellationRequested)
+                if (!_adts.SetCalibrationAccept(accept) || cancel.IsCancellationRequested)
                 {
                     isCommpete.Set();
                     return;
@@ -406,15 +380,13 @@ namespace KipTM.Model.Devices
             return wh;
         }
 
+        #region Autoupdate functions
+
         void AutoUpdateStatus(object transport)
         {
-            var ieee488 = transport as ITransportIEEE488;
-            if (ieee488 == null)
-                return;
-
             if (!_isNeedAutoupdate)
                 return;
-            if (!_adts.GetStatus(ieee488, out _status))
+            if (!_adts.GetStatus(out _status))
                 return;
             if(_status == null)
                 return;
@@ -437,70 +409,71 @@ namespace KipTM.Model.Devices
             if (!_isNeedAutoupdate)
                 return;
 
-            _loops.StartUnimportantAction(_loopKey, AutoUpdateStatus);
+            Task.Run(() => {
+                Thread.Sleep(_periodUpdateStatus);
+                _loops.StartUnimportantAction(_loopKey, AutoUpdateStatus);
+            });
         }
 
         void AutoUpdateState(object transport)
         {
-            var ieee488 = transport as ITransportIEEE488;
-            if (ieee488 == null)
+             if (!_isNeedAutoupdate)
                 return;
-
-            if (!_isNeedAutoupdate)
-                return;
-            if (!_adts.GetState(ieee488, out _state))
+            if (!_adts.GetState(out _state))
                 return;
             _stateTime = DateTime.Now;
             OnStateReaded(_stateTime.Value);
+
             if (!_isNeedAutoupdate)
                 return;
 
-            _loops.StartUnimportantAction(_loopKey, AutoUpdateState);
+            Task.Run(() => {
+                Thread.Sleep(_periodUpdateState);
+                _loops.StartUnimportantAction(_loopKey, AutoUpdateState);
+            });
         }
 
         void AutoUpdatePressure(object transport)
         {
-            var ieee488 = transport as ITransportIEEE488;
-            if (ieee488 == null)
-                return;
-
             if (!_isNeedAutoupdate)
                 return;
-            if (!_adts.ReadMeasure(ieee488, Parameters.PS, out _pressure))
+            if (!_adts.ReadMeasure(Parameters.PS, out _pressure))
                 return;
             _pressureTime = DateTime.Now;
             OnPressureReaded(_pressureTime.Value);
+
             if (!_isNeedAutoupdate)
                 return;
 
-            _loops.StartUnimportantAction(_loopKey, AutoUpdatePressure);
+            Task.Run(() => {
+                Thread.Sleep(_periodUpdatePressure);
+                _loops.StartUnimportantAction(_loopKey, AutoUpdatePressure);
+            });
         }
 
         void AutoUpdatePitot(object transport)
         {
-            var ieee488 = transport as ITransportIEEE488;
-            if (ieee488 == null)
-                return;
-
             if (!_isNeedAutoupdate)
                 return;
-            if (!_adts.ReadMeasure(ieee488, Parameters.PT, out _pitot))
+            if (!_adts.ReadMeasure(Parameters.PT, out _pitot))
                 return;
             _pitotTime = DateTime.Now;
             OnPitotReaded(_pitotTime.Value);
+
             if (!_isNeedAutoupdate)
                 return;
 
-            _loops.StartUnimportantAction(_loopKey, AutoUpdatePitot);
+            Task.Run(() => {
+                Thread.Sleep(_periodUpdatePitot);
+                _loops.StartUnimportantAction(_loopKey, AutoUpdatePitot);
+            });
         }
+
+        #endregion
 
         void UpdateUnit(object transport)
         {
-            var ieee488 = transport as ITransportIEEE488;
-            if (ieee488 == null)
-                return;
-
-            if (!_adts.GetUnits(ieee488, out _pressureUnit))
+            if (!_adts.GetUnits(out _pressureUnit))
                 return;
             _pressureUnitTime = DateTime.Now;
         }
