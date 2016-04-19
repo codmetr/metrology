@@ -25,8 +25,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -174,7 +175,6 @@
     <Compile Include="ViewModel\Archive\ITestResultViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\MethodicViewModel.cs" />
-    <Compile Include="ViewModel\Services\ADTSViewModel.cs" />
     <Compile Include="ViewModel\Services\SelectChannelViewModel.cs" />
     <Compile Include="ViewModel\Services\Pace5000ViewModel.cs" />
     <Compile Include="ViewModel\Services\ParameterValuePair.cs" />
@@ -207,9 +207,6 @@
     </Compile>
     <Compile Include="View\DeviceTypes\EtalonTypeView.xaml.cs">
       <DependentUpon>EtalonTypeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Services\ADTSView.xaml.cs">
-      <DependentUpon>ADTSView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Services\SelectChannelView.xaml.cs">
       <DependentUpon>SelectChannelView.xaml</DependentUpon>
@@ -289,10 +286,6 @@
     <Page Include="View\DeviceTypes\EtalonTypeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Services\ADTSView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Services\SelectChannelView.xaml">
       <Generator>MSBuild:Compile</Generator>
