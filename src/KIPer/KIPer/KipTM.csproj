@@ -110,6 +110,7 @@
     <Compile Include="Archive\DTO\TestResult.cs" />
     <Compile Include="Model\Channels\PACEEchalonChannel.cs" />
     <Compile Include="Model\Checks\ADTSChechPoint.cs" />
+    <Compile Include="Model\Checks\ADTSTestMethod.cs" />
     <Compile Include="Model\Checks\EventArgEnd.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\Init.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\DoPoint.cs" />
@@ -120,6 +121,8 @@
     <Compile Include="Model\Checks\EventArgProgress.cs" />
     <Compile Include="Model\Checks\EventArgResultParam.cs" />
     <Compile Include="Model\Checks\ICheckMethod.cs" />
+    <Compile Include="Model\Checks\Steps\ADTSTest\DoPoint.cs" />
+    <Compile Include="Model\Checks\Steps\ADTSTest\Init.cs" />
     <Compile Include="Model\Checks\Steps\ITestStep.cs" />
     <Compile Include="Model\Channels\IUserChannel.cs" />
     <Compile Include="Model\Checks\Steps\TestStep.cs" />

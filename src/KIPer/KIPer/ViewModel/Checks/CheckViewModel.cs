@@ -71,6 +71,9 @@ namespace KipTM.ViewModel
             LoadAvalableCheckDevices();
 
             LoadAvalableEthalons();
+
+            CheckDeviceChanel = new SelectChannelViewModel();
+            EthalonChanel = new SelectChannelViewModel();
         }
 
         private void LoadAvalableCheckDevices()
@@ -271,14 +274,9 @@ namespace KipTM.ViewModel
         }
 
         /// <summary>
-        /// Выбранный порт
+        /// Настройки канала тестируемого прибора
         /// </summary>
-        public string SelectedPort { get; set; }
-
-        /// <summary>
-        /// Адрес
-        /// </summary>
-        public string Address { get; set; }
+        public SelectChannelViewModel CheckDeviceChanel { get; set; }
 
         #endregion
 
@@ -351,11 +349,19 @@ namespace KipTM.ViewModel
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public DeviceDescriptor Ethalon
         {
             get { return _ethalon; }
             protected set { Set(ref _ethalon, value); }
         }
+
+        /// <summary>
+        /// Настройки канала эталона
+        /// </summary>
+        public SelectChannelViewModel EthalonChanel { get; set; }
         #endregion
 
         public ICommand Save { get; set; }

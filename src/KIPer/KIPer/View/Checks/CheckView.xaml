@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:archive="clr-namespace:KipTM.View.Archive"
              xmlns:checks="clr-namespace:KipTM.ViewModel"
+             xmlns:view="clr-namespace:KipTM.View"
              mc:Ignorable="d"
              d:DesignHeight="550" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance checks:CheckViewModel}">
@@ -76,16 +77,7 @@
                         SelectedItem="{Binding SelectedChannel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Expander Header="Настройки подключения">
                         <StackPanel>
-                            <TextBlock>Настройки подключения</TextBlock>
-                            <ComboBox
-                                ItemsSource="{Binding Ports}"
-                                SelectedItem="{Binding SelectedPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock>Порт:</TextBlock>
-                            <ComboBox
-                                ItemsSource="{Binding Ports}"
-                                SelectedItem="{Binding SelectedPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock>Адрес:</TextBlock>
-                            <TextBox Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <view:SelectChannelView DataContext="{Binding CheckDeviceChanel}"/>
                         </StackPanel>
                     </Expander>
                 </StackPanel>
@@ -142,12 +134,7 @@
                              <Expander Header="Настройки подключения"
                                        Visibility="{Binding IsAnalogEthalon, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
                                 <StackPanel>
-                                    <TextBlock>Порт:</TextBlock>
-                                    <ComboBox
-                                        ItemsSource="{Binding Ports}"
-                                        SelectedItem="{Binding SelectedPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <TextBlock>Адрес:</TextBlock>
-                                    <TextBox Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <view:SelectChannelView DataContext="{Binding EthalonChanel}"/>
                                 </StackPanel>
                             </Expander>
                         </StackPanel>
