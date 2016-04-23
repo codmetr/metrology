@@ -155,6 +155,7 @@
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTSCalibrationViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckViewModel.cs" />
+    <Compile Include="ViewModel\Checks\ADTSTestViewModel.cs" />
     <Compile Include="ViewModel\Checks\IMethodViewModel.cs" />
     <Compile Include="ViewModel\Checks\MechanicalManometerViewModel.cs" />
     <Compile Include="ViewModel\Checks\MethodicViewModelAttribute.cs" />

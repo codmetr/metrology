@@ -80,6 +80,7 @@ namespace KipTM.ViewModel
                 {typeof(CheckViewModel), typeof(CheckView)},
                 {typeof(MechanicalManometerViewModel), typeof(MechanicalManometerView)},
                 {typeof(ADTSCalibrationViewModel), typeof(ADTSCalibrationView)},
+                {typeof(ADTSTestViewModel), typeof(ADTSCalibrationView)},
             };
         }
 

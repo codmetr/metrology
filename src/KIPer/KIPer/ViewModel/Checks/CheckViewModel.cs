@@ -256,6 +256,8 @@ namespace KipTM.ViewModel
                 _selectedCheckType = value;
                 _result.CheckType = _selectedCheckType.Key;
                 Check = GetViewModelFor(_selectedCheckType.Value);
+                if (Ethalon != null)
+                    UpdateEthalon();
             }
         }
  
@@ -291,17 +293,7 @@ namespace KipTM.ViewModel
             set
             {
                 Set(ref _selectedEthalonType, value);
-                IsAnalogEthalon = _selectedEthalonType.Key == UserEchalonChannel.Key;
-                if (!IsAnalogEthalon)
-                {
-                    Ethalon.DeviceType = _selectedEthalonType.Value;
-                    Check.SetEthalonChannel(_selectedEthalonType.Key, null); //ToDo добавить настройки подключения
-                    return;
-                }
-                else
-                {
-                    Check.SlectUserEthalonChannel();
-                }
+                UpdateEthalon();
             }
         }
 
@@ -382,7 +374,28 @@ namespace KipTM.ViewModel
                 adtsMethodic.SetADTS(_deviceManager.ADTS);
                 return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey), _deviceManager);
             }
+            else if (methodic is ADTSTestMethod)
+            {
+                var adtsMethodic = methodic as ADTSTestMethod;
+                adtsMethodic.SetADTS(_deviceManager.ADTS);
+                return new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey), _deviceManager);
+            }
             return null;
+        }
+
+        private void UpdateEthalon()
+        {
+            IsAnalogEthalon = _selectedEthalonType.Key == UserEchalonChannel.Key;
+            if (!IsAnalogEthalon)
+            {
+                Ethalon.DeviceType = _selectedEthalonType.Value;
+                Check.SetEthalonChannel(_selectedEthalonType.Key, null); //ToDo добавить настройки подключения
+                return;
+            }
+            else
+            {
+                Check.SlectUserEthalonChannel();
+            }
         }
     }
 }

@@ -91,6 +91,36 @@ namespace KipTM.Model.Devices
         }
 
         /// <summary>
+        /// Установить состояние
+        /// </summary>
+        /// <param name="state"></param>
+        public void SetState(State state, CancellationToken cancel)
+        {
+            bool result = false;
+            var isCommpete = new AutoResetEvent(false);
+            _loops.StartMiddleAction(_loopKey, (transport) =>
+            {
+                if (!_adts.SetState(state) || cancel.IsCancellationRequested)
+                {
+                    isCommpete.Set();
+                    return;
+                }
+
+                result = true;
+                isCommpete.Set();
+            });
+            if (cancel.IsCancellationRequested)
+                return false;
+            isCommpete.WaitOne();
+            if (cancel.IsCancellationRequested)
+                return false;
+            if (result)
+                date = dateValue;
+            return result;
+        }
+
+
+        /// <summary>
         /// Запуск процесса калибровки
         /// </summary>
         /// <param name="channel"></param>

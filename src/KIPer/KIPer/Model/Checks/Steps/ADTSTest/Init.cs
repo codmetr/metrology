@@ -37,7 +37,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
                 return;
             }
             _logger.With(l => l.Trace(string.Format("Start ADTS calibration by channel {0}", _calibChan)));
-            OnProgressChanged(new EventArgProgress(0, "Запуск калибровки"));
+            OnProgressChanged(new EventArgProgress(0, "Запуск Поверки"));
             if (!_adts.StartCalibration(_calibChan, out calibDate, cancel))
             {
                 _logger.With(l => l.Trace(string.Format("[ERROR] start clibration")));

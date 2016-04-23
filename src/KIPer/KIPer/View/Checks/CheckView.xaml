@@ -124,7 +124,7 @@
                             </TextBox>
                             <TextBlock>Изготовитель:</TextBlock>
                             <TextBox Text="{Binding EthalonManufacturer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                     IsReadOnly="{Binding IsNoAnalogEthalon, UpdateSourceTrigger=PropertyChanged}"/>
+                                     IsReadOnly="{Binding IsAnalogEthalon, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock>Инвентарный номер:</TextBlock>
                             <TextBox Text="{Binding InventarNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock>Серийный номер:</TextBlock>
@@ -132,7 +132,7 @@
                             <TextBlock>Дата прошлой поверки:</TextBlock>
                             <DatePicker SelectedDate="{Binding PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                              <Expander Header="Настройки подключения"
-                                       Visibility="{Binding IsAnalogEthalon, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                       Visibility="{Binding IsNoAnalogEthalon, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
                                 <StackPanel>
                                     <view:SelectChannelView DataContext="{Binding EthalonChanel}"/>
                                 </StackPanel>
