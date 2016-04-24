@@ -16,6 +16,7 @@ using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 using KipTM.Model.Params;
+using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 using KipTM.ViewModel;
 
@@ -27,15 +28,17 @@ namespace KipTM.ViewModel.Checks
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    [MethodicViewModelAttribute(typeof(ADTSCheckMethod))]
-    public class ADTSCalibrationViewModel : ViewModelBase, IMethodViewModel
+    [MethodicViewModelAttribute(typeof(ADTSTestMethod))]
+    public class ADTSTestViewModel : ViewModelBase, IMethodViewModel
     {
         private string _titleBtnNext;
-        private ADTSCheckMethod _methodic;
+        private ADTSTestMethod _methodic;
         private IUserChannel _userChannel;
         private UserEchalonChannel _userEchalonChannel;
         private IPropertyPool _propertyPool;
         private bool _waitUserReaction;
+
+        private SelectChannelViewModel _connection;
 
         private double _realValue;
 
@@ -53,7 +56,7 @@ namespace KipTM.ViewModel.Checks
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
         /// </summary>
-        public ADTSCalibrationViewModel(ADTSCheckMethod methodic, IPropertyPool propertyPool, IDeviceManager deviceManager)
+        public ADTSTestViewModel(ADTSTestMethod methodic, IPropertyPool propertyPool, IDeviceManager deviceManager)
         {
             _cancellation = new CancellationTokenSource();
             _userChannel = new UserChannel();
@@ -83,6 +86,11 @@ namespace KipTM.ViewModel.Checks
             {
                 _dispatcher.Invoke(()=>Results.Add(result));
             }
+        }
+
+        public void SetConnection(SelectChannelViewModel connection)
+        {
+            _connection = connection;
         }
 
         public void SlectUserEthalonChannel()
@@ -156,9 +164,16 @@ namespace KipTM.ViewModel.Checks
         private void DoStart()
         {
             TitleBtnNext = "Далее";
+            _methodic.Address = 1;
+            var visaSett = _connection.SelectedChannel.Settings as VisaSettings;
+            if (visaSett != null)
+                visaSett.Address = _connection.Address;
+            _methodic.ChannelType = _connection.SelectedChannel;
             // Задаем эталон
-            if(_ethalonTypeKey != null && _settings != null)
+            if (_ethalonTypeKey != null && _settings != null)
                 _methodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _settings));
+            else
+                _methodic.SetEthalonChannel(_userEchalonChannel);
             // Запускаем
             Task.Run(()=>_methodic.Start());
             OnStarted();

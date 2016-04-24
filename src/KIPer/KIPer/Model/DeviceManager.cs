@@ -56,6 +56,7 @@ namespace KipTM.Model
                                 throw new TargetParameterCountException(string.Format(
                                     "option mast be type: {0}; now type: {1}",
                                     typeof (Tuple<int, ITransportIEEE488>), options.GetType()));
+                            tupleParam.Item2.Open(tupleParam.Item1);
                             return new ADTSDriver(tupleParam.Item1, tupleParam.Item2);
                         }
                 },
@@ -78,11 +79,11 @@ namespace KipTM.Model
             {
                 {VisaChannelDescriptor.KeyType, opt =>
                 {
-                    return new FakeTransport();//todo Заменить на настоящий транспорт
+                    //return new FakeTransport();//todo Заменить на настоящий транспорт
                     return new VisaIEEE488();
                 }}
             };
-
+            _loops.AddLocker(VisaChannelDescriptor.KeyType, new object());
 
             _adtsModel = new ADTSModel(string.Format("{0} {1}", ADTSModel.Model, ADTSModel.DeviceCommonType), _loops,
                 VisaChannelDescriptor.KeyType, this);

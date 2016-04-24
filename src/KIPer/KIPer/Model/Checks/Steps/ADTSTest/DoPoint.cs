@@ -51,7 +51,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             }
             if (cancel.IsCancellationRequested)
             {
-                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
+                _logger.With(l => l.Trace(string.Format("Cancel test")));
                 whEnd.Set();
                 OnEnd(new EventArgEnd(false));
                 return;
@@ -71,7 +71,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
 
             if (cancel.IsCancellationRequested)
             {
-                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
+                _logger.With(l => l.Trace(string.Format("Cancel test")));
                 whEnd.Set();
                 OnEnd(new EventArgEnd(false));
                 return;
@@ -80,7 +80,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
 
             if (cancel.IsCancellationRequested)
             {
-                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
+                _logger.With(l => l.Trace(string.Format("Cancel test")));
                 whEnd.Set();
                 OnEnd(new EventArgEnd(false));
                 return;
@@ -94,7 +94,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
 
             if (cancel.IsCancellationRequested)
             {
-                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
+                _logger.With(l => l.Trace(string.Format("Cancel test")));
                 whEnd.Set();
                 OnEnd(new EventArgEnd(false));
                 return;

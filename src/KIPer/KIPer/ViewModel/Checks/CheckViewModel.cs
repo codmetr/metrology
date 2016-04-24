@@ -48,6 +48,7 @@ namespace KipTM.ViewModel
 
         private DeviceDescriptor _ethalon;
         private bool _isAnalogEthalon;
+        private SelectChannelViewModel _checkDeviceChanel;
 
         /// <summary>
         /// For disiner
@@ -256,6 +257,11 @@ namespace KipTM.ViewModel
                 _selectedCheckType = value;
                 _result.CheckType = _selectedCheckType.Key;
                 Check = GetViewModelFor(_selectedCheckType.Value);
+                var ch = Check as ADTSTestViewModel;
+                if (ch != null)
+                {
+                    ch.SetConnection(_checkDeviceChanel);
+                }
                 if (Ethalon != null)
                     UpdateEthalon();
             }
@@ -278,7 +284,19 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Настройки канала тестируемого прибора
         /// </summary>
-        public SelectChannelViewModel CheckDeviceChanel { get; set; }
+        public SelectChannelViewModel CheckDeviceChanel
+        {
+            get { return _checkDeviceChanel; }
+            set
+            {
+                _checkDeviceChanel = value;
+                var ch = Check as ADTSTestViewModel;
+                if (ch != null)
+                {
+                    ch.SetConnection(_checkDeviceChanel);
+                }
+            }
+        }
 
         #endregion
 

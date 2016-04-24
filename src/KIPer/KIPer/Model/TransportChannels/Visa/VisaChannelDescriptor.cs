@@ -15,10 +15,15 @@ namespace KipTM.Model.TransportChannels
         {
             Name = "Канал VISA";
             Key = KeyType;
+            _settings = new VisaSettings();
         }
 
         public string Key { get; private set; }
         public string Name { get; private set; }
-        public object Settings { get { return _settings; } }
+
+        public object Settings
+        {
+            get { return _settings; }
+        }
     }
 }

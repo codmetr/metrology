@@ -10,6 +10,7 @@ using KipTM.Model.Channels;
 using KipTM.Model.Checks.Steps;
 using KipTM.Model.Checks.Steps.ADTSTest;
 using KipTM.Model.Devices;
+using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 using Tools;
 
@@ -41,6 +42,10 @@ namespace KipTM.Model.Checks
             _logger = logger;
             _cancelSource = new CancellationTokenSource();
         }
+
+        public int Address;
+
+        public ITransportChannelType ChannelType;
 
         public string Title{get { return TitleMethod; }}
 
@@ -146,6 +151,7 @@ namespace KipTM.Model.Checks
         /// <returns></returns>
         public bool Start()
         {
+            _adts.Start(Address, ChannelType);
             var cancel = _cancelSource.Token;
             ManualResetEvent whStep = new ManualResetEvent(false);
             var waitPeriod = TimeSpan.FromMilliseconds(10);

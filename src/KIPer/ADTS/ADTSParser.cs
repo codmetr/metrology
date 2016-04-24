@@ -374,6 +374,7 @@ namespace ADTS
                             throw new Exception(string.Format("Can not cast \"{0}\" to State", parameter));
                         break;
                     case PeremeterTypes.PressureUnit:
+                        parameter = parameter.Trim();
                         if (parameter == "MBAR")
                             result.Add(key, PressureUnits.MBar);
                         else if(parameter == "INH2O4")

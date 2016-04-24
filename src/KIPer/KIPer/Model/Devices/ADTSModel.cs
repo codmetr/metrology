@@ -94,7 +94,7 @@ namespace KipTM.Model.Devices
         /// Установить состояние
         /// </summary>
         /// <param name="state"></param>
-        public void SetState(State state, CancellationToken cancel)
+        public bool SetState(State state, CancellationToken cancel)
         {
             bool result = false;
             var isCommpete = new AutoResetEvent(false);
@@ -115,7 +115,7 @@ namespace KipTM.Model.Devices
             if (cancel.IsCancellationRequested)
                 return false;
             if (result)
-                date = dateValue;
+                _state = state;
             return result;
         }
 
