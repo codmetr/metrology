@@ -25,8 +25,7 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <TextBlock>Адрес:</TextBlock>
-            <TextBox Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <ContentPresenter Content="{Binding SelectedChannel.Settings}"/>
         </StackPanel>
     </Grid>
 </UserControl>

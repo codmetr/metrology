@@ -6,9 +6,11 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Interfaces;
 using KipTM.Model;
+using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 using KipTM.View;
 using KipTM.View.Checks;
+using KipTM.View.Services;
 using KipTM.ViewModel.Checks;
 
 namespace KipTM.ViewModel
@@ -64,6 +66,7 @@ namespace KipTM.ViewModel
                 {typeof(Pace5000ViewModel), typeof(PACE5000View)},
                 //{typeof(ADTSViewModel), typeof(ADTSView)},
                 {typeof(SelectChannelViewModel), typeof(SelectChannelView)},
+                {typeof(VisaSettings), typeof(VisaSettingsView)},
 
                 //Вкладка Архив
                 {typeof(ArchivesViewModel), typeof(ArchivesView)},
