@@ -8,6 +8,8 @@ namespace ADTS
 {
     public class ADTSParser
     {
+        internal const string KeyGoToGround = "SOUR:GTGR";
+        internal const string KeyGetIsGround = "SOUR:GTGR?";
         internal const string KeyGetDate = "SYST:DATE?";
         internal const string KeySetState = "SOUR:STAT <state>";
         internal const string KeyGetState = "SOUR:STAT?";
@@ -41,6 +43,33 @@ namespace ADTS
                 {"day", PeremeterTypes.Integer}
             });
             date = new DateTime((int)answer["year"], (int)answer["month"], (int)answer["day"]);
+            return true;
+        }
+        #endregion
+
+        #region GoToGround "SOUR:GTGR"
+
+        public string GetCommandGoToGround()
+        {
+            return KeyGoToGround;
+        }
+        #endregion
+
+        #region GetIsGround "SOUR:GTGR?"
+
+        public string GetCommandIsGround()
+        {
+            return KeyGetIsGround;
+        }
+
+        public bool ParseGetIsGround(string message, out bool? isGround)
+        {
+            isGround = null;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>()
+            {
+                {"isGround", PeremeterTypes.Boolean}
+            });
+            isGround = (bool)answer["isGround"];
             return true;
         }
         #endregion
@@ -336,6 +365,7 @@ namespace ADTS
             {
                 var key = keys[i];
                 var parameter = parts[i];
+                parameter = parameter.Trim();
                 switch (parameterTypes[key])
                 {
                     case PeremeterTypes.Real:
@@ -374,7 +404,6 @@ namespace ADTS
                             throw new Exception(string.Format("Can not cast \"{0}\" to State", parameter));
                         break;
                     case PeremeterTypes.PressureUnit:
-                        parameter = parameter.Trim();
                         if (parameter == "MBAR")
                             result.Add(key, PressureUnits.MBar);
                         else if(parameter == "INH2O4")

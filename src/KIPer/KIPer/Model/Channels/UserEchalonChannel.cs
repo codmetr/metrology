@@ -32,7 +32,7 @@ namespace KipTM.Model.Channels
             var result = double.NaN;
             _userChannel.Message = string.Format("Укажите эталонное значение");
             _userChannel.RealValue = point;
-            var wh = new AutoResetEvent(false);
+            var wh = new ManualResetEvent(false);
             _userChannel.NeedQuery(UserQueryType.GetRealValue, wh);
             while (!wh.WaitOne(_waitPeriod))
             {

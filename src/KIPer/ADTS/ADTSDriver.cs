@@ -65,6 +65,17 @@ namespace ADTS
         }
 
         /// <summary>
+        /// Go to ground ADTS
+        /// </summary>
+        /// <param name="transport"></param>
+        /// <returns></returns>
+        public bool GoToGround()
+        {
+            var cmd = _parser.GetCommandGoToGround();
+            return _transport.Send(cmd);
+        }
+
+        /// <summary>
         /// Set state ADTS
         /// </summary>
         /// <param name="transport"></param>

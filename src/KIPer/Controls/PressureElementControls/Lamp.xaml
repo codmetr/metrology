@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="PressureElementControls.Lamp"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" x:Name="root">
+    <Viewbox>
+        <Canvas Height="50" Width="50">
+            <Ellipse Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Ellipse.Fill>
+                    <LinearGradientBrush>
+                        <GradientStop Offset="0.4" Color="Black"/>
+                        <GradientStop Offset="0.5" Color="SkyBlue"/>
+                        <GradientStop Offset="0.6" Color="Black"/>
+                    </LinearGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse Canvas.Top="5" Canvas.Right="5" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Ellipse.Style>
+                    <Style TargetType="{x:Type Ellipse}">
+                        <Setter Property="Fill">
+                            <Setter.Value>
+                                <RadialGradientBrush GradientOrigin="0.7,0.4">
+                                    <GradientStop Offset="1" Color="SlateGray"/>
+                                    <GradientStop Offset="0.7" Color="SlateGray"/>
+                                    <GradientStop Offset="0" Color="WhiteSmoke"/>
+                                </RadialGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Value, ElementName=root, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                <Setter Property="Fill">
+                                    <Setter.Value>
+                                        <RadialGradientBrush GradientOrigin="0.7,0.4">
+                                            <GradientStop Offset="1" Color="Red"/>
+                                            <GradientStop Offset="0.7" Color="Red"/>
+                                            <GradientStop Offset="0" Color="WhiteSmoke"/>
+                                        </RadialGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Value, ElementName=root, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                <Setter Property="Fill">
+                                    <Setter.Value>
+                                        <RadialGradientBrush GradientOrigin="0.7,0.4">
+                                            <GradientStop Offset="1" Color="SlateGray"/>
+                                            <GradientStop Offset="0.7" Color="SlateGray"/>
+                                            <GradientStop Offset="0" Color="WhiteSmoke"/>
+                                        </RadialGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Ellipse.Style>
+            </Ellipse>
+        </Canvas>
+    </Viewbox>
+</UserControl>

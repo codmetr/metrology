@@ -48,8 +48,14 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DiscretInputHorisontalControl.xaml.cs">
+      <DependentUpon>DiscretInputHorisontalControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ErrorLine.xaml.cs">
       <DependentUpon>ErrorLine.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Lamp.xaml.cs">
+      <DependentUpon>Lamp.xaml</DependentUpon>
     </Compile>
     <Compile Include="Scale.xaml.cs">
       <DependentUpon>Scale.xaml</DependentUpon>
@@ -57,9 +63,17 @@
     <Compile Include="StateIndicator.xaml.cs">
       <DependentUpon>StateIndicator.xaml</DependentUpon>
     </Compile>
+    <Page Include="DiscretInputHorisontalControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ErrorLine.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Lamp.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Manometer.xaml">
       <Generator>MSBuild:Compile</Generator>

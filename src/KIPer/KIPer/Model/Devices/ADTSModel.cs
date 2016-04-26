@@ -97,7 +97,7 @@ namespace KipTM.Model.Devices
         public bool SetState(State state, CancellationToken cancel)
         {
             bool result = false;
-            var isCommpete = new AutoResetEvent(false);
+            var isCommpete = new ManualResetEvent(false);
             _loops.StartMiddleAction(_loopKey, (transport) =>
             {
                 if (!_adts.SetState(state) || cancel.IsCancellationRequested)
@@ -119,6 +119,32 @@ namespace KipTM.Model.Devices
             return result;
         }
 
+        /// <summary>
+        /// Установить состояние
+        /// </summary>
+        public bool GoToGround(CancellationToken cancel)
+        {
+            bool result = false;
+            var isCommpete = new ManualResetEvent(false);
+            _loops.StartMiddleAction(_loopKey, (transport) =>
+            {
+                if (!_adts.GoToGround() || cancel.IsCancellationRequested)
+                {
+                    isCommpete.Set();
+                    return;
+                }
+
+                result = true;
+                isCommpete.Set();
+            });
+            if (cancel.IsCancellationRequested)
+                return false;
+            isCommpete.WaitOne();
+            if (cancel.IsCancellationRequested)
+                return false;
+            return result;
+        }
+
 
         /// <summary>
         /// Запуск процесса калибровки
@@ -131,7 +157,7 @@ namespace KipTM.Model.Devices
         {
             bool result = false;
             date = null;
-            var isCommpete = new AutoResetEvent(false);
+            var isCommpete = new ManualResetEvent(false);
             DateTime? dateValue = null;
             if (cancel.IsCancellationRequested)
                 return false;
@@ -180,7 +206,7 @@ namespace KipTM.Model.Devices
         public bool SetPressure(Parameters parameter, double pressure, double rate, PressureUnits unit, CancellationToken cancel)
         {
             bool result = false;
-            var isCommpete = new AutoResetEvent(false);
+            var isCommpete = new ManualResetEvent(false);
             if(cancel.IsCancellationRequested)
                 return false;
             _loops.StartMiddleAction(_loopKey, (transport) =>
@@ -252,7 +278,7 @@ namespace KipTM.Model.Devices
         public bool SetActualValue(double value, CancellationToken cancel)
         {
             bool result = false;
-            var isCommpete = new AutoResetEvent(false);
+            var isCommpete = new ManualResetEvent(false);
             if (cancel.IsCancellationRequested)
                 return false;
             _loops.StartMiddleAction(_loopKey, (transport) =>
@@ -285,7 +311,7 @@ namespace KipTM.Model.Devices
             bool result = false;
             slope = null;
             zero = null;
-            var isCommpete = new AutoResetEvent(false);
+            var isCommpete = new ManualResetEvent(false);
 
             if (cancel.IsCancellationRequested)
                 return false;
@@ -325,7 +351,7 @@ namespace KipTM.Model.Devices
         public bool AcceptCalibration(bool accept, CancellationToken cancel)
         {
             bool result = false;
-            var isCommpete = new AutoResetEvent(false);
+            var isCommpete = new ManualResetEvent(false);
             if (cancel.IsCancellationRequested)
                 return false;
             _loops.StartMiddleAction(_loopKey, (transport) =>
@@ -355,6 +381,8 @@ namespace KipTM.Model.Devices
         public double? Pressure{get { return _pressure; }}
 
         public double? Pitot{get { return _pitot; }}
+
+        public PressureUnits? PUnits { get { return _pressureUnit; } }
 
         public event Action<DateTime> StatusReaded;
 
@@ -402,7 +430,7 @@ namespace KipTM.Model.Devices
         {
             if (waitFunc == null)
                 return null;
-            var wh = new AutoResetEvent(false);
+            var wh = new ManualResetEvent(false);
             lock (_waitStatusPool)
             {
                 _waitStatusPool.Add(wh, waitFunc);

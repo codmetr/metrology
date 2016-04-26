@@ -121,6 +121,7 @@
     <Compile Include="Model\Checks\EventArgProgress.cs" />
     <Compile Include="Model\Checks\EventArgResultParam.cs" />
     <Compile Include="Model\Checks\ICheckMethod.cs" />
+    <Compile Include="Model\Checks\Steps\ADTSTest\End.cs" />
     <Compile Include="Model\Checks\Steps\ADTSTest\DoPoint.cs" />
     <Compile Include="Model\Checks\Steps\ADTSTest\Init.cs" />
     <Compile Include="Model\Checks\Steps\ITestStep.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="ViewModel\Archive\ITestResultViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\MethodicViewModel.cs" />
+    <Compile Include="ViewModel\Services\ADTSViewModel.cs" />
     <Compile Include="ViewModel\Services\SelectChannelViewModel.cs" />
     <Compile Include="ViewModel\Services\Pace5000ViewModel.cs" />
     <Compile Include="ViewModel\Services\ParameterValuePair.cs" />
@@ -211,6 +213,9 @@
     </Compile>
     <Compile Include="View\DeviceTypes\EtalonTypeView.xaml.cs">
       <DependentUpon>EtalonTypeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Services\ADTSView.xaml.cs">
+      <DependentUpon>ADTSView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Services\SelectChannelView.xaml.cs">
       <DependentUpon>SelectChannelView.xaml</DependentUpon>
@@ -291,6 +296,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\DeviceTypes\EtalonTypeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Services\ADTSView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

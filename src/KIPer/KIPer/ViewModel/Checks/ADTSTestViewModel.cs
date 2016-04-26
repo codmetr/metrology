@@ -19,6 +19,7 @@ using KipTM.Model.Params;
 using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 using KipTM.ViewModel;
+using KipTM.ViewModel.Services;
 
 namespace KipTM.ViewModel.Checks
 {
@@ -52,6 +53,7 @@ namespace KipTM.ViewModel.Checks
         private IDeviceManager _deviceManager;
         private string _ethalonTypeKey;
         private object _settings;
+        private ADTSViewModel _adtsViewModel;
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
@@ -64,7 +66,8 @@ namespace KipTM.ViewModel.Checks
             _methodic = methodic;
             _propertyPool = propertyPool;
             _deviceManager = deviceManager;
-            
+            _adtsViewModel = new ADTSViewModel();
+
             // Базовая инициализация
             var adts = _propertyPool.ByKey(methodic.ChannelKey);
             _methodic.Init(adts);
@@ -78,6 +81,11 @@ namespace KipTM.ViewModel.Checks
             TitleBtnNext = "Старт";
             _currentAction = DoStart;
             _dispatcher = Dispatcher.CurrentDispatcher;
+        }
+
+        public ADTSViewModel ADTS
+        {
+            get { return _adtsViewModel; }
         }
 
         private void ResultUpdated(object sender, EventArgTestResult eventArgTestResult)
