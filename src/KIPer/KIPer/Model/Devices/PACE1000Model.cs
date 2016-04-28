@@ -27,8 +27,8 @@ namespace KipTM.Model.Devices
             private set;
         }
 
-        internal static string Key{get { return "PACE5000"; }}
-        internal static string Model { get { return "PACE5000"; } }
+        internal static string Key{get { return "PACE1000"; }}
+        internal static string Model { get { return "PACE1000"; } }
         internal static string DeviceCommonType { get { return "Калибратор давления"; } }
         internal static string DeviceManufacturer { get { return "GE Druk"; } }
         internal static IEnumerable<string> TypesEtalonParameters = new[] { "давление", "авиационная высота", "авиационная скорость" };

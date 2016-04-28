@@ -28,7 +28,7 @@ namespace KipTM.Model
         private readonly PACE5000Model _paceModel;
         private readonly ADTSModel _adtsModel;
 
-        private readonly IDictionary<string, IEthalonChannel> _ethalonChannels;
+        private readonly IDictionary<string, Func<ITransportChannelType, IEthalonChannel>> _ethalonChannels;
 
         private readonly IDictionary<string, Tuple<ITransportIEEE488, SerialPort>> _ports = new Dictionary<string, Tuple<ITransportIEEE488, SerialPort>>();
 
@@ -56,7 +56,7 @@ namespace KipTM.Model
                                 throw new TargetParameterCountException(string.Format(
                                     "option mast be type: {0}; now type: {1}",
                                     typeof (Tuple<int, ITransportIEEE488>), options.GetType()));
-                            tupleParam.Item2.Open(tupleParam.Item1);
+                            //tupleParam.Item2.Open(tupleParam.Item1);
                             return new ADTSDriver(tupleParam.Item1, tupleParam.Item2);
                         }
                 },
@@ -80,7 +80,14 @@ namespace KipTM.Model
                 {VisaChannelDescriptor.KeyType, opt =>
                 {
                     //return new FakeTransport();//todo Заменить на настоящий транспорт
-                    return new VisaIEEE488();
+                    var visaSettings = opt as VisaSettings;
+                    if (visaSettings != null)
+                    {
+                        var transport = new VisaIEEE488();
+                        transport.Open(visaSettings.Address);
+                        return transport;
+                    }
+                    throw new Exception(string.Format("Can not generate transport for key \"{0}\" with options [{0}]", VisaChannelDescriptor.KeyType, opt));
                 }}
             };
             _loops.AddLocker(VisaChannelDescriptor.KeyType, new object());
@@ -92,17 +99,17 @@ namespace KipTM.Model
                 string.Format("{0} {1}", PACE5000Model.Model, PACE5000Model.DeviceCommonType), _loops,
                 VisaChannelDescriptor.KeyType, this);
 
-            _ethalonChannels = new Dictionary<string, IEthalonChannel>()
+            _ethalonChannels = new Dictionary<string, Func<ITransportChannelType, IEthalonChannel>>()
             {
-                {PACE5000Model.Key, new PACEEchalonChannel(_paceModel)}
+                {PACE1000Model.Key, (transportDescriptor)=> new PACEEchalonChannel(GetDevice<PACE1000Model>(default(int),transportDescriptor))}
             };
         }
 
         #region IDeviceManager
 
-        public IEthalonChannel GetEthalonChannel(string deviceKey, object settings)
+        public IEthalonChannel GetEthalonChannel(string deviceKey, ITransportChannelType settings)
         {
-            return _ethalonChannels[deviceKey];
+            return _ethalonChannels[deviceKey](settings);
         }
 
         public T GetDevice<T>(int address, ITransportChannelType transportDescription)
@@ -126,11 +133,6 @@ namespace KipTM.Model
         public ADTSModel ADTS
         {
             get { return _adtsModel; }
-        }
-
-        public IDictionary<string, IEthalonChannel> EthalonChannels
-        {
-            get { return _ethalonChannels; }
         }
 
         #endregion

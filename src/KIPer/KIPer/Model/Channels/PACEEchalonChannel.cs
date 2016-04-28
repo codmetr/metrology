@@ -9,9 +9,9 @@ namespace KipTM.Model.Channels
     {
         public static string Key = "PACEChannel";
 
-        private readonly PACE5000Model _paseModel;
+        private readonly PACE1000Model _paseModel;
 
-        public PACEEchalonChannel(PACE5000Model paseModel)
+        public PACEEchalonChannel(PACE1000Model paseModel)
         {
             _paseModel = paseModel;
         }

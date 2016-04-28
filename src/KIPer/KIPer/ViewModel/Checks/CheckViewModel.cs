@@ -407,7 +407,7 @@ namespace KipTM.ViewModel
             if (!IsAnalogEthalon)
             {
                 Ethalon.DeviceType = _selectedEthalonType.Value;
-                Check.SetEthalonChannel(_selectedEthalonType.Key, null); //ToDo добавить настройки подключения
+                Check.SetEthalonChannel(_selectedEthalonType.Key, EthalonChanel.SelectedChannel); //ToDo добавить настройки подключения
                 return;
             }
             else

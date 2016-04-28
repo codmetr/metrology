@@ -139,6 +139,8 @@ namespace KipTM.ViewModel.Services
             private set { Set(ref _pitot, value); }
         }
 
+        
+
         #region Events
         private void AttachEvents(ADTSModel model)
         {

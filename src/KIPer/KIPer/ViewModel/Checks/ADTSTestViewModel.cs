@@ -52,7 +52,7 @@ namespace KipTM.ViewModel.Checks
 
         private IDeviceManager _deviceManager;
         private string _ethalonTypeKey;
-        private object _settings;
+        private ITransportChannelType _settings;
         private ADTSViewModel _adtsViewModel;
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace KipTM.ViewModel.Checks
             _settings = null;
         }
 
-        public void SetEthalonChannel(string ethalonTypeKey, object settings)
+        public void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings)
         {
             _ethalonTypeKey = ethalonTypeKey;
             _settings = settings;
@@ -173,9 +173,9 @@ namespace KipTM.ViewModel.Checks
         {
             TitleBtnNext = "Далее";
             _methodic.Address = 1;
-            var visaSett = _connection.SelectedChannel.Settings as VisaSettings;
-            if (visaSett != null)
-                visaSett.Address = _connection.Address;
+            //var visaSett = _connection.SelectedChannel.Settings as VisaSettings;
+            //if (visaSett != null)
+            //    visaSett.Address = _connection.Address;
             _methodic.ChannelType = _connection.SelectedChannel;
             // Задаем эталон
             if (_ethalonTypeKey != null && _settings != null)
@@ -185,7 +185,6 @@ namespace KipTM.ViewModel.Checks
             // Запускаем
             Task.Run(()=>_methodic.Start());
             OnStarted();
-            //_currentAction = DoNext;
         }
 
         private void DoNext()

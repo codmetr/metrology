@@ -16,6 +16,7 @@ using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 using KipTM.Model.Params;
+using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 using KipTM.ViewModel;
 using KipTM.ViewModel.Services;
@@ -49,7 +50,7 @@ namespace KipTM.ViewModel.Checks
 
         private IDeviceManager _deviceManager;
         private string _ethalonTypeKey;
-        private object _settings;
+        private ITransportChannelType _settings;
         private ADTSViewModel _adtsViewModel;
 
         /// <summary>
@@ -101,7 +102,7 @@ namespace KipTM.ViewModel.Checks
             _settings = null;
         }
 
-        public void SetEthalonChannel(string ethalonTypeKey, object settings)
+        public void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings)
         {
             _ethalonTypeKey = ethalonTypeKey;
             _settings = settings;

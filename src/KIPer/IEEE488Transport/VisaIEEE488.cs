@@ -16,17 +16,22 @@ namespace IEEE488
             _visa = null;
         }
 
-        public bool Open(int address)
+        public bool Open(string address)
         {
             if (_visa == null)
             {
-                _visa = new Visa(string.Format("GPIB0::{0}", address));
+                _visa = new Visa(address);
                 return true;
             }
-            return _visa.SetAddress(string.Format("GPIB0::{0}", address));
+            return _visa.SetAddress(address);
         }
 
-        public bool Close(int address)
+        public bool Open(int address)
+        {
+            return Open(string.Format("GPIB0::{0}", address));
+        }
+
+        public bool Close()
         {
             if (_visa != null)
                 _visa.Dispose();
@@ -34,10 +39,15 @@ namespace IEEE488
             return true;
         }
 
+        public bool Close(int address)
+        {
+            return Close();
+        }
+
         public bool Send(string data)
         {
             if (_visa == null)
-                throw new Exception("Call Send after \"Open\"");
+                throw new Exception("Call Send before \"Open\"");
             _visa.WriteString(data);
             return true;
         }
@@ -45,7 +55,7 @@ namespace IEEE488
         public string Receive()
         {
             if (_visa == null)
-                throw new Exception("Call Receive after \"Open\"");
+                throw new Exception("Call Receive before \"Open\"");
             return _visa.ReadString();
         }
     }
