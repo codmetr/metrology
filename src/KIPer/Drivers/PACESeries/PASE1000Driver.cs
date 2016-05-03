@@ -6,10 +6,11 @@ using System.Text;
 using IEEE488;
 
 
-namespace PACEVISADriver
+namespace PACESeries
 {
     public class PASE1000Driver:IDisposable
     {
+        private readonly PACEParser _parser;
         private readonly ITransportIEEE488 _transport;
         private readonly int _address;
 
@@ -17,6 +18,10 @@ namespace PACEVISADriver
         {
             _transport = transport;
             _address = address;
+        }
+
+        public PASE1000Driver(ITransportIEEE488 transport):this(default (int), transport)
+        {
         }
 
         public bool Open()
@@ -32,10 +37,14 @@ namespace PACEVISADriver
         /// <returns></returns>
         public string GetIdentificator()
         {
-            _transport.Send("*IDN?");
-            string m_strReturn = _transport.Receive();
-
-            return m_strReturn;
+            var idn = string.Empty;
+            var cmd = _parser.GetCommandGetIdentificator();
+            if (!_transport.Send(cmd))
+                return null;
+            var answer = _transport.Receive();
+            if (!_parser.ParseGetIdentificator(answer, out idn))
+                return string.Empty;
+            return idn;
         }
 
         /// <summary>

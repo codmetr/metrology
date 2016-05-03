@@ -15,7 +15,6 @@ using KipTM.Settings;
 using MainLoop;
 using NLog;
 using PACESeries;
-using PACEVISADriver;
 
 namespace KipTM.Model
 {
