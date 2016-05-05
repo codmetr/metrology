@@ -305,10 +305,8 @@ namespace ADTS
         public bool ParseMeasurePress(string message, out double? value)
         {
             value = null;
-            double doubleVal;
-            if (!double.TryParse(message, NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out doubleVal))
-                return false;
-            value = doubleVal;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.Real } });
+            value = (double)answer["value"];
             return true;
         }
         #endregion

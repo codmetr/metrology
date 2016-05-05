@@ -8,13 +8,24 @@ namespace PACESeries
 {
     public class PACEParser
     {
-        internal const string KeyGetGetIdentificator = "*IDN?";
-        internal const string KeyGetGetPressure = ":INS:UNIT?";
+        internal const string KeyGetIdentificator = "*IDN?";
+        internal const string KeySetOffLocalLockOut = ":GTL";
+        internal const string KeySetLocalLockOut = ":LLO";
+        internal const string KeySetLocal = ":LOC";
+        internal const string KeySetRemote = ":REM";
+        internal const string KeyGetUnitPressure = ":UNIT:PRES?";
+        internal const string KeySetUnitPressure = ":UNIT:PRES <units>";
+        internal const string KeyGetPressure = ":SENS:PRES?";
+        internal const string KeyGetPressureByChannelFormat = ":SENS{0}:PRES?";
+        internal const string KeyGetPressureRange = ":SENS:PRES:RANG?";
+        internal const string KeyGetPressureRangeByChannelFormat = ":SENS{0}:PRES:RANG?";
+        internal const string KeyGetAvailableRange = ":INST:CAT:ALL?";
+        internal const string KeyGetAvailableRangeByChannelFormat = ":INST:CAT{0}:ALL?";
 
         #region GetIdentificator "*IDN?"
         public string GetCommandGetIdentificator()
         {
-            return KeyGetGetIdentificator;
+            return KeyGetIdentificator;
         }
 
         public bool ParseGetIdentificator(string message, out string idn)
@@ -28,6 +39,168 @@ namespace PACESeries
         }
         #endregion
 
+        #region SetLocalLockOutMode ":LLO"
+        public string GetCommandSetLocalLockOutMode()
+        {
+            return KeySetLocalLockOut;
+        }
+        #endregion
+
+        #region SetOffLocalLockOutMode ":GTL"
+        public string GetCommandSetOffLocalLockOutMode()
+        {
+            return KeySetOffLocalLockOut;
+        }
+        #endregion
+
+        #region SetLocal ":LOC"
+        public string GetCommandSetLocal()
+        {
+            return KeySetLocal;
+        }
+        #endregion
+
+        #region SetRemote ":REM"
+        public string GetCommandSetRemote()
+        {
+            return KeySetRemote;
+        }
+        #endregion
+
+        #region GetPressureUnit ":UNIT:PRES?"
+        public string GetCommandGetPressureUnit()
+        {
+            return KeyGetUnitPressure;
+        }
+
+        public bool ParseGetPressureUnit(string message, out PressureUnits? unit)
+        {
+            unit = null;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "unit", PeremeterTypes.PressureUnit } });
+            unit = (PressureUnits)answer["unit"];
+            return true;
+        }
+        #endregion
+
+
+        #region SetPressureUnit "UNIT:PRES <units>"
+
+        public string GetCommandSetPressureUnit(PressureUnits unit)
+        {
+            string unitstr = null;
+            if (unit == PressureUnits.None)
+                throw new Exception(string.Format("can not set pressure unit PressureUnits.None"));
+            unitstr = PressureUnitToString(unit);
+            return CompilCommand(KeySetUnitPressure, new Dictionary<string, string>() { { "<units>", unitstr } });
+        }
+        #endregion
+
+        #region GetPressure ":SENS:PRES?"
+        /// <summary>
+        /// Получить команду на измерение давления
+        /// </summary>
+        /// <returns></returns>
+        public string GetCommandGetPressure()
+        {
+            return KeyGetPressure;
+        }
+
+        /// <summary>
+        /// Получить команду на измерение давления по каналу
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <returns></returns>
+        public string GetCommandGetPressure(int channel)
+        {
+            return string.Format(KeyGetPressureByChannelFormat, channel);
+        }
+
+        /// <summary>
+        /// Разобрать результат команды на измерение давления
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool ParseGetPressure(string message, out double? value)
+        {
+            value = null;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.Real } });
+            value = (double)answer["value"];
+            return true;
+        }
+        #endregion
+
+        #region GetPressureRange ":SENS:PRES:RANG?"
+        /// <summary>
+        /// Получить команду на получение ограничение канала давления
+        /// </summary>
+        /// <returns></returns>
+        public string GetCommandGetPressureRange()
+        {
+            return KeyGetPressureRange;
+        }
+
+        /// <summary>
+        /// Получить команду на получение ограничение канала давления по каналу
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <returns></returns>
+        public string GetCommandGetPressureRange(int channel)
+        {
+            return string.Format(KeyGetPressureRangeByChannelFormat, channel);
+        }
+
+        /// <summary>
+        /// Разобрать результат команды на получение ограничение канала давления
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool ParseGetPressureRange(string message, out string value)
+        {
+            value = null;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.String } });
+            value = (string)answer["value"];
+            return true;
+        }
+        #endregion
+
+        #region GetAllRanges ":INST:CAT:ALL?"
+        /// <summary>
+        /// Получить команду на получение всех допустимых ограничений канала давления
+        /// </summary>
+        /// <returns></returns>
+        public string GetCommandGetAllRanges()
+        {
+            return KeyGetAvailableRange;
+        }
+
+        /// <summary>
+        /// Получить команду на получение всех допустимых ограничений канала давления по каналу
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <returns></returns>
+        public string GetCommandGetAllRanges(int channel)
+        {
+            return string.Format(KeyGetAvailableRangeByChannelFormat, channel);
+        }
+
+        /// <summary>
+        /// Разобрать результат команды на получение ограничение канала давления
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool ParseGetAllRanges(string message, out IEnumerable<string> value)
+        {
+            value = null;
+            var answer = ParseAnswer(message);
+            value = answer;
+            return true;
+        }
+        #endregion
+
+        
         #region Protocol parser
         private string CompilCommand(string frame, IDictionary<string, string> parameters)
         {
@@ -52,10 +225,15 @@ namespace PACESeries
             return result;
         }
 
+        private string[] ParseAnswer(string answer)
+        {
+            return answer.Split(new[] { ',' });
+        }
+
         private IDictionary<string, object> ParseAnswer(string answer, Dictionary<string, PeremeterTypes> parameterTypes)
         {
             var result = new Dictionary<string, object>();
-            var parts = answer.Split(new[] { ',' });
+            var parts = ParseAnswer(answer);
             if (parts.Length != parameterTypes.Count)
                 throw new Exception(string.Format("Count[{0}] parts answer[{1}] not equal count[{2}] parameters", parts.Length, answer, parameterTypes.Count));
             var keys = parameterTypes.Keys.ToList();
