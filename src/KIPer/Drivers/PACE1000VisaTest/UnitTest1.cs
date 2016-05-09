@@ -13,7 +13,7 @@ namespace PACE1000VisaTest
         {
             var transport = new VisaIEEE488();
             transport.Open("GPIB0::16");
-            var pace = new PASE1000Driver(transport);
+            var pace = new PACE1000Driver(transport);
             var idn = pace.GetIdentificator();
             pace.Dispose();
             Assert.IsNotNull(idn);
@@ -24,7 +24,7 @@ namespace PACE1000VisaTest
         {
             var transport = new VisaIEEE488();
             transport.Open("GPIB0::16");
-            var pace = new PASE1000Driver(transport);
+            var pace = new PACE1000Driver(transport);
             var value = pace.GetPressure();
             pace.Dispose();
             Assert.IsFalse(double.IsNaN(value));
@@ -35,7 +35,7 @@ namespace PACE1000VisaTest
         {
             var transport = new VisaIEEE488();
             transport.Open("GPIB0::16");
-            var pace = new PASE1000Driver(transport);
+            var pace = new PACE1000Driver(transport);
             var value = pace.GetDate();
             pace.Dispose();
             Assert.IsNotNull(value);
@@ -46,7 +46,7 @@ namespace PACE1000VisaTest
         {
             var transport = new VisaIEEE488();
             transport.Open("GPIB0::16");
-            var pace = new PASE1000Driver(transport);
+            var pace = new PACE1000Driver(transport);
             var value = pace.GetPressureUnit();
             pace.Dispose();
             Assert.IsNotNull(value);
@@ -57,11 +57,11 @@ namespace PACE1000VisaTest
         {
             var transport = new VisaIEEE488();
             transport.Open("GPIB0::16");
-            var pace = new PASE1000Driver(transport);
+            var pace = new PACE1000Driver(transport);
             var value = pace.GetPressureUnit();
-            var mmGh = pace.SetPressureUnit("MMHG");
-            var mbar = pace.SetPressureUnit("MBAR");
-            var oldValue = pace.SetPressureUnit(value);
+            var mmGh = pace.SetPressureUnit(PressureUnits.mmHg);
+            var mbar = pace.SetPressureUnit(PressureUnits.MBar);
+            var oldValue = value != null && pace.SetPressureUnit(value.Value);
             pace.Dispose();
             Assert.IsTrue(mmGh);
             Assert.IsTrue(mbar);
@@ -73,8 +73,8 @@ namespace PACE1000VisaTest
         {
             var transport = new VisaIEEE488();
             transport.Open("GPIB0::16");
-            var pace = new PASE1000Driver(transport);
-            var value = pace.GetUnitSpeed();
+            var pace = new PACE1000Driver(transport);
+            var value = pace.GetPressureRange();
             pace.Dispose();
             Assert.IsNotNull(value);
         }

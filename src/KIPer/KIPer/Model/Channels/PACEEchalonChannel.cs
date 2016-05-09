@@ -29,7 +29,15 @@ namespace KipTM.Model.Channels
         public double GetEthalonValue(double point, CancellationToken cancel)
         {
             var result = double.NaN;
-            result = _paseModel.GetPressure();
+            var wh = new ManualResetEvent(false);
+            _paseModel.UpdatePressure(wh);
+            while (!cancel.IsCancellationRequested)
+            {
+                if(wh.WaitOne(TimeSpan.FromMilliseconds(20)))
+                    break;
+            }
+            if (!cancel.IsCancellationRequested)
+                result = _paseModel.Pressure;
             return result;
         }
     }

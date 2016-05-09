@@ -45,13 +45,13 @@ namespace KipTM.Model
         {
             DeviceSettings paceSettings = null;
             if (_settings.LastEtalons != null) 
-                paceSettings = _settings.LastEtalons.FirstOrDefault(el => el.Name == PACE5000Model.Key);
+                paceSettings = _settings.LastEtalons.FirstOrDefault(el => el.Name == PACE1000Model.Key);
             DeviceSettings adtsSettings = null;
             if (_settings.LastDevices != null)
                 adtsSettings = _settings.LastDevices.FirstOrDefault(el => el.Name == ADTSModel.Key);
 
             if(paceSettings == null)
-                throw new NullReferenceException(string.Format("PACE settings not found by key \"{0}\"", PACE5000Model.Key));
+                throw new NullReferenceException(string.Format("PACE settings not found by key \"{0}\"", PACE1000Model.Key));
             if(adtsSettings == null)
                 throw new NullReferenceException(string.Format("ADTS settings not found by key \"{0}\"", ADTSModel.Key));
 
@@ -65,7 +65,7 @@ namespace KipTM.Model
 
             _deviceTypes.Add(new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer));
 
-            _ethalonTypes.Add(new DeviceTypeDescriptor(PACE5000Model.Model, PACE5000Model.DeviceCommonType, PACE5000Model.DeviceManufacturer));
+            _ethalonTypes.Add(new DeviceTypeDescriptor(PACE1000Model.Model, PACE1000Model.DeviceCommonType, PACE1000Model.DeviceManufacturer));
 
             _deviceManager = new DeviceManager(NLog.LogManager.GetLogger("DeviceManager"));
         }

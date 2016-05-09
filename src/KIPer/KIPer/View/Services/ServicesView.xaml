@@ -16,22 +16,26 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-    <ItemsControl ItemsSource="{Binding Services}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical"/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="5"> 
-                    <Expander Header="{Binding Title}">
-                        <ContentPresenter Content="{Binding}"/>
-                    </Expander>
-                </Border>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
-        <ContentPresenter Grid.Column="1" Content="{Binding Channel}"/>
-        </Grid>
+        <StackPanel Grid.Column="0">
+            <DockPanel >
+                <TextBlock Margin="3">Тип устройства</TextBlock>
+                <ComboBox
+                    IsEnabled="{Binding IsCanConnect}"
+                    ItemsSource="{Binding Services}"
+                    SelectedItem="{Binding SelectedService, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <ContentPresenter Content="{Binding Title}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </DockPanel>
+            <ContentPresenter Content="{Binding ShowedService}"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <ContentPresenter Content="{Binding Channel}"/>
+            <Button Command="{Binding Connect}" IsEnabled="{Binding IsCanConnect}">Поключиться</Button>
+            <Button Command="{Binding Disconnect}" IsEnabled="{Binding IsCanNotConnect}">Отключиться</Button>
+        </StackPanel>
+    </Grid>
 </UserControl>

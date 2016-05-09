@@ -8,34 +8,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{d:DesignInstance services:ADTSViewModel}">
     <UserControl.Resources>
-        <Style TargetType="TextBlock" x:Key="TitleStyle">
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Width" Value="60"/>
-        </Style>
-        <Style TargetType="TextBlock" x:Key="DoubleTitleStyle">
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Width" Value="120"/>
-        </Style>
-        <Style TargetType="TextBlock" x:Key="ValueStyle">
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Background" Value="#FF818147"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Skins/SimpleElements.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
-        <Style TargetType="TextBlock" x:Key="ValueStateStyle" BasedOn="{StaticResource ValueStyle}">
-            <Setter Property="Width" Value="100"/>
-        </Style>
-
-        <Style TargetType="TextBlock" x:Key="DoubleValueStateStyle" BasedOn="{StaticResource ValueStyle}">
-            <Setter Property="Width" Value="213"/>
-        </Style>
-
-        <Style TargetType="pressureElementControls:DiscretInputHorisontalControl">
-            <Setter Property="Height" Value="25"/>
-            <Setter Property="Width" Value="150"/>
-            <Setter Property="Margin" Value="3"/>
-        </Style>
+            <Style TargetType="pressureElementControls:DiscretInputHorisontalControl">
+                <Setter Property="Height" Value="25"/>
+                <Setter Property="Width" Value="150"/>
+                <Setter Property="Margin" Value="3"/>
+            </Style>
         
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <StackPanel>

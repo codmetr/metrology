@@ -18,11 +18,11 @@ namespace KipTM.View
     /// <summary>
     /// Interaction logic for PACE5000View.xaml
     /// </summary>
-    public partial class PACE5000View : UserControl
+    public partial class PACE1000View : UserControl
     {
 
 
-        public PACE5000View()
+        public PACE1000View()
         {
             InitializeComponent();
         }

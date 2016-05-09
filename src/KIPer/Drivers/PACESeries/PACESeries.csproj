@@ -46,10 +46,9 @@
     <Compile Include="AnswerException.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ITransport.cs" />
-    <Compile Include="PACEDriver.cs" />
     <Compile Include="PACEParser.cs" />
     <Compile Include="PACEVisaTransport.cs" />
-    <Compile Include="PASE1000Driver.cs" />
+    <Compile Include="PACE1000Driver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

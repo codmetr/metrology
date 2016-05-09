@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using MainLoop;
 using PACESeries;
 
@@ -10,10 +11,15 @@ namespace KipTM.Model.Devices
 {
     public class PACE1000Model
     {
-        private readonly PACESeries.PACEDriver _driver;
+        private readonly PACESeries.PACE1000Driver _driver;
         private ILoops _loops;
         private string _loopKey;
-        public PACE1000Model(string title, ILoops loops, string loopKey, PACEDriver driver)
+        private bool _autoUpdateRun = false;
+        private TimeSpan _periodAutoUpdate = TimeSpan.FromMilliseconds(200);
+        private CancellationTokenSource _cancellationAutoread = new CancellationTokenSource();
+        private CancellationTokenSource _cancellation = new CancellationTokenSource();
+
+        public PACE1000Model(string title, ILoops loops, string loopKey, PACE1000Driver driver)
         {
             Title = title;
             _loops = loops;
@@ -33,30 +39,107 @@ namespace KipTM.Model.Devices
         internal static string DeviceManufacturer { get { return "GE Druk"; } }
         internal static IEnumerable<string> TypesEtalonParameters = new[] { "давление", "авиационная высота", "авиационная скорость" };
 
-        public void SetAutoread(TimeSpan autoreadPeriod)
-        {
-            throw new NotImplementedException();
-        }
+        #region public properties
 
-        public double GetPressure()
-        {
-            throw new NotImplementedException();
-        }
+        public double Pressure { get; set; }
 
-        private void AutoreadFunction(object parameters)
-        {
-            var paramTuple = parameters as Tuple<TimeSpan, CancellationToken, ILoops, string>;
-            if(paramTuple == null)
-                return;
-            var period = paramTuple.Item1;
-            var cancel = paramTuple.Item2;
-            var loops = paramTuple.Item3;
-            var loopKey = paramTuple.Item4;
+        public PressureUnits PressureUnit { get; set; }
 
-            while (!cancel.IsCancellationRequested)
+        public TimeSpan AutoreadPeriod { get { return _periodAutoUpdate; } }
+
+        #endregion
+
+        public void SetPressureUnit(PressureUnits unit)
+        {
+            _loops.StartMiddleAction(_loopKey, (mb) =>
             {
-                loops.StartMiddleAction(loopKey, (mb) => _driver.GetAltetude());
+                if(!_driver.SetPressureUnit(unit))
+                    return;
+                PressureUnit = unit;
+            });
+        }
+
+        public void StartAutoread(TimeSpan autoreadPeriod)
+        {
+            SetAutoreadPeriod(autoreadPeriod);
+            if (_autoUpdateRun)
+                return;
+
+            CancellationToken cancel = _cancellationAutoread.Token;
+            Task.Factory.StartNew((cncl)=>AutoreadFunction((CancellationToken)cncl), (object)cancel, cancel);
+        }
+
+        public void StopAutoUpdate()
+        {
+            _cancellationAutoread.Cancel();
+            _cancellationAutoread = new CancellationTokenSource();
+        }
+
+        public void SetAutoreadPeriod(TimeSpan autoreadPeriod)
+        {
+            _periodAutoUpdate = autoreadPeriod;
+        }
+
+        public void UpdatePressure()
+        {
+            _loops.StartMiddleAction(_loopKey, (mb) => _updatePressure(_cancellation.Token));
+        }
+
+        public void UpdatePressure(EventWaitHandle wh)
+        {
+            _loops.StartMiddleAction(_loopKey, (mb) =>
+            {
+                _updatePressure(_cancellation.Token);
+                wh.Set();
+            });
+        }
+        public event EventHandler PressureUnitChanged;
+
+        public event EventHandler PressureChanged;
+
+        protected virtual void OnPressureUnitChanged()
+        {
+            EventHandler handler = PressureUnitChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnPressureChanged()
+        {
+            EventHandler handler = PressureChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        private void AutoreadFunction(CancellationToken cancel)
+        {
+            if (cancel.IsCancellationRequested)
+                return;
+            _loops.StartMiddleAction(_loopKey, (mb) => _updatePressure(cancel));
+
+            var timeSetToQueue = DateTime.Now;
+            while (!cancel.IsCancellationRequested && (DateTime.Now - timeSetToQueue)<_periodAutoUpdate)
+            {
+                Thread.Sleep(10);
             }
+
+            if (!cancel.IsCancellationRequested)
+            {
+                _loops.StartMiddleAction(_loopKey, (mb) => AutoreadFunction(cancel));
+            }
+        }
+
+        private void _updatePressure(CancellationToken cancel)
+        {
+            if (cancel.IsCancellationRequested)
+                return;
+            var pressure = _driver.GetPressure();
+            if (!double.IsNaN(pressure))
+                Pressure = pressure;
+            
+            if (cancel.IsCancellationRequested)
+                return;
+            var unit = _driver.GetPressureUnit();
+            if (unit != null)
+                PressureUnit = unit.Value;
         }
     }
 }

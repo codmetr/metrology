@@ -8,19 +8,25 @@ namespace PACESeries
 {
     public class PACEParser
     {
+        #region Keys
         internal const string KeyGetIdentificator = "*IDN?";
         internal const string KeySetOffLocalLockOut = ":GTL";
         internal const string KeySetLocalLockOut = ":LLO";
         internal const string KeySetLocal = ":LOC";
         internal const string KeySetRemote = ":REM";
+        internal const string KeyGetDate = ":SYST:DATE?";
+        internal const string KeyGetTime = ":SYST:TIME?";
         internal const string KeyGetUnitPressure = ":UNIT:PRES?";
         internal const string KeySetUnitPressure = ":UNIT:PRES <units>";
         internal const string KeyGetPressure = ":SENS:PRES?";
         internal const string KeyGetPressureByChannelFormat = ":SENS{0}:PRES?";
+        internal const string KeySetPressureRangeFormat = ":SENS:PRES:RANG {0}";
+        internal const string KeySetPressureRangeByChannelFormat = ":SENS{0}:PRES:RANG {1}";
         internal const string KeyGetPressureRange = ":SENS:PRES:RANG?";
         internal const string KeyGetPressureRangeByChannelFormat = ":SENS{0}:PRES:RANG?";
         internal const string KeyGetAvailableRange = ":INST:CAT:ALL?";
         internal const string KeyGetAvailableRangeByChannelFormat = ":INST:CAT{0}:ALL?";
+        #endregion
 
         #region GetIdentificator "*IDN?"
         public string GetCommandGetIdentificator()
@@ -39,6 +45,48 @@ namespace PACESeries
         }
         #endregion
 
+        #region GetDate ":SYST:DATE?"
+        public string GetCommandGetDate()
+        {
+            return KeyGetDate;
+        }
+
+        public bool ParseGetDate(string message, out int year, out int month, out int day)
+        {
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>()
+            {
+                {"year", PeremeterTypes.Integer},
+                {"month", PeremeterTypes.Integer},
+                {"day", PeremeterTypes.Integer}
+            });
+            year = (int)answer["year"];
+            month = (int)answer["month"];
+            day = (int)answer["day"];
+            return true;
+        }
+        #endregion
+
+        #region GetDate ":SYST:TIME?"
+        public string GetCommandGetTime()
+        {
+            return KeyGetTime;
+        }
+
+        public bool ParseGetTime(string message, out int hour, out int minute, out int sec)
+        {
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>()
+            {
+                {"hour", PeremeterTypes.Integer},
+                {"month", PeremeterTypes.Integer},
+                {"day", PeremeterTypes.Integer}
+            });
+            hour = (int)answer["hour"];
+            minute = (int)answer["minute"];
+            sec = (int)answer["sec"];
+            return true;
+        }
+        #endregion
+
         #region SetLocalLockOutMode ":LLO"
         public string GetCommandSetLocalLockOutMode()
         {
@@ -52,7 +100,7 @@ namespace PACESeries
             return KeySetOffLocalLockOut;
         }
         #endregion
-
+         
         #region SetLocal ":LOC"
         public string GetCommandSetLocal()
         {
@@ -81,7 +129,6 @@ namespace PACESeries
             return true;
         }
         #endregion
-
 
         #region SetPressureUnit "UNIT:PRES <units>"
 
@@ -165,6 +212,27 @@ namespace PACESeries
         }
         #endregion
 
+        #region SetPressureRange ":SENS:PRES:RANG"
+        /// <summary>
+        /// Получить команду на установку ограничение канала давления
+        /// </summary>
+        /// <returns></returns>
+        public string GetCommandSetPressureRange(string range)
+        {
+            return string.Format(KeySetPressureRangeFormat, range);
+        }
+
+        /// <summary>
+        /// Получить команду на установку ограничение канала давления по каналу
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <returns></returns>
+        public string GetCommandSetPressureRange(int channel, string range)
+        {
+            return string.Format(KeySetPressureRangeByChannelFormat, channel, range);
+        }
+        #endregion
+
         #region GetAllRanges ":INST:CAT:ALL?"
         /// <summary>
         /// Получить команду на получение всех допустимых ограничений канала давления
@@ -199,7 +267,6 @@ namespace PACESeries
             return true;
         }
         #endregion
-
         
         #region Protocol parser
         private string CompilCommand(string frame, IDictionary<string, string> parameters)

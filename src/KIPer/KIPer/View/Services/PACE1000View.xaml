@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="KipTM.View.PACE1000View"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:pressureElementControls="clr-namespace:PressureElementControls;assembly=PressureElementControls"
+             xmlns:viewModel="clr-namespace:KipTM.ViewModel"
+             xmlns:converters="clr-namespace:KipTM.View.Converters"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:Pace1000ViewModel}"
+             d:DesignHeight="200" d:DesignWidth="400">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Skins/SimpleElements.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:DoubleToTimespanConverter x:Key="DoubleToTimespanConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <GroupBox Header="Ручной опрос">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource TitleStyle}">Давление:</TextBlock>
+                        <TextBlock Text="{Binding Pressure}" Style="{StaticResource ValueStyle}" Width="100"/>
+                        <TextBlock Text="{Binding Unit}" Style="{StaticResource ValueStyle}" Width="50"/>
+                        <Button Command="{Binding UpdatePressureAndUnits}">Перечитать давление</Button>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Автоматический опрос" Grid.Column="0" Grid.Row="1">
+            <StackPanel>
+                <CheckBox Content="Включить автоматический опрос" Margin="5,0,0,0" IsChecked="{Binding IsAutoRead, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Период опроса:" Margin="5,0,0,0"/>
+                    <TextBox Width="40" Margin="5,0,0,0"
+                             Text="{Binding AutoreadPeriod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleToTimespanConverter}}"
+                             IsEnabled="{Binding IsAutoRead, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="мс." Margin="5,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        </StackPanel>
+    </Grid>
+</UserControl>

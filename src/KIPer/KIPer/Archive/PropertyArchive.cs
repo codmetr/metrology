@@ -106,7 +106,7 @@ namespace KipTM.Archive
             var ethalons = new List<string>()
             {
                 UserEchalonChannel.Key,
-                PACE5000Model.Key,
+                PACE1000Model.Key,
             };
             return ethalons;
         }

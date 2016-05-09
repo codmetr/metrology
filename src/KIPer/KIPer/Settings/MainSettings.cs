@@ -50,10 +50,10 @@ namespace KipTM.Settings
                 },
                 new DeviceTypeSettings()
                 {
-                    Key = KipTM.Model.Devices.PACE5000Model.Key,
-                    Model = KipTM.Model.Devices.PACE5000Model.Model,
-                    DeviceCommonType = KipTM.Model.Devices.PACE5000Model.DeviceCommonType,
-                    DeviceManufacturer = KipTM.Model.Devices.PACE5000Model.DeviceManufacturer,
+                    Key = KipTM.Model.Devices.PACE1000Model.Key,
+                    Model = KipTM.Model.Devices.PACE1000Model.Model,
+                    DeviceCommonType = KipTM.Model.Devices.PACE1000Model.DeviceCommonType,
+                    DeviceManufacturer = KipTM.Model.Devices.PACE1000Model.DeviceManufacturer,
                     TypesEtalonParameters = new List<string>(KipTM.Model.Devices.ADTSModel.TypesEtalonParameters),
                     //AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key, UserEchalonChannel.Key},
                 },
@@ -64,11 +64,11 @@ namespace KipTM.Settings
                 new DeviceSettings()
                 {
                     Address = "0",
-                    Name = KipTM.Model.Devices.PACE5000Model.Key,
-                    Model = KipTM.Model.Devices.PACE5000Model.Model,
-                    DeviceCommonType = KipTM.Model.Devices.PACE5000Model.DeviceCommonType,
-                    DeviceManufacturer = KipTM.Model.Devices.PACE5000Model.DeviceManufacturer,
-                    TypesEtalonParameters = new List<string>(KipTM.Model.Devices.PACE5000Model.TypesEtalonParameters),
+                    Name = KipTM.Model.Devices.PACE1000Model.Key,
+                    Model = KipTM.Model.Devices.PACE1000Model.Model,
+                    DeviceCommonType = KipTM.Model.Devices.PACE1000Model.DeviceCommonType,
+                    DeviceManufacturer = KipTM.Model.Devices.PACE1000Model.DeviceManufacturer,
+                    TypesEtalonParameters = new List<string>(KipTM.Model.Devices.PACE1000Model.TypesEtalonParameters),
                     SerialNumber = "123",
                     NamePort = "COM1"
                 },

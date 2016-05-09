@@ -24,7 +24,6 @@ namespace KipTM.Model
 
         private readonly ILoops _loops = new Loops();
 
-        private readonly PACE5000Model _paceModel;
         private readonly ADTSModel _adtsModel;
 
         private readonly IDictionary<string, Func<ITransportChannelType, IEthalonChannel>> _ethalonChannels;
@@ -61,7 +60,7 @@ namespace KipTM.Model
                 },
 
                 {
-                    typeof(PASE1000Driver),
+                    typeof(PACE1000Driver),
                     options =>
                         {
                             var tupleParam = options as Tuple<int, ITransportIEEE488>;
@@ -69,7 +68,7 @@ namespace KipTM.Model
                                 throw new TargetParameterCountException(string.Format(
                                     "option mast be type: {0}; now type: {1}",
                                     typeof (Tuple<int, ITransportIEEE488>), options.GetType()));
-                            return new PASE1000Driver(tupleParam.Item1, tupleParam.Item2);
+                            return new PACE1000Driver(tupleParam.Item1, tupleParam.Item2);
                         }
                 },
             };
@@ -94,10 +93,6 @@ namespace KipTM.Model
             _adtsModel = new ADTSModel(string.Format("{0} {1}", ADTSModel.Model, ADTSModel.DeviceCommonType), _loops,
                 VisaChannelDescriptor.KeyType, this);
 
-            _paceModel = new PACE5000Model(
-                string.Format("{0} {1}", PACE5000Model.Model, PACE5000Model.DeviceCommonType), _loops,
-                VisaChannelDescriptor.KeyType, this);
-
             _ethalonChannels = new Dictionary<string, Func<ITransportChannelType, IEthalonChannel>>()
             {
                 {PACE1000Model.Key, (transportDescriptor)=> new PACEEchalonChannel(GetDevice<PACE1000Model>(default(int),transportDescriptor))}
@@ -111,7 +106,7 @@ namespace KipTM.Model
             return _ethalonChannels[deviceKey](settings);
         }
 
-        public T GetDevice<T>(int address, ITransportChannelType transportDescription)
+        public T GetModel<T>(int address, ITransportChannelType transportDescription)
         {
             if(!_devicesFabrics.ContainsKey(typeof(T)))
                 throw new IndexOutOfRangeException(string.Format("For type [{0}] not found fabric", typeof(T)));
@@ -124,9 +119,17 @@ namespace KipTM.Model
             return (T)_devicesFabrics[typeof (T)](new Tuple<int, ITransportIEEE488>(address, chann));
         }
 
-        public PACE5000Model Pace5000
+        public T GetDevice<T>(int address, ITransportChannelType transportDescription)
         {
-            get { return _paceModel; }
+            if(!_devicesFabrics.ContainsKey(typeof(T)))
+                throw new IndexOutOfRangeException(string.Format("For type [{0}] not found fabric", typeof(T)));
+
+            if (!_channelsFabrics.ContainsKey(transportDescription.Key))
+                throw new IndexOutOfRangeException(string.Format("For channel [{0}] not found fabric", transportDescription.Key));
+
+            var chann = _channelsFabrics[transportDescription.Key](transportDescription.Settings);
+
+            return (T)_devicesFabrics[typeof (T)](new Tuple<int, ITransportIEEE488>(address, chann));
         }
 
         public ADTSModel ADTS

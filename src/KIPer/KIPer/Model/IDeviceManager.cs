@@ -11,8 +11,6 @@ namespace KipTM.Model
 
         T GetDevice<T>(int address, ITransportChannelType transportDescription);
 
-        PACE5000Model Pace5000 { get; }
-        
         ADTSModel ADTS { get; }
     }
 }

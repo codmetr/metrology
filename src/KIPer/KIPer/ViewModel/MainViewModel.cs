@@ -57,14 +57,14 @@ namespace KipTM.ViewModel
 
             _services = new ServiceViewModel(new List<IService>()
             {
-                new Pace5000ViewModel(_dataService.DeviceManager.Pace5000),
+                new Pace1000ViewModel(_dataService.DeviceManager.Pace5000),
                 //new ADTSViewModel(_dataService.DeviceManager.ADTS)
             });
             ViewModelViewDic = new Dictionary<Type, Type>()
             {
                 //Вкладка Сервис
                 {typeof(ServiceViewModel), typeof(ServicesView)},
-                {typeof(Pace5000ViewModel), typeof(PACE5000View)},
+                {typeof(Pace1000ViewModel), typeof(PACE1000View)},
                 {typeof(ADTSViewModel), typeof(ADTSView)},
                 {typeof(SelectChannelViewModel), typeof(SelectChannelView)},
                 {typeof(VisaSettings), typeof(VisaSettingsView)},
