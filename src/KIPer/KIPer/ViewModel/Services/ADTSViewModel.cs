@@ -1,7 +1,10 @@
 ﻿using System;
 using ADTS;
 using GalaSoft.MvvmLight;
+using KipTM.Interfaces;
+using KipTM.Model;
 using KipTM.Model.Devices;
+using KipTM.Model.TransportChannels;
 
 namespace KipTM.ViewModel.Services
 {
@@ -11,8 +14,9 @@ namespace KipTM.ViewModel.Services
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class ADTSViewModel : ViewModelBase
+    public class ADTSViewModel : ViewModelBase, IService
     {
+        private IDeviceManager _deviceManager;
         private ADTSModel _model;
         private string _statusAdts;
         private string _stateAdts;
@@ -29,8 +33,9 @@ namespace KipTM.ViewModel.Services
         /// <summary>
         /// Initializes a new instance of the ADTSViewModel class.
         /// </summary>
-        public ADTSViewModel()
+        public ADTSViewModel(IDeviceManager deviceManager)
         {
+            _deviceManager = deviceManager;
         }
 
         public void Start(ADTSModel model)
@@ -46,6 +51,14 @@ namespace KipTM.ViewModel.Services
                 _model.StartAutoUpdate();
                 AttachEvents(_model);
             }
+        }
+
+        public string Title { get { return ADTSModel.Model; } }
+
+        public void Start(ITransportChannelType channel)
+        {
+            var model = _deviceManager.GetDevice<ADTSModel>(channel);
+            Start(model);
         }
 
         public void Stop()

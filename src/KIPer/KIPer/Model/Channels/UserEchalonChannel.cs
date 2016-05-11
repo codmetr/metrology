@@ -4,14 +4,14 @@ using KipTM.Model.Checks;
 
 namespace KipTM.Model.Channels
 {
-    public class UserEchalonChannel : IEthalonChannel
+    public class UserEthalonChannel : IEthalonChannel
     {
         public static string Key = "UserChannel";
 
         private readonly IUserChannel _userChannel;
         private readonly TimeSpan _waitPeriod;
 
-        public UserEchalonChannel(IUserChannel userChannel, TimeSpan waitPeriod)
+        public UserEthalonChannel(IUserChannel userChannel, TimeSpan waitPeriod)
         {
             _userChannel = userChannel;
             _waitPeriod = waitPeriod;

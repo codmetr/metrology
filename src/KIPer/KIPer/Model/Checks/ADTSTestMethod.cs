@@ -151,7 +151,7 @@ namespace KipTM.Model.Checks
         /// <returns></returns>
         public bool Start()
         {
-            _adts.Start(Address, ChannelType);
+            _adts.Start(ChannelType);
             var cancel = _cancelSource.Token;
             ManualResetEvent whStep = new ManualResetEvent(false);
             var waitPeriod = TimeSpan.FromMilliseconds(10);

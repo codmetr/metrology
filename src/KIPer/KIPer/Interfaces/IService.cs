@@ -10,7 +10,7 @@ namespace KipTM.Interfaces
     public interface IService
     {
         string Title { get; }
-        void Start(int address, ITransportChannelType channel);
+        void Start(ITransportChannelType channel);
         void Stop();
     }
 }

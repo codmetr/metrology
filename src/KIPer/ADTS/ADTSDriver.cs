@@ -18,6 +18,10 @@ namespace ADTS
             _transport = transport;
         }
 
+        public ADTSDriver(IEEE488.ITransportIEEE488 transport):this(default(int),transport)
+        {
+        }
+
         public bool Open()
         {
             if (_transport == null)

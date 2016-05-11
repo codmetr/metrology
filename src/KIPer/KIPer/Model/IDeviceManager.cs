@@ -9,8 +9,8 @@ namespace KipTM.Model
     {
         IEthalonChannel GetEthalonChannel(string deviceKey, ITransportChannelType settongs);
 
-        T GetDevice<T>(int address, ITransportChannelType transportDescription);
+        T GetDevice<T>(ITransportChannelType transportDescription);
 
-        ADTSModel ADTS { get; }
+        T GetModel<T>();
     }
 }

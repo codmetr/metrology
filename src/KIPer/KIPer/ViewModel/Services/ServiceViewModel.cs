@@ -26,6 +26,7 @@ namespace KipTM.ViewModel
         {
             Services = services;
             SelectedService = Services.FirstOrDefault();
+            _showedService = null;
             Channel = new SelectChannelViewModel();
             ShowedService = null;
             IsCanConnect = true;
@@ -71,7 +72,6 @@ namespace KipTM.ViewModel
 
             ShowedService = SelectedService;
             ShowedService.Start(Channel.GetSelectedChannelType());
-
         }
 
         private void _disconnect()

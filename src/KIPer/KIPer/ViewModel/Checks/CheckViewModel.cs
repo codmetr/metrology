@@ -119,7 +119,7 @@ namespace KipTM.ViewModel
                 }
                 if (setDevice == null)
                 {
-                    if (_ethalonTypeKey == UserEchalonChannel.Key)
+                    if (_ethalonTypeKey == UserEthalonChannel.Key)
                         avalableEthalonTypes.Add(deviceEthalon, 
                             new DeviceTypeDescriptor("Аналоговый прибор", "Приборы без аппаратного интерфейса", ""));
                     else
@@ -135,7 +135,7 @@ namespace KipTM.ViewModel
             var ethalonDevType = new DeviceTypeDescriptor("", "", "");
             if (_devTypeKey != null)
             {
-                if(_ethalonTypeKey != UserEchalonChannel.Key)
+                if(_ethalonTypeKey != UserEthalonChannel.Key)
                     ethalonDevType = _selectedEthalonType.Value;
                 Ethalon = new DeviceDescriptor(ethalonDevType);
                 _result.Etalon = new List<DeviceDescriptor>() { _ethalon };
@@ -389,13 +389,13 @@ namespace KipTM.ViewModel
             if (methodic is ADTSCheckMethod)
             {
                 var adtsMethodic = methodic as ADTSCheckMethod;
-                adtsMethodic.SetADTS(_deviceManager.ADTS);
+                adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
                 return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey), _deviceManager);
             }
             else if (methodic is ADTSTestMethod)
             {
                 var adtsMethodic = methodic as ADTSTestMethod;
-                adtsMethodic.SetADTS(_deviceManager.ADTS);
+                adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
                 return new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey), _deviceManager);
             }
             return null;
@@ -403,7 +403,7 @@ namespace KipTM.ViewModel
 
         private void UpdateEthalon()
         {
-            IsAnalogEthalon = _selectedEthalonType.Key == UserEchalonChannel.Key;
+            IsAnalogEthalon = _selectedEthalonType.Key == UserEthalonChannel.Key;
             if (!IsAnalogEthalon)
             {
                 Ethalon.DeviceType = _selectedEthalonType.Value;

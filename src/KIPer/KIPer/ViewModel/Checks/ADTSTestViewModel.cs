@@ -35,7 +35,7 @@ namespace KipTM.ViewModel.Checks
         private string _titleBtnNext;
         private ADTSTestMethod _methodic;
         private IUserChannel _userChannel;
-        private UserEchalonChannel _userEchalonChannel;
+        private UserEthalonChannel _userEchalonChannel;
         private IPropertyPool _propertyPool;
         private bool _waitUserReaction;
 
@@ -62,11 +62,11 @@ namespace KipTM.ViewModel.Checks
         {
             _cancellation = new CancellationTokenSource();
             _userChannel = new UserChannel();
-            _userEchalonChannel = new UserEchalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
+            _userEchalonChannel = new UserEthalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
             _methodic = methodic;
             _propertyPool = propertyPool;
             _deviceManager = deviceManager;
-            _adtsViewModel = new ADTSViewModel();
+            _adtsViewModel = new ADTSViewModel(_deviceManager);
 
             // Базовая инициализация
             var adts = _propertyPool.ByKey(methodic.ChannelKey);

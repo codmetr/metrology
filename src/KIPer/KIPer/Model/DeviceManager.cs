@@ -32,6 +32,8 @@ namespace KipTM.Model
 
         private readonly IDictionary<ITransportChannelType, object> _devicesOnPorts = new Dictionary<ITransportChannelType, object>();
 
+        private IDictionary<Type, Func<object>> _modelFabrics;
+
         private IDictionary<Type, Func<object, object>> _devicesFabrics;
 
         private IDictionary<string, Func<object, ITransportIEEE488>> _channelsFabrics;
@@ -43,19 +45,25 @@ namespace KipTM.Model
 
             _loops = new Loops();
 
+            _modelFabrics = new Dictionary<Type, Func<object>>()
+            {
+                {typeof(ADTSModel), () => new ADTSModel(ADTSModel.Model, _loops, this)},
+                {typeof(PACE1000Model), () => new PACE1000Model(PACE1000Model.Model, _loops, this)},
+            };
+
+
             _devicesFabrics = new Dictionary<Type, Func<object, object>>()
             {
                 {
                     typeof(ADTSDriver),
                     options =>
                         {
-                            var tupleParam = options as Tuple<int, ITransportIEEE488>;
-                            if (tupleParam == null)
+                            var param = options as ITransportIEEE488;
+                            if (param == null)
                                 throw new TargetParameterCountException(string.Format(
                                     "option mast be type: {0}; now type: {1}",
-                                    typeof (Tuple<int, ITransportIEEE488>), options.GetType()));
-                            //tupleParam.Item2.Open(tupleParam.Item1);
-                            return new ADTSDriver(tupleParam.Item1, tupleParam.Item2);
+                                    typeof (ITransportIEEE488), options.GetType()));
+                            return new ADTSDriver(param);
                         }
                 },
 
@@ -63,12 +71,12 @@ namespace KipTM.Model
                     typeof(PACE1000Driver),
                     options =>
                         {
-                            var tupleParam = options as Tuple<int, ITransportIEEE488>;
-                            if (tupleParam == null)
+                            var param = options as ITransportIEEE488;
+                            if (param == null)
                                 throw new TargetParameterCountException(string.Format(
                                     "option mast be type: {0}; now type: {1}",
-                                    typeof (Tuple<int, ITransportIEEE488>), options.GetType()));
-                            return new PACE1000Driver(tupleParam.Item1, tupleParam.Item2);
+                                    typeof (ITransportIEEE488), options.GetType()));
+                            return new PACE1000Driver(param);
                         }
                 },
             };
@@ -82,7 +90,7 @@ namespace KipTM.Model
                     if (visaSettings != null)
                     {
                         var transport = new VisaIEEE488();
-                        transport.Open(visaSettings.Address);
+                        transport.Open(visaSettings.AddressFull);
                         return transport;
                     }
                     throw new Exception(string.Format("Can not generate transport for key \"{0}\" with options [{0}]", VisaChannelDescriptor.KeyType, opt));
@@ -90,12 +98,9 @@ namespace KipTM.Model
             };
             _loops.AddLocker(VisaChannelDescriptor.KeyType, new object());
 
-            _adtsModel = new ADTSModel(string.Format("{0} {1}", ADTSModel.Model, ADTSModel.DeviceCommonType), _loops,
-                VisaChannelDescriptor.KeyType, this);
-
             _ethalonChannels = new Dictionary<string, Func<ITransportChannelType, IEthalonChannel>>()
             {
-                {PACE1000Model.Key, (transportDescriptor)=> new PACEEchalonChannel(GetDevice<PACE1000Model>(default(int),transportDescriptor))}
+                {PACE1000Model.Key, (transportDescriptor)=> new PACEEchalonChannel(GetDevice<PACE1000Model>(transportDescriptor))}
             };
         }
 
@@ -106,7 +111,15 @@ namespace KipTM.Model
             return _ethalonChannels[deviceKey](settings);
         }
 
-        public T GetModel<T>(int address, ITransportChannelType transportDescription)
+        public T GetModel<T>()
+        {
+            if (!_modelFabrics.ContainsKey(typeof(T)))
+                throw new IndexOutOfRangeException(string.Format("For type [{0}] not found fabric", typeof(T)));
+
+            return (T)_modelFabrics[typeof(T)]();
+        }
+
+        public T GetDevice<T>(ITransportChannelType transportDescription)
         {
             if(!_devicesFabrics.ContainsKey(typeof(T)))
                 throw new IndexOutOfRangeException(string.Format("For type [{0}] not found fabric", typeof(T)));
@@ -116,25 +129,7 @@ namespace KipTM.Model
 
             var chann = _channelsFabrics[transportDescription.Key](transportDescription.Settings);
 
-            return (T)_devicesFabrics[typeof (T)](new Tuple<int, ITransportIEEE488>(address, chann));
-        }
-
-        public T GetDevice<T>(int address, ITransportChannelType transportDescription)
-        {
-            if(!_devicesFabrics.ContainsKey(typeof(T)))
-                throw new IndexOutOfRangeException(string.Format("For type [{0}] not found fabric", typeof(T)));
-
-            if (!_channelsFabrics.ContainsKey(transportDescription.Key))
-                throw new IndexOutOfRangeException(string.Format("For channel [{0}] not found fabric", transportDescription.Key));
-
-            var chann = _channelsFabrics[transportDescription.Key](transportDescription.Settings);
-
-            return (T)_devicesFabrics[typeof (T)](new Tuple<int, ITransportIEEE488>(address, chann));
-        }
-
-        public ADTSModel ADTS
-        {
-            get { return _adtsModel; }
+            return (T)_devicesFabrics[typeof (T)](chann);
         }
 
         #endregion

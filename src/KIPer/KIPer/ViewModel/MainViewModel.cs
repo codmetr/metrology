@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Interfaces;
 using KipTM.Model;
+using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 using KipTM.View;
@@ -57,8 +58,8 @@ namespace KipTM.ViewModel
 
             _services = new ServiceViewModel(new List<IService>()
             {
-                new Pace1000ViewModel(_dataService.DeviceManager.Pace5000),
-                //new ADTSViewModel(_dataService.DeviceManager.ADTS)
+                new Pace1000ViewModel(_dataService.DeviceManager),
+                new ADTSViewModel(_dataService.DeviceManager)
             });
             ViewModelViewDic = new Dictionary<Type, Type>()
             {

@@ -68,10 +68,11 @@ namespace KipTM.ViewModel
             Pressure = _model.Pressure.ToString("F3");
         }
 
-        public string Title { get { return _model.Title; } }
-        public void Start(int address, ITransportChannelType channel)
+        public string Title { get { return PACE1000Model.Model; } }
+        public void Start(ITransportChannelType channel)
         {
-            _model = _deviceManager.GetDevice<PACE1000Model>(address, channel);
+            _model = _deviceManager.GetModel<PACE1000Model>();
+            _model.Start(channel);
             _model.PressureChanged += _model_PressureChanged;
             _model.PressureUnitChanged += _model_PressureUnitChanged;
             AutoreadPeriod = _model.AutoreadPeriod;
@@ -79,6 +80,7 @@ namespace KipTM.ViewModel
 
         public void Stop()
         {
+            _model.StopAutoUpdate();
             _model.PressureChanged -= _model_PressureChanged;
             _model.PressureUnitChanged -= _model_PressureUnitChanged;
             _model = null;

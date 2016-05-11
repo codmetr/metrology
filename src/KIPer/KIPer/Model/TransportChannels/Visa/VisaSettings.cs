@@ -9,6 +9,18 @@ namespace KipTM.Model.TransportChannels
 {
     public class VisaSettings
     {
-        public string Address { get; set; }
+        private string _address;
+
+        public string Address
+        {
+            get { return _address; }
+            set
+            {
+                _address = value;
+                AddressFull = string.Format("GPIB0::{0}", _address);
+            }
+        }
+
+        public string AddressFull { get; private set; }
     }
 }

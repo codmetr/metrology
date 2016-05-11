@@ -18,7 +18,7 @@ namespace KipTM.Model.Devices
         private IDeviceManager _deviceManager;
         private ADTSDriver _adts;
         private readonly ILoops _loops;
-        private readonly string _loopKey;
+        private string _loopKey = null;
         private bool _isNeedAutoupdate;
 
 
@@ -52,11 +52,10 @@ namespace KipTM.Model.Devices
         internal static IEnumerable<string> TypesEtalonParameters = new[]
         {"давление", "авиационная высота", "авиационная скорость"};
 
-        public ADTSModel(string title, ILoops loops, string loopKey, IDeviceManager deviceManager)
+        public ADTSModel(string title, ILoops loops, IDeviceManager deviceManager)
         {
             Title = title;
             _loops = loops;
-            _loopKey = loopKey;
             _deviceManager = deviceManager;
             _waitStatusPool = new Dictionary<EventWaitHandle, Func<Status, bool>>();
         }
@@ -64,9 +63,10 @@ namespace KipTM.Model.Devices
         /// <summary>
         /// Инициализация
         /// </summary>
-        public void Start(int address, ITransportChannelType transport)
+        public void Start(ITransportChannelType transport)
         {
-            _adts = _deviceManager.GetDevice<ADTSDriver>(address, transport);
+            _loopKey = transport.Key;
+            _adts = _deviceManager.GetDevice<ADTSDriver>(transport);
             _loops.StartUnimportantAction(_loopKey, UpdateUnit);
         }
 

@@ -45,12 +45,6 @@ namespace KipTM.ViewModel
             set { Set(ref _selectedChannel, value); }
         }
 
-        public string Address
-        {
-            get { return _address; }
-            set { Set(ref _address, value); }
-        }
-
         public ITransportChannelType GetSelectedChannelType()
         {
             return SelectedChannel;

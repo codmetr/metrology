@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using KipTM.Model.TransportChannels;
 using MainLoop;
 using PACESeries;
 
@@ -11,7 +12,8 @@ namespace KipTM.Model.Devices
 {
     public class PACE1000Model
     {
-        private readonly PACESeries.PACE1000Driver _driver;
+        private IDeviceManager _deviceManager;
+        private PACESeries.PACE1000Driver _driver;
         private ILoops _loops;
         private string _loopKey;
         private bool _autoUpdateRun = false;
@@ -19,12 +21,11 @@ namespace KipTM.Model.Devices
         private CancellationTokenSource _cancellationAutoread = new CancellationTokenSource();
         private CancellationTokenSource _cancellation = new CancellationTokenSource();
 
-        public PACE1000Model(string title, ILoops loops, string loopKey, PACE1000Driver driver)
+        public PACE1000Model(string title, ILoops loops, IDeviceManager deviceManager)
         {
             Title = title;
             _loops = loops;
-            _loopKey = loopKey;
-            _driver = driver;
+            _deviceManager = deviceManager;
         }
 
         public string Title
@@ -48,6 +49,15 @@ namespace KipTM.Model.Devices
         public TimeSpan AutoreadPeriod { get { return _periodAutoUpdate; } }
 
         #endregion
+
+        /// <summary>
+        /// Инициализация
+        /// </summary>
+        public void Start(ITransportChannelType transport)
+        {
+            _loopKey = transport.Key;
+            _driver = _deviceManager.GetDevice<PACE1000Driver>(transport);
+        }
 
         public void SetPressureUnit(PressureUnits unit)
         {
