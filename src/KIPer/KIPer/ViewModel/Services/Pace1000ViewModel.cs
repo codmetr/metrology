@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -39,36 +40,36 @@ namespace KipTM.ViewModel
             _deviceManager = deviceManager;
             _avalableUnits = new[]
             {
-                new PressureUnitDescriptor()
-                {
-                    Unit = PressureUnits.MBar,
-                    UnitString = _pressureUnitToString(PressureUnits.MBar)
-                },
-                new PressureUnitDescriptor()
-                {
-                    Unit = PressureUnits.mmHg,
-                    UnitString = _pressureUnitToString(PressureUnits.mmHg)
-                },
-                new PressureUnitDescriptor()
-                {
-                    Unit = PressureUnits.KgCm2,
-                    UnitString = _pressureUnitToString(PressureUnits.KgCm2)
-                },
+                new PressureUnitDescriptor(PressureUnits.MBar,_pressureUnitToString(PressureUnits.MBar)),
+                new PressureUnitDescriptor(PressureUnits.Bar,_pressureUnitToString(PressureUnits.Bar)),
+                new PressureUnitDescriptor(PressureUnits.inH2O4,_pressureUnitToString(PressureUnits.inH2O4)),
+                new PressureUnitDescriptor(PressureUnits.inH2O,_pressureUnitToString(PressureUnits.inH2O)),
+                new PressureUnitDescriptor(PressureUnits.inHg,_pressureUnitToString(PressureUnits.inHg)),
+                new PressureUnitDescriptor(PressureUnits.mmHg,_pressureUnitToString(PressureUnits.mmHg)),
+                new PressureUnitDescriptor(PressureUnits.Pa,_pressureUnitToString(PressureUnits.Pa)),
+                new PressureUnitDescriptor(PressureUnits.hPa,_pressureUnitToString(PressureUnits.hPa)),
+                new PressureUnitDescriptor(PressureUnits.kPa,_pressureUnitToString(PressureUnits.kPa)),
+                new PressureUnitDescriptor(PressureUnits.psi,_pressureUnitToString(PressureUnits.psi)),
+                new PressureUnitDescriptor(PressureUnits.inH2O60F,_pressureUnitToString(PressureUnits.inH2O60F)),
+                new PressureUnitDescriptor(PressureUnits.KgCm2,_pressureUnitToString(PressureUnits.KgCm2)),
+                new PressureUnitDescriptor(PressureUnits.ATM,_pressureUnitToString(PressureUnits.ATM)),
+                new PressureUnitDescriptor(PressureUnits.mmH2O4,_pressureUnitToString(PressureUnits.mmH2O4)),
             };
             SelectedUnit = _avalableUnits.First();
         }
 
-        void _model_PressureUnitChanged(object sender, EventArgs e)
+        public override void Cleanup()
         {
-            Unit = _pressureUnitToString(_model.PressureUnit);
-        }
-
-        void _model_PressureChanged(object sender, EventArgs e)
-        {
-            Pressure = _model.Pressure.ToString("F3");
+            if (_model != null)
+            {
+                _model.PressureChanged -= _model_PressureChanged;
+                _model.PressureUnitChanged -= _model_PressureUnitChanged;
+            }
+            base.Cleanup();
         }
 
         public string Title { get { return PACE1000Model.Model; } }
+
         public void Start(ITransportChannelType channel)
         {
             _model = _deviceManager.GetModel<PACE1000Model>();
@@ -86,6 +87,7 @@ namespace KipTM.ViewModel
             _model = null;
         }
 
+        #region Pressure 
         public string Pressure
         {
             get { return _pressure; }
@@ -94,6 +96,9 @@ namespace KipTM.ViewModel
                 Set(ref _pressure, value);
             }
         }
+        #endregion
+
+        #region PressureUnit 
 
         public string Unit
         {
@@ -111,10 +116,19 @@ namespace KipTM.ViewModel
             get { return _selectedUnit; }
             set { Set(ref _selectedUnit, value); }
         }
+        #endregion
 
+        #region Commands
         public ICommand UpdatePressureAndUnits { get { return new CommandWrapper(_updatePressureAndUnit); } }
+        public ICommand UpdateUnits { get { return new CommandWrapper(_updateUnit); } }
         public ICommand SetSelectedUnit { get { return new CommandWrapper(()=>_setUnit(_selectedUnit.Unit)); } }
+        public ICommand SetLloOn { get { return new CommandWrapper(()=>_model.SetLloOn()); } }
+        public ICommand SetLloOff { get { return new CommandWrapper(()=>_model.SetLloOff()); } }
+        public ICommand SetLocal { get { return new CommandWrapper(()=>_model.SetLocal()); } }
+        public ICommand SetRemote { get { return new CommandWrapper(()=>_model.SetRemote()); } }
+        #endregion
 
+        #region Autoread
         public bool IsAutoRead
         {
             get { return _isAutoRead; }
@@ -145,15 +159,35 @@ namespace KipTM.ViewModel
                 _model.SetAutoreadPeriod(_autoreadPeriod);
             }
         }
+        #endregion
+
+        #region _Services
+        void _model_PressureUnitChanged(object sender, EventArgs e)
+        {
+            Unit = _pressureUnitToString(_model.PressureUnit);
+        }
+
+        void _model_PressureChanged(object sender, EventArgs e)
+        {
+            Pressure = _model.Pressure.ToString("F3");
+        }
 
         private void _setUnit(PressureUnits unit)
         {
             _model.SetPressureUnit(unit);
         }
 
+        private void _updateUnit()
+        {
+            _model.UpdateUnit();
+            Task.Delay(TimeSpan.FromMilliseconds(100));
+            SelectedUnit = AvalableUnits.FirstOrDefault(el=>el.Unit ==_model.PressureUnit);
+        }
+
         private void _updatePressureAndUnit()
         {
             _model.UpdatePressure();
+            _model.UpdateUnit();
         }
 
         private string _pressureUnitToString(PressureUnits unit)
@@ -164,42 +198,51 @@ namespace KipTM.ViewModel
                     break;
                 case PressureUnits.MBar:
                     return "мБар";
-                case PressureUnits.inH2O4:
                     break;
-                case PressureUnits.inH2O20:
+                case PressureUnits.Bar:
+                    return "бар";
+                    break;
+                case PressureUnits.inH2O4:
+                    return "дюйм вод.ст. 4С";
+                    break;
+                case PressureUnits.inH2O:
+                    return "дюйм вод.ст. 20С";
                     break;
                 case PressureUnits.inHg:
+                    return "дюйм рт.ст.";
                     break;
                 case PressureUnits.mmHg:
                     return "мм рт.ст.";
+                    break;
                 case PressureUnits.Pa:
+                    return "Па";
                     break;
                 case PressureUnits.hPa:
+                    return "гПа";
+                    break;
+                case PressureUnits.kPa:
+                    return "кПа";
                     break;
                 case PressureUnits.psi:
+                    return "фтс/дюйм";
                     break;
                 case PressureUnits.inH2O60F:
+                    return "дюйм вод.ст. 60F";
                     break;
                 case PressureUnits.KgCm2:
-                    return "кгс//см";
-                case PressureUnits.FS:
+                    return "кгс/см";
+                    break;
+                case PressureUnits.ATM:
+                    return "атм";
                     break;
                 case PressureUnits.mmH2O4:
+                    return "мм вод.ст. 4С";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("unit");
             }
             return string.Empty;
         }
-
-        public override void Cleanup()
-        {
-            if (_model != null)
-            {
-                _model.PressureChanged -= _model_PressureChanged;
-                _model.PressureUnitChanged -= _model_PressureUnitChanged;
-            }
-            base.Cleanup();
-        }
+        #endregion
     }
 }

@@ -18,6 +18,7 @@ namespace PACESeries
         {
             _transport = transport;
             _address = address;
+            _parser = new PACEParser();
         }
 
         public PACE1000Driver(ITransportIEEE488 transport):this(default (int), transport)

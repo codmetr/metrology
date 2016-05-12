@@ -20,6 +20,8 @@ namespace KipTM.Model.Devices
         private TimeSpan _periodAutoUpdate = TimeSpan.FromMilliseconds(200);
         private CancellationTokenSource _cancellationAutoread = new CancellationTokenSource();
         private CancellationTokenSource _cancellation = new CancellationTokenSource();
+        private double _pressure;
+        private PressureUnits _pressureUnit;
 
         public PACE1000Model(string title, ILoops loops, IDeviceManager deviceManager)
         {
@@ -40,16 +42,6 @@ namespace KipTM.Model.Devices
         internal static string DeviceManufacturer { get { return "GE Druk"; } }
         internal static IEnumerable<string> TypesEtalonParameters = new[] { "давление", "авиационная высота", "авиационная скорость" };
 
-        #region public properties
-
-        public double Pressure { get; set; }
-
-        public PressureUnits PressureUnit { get; set; }
-
-        public TimeSpan AutoreadPeriod { get { return _periodAutoUpdate; } }
-
-        #endregion
-
         /// <summary>
         /// Инициализация
         /// </summary>
@@ -59,15 +51,9 @@ namespace KipTM.Model.Devices
             _driver = _deviceManager.GetDevice<PACE1000Driver>(transport);
         }
 
-        public void SetPressureUnit(PressureUnits unit)
-        {
-            _loops.StartMiddleAction(_loopKey, (mb) =>
-            {
-                if(!_driver.SetPressureUnit(unit))
-                    return;
-                PressureUnit = unit;
-            });
-        }
+        #region Autoread
+
+        public TimeSpan AutoreadPeriod { get { return _periodAutoUpdate; } }
 
         public void StartAutoread(TimeSpan autoreadPeriod)
         {
@@ -90,6 +76,59 @@ namespace KipTM.Model.Devices
             _periodAutoUpdate = autoreadPeriod;
         }
 
+        #endregion
+
+        #region Pressure Unit
+
+        public PressureUnits PressureUnit
+        {
+            get { return _pressureUnit; }
+            set
+            {
+                if(value==_pressureUnit)
+                    return;
+                _pressureUnit = value; 
+                OnPressureUnitChanged();
+            }
+        }
+
+        public void SetPressureUnit(PressureUnits unit)
+        {
+            _loops.StartMiddleAction(_loopKey, (mb) =>
+            {
+                if(!_driver.SetPressureUnit(unit))
+                    return;
+                PressureUnit = unit;
+            });
+        }
+
+        public void UpdateUnit()
+        {
+            _loops.StartMiddleAction(_loopKey, (mb) => _updateUnit(_cancellation.Token));
+        }
+
+        public event EventHandler PressureUnitChanged;
+
+        protected virtual void OnPressureUnitChanged()
+        {
+            EventHandler handler = PressureUnitChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        #endregion
+
+        #region Pressure
+
+        public double Pressure
+        {
+            get { return _pressure; }
+            set
+            {
+                _pressure = value; 
+                OnPressureChanged();
+            }
+        }
+
         public void UpdatePressure()
         {
             _loops.StartMiddleAction(_loopKey, (mb) => _updatePressure(_cancellation.Token));
@@ -103,15 +142,8 @@ namespace KipTM.Model.Devices
                 wh.Set();
             });
         }
-        public event EventHandler PressureUnitChanged;
 
         public event EventHandler PressureChanged;
-
-        protected virtual void OnPressureUnitChanged()
-        {
-            EventHandler handler = PressureUnitChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
 
         protected virtual void OnPressureChanged()
         {
@@ -119,6 +151,33 @@ namespace KipTM.Model.Devices
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
+        #endregion
+
+        #region Local/Remote
+
+        public void SetLloOn()
+        {
+            _loops.StartMiddleAction(_loopKey, (mb) => _driver.SetLocalLockOutMode());
+        }
+
+        public void SetLloOff()
+        {
+            _loops.StartMiddleAction(_loopKey, (mb) => _driver.SetOffLocalLockOutMode());
+        }
+
+        public void SetLocal()
+        {
+            _loops.StartMiddleAction(_loopKey, (mb) => _driver.SetLocal());
+        }
+
+        public void SetRemote()
+        {
+            _loops.StartMiddleAction(_loopKey, (mb) => _driver.SetRemote());
+        }
+
+        #endregion
+
+        #region _Services
         private void AutoreadFunction(CancellationToken cancel)
         {
             if (cancel.IsCancellationRequested)
@@ -144,12 +203,16 @@ namespace KipTM.Model.Devices
             var pressure = _driver.GetPressure();
             if (!double.IsNaN(pressure))
                 Pressure = pressure;
-            
+        }
+
+        private void _updateUnit(CancellationToken cancel)
+        {
             if (cancel.IsCancellationRequested)
                 return;
             var unit = _driver.GetPressureUnit();
             if (unit != null)
                 PressureUnit = unit.Value;
         }
+        #endregion
     }
 }

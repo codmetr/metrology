@@ -27,14 +27,44 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="1" Grid.Row="0">
             <GroupBox Header="Ручной опрос">
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource TitleStyle}">Давление:</TextBlock>
-                        <TextBlock Text="{Binding Pressure}" Style="{StaticResource ValueStyle}" Width="100"/>
-                        <TextBlock Text="{Binding Unit}" Style="{StaticResource ValueStyle}" Width="50"/>
-                        <Button Command="{Binding UpdatePressureAndUnits}">Перечитать давление</Button>
-                    </StackPanel>
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource TitleStyle}">Давление:</TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Pressure}" Style="{StaticResource ValueStyle}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Unit}" Style="{StaticResource ValueStyle}"/>
+                    <Button Grid.Column="3" Grid.Row="0" Command="{Binding UpdatePressureAndUnits}" VerticalAlignment="Center">Перечитать</Button>
+
+                    <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource TitleStyle}" VerticalAlignment="Center" TextWrapping="Wrap">Ед. измерения:</TextBlock>
+                    <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Margin="3" HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding AvalableUnits}"
+                              SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemTemplate><DataTemplate>
+                            <TextBlock Text="{Binding UnitString}"></TextBlock>
+                        </DataTemplate></ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button Grid.Column="3" Grid.Row="1" Command="{Binding UpdateUnits}" VerticalAlignment="Center">Перечитать</Button>
+                    <Button Grid.Column="4" Grid.Row="1" VerticalAlignment="Center"
+                            Command="{Binding SetSelectedUnit}">Установить</Button>
+                    <UniformGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" Rows="1">
+                        <Button Command="{Binding SetLloOn}">LLO</Button>
+                        <Button Command="{Binding SetLloOff}">GTL</Button>
+                        <Button Command="{Binding SetLocal}">Локально</Button>
+                        <Button Command="{Binding SetRemote}">Удаленно</Button>
+                    </UniformGrid>
+                </Grid>
             </GroupBox>
             <GroupBox Header="Автоматический опрос" Grid.Column="0" Grid.Row="1">
             <StackPanel>

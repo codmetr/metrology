@@ -28,9 +28,9 @@
             <GroupBox Header="Состояние ADTS" Grid.Column="1" Grid.Row="0">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource TitleStyle}">PS:</TextBlock>
+                        <TextBlock Style="{StaticResource NormalTitleStyle}">PS:</TextBlock>
                         <TextBlock Style="{StaticResource ValueStateStyle}" Text="{Binding Pressure, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Style="{StaticResource TitleStyle}">PT:</TextBlock>
+                        <TextBlock Style="{StaticResource NormalTitleStyle}">PT:</TextBlock>
                         <TextBlock Style="{StaticResource ValueStateStyle}" Text="{Binding Pitot, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">

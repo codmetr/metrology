@@ -294,7 +294,7 @@ namespace PACESeries
 
         private string[] ParseAnswer(string answer)
         {
-            return answer.Split(new[] { ',' });
+            return answer.Trim().Split(' ')[1].Split(',');
         }
 
         private IDictionary<string, object> ParseAnswer(string answer, Dictionary<string, PeremeterTypes> parameterTypes)
@@ -339,10 +339,12 @@ namespace PACESeries
                     case PeremeterTypes.PressureUnit:
                         if (parameter == "MBAR")
                             result.Add(key, PressureUnits.MBar);
+                        else if (parameter == "BAR")
+                            result.Add(key, PressureUnits.Bar);
                         else if (parameter == "INH2O4")
                             result.Add(key, PressureUnits.inH2O4);
-                        else if (parameter == "INH2O20")
-                            result.Add(key, PressureUnits.inH2O20);
+                        else if (parameter == "INH2O")
+                            result.Add(key, PressureUnits.inH2O);
                         else if (parameter == "INHG")
                             result.Add(key, PressureUnits.inHg);
                         else if (parameter == "MMHG")
@@ -351,14 +353,16 @@ namespace PACESeries
                             result.Add(key, PressureUnits.Pa);
                         else if (parameter == "HPA")
                             result.Add(key, PressureUnits.hPa);
+                        else if (parameter == "KPA")
+                            result.Add(key, PressureUnits.kPa);
                         else if (parameter == "PSI")
                             result.Add(key, PressureUnits.psi);
-                        else if (parameter == "INH2O60F")
+                        else if (parameter == "INH2O60")
                             result.Add(key, PressureUnits.inH2O60F);
-                        else if (parameter == "KGCM2")
+                        else if (parameter == "KG/CM2")
                             result.Add(key, PressureUnits.KgCm2);
-                        else if (parameter == "%FS")
-                            result.Add(key, PressureUnits.FS);
+                        else if (parameter == "ATM")
+                            result.Add(key, PressureUnits.ATM);
                         else if (parameter == "MMH2O4")
                             result.Add(key, PressureUnits.mmH2O4);
                         else
@@ -382,11 +386,14 @@ namespace PACESeries
                 case PressureUnits.MBar:
                     unitstr = "MBAR";
                     break;
+                case PressureUnits.Bar:
+                    unitstr = "BAR";
+                    break;
                 case PressureUnits.inH2O4:
                     unitstr = "INH2O4";
                     break;
-                case PressureUnits.inH2O20:
-                    unitstr = "INH2O20";
+                case PressureUnits.inH2O:
+                    unitstr = "INH2O";
                     break;
                 case PressureUnits.inHg:
                     unitstr = "INHG";
@@ -400,17 +407,20 @@ namespace PACESeries
                 case PressureUnits.hPa:
                     unitstr = "HPA";
                     break;
+                case PressureUnits.kPa:
+                    unitstr = "KPA";
+                    break;
                 case PressureUnits.psi:
                     unitstr = "PSI";
                     break;
                 case PressureUnits.inH2O60F:
-                    unitstr = "INH2O60F";
+                    unitstr = "INH2O60";
                     break;
                 case PressureUnits.KgCm2:
-                    unitstr = "KGCM2";
+                    unitstr = "KG/CM2";
                     break;
-                case PressureUnits.FS:
-                    unitstr = "%FS";
+                case PressureUnits.ATM:
+                    unitstr = "ATM";
                     break;
                 case PressureUnits.mmH2O4:
                     unitstr = "MMH2O4";

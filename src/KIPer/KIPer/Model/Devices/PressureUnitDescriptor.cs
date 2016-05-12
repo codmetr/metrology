@@ -9,7 +9,13 @@ namespace KipTM.Model.Devices
 {
     public class PressureUnitDescriptor
     {
-        public PressureUnits Unit;
-        public string UnitString;
+        public PressureUnitDescriptor(PressureUnits unit, string unitString)
+        {
+            UnitString = unitString;
+            Unit = unit;
+        }
+
+        public PressureUnits Unit { get; private set; }
+        public string UnitString { get; private set; }
     }
 }

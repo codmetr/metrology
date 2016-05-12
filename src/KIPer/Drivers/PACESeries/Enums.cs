@@ -18,18 +18,20 @@ namespace PACESeries
     public enum PressureUnits
     {
         None = 0,
-        MBar = 1,
-        inH2O4 = 2,
-        inH2O20 = 3,
-        inHg = 4,
-        mmHg = 5,
-        Pa = 6,
-        hPa = 7,
-        psi = 8,
-        inH2O60F = 9,
-        KgCm2 = 10,
-        FS = 11,
-        mmH2O4 = 12,
+        MBar,
+        Bar,
+        inH2O4,
+        inH2O,
+        inHg,
+        mmHg,
+        Pa,
+        hPa,
+        kPa,
+        psi,
+        inH2O60F,
+        KgCm2,
+        ATM,
+        mmH2O4,
     }
 
     public enum AeronauticalUnits
