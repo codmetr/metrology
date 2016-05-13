@@ -57,7 +57,8 @@ namespace KipTM.ViewModel.Services
 
         public void Start(ITransportChannelType channel)
         {
-            var model = _deviceManager.GetDevice<ADTSModel>(channel);
+            var model = _deviceManager.GetModel<ADTSModel>();
+            model.Start(channel);
             Start(model);
         }
 
