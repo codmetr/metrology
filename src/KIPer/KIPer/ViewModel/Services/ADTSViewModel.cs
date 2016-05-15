@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Windows.Input;
 using ADTS;
 using GalaSoft.MvvmLight;
 using KipTM.Interfaces;
@@ -29,6 +31,9 @@ namespace KipTM.ViewModel.Services
         private bool _isPsRampingAndAchievingRate;
         private bool _isPtAtSetPointAndInControlMode;
         private bool _isPtRampingAndAchievingRate;
+        private string _pressureUnit;
+        private IEnumerable<PressureUnitDescriptor> _avalableUnits;
+        private PressureUnitDescriptor _selectedUnit;
 
         /// <summary>
         /// Initializes a new instance of the ADTSViewModel class.
@@ -72,6 +77,15 @@ namespace KipTM.ViewModel.Services
             _model = null;
         }
 
+        public ICommand UpdatePressure { get { return new CommandWrapper(_uptetePressure); } }
+
+        public ICommand UpdatePitot { get { return new CommandWrapper(_updatePitot); } }
+
+        public ICommand UpdatePressureUnit { get { return new CommandWrapper(_updatePressureUnit); } }
+
+        public ICommand SetPressureUnit { get { return new CommandWrapper(_setPressureUnit); } }
+
+        #region State
         /// <summary>
         /// Стабилизированно на значении
         /// </summary>
@@ -140,26 +154,49 @@ namespace KipTM.ViewModel.Services
             get { return _stateAdts; }
             private set { Set(ref _stateAdts, value); }
         }
+        #endregion
 
+        #region Pressure
         public string Pressure
         {
             get { return _pressure; }
             private set { Set(ref _pressure, value); }
         }
+        #endregion
 
+        #region Pitot
         public string Pitot
         {
             get { return _pitot; }
             private set { Set(ref _pitot, value); }
         }
+        #endregion
 
-        
+        #region Pressure Unit
+        public IEnumerable<PressureUnitDescriptor> AvalableUnits
+        {
+            get { return _avalableUnits; }
+        }
+
+        public PressureUnitDescriptor SelectedUnit
+        {
+            get { return _selectedUnit; }
+            set { Set(ref _selectedUnit, value); }
+        }
+
+        public string PressureUnit
+        {
+            get { return _pressureUnit; }
+            set { Set(ref _pressureUnit, value); }
+        }
+        #endregion
 
         #region Events
         private void AttachEvents(ADTSModel model)
         {
             model.PressureReaded += model_PressureReaded;
             model.PitotReaded += _model_PitotReaded;
+            model.PressureUnitChanged += model_PressureUnitChanged;
             model.StateReaded += _model_StateReaded;
             model.StatusReaded += _model_StatusReaded;
         }
@@ -168,6 +205,7 @@ namespace KipTM.ViewModel.Services
         {
             model.PressureReaded += model_PressureReaded;
             model.PitotReaded += _model_PitotReaded;
+            model.PressureUnitChanged -= model_PressureUnitChanged;
             model.StateReaded += _model_StateReaded;
             model.StatusReaded += _model_StatusReaded;
         }
@@ -214,8 +252,7 @@ namespace KipTM.ViewModel.Services
         {
             if (_model != null && _model.Pitot != null)
             {
-                Pitot = string.Format("{0}{1}", _model.Pitot,
-                    _model.PUnits == null ? "" : PUnitToString(_model.PUnits.Value));
+                Pitot = _model.Pitot.Value.ToString("F4");
             }
         }
 
@@ -223,12 +260,42 @@ namespace KipTM.ViewModel.Services
         {
             if (_model != null && _model.Pressure != null)
             {
-                Pressure = string.Format("{0}{1}", _model.Pressure,
-                    _model.PUnits == null ? "" : PUnitToString(_model.PUnits.Value));
+                Pressure = _model.Pressure.Value.ToString("F4");
             }
         }
 
-        string PUnitToString(PressureUnits unit)
+        void model_PressureUnitChanged(DateTime obj)
+        {
+            if (_model != null && _model.PUnits != null)
+            {
+                PressureUnit = _pressureUnitToString(_model.PUnits.Value);
+            }
+        }
+        #endregion
+
+        #region Services
+
+        private void _uptetePressure()
+        {
+            _model.
+        }
+
+        private void _updatePitot()
+        {
+            
+        }
+
+        private void _updatePressureUnit()
+        {
+            
+        }
+
+        private void _setPressureUnit()
+        {
+            
+        }
+
+        string _pressureUnitToString(PressureUnits unit)
         {
             switch (unit)
             {

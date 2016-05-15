@@ -41,10 +41,37 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             var cancel = _cancellationTokenSource.Token;
 
             OnStarted();
-            if (!_adts.SetPressure(_param, _point, _rate, _unit, cancel))
+            if (!_adts.SetPressureUnit(_unit, cancel))
+            {
+                _logger.With(l => l.Trace(string.Format("[ERROR] Set unit for point")));
+                whEnd.Set();
+                OnEnd(new EventArgEnd(false));
+                return;
+            }
+            if (cancel.IsCancellationRequested)
+            {
+                _logger.With(l => l.Trace(string.Format("Cancel test")));
+                whEnd.Set();
+                OnEnd(new EventArgEnd(false));
+                return;
+            }
+            if (!_adts.SetRate(_param, _rate, cancel))
+            {
+                _logger.With(l => l.Trace(string.Format("[ERROR] Set rate for point")));
+                whEnd.Set();
+                OnEnd(new EventArgEnd(false));
+                return;
+            }
+            if (cancel.IsCancellationRequested)
+            {
+                _logger.With(l => l.Trace(string.Format("Cancel test")));
+                whEnd.Set();
+                OnEnd(new EventArgEnd(false));
+                return;
+            }
+            if (!_adts.SetPressure(_param, _point, cancel))
             {
                 _logger.With(l => l.Trace(string.Format("[ERROR] Set point")));
-                //OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetPressurePoint });
                 whEnd.Set();
                 OnEnd(new EventArgEnd(false));
                 return;

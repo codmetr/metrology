@@ -145,7 +145,7 @@ namespace KipTM.Model.Devices
             return result;
         }
 
-
+        #region Calibration
         /// <summary>
         /// Запуск процесса калибровки
         /// </summary>
@@ -193,17 +193,16 @@ namespace KipTM.Model.Devices
                 date = dateValue;
             return result;
         }
+        #endregion
 
+        #region Pressure Unit
         /// <summary>
-        /// Задать цель для Ps
+        /// Задать единицы измерения давления
         /// </summary>
-        /// <param name="parameter"></param>
-        /// <param name="pressure"></param>
-        /// <param name="rate"></param>
         /// <param name="unit"></param>
         /// <param name="cancel"></param>
         /// <returns></returns>
-        public bool SetPressure(Parameters parameter, double pressure, double rate, PressureUnits unit, CancellationToken cancel)
+        public bool SetPressureUnit(PressureUnits unit, CancellationToken cancel)
         {
             bool result = false;
             var isCommpete = new ManualResetEvent(false);
@@ -216,12 +215,97 @@ namespace KipTM.Model.Devices
                     isCommpete.Set();
                     return;
                 }
+                result = true;
+                isCommpete.Set();
+            });
+            if(cancel.IsCancellationRequested)
+                return false;
+            isCommpete.WaitOne();
+            if(cancel.IsCancellationRequested)
+                return false;
+            return result;
+        }
+
+        public bool UpdatePressureUnit(CancellationToken cancel)
+        {
+            bool result = false;
+            var isCommpete = new ManualResetEvent(false);
+            if (cancel.IsCancellationRequested)
+                return false;
+            _loops.StartMiddleAction(_loopKey, (transport) =>
+            {
+                PressureUnits? unit;
+                if (!_adts.GetUnits(out unit) || cancel.IsCancellationRequested)
+                {
+                    isCommpete.Set();
+                    return;
+                }
+                PUnits = unit;
+                result = true;
+                isCommpete.Set();
+            });
+            if (cancel.IsCancellationRequested)
+                return false;
+            isCommpete.WaitOne();
+            if (cancel.IsCancellationRequested)
+                return false;
+            return result;
+        }
+
+        #endregion
+
+        #region Rate
+
+        /// <summary>
+        /// Задать скорость установки величины
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="rate"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
+        public bool SetRate(Parameters parameter, double rate, CancellationToken cancel)
+        {
+            bool result = false;
+            var isCommpete = new ManualResetEvent(false);
+            if(cancel.IsCancellationRequested)
+                return false;
+            _loops.StartMiddleAction(_loopKey, (transport) =>
+            {
                 if (!_adts.SetRate(parameter, rate) || cancel.IsCancellationRequested)
                 {
                     isCommpete.Set();
                     return;
                 }
+                result = true;
+                isCommpete.Set();
+            });
+            if(cancel.IsCancellationRequested)
+                return false;
+            isCommpete.WaitOne();
+            if(cancel.IsCancellationRequested)
+                return false;
+            return result;
+        }
 
+        #endregion
+
+        #region Pressure
+
+        /// <summary>
+        /// Задать цель для выбранного параметра
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="pressure"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
+        public bool SetPressure(Parameters parameter, double pressure, CancellationToken cancel)
+        {
+            bool result = false;
+            var isCommpete = new ManualResetEvent(false);
+            if(cancel.IsCancellationRequested)
+                return false;
+            _loops.StartMiddleAction(_loopKey, (transport) =>
+            {
                 if (!_adts.SetAim(parameter, pressure) || cancel.IsCancellationRequested)
                 {
                     isCommpete.Set();
@@ -237,6 +321,8 @@ namespace KipTM.Model.Devices
                 return false;
             return result;
         }
+
+        #endregion
 
         /// <summary>
         /// Ожидать достяжения Ps необходимого давления
@@ -382,7 +468,20 @@ namespace KipTM.Model.Devices
 
         public double? Pitot{get { return _pitot; }}
 
-        public PressureUnits? PUnits { get { return _pressureUnit; } }
+        public PressureUnits? PUnits
+        {
+            get
+            {
+                return _pressureUnit;
+            }
+            private set
+            {
+                if (value == _pressureUnit)
+                    return;
+                _pressureUnit = value;
+                OnPressureUnitChanged(DateTime.Now);
+            }
+        }
 
         public event Action<DateTime> StatusReaded;
 
@@ -391,6 +490,8 @@ namespace KipTM.Model.Devices
         public event Action<DateTime> PressureReaded;
 
         public event Action<DateTime> PitotReaded;
+
+        public event Action<DateTime> PressureUnitChanged;
 
         #region Service members
 
@@ -417,6 +518,12 @@ namespace KipTM.Model.Devices
         protected virtual void OnPitotReaded(DateTime obj)
         {
             Action<DateTime> handler = PitotReaded;
+            if (handler != null) handler(obj);
+        }
+
+        protected virtual void OnPressureUnitChanged(DateTime obj)
+        {
+            Action<DateTime> handler = PressureUnitChanged;
             if (handler != null) handler(obj);
         }
         #endregion
@@ -531,9 +638,10 @@ namespace KipTM.Model.Devices
 
         void UpdateUnit(object transport)
         {
-            if (!_adts.GetUnits(out _pressureUnit))
+            PressureUnits? unit;
+            if (!_adts.GetUnits(out unit))
                 return;
-            _pressureUnitTime = DateTime.Now;
+            PUnits = unit;
         }
         #endregion
 
