@@ -47,7 +47,9 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
                 OnEnd(new EventArgEnd(false));
                 return;
             }
+
             OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("CalibDate", null, ParameterType.Metadata), new ParameterResult(DateTime.Now, testDate)));
+
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel test")));

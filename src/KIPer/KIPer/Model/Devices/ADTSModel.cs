@@ -217,6 +217,7 @@ namespace KipTM.Model.Devices
                 }
                 result = true;
                 isCommpete.Set();
+                PUnits = unit;
             });
             if(cancel.IsCancellationRequested)
                 return false;
@@ -240,9 +241,9 @@ namespace KipTM.Model.Devices
                     isCommpete.Set();
                     return;
                 }
-                PUnits = unit;
                 result = true;
                 isCommpete.Set();
+                PUnits = unit;
             });
             if (cancel.IsCancellationRequested)
                 return false;

@@ -6,7 +6,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        Height="768" Width="1280" Title="КипТМ"
+        Height="768" Width="1024" Title="КипТМ"
         x:Name="MainViewWindow" Icon="Content/icon.png"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <i:Interaction.Triggers>
@@ -34,9 +34,9 @@
         <ItemsControl Grid.Column="0" Grid.Row="0" Style="{StaticResource MenuCollectionStyle}">
             <Button Style="{StaticResource ButtonTabStyle}" Content="Проверки" Command="{Binding SelectChecks}"/>
             <Button Style="{StaticResource ButtonTabStyle}" Content="Архив" Command="{Binding SelectArchive}"/>
-            <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
+            <!--<Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
             <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
-            <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>
+            <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>-->
             <Button Style="{StaticResource ButtonTabStyle}" Content="Сервис" Command="{Binding SelectService}"/>
         </ItemsControl>
         <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}" x:Name="HelpBorder" Height="35">
