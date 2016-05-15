@@ -7,15 +7,15 @@ using PACESeries;
 
 namespace KipTM.Model.Devices
 {
-    public class PressureUnitDescriptor
+    public class PressureUnitDescriptor<T>
     {
-        public PressureUnitDescriptor(PressureUnits unit, string unitString)
+        public PressureUnitDescriptor(T unit, string unitString)
         {
             UnitString = unitString;
             Unit = unit;
         }
 
-        public PressureUnits Unit { get; private set; }
+        public T Unit { get; private set; }
         public string UnitString { get; private set; }
     }
 }

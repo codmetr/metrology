@@ -67,7 +67,7 @@ namespace KipTM.Model.Devices
         {
             _loopKey = transport.Key;
             _adts = _deviceManager.GetDevice<ADTSDriver>(transport);
-            _loops.StartUnimportantAction(_loopKey, UpdateUnit);
+            _loops.StartUnimportantAction(_loopKey, _updateUnit);
         }
 
         /// <summary>
@@ -289,16 +289,15 @@ namespace KipTM.Model.Devices
 
         #endregion
 
-        #region Pressure
-
+        #region Any parameter
         /// <summary>
         /// Задать цель для выбранного параметра
         /// </summary>
         /// <param name="parameter"></param>
-        /// <param name="pressure"></param>
+        /// <param name="aim"></param>
         /// <param name="cancel"></param>
         /// <returns></returns>
-        public bool SetPressure(Parameters parameter, double pressure, CancellationToken cancel)
+        public bool SetParameter(Parameters parameter, double aim, CancellationToken cancel)
         {
             bool result = false;
             var isCommpete = new ManualResetEvent(false);
@@ -306,7 +305,7 @@ namespace KipTM.Model.Devices
                 return false;
             _loops.StartMiddleAction(_loopKey, (transport) =>
             {
-                if (!_adts.SetAim(parameter, pressure) || cancel.IsCancellationRequested)
+                if (!_adts.SetAim(parameter, aim) || cancel.IsCancellationRequested)
                 {
                     isCommpete.Set();
                     return;
@@ -321,7 +320,109 @@ namespace KipTM.Model.Devices
                 return false;
             return result;
         }
+        #endregion
 
+        #region Pressure
+
+        /// <summary>
+        /// Давление
+        /// </summary>
+        public double? Pressure
+        {
+            get { return _pressure; }
+            private set
+            {
+                if (value == null)
+                    return;
+                _pressure = value;
+                _pressureTime = DateTime.Now;
+                OnPressureReaded(_pressureTime.Value);
+            }
+        }
+
+        /// <summary>
+        /// Обновить значение давления PS
+        /// </summary>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
+        public bool UpdatePressure(CancellationToken cancel)
+        {
+            return _userUpdater(cancel, (t) => _updater(t, (val) => Pressure = val, Parameters.PS));
+        }
+
+        void AutoUpdatePressure(object transport)
+        {
+            _autoUpdater(transport, () => _periodUpdatePressure, t=>_updater(t, (val)=>Pressure=val, Parameters.PS));
+        }
+        #endregion
+
+        #region Pitot
+        /// <summary>
+        /// Полное давление 
+        /// </summary>
+        public double? Pitot
+        {
+            get { return _pitot; }
+            private set
+            {
+                if (value == null)
+                    return;
+                _pitot = value;
+                _pitotTime = DateTime.Now;
+                OnPitotReaded(_pitotTime.Value);
+            }
+        }
+
+        /// <summary>
+        /// Обновить значение давления PT
+        /// </summary>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
+        public bool UpdatePitot(CancellationToken cancel)
+        {
+            return _userUpdater(cancel, (t) => _updater(t, val => Pitot = val, Parameters.PT));
+        }
+
+        void AutoUpdatePitot(object transport)
+        {
+            _autoUpdater(transport, () => _periodUpdatePitot, t => _updater(t, (val) => Pitot = val, Parameters.PT));
+        }
+        #endregion
+
+        #region PUnit
+
+        public PressureUnits? PUnits
+        {
+            get
+            {
+                return _pressureUnit;
+            }
+            private set
+            {
+                if (value == _pressureUnit)
+                    return;
+                _pressureUnit = value;
+                OnPressureUnitChanged(DateTime.Now);
+            }
+        }
+
+        /// <summary>
+        /// Обновить значение давления PT
+        /// </summary>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
+        public bool UpdateUnit(CancellationToken cancel)
+        {
+            return _userUpdater(cancel, _updateUnit);
+        }
+
+        void _updateUnit(object transport)
+        {
+            PressureUnits? unit;
+            if (!_adts.GetUnits(out unit))
+                return;
+            PUnits = unit;
+        }
         #endregion
 
         /// <summary>
@@ -464,25 +565,7 @@ namespace KipTM.Model.Devices
 
         public State? StateADTS { get { return _state; } }
 
-        public double? Pressure{get { return _pressure; }}
-
-        public double? Pitot{get { return _pitot; }}
-
-        public PressureUnits? PUnits
-        {
-            get
-            {
-                return _pressureUnit;
-            }
-            private set
-            {
-                if (value == _pressureUnit)
-                    return;
-                _pressureUnit = value;
-                OnPressureUnitChanged(DateTime.Now);
-            }
-        }
-
+        #region Events
         public event Action<DateTime> StatusReaded;
 
         public event Action<DateTime> StateReaded;
@@ -492,8 +575,6 @@ namespace KipTM.Model.Devices
         public event Action<DateTime> PitotReaded;
 
         public event Action<DateTime> PressureUnitChanged;
-
-        #region Service members
 
         #region Event invocators
 
@@ -527,6 +608,10 @@ namespace KipTM.Model.Devices
             if (handler != null) handler(obj);
         }
         #endregion
+
+        #endregion
+
+        #region Service members
 
         /// <summary>
         /// Ожидать статус ADTS
@@ -598,50 +683,63 @@ namespace KipTM.Model.Devices
             });
         }
 
-        void AutoUpdatePressure(object transport)
-        {
-            if (!_isNeedAutoupdate)
-                return;
-            if (!_adts.ReadMeasure(Parameters.PS, out _pressure))
-                return;
-            _pressureTime = DateTime.Now;
-            OnPressureReaded(_pressureTime.Value);
-
-            if (!_isNeedAutoupdate)
-                return;
-
-            Task.Run(() => {
-                Thread.Sleep(_periodUpdatePressure);
-                _loops.StartUnimportantAction(_loopKey, AutoUpdatePressure);
-            });
-        }
-
-        void AutoUpdatePitot(object transport)
-        {
-            if (!_isNeedAutoupdate)
-                return;
-            if (!_adts.ReadMeasure(Parameters.PT, out _pitot))
-                return;
-            _pitotTime = DateTime.Now;
-            OnPitotReaded(_pitotTime.Value);
-
-            if (!_isNeedAutoupdate)
-                return;
-
-            Task.Run(() => {
-                Thread.Sleep(_periodUpdatePitot);
-                _loops.StartUnimportantAction(_loopKey, AutoUpdatePitot);
-            });
-        }
-
         #endregion
 
-        void UpdateUnit(object transport)
+        /// <summary>
+        /// Обновление параметра
+        /// </summary>
+        /// <param name="transport"></param>
+        /// <param name="seter"></param>
+        /// <param name="parameter"></param>
+        void _updater(object transport, Action<double?> seter, Parameters parameter)
         {
-            PressureUnits? unit;
-            if (!_adts.GetUnits(out unit))
+            double? paramValue;
+            if (!_adts.ReadMeasure(parameter, out paramValue))
                 return;
-            PUnits = unit;
+            seter(paramValue);
+        }
+
+        /// <summary>
+        /// Автообновление параметра
+        /// </summary>
+        /// <param name="transport"></param>
+        /// <param name="getPeriodUpdate"></param>
+        /// <param name="updater"></param>
+        void _autoUpdater(object transport, Func<TimeSpan> getPeriodUpdate, Action<object> updater)
+        {
+            if (!_isNeedAutoupdate)
+                return;
+            updater(transport);
+
+            if (!_isNeedAutoupdate)
+                return;
+
+            Task.Run(() =>
+            {
+                Thread.Sleep(getPeriodUpdate());
+                _loops.StartUnimportantAction(_loopKey, t => _autoUpdater(t, getPeriodUpdate, updater));
+            });
+        }
+
+        /// <summary>
+        /// Обновение по запросу пользователя
+        /// </summary>
+        /// <param name="cancel"></param>
+        /// <param name="updater"></param>
+        /// <returns></returns>
+        public bool _userUpdater(CancellationToken cancel, Action<object> updater)
+        {
+            bool result = false;
+            var isCommpete = new ManualResetEvent(false);
+            if (cancel.IsCancellationRequested)
+                return false;
+            _loops.StartMiddleAction(_loopKey, updater);
+            if (cancel.IsCancellationRequested)
+                return false;
+            isCommpete.WaitOne();
+            if (cancel.IsCancellationRequested)
+                return false;
+            return result;
         }
         #endregion
 

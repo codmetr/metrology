@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Windows.Input;
 using ADTS;
 using GalaSoft.MvvmLight;
@@ -32,8 +34,9 @@ namespace KipTM.ViewModel.Services
         private bool _isPtAtSetPointAndInControlMode;
         private bool _isPtRampingAndAchievingRate;
         private string _pressureUnit;
-        private IEnumerable<PressureUnitDescriptor> _avalableUnits;
-        private PressureUnitDescriptor _selectedUnit;
+        private IEnumerable<PressureUnitDescriptor<PressureUnits>> _avalableUnits;
+        private PressureUnitDescriptor<PressureUnits> _selectedUnit;
+        private CancellationTokenSource _cancellation = new CancellationTokenSource();
 
         /// <summary>
         /// Initializes a new instance of the ADTSViewModel class.
@@ -41,6 +44,20 @@ namespace KipTM.ViewModel.Services
         public ADTSViewModel(IDeviceManager deviceManager)
         {
             _deviceManager = deviceManager;
+            _avalableUnits = new[]
+            {
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.MBar,_pressureUnitToString(PressureUnits.MBar)),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inH2O4,_pressureUnitToString(PressureUnits.inH2O4)),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inHg,_pressureUnitToString(PressureUnits.inHg)),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.mmHg,_pressureUnitToString(PressureUnits.mmHg)),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.Pa,_pressureUnitToString(PressureUnits.Pa)),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.hPa,_pressureUnitToString(PressureUnits.hPa)),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.psi,_pressureUnitToString(PressureUnits.psi)),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inH2O60F,_pressureUnitToString(PressureUnits.inH2O60F)),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.KgCm2,_pressureUnitToString(PressureUnits.KgCm2)),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.mmH2O4,_pressureUnitToString(PressureUnits.mmH2O4)),
+            };
+            SelectedUnit = _avalableUnits.First();
         }
 
         public void Start(ADTSModel model)
@@ -74,6 +91,8 @@ namespace KipTM.ViewModel.Services
                 _model.StopAutoUpdate();
                 DetachEvents(_model);
             }
+            _cancellation.Cancel();
+            _cancellation = new CancellationTokenSource();
             _model = null;
         }
 
@@ -83,7 +102,7 @@ namespace KipTM.ViewModel.Services
 
         public ICommand UpdatePressureUnit { get { return new CommandWrapper(_updatePressureUnit); } }
 
-        public ICommand SetPressureUnit { get { return new CommandWrapper(_setPressureUnit); } }
+        public ICommand SetPressureUnit { get { return new CommandWrapper(() => _setPressureUnit(_selectedUnit.Unit)); } }
 
         #region State
         /// <summary>
@@ -173,12 +192,12 @@ namespace KipTM.ViewModel.Services
         #endregion
 
         #region Pressure Unit
-        public IEnumerable<PressureUnitDescriptor> AvalableUnits
+        public IEnumerable<PressureUnitDescriptor<PressureUnits>> AvalableUnits
         {
             get { return _avalableUnits; }
         }
 
-        public PressureUnitDescriptor SelectedUnit
+        public PressureUnitDescriptor<PressureUnits> SelectedUnit
         {
             get { return _selectedUnit; }
             set { Set(ref _selectedUnit, value); }
@@ -277,22 +296,22 @@ namespace KipTM.ViewModel.Services
 
         private void _uptetePressure()
         {
-            _model.
+            _model.UpdatePressure(_cancellation.Token);
         }
 
         private void _updatePitot()
         {
-            
+            _model.UpdatePitot(_cancellation.Token);
         }
 
         private void _updatePressureUnit()
         {
-            
+            _model.UpdatePressureUnit(_cancellation.Token);
         }
 
-        private void _setPressureUnit()
+        private void _setPressureUnit(PressureUnits unit)
         {
-            
+            _model.SetPressureUnit(unit, _cancellation.Token);
         }
 
         string _pressureUnitToString(PressureUnits unit)

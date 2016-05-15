@@ -70,7 +70,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
                 OnEnd(new EventArgEnd(false));
                 return;
             }
-            if (!_adts.SetPressure(_param, _point, cancel))
+            if (!_adts.SetParameter(_param, _point, cancel))
             {
                 _logger.With(l => l.Trace(string.Format("[ERROR] Set point")));
                 whEnd.Set();

@@ -223,7 +223,7 @@ namespace KipTM.Model.Checks
                 _logger.With( l => l.Trace(string.Format("Start calibration {0}, point[{4}//{5}] {1}; unit {2}; rate {3}",
                     param, point.Pressure, Rate, Unit, indexPoint + 1, countPoints)));
                 OnProgress(new EventArgProgress(percent, string.Format("Калибровка значения {0}", point.Pressure)));
-                if(_adts.SetPressure(param, point.Pressure, Rate, Unit, cancel))
+                if(_adts.SetParameter(param, point.Pressure, Rate, Unit, cancel))
                 {
                     _logger.With(l => l.Trace(string.Format("[ERROR] Set point")));
                     //OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetPressurePoint });
