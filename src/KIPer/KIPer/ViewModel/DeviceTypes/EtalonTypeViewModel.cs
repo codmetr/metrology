@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
-using KipTM.Model.Devices;
 
 namespace KipTM.ViewModel
 {

@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using ADTS;
+using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Archive;
@@ -374,9 +375,9 @@ namespace KipTM.ViewModel
         public SelectChannelViewModel EthalonChanel { get; set; }
         #endregion
 
-        public ICommand Save { get; set; }
+        public ICommand Save { get { return new CommandWrapper(DoSave); } }
 
-        public ICommand Report { get; set; }
+        public ICommand Report { get { return new CommandWrapper(DoShowReport); } }
 
         public IMethodViewModel Check
         {
@@ -390,13 +391,13 @@ namespace KipTM.ViewModel
             {
                 var adtsMethodic = methodic as ADTSCheckMethod;
                 adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
-                return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey), _deviceManager);
+                return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey), _deviceManager, _result);
             }
             else if (methodic is ADTSTestMethod)
             {
                 var adtsMethodic = methodic as ADTSTestMethod;
                 adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
-                return new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey), _deviceManager);
+                return new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey), _deviceManager, _result);
             }
             return null;
         }
@@ -414,6 +415,16 @@ namespace KipTM.ViewModel
             {
                 Check.SlectUserEthalonChannel();
             }
+        }
+
+        private void DoSave()
+        {
+            
+        }
+
+        private void DoShowReport()
+        {
+            
         }
     }
 }

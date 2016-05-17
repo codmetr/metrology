@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using KipTM.Model.Params;
+using ArchiveData.DTO.Params;
 
 namespace KipTM.Archive.DataTypes
 {

@@ -1,5 +1,5 @@
-﻿using GalaSoft.MvvmLight;
-using KipTM.Model.Devices;
+﻿using ArchiveData.DTO;
+using GalaSoft.MvvmLight;
 
 namespace KipTM.ViewModel
 {

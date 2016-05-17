@@ -1,4 +1,4 @@
-﻿namespace KipTM.Model.Params
+﻿namespace ArchiveData.DTO.Params
 {
     public enum ParameterType
     {

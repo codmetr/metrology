@@ -37,3 +37,6 @@ src/KIPer/Drivers/VisaDriver/bin/
 src/KIPer/DeviceManager/obj/
 src/KIPer/Drivers/PACESeries/bin/
 src/KIPer/Drivers/PACESeries/obj/
+src/KIPer/ArchiveData/bin/
+src/KIPer/ArchiveData/obj/
+src/KIPer/Reports/ReportService/obj/

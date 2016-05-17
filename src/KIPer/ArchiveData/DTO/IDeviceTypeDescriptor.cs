@@ -1,4 +1,4 @@
-﻿namespace KipTM.Model.Devices
+﻿namespace ArchiveData.DTO
 {
     public interface IDeviceTypeDescriptor
     {

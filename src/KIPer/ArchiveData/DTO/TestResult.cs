@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using KipTM.Model.Devices;
-using KipTM.Model.Params;
+using ArchiveData.DTO;
+using ArchiveData.DTO.Params;
 
 namespace KipTM.Archive.DTO
 {

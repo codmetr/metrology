@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ArchiveData.DTO;
 using KipTM.Archive.DTO;
 using KipTM.Model;
 using KipTM.Model.Checks;

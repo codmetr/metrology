@@ -1,4 +1,5 @@
-﻿namespace KipTM.Model.Params
+﻿
+namespace ArchiveData.DTO.Params
 {
     public class ParameterDescriptor
     {

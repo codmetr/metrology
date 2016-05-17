@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
 using KipTM.Archive.DTO;
 using KipTM.Model.Devices;

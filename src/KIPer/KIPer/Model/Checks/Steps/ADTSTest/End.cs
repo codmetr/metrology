@@ -2,7 +2,6 @@
 using System.Threading;
 using ADTS;
 using KipTM.Model.Devices;
-using KipTM.Model.Params;
 using NLog;
 using Tools;
 

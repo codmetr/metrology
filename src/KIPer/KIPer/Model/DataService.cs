@@ -7,6 +7,7 @@ using System.Windows.Documents;
 using System.Xml;
 using System.Xml.Serialization;
 using ADTS;
+using ArchiveData.DTO;
 using KipTM.Archive.DTO;
 using KipTM.Interfaces;
 using KipTM.Model.Checks;

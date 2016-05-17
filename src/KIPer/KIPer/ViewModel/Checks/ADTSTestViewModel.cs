@@ -8,14 +8,15 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ADTS;
+using ArchiveData.DTO.Params;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Archive;
+using KipTM.Archive.DTO;
 using KipTM.Model;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
-using KipTM.Model.Params;
 using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 using KipTM.ViewModel;
@@ -53,12 +54,13 @@ namespace KipTM.ViewModel.Checks
         private IDeviceManager _deviceManager;
         private string _ethalonTypeKey;
         private ITransportChannelType _settings;
+        private TestResult _resultPool;
         private ADTSViewModel _adtsViewModel;
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
         /// </summary>
-        public ADTSTestViewModel(ADTSTestMethod methodic, IPropertyPool propertyPool, IDeviceManager deviceManager)
+        public ADTSTestViewModel(ADTSTestMethod methodic, IPropertyPool propertyPool, IDeviceManager deviceManager, TestResult resultPool)
         {
             _cancellation = new CancellationTokenSource();
             _userChannel = new UserChannel();
@@ -66,6 +68,7 @@ namespace KipTM.ViewModel.Checks
             _methodic = methodic;
             _propertyPool = propertyPool;
             _deviceManager = deviceManager;
+            _resultPool = resultPool;
             _adtsViewModel = new ADTSViewModel(_deviceManager);
 
             // Базовая инициализация
@@ -92,7 +95,11 @@ namespace KipTM.ViewModel.Checks
         {
             foreach (var result in eventArgTestResult.Result)
             {
-                _dispatcher.Invoke(()=>Results.Add(result));
+                _dispatcher.Invoke(() =>
+                {
+                    Results.Add(result);
+                    _resultPool.Results.Add(result.Key, result.Value);
+                });
             }
         }
 

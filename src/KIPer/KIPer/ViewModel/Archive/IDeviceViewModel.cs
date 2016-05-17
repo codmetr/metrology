@@ -1,4 +1,5 @@
-﻿using KipTM.Model.Devices;
+﻿using ArchiveData.DTO;
+using KipTM.Model.Devices;
 
 namespace KipTM.ViewModel
 {

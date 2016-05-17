@@ -106,8 +106,6 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Model\ArchiveService.cs" />
-    <Compile Include="Archive\DTO\ArchivePool.cs" />
-    <Compile Include="Archive\DTO\TestResult.cs" />
     <Compile Include="Model\Channels\PACEEchalonChannel.cs" />
     <Compile Include="Model\Checks\ADTSChechPoint.cs" />
     <Compile Include="Model\Checks\ADTSTestMethod.cs" />
@@ -134,16 +132,12 @@
     <Compile Include="Model\Checks\ADTSCheckMethod.cs" />
     <Compile Include="Model\DeviceManager.cs" />
     <Compile Include="Model\Devices\PACE1000Model.cs" />
-    <Compile Include="Model\Devices\DeviceDescriptor.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
     <Compile Include="Model\Devices\PressureUnitDescriptor.cs" />
     <Compile Include="Model\IDeviceManager.cs" />
     <Compile Include="Model\IMethodsService.cs" />
     <Compile Include="Model\MethodsService.cs" />
-    <Compile Include="Model\Params\ParameterDescriptor.cs" />
-    <Compile Include="Model\Params\ParameterResult.cs" />
-    <Compile Include="Model\Params\ParameterType.cs" />
     <Compile Include="Model\TransportChannels\ITransportChannelType.cs" />
     <Compile Include="Model\TransportChannels\Visa\VisaChannelDescriptor.cs" />
     <Compile Include="Model\TransportChannels\Visa\VisaSettings.cs" />
@@ -160,7 +154,6 @@
     <Compile Include="ViewModel\Checks\IMethodViewModel.cs" />
     <Compile Include="ViewModel\Checks\MechanicalManometerViewModel.cs" />
     <Compile Include="ViewModel\Checks\MethodicViewModelAttribute.cs" />
-    <Compile Include="Model\Devices\DeviceTypeDescriptor.cs" />
     <Compile Include="ViewModel\Checks\StepState.cs" />
     <Compile Include="ViewModel\Checks\StepViewModel.cs" />
     <Compile Include="ViewModel\CommandWrapper.cs" />
@@ -170,7 +163,6 @@
     <Compile Include="ViewModel\DeviceTypes\EtalonTypeViewModel.cs" />
     <Compile Include="Model\Devices\FunctionDescriptor.cs" />
     <Compile Include="ViewModel\Archive\IDeviceViewModel.cs" />
-    <Compile Include="Model\Devices\IDeviceTypeDescriptor.cs" />
     <Compile Include="ViewModel\DeviceTypes\IDeviceTypesViewModel.cs" />
     <Compile Include="Model\Devices\IFunctionDescriptor.cs" />
     <Compile Include="ViewModel\DeviceTypes\IMethodicViewModel.cs" />
@@ -372,6 +364,10 @@
     <ProjectReference Include="..\ADTS\ADTS.csproj">
       <Project>{e032255a-ad56-44cd-8525-87293538e958}</Project>
       <Name>ADTS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
+      <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
+      <Name>ArchiveData</Name>
     </ProjectReference>
     <ProjectReference Include="..\Archive\SQLiteArchive\SQLiteArchive.csproj">
       <Project>{5ddfab0d-1f66-4337-bd2f-ece434d68794}</Project>

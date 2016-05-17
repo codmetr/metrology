@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using ADTS;
+using ArchiveData.DTO.Params;
 using KipTM.Model.Channels;
 using KipTM.Model.Devices;
-using KipTM.Model.Params;
 using NLog;
 using Tools;
 

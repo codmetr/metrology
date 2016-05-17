@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ArchiveData.DTO;
 using KipTM.Archive.DTO;
 using KipTM.Interfaces;
 using KipTM.Model;

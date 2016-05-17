@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using KipTM.ViewModel;
-
-namespace KipTM.Model.Devices
+﻿namespace ArchiveData.DTO
 {
     /// <summary>
     /// Базовый описатель типа устройства
