@@ -37,6 +37,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PACESeries", "Drivers\PACES
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchiveData", "ArchiveData\ArchiveData.csproj", "{26676346-C100-4CC9-869F-80175B33DF76}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reports", "Reports", "{3ABCB0BA-C49C-4F76-BDF9-FA45D8C7BB8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportService", "Reports\ReportService\ReportService.csproj", "{71E2479C-C370-44BD-B6E0-48AA88101E7B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -187,6 +191,16 @@ Global
 		{26676346-C100-4CC9-869F-80175B33DF76}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{26676346-C100-4CC9-869F-80175B33DF76}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{26676346-C100-4CC9-869F-80175B33DF76}.Release|x86.ActiveCfg = Release|Any CPU
+		{71E2479C-C370-44BD-B6E0-48AA88101E7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E2479C-C370-44BD-B6E0-48AA88101E7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71E2479C-C370-44BD-B6E0-48AA88101E7B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{71E2479C-C370-44BD-B6E0-48AA88101E7B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{71E2479C-C370-44BD-B6E0-48AA88101E7B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{71E2479C-C370-44BD-B6E0-48AA88101E7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E2479C-C370-44BD-B6E0-48AA88101E7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71E2479C-C370-44BD-B6E0-48AA88101E7B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{71E2479C-C370-44BD-B6E0-48AA88101E7B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{71E2479C-C370-44BD-B6E0-48AA88101E7B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -203,5 +217,6 @@ Global
 		{906003D7-94BB-401B-8135-54267B2C713F} = {AFC29171-8CF7-4974-B9F7-CAAA0627D56A}
 		{5DDFAB0D-1F66-4337-BD2F-ECE434D68794} = {D30AAB61-39FF-405A-9824-C7E062D2BA3D}
 		{26676346-C100-4CC9-869F-80175B33DF76} = {D30AAB61-39FF-405A-9824-C7E062D2BA3D}
+		{71E2479C-C370-44BD-B6E0-48AA88101E7B} = {3ABCB0BA-C49C-4F76-BDF9-FA45D8C7BB8E}
 	EndGlobalSection
 EndGlobal
