@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using KipTM.Archive.DTO;
 using KipTM.Interfaces;
 using KipTM.Model;
 using KipTM.Model.Devices;
@@ -83,6 +84,7 @@ namespace KipTM.ViewModel
 
                 //Вкладка Проверка
                 {typeof(CheckViewModel), typeof(CheckView)},
+                {typeof(CheckConfigViewModel), typeof(CheckConfigView)},
                 {typeof(MechanicalManometerViewModel), typeof(MechanicalManometerView)},
                 {typeof(ADTSCalibrationViewModel), typeof(ADTSCalibrationView)},
                 {typeof(ADTSTestViewModel), typeof(ADTSCalibrationView)},
@@ -100,7 +102,7 @@ namespace KipTM.ViewModel
             _deviceTypes = new DeviceTypesViewModel();
             _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
-            _checks = new CheckViewModel(_settings, _methodicService, _archive.PropertyPool, _archive.DictionariesPool, _dataService.DeviceManager);
+            _checks = new CheckViewModel(_settings, _methodicService, _archive.PropertyPool, _archive.DictionariesPool, _dataService.DeviceManager, new TestResult());
             SelectChecks.Execute(null);
         }
 

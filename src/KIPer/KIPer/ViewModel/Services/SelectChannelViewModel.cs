@@ -23,7 +23,6 @@ namespace KipTM.ViewModel
     {
         private ITransportChannelType _selectedChannel;
         private readonly IEnumerable<ITransportChannelType> _channels;
-        private string _address;
 
         /// <summary>
         /// Initializes a new instance of the Pace5000ViewModel class.
@@ -42,12 +41,24 @@ namespace KipTM.ViewModel
         public ITransportChannelType SelectedChannel
         {
             get { return _selectedChannel; }
-            set { Set(ref _selectedChannel, value); }
+            set
+            {
+                Set(ref _selectedChannel, value);
+                OnChannelTypeChanget();
+            }
         }
 
         public ITransportChannelType GetSelectedChannelType()
         {
             return SelectedChannel;
+        }
+
+        public event EventHandler ChannelTypeChanget;
+
+        protected virtual void OnChannelTypeChanget()
+        {
+            EventHandler handler = ChannelTypeChanget;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
     }
 }

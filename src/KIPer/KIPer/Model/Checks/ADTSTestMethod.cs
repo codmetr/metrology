@@ -31,7 +31,7 @@ namespace KipTM.Model.Checks
         private const string TitleMethod = "Поверка ADTS";
 
         private ADTSModel _adts;
-        private readonly CancellationTokenSource _cancelSource;
+        private  CancellationTokenSource _cancelSource;
         private readonly NLog.Logger _logger;
 
         private CalibChannel _calibChan;
@@ -202,6 +202,7 @@ namespace KipTM.Model.Checks
         public void Cancel()
         {
             _cancelSource.Cancel();
+            _cancelSource = new CancellationTokenSource();
         }
 
         /// <summary>

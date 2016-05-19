@@ -40,7 +40,7 @@ namespace KipTM.ViewModel.Checks
         private IPropertyPool _propertyPool;
         private bool _waitUserReaction;
 
-        private SelectChannelViewModel _connection;
+        private ITransportChannelType _connection;
 
         private double _realValue;
 
@@ -103,7 +103,7 @@ namespace KipTM.ViewModel.Checks
             }
         }
 
-        public void SetConnection(SelectChannelViewModel connection)
+        public void SetConnection(ITransportChannelType connection)
         {
             _connection = connection;
         }
@@ -183,7 +183,7 @@ namespace KipTM.ViewModel.Checks
             //var visaSett = _connection.SelectedChannel.Settings as VisaSettings;
             //if (visaSett != null)
             //    visaSett.Address = _connection.Address;
-            _methodic.ChannelType = _connection.SelectedChannel;
+            _methodic.ChannelType = _connection;
             // Задаем эталон
             if (_ethalonTypeKey != null && _settings != null)
                 _methodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _settings));

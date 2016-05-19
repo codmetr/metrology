@@ -109,15 +109,16 @@
     <Compile Include="Model\Channels\PACEEchalonChannel.cs" />
     <Compile Include="Model\Checks\ADTSChechPoint.cs" />
     <Compile Include="Model\Checks\ADTSTestMethod.cs" />
-    <Compile Include="Model\Checks\EventArgEnd.cs" />
+    <Compile Include="Model\Checks\CheckConfig.cs" />
+    <Compile Include="Model\Checks\EventArgs\EventArgEnd.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\Init.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\DoPoint.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\Finish.cs" />
     <Compile Include="Model\Checks\ADTSCheckParameters.cs" />
     <Compile Include="Model\Channels\IEthalonChannel.cs" />
-    <Compile Include="Model\Checks\EventArgError.cs" />
-    <Compile Include="Model\Checks\EventArgProgress.cs" />
-    <Compile Include="Model\Checks\EventArgResultParam.cs" />
+    <Compile Include="Model\Checks\EventArgs\EventArgError.cs" />
+    <Compile Include="Model\Checks\EventArgs\EventArgProgress.cs" />
+    <Compile Include="Model\Checks\EventArgs\EventArgResultParam.cs" />
     <Compile Include="Model\Checks\ICheckMethod.cs" />
     <Compile Include="Model\Checks\Steps\ADTSTest\End.cs" />
     <Compile Include="Model\Checks\Steps\ADTSTest\DoPoint.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Settings\MainSettings.cs" />
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTSCalibrationViewModel.cs" />
+    <Compile Include="ViewModel\Checks\CheckConfigViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTSTestViewModel.cs" />
     <Compile Include="ViewModel\Checks\IMethodViewModel.cs" />
@@ -189,6 +191,9 @@
     </Compile>
     <Compile Include="View\Checks\ADTSCalibrationView.xaml.cs">
       <DependentUpon>ADTSCalibrationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Checks\CheckConfigView.xaml.cs">
+      <DependentUpon>CheckConfigView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Checks\CheckView.xaml.cs">
       <DependentUpon>CheckView.xaml</DependentUpon>
@@ -272,6 +277,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Checks\ADTSCalibrationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Checks\CheckConfigView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

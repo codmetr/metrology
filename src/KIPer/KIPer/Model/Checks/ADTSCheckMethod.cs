@@ -30,7 +30,7 @@ namespace KipTM.Model.Checks
         private const string TitleMethod = "Калибровка ADTS";
 
         private ADTSModel _adts;
-        private readonly CancellationTokenSource _cancelSource;
+        private CancellationTokenSource _cancelSource;
         private readonly NLog.Logger _logger;
 
         private CalibChannel _calibChan;
@@ -185,137 +185,6 @@ namespace KipTM.Model.Checks
             }
             return true;
 
-            /*
-            var countPoints = Points.Count();
-
-            const double percentInitCalib = 5.0;
-            const double percentEndPoints = 90.0;
-            var percentOnePoint = (percentEndPoints - percentInitCalib)/countPoints;
-            const double percentGetRes = 95.0;
-
-            DateTime? calibDate;
-            if (cancel.IsCancellationRequested)
-            {
-                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
-            }
-            _logger.With(l => l.Trace(string.Format("Start ADTS calibration by channel {0}", _calibChan)));
-            OnProgress(new EventArgProgress(0, "Калибровка запущена"));
-            if (!_adts.StartCalibration(_calibChan, out calibDate, cancel))
-            {
-                _logger.With(l => l.Trace(string.Format("[ERROR] start clibration")));
-                //OnError(new EventArgError() {Error = ADTSCheckError.ErrorStartCalibration});
-                return false;
-            }
-            if (cancel.IsCancellationRequested)
-            {
-                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
-            }
-
-            int indexPoint = 0;
-            Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
-                : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
-            TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
-            foreach (var point in Points)
-            {
-                var percent = percentInitCalib + indexPoint*percentOnePoint;
-                _logger.With( l => l.Trace(string.Format("Start calibration {0}, point[{4}//{5}] {1}; unit {2}; rate {3}",
-                    param, point.Pressure, Rate, Unit, indexPoint + 1, countPoints)));
-                OnProgress(new EventArgProgress(percent, string.Format("Калибровка значения {0}", point.Pressure)));
-                if(_adts.SetParameter(param, point.Pressure, Rate, Unit, cancel))
-                {
-                    _logger.With(l => l.Trace(string.Format("[ERROR] Set point")));
-                    //OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetPressurePoint });
-                    return false;
-                }
-                if (cancel.IsCancellationRequested)
-                {
-                    _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                    return false;
-                }
-                EventWaitHandle wh = param == Parameters.PT ? _adts.WaitPitotSetted() : _adts.WaitPressureSetted();
-
-                while (wh.WaitOne(waitPointPeriod))
-                {
-                    if (cancel.IsCancellationRequested)
-                    {
-                        _adts.StopWaitStatus(wh);
-                        return false;
-                    }
-                }
-
-                if (cancel.IsCancellationRequested)
-                {
-                    _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                    return false;
-                }
-                var realValue = _ethalonChannel.GetEthalonValue(point.Pressure, cancel);
-                _logger.With(l => l.Trace(string.Format("Real value {0}", realValue)));
-                if (_adts.SetActualValue(realValue, cancel))
-                {
-                    //OnError(new EventArgError() { Error = ADTSCheckError.ErrorSetRealValue });
-                    return false;
-                }
-
-                if (cancel.IsCancellationRequested)
-                {
-                    _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                    return false;
-                }
-                indexPoint++;
-            }
-
-            double? slope;
-            double? zero;
-
-            if (cancel.IsCancellationRequested)
-            {
-                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
-            }
-            if (_adts.GetCalibrationResult(out slope, out zero, cancel))
-            {
-                //OnError(new EventArgError() { Error = ADTSCheckError.ErrorGetResultCalibration });
-                return false;
-            }
-            _logger.With(l => l.Trace(string.Format("Calibration result: slope {0}; zero: {1}", (object)slope ?? "NULL", (object)zero ?? "NULL")));
-            OnProgress(new EventArgProgress(percentGetRes, string.Format("Результат калибровки наклон:{0} ноль:{1}", (object)slope??"NULL", (object)zero??"NULL")));
-
-            if (cancel.IsCancellationRequested)
-            {
-                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
-            }
-
-            _userChannel.Message = "Применить результаты калибровки?";
-            var whAccept = new ManualResetEvent(false);
-            TimeSpan waitAcceptPeriod = TimeSpan.FromMilliseconds(50);
-            _userChannel.NeedQuery(UserQueryType.GetAccept, whAccept);
-            while (whAccept.WaitOne(waitAcceptPeriod))
-            {
-                if (cancel.IsCancellationRequested)
-                {
-                    _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                    return false;
-                }
-            }
-            var accept = _userChannel.AcceptValue;
-
-            _logger.With(l => l.Trace(string.Format("Calibration accept: {0}", accept ? "accept" : "deny")));
-            if (cancel.IsCancellationRequested)
-            {
-                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                return false;
-            }
-            if (_adts.AcceptCalibration(accept, cancel))
-            {
-                //OnError(new EventArgError() { Error = ADTSCheckError.ErrorAcceptResultCalibration });
-                return false;
-            }
-            OnProgress(new EventArgProgress(100, string.Format("{0} результата калибровки", accept?"Подтверждение":"Отмена")));
-
-            return true;*/
         }
 
         public IEnumerable<ITestStep> Steps
@@ -330,7 +199,13 @@ namespace KipTM.Model.Checks
 
         public void Stop()
         {
-            throw new NotImplementedException();
+            if (Steps != null)
+                foreach (var testStep in Steps)
+                {
+                    if (testStep != null) testStep.ResultUpdated -= step_ResultUpdated;
+                }
+            _cancelSource.Cancel();
+            _cancelSource = new CancellationTokenSource();
         }
 
         /// <summary>

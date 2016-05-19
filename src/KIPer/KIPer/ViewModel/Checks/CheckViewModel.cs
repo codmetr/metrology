@@ -30,9 +30,8 @@ namespace KipTM.ViewModel
     /// </summary>
     public class CheckViewModel : ViewModelBase
     {
+        #region Внутренние переменные
         private readonly IDeviceManager _deviceManager;
-        private DictionariesPool _dictionaries;
-        private MainSettings _settings;
         private readonly IMethodsService _methodics;
         private IDictionary<string, ICheckMethod> _check;
         private readonly IPropertyPool _propertyPool;
@@ -50,7 +49,13 @@ namespace KipTM.ViewModel
         private DeviceDescriptor _ethalon;
         private bool _isAnalogEthalon;
         private SelectChannelViewModel _checkDeviceChanel;
+        private SelectChannelViewModel _ethalonChanel;
 
+        private CheckConfig _checkConfig;
+        private CheckConfigViewModel _checkConfigViewModel;
+        #endregion
+
+        #region Конструкторы и инициализация
         /// <summary>
         /// For disiner
         /// </summary>
@@ -61,323 +66,66 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the CheckViewModel class.
         /// </summary>
-        public CheckViewModel(MainSettings settings, IMethodsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries, IDeviceManager deviceManager)
+        public CheckViewModel(MainSettings settings, IMethodsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries, IDeviceManager deviceManager, TestResult result)
         {
-            _result = new TestResult();
-            _settings = settings;
+            _checkConfig = new CheckConfig(settings, methodics, propertyPool, dictionaries, result);
+            _checkConfigViewModel = new CheckConfigViewModel(_checkConfig);
+
+            _checkConfig.SelectedCheckTypeChanged += _checkConfig_SelectedCheckTypeChanged;
+            _checkConfig.SelectedEthalonTypeChanged += _checkConfig_SelectedEthalonTypeChanged;
+
+            _checkConfigViewModel.CheckedDeviseChannelChanged += _checkConfigViewModel_CheckedDeviseChannelChanged;
+            _checkConfigViewModel.EthalonDeviseChannelChanged += _checkConfigViewModel_EthalonDeviseChannelChanged;
+            _result = result;
             _methodics = methodics;
             _propertyPool = propertyPool;
-            _dictionaries = dictionaries;
             _deviceManager = deviceManager;
-
-            LoadAvalableCheckDevices();
-
-            LoadAvalableEthalons();
-
-            CheckDeviceChanel = new SelectChannelViewModel();
-            EthalonChanel = new SelectChannelViewModel();
         }
 
-        private void LoadAvalableCheckDevices()
+        void _checkConfigViewModel_CheckedDeviseChannelChanged(object sender, EventArgs e)
         {
-            // заполнение списка поддерживаемых устройств и выбор первого элемента
-            var avalableDeviceTypes = new Dictionary<string, DeviceTypeDescriptor>();
-            _devTypeKey = null;
-            foreach (var deviceType in _dictionaries.DeviceTypes)
+            var ch = Check as ADTSTestViewModel;
+            if (ch != null)
             {
-                var setDevice = _settings.Devices.First(el => el.Key == deviceType);
-                if (setDevice == null)
-                    continue;
-                if (_devTypeKey == null)
-                    _devTypeKey = deviceType;
-                avalableDeviceTypes.Add(deviceType,
-                    new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
-            }
-            _avalableDeviceTypes = avalableDeviceTypes;
-            _selectedType = _avalableDeviceTypes.First();
-
-            if (_devTypeKey != null)
-            {
-                _result.TargetDevice = new DeviceDescriptor(_selectedType.Value);
-                _check = _methodics.MethodsForType(_devTypeKey);
-                SelectedCheckType = _check.First();
-                Channels = _propertyPool.ByKey(_devTypeKey).GetAllKeys();
-                _result.Channel = Channels.First();
+                ch.SetConnection(_checkConfigViewModel.GetCheckedDeviseChannel());
             }
         }
 
-        private void LoadAvalableEthalons()
+        void _checkConfigViewModel_EthalonDeviseChannelChanged(object sender, EventArgs e)
         {
-            var avalableEthalonTypes = new Dictionary<string, DeviceTypeDescriptor>();
-            _ethalonTypeKey = null;
-            var ethalons = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel).GetProperty<List<string>>(CommonPropertyKeys.KeyEthalons);
-            foreach (var deviceEthalon in ethalons)
-            {
-                var setDevice = _settings.Devices.FirstOrDefault(el => el.Key == deviceEthalon);
-                if (_ethalonTypeKey == null)
-                {
-                    _ethalonTypeKey = deviceEthalon;
-                }
-                if (setDevice == null)
-                {
-                    if (_ethalonTypeKey == UserEthalonChannel.Key)
-                        avalableEthalonTypes.Add(deviceEthalon, 
-                            new DeviceTypeDescriptor("Аналоговый прибор", "Приборы без аппаратного интерфейса", ""));
-                    else
-                        avalableEthalonTypes.Add(deviceEthalon, null);
-                    continue;
-                }
-                avalableEthalonTypes.Add(deviceEthalon,
-                    new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
-            }
-            _avalableEthalonTypes = avalableEthalonTypes;
-            SelectedEthalonType = _avalableEthalonTypes.First();
-
-            var ethalonDevType = new DeviceTypeDescriptor("", "", "");
-            if (_devTypeKey != null)
-            {
-                if(_ethalonTypeKey != UserEthalonChannel.Key)
-                    ethalonDevType = _selectedEthalonType.Value;
-                Ethalon = new DeviceDescriptor(ethalonDevType);
-                _result.Etalon = new List<DeviceDescriptor>() { _ethalon };
-            }
+            UpdateEthalon();
         }
 
-        #region Перечисления
-        /// <summary>
-        /// Доступные типы устройства
-        /// </summary>
-        public IDictionary<string, DeviceTypeDescriptor> DeviceTypes { get { return _avalableDeviceTypes; } }
-
-        /// <summary>
-        /// Каналы устройства
-        /// </summary>
-        public IEnumerable<string> Channels { get; set; }
-
-        /// <summary>
-        /// Дострупные для выбранного типа устройства методики
-        /// </summary>
-        public IDictionary<string, ICheckMethod> CheckTypes
+        void _checkConfig_SelectedEthalonTypeChanged(object sender, EventArgs e)
         {
-            get { return _check; }
-            set { Set(ref _check, value); }
+            UpdateEthalon();
         }
 
-        /// <summary>
-        /// Доступные типы устройства
-        /// </summary>
-        public IDictionary<string, DeviceTypeDescriptor> EthalonTypes { get { return _avalableEthalonTypes; } }
-
+        void _checkConfig_SelectedCheckTypeChanged(object sender, EventArgs e)
+        {
+            Check = GetViewModelFor(_checkConfig.SelectedCheckType);
+            var ch = Check as ADTSTestViewModel;
+            if (ch != null)
+            {
+                ch.SetConnection(_checkConfigViewModel.GetCheckedDeviseChannel());
+            }
+            UpdateEthalon();
+        }
         #endregion
-        
+
         #region Условия проверки
-        /// <summary>
-        /// Дата проверки
-        /// </summary>
-        public DateTime CheckDateTime { get; set; }
 
-        /// <summary>
-        /// Лаборатория
-        /// </summary>
-        public string Laboratory { get; set; }
-
-        /// <summary>
-        /// Температура
-        /// </summary>
-        public string Temperature { get; set; }
-
-        /// <summary>
-        /// Влажность
-        /// </summary>
-        public string Humidity { get; set; }
+        public CheckConfigViewModel CheckConfig
+        {
+            get { return _checkConfigViewModel; }
+        }
         #endregion
 
-        #region Настройки проверяемого устройства
-        /// <summary>
-        /// Тип устройства
-        /// </summary>
-        public KeyValuePair<string, DeviceTypeDescriptor> SelectedDeviceType
-        {
-            get { return _selectedType; }
-            set
-            {
-                if (_selectedType.Key == value.Key)
-                    return;
-                _devTypeKey = _selectedType.Key;
-                _result.TargetDevice.DeviceType = _selectedType.Value;
-                CheckTypes = _methodics.MethodsForType(_selectedType.Key);
-                RaisePropertyChanged("Manufacturer");
-            }
-        }
-
-        public TestResult Result
-        {
-            get { return _result; }
-            set { Set(ref _result, value); }
-        }
-        /// <summary>
-        /// Производитель
-        /// </summary>
-        public string Manufacturer { get { return _result.TargetDevice.DeviceType.DeviceManufacturer; } }
-
-        /// <summary>
-        /// Инвентарный номер
-        /// </summary>
-        public string InventarNumber
-        {
-            get { return _result.TargetDevice.InventarNumber; }
-            set { _result.TargetDevice.InventarNumber = value; }
-        }
-
-        /// <summary>
-        /// Серийный номер
-        /// </summary>
-        public string SerialNumber
-        {
-            get { return _result.TargetDevice.SerialNumber; }
-            set { _result.TargetDevice.SerialNumber = value; }
-        }
-
-        /// <summary>
-        /// Дата предыдущей поверки/калибровки
-        /// </summary>
-        public DateTime PreviousCheckTime
-        {
-            get { return _result.TargetDevice.PreviousCheckTime; }
-            set { _result.TargetDevice.PreviousCheckTime = value; }
-        }
-
-        /// <summary>
-        /// Выбранная методика
-        /// </summary>
-        public KeyValuePair<string, ICheckMethod> SelectedCheckType
-        {
-            get { return _selectedCheckType; }
-            set
-            {
-                _selectedCheckType = value;
-                _result.CheckType = _selectedCheckType.Key;
-                Check = GetViewModelFor(_selectedCheckType.Value);
-                var ch = Check as ADTSTestViewModel;
-                if (ch != null)
-                {
-                    ch.SetConnection(_checkDeviceChanel);
-                }
-                if (Ethalon != null)
-                    UpdateEthalon();
-            }
-        }
- 
-        /// <summary>
-        /// Выбранный канал
-        /// </summary>
-        public string SelectedChannel
-        {
-            get { return _result.Channel; }
-            set
-            {
-                _result.Channel = value;
-                var properties = _propertyPool.ByKey(_devTypeKey).ByKey(value);
-                _selectedCheckType.Value.Init(properties);
-            }
-        }
-
-        /// <summary>
-        /// Настройки канала тестируемого прибора
-        /// </summary>
-        public SelectChannelViewModel CheckDeviceChanel
-        {
-            get { return _checkDeviceChanel; }
-            set
-            {
-                _checkDeviceChanel = value;
-                var ch = Check as ADTSTestViewModel;
-                if (ch != null)
-                {
-                    ch.SetConnection(_checkDeviceChanel);
-                }
-            }
-        }
-
-        #endregion
-
-        #region Настройки эталона
-
-        /// <summary>
-        /// Тип устройства
-        /// </summary>
-        public KeyValuePair<string, DeviceTypeDescriptor> SelectedEthalonType
-        {
-            get { return _selectedEthalonType; }
-            set
-            {
-                Set(ref _selectedEthalonType, value);
-                UpdateEthalon();
-            }
-        }
-
-        public bool IsAnalogEthalon
-        {
-            get { return _isAnalogEthalon; }
-            set
-            {
-                Set(ref _isAnalogEthalon, value); 
-                RaisePropertyChanged("IsNoAnalogEthalon");
-            }
-        }
-
-        public bool IsNoAnalogEthalon
-        {
-            get { return !_isAnalogEthalon; }
-        }
-
-        /// <summary>
-        /// Инвентарный номер
-        /// </summary>
-        public string EthalonDeviceType
-        {
-            get { return Ethalon.DeviceType.Model; }
-            set
-            {
-                if(!IsAnalogEthalon)
-                    throw new SettingsPropertyIsReadOnlyException("EthalonDeviceType can not set in no user channel");
-                Ethalon.DeviceType = new DeviceTypeDescriptor(value, Ethalon.DeviceType.DeviceCommonType, Ethalon.DeviceType.DeviceManufacturer);
-                RaisePropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Производитель эталона
-        /// </summary>
-        public string EthalonManufacturer
-        {
-            get { return Ethalon.DeviceType.DeviceManufacturer; }
-            set
-            {
-                if(!IsAnalogEthalon)
-                    throw new SettingsPropertyIsReadOnlyException("EthalonManufacturer can not set in no user channel");
-                Ethalon.DeviceType = new DeviceTypeDescriptor(Ethalon.DeviceType.Model, _ethalon.DeviceType.DeviceCommonType, value);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public DeviceDescriptor Ethalon
-        {
-            get { return _ethalon; }
-            protected set { Set(ref _ethalon, value); }
-        }
-
-        /// <summary>
-        /// Настройки канала эталона
-        /// </summary>
-        public SelectChannelViewModel EthalonChanel { get; set; }
-        #endregion
-
+        #region Команды
         public ICommand Save { get { return new CommandWrapper(DoSave); } }
 
         public ICommand Report { get { return new CommandWrapper(DoShowReport); } }
+        #endregion
 
         public IMethodViewModel Check
         {
@@ -402,13 +150,16 @@ namespace KipTM.ViewModel
             return null;
         }
 
+        #region Сервисные методы
         private void UpdateEthalon()
         {
-            IsAnalogEthalon = _selectedEthalonType.Key == UserEthalonChannel.Key;
-            if (!IsAnalogEthalon)
+            //IsAnalogEthalon = _selectedEthalonType.Key == UserEthalonChannel.Key;
+            //if (!IsAnalogEthalon)
+            if (!_checkConfig.IsAnalogEthalon)
             {
-                Ethalon.DeviceType = _selectedEthalonType.Value;
-                Check.SetEthalonChannel(_selectedEthalonType.Key, EthalonChanel.SelectedChannel); //ToDo добавить настройки подключения
+                //Ethalon.DeviceType = _selectedEthalonType.Value;
+                //Check.SetEthalonChannel(_selectedEthalonType.Key, EthalonChanel.SelectedChannel); //ToDo добавить настройки подключения
+                Check.SetEthalonChannel(_checkConfig.SelectedEthalonTypeKey, _checkConfigViewModel.GetEthalonDeviseChannel()); //ToDo добавить настройки подключения
                 return;
             }
             else
@@ -424,7 +175,8 @@ namespace KipTM.ViewModel
 
         private void DoShowReport()
         {
-            
+
         }
+        #endregion
     }
 }
