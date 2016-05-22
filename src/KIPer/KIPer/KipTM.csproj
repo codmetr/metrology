@@ -149,6 +149,7 @@
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\MainSettings.cs" />
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
+    <Compile Include="ViewModel\Channels\PACEEchalonChannelViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTSCalibrationViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckConfigViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckViewModel.cs" />

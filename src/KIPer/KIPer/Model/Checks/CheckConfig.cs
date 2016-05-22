@@ -276,6 +276,7 @@ namespace KipTM.Model.Checks
             private set
             {
                 _selectedCheckType = value;
+                OnSelectedCheckTypeChanged();
             }
         }
 
@@ -291,7 +292,8 @@ namespace KipTM.Model.Checks
                     return;
                 _result.Channel = value;
                 var properties = _propertyPool.ByKey(_devTypeKey).ByKey(value);
-                SelectedCheckType.Init(properties);
+                SelectedCheckType.Init(properties); //todo maybe move to CheckViewModel
+                OnSelectedChannelChanged();
             }
         }
         #endregion
@@ -323,6 +325,7 @@ namespace KipTM.Model.Checks
                _selectedEthalonType = value;
                 if (!IsAnalogEthalon)
                     Ethalon.DeviceType = _selectedEthalonType;
+                OnSelectedEthalonTypeChanged();
             }
         }
 
@@ -377,8 +380,28 @@ namespace KipTM.Model.Checks
         #region Events
 
         public event EventHandler SelectedCheckTypeChanged;
+
+        protected virtual void OnSelectedCheckTypeChanged()
+        {
+            EventHandler handler = SelectedCheckTypeChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
         public event EventHandler SelectedChannelChanged;
+
+        protected virtual void OnSelectedChannelChanged()
+        {
+            EventHandler handler = SelectedChannelChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
         public event EventHandler SelectedEthalonTypeChanged;
+
+        protected virtual void OnSelectedEthalonTypeChanged()
+        {
+            EventHandler handler = SelectedEthalonTypeChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
 
         #endregion
     }

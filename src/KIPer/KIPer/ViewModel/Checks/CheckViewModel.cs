@@ -32,22 +32,9 @@ namespace KipTM.ViewModel
     {
         #region Внутренние переменные
         private readonly IDeviceManager _deviceManager;
-        private readonly IMethodsService _methodics;
-        private IDictionary<string, ICheckMethod> _check;
         private readonly IPropertyPool _propertyPool;
         private IMethodViewModel _selectedCheck;
-        private KeyValuePair<string, ICheckMethod> _selectedCheckType;
-        private TestResult _result;
-        private IDictionary<string, DeviceTypeDescriptor> _avalableDeviceTypes; 
-        private string _devTypeKey;
-        private KeyValuePair<string, DeviceTypeDescriptor> _selectedType;
-
-        private IDictionary<string, DeviceTypeDescriptor> _avalableEthalonTypes; 
-        private string _ethalonTypeKey;
-        private KeyValuePair<string, DeviceTypeDescriptor> _selectedEthalonType;
-
-        private DeviceDescriptor _ethalon;
-        private bool _isAnalogEthalon;
+        
         private SelectChannelViewModel _checkDeviceChanel;
         private SelectChannelViewModel _ethalonChanel;
 
@@ -72,14 +59,56 @@ namespace KipTM.ViewModel
             _checkConfigViewModel = new CheckConfigViewModel(_checkConfig);
 
             _checkConfig.SelectedCheckTypeChanged += _checkConfig_SelectedCheckTypeChanged;
+            _checkConfig.SelectedChannelChanged += _checkConfig_SelectedChannelChanged;
             _checkConfig.SelectedEthalonTypeChanged += _checkConfig_SelectedEthalonTypeChanged;
 
             _checkConfigViewModel.CheckedDeviseChannelChanged += _checkConfigViewModel_CheckedDeviseChannelChanged;
             _checkConfigViewModel.EthalonDeviseChannelChanged += _checkConfigViewModel_EthalonDeviseChannelChanged;
-            _result = result;
-            _methodics = methodics;
             _propertyPool = propertyPool;
             _deviceManager = deviceManager;
+            Check = GetViewModelFor(_checkConfig.SelectedCheckType);
+        }
+        #endregion
+
+        #region Условия проверки
+
+        public CheckConfigViewModel CheckConfig
+        {
+            get { return _checkConfigViewModel; }
+        }
+        #endregion
+
+        #region Команды
+        public ICommand Save { get { return new CommandWrapper(DoSave); } }
+
+        public ICommand Report { get { return new CommandWrapper(DoShowReport); } }
+        #endregion
+
+        #region Модель самой проверки
+        public IMethodViewModel Check
+        {
+            get { return _selectedCheck; }
+            set { Set(ref _selectedCheck, value); }
+        }
+        #endregion
+
+        #region Сервисные методы
+
+        private IMethodViewModel GetViewModelFor(ICheckMethod methodic)
+        {
+            if (methodic is ADTSCheckMethod)
+            {
+                var adtsMethodic = methodic as ADTSCheckMethod;
+                adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
+                return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(_checkConfig.SelectedDeviceTypeKey), _deviceManager, _checkConfig.Result);
+            }
+            else if (methodic is ADTSTestMethod)
+            {
+                var adtsMethodic = methodic as ADTSTestMethod;
+                adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
+                return new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(_checkConfig.SelectedDeviceTypeKey), _deviceManager, _checkConfig.Result);
+            }
+            return null;
         }
 
         void _checkConfigViewModel_CheckedDeviseChannelChanged(object sender, EventArgs e)
@@ -101,6 +130,10 @@ namespace KipTM.ViewModel
             UpdateEthalon();
         }
 
+        void _checkConfig_SelectedChannelChanged(object sender, EventArgs e)
+        {
+        }
+
         void _checkConfig_SelectedCheckTypeChanged(object sender, EventArgs e)
         {
             Check = GetViewModelFor(_checkConfig.SelectedCheckType);
@@ -111,54 +144,11 @@ namespace KipTM.ViewModel
             }
             UpdateEthalon();
         }
-        #endregion
 
-        #region Условия проверки
-
-        public CheckConfigViewModel CheckConfig
-        {
-            get { return _checkConfigViewModel; }
-        }
-        #endregion
-
-        #region Команды
-        public ICommand Save { get { return new CommandWrapper(DoSave); } }
-
-        public ICommand Report { get { return new CommandWrapper(DoShowReport); } }
-        #endregion
-
-        public IMethodViewModel Check
-        {
-            get { return _selectedCheck; }
-            set { Set(ref _selectedCheck, value); }
-        }
-
-        public IMethodViewModel GetViewModelFor(ICheckMethod methodic)
-        {
-            if (methodic is ADTSCheckMethod)
-            {
-                var adtsMethodic = methodic as ADTSCheckMethod;
-                adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
-                return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey), _deviceManager, _result);
-            }
-            else if (methodic is ADTSTestMethod)
-            {
-                var adtsMethodic = methodic as ADTSTestMethod;
-                adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
-                return new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(_devTypeKey), _deviceManager, _result);
-            }
-            return null;
-        }
-
-        #region Сервисные методы
         private void UpdateEthalon()
         {
-            //IsAnalogEthalon = _selectedEthalonType.Key == UserEthalonChannel.Key;
-            //if (!IsAnalogEthalon)
             if (!_checkConfig.IsAnalogEthalon)
             {
-                //Ethalon.DeviceType = _selectedEthalonType.Value;
-                //Check.SetEthalonChannel(_selectedEthalonType.Key, EthalonChanel.SelectedChannel); //ToDo добавить настройки подключения
                 Check.SetEthalonChannel(_checkConfig.SelectedEthalonTypeKey, _checkConfigViewModel.GetEthalonDeviseChannel()); //ToDo добавить настройки подключения
                 return;
             }
@@ -178,5 +168,16 @@ namespace KipTM.ViewModel
 
         }
         #endregion
+
+        public override void Cleanup()
+        {
+            _checkConfig.SelectedCheckTypeChanged -= _checkConfig_SelectedCheckTypeChanged;
+            _checkConfig.SelectedChannelChanged -= _checkConfig_SelectedChannelChanged;
+            _checkConfig.SelectedEthalonTypeChanged -= _checkConfig_SelectedEthalonTypeChanged;
+
+            _checkConfigViewModel.CheckedDeviseChannelChanged -= _checkConfigViewModel_CheckedDeviseChannelChanged;
+            _checkConfigViewModel.EthalonDeviseChannelChanged -= _checkConfigViewModel_EthalonDeviseChannelChanged;
+            base.Cleanup();
+        }
     }
 }

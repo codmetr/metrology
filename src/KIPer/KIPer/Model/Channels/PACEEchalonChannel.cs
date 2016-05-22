@@ -16,14 +16,16 @@ namespace KipTM.Model.Channels
             _paseModel = paseModel;
         }
 
+        #region Implementation IEthalonChannel
         public bool Activate()
         {
-            throw new NotImplementedException();
+            IsActive = true;
+            return true;
         }
 
         public void Stop()
         {
-            throw new NotImplementedException();
+            IsActive = false;
         }
 
         public double GetEthalonValue(double point, CancellationToken cancel)
@@ -38,7 +40,36 @@ namespace KipTM.Model.Channels
             }
             if (!cancel.IsCancellationRequested)
                 result = _paseModel.Pressure;
+            OnStateUpdated();
             return result;
+        }
+        #endregion
+
+        public PACE1000Model Model{get { return _paseModel; }}
+
+        public double Pressure{get { return _paseModel.Pressure; }}
+
+        public string PressureUnit{get { return _paseModel.PressureUnit.ToString(); }}
+
+        public bool IsActive { get; set; }
+
+        public event EventHandler StateUpdated;
+
+        protected virtual void OnStateUpdated()
+        {
+            EventHandler handler = StateUpdated;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        private void AutoUpdate()
+        {
+            UpdateState();
+            
+        }
+
+        private void UpdateState()
+        {
+            
         }
     }
 }

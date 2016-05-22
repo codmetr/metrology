@@ -40,6 +40,8 @@ namespace KipTM.ViewModel.Checks
         private IPropertyPool _propertyPool;
         private bool _waitUserReaction;
 
+        private ITransportChannelType _connection;
+
         private double _realValue;
 
         private CancellationTokenSource _cancellation;
@@ -54,6 +56,8 @@ namespace KipTM.ViewModel.Checks
         private ITransportChannelType _settings;
         private TestResult _resultPool;
         private ADTSViewModel _adtsViewModel;
+        private bool _isUserChannel;
+        private object _ethalonChannel;
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
@@ -84,6 +88,10 @@ namespace KipTM.ViewModel.Checks
             _dispatcher = Dispatcher.CurrentDispatcher;
         }
 
+        #region Interface for config
+        public event EventHandler Started;
+
+        public event EventHandler Stoped;
 
         public ADTSViewModel ADTS
         {
@@ -113,11 +121,32 @@ namespace KipTM.ViewModel.Checks
         {
             _ethalonTypeKey = ethalonTypeKey;
             _settings = settings;
+            IsUserChannel = _ethalonTypeKey != null;
+            EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey, _settings);
+        }
+        #endregion
+
+        #region Properties for View
+        public bool IsUserChannel
+        {
+            get { return _isUserChannel; }
+            set
+            {
+                Set(ref _isUserChannel, value);
+                RaisePropertyChanged("IsNotUserChannel");
+            }
         }
 
-        public event EventHandler Started;
+        public bool IsNotUserChannel
+        {
+            get { return !_isUserChannel; }
+        }
 
-        public event EventHandler Stoped;
+        public object EthalonChannel
+        {
+            get { return _ethalonChannel; }
+            set { Set(ref _ethalonChannel, value); }
+        }
 
         public string TitleBtnNext
         {
@@ -162,6 +191,9 @@ namespace KipTM.ViewModel.Checks
             get { return _accept; }
             set { Set(ref _accept, value); }
         }
+        #endregion
+
+        #region Service methods
 
         private void DoCorrectRealVal(object param)
         {
@@ -250,6 +282,7 @@ namespace KipTM.ViewModel.Checks
                 _currentAction = DoCancel;
             }
         }
+        #endregion
 
         public override void Cleanup()
         {

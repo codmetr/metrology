@@ -308,8 +308,6 @@ namespace KipTM.ViewModel.Checks
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-
-
         void _ethalonChanel_ChannelTypeChanget(object sender, EventArgs e)
         {
             OnCheckedDeviseChannelChanged();

@@ -56,6 +56,8 @@ namespace KipTM.ViewModel.Checks
         private ITransportChannelType _settings;
         private TestResult _resultPool;
         private ADTSViewModel _adtsViewModel;
+        private bool _isUserChannel;
+        private object _ethalonChannel;
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
@@ -86,33 +88,19 @@ namespace KipTM.ViewModel.Checks
             _dispatcher = Dispatcher.CurrentDispatcher;
         }
 
+        #region Interface for config
+        public event EventHandler Started;
+
+        public event EventHandler Stoped;
+
         public ADTSViewModel ADTS
         {
             get { return _adtsViewModel; }
         }
 
-        private void ResultUpdated(object sender, EventArgTestResult eventArgTestResult)
-        {
-            foreach (var result in eventArgTestResult.Result)
-            {
-                _dispatcher.Invoke(() =>
-                {
-                    Results.Add(result);
-                    _resultPool.Results.Add(result.Key, result.Value);
-                });
-            }
-        }
-
         public void SetConnection(ITransportChannelType connection)
         {
             _connection = connection;
-        }
-
-        public void SlectUserEthalonChannel()
-        {
-            _methodic.SetEthalonChannel(_userEchalonChannel);
-            _ethalonTypeKey = null;
-            _settings = null;
         }
 
         public void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings)
@@ -121,9 +109,36 @@ namespace KipTM.ViewModel.Checks
             _settings = settings;
         }
 
-        public event EventHandler Started;
+        public void SlectUserEthalonChannel()
+        {
+            _methodic.SetEthalonChannel(_userEchalonChannel);
+            _ethalonTypeKey = null;
+            _settings = null;
+        }
+        #endregion
 
-        public event EventHandler Stoped;
+        #region Properties for View
+
+        public bool IsUserChannel
+        {
+            get { return _isUserChannel; }
+            set
+            {
+                Set(ref _isUserChannel, value);
+                RaisePropertyChanged("IsNotUserChannel");
+            }
+        }
+
+        public bool IsNotUserChannel
+        {
+            get { return !_isUserChannel; }
+        }
+
+        public object EthalonChannel
+        {
+            get { return _ethalonChannel; }
+            set { Set(ref _ethalonChannel, value); }
+        }
 
         public string TitleBtnNext
         {
@@ -167,6 +182,20 @@ namespace KipTM.ViewModel.Checks
         {
             get { return _accept; }
             set { Set(ref _accept, value); }
+        }
+        #endregion
+
+        #region Service methods
+        private void ResultUpdated(object sender, EventArgTestResult eventArgTestResult)
+        {
+            foreach (var result in eventArgTestResult.Result)
+            {
+                _dispatcher.Invoke(() =>
+                {
+                    Results.Add(result);
+                    _resultPool.Results.Add(result.Key, result.Value);
+                });
+            }
         }
 
         private void DoCorrectRealVal(object param)
@@ -245,7 +274,7 @@ namespace KipTM.ViewModel.Checks
             Steps = new ObservableCollection<StepViewModel>(_methodic.Steps.Select(el => new StepViewModel(el)));
         }
 
-        void _userChannel_QueryStarted(object sender, EventArgs e)
+        private void _userChannel_QueryStarted(object sender, EventArgs e)
         {
             if (_userChannel.QueryType == UserQueryType.GetRealValue)
             {
@@ -262,6 +291,7 @@ namespace KipTM.ViewModel.Checks
                 _currentAction = DoCancel;
             }
         }
+        #endregion
 
         public override void Cleanup()
         {
