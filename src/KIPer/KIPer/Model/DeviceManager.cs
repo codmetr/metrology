@@ -100,7 +100,7 @@ namespace KipTM.Model
 
             _ethalonChannels = new Dictionary<string, Func<ITransportChannelType, IEthalonChannel>>()
             {
-                {PACE1000Model.Key, (transportDescriptor)=> new PACEEchalonChannel(GetDevice<PACE1000Model>(transportDescriptor))}
+                {PACE1000Model.Key, (transportDescriptor)=> new PACEEthalonChannel(GetModel<PACE1000Model>())}
             };
         }
 

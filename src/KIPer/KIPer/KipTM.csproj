@@ -202,6 +202,9 @@
     <Compile Include="View\Checks\MechanicalManometerView.xaml.cs">
       <DependentUpon>MechanicalManometerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Checks\PACE1000EthalonChannelView.xaml.cs">
+      <DependentUpon>PACE1000EthalonChannelView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Converters\DoubleToTimespanConverter.cs" />
     <Compile Include="View\DeviceTypes\DeviceTypesView.xaml.cs">
       <DependentUpon>DeviceTypesView.xaml</DependentUpon>
@@ -290,6 +293,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Checks\MechanicalManometerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Checks\PACE1000EthalonChannelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

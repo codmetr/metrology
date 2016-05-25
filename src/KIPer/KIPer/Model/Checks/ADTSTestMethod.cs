@@ -134,7 +134,8 @@ namespace KipTM.Model.Checks
             if (Steps != null)
                 foreach (var testStep in Steps)
                 {
-                    if (testStep != null) testStep.ResultUpdated -= step_ResultUpdated;
+                    if (testStep != null)
+                        testStep.ResultUpdated -= step_ResultUpdated;
                 }
             Steps = steps;
             return true;
@@ -155,6 +156,8 @@ namespace KipTM.Model.Checks
             var cancel = _cancelSource.Token;
             ManualResetEvent whStep = new ManualResetEvent(false);
             var waitPeriod = TimeSpan.FromMilliseconds(10);
+            if(!_ethalonChannel.Activate())
+                throw new Exception(string.Format("Can not Activate ethalon channel: {0}", _ethalonChannel));
             foreach (var testStep in Steps)
             {
                 whStep.Reset();
@@ -172,6 +175,7 @@ namespace KipTM.Model.Checks
                     break;
                 }
             }
+            _ethalonChannel.Stop();
             return true;
 
         }

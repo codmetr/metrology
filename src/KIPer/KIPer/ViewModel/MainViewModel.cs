@@ -13,6 +13,7 @@ using KipTM.Settings;
 using KipTM.View;
 using KipTM.View.Checks;
 using KipTM.View.Services;
+using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Checks;
 using KipTM.ViewModel.Services;
 
@@ -81,6 +82,7 @@ namespace KipTM.ViewModel
 
                 //Вкладка Эталоны
                 {typeof(EtalonTypeViewModel), typeof(EtalonTypeView)},
+                {typeof(PACEEchalonChannelViewModel), typeof(PACE1000EthalonChannelView)},
 
                 //Вкладка Проверка
                 {typeof(CheckViewModel), typeof(CheckView)},

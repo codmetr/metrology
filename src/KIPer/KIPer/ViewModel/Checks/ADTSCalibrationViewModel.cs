@@ -19,7 +19,9 @@ using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
 using KipTM.Settings;
+using KipTM.View.Checks;
 using KipTM.ViewModel;
+using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Services;
 
 namespace KipTM.ViewModel.Checks
@@ -58,6 +60,7 @@ namespace KipTM.ViewModel.Checks
         private ADTSViewModel _adtsViewModel;
         private bool _isUserChannel;
         private object _ethalonChannel;
+        private object _ethalonChannelViewModel;
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
@@ -115,13 +118,15 @@ namespace KipTM.ViewModel.Checks
             _methodic.SetEthalonChannel(_userEchalonChannel);
             _ethalonTypeKey = null;
             _settings = null;
+            IsUserChannel = true;
+            EthalonChannel = null;
         }
 
         public void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings)
         {
             _ethalonTypeKey = ethalonTypeKey;
             _settings = settings;
-            IsUserChannel = _ethalonTypeKey != null;
+            IsUserChannel = _ethalonTypeKey == null;
             EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey, _settings);
         }
         #endregion
@@ -145,7 +150,17 @@ namespace KipTM.ViewModel.Checks
         public object EthalonChannel
         {
             get { return _ethalonChannel; }
-            set { Set(ref _ethalonChannel, value); }
+            set
+            {
+                Set(ref _ethalonChannel, value);
+                EthalonChannelViewModel = GetViewModelForChannel(_ethalonChannel);
+            }
+        }
+
+        public object EthalonChannelViewModel
+        {
+            get { return _ethalonChannelViewModel; }
+            set { Set(ref _ethalonChannelViewModel, value); }
         }
 
         public string TitleBtnNext
@@ -281,6 +296,15 @@ namespace KipTM.ViewModel.Checks
                 AcceptEnabled = true;
                 _currentAction = DoCancel;
             }
+        }
+
+        object GetViewModelForChannel(object model)
+        {
+            if (model is PACEEthalonChannel)
+            {
+                return new PACEEchalonChannelViewModel(model as PACEEthalonChannel);
+            }
+            return null;
         }
         #endregion
 

@@ -110,7 +110,7 @@
             </GroupBox>
             <GroupBox Header="Эталонный канал" Grid.Column="1" Grid.Row="1" 
                       Visibility="{Binding IsNotUserChannel, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <ContentPresenter Content="{Binding EthalonChannel, UpdateSourceTrigger=PropertyChanged}"/>
+                <ContentPresenter Content="{Binding EthalonChannelViewModel, UpdateSourceTrigger=PropertyChanged}"/>
             </GroupBox>
             <TextBlock Grid.Column="1" Grid.Row="2"
                        VerticalAlignment="Bottom" TextWrapping="Wrap" TextAlignment="Center" Margin="5"
