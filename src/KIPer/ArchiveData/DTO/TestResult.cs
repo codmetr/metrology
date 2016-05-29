@@ -7,6 +7,12 @@ namespace KipTM.Archive.DTO
 {
     public class TestResult
     {
+        public TestResult()
+        {
+            Etalon = new List<DeviceDescriptor>();
+            Results = new Dictionary<ParameterDescriptor, ParameterResult>();
+        }
+
         /// <summary>
         /// Пользователь проводивший проверку
         /// </summary>

@@ -85,7 +85,6 @@ namespace KipTM.Model
             {
                 {VisaChannelDescriptor.KeyType, opt =>
                 {
-                    //return new FakeTransport();//todo Заменить на настоящий транспорт
                     var visaSettings = opt as VisaSettings;
                     if (visaSettings != null)
                     {
@@ -94,9 +93,11 @@ namespace KipTM.Model
                         return transport;
                     }
                     throw new Exception(string.Format("Can not generate transport for key \"{0}\" with options [{0}]", VisaChannelDescriptor.KeyType, opt));
-                }}
+                }},
+                {FakeChannelDescriptor.KeyType, opt => new FakeTransport()}
             };
             _loops.AddLocker(VisaChannelDescriptor.KeyType, new object());
+            _loops.AddLocker(FakeChannelDescriptor.KeyType, new object());
 
             _ethalonChannels = new Dictionary<string, Func<ITransportChannelType, IEthalonChannel>>()
             {

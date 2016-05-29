@@ -59,7 +59,7 @@
                         SelectedItem="{Binding SelectedChannel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Expander Header="Настройки подключения">
                         <StackPanel>
-                            <ContentPresenter DataContext="{Binding CheckDeviceChanel}"/>
+                            <ContentPresenter Content="{Binding CheckDeviceChanel}"/>
                         </StackPanel>
                     </Expander>
                 </StackPanel>
@@ -110,7 +110,7 @@
                             <Expander Header="Настройки подключения"
                                        Visibility="{Binding IsNoAnalogEthalon, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
                                 <StackPanel>
-                                    <ContentPresenter DataContext="{Binding EthalonChanel}"/>
+                                    <ContentPresenter Content="{Binding EthalonChanel}"/>
                                 </StackPanel>
                             </Expander>
                         </StackPanel>

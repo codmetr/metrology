@@ -1,10 +1,11 @@
 ﻿using System.Threading;
+using KipTM.Model.TransportChannels;
 
 namespace KipTM.Model.Channels
 {
     public interface IEthalonChannel
     {
-        bool Activate();
+        bool Activate(ITransportChannelType transport);
 
         void Stop();
 

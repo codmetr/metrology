@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
+using KipTM.Model.TransportChannels;
 
 namespace KipTM.Model.Channels
 {
@@ -28,10 +29,11 @@ namespace KipTM.Model.Channels
         /// Активация канала эталона
         /// </summary>
         /// <returns></returns>
-        public bool Activate()
+        public bool Activate(ITransportChannelType transport)
         {
             IsActive = true;
             _isAutoupdate = true;
+            _paseModel.Start(transport);
             AutoUpdate();
             return true;
         }

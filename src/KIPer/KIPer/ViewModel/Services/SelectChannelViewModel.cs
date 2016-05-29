@@ -30,7 +30,11 @@ namespace KipTM.ViewModel
         public SelectChannelViewModel()
         {
             SelectedChannel = new VisaChannelDescriptor();
-            _channels = new[] { SelectedChannel };
+            _channels = new[]
+            {
+                SelectedChannel,
+                new FakeChannelDescriptor(),
+            };
         }
 
         public IEnumerable<ITransportChannelType> Channels

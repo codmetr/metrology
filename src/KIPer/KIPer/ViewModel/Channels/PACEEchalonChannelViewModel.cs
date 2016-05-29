@@ -61,7 +61,7 @@ namespace KipTM.ViewModel.Channels
 
         void _model_ActiveStateChange(object sender, System.EventArgs e)
         {
-            IsActive = _model.Activate();
+            IsActive = _model.IsActive;
         }
 
         public override void Cleanup()

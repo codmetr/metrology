@@ -67,6 +67,10 @@ namespace KipTM.ViewModel
             _propertyPool = propertyPool;
             _deviceManager = deviceManager;
             Check = GetViewModelFor(_checkConfig.SelectedCheckType);
+            if (Check != null)
+            {
+                Check.SetConnection(_checkConfigViewModel.GetCheckedDeviseChannel());
+            }
         }
         #endregion
 
@@ -113,10 +117,9 @@ namespace KipTM.ViewModel
 
         void _checkConfigViewModel_CheckedDeviseChannelChanged(object sender, EventArgs e)
         {
-            var ch = Check as ADTSTestViewModel;
-            if (ch != null)
+            if (Check != null)
             {
-                ch.SetConnection(_checkConfigViewModel.GetCheckedDeviseChannel());
+                Check.SetConnection(_checkConfigViewModel.GetCheckedDeviseChannel());
             }
         }
 
@@ -137,10 +140,9 @@ namespace KipTM.ViewModel
         void _checkConfig_SelectedCheckTypeChanged(object sender, EventArgs e)
         {
             Check = GetViewModelFor(_checkConfig.SelectedCheckType);
-            var ch = Check as ADTSTestViewModel;
-            if (ch != null)
+            if (Check != null)
             {
-                ch.SetConnection(_checkConfigViewModel.GetCheckedDeviseChannel());
+                Check.SetConnection(_checkConfigViewModel.GetCheckedDeviseChannel());
             }
             UpdateEthalon();
         }

@@ -7,7 +7,7 @@ namespace KipTM.Model
 {
     public interface IDeviceManager
     {
-        IEthalonChannel GetEthalonChannel(string deviceKey, ITransportChannelType settongs);
+        IEthalonChannel GetEthalonChannel(string deviceKey, ITransportChannelType settings);
 
         T GetDevice<T>(ITransportChannelType transportDescription);
 

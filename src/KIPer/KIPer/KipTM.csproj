@@ -139,6 +139,7 @@
     <Compile Include="Model\IDeviceManager.cs" />
     <Compile Include="Model\IMethodsService.cs" />
     <Compile Include="Model\MethodsService.cs" />
+    <Compile Include="Model\TransportChannels\Fake\VisaChannelDescriptor.cs" />
     <Compile Include="Model\TransportChannels\ITransportChannelType.cs" />
     <Compile Include="Model\TransportChannels\Visa\VisaChannelDescriptor.cs" />
     <Compile Include="Model\TransportChannels\Visa\VisaSettings.cs" />

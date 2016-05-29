@@ -27,10 +27,32 @@ namespace KipTM.ViewModel.Checks
         public CheckConfigViewModel(CheckConfig model)
         {
             _model = model;
+            _model.SelectedChannelChanged += _model_SelectedChannelChanged;
+            _model.SelectedCheckTypeChanged += _model_SelectedCheckTypeChanged;
+            _model.SelectedEthalonTypeChanged += _model_SelectedEthalonTypeChanged;
             _checkDeviceChanel = new SelectChannelViewModel();
             _checkDeviceChanel.ChannelTypeChanget += _checkDeviceChanel_ChannelTypeChanget;
             _ethalonChanel = new SelectChannelViewModel();
             _ethalonChanel.ChannelTypeChanget += _ethalonChanel_ChannelTypeChanget;
+        }
+
+        void _model_SelectedEthalonTypeChanged(object sender, EventArgs e)
+        {
+            RaisePropertyChanged("SelectedEthalonType");
+            RaisePropertyChanged("IsAnalogEthalon");
+            RaisePropertyChanged("IsNoAnalogEthalon");
+        }
+
+        void _model_SelectedCheckTypeChanged(object sender, EventArgs e)
+        {
+            RaisePropertyChanged("SelectedCheckType");
+            RaisePropertyChanged("SelectedChannel");
+            RaisePropertyChanged("CheckDeviceChanel");
+        }
+
+        void _model_SelectedChannelChanged(object sender, EventArgs e)
+        {
+            RaisePropertyChanged("SelectedChannel");
         }
 
         #region Перечисления
@@ -224,6 +246,7 @@ namespace KipTM.ViewModel.Checks
             set
             {
                _model.SelectedEthalonTypeKey = value;
+               RaisePropertyChanged();
             }
         }
 
@@ -325,6 +348,9 @@ namespace KipTM.ViewModel.Checks
         {
             _checkDeviceChanel.ChannelTypeChanget -= _checkDeviceChanel_ChannelTypeChanget;
             _ethalonChanel.ChannelTypeChanget -= _ethalonChanel_ChannelTypeChanget;
+            _model.SelectedChannelChanged -= _model_SelectedChannelChanged;
+            _model.SelectedCheckTypeChanged -= _model_SelectedCheckTypeChanged;
+            _model.SelectedEthalonTypeChanged -= _model_SelectedEthalonTypeChanged;
             base.Cleanup();
         }
     }

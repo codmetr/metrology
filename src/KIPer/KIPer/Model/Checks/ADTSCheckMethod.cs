@@ -10,6 +10,7 @@ using KipTM.Model.Channels;
 using KipTM.Model.Checks.Steps;
 using KipTM.Model.Checks.Steps.ADTSCalibration;
 using KipTM.Model.Devices;
+using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 using Tools;
 
@@ -43,6 +44,10 @@ namespace KipTM.Model.Checks
             _cancelSource = new CancellationTokenSource();
         }
 
+        public ITransportChannelType ChannelType;
+
+        public ITransportChannelType EthalonChannelType;
+
         public string Title{get { return TitleMethod; }}
 
         public IEnumerable<ADTSChechPoint> Points { get; set; }
@@ -67,9 +72,10 @@ namespace KipTM.Model.Checks
             }
         }
 
-        public void SetEthalonChannel(IEthalonChannel ethalonChannel)
+        public void SetEthalonChannel(IEthalonChannel ethalonChannel, ITransportChannelType transport)
         {
             _ethalonChannel = ethalonChannel;
+            EthalonChannelType = transport;
             foreach (var testStep in Steps)
             {
                 var step = testStep as DoPoint;
@@ -163,9 +169,12 @@ namespace KipTM.Model.Checks
         /// <returns></returns>
         public bool Start()
         {
+            _adts.Start(ChannelType); 
             var cancel = _cancelSource.Token;
             ManualResetEvent whStep = new ManualResetEvent(false);
             var waitPeriod = TimeSpan.FromMilliseconds(10);
+            if (!_ethalonChannel.Activate(EthalonChannelType))
+                throw new Exception(string.Format("Can not Activate ethalon channel: {0}", _ethalonChannel));
             foreach (var testStep in Steps)
             {
                 whStep.Reset();

@@ -55,7 +55,7 @@ namespace KipTM.ViewModel.Checks
 
         private IDeviceManager _deviceManager;
         private string _ethalonTypeKey;
-        private ITransportChannelType _settings;
+        private ITransportChannelType _ethalonChannelType;
         private TestResult _resultPool;
         private ADTSViewModel _adtsViewModel;
         private bool _isUserChannel;
@@ -101,6 +101,11 @@ namespace KipTM.ViewModel.Checks
             get { return _adtsViewModel; }
         }
 
+        public void SetConnection(ITransportChannelType connection)
+        {
+            _connection = connection;
+        }
+
         private void ResultUpdated(object sender, EventArgTestResult eventArgTestResult)
         {
             foreach (var result in eventArgTestResult.Result)
@@ -115,9 +120,9 @@ namespace KipTM.ViewModel.Checks
 
         public void SlectUserEthalonChannel()
         {
-            _methodic.SetEthalonChannel(_userEchalonChannel);
+            _methodic.SetEthalonChannel(_userEchalonChannel, null);
             _ethalonTypeKey = null;
-            _settings = null;
+            _ethalonChannelType = null;
             IsUserChannel = true;
             EthalonChannel = null;
         }
@@ -125,9 +130,9 @@ namespace KipTM.ViewModel.Checks
         public void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings)
         {
             _ethalonTypeKey = ethalonTypeKey;
-            _settings = settings;
+            _ethalonChannelType = settings;
             IsUserChannel = _ethalonTypeKey == null;
-            EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey, _settings);
+            EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType);
         }
         #endregion
 
@@ -220,9 +225,12 @@ namespace KipTM.ViewModel.Checks
         private void DoStart()
         {
             TitleBtnNext = "Далее";
+            _methodic.ChannelType = _connection;
             // Задаем эталон
-            if(_ethalonTypeKey != null && _settings != null)
-                _methodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _settings));
+            if (_ethalonTypeKey != null && _ethalonChannelType != null)
+                _methodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType), _ethalonChannelType);
+            else
+                _methodic.SetEthalonChannel(_userEchalonChannel, null);
             // Запускаем
             Task.Run(()=>_methodic.Start());
             OnStarted();

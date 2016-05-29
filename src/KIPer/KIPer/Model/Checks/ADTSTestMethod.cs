@@ -47,7 +47,9 @@ namespace KipTM.Model.Checks
 
         public ITransportChannelType ChannelType;
 
-        public string Title{get { return TitleMethod; }}
+        public ITransportChannelType EthalonChannelType;
+
+        public string Title { get { return TitleMethod; } }
 
         public IEnumerable<ADTSChechPoint> Points { get; set; }
 
@@ -71,9 +73,10 @@ namespace KipTM.Model.Checks
             }
         }
 
-        public void SetEthalonChannel(IEthalonChannel ethalonChannel)
+        public void SetEthalonChannel(IEthalonChannel ethalonChannel, ITransportChannelType transport)
         {
             _ethalonChannel = ethalonChannel;
+            EthalonChannelType = transport;
             foreach (var testStep in Steps)
             {
                 var step = testStep as DoPoint;
@@ -156,7 +159,7 @@ namespace KipTM.Model.Checks
             var cancel = _cancelSource.Token;
             ManualResetEvent whStep = new ManualResetEvent(false);
             var waitPeriod = TimeSpan.FromMilliseconds(10);
-            if(!_ethalonChannel.Activate())
+            if (!_ethalonChannel.Activate(EthalonChannelType))
                 throw new Exception(string.Format("Can not Activate ethalon channel: {0}", _ethalonChannel));
             foreach (var testStep in Steps)
             {

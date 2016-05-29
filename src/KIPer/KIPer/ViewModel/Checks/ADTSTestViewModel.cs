@@ -53,7 +53,7 @@ namespace KipTM.ViewModel.Checks
 
         private IDeviceManager _deviceManager;
         private string _ethalonTypeKey;
-        private ITransportChannelType _settings;
+        private ITransportChannelType _ethalonChannelType;
         private TestResult _resultPool;
         private ADTSViewModel _adtsViewModel;
         private bool _isUserChannel;
@@ -106,14 +106,14 @@ namespace KipTM.ViewModel.Checks
         public void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings)
         {
             _ethalonTypeKey = ethalonTypeKey;
-            _settings = settings;
+            _ethalonChannelType = settings;
         }
 
         public void SlectUserEthalonChannel()
         {
-            _methodic.SetEthalonChannel(_userEchalonChannel);
+            _methodic.SetEthalonChannel(_userEchalonChannel, null);
             _ethalonTypeKey = null;
-            _settings = null;
+            _ethalonChannelType = null;
         }
         #endregion
 
@@ -214,10 +214,10 @@ namespace KipTM.ViewModel.Checks
             //    visaSett.Address = _connection.Address;
             _methodic.ChannelType = _connection;
             // Задаем эталон
-            if (_ethalonTypeKey != null && _settings != null)
-                _methodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _settings));
+            if (_ethalonTypeKey != null && _ethalonChannelType != null)
+                _methodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType), _ethalonChannelType);
             else
-                _methodic.SetEthalonChannel(_userEchalonChannel);
+                _methodic.SetEthalonChannel(_userEchalonChannel, null);
             // Запускаем
             Task.Run(()=>_methodic.Start());
             OnStarted();

@@ -7,6 +7,7 @@ namespace ADTS
 {
     public class FakeTransport:IEEE488.ITransportIEEE488
     {
+        
         private string request;
         private string answer;
 

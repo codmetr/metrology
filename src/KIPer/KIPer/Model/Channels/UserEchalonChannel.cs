@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using KipTM.Model.Checks;
+using KipTM.Model.TransportChannels;
 
 namespace KipTM.Model.Channels
 {
@@ -18,7 +19,7 @@ namespace KipTM.Model.Channels
         }
 
 
-        public bool Activate()
+        public bool Activate(ITransportChannelType transport)
         {
             return true;
         }
