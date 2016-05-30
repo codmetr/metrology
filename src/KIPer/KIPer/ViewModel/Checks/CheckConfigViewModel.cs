@@ -333,12 +333,12 @@ namespace KipTM.ViewModel.Checks
 
         void _ethalonChanel_ChannelTypeChanget(object sender, EventArgs e)
         {
-            OnCheckedDeviseChannelChanged();
+            OnEthalonDeviseChannelChanged();
         }
 
         void _checkDeviceChanel_ChannelTypeChanget(object sender, EventArgs e)
         {
-            OnEthalonDeviseChannelChanged();
+            OnCheckedDeviseChannelChanged();
         }
 
 

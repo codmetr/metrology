@@ -20,7 +20,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="1" Grid.Row="1" Text="Текущее давление: "/>
-        <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding Pressure}" MinWidth="100"/>
-        <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding PressureUnit}" MinWidth="50"/>
+        <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding Pressure, UpdateSourceTrigger=PropertyChanged}" MinWidth="100"/>
+        <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding PressureUnit, UpdateSourceTrigger=PropertyChanged}" MinWidth="50"/>
     </Grid>
 </UserControl>
