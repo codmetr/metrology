@@ -228,7 +228,7 @@ namespace KipTM.ViewModel.Checks
             _methodic.ChannelType = _connection;
             // Задаем эталон
             if (_ethalonTypeKey != null && _ethalonChannelType != null)
-                _methodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType), _ethalonChannelType);
+                _methodic.SetEthalonChannel(_ethalonChannel as IEthalonChannel, _ethalonChannelType);
             else
                 _methodic.SetEthalonChannel(_userEchalonChannel, null);
             // Запускаем

@@ -14,7 +14,7 @@ namespace KipTM.Model.Channels
         private readonly PACE1000Model _paseModel;
 
         private bool _isAutoupdate = false;
-        private TimeSpan _autoupdatePeriod = TimeSpan.FromMilliseconds(100);
+        private TimeSpan _autoupdatePeriod = TimeSpan.FromMilliseconds(500);
         private bool _isActive;
 
         public PACEEthalonChannel(PACE1000Model paseModel)
@@ -124,7 +124,7 @@ namespace KipTM.Model.Channels
             UpdateState();
             Task.Run(() =>
             {
-                Task.Delay(_autoupdatePeriod);
+                Thread.Sleep(_autoupdatePeriod);
                 AutoUpdate();
             });
         }
