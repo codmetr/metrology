@@ -60,6 +60,8 @@ namespace KipTM.ViewModel.Services
             SelectedUnit = _avalableUnits.First();
         }
 
+        public string Title { get { return ADTSModel.Model; } }
+
         public void Start(ADTSModel model)
         {
             if (_model != null)
@@ -75,11 +77,14 @@ namespace KipTM.ViewModel.Services
             }
         }
 
-        public string Title { get { return ADTSModel.Model; } }
-
         public void Start(ITransportChannelType channel)
         {
-            var model = _deviceManager.GetModel<ADTSModel>();
+            Start(_deviceManager.GetModel<ADTSModel>());
+        }
+
+        public void Start(ITransportChannelType channel, ADTSModel adts)
+        {
+            var model = adts;
             model.Start(channel);
             Start(model);
         }

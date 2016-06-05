@@ -108,6 +108,7 @@
     <Compile Include="Model\ArchiveService.cs" />
     <Compile Include="Model\Channels\PACEEchalonChannel.cs" />
     <Compile Include="Model\Checks\ADTSChechPoint.cs" />
+    <Compile Include="Model\Checks\ADTSMethodBase.cs" />
     <Compile Include="Model\Checks\ADTSTestMethod.cs" />
     <Compile Include="Model\Checks\CheckConfig.cs" />
     <Compile Include="Model\Checks\EventArgs\EventArgEnd.cs" />

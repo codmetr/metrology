@@ -208,11 +208,11 @@ namespace KipTM.ViewModel.Checks
         private void DoStart()
         {
             TitleBtnNext = "Далее";
-            _methodic.Address = 1;
             //var visaSett = _connection.SelectedChannel.Settings as VisaSettings;
             //if (visaSett != null)
             //    visaSett.Address = _connection.Address;
             _methodic.ChannelType = _connection;
+            _adtsViewModel.Start(_methodic.GetADTS());
             // Задаем эталон
             if (_ethalonTypeKey != null && _ethalonChannelType != null)
                 _methodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType), _ethalonChannelType);

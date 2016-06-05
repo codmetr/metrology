@@ -94,7 +94,8 @@
                 </TabItem>
             </TabControl>
             <StackPanel Grid.Column="1" Grid.Row="0">
-                <ContentPresenter Content="{Binding ADTS}"/>
+                <ContentPresenter Content="{Binding ADTS}" />
+                <Button Content="Принять текущее значение за точку" Command="{Binding SetCurrentValueAsPoint}"/>
             </StackPanel>
             <GroupBox Header="Ввод корректировки ADTS" Grid.Column="1" Grid.Row="1" 
                       Visibility="{Binding IsUserChannel, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -112,7 +113,7 @@
                       Visibility="{Binding IsNotUserChannel, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ContentPresenter Content="{Binding EthalonChannelViewModel, UpdateSourceTrigger=PropertyChanged}"/>
             </GroupBox>
-            <TextBlock Grid.Column="1" Grid.Row="2"
+            <TextBlock Name="tbNoteMsg" Grid.Column="1" Grid.Row="2"
                        VerticalAlignment="Bottom" TextWrapping="Wrap" TextAlignment="Center" Margin="5"
                        Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel Grid.Column="1" Grid.Row="3"

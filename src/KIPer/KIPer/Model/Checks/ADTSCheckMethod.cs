@@ -16,111 +16,41 @@ using Tools;
 
 namespace KipTM.Model.Checks
 {
-    public class ADTSCheckMethod : ICheckMethod
+    public class ADTSCheckMethod : ADTSMethodBase
     {
         public static string Key = "Калибровка ADTS";
-        public const string KeySettingsPS = "ADTSCalibrationPs";
-        public const string KeySettingsPT = "ADTSCalibrationPt";
-        public const string KeySettingsPSPT = "ADTSCalibrationPsPt";
 
         public const string KeyPoints = "Points";
         public const string KeyRate = "Rate";
         public const string KeyUnit = "Unit";
         public const string KeyChannel = "Channel";
 
-        private const string TitleMethod = "Калибровка ADTS";
+        private ITestStep _currenTestStep = null;
+        private readonly object _currenTestStepLocker = new object();
 
-        private ADTSModel _adts;
-        private CancellationTokenSource _cancelSource;
-        private readonly NLog.Logger _logger;
-
-        private CalibChannel _calibChan;
-        private IEthalonChannel _ethalonChannel;
-        private IUserChannel _userChannel;
-
-        public ADTSCheckMethod(NLog.Logger logger)
+        public ADTSCheckMethod(NLog.Logger logger) : base(logger)
         {
-            _logger = logger;
-            _cancelSource = new CancellationTokenSource();
-        }
-
-        public ITransportChannelType ChannelType;
-
-        public ITransportChannelType EthalonChannelType;
-
-        public string Title{get { return TitleMethod; }}
-
-        public IEnumerable<ADTSChechPoint> Points { get; set; }
-
-        public CalibChannel Channel{get { return _calibChan; } set { _calibChan = value; }}
-
-        public string ChannelKey
-        {
-            get
-            {
-                switch (_calibChan)
-                {
-                    case CalibChannel.PT:
-                        return KeySettingsPS;
-                    case CalibChannel.PS:
-                        return KeySettingsPT;
-                    case CalibChannel.PTPS:
-                        return KeySettingsPSPT;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
-
-        public void SetEthalonChannel(IEthalonChannel ethalonChannel, ITransportChannelType transport)
-        {
-            _ethalonChannel = ethalonChannel;
-            EthalonChannelType = transport;
-            foreach (var testStep in Steps)
-            {
-                var step = testStep as DoPoint;
-                if(step==null)
-                    continue;
-                step.SetEthalonChannel(ethalonChannel);
-            }
-        }
-
-        public void SetUserChannel(IUserChannel userChannel)
-        {
-            _userChannel = userChannel;
-            foreach (var testStep in Steps)
-            {
-                var step = testStep as Finish;
-                if (step == null)
-                    continue;
-                step.SetUserChannel(_userChannel);
-            }
-        }
-
-        public void SetADTS(ADTSModel adts)
-        {
-            _adts = adts;
-            
+            MethodName = "Калибровка ADTS";
         }
 
         /// <summary>
         /// Инициализация 
         /// </summary>
         /// <returns></returns>
-        public bool Init(IPropertyPool propertyes)
+        public override bool Init(IPropertyPool propertyes)
         {
             var points = propertyes.GetProperty<List<ADTSChechPoint>>(ADTSCheckMethod.KeyPoints);
             var channel = propertyes.GetProperty<CalibChannel>(ADTSCheckMethod.KeyChannel);
             var rate = propertyes.GetProperty<double>(ADTSCheckMethod.KeyRate);
             var unit = propertyes.GetProperty<PressureUnits>(ADTSCheckMethod.KeyUnit);
-            return Init(new ADTSCheckParameters(channel, points, rate, unit));
+            return Init(new ADTSMethodParameters(channel, points, rate, unit));
         }
 
         /// <summary>
         /// Инициализация 
         /// </summary>
         /// <returns></returns>
-        public bool Init(ADTSCheckParameters parameters)
+        public override bool Init(ADTSMethodParameters parameters)
         {
             _logger.With(l => l.Trace("Init ADTSCheckMethodic"));
 
@@ -134,7 +64,7 @@ namespace KipTM.Model.Checks
             // добавление шага инициализации
             ITestStep step = new Init("Инициализация калибровки", _adts, _calibChan, _logger);
             steps.Add(step);
-            step.ResultUpdated += step_ResultUpdated;
+            step.ResultUpdated += StepResultUpdated;
 
             // добавление шага прохождения точек
             Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
@@ -142,7 +72,7 @@ namespace KipTM.Model.Checks
             foreach (var point in parameters.Points)
             {
                 step = new DoPoint(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger);
-                step.ResultUpdated += step_ResultUpdated;
+                step.ResultUpdated += StepResultUpdated;
                 steps.Add(step);
             }
 
@@ -152,136 +82,46 @@ namespace KipTM.Model.Checks
             if (Steps != null)
                 foreach (var testStep in Steps)
                 {
-                    if (testStep != null) testStep.ResultUpdated -= step_ResultUpdated;
+                    if (testStep != null) testStep.ResultUpdated -= StepResultUpdated;
                 }
             Steps = steps;
             return true;
         }
 
-        void step_ResultUpdated(object sender, EventArgTestResult e)
-        {
-            OnResultUpdated(e);
-        }
-
         /// <summary>
-        /// Запуск калибровки
+        /// Вызывается перед запуском шага
         /// </summary>
-        /// <returns></returns>
-        public bool Start()
+        /// <param name="step"></param>
+        protected override void PrepareStartStep(ITestStep step)
         {
-            _adts.Start(ChannelType); 
-            var cancel = _cancelSource.Token;
-            ManualResetEvent whStep = new ManualResetEvent(false);
-            var waitPeriod = TimeSpan.FromMilliseconds(10);
-            if (!_ethalonChannel.Activate(EthalonChannelType))
-                throw new Exception(string.Format("Can not Activate ethalon channel: {0}", _ethalonChannel));
-            foreach (var testStep in Steps)
+            lock (_currenTestStepLocker)
             {
-                whStep.Reset();
-                testStep.Start(whStep);
-                while (!whStep.WaitOne(waitPeriod))
-                {
-                    if (cancel.IsCancellationRequested)
-                    {
-                        testStep.Stop();
-                        break;
-                    }
-                }
-                if (cancel.IsCancellationRequested)
-                {
-                    break;
-                }
-            }
-            return true;
-
-        }
-
-        public IEnumerable<ITestStep> Steps
-        {
-            get { return _steps; }
-            private set
-            {
-                _steps = value;
-                OnStepsChanged();
+                _currenTestStep = step;
             }
         }
 
-        public void Stop()
-        {
-            if (Steps != null)
-                foreach (var testStep in Steps)
-                {
-                    if (testStep != null) testStep.ResultUpdated -= step_ResultUpdated;
-                }
-            _cancelSource.Cancel();
-            _cancelSource = new CancellationTokenSource();
-        }
-
         /// <summary>
-        /// Отмена
+        /// Вызывается после завершения шага
         /// </summary>
-        public void Cancel()
+        /// <param name="step"></param>
+        protected override void AfterEndStep(ITestStep step)
         {
-            _cancelSource.Cancel();
+            lock (_currenTestStepLocker)
+            {
+                _currenTestStep = null;
+            }
         }
 
-        /// <summary>
-        /// Ошибка
-        /// </summary>
-        public EventHandler<EventArgError> Error;
-        
-        /// <summary>
-        /// Изменился прогресс
-        /// </summary>
-        public EventHandler<EventArgProgress> Progress;
-
-        /// <summary>
-        /// Изменился набор точек
-        /// </summary>
-        public EventHandler PointsChanged;
-
-        /// <summary>
-        /// Изменился набор шагов
-        /// </summary>
-        public EventHandler StepsChanged;
-
-        /// <summary>
-        /// Получен результат
-        /// </summary>
-        public EventHandler<EventArgTestResult> ResultUpdated;
-
-        private IEnumerable<ITestStep> _steps;
-
-        #region Service methods
-        protected virtual void OnError(EventArgError obj)
+        public void SetCurrentValueAsPoint()
         {
-            var handler = Error;
-            if (handler != null) handler(this, obj);
+            DoPoint pointstep;
+            lock (_currenTestStepLocker)
+            {
+                pointstep = _currenTestStep as DoPoint;
+            }
+            if (pointstep == null)
+                return;
+            pointstep.SetCurrentValueAsPoint();
         }
-
-        protected virtual void OnProgress(EventArgProgress obj)
-        {
-            var handler = Progress;
-            if (handler != null) handler(this, obj);
-        }
-
-        protected virtual void OnPointsChanged()
-        {
-            var handler = PointsChanged;
-            if (handler != null) handler(this, null);
-        }
-
-        protected virtual void OnStepsChanged()
-        {
-            var handler = StepsChanged;
-            if (handler != null) handler(this, null);
-        }
-
-        protected virtual void OnResultUpdated(EventArgTestResult e)
-        {
-            var handler = ResultUpdated;
-            if (handler != null) handler(this, e);
-        }
-        #endregion
     }
 }

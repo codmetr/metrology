@@ -188,6 +188,8 @@ namespace KipTM.ViewModel.Checks
 
         public ObservableCollection<KeyValuePair<ParameterDescriptor, ParameterResult>> Results { get; private set; }
 
+        public ICommand SetCurrentValueAsPoint { get { return new CommandWrapper(DoStopOnCurrentValue); } }
+        
         public ICommand CorrectRealValue { get { return new CommandWrapper(DoCorrectRealVal); } }
 
         public ICommand Start { get { return new GalaSoft.MvvmLight.Command.RelayCommand(()=>_currentAction()); } }
@@ -214,6 +216,11 @@ namespace KipTM.ViewModel.Checks
         #endregion
 
         #region Service methods
+
+        private void DoStopOnCurrentValue()
+        {
+            _methodic.SetCurrentValueAsPoint();
+        }
 
         private void DoCorrectRealVal(object param)
         {

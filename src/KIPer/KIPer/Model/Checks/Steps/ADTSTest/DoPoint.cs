@@ -19,6 +19,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
         private readonly PressureUnits _unit;
         private IEthalonChannel _ethalonChannel;
         private readonly NLog.Logger _logger;
+        private ManualResetEvent _setCurrentValueAsPoint = new ManualResetEvent(false);
         private CancellationTokenSource _cancellationTokenSource;
 
         public DoPoint(string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate, PressureUnits unit, IEthalonChannel ethalonChannel, Logger logger)
@@ -35,57 +36,34 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
+        /// <summary>
+        /// Запустить шаг
+        /// </summary>
+        /// <param name="whEnd"></param>
         public override void Start(EventWaitHandle whEnd)
         {
             TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
             var cancel = _cancellationTokenSource.Token;
+            var point = _point;
 
             OnStarted();
-            if (!_adts.SetPressureUnit(_unit, cancel))
-            {
-                _logger.With(l => l.Trace(string.Format("[ERROR] Set unit for point")));
-                whEnd.Set();
-                OnEnd(new EventArgEnd(false));
+            // Установка единиц измерений
+            if (!DoOne(whEnd, cancel, () => _adts.SetPressureUnit(_unit, cancel), "[ERROR] Set unit for point"))
                 return;
-            }
-            if (cancel.IsCancellationRequested)
-            {
-                _logger.With(l => l.Trace(string.Format("Cancel test")));
-                whEnd.Set();
-                OnEnd(new EventArgEnd(false));
-                return;
-            }
-            if (!_adts.SetRate(_param, _rate, cancel))
-            {
-                _logger.With(l => l.Trace(string.Format("[ERROR] Set rate for point")));
-                whEnd.Set();
-                OnEnd(new EventArgEnd(false));
-                return;
-            }
-            if (cancel.IsCancellationRequested)
-            {
-                _logger.With(l => l.Trace(string.Format("Cancel test")));
-                whEnd.Set();
-                OnEnd(new EventArgEnd(false));
-                return;
-            }
-            if (!_adts.SetParameter(_param, _point, cancel))
-            {
-                _logger.With(l => l.Trace(string.Format("[ERROR] Set point")));
-                whEnd.Set();
-                OnEnd(new EventArgEnd(false));
-                return;
-            }
-            if (cancel.IsCancellationRequested)
-            {
-                _logger.With(l => l.Trace(string.Format("Cancel test")));
-                whEnd.Set();
-                OnEnd(new EventArgEnd(false));
-                return;
-            }
-            EventWaitHandle wh = _param == Parameters.PT ? _adts.WaitPitotSetted() : _adts.WaitPressureSetted();
 
-            while (wh.WaitOne(waitPointPeriod))
+            // Установить скорость
+            if (!DoOne(whEnd, cancel, () => _adts.SetRate(_param, _rate, cancel), "[ERROR] Set rate for point"))
+                return;
+
+            // Установить цель для ADST
+            if (!DoOne(whEnd, cancel, () => _adts.SetParameter(_param, point, cancel), "[ERROR] Set point"))
+                return;
+
+            // Дождаться установки параметра или примененения текущей точки как целевой
+            EventWaitHandle wh = _param == Parameters.PT ? _adts.WaitPitotSetted() : _adts.WaitPressureSetted();
+            var whArray = new WaitHandle[] {wh, _setCurrentValueAsPoint};
+            int exitIndex = WaitHandle.WaitAny(whArray, waitPointPeriod);
+            while (exitIndex < 0)
             {
                 if (cancel.IsCancellationRequested)
                 {
@@ -94,46 +72,52 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
                     OnEnd(new EventArgEnd(false));
                     return;
                 }
+                exitIndex = WaitHandle.WaitAny(whArray, waitPointPeriod);
+            }
+            if (exitIndex == 1)
+            {
+                _adts.StopWaitStatus(wh);
+                point = _param == Parameters.PT ? _adts.Pitot.GetValueOrDefault(_point) : _adts.Pressure.GetValueOrDefault(_point);
+                _adts.SetParameter(_param, point, cancel);
             }
 
-            if (cancel.IsCancellationRequested)
+            if (IsCancel(whEnd, cancel))
             {
-                _logger.With(l => l.Trace(string.Format("Cancel test")));
-                whEnd.Set();
-                OnEnd(new EventArgEnd(false));
                 return;
             }
-            var realValue = _ethalonChannel.GetEthalonValue(_point, cancel);
 
-            if (cancel.IsCancellationRequested)
+            if (IsCancel(whEnd, cancel))
             {
-                _logger.With(l => l.Trace(string.Format("Cancel test")));
-                whEnd.Set();
-                OnEnd(new EventArgEnd(false));
                 return;
             }
-            bool correctPoint = Math.Abs(Math.Abs(_point) - Math.Abs(realValue)) <= _tolerance;
+            // Получить эталонное значение
+            var realValue = _ethalonChannel.GetEthalonValue(point, cancel);
+
+            // Расчитать погрешность и зафиксировать реультата
+            bool correctPoint = Math.Abs(Math.Abs(point) - Math.Abs(realValue)) <= _tolerance;
             _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
-            OnResultUpdated( new EventArgTestResult(new ParameterDescriptor("EthalonValue", _point, ParameterType.RealValue),
+            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("EthalonValue", point, ParameterType.RealValue),
                     new ParameterResult(DateTime.Now, realValue)));
-            OnResultUpdated( new EventArgTestResult(new ParameterDescriptor("IsCorrect", _point, ParameterType.IsCorrect),
+            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("IsCorrect", point, ParameterType.IsCorrect),
                     new ParameterResult(DateTime.Now, correctPoint)));
-
-            if (cancel.IsCancellationRequested)
+            if (IsCancel(whEnd, cancel))
             {
-                _logger.With(l => l.Trace(string.Format("Cancel test")));
-                whEnd.Set();
-                OnEnd(new EventArgEnd(false));
                 return;
             }
+
+            // Сдвинуть прогресс
             OnProgressChanged(new EventArgProgress(100,
                 string.Format("Точка {0}: Реальное значени {1}({2})",
-                    _point, realValue, correctPoint ? "correct" : "incorrect")));
+                    point, realValue, correctPoint ? "correct" : "incorrect")));
             whEnd.Set();
             OnEnd(new EventArgEnd(true));
             return;
         }
 
+        /// <summary>
+        /// Остановить шаг
+        /// </summary>
+        /// <returns></returns>
         public override bool Stop()
         {
             _cancellationTokenSource.Cancel();
@@ -141,9 +125,63 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             return true;
         }
 
+        /// <summary>
+        /// Установить эталонный канал
+        /// </summary>
+        /// <param name="ehalon"></param>
         public void SetEthalonChannel(IEthalonChannel ehalon)
         {
             _ethalonChannel = ehalon;
+        }
+
+        /// <summary>
+        /// Установить теущее значение как точку
+        /// </summary>
+        public void SetCurrentValueAsPoint()
+        {
+            _setCurrentValueAsPoint.Set();
+        }
+
+        /// <summary>
+        /// Обертка для выполнения подшага
+        /// </summary>
+        /// <param name="whEnd"></param>
+        /// <param name="cancel"></param>
+        /// <param name="func"></param>
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
+        private bool DoOne(EventWaitHandle whEnd, CancellationToken cancel, Func<bool> func, string errorMessage )
+        {
+            if (!func())
+            {
+                _logger.With(l => l.Trace(errorMessage));
+                whEnd.Set();
+                OnEnd(new EventArgEnd(false));
+                return false;
+            }
+            if (IsCancel(whEnd, cancel))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Обертка для проверки на "отмену" операции
+        /// </summary>
+        /// <param name="whEnd"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
+        private bool IsCancel(EventWaitHandle whEnd, CancellationToken cancel)
+        {
+            if (cancel.IsCancellationRequested)
+            {
+                _logger.With(l => l.Trace(string.Format("Cancel test")));
+                whEnd.Set();
+                OnEnd(new EventArgEnd(false));
+                return false;
+            }
+            return true;
         }
     }
 }

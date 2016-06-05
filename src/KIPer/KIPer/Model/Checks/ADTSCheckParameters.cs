@@ -9,14 +9,14 @@ using KipTM.Settings;
 
 namespace KipTM.Model.Checks
 {
-    public class ADTSCheckParameters
+    public class ADTSMethodParameters
     {
         private readonly CalibChannel _calibChannel;
         private readonly IEnumerable<ADTSChechPoint> _points;
         private readonly double _rate;
         private readonly PressureUnits _unit;
 
-        public ADTSCheckParameters(CalibChannel calibChannel, IEnumerable<ADTSChechPoint> points, double rate, PressureUnits unit)
+        public ADTSMethodParameters(CalibChannel calibChannel, IEnumerable<ADTSChechPoint> points, double rate, PressureUnits unit)
         {
             _calibChannel = calibChannel;
             _points = points;

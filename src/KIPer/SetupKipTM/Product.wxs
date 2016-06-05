@@ -67,7 +67,6 @@
         <File Name="GalaSoft.MvvmLight.Platform.dll" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Platform.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="GalaSoft.MvvmLight.Extras.dll" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Extras.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="GalaSoft.MvvmLight.dll" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="NModbus4.dll" Source="$(var.KipTM.TargetDir)NModbus4.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A1A">
         <File Name="$(var.MainLoop.TargetFileName)" Source="$(var.MainLoop.TargetPath)" KeyPath="yes" />

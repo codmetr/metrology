@@ -30,20 +30,21 @@ namespace KipTM.Model.Checks
 
         private const string TitleMethod = "Поверка ADTS";
 
-        private ADTSModel _adts;
-        private  CancellationTokenSource _cancelSource;
-        private readonly NLog.Logger _logger;
+        protected ADTSModel _adts;
+        protected CancellationTokenSource _cancelSource;
+        protected readonly NLog.Logger _logger;
 
         private CalibChannel _calibChan;
         private IEthalonChannel _ethalonChannel;
+
+        private ITestStep _currenTestStep = null;
+        private readonly object _currenTestStepLocker = new object();
 
         public ADTSTestMethod(NLog.Logger logger)
         {
             _logger = logger;
             _cancelSource = new CancellationTokenSource();
         }
-
-        public int Address;
 
         public ITransportChannelType ChannelType;
 
@@ -91,6 +92,12 @@ namespace KipTM.Model.Checks
             _adts = adts;
         }
 
+
+        public ADTSModel GetADTS()
+        {
+            return _adts;
+        }
+
         /// <summary>
         /// Инициализация 
         /// </summary>
@@ -101,14 +108,14 @@ namespace KipTM.Model.Checks
             var channel = propertyes.GetProperty<CalibChannel>(ADTSCheckMethod.KeyChannel);
             var rate = propertyes.GetProperty<double>(ADTSCheckMethod.KeyRate);
             var unit = propertyes.GetProperty<PressureUnits>(ADTSCheckMethod.KeyUnit);
-            return Init(new ADTSCheckParameters(channel, points, rate, unit));
+            return Init(new ADTSMethodParameters(channel, points, rate, unit));
         }
 
         /// <summary>
         /// Инициализация 
         /// </summary>
         /// <returns></returns>
-        public bool Init(ADTSCheckParameters parameters)
+        public bool Init(ADTSMethodParameters parameters)
         {
             _logger.With(l => l.Trace("Init ADTSCheckMethodic"));
 
@@ -122,7 +129,7 @@ namespace KipTM.Model.Checks
             // добавление шага инициализации
             ITestStep step = new Init("Инициализация поверки", _adts, _calibChan, _logger);
             steps.Add(step);
-            step.ResultUpdated += step_ResultUpdated;
+            step.ResultUpdated += StepResultUpdated;
 
             // добавление шага прохождения точек
             Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
@@ -130,7 +137,7 @@ namespace KipTM.Model.Checks
             foreach (var point in parameters.Points)
             {
                 step = new DoPoint(string.Format("Поверка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger);
-                step.ResultUpdated += step_ResultUpdated;
+                step.ResultUpdated += StepResultUpdated;
                 steps.Add(step);
             }
 
@@ -138,15 +145,10 @@ namespace KipTM.Model.Checks
                 foreach (var testStep in Steps)
                 {
                     if (testStep != null)
-                        testStep.ResultUpdated -= step_ResultUpdated;
+                        testStep.ResultUpdated -= StepResultUpdated;
                 }
             Steps = steps;
             return true;
-        }
-
-        void step_ResultUpdated(object sender, EventArgTestResult e)
-        {
-            OnResultUpdated(e);
         }
 
         /// <summary>
@@ -165,6 +167,10 @@ namespace KipTM.Model.Checks
             {
                 whStep.Reset();
                 testStep.Start(whStep);
+                lock (_currenTestStepLocker)
+                {
+                    _currenTestStep = testStep;
+                }
                 while (!whStep.WaitOne(waitPeriod))
                 {
                     if (cancel.IsCancellationRequested)
@@ -178,9 +184,25 @@ namespace KipTM.Model.Checks
                     break;
                 }
             }
+            lock (_currenTestStepLocker)
+            {
+                _currenTestStep = null;
+            }
             _ethalonChannel.Stop();
             return true;
 
+        }
+
+        public void SetCurrentValueAsPoint()
+        {
+            DoPoint pointstep;
+            lock (_currenTestStepLocker)
+            {
+                pointstep = _currenTestStep as DoPoint;
+            }
+            if(pointstep==null)
+                return;
+            pointstep.SetCurrentValueAsPoint();
         }
 
         public IEnumerable<ITestStep> Steps
@@ -198,7 +220,7 @@ namespace KipTM.Model.Checks
             if (Steps != null)
                 foreach (var testStep in Steps)
                 {
-                    if (testStep != null) testStep.ResultUpdated -= step_ResultUpdated;
+                    if (testStep != null) testStep.ResultUpdated -= StepResultUpdated;
                 }
             _cancelSource.Cancel();
         }
@@ -240,6 +262,12 @@ namespace KipTM.Model.Checks
         private IEnumerable<ITestStep> _steps;
 
         #region Service methods
+
+        void StepResultUpdated(object sender, EventArgTestResult e)
+        {
+            OnResultUpdated(e);
+        }
+
         protected virtual void OnError(EventArgError obj)
         {
             var handler = Error;
