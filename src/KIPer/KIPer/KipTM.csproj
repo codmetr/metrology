@@ -367,6 +367,9 @@
       <CustomToolNamespace>KipTM</CustomToolNamespace>
     </EmbeddedResource>
     <None Include="App.config" />
+    <None Include="Nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

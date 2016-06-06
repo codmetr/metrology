@@ -67,9 +67,11 @@ namespace KipTM.ViewModel
             _propertyPool = propertyPool;
             _deviceManager = deviceManager;
             Check = GetViewModelFor(_checkConfig.SelectedCheckType);
+            
             if (Check != null)
             {
                 Check.SetConnection(_checkConfigViewModel.GetCheckedDeviseChannel());
+                UpdateEthalon();
             }
         }
         #endregion

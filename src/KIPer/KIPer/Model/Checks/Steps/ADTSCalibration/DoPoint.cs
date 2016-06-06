@@ -178,9 +178,9 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
                 _logger.With(l => l.Trace(string.Format("Cancel test")));
                 whEnd.Set();
                 OnEnd(new EventArgEnd(false));
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
 
     }

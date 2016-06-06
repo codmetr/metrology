@@ -20,8 +20,8 @@ namespace KipTM.Model
             var adtsTest = new ADTSTestMethod(NLog.LogManager.GetLogger("ADTSTestMethod"));
             _methods.Add(ADTSModel.Key,new Dictionary<string, ICheckMethod>()
             {
-                {ADTSCheckMethod.Key, adtsCheck},
                 {ADTSTestMethod.Key, adtsTest},
+                {ADTSCheckMethod.Key, adtsCheck},
             }); 
 
         }

@@ -62,7 +62,7 @@ namespace KipTM.ViewModel.Services
 
         public string Title { get { return ADTSModel.Model; } }
 
-        public void Start(ADTSModel model)
+        public void Start(ADTSModel model, ITransportChannelType channel)
         {
             if (_model != null)
             {
@@ -72,6 +72,7 @@ namespace KipTM.ViewModel.Services
             _model = model;
             if (_model != null)
             {
+                _model.Start(channel);
                 _model.StartAutoUpdate();
                 AttachEvents(_model);
             }
@@ -79,14 +80,7 @@ namespace KipTM.ViewModel.Services
 
         public void Start(ITransportChannelType channel)
         {
-            Start(_deviceManager.GetModel<ADTSModel>());
-        }
-
-        public void Start(ITransportChannelType channel, ADTSModel adts)
-        {
-            var model = adts;
-            model.Start(channel);
-            Start(model);
+            Start(_deviceManager.GetModel<ADTSModel>(), channel);
         }
 
         public void Stop()
@@ -109,6 +103,12 @@ namespace KipTM.ViewModel.Services
 
         public ICommand SetPressureUnit { get { return new CommandWrapper(() => _setPressureUnit(_selectedUnit.Unit)); } }
 
+        public ICommand SetMeasuring { get { return new CommandWrapper(_setMeasuring); } }
+
+        public ICommand SetControl { get { return new CommandWrapper(_setControl); } }
+
+        public ICommand SetGround { get { return new CommandWrapper(_goToGround); } }
+        
         #region State
         /// <summary>
         /// Стабилизированно на значении
@@ -317,6 +317,21 @@ namespace KipTM.ViewModel.Services
         private void _setPressureUnit(PressureUnits unit)
         {
             _model.SetPressureUnit(unit, _cancellation.Token);
+        }
+
+        private void _setControl()
+        {
+            _model.SetState(State.Control, _cancellation.Token);
+        }
+
+        private void _setMeasuring()
+        {
+            _model.SetState(State.Measure, _cancellation.Token);
+        }
+
+        private void _goToGround()
+        {
+            _model.GoToGround(_cancellation.Token);
         }
 
         string _pressureUnitToString(PressureUnits unit)

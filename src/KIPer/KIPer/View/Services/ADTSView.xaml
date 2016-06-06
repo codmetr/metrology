@@ -43,6 +43,15 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource TitleStyle}">Давление PS:</TextBlock>
                 <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Pressure}" Style="{StaticResource ValueStyle}"/>
@@ -65,8 +74,35 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Button Grid.Column="3" Grid.Row="2" Command="{Binding UpdatePressureUnit}" VerticalAlignment="Center">Перечитать</Button>
-                <Button Grid.Column="4" Grid.Row="2" VerticalAlignment="Center"
-                            Command="{Binding SetPressureUnit}">Установить</Button>
+                <Button Grid.Column="4" Grid.Row="2" VerticalAlignment="Center" Command="{Binding SetPressureUnit}">Установить</Button>
+                
+                <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource TitleStyle}">Состояние:</TextBlock>
+                <TextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Text="{Binding StateADTS}" Style="{StaticResource ValueStyle}"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Text="Наращивает"/>
+                <pressureElementControls:Lamp Grid.Row="4" Grid.Column="3" HorizontalAlignment="Left" Height="15" Value="{Binding IsRamping, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Text="Стабилизированно на значении"/>
+                <pressureElementControls:Lamp Grid.Row="5" Grid.Column="3" HorizontalAlignment="Left" Height="15" Value="{Binding IsStableAtAimValue, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Text="Стабилизированно на уровне земли"/>
+                <pressureElementControls:Lamp Grid.Row="6" Grid.Column="3" HorizontalAlignment="Left" Height="15" Value="{Binding IsSafeAtGround, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Text="PS устанавливается"/>
+                <pressureElementControls:Lamp Grid.Row="7" Grid.Column="3" HorizontalAlignment="Left" Height="15" Value="{Binding IsPsRampingAndAchievingRate, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Text="PS установлено"/>
+                <pressureElementControls:Lamp Grid.Row="8" Grid.Column="3" HorizontalAlignment="Left" Height="15" Value="{Binding IsPsAtSetPointAndInControlMode, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Text="PT устанавливается"/>
+                <pressureElementControls:Lamp Grid.Row="9" Grid.Column="3" HorizontalAlignment="Left" Height="15" Value="{Binding IsPtRampingAndAchievingRate, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Text="PT установлено"/>
+                <pressureElementControls:Lamp Grid.Row="10" Grid.Column="3" HorizontalAlignment="Left" Height="15" Value="{Binding IsPtAtSetPointAndInControlMode, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Button Grid.Row="11" Grid.Column="3" Grid.ColumnSpan="2" Command="{Binding SetControl}" VerticalAlignment="Center">В режим контроль</Button>
+                <Button Grid.Row="12" Grid.Column="3" Grid.ColumnSpan="2" Command="{Binding SetMeasuring}" VerticalAlignment="Center">В режим измерение</Button>
+                <Button Grid.Row="13" Grid.Column="3" Grid.ColumnSpan="2" Command="{Binding SetGround}" VerticalAlignment="Center">Спустить на землю</Button>
             </Grid>
 
             <!--<StackPanel Orientation="Vertical">

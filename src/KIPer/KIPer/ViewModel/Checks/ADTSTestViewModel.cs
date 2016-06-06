@@ -107,6 +107,8 @@ namespace KipTM.ViewModel.Checks
         {
             _ethalonTypeKey = ethalonTypeKey;
             _ethalonChannelType = settings;
+            IsUserChannel = _ethalonTypeKey == null;
+            EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType);
         }
 
         public void SlectUserEthalonChannel()
@@ -114,6 +116,8 @@ namespace KipTM.ViewModel.Checks
             _methodic.SetEthalonChannel(_userEchalonChannel, null);
             _ethalonTypeKey = null;
             _ethalonChannelType = null;
+            IsUserChannel = true;
+            EthalonChannel = null;
         }
         #endregion
 
@@ -160,6 +164,8 @@ namespace KipTM.ViewModel.Checks
 
         public ObservableCollection<KeyValuePair<ParameterDescriptor, ParameterResult>> Results { get; private set; }
 
+        public ICommand SetCurrentValueAsPoint { get { return new CommandWrapper(DoStopOnCurrentValue); } }
+        
         public ICommand CorrectRealValue { get { return new CommandWrapper(DoCorrectRealVal); } }
 
         public ICommand Start { get { return new GalaSoft.MvvmLight.Command.RelayCommand(()=>_currentAction()); } }
@@ -198,6 +204,11 @@ namespace KipTM.ViewModel.Checks
             }
         }
 
+        private void DoStopOnCurrentValue()
+        {
+            _methodic.SetCurrentValueAsPoint();
+        }
+
         private void DoCorrectRealVal(object param)
         {
             double correction;
@@ -212,7 +223,7 @@ namespace KipTM.ViewModel.Checks
             //if (visaSett != null)
             //    visaSett.Address = _connection.Address;
             _methodic.ChannelType = _connection;
-            _adtsViewModel.Start(_connection, _methodic.GetADTS());
+            _adtsViewModel.Start(_methodic.GetADTS(),_connection);
             // Задаем эталон
             if (_ethalonTypeKey != null && _ethalonChannelType != null)
                 _methodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType), _ethalonChannelType);

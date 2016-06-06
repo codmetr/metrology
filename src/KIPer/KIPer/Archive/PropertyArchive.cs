@@ -68,14 +68,14 @@ namespace KipTM.Archive
         {
             var points = new List<ADTSChechPoint>()
             {
-                new ADTSChechPoint(){Pressure = 27.62,   Tolerance = 0.1},
-                new ADTSChechPoint(){Pressure = 72.00,   Tolerance = 0.1},
-                new ADTSChechPoint(){Pressure = 189.00,  Tolerance = 0.1},
-                new ADTSChechPoint(){Pressure = 466.00,  Tolerance = 0.1},
-                new ADTSChechPoint(){Pressure = 697.00,  Tolerance = 0.1},
-                new ADTSChechPoint(){Pressure = 843.00,  Tolerance = 0.1},
-                new ADTSChechPoint(){Pressure = 1013.00, Tolerance = 0.1},
                 new ADTSChechPoint(){Pressure = 1100.00, Tolerance = 0.1},
+                new ADTSChechPoint(){Pressure = 1013.00, Tolerance = 0.1},
+                new ADTSChechPoint(){Pressure = 843.00,  Tolerance = 0.1},
+                new ADTSChechPoint(){Pressure = 697.00,  Tolerance = 0.1},
+                new ADTSChechPoint(){Pressure = 466.00,  Tolerance = 0.1},
+                new ADTSChechPoint(){Pressure = 189.00,  Tolerance = 0.1},
+                new ADTSChechPoint(){Pressure = 72.00,   Tolerance = 0.1},
+                new ADTSChechPoint(){Pressure = 27.62,   Tolerance = 0.1},
             };
             return points;
         }
@@ -84,19 +84,19 @@ namespace KipTM.Archive
         {
             var points = new List<ADTSChechPoint>()
             {
-                new ADTSChechPoint(){Pressure = 27.62,   Tolerance = 0.24},
-                new ADTSChechPoint(){Pressure = 72.00,   Tolerance = 0.24},
-                new ADTSChechPoint(){Pressure = 189.00,  Tolerance = 0.25},
-                new ADTSChechPoint(){Pressure = 466.00,  Tolerance = 0.25},
-                new ADTSChechPoint(){Pressure = 697.00,  Tolerance = 0.26},
-                new ADTSChechPoint(){Pressure = 843.00,  Tolerance = 0.27},
-                new ADTSChechPoint(){Pressure = 1013.00, Tolerance = 0.27},
-                new ADTSChechPoint(){Pressure = 1100.00, Tolerance = 0.28},
-                new ADTSChechPoint(){Pressure = 1655.00, Tolerance = 0.32},
-                new ADTSChechPoint(){Pressure = 2200.00, Tolerance = 0.36},
-                new ADTSChechPoint(){Pressure = 2590.00, Tolerance = 0.40},
-                new ADTSChechPoint(){Pressure = 3000.00, Tolerance = 0.46},
                 new ADTSChechPoint(){Pressure = 3500.00, Tolerance = 0.49},
+                new ADTSChechPoint(){Pressure = 3000.00, Tolerance = 0.46},
+                new ADTSChechPoint(){Pressure = 2590.00, Tolerance = 0.40},
+                new ADTSChechPoint(){Pressure = 2200.00, Tolerance = 0.36},
+                new ADTSChechPoint(){Pressure = 1655.00, Tolerance = 0.32},
+                new ADTSChechPoint(){Pressure = 1100.00, Tolerance = 0.28},
+                new ADTSChechPoint(){Pressure = 1013.00, Tolerance = 0.27},
+                new ADTSChechPoint(){Pressure = 843.00,  Tolerance = 0.27},
+                new ADTSChechPoint(){Pressure = 697.00,  Tolerance = 0.26},
+                new ADTSChechPoint(){Pressure = 466.00,  Tolerance = 0.25},
+                new ADTSChechPoint(){Pressure = 189.00,  Tolerance = 0.25},
+                new ADTSChechPoint(){Pressure = 72.00,   Tolerance = 0.24},
+                new ADTSChechPoint(){Pressure = 27.62,   Tolerance = 0.24},
             };
             return points;
         }

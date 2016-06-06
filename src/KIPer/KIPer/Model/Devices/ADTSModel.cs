@@ -734,7 +734,17 @@ namespace KipTM.Model.Devices
             var isCommpete = new ManualResetEvent(false);
             if (cancel.IsCancellationRequested)
                 return false;
-            _loops.StartMiddleAction(_loopKey, updater);
+            _loops.StartMiddleAction(_loopKey, (trarsport) =>
+            {
+                try
+                {
+                    updater(trarsport);
+                }
+                finally
+                {
+                    isCommpete.Set();
+                }
+            });
             if (cancel.IsCancellationRequested)
                 return false;
             isCommpete.WaitOne();
