@@ -16,6 +16,33 @@
         <Setter Property="Background" Value="#FF818147"/>
     </Style>
 
+    <Style TargetType="TextBox" x:Key="SettedValueStyle">
+        <Setter Property="Margin" Value="3"/>
+        <Setter Property="Background" Value="#FFECECDC"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <DockPanel LastChildFill="True">
+                        <TextBlock DockPanel.Dock="Right" Foreground="Red" FontSize="14" FontWeight="Bold"
+                                                       Text="*"/>
+                        <Border BorderBrush="Green" BorderThickness="1">
+                            <AdornedElementPlaceholder Name="adornerPlaceholder"/>
+                        </Border>
+                    </DockPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="Foreground" Value="Red"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--<Style TargetType="{x:Type TextBox}">
+    </Style>-->
+
     <Style TargetType="TextBlock" x:Key="ValueStateStyle" BasedOn="{StaticResource ValueStyle}">
         <Setter Property="Width" Value="100"/>
     </Style>

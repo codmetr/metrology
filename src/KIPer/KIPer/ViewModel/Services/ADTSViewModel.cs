@@ -37,6 +37,10 @@ namespace KipTM.ViewModel.Services
         private IEnumerable<PressureUnitDescriptor<PressureUnits>> _avalableUnits;
         private PressureUnitDescriptor<PressureUnits> _selectedUnit;
         private CancellationTokenSource _cancellation = new CancellationTokenSource();
+        private double _pressureAim;
+        private double _pitotAim;
+        private double _pitotRateAim;
+        private double _pressureRateAim;
 
         /// <summary>
         /// Initializes a new instance of the ADTSViewModel class.
@@ -108,6 +112,15 @@ namespace KipTM.ViewModel.Services
         public ICommand SetControl { get { return new CommandWrapper(_setControl); } }
 
         public ICommand SetGround { get { return new CommandWrapper(_goToGround); } }
+
+        public ICommand SetPressureAim { get { return new CommandWrapper(_setPressureAim); } }
+
+        public ICommand SetPitotAim { get { return new CommandWrapper(_setPitotAim); } }
+
+        public ICommand SetPressureRate { get { return new CommandWrapper(_setPressureRate); } }
+
+        public ICommand SetPitotRate { get { return new CommandWrapper(_setPitotRate); } }
+
         
         #region State
         /// <summary>
@@ -188,12 +201,52 @@ namespace KipTM.ViewModel.Services
         }
         #endregion
 
+        #region Pressure Aim
+
+        public double PressureAim
+        {
+            get { return _pressureAim; }
+            set { Set(ref _pressureAim, value); }
+        }
+
+        #endregion
+
+        #region Pressure Rate Aim
+
+        public double PressureRateAim
+        {
+            get { return _pressureRateAim; }
+            set { Set(ref _pressureRateAim, value); }
+        }
+
+        #endregion
+
         #region Pitot
         public string Pitot
         {
             get { return _pitot; }
             private set { Set(ref _pitot, value); }
         }
+        #endregion
+
+        #region Pitot Aim
+
+        public double PitotAim
+        {
+            get { return _pitotAim; }
+            set { Set(ref _pitotAim, value); }
+        }
+
+        #endregion
+
+        #region Pitot Rate Aim
+
+        public double PitotRateAim
+        {
+            get { return _pitotRateAim; }
+            set { Set(ref _pitotRateAim, value); }
+        }
+
         #endregion
 
         #region Pressure Unit
@@ -332,6 +385,26 @@ namespace KipTM.ViewModel.Services
         private void _goToGround()
         {
             _model.GoToGround(_cancellation.Token);
+        }
+
+        private void _setPressureAim()
+        {
+            _model.SetParameter(Parameters.PS, PressureAim, _cancellation.Token);
+        }
+
+        private void _setPitotAim()
+        {
+            _model.SetParameter(Parameters.PT, PitotAim, _cancellation.Token);
+        }
+
+        private void _setPressureRate()
+        {
+            _model.SetRate(Parameters.PS, PressureRateAim, _cancellation.Token);
+        }
+
+        private void _setPitotRate()
+        {
+            _model.SetRate(Parameters.PT, PitotRateAim, _cancellation.Token);
         }
 
         string _pressureUnitToString(PressureUnits unit)
