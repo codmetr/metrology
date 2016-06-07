@@ -61,6 +61,7 @@ namespace KipTM.ViewModel.Checks
         private bool _isUserChannel;
         private object _ethalonChannel;
         private object _ethalonChannelViewModel;
+        private bool _stopEnabled = false;
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
@@ -81,7 +82,7 @@ namespace KipTM.ViewModel.Checks
             _methodic.Init(adts);
             _methodic.StepsChanged += OnStepsChanged;
             _methodic.ResultUpdated += ResultUpdated;
-
+            
             _userChannel.QueryStarted += _userChannel_QueryStarted;
 
             Results = new ObservableCollection<KeyValuePair<ParameterDescriptor, ParameterResult>>();
@@ -194,6 +195,8 @@ namespace KipTM.ViewModel.Checks
 
         public ICommand Start { get { return new GalaSoft.MvvmLight.Command.RelayCommand(()=>_currentAction()); } }
 
+        public ICommand Stop { get { return new GalaSoft.MvvmLight.Command.RelayCommand(DoCancel); } }
+
         public ICommand Accept { get { return new RelayCommand(DoAccept); } }
 
         public IEnumerable<StepViewModel> Steps
@@ -213,6 +216,13 @@ namespace KipTM.ViewModel.Checks
             get { return _accept; }
             set { Set(ref _accept, value); }
         }
+
+        public bool StopEnabled
+        {
+            get { return _stopEnabled; }
+            set { Set(ref _stopEnabled, value); }
+        }
+
         #endregion
 
         #region Service methods
@@ -240,6 +250,7 @@ namespace KipTM.ViewModel.Checks
                 _methodic.SetEthalonChannel(_userEchalonChannel, null);
             // Запускаем
             Task.Run(()=>_methodic.Start());
+            StopEnabled = true;
             OnStarted();
             //_currentAction = DoNext;
         }
@@ -275,6 +286,7 @@ namespace KipTM.ViewModel.Checks
                 _userChannel.AgreeValue = true;
             }
             AcceptEnabled = false;
+            StopEnabled = false;
             OnStoped();
         }
 

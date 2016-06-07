@@ -141,6 +141,11 @@ namespace KipTM.Model.Checks
                 steps.Add(step);
             }
 
+            // добавление шага завешения
+            step = new End("Завершение поверки", _adts, _logger);
+            steps.Add(step);
+            step.ResultUpdated += StepResultUpdated;
+
             if (Steps != null)
                 foreach (var testStep in Steps)
                 {

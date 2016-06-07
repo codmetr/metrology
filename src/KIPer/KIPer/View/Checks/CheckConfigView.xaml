@@ -102,11 +102,11 @@
                             <TextBox Text="{Binding EthalonManufacturer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                      IsReadOnly="{Binding IsAnalogEthalon, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock>Инвентарный номер:</TextBlock>
-                            <TextBox Text="{Binding InventarNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Text="{Binding EthalonInventarNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock>Серийный номер:</TextBlock>
-                            <TextBox Text="{Binding SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Text="{Binding EthalonSerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock>Дата прошлой поверки:</TextBlock>
-                            <DatePicker SelectedDate="{Binding PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DatePicker SelectedDate="{Binding EthalonPreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <Expander Header="Настройки подключения"
                                        Visibility="{Binding IsNoAnalogEthalon, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
                                 <StackPanel>

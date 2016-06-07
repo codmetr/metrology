@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace ArchiveData.DTO.Params
 {
     public class ParameterDescriptor
@@ -27,6 +29,35 @@ namespace ArchiveData.DTO.Params
         public ParameterType PType
         {
             get { return _pType; }
+        }
+
+        public string LocalizedString
+        {
+            get { return GetLocalizedString(); }
+        }
+
+        private string GetLocalizedString()
+        {
+            switch (PType)
+            {
+                case ParameterType.RealValue:
+                    return string.Format("[{0} мБар] значение:", Point);
+                    break;
+                case ParameterType.Error:
+                    return string.Format("[{0} мБар] ошибка:", Point);
+                    break;
+                case ParameterType.IsCorrect:
+                    return string.Format("[{0} мБар] результат:", Point);
+                    break;
+                case ParameterType.Tolerance:
+                    return string.Format("[{0} мБар] допуск:", Point);
+                    break;
+                case ParameterType.Metadata:
+                    return string.Format("Информация:", Point);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         #region Overrides of Object

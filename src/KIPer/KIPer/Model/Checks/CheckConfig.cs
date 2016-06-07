@@ -367,6 +367,33 @@ namespace KipTM.Model.Checks
         }
 
         /// <summary>
+        /// Инвентарный номер эталона
+        /// </summary>
+        public string EthalonInventarNumber
+        {
+            get { return Ethalon.InventarNumber; }
+            set { Ethalon.InventarNumber = value; }
+        }
+
+        /// <summary>
+        /// Серийный номер эталона
+        /// </summary>
+        public string EthalonSerialNumber
+        {
+            get { return Ethalon.SerialNumber; }
+            set { Ethalon.SerialNumber = value; }
+        }
+
+        /// <summary>
+        /// Дата предыдущей поверки/калибровки эталона
+        /// </summary>
+        public DateTime EthalonPreviousCheckTime
+        {
+            get { return Ethalon.PreviousCheckTime; }
+            set { Ethalon.PreviousCheckTime = value; }
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         public DeviceDescriptor Ethalon

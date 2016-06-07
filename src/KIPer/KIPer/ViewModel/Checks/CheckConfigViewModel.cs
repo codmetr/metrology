@@ -292,6 +292,46 @@ namespace KipTM.ViewModel.Checks
             }
         }
 
+
+        /// <summary>
+        /// Инвентарный номер
+        /// </summary>
+        public string EthalonInventarNumber
+        {
+            get { return _model.EthalonInventarNumber; }
+            set
+            {
+                _model.EthalonInventarNumber = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Серийный номер
+        /// </summary>
+        public string EthalonSerialNumber
+        {
+            get { return _model.EthalonSerialNumber; }
+            set
+            {
+                _model.EthalonSerialNumber = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Дата предыдущей поверки/калибровки
+        /// </summary>
+        public DateTime EthalonPreviousCheckTime
+        {
+            get { return _model.EthalonPreviousCheckTime; }
+            set
+            {
+                _model.EthalonPreviousCheckTime = value;
+                RaisePropertyChanged();
+            }
+        }
+
         /// <summary>
         /// Настройки канала эталона
         /// </summary>

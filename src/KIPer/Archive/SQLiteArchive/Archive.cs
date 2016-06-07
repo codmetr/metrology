@@ -11,7 +11,7 @@ namespace SQLiteArchive
 {
     public class Archive : IArchive
     {
-        public string _archiveFileFormat = "./Archive/{0}.xml";
+        public string _archiveFileFormat = "\\KTM\\KipTM\\Archive\\{0}.xml";
 
         public Archive()
         {
@@ -20,7 +20,7 @@ namespace SQLiteArchive
 
         public void Save<T>(string key, T entity)
         {
-            var path = string.Format(_archiveFileFormat, key);
+            var path = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonDocuments), string.Format(_archiveFileFormat, key));
             if (File.Exists(path))
             {
                 File.Delete(path);

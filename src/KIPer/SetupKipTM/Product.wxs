@@ -67,6 +67,30 @@
         <File Name="GalaSoft.MvvmLight.Platform.dll" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Platform.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="GalaSoft.MvvmLight.Extras.dll" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Extras.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="GalaSoft.MvvmLight.dll" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Ivi.Visa.Interop.dll" Source="$(var.KipTM.TargetDir)Ivi.Visa.Interop.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Nlog.config" Source="$(var.KipTM.TargetDir)Nlog.config" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="NLog.dll" Source="$(var.KipTM.TargetDir)NLog.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="NLog.xml" Source="$(var.KipTM.TargetDir)NLog.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A2A">
+        <File Name="$(var.ADTS.TargetFileName)" Source="$(var.ADTS.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.ADTS.TargetName).pdb" Source="$(var.ADTS.TargetDir)$(var.ADTS.TargetName).pdb" CompanionFile="$(var.ADTS.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A3A">
+        <File Name="$(var.ArchiveData.TargetFileName)" Source="$(var.ArchiveData.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.ArchiveData.TargetName).pdb" Source="$(var.ArchiveData.TargetDir)$(var.ArchiveData.TargetName).pdb" CompanionFile="$(var.ArchiveData.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A4A">
+        <File Name="$(var.IEEE488.TargetFileName)" Source="$(var.IEEE488.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.IEEE488.TargetName).pdb" Source="$(var.IEEE488.TargetDir)$(var.IEEE488.TargetName).pdb" CompanionFile="$(var.IEEE488.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A6A">
+        <File Name="$(var.VisaDriver.TargetFileName)" Source="$(var.VisaDriver.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.VisaDriver.TargetName).pdb" Source="$(var.VisaDriver.TargetDir)$(var.VisaDriver.TargetName).pdb" CompanionFile="$(var.VisaDriver.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Name="$(var.SQLiteArchive.TargetFileName)" Source="$(var.SQLiteArchive.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.SQLiteArchive.TargetName).pdb" Source="$(var.SQLiteArchive.TargetDir)$(var.SQLiteArchive.TargetName).pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A1A">
         <File Name="$(var.MainLoop.TargetFileName)" Source="$(var.MainLoop.TargetPath)" KeyPath="yes" />

@@ -24,6 +24,30 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ADTS\ADTS.csproj">
+      <Name>ADTS</Name>
+      <Project>{e032255a-ad56-44cd-8525-87293538e958}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
+      <Name>ArchiveData</Name>
+      <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Archive\SQLiteArchive\SQLiteArchive.csproj">
+      <Name>SQLiteArchive</Name>
+      <Project>{5ddfab0d-1f66-4337-bd2f-ece434d68794}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\Controls\PressureElementControls\PressureElementControls.csproj">
       <Name>PressureElementControls</Name>
       <Project>{30e4408b-ffc2-495c-b7b4-8cf8e621d3de}</Project>
@@ -40,9 +64,25 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\Drivers\VisaDriver\VisaDriver.csproj">
+      <Name>VisaDriver</Name>
+      <Project>{cbea7a6c-2ea6-4329-99ee-4290a9801a0a}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\Emulation\ComPortEmulation\ComPortEmulation.csproj">
       <Name>ComPortEmulation</Name>
       <Project>{906003d7-94bb-401b-8135-54267b2c713f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\IEEE488Transport\IEEE488.csproj">
+      <Name>IEEE488</Name>
+      <Project>{3fec76c3-b933-4461-aa8d-85360d3f41c4}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
