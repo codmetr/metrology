@@ -204,7 +204,7 @@ namespace ADTS
         public bool ParseGetState(string message, out State? state)
         {
             state = null;
-            switch (message)
+            switch (message.Trim())
             {
                 case "ON":
                     state = State.Control;
