@@ -434,7 +434,7 @@ namespace KipTM.Model.Devices
         /// <returns></returns>
         public EventWaitHandle WaitPressureSetted()
         {
-            return WaitStatusADTS(status => status == Status.PsAtSetPointAndInControlMode);
+            return WaitStatusADTS(status => (status & Status.PsAtSetPointAndInControlMode) > 0);
         }
 
         /// <summary>
@@ -443,7 +443,7 @@ namespace KipTM.Model.Devices
         /// <returns></returns>
         public EventWaitHandle WaitPitotSetted()
         {
-            return WaitStatusADTS(status => status == Status.PtAtSetPointAndInControlMode);
+            return WaitStatusADTS(status => (status & Status.PtAtSetPointAndInControlMode) > 0);
         }
 
         /// <summary>

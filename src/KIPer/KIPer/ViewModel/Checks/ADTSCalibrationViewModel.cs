@@ -82,7 +82,10 @@ namespace KipTM.ViewModel.Checks
             _methodic.Init(adts);
             _methodic.StepsChanged += OnStepsChanged;
             _methodic.ResultUpdated += ResultUpdated;
-            
+
+            // Установка канала общения с оператором
+            _methodic.SetUserChannel(_userChannel);
+
             _userChannel.QueryStarted += _userChannel_QueryStarted;
 
             Results = new ObservableCollection<KeyValuePair<ParameterDescriptor, ParameterResult>>();
@@ -243,6 +246,8 @@ namespace KipTM.ViewModel.Checks
         {
             TitleBtnNext = "Далее";
             _methodic.ChannelType = _connection;
+            _adtsViewModel.Start(_methodic.GetADTS(), _connection);
+
             // Задаем эталон
             if (_ethalonTypeKey != null && _ethalonChannelType != null)
                 _methodic.SetEthalonChannel(_ethalonChannel as IEthalonChannel, _ethalonChannelType);

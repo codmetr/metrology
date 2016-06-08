@@ -9,7 +9,7 @@ using Tools;
 
 namespace KipTM.Model.Checks.Steps.ADTSTest
 {
-    class DoPoint : TestStep
+    class DoPoint : TestStep, IStoppedOnPoint, ISettedEthalonChannel
     {
         private readonly ADTSModel _adts;
         private readonly Parameters _param;
@@ -100,9 +100,11 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             // Расчитать погрешность и зафиксировать реультата
             bool correctPoint = Math.Abs(Math.Abs(point) - Math.Abs(realValue)) <= _tolerance;
             _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
-            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("EthalonValue", point, ParameterType.RealValue),
-                    new ParameterResult(DateTime.Now, realValue)));
-            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("IsCorrect", point, ParameterType.IsCorrect),
+            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("EthalonValue", point.ToString("F2"), ParameterType.RealValue),
+                    new ParameterResult(DateTime.Now, realValue.ToString("F2"))));
+            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("Tolerance", point.ToString("F2"), ParameterType.Tolerance),
+                    new ParameterResult(DateTime.Now, _tolerance.ToString("F2"))));
+            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("IsCorrect", point.ToString("F2"), ParameterType.IsCorrect),
                     new ParameterResult(DateTime.Now, correctPoint)));
             if (IsCancel(whEnd, cancel))
             {

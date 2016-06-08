@@ -12,11 +12,11 @@ namespace KipTM.Model.Checks
     public class ADTSMethodParameters
     {
         private readonly CalibChannel _calibChannel;
-        private readonly IEnumerable<ADTSChechPoint> _points;
+        private readonly IEnumerable<ADTSPoint> _points;
         private readonly double _rate;
         private readonly PressureUnits _unit;
 
-        public ADTSMethodParameters(CalibChannel calibChannel, IEnumerable<ADTSChechPoint> points, double rate, PressureUnits unit)
+        public ADTSMethodParameters(CalibChannel calibChannel, IEnumerable<ADTSPoint> points, double rate, PressureUnits unit)
         {
             _calibChannel = calibChannel;
             _points = points;
@@ -29,7 +29,7 @@ namespace KipTM.Model.Checks
             get { return _calibChannel; }
         }
 
-        public IEnumerable<ADTSChechPoint> Points
+        public IEnumerable<ADTSPoint> Points
         {
             get { return _points; }
         }

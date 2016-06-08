@@ -7,7 +7,7 @@ using Tools;
 
 namespace KipTM.Model.Checks.Steps.ADTSTest
 {
-    class End : TestStep
+    class End : TestStep, IToBaseStep
     {
         private readonly ADTSModel _adts;
         private readonly NLog.Logger _logger;

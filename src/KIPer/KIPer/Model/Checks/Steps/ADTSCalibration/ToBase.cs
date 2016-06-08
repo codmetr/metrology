@@ -9,20 +9,18 @@ using Tools;
 
 namespace KipTM.Model.Checks.Steps.ADTSCalibration
 {
-    class ToBase : TestStep
+    class ToBase : TestStep, IToBaseStep
     {
         private readonly ADTSModel _adts;
-        private IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
         private CancellationTokenSource _cancellationTokenSource;
         private readonly TimeSpan _checkCancelPeriod;
 
-        public ToBase(string name, ADTSModel adts, IUserChannel userChannel, Logger logger)
+        public ToBase(string name, ADTSModel adts, Logger logger)
         {
             Name = name;
             _adts = adts;
             _logger = logger;
-            _userChannel = userChannel;
             _cancellationTokenSource = new CancellationTokenSource();
             _checkCancelPeriod = TimeSpan.FromMilliseconds(10);
         }
@@ -69,11 +67,6 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
             return true;
-        }
-
-        public void SetUserChannel(IUserChannel userChannel)
-        {
-            _userChannel = userChannel;
         }
     }
 }

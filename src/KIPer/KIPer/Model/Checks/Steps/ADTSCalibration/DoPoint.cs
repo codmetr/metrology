@@ -10,7 +10,7 @@ using Tools;
 
 namespace KipTM.Model.Checks.Steps.ADTSCalibration
 {
-    class DoPoint : TestStep
+    class DoPoint : TestStep, IStoppedOnPoint, ISettedEthalonChannel
     {
         private readonly ADTSModel _adts;
         private readonly Parameters _param;

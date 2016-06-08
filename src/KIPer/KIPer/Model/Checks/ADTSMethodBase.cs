@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
 using KipTM.Archive;
 using KipTM.Model.Channels;
+using KipTM.Model.Checks.Steps;
 using KipTM.Model.Checks.Steps.ADTSCalibration;
 using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
@@ -19,13 +21,17 @@ namespace KipTM.Model.Checks
         public const string KeySettingsPSPT = "ADTSCalibrationPsPt";
 
         protected ADTSModel _adts;
-        private CancellationTokenSource _cancelSource;
+        protected CancellationTokenSource _cancelSource;
         protected readonly NLog.Logger _logger;
+
         protected CalibChannel _calibChan;
         protected IEthalonChannel _ethalonChannel;
         protected IUserChannel _userChannel;
         public ITransportChannelType ChannelType;
         public ITransportChannelType EthalonChannelType;
+
+        protected ITestStep _currenTestStep = null;
+        protected readonly object _currenTestStepLocker = new object();
 
         /// <summary>
         /// Ошибка
@@ -54,7 +60,7 @@ namespace KipTM.Model.Checks
 
         private IEnumerable<ITestStep> _steps;
 
-        protected string MethodName = "Калибровка ADTS";
+        protected string MethodName = "ADTS";
 
         protected ADTSMethodBase(Logger logger)
         {
@@ -63,7 +69,7 @@ namespace KipTM.Model.Checks
         }
 
         public string Title{get { return MethodName; }}
-        public IEnumerable<ADTSChechPoint> Points { get; set; }
+        public IEnumerable<ADTSPoint> Points { get; set; }
         public CalibChannel Channel{get { return _calibChan; } set { _calibChan = value; }}
 
         public string ChannelKey
@@ -100,7 +106,7 @@ namespace KipTM.Model.Checks
             EthalonChannelType = transport;
             foreach (var testStep in Steps)
             {
-                var step = testStep as DoPoint;
+                var step = testStep as ISettedEthalonChannel;
                 if(step==null)
                     continue;
                 step.SetEthalonChannel(ethalonChannel);
@@ -112,7 +118,7 @@ namespace KipTM.Model.Checks
             _userChannel = userChannel;
             foreach (var testStep in Steps)
             {
-                var step = testStep as Finish;
+                var step = testStep as ISettedUserChannel;
                 if (step == null)
                     continue;
                 step.SetUserChannel(_userChannel);
@@ -123,6 +129,11 @@ namespace KipTM.Model.Checks
         {
             _adts = adts;
             
+        }
+
+        public ADTSModel GetADTS()
+        {
+            return _adts;
         }
 
         /// <summary>
@@ -145,7 +156,7 @@ namespace KipTM.Model.Checks
         {
             _adts.Start(ChannelType); 
             var cancel = _cancelSource.Token;
-            ManualResetEvent whStep = new ManualResetEvent(false);
+            var whStep = new ManualResetEvent(false);
             var waitPeriod = TimeSpan.FromMilliseconds(10);
             if (!_ethalonChannel.Activate(EthalonChannelType))
                 throw new Exception(string.Format("Can not Activate ethalon channel: {0}", _ethalonChannel));
@@ -169,6 +180,7 @@ namespace KipTM.Model.Checks
                     break;
                 }
             }
+            _ethalonChannel.Stop();
             return true;
 
         }
@@ -180,9 +192,20 @@ namespace KipTM.Model.Checks
                 {
                     if (testStep != null) testStep.ResultUpdated -= StepResultUpdated;
                 }
-            _cancelSource.Cancel();
-            _cancelSource = new CancellationTokenSource();
+            Cancel(); 
             ToBaseAction();
+        }
+
+        public void SetCurrentValueAsPoint()
+        {
+            IStoppedOnPoint pointstep;
+            lock (_currenTestStepLocker)
+            {
+                pointstep = _currenTestStep as IStoppedOnPoint;
+            }
+            if (pointstep == null)
+                return;
+            pointstep.SetCurrentValueAsPoint();
         }
 
         /// <summary>
@@ -191,7 +214,10 @@ namespace KipTM.Model.Checks
         public void Cancel()
         {
             _cancelSource.Cancel();
+            _cancelSource = new CancellationTokenSource();
         }
+
+        #region Service methods
 
         /// <summary>
         /// Вызывается перед запуском шага
@@ -199,7 +225,10 @@ namespace KipTM.Model.Checks
         /// <param name="step"></param>
         protected virtual void PrepareStartStep(ITestStep step)
         {
-            
+            lock (_currenTestStepLocker)
+            {
+                _currenTestStep = step;
+            }
         }
 
         /// <summary>
@@ -208,7 +237,27 @@ namespace KipTM.Model.Checks
         /// <param name="step"></param>
         protected virtual void AfterEndStep(ITestStep step)
         {
+            lock (_currenTestStepLocker)
+            {
+                _currenTestStep = null;
+            }
+        }
 
+        protected void AttachStep(ITestStep step)
+        {
+            step.ResultUpdated += StepResultUpdated;
+            step.End += StepEnd;
+        }
+
+        protected void DetachStep(ITestStep step)
+        {
+            step.ResultUpdated -= StepResultUpdated;
+            step.End -= StepEnd;
+        }
+
+        protected void StepEnd(object sender, EventArgEnd e)
+        {
+            throw new NotImplementedException();
         }
 
         protected void StepResultUpdated(object sender, EventArgTestResult e)
@@ -246,9 +295,16 @@ namespace KipTM.Model.Checks
             if (handler != null) handler(this, e);
         }
 
-
         protected virtual void ToBaseAction()
         {
+            var whStep = new ManualResetEvent(false);
+            var end = Steps.FirstOrDefault(el => el is IToBaseStep);
+            if (end != null)
+            {
+                whStep.Reset();
+                end.Start(whStep);
+            }
         }
+        #endregion
     }
 }

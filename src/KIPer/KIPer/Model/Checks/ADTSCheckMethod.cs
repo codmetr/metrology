@@ -25,9 +25,6 @@ namespace KipTM.Model.Checks
         public const string KeyUnit = "Unit";
         public const string KeyChannel = "Channel";
 
-        private ITestStep _currenTestStep = null;
-        private readonly object _currenTestStepLocker = new object();
-
         public ADTSCheckMethod(NLog.Logger logger) : base(logger)
         {
             MethodName = "Калибровка ADTS";
@@ -39,7 +36,7 @@ namespace KipTM.Model.Checks
         /// <returns></returns>
         public override bool Init(IPropertyPool propertyes)
         {
-            var points = propertyes.GetProperty<List<ADTSChechPoint>>(ADTSCheckMethod.KeyPoints);
+            var points = propertyes.GetProperty<List<ADTSPoint>>(ADTSCheckMethod.KeyPoints);
             var channel = propertyes.GetProperty<CalibChannel>(ADTSCheckMethod.KeyChannel);
             var rate = propertyes.GetProperty<double>(ADTSCheckMethod.KeyRate);
             var unit = propertyes.GetProperty<PressureUnits>(ADTSCheckMethod.KeyUnit);
@@ -64,7 +61,7 @@ namespace KipTM.Model.Checks
             // добавление шага инициализации
             ITestStep step = new Init("Инициализация калибровки", _adts, _calibChan, _logger);
             steps.Add(step);
-            step.ResultUpdated += StepResultUpdated;
+            AttachStep(step);
 
             // добавление шага прохождения точек
             Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
@@ -72,74 +69,27 @@ namespace KipTM.Model.Checks
             foreach (var point in parameters.Points)
             {
                 step = new DoPoint(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger);
-                step.ResultUpdated += StepResultUpdated;
+                AttachStep(step);
                 steps.Add(step);
             }
 
             // добавление шага подтверждения калибровки
             step = new Finish("Подтверждение калибровки", _adts, _userChannel, _logger);
-            step.ResultUpdated += StepResultUpdated;
+            AttachStep(step);
             steps.Add(step);
 
-            // добавление шага переводав базовое состояние
-            step = new ToBase("Перевод в базовое состояние", _adts, _userChannel, _logger);
-            step.ResultUpdated += StepResultUpdated;
+            // добавление шага перевода в базовое состояние
+            step = new ToBase("Перевод в базовое состояние", _adts, _logger);
+            AttachStep(step);
             steps.Add(step);
             if (Steps != null)
                 foreach (var testStep in Steps)
                 {
-                    if (testStep != null) testStep.ResultUpdated -= StepResultUpdated;
+                    if (testStep != null)
+                        DetachStep(testStep);
                 }
             Steps = steps;
             return true;
         }
-
-        /// <summary>
-        /// Вызывается перед запуском шага
-        /// </summary>
-        /// <param name="step"></param>
-        protected override void PrepareStartStep(ITestStep step)
-        {
-            lock (_currenTestStepLocker)
-            {
-                _currenTestStep = step;
-            }
-        }
-
-        /// <summary>
-        /// Вызывается после завершения шага
-        /// </summary>
-        /// <param name="step"></param>
-        protected override void AfterEndStep(ITestStep step)
-        {
-            lock (_currenTestStepLocker)
-            {
-                _currenTestStep = null;
-            }
-        }
-
-        public void SetCurrentValueAsPoint()
-        {
-            DoPoint pointstep;
-            lock (_currenTestStepLocker)
-            {
-                pointstep = _currenTestStep as DoPoint;
-            }
-            if (pointstep == null)
-                return;
-            pointstep.SetCurrentValueAsPoint();
-        }
-
-        protected override void ToBaseAction()
-        {
-            ManualResetEvent whStep = new ManualResetEvent(false);
-            var end = Steps.FirstOrDefault(el => el is ToBase);
-            if (end != null)
-            {
-                whStep.Reset();
-                end.Start(whStep);
-            }
-        }
-
     }
 }

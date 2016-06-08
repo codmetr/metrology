@@ -125,8 +125,12 @@
     <Compile Include="Model\Checks\Steps\ADTSTest\End.cs" />
     <Compile Include="Model\Checks\Steps\ADTSTest\DoPoint.cs" />
     <Compile Include="Model\Checks\Steps\ADTSTest\Init.cs" />
+    <Compile Include="Model\Checks\Steps\ISettedUserChannel.cs" />
+    <Compile Include="Model\Checks\Steps\ISettedEthalonChannel.cs" />
+    <Compile Include="Model\Checks\Steps\IStoppedOnPoint.cs" />
     <Compile Include="Model\Checks\Steps\ITestStep.cs" />
     <Compile Include="Model\Channels\IUserChannel.cs" />
+    <Compile Include="Model\Checks\Steps\IToBaseStep.cs" />
     <Compile Include="Model\Checks\Steps\TestStep.cs" />
     <Compile Include="Model\Channels\UserChannel.cs" />
     <Compile Include="Model\Channels\UserEchalonChannel.cs" />
@@ -384,6 +388,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ADTSData\ADTSData.csproj">
+      <Project>{b00215bc-0620-414b-83ab-6b88a152e0c2}</Project>
+      <Name>ADTSData</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ADTS\ADTS.csproj">
       <Project>{e032255a-ad56-44cd-8525-87293538e958}</Project>
       <Name>ADTS</Name>

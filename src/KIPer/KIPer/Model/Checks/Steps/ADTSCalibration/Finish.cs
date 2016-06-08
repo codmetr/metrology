@@ -9,7 +9,7 @@ using Tools;
 
 namespace KipTM.Model.Checks.Steps.ADTSCalibration
 {
-    class Finish : TestStep
+    class Finish : TestStep, ISettedUserChannel
     {
         private readonly ADTSModel _adts;
         private IUserChannel _userChannel;

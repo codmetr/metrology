@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace KipTM.Model.Checks
 {
 
-    public class ADTSChechPoint
+    public class ADTSPoint
     {
         /// <summary>
         /// Контрольное давление
