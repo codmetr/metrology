@@ -20,6 +20,7 @@ using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 using KipTM.ViewModel;
+using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Services;
 
 namespace KipTM.ViewModel.Checks
@@ -58,6 +59,8 @@ namespace KipTM.ViewModel.Checks
         private ADTSViewModel _adtsViewModel;
         private bool _isUserChannel;
         private object _ethalonChannel;
+        private object _ethalonChannelViewModel;
+        private bool _stopEnabled = false;
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
@@ -141,7 +144,17 @@ namespace KipTM.ViewModel.Checks
         public object EthalonChannel
         {
             get { return _ethalonChannel; }
-            set { Set(ref _ethalonChannel, value); }
+            set
+            {
+                Set(ref _ethalonChannel, value);
+                EthalonChannelViewModel = GetViewModelForChannel(_ethalonChannel);
+            }
+        }
+
+        public object EthalonChannelViewModel
+        {
+            get { return _ethalonChannelViewModel; }
+            set { Set(ref _ethalonChannelViewModel, value); }
         }
 
         public string TitleBtnNext
@@ -170,6 +183,8 @@ namespace KipTM.ViewModel.Checks
 
         public ICommand Start { get { return new GalaSoft.MvvmLight.Command.RelayCommand(()=>_currentAction()); } }
 
+        public ICommand Stop { get { return new GalaSoft.MvvmLight.Command.RelayCommand(DoCancel); } }
+
         public ICommand Accept { get { return new RelayCommand(DoAccept); } }
 
         public IEnumerable<StepViewModel> Steps
@@ -188,6 +203,12 @@ namespace KipTM.ViewModel.Checks
         {
             get { return _accept; }
             set { Set(ref _accept, value); }
+        }
+
+        public bool StopEnabled
+        {
+            get { return _stopEnabled; }
+            set { Set(ref _stopEnabled, value); }
         }
         #endregion
 
@@ -236,6 +257,7 @@ namespace KipTM.ViewModel.Checks
                 DoCancel();
                 _currentAction = DoStart;
             });
+            StopEnabled = true;
             OnStarted();
         }
 
@@ -265,12 +287,15 @@ namespace KipTM.ViewModel.Checks
         {
             TitleBtnNext = "Старт";
 
+            _methodic.Stop();
+
             if (_userChannel.QueryType == UserQueryType.GetAccept)
             {
                 _userChannel.AcceptValue = false;
                 _userChannel.AgreeValue = true;
             }
             AcceptEnabled = false;
+            StopEnabled = false;
             OnStoped();
         }
 
@@ -308,6 +333,16 @@ namespace KipTM.ViewModel.Checks
                 _currentAction = DoCancel;
             }
         }
+
+        object GetViewModelForChannel(object model)
+        {
+            if (model is PACEEthalonChannel)
+            {
+                return new PACEEchalonChannelViewModel(model as PACEEthalonChannel);
+            }
+            return null;
+        }
+
         #endregion
 
         public override void Cleanup()

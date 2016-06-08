@@ -171,7 +171,8 @@ namespace KipTM.Model.Checks
             foreach (var testStep in Steps)
             {
                 whStep.Reset();
-                testStep.Start(whStep);
+                var step = testStep;
+                Task.Factory.StartNew(() => step.Start(whStep), cancel);
                 lock (_currenTestStepLocker)
                 {
                     _currenTestStep = testStep;
@@ -227,7 +228,8 @@ namespace KipTM.Model.Checks
                 {
                     if (testStep != null) testStep.ResultUpdated -= StepResultUpdated;
                 }
-            _cancelSource.Cancel();
+            Cancel();
+            ToBaseAction();
         }
 
         /// <summary>
@@ -264,9 +266,9 @@ namespace KipTM.Model.Checks
         /// </summary>
         public EventHandler<EventArgTestResult> ResultUpdated;
 
-        private IEnumerable<ITestStep> _steps;
-
         #region Service methods
+
+        private IEnumerable<ITestStep> _steps;
 
         void StepResultUpdated(object sender, EventArgTestResult e)
         {
@@ -301,6 +303,17 @@ namespace KipTM.Model.Checks
         {
             var handler = ResultUpdated;
             if (handler != null) handler(this, e);
+        }
+
+        private void ToBaseAction()
+        {
+            ManualResetEvent whStep = new ManualResetEvent(false);
+            var end = Steps.FirstOrDefault(el => el is End);
+            if (end != null)
+            {
+                whStep.Reset();
+                end.Start(whStep);
+            }
         }
         #endregion
     }

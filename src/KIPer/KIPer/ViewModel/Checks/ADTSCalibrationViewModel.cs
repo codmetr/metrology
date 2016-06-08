@@ -249,7 +249,12 @@ namespace KipTM.ViewModel.Checks
             else
                 _methodic.SetEthalonChannel(_userEchalonChannel, null);
             // Запускаем
-            Task.Run(()=>_methodic.Start());
+            Task.Run(() =>
+            {
+                _methodic.Start();
+                DoCancel();
+                _currentAction = DoStart;
+            });
             StopEnabled = true;
             OnStarted();
             //_currentAction = DoNext;
@@ -280,6 +285,9 @@ namespace KipTM.ViewModel.Checks
         private void DoCancel()
         {
             TitleBtnNext = "Старт";
+            
+            _methodic.Stop();
+
             if (_userChannel.QueryType == UserQueryType.GetAccept)
             {
                 _userChannel.AcceptValue = false;

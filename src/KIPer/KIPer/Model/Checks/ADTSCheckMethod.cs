@@ -78,6 +78,12 @@ namespace KipTM.Model.Checks
 
             // добавление шага подтверждения калибровки
             step = new Finish("Подтверждение калибровки", _adts, _userChannel, _logger);
+            step.ResultUpdated += StepResultUpdated;
+            steps.Add(step);
+
+            // добавление шага переводав базовое состояние
+            step = new ToBase("Перевод в базовое состояние", _adts, _userChannel, _logger);
+            step.ResultUpdated += StepResultUpdated;
             steps.Add(step);
             if (Steps != null)
                 foreach (var testStep in Steps)
@@ -123,5 +129,17 @@ namespace KipTM.Model.Checks
                 return;
             pointstep.SetCurrentValueAsPoint();
         }
+
+        protected override void ToBaseAction()
+        {
+            ManualResetEvent whStep = new ManualResetEvent(false);
+            var end = Steps.FirstOrDefault(el => el is ToBase);
+            if (end != null)
+            {
+                whStep.Reset();
+                end.Start(whStep);
+            }
+        }
+
     }
 }

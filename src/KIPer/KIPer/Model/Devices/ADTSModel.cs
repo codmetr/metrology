@@ -43,6 +43,7 @@ namespace KipTM.Model.Devices
         private Status? _status;
 
         private IDictionary<EventWaitHandle, Func<Status, bool>> _waitStatusPool; 
+        private IDictionary<EventWaitHandle, Func<State, bool>> _waitStatePool; 
         #endregion
 
         internal static string Key { get { return "ADTS"; } }
@@ -58,6 +59,7 @@ namespace KipTM.Model.Devices
             _loops = loops;
             _deviceManager = deviceManager;
             _waitStatusPool = new Dictionary<EventWaitHandle, Func<Status, bool>>();
+            _waitStatePool = new Dictionary<EventWaitHandle, Func<State, bool>>();
         }
 
         /// <summary>
@@ -445,6 +447,15 @@ namespace KipTM.Model.Devices
         }
 
         /// <summary>
+        /// Ожидать достяжения режима Контроль
+        /// </summary>
+        /// <returns></returns>
+        public EventWaitHandle WaitControlSetted()
+        {
+            return WaitStateADTS(state => state == State.Control);
+        }
+
+        /// <summary>
         /// Перестат ожидать
         /// </summary>
         /// <param name="waitHandle"></param>
@@ -454,6 +465,19 @@ namespace KipTM.Model.Devices
             {
                 if (_waitStatusPool.ContainsKey(waitHandle))
                     _waitStatusPool.Remove(waitHandle);
+            }
+        }
+
+        /// <summary>
+        /// Перестат ожидать
+        /// </summary>
+        /// <param name="waitHandle"></param>
+        public void StopWaitState(EventWaitHandle waitHandle)
+        {
+            lock (_waitStatePool)
+            {
+                if (_waitStatePool.ContainsKey(waitHandle))
+                    _waitStatePool.Remove(waitHandle);
             }
         }
 
@@ -631,6 +655,23 @@ namespace KipTM.Model.Devices
             return wh;
         }
 
+        /// <summary>
+        /// Ожидать состояние ADTS
+        /// </summary>
+        /// <param name="waitFunc">Функция проверки состояния</param>
+        /// <returns></returns>
+        private EventWaitHandle WaitStateADTS(Func<State, bool> waitFunc)
+        {
+            if (waitFunc == null)
+                return null;
+            var wh = new ManualResetEvent(false);
+            lock (_waitStatePool)
+            {
+                _waitStatePool.Add(wh, waitFunc);
+            }
+            return wh;
+        }
+
         #region Autoupdate functions
 
         void AutoUpdateStatus(object transport)
@@ -672,8 +713,23 @@ namespace KipTM.Model.Devices
                 return;
             if (!_adts.GetState(out _state))
                 return;
+            if (_state == null)
+                return;
             _stateTime = DateTime.Now;
             OnStateReaded(_stateTime.Value);
+
+            lock (_waitStatePool)
+            {
+                if (_waitStatePool.Count > 0)
+                {
+                    var completeList = (from func in _waitStatePool where func.Value(_state.Value) select func.Key).ToList();
+                    foreach (var waitHandle in completeList)
+                    {
+                        _waitStatePool.Remove(waitHandle);
+                        waitHandle.Set();
+                    }
+                }
+            }
 
             if (!_isNeedAutoupdate)
                 return;

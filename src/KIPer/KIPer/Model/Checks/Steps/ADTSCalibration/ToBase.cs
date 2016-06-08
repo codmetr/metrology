@@ -1,32 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
-using ADTS;
 using ArchiveData.DTO.Params;
+using KipTM.Model.Channels;
 using KipTM.Model.Devices;
 using NLog;
 using Tools;
 
-namespace KipTM.Model.Checks.Steps.ADTSTest
+namespace KipTM.Model.Checks.Steps.ADTSCalibration
 {
-    class Init : TestStep
+    class ToBase : TestStep
     {
         private readonly ADTSModel _adts;
-        private readonly CalibChannel _calibChan;
+        private IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
         private CancellationTokenSource _cancellationTokenSource;
+        private readonly TimeSpan _checkCancelPeriod;
 
-        public Init(string name, ADTSModel adts, CalibChannel calibChan, Logger logger)
+        public ToBase(string name, ADTSModel adts, IUserChannel userChannel, Logger logger)
         {
             Name = name;
             _adts = adts;
-            _calibChan = calibChan;
             _logger = logger;
+            _userChannel = userChannel;
             _cancellationTokenSource = new CancellationTokenSource();
+            _checkCancelPeriod = TimeSpan.FromMilliseconds(10);
         }
 
         public override void Start(EventWaitHandle whEnd)
         {
-            TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
             var cancel = _cancellationTokenSource.Token;
             DateTime testDate = DateTime.Now;
             OnStarted();
@@ -37,33 +39,17 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
                 OnEnd(new EventArgEnd(false));
                 return;
             }
-            _logger.With(l => l.Trace(string.Format("Start ADTS test by channel {0}", _calibChan)));
-            OnProgressChanged(new EventArgProgress(0, "Запуск Поверки"));
-            if (!_adts.SetState(State.Control, cancel))
+            _logger.With(l => l.Trace(string.Format("ADTS test end (Go to Ground)")));
+            OnProgressChanged(new EventArgProgress(0, "Перевод в базовое состояние"));
+            if (!_adts.GoToGround(cancel))
             {
-                if(!cancel.IsCancellationRequested)
-                    _logger.With(l => l.Trace(string.Format("[ERROR] set state {0}", State.Control)));
+                if (!cancel.IsCancellationRequested)
+                    _logger.With(l => l.Trace(string.Format("[ERROR] go to ground")));
                 //OnError(new EventArgError() { Error = ADTSCheckError.ErrorStartCalibration });
                 whEnd.Set();
                 OnEnd(new EventArgEnd(false));
                 return;
             }
-
-            // Дождаться установки параметра или примененения текущей точки как целевой
-            EventWaitHandle wh = _adts.WaitControlSetted();
-            while (!wh.WaitOne(waitPointPeriod))
-            {
-                if (cancel.IsCancellationRequested)
-                {
-                    _adts.StopWaitState(wh);
-                    whEnd.Set();
-                    OnEnd(new EventArgEnd(false));
-                    return;
-                }
-            }
-
-            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("CalibDate", null, ParameterType.Metadata), new ParameterResult(DateTime.Now, testDate)));
-
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel test")));
@@ -72,7 +58,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
                 return;
             }
             OnProgressChanged(new EventArgProgress(100,
-                string.Format("Поверка запущена (Дата: {0})", testDate.ToString())));
+                string.Format("В базовом состоянии")));
             whEnd.Set();
             OnEnd(new EventArgEnd(true));
             return;
@@ -83,6 +69,11 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
             return true;
+        }
+
+        public void SetUserChannel(IUserChannel userChannel)
+        {
+            _userChannel = userChannel;
         }
     }
 }

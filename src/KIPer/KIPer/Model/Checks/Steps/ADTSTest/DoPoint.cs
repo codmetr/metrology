@@ -55,15 +55,19 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             if (!DoOne(whEnd, cancel, () => _adts.SetRate(_param, _rate, cancel), "[ERROR] Set rate for point"))
                 return;
 
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+
             // Установить цель для ADST
             if (!DoOne(whEnd, cancel, () => _adts.SetParameter(_param, point, cancel), "[ERROR] Set point"))
                 return;
+
+            Thread.Sleep(TimeSpan.FromSeconds(2));
 
             // Дождаться установки параметра или примененения текущей точки как целевой
             EventWaitHandle wh = _param == Parameters.PT ? _adts.WaitPitotSetted() : _adts.WaitPressureSetted();
             var whArray = new WaitHandle[] {wh, _setCurrentValueAsPoint};
             int exitIndex = WaitHandle.WaitAny(whArray, waitPointPeriod);
-            while (exitIndex < 0)
+            while (exitIndex == WaitHandle.WaitTimeout)
             {
                 if (cancel.IsCancellationRequested)
                 {

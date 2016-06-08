@@ -84,16 +84,16 @@ namespace KipTM.Model
             _channelsFabrics = new Dictionary<string, Func<object, ITransportIEEE488>>()
             {
                 {VisaChannelDescriptor.KeyType, opt =>
-                {
-                    var visaSettings = opt as VisaSettings;
-                    if (visaSettings != null)
                     {
-                        var transport = new VisaIEEE488();
-                        transport.Open(visaSettings.AddressFull);
-                        return transport;
-                    }
-                    throw new Exception(string.Format("Can not generate transport for key \"{0}\" with options [{0}]", VisaChannelDescriptor.KeyType, opt));
-                }},
+                        var visaSettings = opt as VisaSettings;
+                        if (visaSettings != null)
+                        {
+                            var transport = new VisaIEEE488();
+                            transport.Open(visaSettings.AddressFull);
+                            return transport;
+                        }
+                        throw new Exception(string.Format("Can not generate transport for key \"{0}\" with options [{0}]", VisaChannelDescriptor.KeyType, opt));
+                    }},
                 {FakeChannelDescriptor.KeyType, opt => new FakeTransport()}
             };
             _loops.AddLocker(VisaChannelDescriptor.KeyType, new object());

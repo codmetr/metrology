@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using ADTS;
 using KipTM.Archive;
 using KipTM.Model.Channels;
@@ -152,7 +153,8 @@ namespace KipTM.Model.Checks
             {
                 whStep.Reset();
                 PrepareStartStep(testStep);
-                testStep.Start(whStep);
+                var step = testStep;
+                Task.Factory.StartNew(() => step.Start(whStep), cancel);
                 while (!whStep.WaitOne(waitPeriod))
                 {
                     if (cancel.IsCancellationRequested)
@@ -180,6 +182,7 @@ namespace KipTM.Model.Checks
                 }
             _cancelSource.Cancel();
             _cancelSource = new CancellationTokenSource();
+            ToBaseAction();
         }
 
         /// <summary>
@@ -241,6 +244,11 @@ namespace KipTM.Model.Checks
         {
             var handler = ResultUpdated;
             if (handler != null) handler(this, e);
+        }
+
+
+        protected virtual void ToBaseAction()
+        {
         }
     }
 }

@@ -54,11 +54,15 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             {
                 return;
             }
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+
             // Установить цель для ADST
             if (!DoOne(whEnd, cancel, () => _adts.SetParameter(_param, point, cancel), "[ERROR] Set rate for point"))
             {
                 return;
             }
+
+            Thread.Sleep(TimeSpan.FromSeconds(2));
 
             EventWaitHandle wh = _param == Parameters.PT ? _adts.WaitPitotSetted() : _adts.WaitPressureSetted();
             var whArray = new WaitHandle[] { wh, _setCurrentValueAsPoint };

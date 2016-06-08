@@ -112,6 +112,7 @@
     <Compile Include="Model\Checks\ADTSTestMethod.cs" />
     <Compile Include="Model\Checks\CheckConfig.cs" />
     <Compile Include="Model\Checks\EventArgs\EventArgEnd.cs" />
+    <Compile Include="Model\Checks\Steps\ADTSCalibration\ToBase.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\Init.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\DoPoint.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\Finish.cs" />
