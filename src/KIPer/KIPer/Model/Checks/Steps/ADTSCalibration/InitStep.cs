@@ -1,22 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using ADTS;
+using ArchiveData.DTO.Params;
 using KipTM.Model.Devices;
 using NLog;
 using Tools;
 
-namespace KipTM.Model.Checks.Steps.ADTSTest
+namespace KipTM.Model.Checks.Steps.ADTSCalibration
 {
-    class End : TestStep, IToBaseStep
+    class InitStep : TestStep
     {
         private readonly ADTSModel _adts;
+        private readonly CalibChannel _calibChan;
         private readonly NLog.Logger _logger;
         private CancellationTokenSource _cancellationTokenSource;
 
-        public End(string name, ADTSModel adts, Logger logger)
+        public InitStep(string name, ADTSModel adts, CalibChannel calibChan, Logger logger)
         {
             Name = name;
             _adts = adts;
+            _calibChan = calibChan;
             _logger = logger;
             _cancellationTokenSource = new CancellationTokenSource();
         }
@@ -24,35 +28,36 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
         public override void Start(EventWaitHandle whEnd)
         {
             var cancel = _cancellationTokenSource.Token;
-            DateTime testDate = DateTime.Now;
+            DateTime? calibDate;
             OnStarted();
             if (cancel.IsCancellationRequested)
             {
-                _logger.With(l => l.Trace(string.Format("Cancel test")));
+                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 whEnd.Set();
                 OnEnd(new EventArgEnd(false));
                 return;
             }
-            _logger.With(l => l.Trace(string.Format("ADTS test end (Go to Ground)")));
-            OnProgressChanged(new EventArgProgress(0, "Остановка Поверки"));
-            if (!_adts.GoToGround(cancel))
+            _logger.With(l => l.Trace(string.Format("Start ADTS calibration by channel {0}", _calibChan)));
+            OnProgressChanged(new EventArgProgress(0, "Запуск калибровки"));
+            if (!_adts.StartCalibration(_calibChan, out calibDate, cancel))
             {
-                if(!cancel.IsCancellationRequested)
-                    _logger.With(l => l.Trace(string.Format("[ERROR] go to ground")));
+                _logger.With(l => l.Trace(string.Format("[ERROR] start clibration")));
                 //OnError(new EventArgError() { Error = ADTSCheckError.ErrorStartCalibration });
                 whEnd.Set();
                 OnEnd(new EventArgEnd(false));
                 return;
             }
+            if (calibDate!=null)
+                OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("CalibDate", null, ParameterType.Metadata), new ParameterResult(DateTime.Now, calibDate.Value)));
             if (cancel.IsCancellationRequested)
             {
-                _logger.With(l => l.Trace(string.Format("Cancel test")));
+                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
                 whEnd.Set();
                 OnEnd(new EventArgEnd(false));
                 return;
             }
             OnProgressChanged(new EventArgProgress(100,
-                string.Format("Поверка завершена")));
+                string.Format("Калибровка запущена (Дата: {0})", calibDate == null ? "null" : calibDate.Value.ToString())));
             whEnd.Set();
             OnEnd(new EventArgEnd(true));
             return;

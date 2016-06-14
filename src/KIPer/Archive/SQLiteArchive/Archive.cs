@@ -11,7 +11,7 @@ namespace SQLiteArchive
 {
     public class Archive : IArchive
     {
-        public string _archiveFileFormat = "\\KTM\\KipTM\\Archive\\{0}.xml";
+        public string _archiveFileFormat = "KTM\\KipTM\\Archive\\{0}.xml";
 
         public Archive()
         {

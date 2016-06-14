@@ -9,7 +9,7 @@ using Tools;
 
 namespace KipTM.Model.Checks.Steps.ADTSCalibration
 {
-    class Finish : TestStep, ISettedUserChannel
+    class FinishStep : TestStep, ISettedUserChannel
     {
         private readonly ADTSModel _adts;
         private IUserChannel _userChannel;
@@ -17,7 +17,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
         private CancellationTokenSource _cancellationTokenSource;
         private readonly TimeSpan _checkCancelPeriod;
 
-        public Finish(string name, ADTSModel adts, IUserChannel userChannel, Logger logger)
+        public FinishStep(string name, ADTSModel adts, IUserChannel userChannel, Logger logger)
         {
             Name = name;
             _adts = adts;

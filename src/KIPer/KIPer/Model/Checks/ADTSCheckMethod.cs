@@ -59,7 +59,7 @@ namespace KipTM.Model.Checks
             var steps = new List<ITestStep>();
 
             // добавление шага инициализации
-            ITestStep step = new Init("Инициализация калибровки", _adts, _calibChan, _logger);
+            ITestStep step = new InitStep("Инициализация калибровки", _adts, _calibChan, _logger);
             steps.Add(step);
             AttachStep(step);
 
@@ -68,18 +68,18 @@ namespace KipTM.Model.Checks
                 : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
             foreach (var point in parameters.Points)
             {
-                step = new DoPoint(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger);
+                step = new DoPointStep(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger);
                 AttachStep(step);
                 steps.Add(step);
             }
 
             // добавление шага подтверждения калибровки
-            step = new Finish("Подтверждение калибровки", _adts, _userChannel, _logger);
+            step = new FinishStep("Подтверждение калибровки", _adts, _userChannel, _logger);
             AttachStep(step);
             steps.Add(step);
 
             // добавление шага перевода в базовое состояние
-            step = new ToBase("Перевод в базовое состояние", _adts, _logger);
+            step = new ToBaseStep("Перевод в базовое состояние", _adts, _logger);
             AttachStep(step);
             steps.Add(step);
             if (Steps != null)

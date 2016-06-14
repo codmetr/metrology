@@ -58,6 +58,11 @@ namespace KipTM.Model.Checks
         /// </summary>
         public EventHandler<EventArgTestResult> ResultUpdated;
 
+        /// <summary>
+        /// Проход закончен
+        /// </summary>
+        public EventHandler EndMethod;
+
         private IEnumerable<ITestStep> _steps;
 
         protected string MethodName = "ADTS";
@@ -181,6 +186,8 @@ namespace KipTM.Model.Checks
                 }
             }
             _ethalonChannel.Stop();
+
+            OnEndMethod(null);
             return true;
 
         }
@@ -217,8 +224,7 @@ namespace KipTM.Model.Checks
             _cancelSource = new CancellationTokenSource();
         }
 
-        #region Service methods
-
+        #region Steps events
         /// <summary>
         /// Вызывается перед запуском шага
         /// </summary>
@@ -255,15 +261,15 @@ namespace KipTM.Model.Checks
             step.End -= StepEnd;
         }
 
-        protected void StepEnd(object sender, EventArgEnd e)
-        {
-            throw new NotImplementedException();
-        }
+        protected abstract void StepEnd(object sender, EventArgEnd e);
 
-        protected void StepResultUpdated(object sender, EventArgTestResult e)
+        protected virtual void StepResultUpdated(object sender, EventArgTestResult e)
         {
             OnResultUpdated(e);
         }
+        #endregion
+
+        #region Event invocators
 
         protected virtual void OnError(EventArgError obj)
         {
@@ -295,6 +301,13 @@ namespace KipTM.Model.Checks
             if (handler != null) handler(this, e);
         }
 
+        protected virtual void OnEndMethod(EventArgs e)
+        {
+            var handler = EndMethod;
+            if (handler != null) handler(this, e);
+        }
+        #endregion
+
         protected virtual void ToBaseAction()
         {
             var whStep = new ManualResetEvent(false);
@@ -305,6 +318,5 @@ namespace KipTM.Model.Checks
                 end.Start(whStep);
             }
         }
-        #endregion
     }
 }

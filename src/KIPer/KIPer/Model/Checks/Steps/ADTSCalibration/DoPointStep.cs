@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using ADTS;
 using ArchiveData.DTO.Params;
@@ -7,9 +8,9 @@ using KipTM.Model.Devices;
 using NLog;
 using Tools;
 
-namespace KipTM.Model.Checks.Steps.ADTSTest
+namespace KipTM.Model.Checks.Steps.ADTSCalibration
 {
-    class DoPoint : TestStep, IStoppedOnPoint, ISettedEthalonChannel
+    class DoPointStep : TestStep, IStoppedOnPoint, ISettedEthalonChannel
     {
         private readonly ADTSModel _adts;
         private readonly Parameters _param;
@@ -22,7 +23,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
         private ManualResetEvent _setCurrentValueAsPoint = new ManualResetEvent(false);
         private CancellationTokenSource _cancellationTokenSource;
 
-        public DoPoint(string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate, PressureUnits unit, IEthalonChannel ethalonChannel, Logger logger)
+        public DoPointStep(string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate, PressureUnits unit, IEthalonChannel ethalonChannel, Logger logger)
         {
             Name = name;
             _adts = adts;
@@ -36,10 +37,6 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
-        /// <summary>
-        /// Запустить шаг
-        /// </summary>
-        /// <param name="whEnd"></param>
         public override void Start(EventWaitHandle whEnd)
         {
             TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
@@ -49,25 +46,28 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             OnStarted();
             // Установка единиц измерений
             if (!DoOne(whEnd, cancel, () => _adts.SetPressureUnit(_unit, cancel), "[ERROR] Set unit for point"))
+            {
                 return;
-
+            }
             // Установить скорость
             if (!DoOne(whEnd, cancel, () => _adts.SetRate(_param, _rate, cancel), "[ERROR] Set rate for point"))
+            {
                 return;
-
+            }
             Thread.Sleep(TimeSpan.FromSeconds(1));
 
             // Установить цель для ADST
-            if (!DoOne(whEnd, cancel, () => _adts.SetParameter(_param, point, cancel), "[ERROR] Set point"))
+            if (!DoOne(whEnd, cancel, () => _adts.SetParameter(_param, point, cancel), "[ERROR] Set rate for point"))
+            {
                 return;
+            }
 
             Thread.Sleep(TimeSpan.FromSeconds(2));
 
-            // Дождаться установки параметра или примененения текущей точки как целевой
             EventWaitHandle wh = _param == Parameters.PT ? _adts.WaitPitotSetted() : _adts.WaitPressureSetted();
-            var whArray = new WaitHandle[] {wh, _setCurrentValueAsPoint};
+            var whArray = new WaitHandle[] { wh, _setCurrentValueAsPoint };
             int exitIndex = WaitHandle.WaitAny(whArray, waitPointPeriod);
-            while (exitIndex == WaitHandle.WaitTimeout)
+            while (exitIndex < 0)
             {
                 if (cancel.IsCancellationRequested)
                 {
@@ -90,23 +90,27 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
                 return;
             }
 
+            // Получить эталонное значение
+            var realValue = _ethalonChannel.GetEthalonValue(point, cancel);
             if (IsCancel(whEnd, cancel))
             {
                 return;
             }
-            // Получить эталонное значение
-            var realValue = _ethalonChannel.GetEthalonValue(point, cancel);
 
             // Расчитать погрешность и зафиксировать реультата
             bool correctPoint = Math.Abs(Math.Abs(point) - Math.Abs(realValue)) <= _tolerance;
             _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
-            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("EthalonValue", point.ToString("F2"), ParameterType.RealValue),
-                    new ParameterResult(DateTime.Now, realValue.ToString("F2"))));
-            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("Tolerance", point.ToString("F2"), ParameterType.Tolerance),
-                    new ParameterResult(DateTime.Now, _tolerance.ToString("F2"))));
-            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("IsCorrect", point.ToString("F2"), ParameterType.IsCorrect),
+            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("EthalonValue", point, ParameterType.RealValue),
+                    new ParameterResult(DateTime.Now, realValue)));
+            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("IsCorrect", point, ParameterType.IsCorrect),
                     new ParameterResult(DateTime.Now, correctPoint)));
             if (IsCancel(whEnd, cancel))
+            {
+                return;
+            }
+
+            // Передача ADTS реального значения
+            if (!DoOne(whEnd, cancel, () => _adts.SetActualValue(realValue, cancel), "[ERROR] Can not set real value"))
             {
                 return;
             }
@@ -120,10 +124,6 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             return;
         }
 
-        /// <summary>
-        /// Остановить шаг
-        /// </summary>
-        /// <returns></returns>
         public override bool Stop()
         {
             _cancellationTokenSource.Cancel();
@@ -131,14 +131,11 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             return true;
         }
 
-        /// <summary>
-        /// Установить эталонный канал
-        /// </summary>
-        /// <param name="ehalon"></param>
         public void SetEthalonChannel(IEthalonChannel ehalon)
         {
             _ethalonChannel = ehalon;
         }
+
 
         /// <summary>
         /// Установить теущее значение как точку
@@ -156,7 +153,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
         /// <param name="func"></param>
         /// <param name="errorMessage"></param>
         /// <returns></returns>
-        private bool DoOne(EventWaitHandle whEnd, CancellationToken cancel, Func<bool> func, string errorMessage )
+        private bool DoOne(EventWaitHandle whEnd, CancellationToken cancel, Func<bool> func, string errorMessage)
         {
             if (!func())
             {
@@ -189,5 +186,6 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             }
             return false;
         }
+
     }
 }

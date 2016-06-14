@@ -8,14 +8,16 @@ using Tools;
 
 namespace KipTM.Model.Checks.Steps.ADTSTest
 {
-    class Init : TestStep
+    class InitStep : TestStep
     {
+        public const string KeyCalibDate = "CalibDate";
+
         private readonly ADTSModel _adts;
         private readonly CalibChannel _calibChan;
         private readonly NLog.Logger _logger;
         private CancellationTokenSource _cancellationTokenSource;
 
-        public Init(string name, ADTSModel adts, CalibChannel calibChan, Logger logger)
+        public InitStep(string name, ADTSModel adts, CalibChannel calibChan, Logger logger)
         {
             Name = name;
             _adts = adts;
@@ -62,7 +64,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
                 }
             }
 
-            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor("CalibDate", null, ParameterType.Metadata), new ParameterResult(DateTime.Now, testDate)));
+            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor(KeyCalibDate, null, ParameterType.Metadata), new ParameterResult(DateTime.Now, testDate)));
 
             if (cancel.IsCancellationRequested)
             {
