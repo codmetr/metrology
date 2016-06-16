@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
+using ADTSData;
+using ArchiveData.DTO.Params;
 using KipTM.Archive;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks.Steps;
@@ -25,9 +27,14 @@ namespace KipTM.Model.Checks
         public const string KeyUnit = "Unit";
         public const string KeyChannel = "Channel";
 
+        private AdtsTestResults _result;
+        private AdtsPointResult _resultPoint;
+
         public ADTSCheckMethod(NLog.Logger logger) : base(logger)
         {
             MethodName = "Калибровка ADTS";
+            _result = new AdtsTestResults();
+            _resultPoint = new AdtsPointResult();
         }
 
         /// <summary>
@@ -91,5 +98,80 @@ namespace KipTM.Model.Checks
             Steps = steps;
             return true;
         }
+
+        protected override void StepEnd(object sender, EventArgEnd e)
+        {
+            if (_resultPoint != null)
+            {
+                _result.PointsResults.Add(_resultPoint);
+                _resultPoint = null;
+            }
+        }
+
+        protected override void StepResultUpdated(object sender, EventArgTestResult e)
+        {
+            FillResult(e);
+            base.StepResultUpdated(sender, e);
+        }
+
+        #region Fill results
+        /// <summary>
+        /// Заполнение полученных результатов проверки
+        /// </summary>
+        /// <param name="e"></param>
+        private void FillResult(EventArgTestResult e)
+        {
+            foreach (var parameterResult in e.Result)
+            {
+                SwitchParameter(parameterResult.Key, parameterResult.Value);
+            }
+        }
+
+        /// <summary>
+        /// Распределить результат в нужное поле результата
+        /// </summary>
+        /// <param name="descriptor"></param>
+        /// <param name="result"></param>
+        private void SwitchParameter(ParameterDescriptor descriptor, ParameterResult result)
+        {
+            switch (descriptor.Name)
+            {
+                case InitStep.KeyCalibDate:
+                    _result.CheckTime = (DateTime)result.Value;
+                    break;
+                case DoPointStep.KeyPressure:
+                    if (_resultPoint == null)
+                        _resultPoint = new AdtsPointResult();
+                    _resultPoint = SetProperty(_resultPoint, descriptor, result.Value);
+                    break;
+                default:
+                    throw new KeyNotFoundException(string.Format("Received not exected key [{0}]", descriptor.Name));
+            }
+        }
+
+        /// <summary>
+        /// Заполнить поле по заданному типу в параметре
+        /// </summary>
+        /// <param name="field">Заполняемое поле</param>
+        /// <param name="ptype">Тип заполняемого поля</param>
+        /// <param name="value">Значние поля</param>
+        /// <returns></returns>
+        public AdtsPointResult SetProperty(AdtsPointResult field, ParameterDescriptor ptype, object value)
+        {
+            field.Point = (double)ptype.Point;
+
+            if (ptype.PType == ParameterType.RealValue)
+                field.RealValue = (double)value;
+            else if (ptype.PType == ParameterType.Error)
+                field.Error = (double)value;
+            else if (ptype.PType == ParameterType.Tolerance)
+                field.Tolerance = (double)value;
+            else if (ptype.PType == ParameterType.IsCorrect)
+                field.IsCorrect = (bool)value;
+
+            return field;
+        }
+        #endregion
+
     }
 }
