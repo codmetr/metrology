@@ -220,8 +220,8 @@ namespace KipTM.ViewModel.Checks
                 _dispatcher.Invoke(() =>
                 {
                     Results.Add(result);
-                    _resultPool.Results.Add(result.Key, result.Value);
                 });
+                _resultPool.Results.Add(result.Key, result.Value);
             }
         }
 

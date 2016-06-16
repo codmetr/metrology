@@ -22,10 +22,10 @@ namespace KipTM.Model.Checks
     {
         public static string Key = "Поверка ADTS";
 
-        public const string KeyPoints = "Points";
-        public const string KeyRate = "Rate";
-        public const string KeyUnit = "Unit";
-        public const string KeyChannel = "Channel";
+        public const string KeyPropertyPoints = "Points";
+        public const string KeyPropertyRate = "Rate";
+        public const string KeyPropertyUnit = "Unit";
+        public const string KeyPropertyChannel = "Channel";
 
         private AdtsTestResults _result;
         private AdtsPointResult _resultPoint;
@@ -43,10 +43,10 @@ namespace KipTM.Model.Checks
         /// <returns></returns>
         public override bool Init(IPropertyPool propertyes)
         {
-            var points = propertyes.GetProperty<List<ADTSPoint>>(ADTSTestMethod.KeyPoints);
-            var channel = propertyes.GetProperty<CalibChannel>(ADTSTestMethod.KeyChannel);
-            var rate = propertyes.GetProperty<double>(ADTSTestMethod.KeyRate);
-            var unit = propertyes.GetProperty<PressureUnits>(ADTSTestMethod.KeyUnit);
+            var points = propertyes.GetProperty<List<ADTSPoint>>(KeyPropertyPoints);
+            var channel = propertyes.GetProperty<CalibChannel>(KeyPropertyChannel);
+            var rate = propertyes.GetProperty<double>(KeyPropertyRate);
+            var unit = propertyes.GetProperty<PressureUnits>(KeyPropertyUnit);
             return Init(new ADTSMethodParameters(channel, points, rate, unit));
         }
 
