@@ -6,7 +6,7 @@
              xmlns:checks="clr-namespace:KipTM.ViewModel.Checks"
              xmlns:pressureElementControls="clr-namespace:PressureElementControls;assembly=PressureElementControls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="700" d:DataContext="{d:DesignInstance checks:ADTSCalibrationViewModel}">
+             d:DesignHeight="300" d:DesignWidth="700" d:DataContext="{d:DesignInstance checks:ADTSBaseViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

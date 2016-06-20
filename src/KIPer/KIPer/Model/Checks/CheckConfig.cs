@@ -77,9 +77,9 @@ namespace KipTM.Model.Checks
             {
                 _result.TargetDevice = new DeviceDescriptor(_selectedType);
                 _check = _methodics.MethodsForType(_devTypeKey);
-                SelectedCheckTypeKey = CheckTypes.First();
                 Channels = _propertyPool.ByKey(_devTypeKey).GetAllKeys();
                 _result.Channel = Channels.First();
+                SelectedCheckTypeKey = CheckTypes.First();
             }
         }
 
@@ -264,6 +264,8 @@ namespace KipTM.Model.Checks
                 _selectedCheckTypeKey = value;
                 _result.CheckType = _selectedCheckTypeKey;
                 SelectedCheckType = _check[_selectedCheckTypeKey];
+                var properties = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel);
+                SelectedCheckType.Init(properties);
             }
         }
 

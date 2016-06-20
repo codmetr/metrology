@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:checks="clr-namespace:KipTM.ViewModel"
-             xmlns:view="clr-namespace:KipTM.View"
              mc:Ignorable="d"
              d:DesignHeight="550" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance checks:CheckViewModel}">
@@ -27,121 +26,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <!--<StackPanel Grid.Column="0" Grid.Row="0">
-            <GroupBox Header="Условия поверки">
-                <StackPanel>
-                    <TextBlock>Дата поверки:</TextBlock>
-                    <DatePicker FirstDayOfWeek="Monday" DisplayDate="{Binding CheckDateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock>Лаборатория:</TextBlock>
-                    <TextBox Text="{Binding Result.Laboratory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock>Температура:</TextBlock>
-                    <TextBox Text="{Binding Result.Temperature, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock>Влажность:</TextBlock>
-                    <TextBox Text="{Binding Result.Humidity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
-            </GroupBox>
-            <GroupBox Header="Проверяемое утсройство">
-                <StackPanel>
-                    <TextBlock>Тип устройства:</TextBlock>
-                    <ComboBox
-                        ItemsSource="{Binding DeviceTypes}"
-                        SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Value.Model}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <TextBlock>Изготовитель:</TextBlock>
-                    <TextBlock Text="{Binding SelectedDeviceType.DeviceManufacturer, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock>Инвентарный номер:</TextBlock>
-                    <TextBox Text="{Binding Result.TargetDevice.InventarNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock>Серийный номер:</TextBlock>
-                    <TextBox Text="{Binding Result.TargetDevice.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock>Дата прошлой поверки:</TextBlock>
-                    <DatePicker SelectedDate="{Binding Result.TargetDevice.PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock>Тип поверки:</TextBlock>
-                    <ComboBox
-                        ItemsSource="{Binding CheckTypes}"
-                        SelectedItem="{Binding SelectedCheckType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Value.Title}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <TextBlock>Канал:</TextBlock>
-                    <ComboBox
-                        ItemsSource="{Binding Channels}"
-                        SelectedItem="{Binding SelectedChannel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Expander Header="Настройки подключения">
-                        <StackPanel>
-                            <view:SelectChannelView DataContext="{Binding CheckDeviceChanel}"/>
-                        </StackPanel>
-                    </Expander>
-                </StackPanel>
-            </GroupBox>
-        </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="0">
-            <GroupBox Header="Эталон">
-                <StackPanel>
-                    <TextBlock>Настройки эталона:</TextBlock>
-                    <GroupBox Header="Эталон">
-                        <StackPanel>
-                            <ComboBox
-                                ItemsSource="{Binding EthalonTypes}"
-                                SelectedItem="{Binding SelectedEthalonType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Value.Model}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                            <TextBlock Text="Тип аналоговога прибора:">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsAnalogEthalon}" Value="TRUE">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                            <TextBox Text="{Binding EthalonDeviceType, UpdateSourceTrigger=PropertyChanged}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsAnalogEthalon}" Value="TRUE">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                            <TextBlock>Изготовитель:</TextBlock>
-                            <TextBox Text="{Binding EthalonManufacturer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                     IsReadOnly="{Binding IsAnalogEthalon, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock>Инвентарный номер:</TextBlock>
-                            <TextBox Text="{Binding InventarNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock>Серийный номер:</TextBlock>
-                            <TextBox Text="{Binding SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock>Дата прошлой поверки:</TextBlock>
-                            <DatePicker SelectedDate="{Binding PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                             <Expander Header="Настройки подключения"
-                                       Visibility="{Binding IsNoAnalogEthalon, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
-                                <StackPanel>
-                                    <view:SelectChannelView DataContext="{Binding EthalonChanel}"/>
-                                </StackPanel>
-                            </Expander>
-                        </StackPanel>
-                    </GroupBox>
-                </StackPanel>
-            </GroupBox>
-        </StackPanel>-->
-        <ContentPresenter Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Content="{Binding CheckConfig}"/>
+        <ContentPresenter Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Content="{Binding CheckConfig}" IsEnabled="{Binding IsCheckConfigAvailable}"/>
         <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
             <Button Command="{Binding Save}">Сохранить</Button>
             <Button Command="{Binding Report}">Протокол</Button>

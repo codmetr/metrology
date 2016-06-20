@@ -27,45 +27,46 @@ namespace KipTM.Model.Checks
         protected CalibChannel _calibChan;
         protected IEthalonChannel _ethalonChannel;
         protected IUserChannel _userChannel;
-        public ITransportChannelType ChannelType;
-        public ITransportChannelType EthalonChannelType;
+
+        private IEnumerable<ITestStep> _steps;
 
         protected ITestStep _currenTestStep = null;
         protected readonly object _currenTestStepLocker = new object();
 
+        protected string MethodName = "ADTS";
+
+        public ITransportChannelType ChannelType;
+        public ITransportChannelType EthalonChannelType;
+
         /// <summary>
         /// Ошибка
         /// </summary>
-        public EventHandler<EventArgError> Error;
+        public event EventHandler<EventArgError> Error;
 
         /// <summary>
         /// Изменился прогресс
         /// </summary>
-        public EventHandler<EventArgProgress> Progress;
+        public event EventHandler<EventArgProgress> Progress;
 
         /// <summary>
         /// Изменился набор точек
         /// </summary>
-        public EventHandler PointsChanged;
+        public event EventHandler PointsChanged;
 
         /// <summary>
         /// Изменился набор шагов
         /// </summary>
-        public EventHandler StepsChanged;
+        public event EventHandler StepsChanged;
 
         /// <summary>
         /// Получен результат
         /// </summary>
-        public EventHandler<EventArgTestResult> ResultUpdated;
+        public event EventHandler<EventArgTestStepResult> ResultUpdated;
 
         /// <summary>
         /// Проход закончен
         /// </summary>
-        public EventHandler EndMethod;
-
-        private IEnumerable<ITestStep> _steps;
-
-        protected string MethodName = "ADTS";
+        public event EventHandler EndMethod;
 
         protected ADTSMethodBase(Logger logger)
         {
@@ -74,7 +75,9 @@ namespace KipTM.Model.Checks
         }
 
         public string Title{get { return MethodName; }}
+
         public IEnumerable<ADTSPoint> Points { get; set; }
+
         public CalibChannel Channel{get { return _calibChan; } set { _calibChan = value; }}
 
         public string ChannelKey
@@ -84,9 +87,9 @@ namespace KipTM.Model.Checks
                 switch (_calibChan)
                 {
                     case CalibChannel.PT:
-                        return KeySettingsPS;
-                    case CalibChannel.PS:
                         return KeySettingsPT;
+                    case CalibChannel.PS:
+                        return KeySettingsPS;
                     case CalibChannel.PTPS:
                         return KeySettingsPSPT;
                     default:
@@ -154,7 +157,7 @@ namespace KipTM.Model.Checks
         public abstract bool Init(ADTSMethodParameters parameters);
 
         /// <summary>
-        /// Запуск калибровки
+        /// Запуск методики
         /// </summary>
         /// <returns></returns>
         public bool Start()
@@ -192,6 +195,9 @@ namespace KipTM.Model.Checks
 
         }
 
+        /// <summary>
+        /// Остановка методики
+        /// </summary>
         public void Stop()
         {
             if (Steps != null)
@@ -203,6 +209,9 @@ namespace KipTM.Model.Checks
             ToBaseAction();
         }
 
+        /// <summary>
+        /// Установить текущую точку как очередную ожидаемую
+        /// </summary>
         public void SetCurrentValueAsPoint()
         {
             IStoppedOnPoint pointstep;
@@ -263,7 +272,7 @@ namespace KipTM.Model.Checks
 
         protected abstract void StepEnd(object sender, EventArgEnd e);
 
-        protected virtual void StepResultUpdated(object sender, EventArgTestResult e)
+        protected virtual void StepResultUpdated(object sender, EventArgTestStepResult e)
         {
             OnResultUpdated(e);
         }
@@ -295,17 +304,30 @@ namespace KipTM.Model.Checks
             if (handler != null) handler(this, null);
         }
 
-        protected virtual void OnResultUpdated(EventArgTestResult e)
+        protected virtual void OnResultUpdated(EventArgTestStepResult e)
         {
-            var handler = ResultUpdated;
+            EventHandler<EventArgTestStepResult> handler = ResultUpdated;
             if (handler != null) handler(this, e);
         }
-
+ 
         protected virtual void OnEndMethod(EventArgs e)
         {
             var handler = EndMethod;
             if (handler != null) handler(this, e);
         }
+
+        protected virtual void StepResultUpdated(object sender, EventArgStepResult e)
+        {
+            FillResult(e);
+        }
+        #endregion
+
+        #region Fill results
+        /// <summary>
+        /// Заполнение полученных результатов проверки
+        /// </summary>
+        /// <param name="e"></param>
+        protected abstract void FillResult(EventArgStepResult e);
         #endregion
 
         protected virtual void ToBaseAction()

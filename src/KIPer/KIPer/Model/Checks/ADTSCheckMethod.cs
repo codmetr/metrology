@@ -108,18 +108,12 @@ namespace KipTM.Model.Checks
             }
         }
 
-        protected override void StepResultUpdated(object sender, EventArgTestResult e)
-        {
-            FillResult(e);
-            base.StepResultUpdated(sender, e);
-        }
-
         #region Fill results
         /// <summary>
         /// Заполнение полученных результатов проверки
         /// </summary>
         /// <param name="e"></param>
-        private void FillResult(EventArgTestResult e)
+        protected override void FillResult(EventArgStepResult e)
         {
             foreach (var parameterResult in e.Result)
             {

@@ -45,7 +45,7 @@ namespace KipTM.Model.Checks.Steps
         /// <summary>
         /// Получены какие-то результаты шага
         /// </summary>
-        public event EventHandler<EventArgTestResult> ResultUpdated;
+        public event EventHandler<EventArgStepResult> ResultUpdated;
 
         /// <summary>
         /// Шаг окончен
@@ -71,9 +71,9 @@ namespace KipTM.Model.Checks.Steps
             if (handler != null) handler(this, e);
         }
 
-        protected virtual void OnResultUpdated(EventArgTestResult e)
+        protected virtual void OnResultUpdated(EventArgStepResult e)
         {
-            EventHandler<EventArgTestResult> handler = ResultUpdated;
+            EventHandler<EventArgStepResult> handler = ResultUpdated;
             if (handler != null) handler(this, e);
         }
 

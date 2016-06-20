@@ -7,14 +7,14 @@ using ArchiveData.DTO.Params;
 
 namespace KipTM.Model.Checks
 {
-    public class EventArgTestResult
+    public class EventArgStepResult
     {
-        public EventArgTestResult(ParameterDescriptor descr, ParameterResult res)
+        public EventArgStepResult(ParameterDescriptor descr, ParameterResult res)
         {
             Result = new Dictionary<ParameterDescriptor, ParameterResult>() { { descr, res } };
         }
 
-        public EventArgTestResult(IDictionary<ParameterDescriptor, ParameterResult> results)
+        public EventArgStepResult(IDictionary<ParameterDescriptor, ParameterResult> results)
         {
             Result = results;
         }

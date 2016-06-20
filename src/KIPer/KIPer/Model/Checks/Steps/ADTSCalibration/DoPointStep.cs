@@ -102,9 +102,9 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             // Расчитать погрешность и зафиксировать реультата
             bool correctPoint = Math.Abs(Math.Abs(point) - Math.Abs(realValue)) <= _tolerance;
             _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
-            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor(KeyPressure, point, ParameterType.RealValue),
+            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.RealValue),
                     new ParameterResult(DateTime.Now, realValue)));
-            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor(KeyPressure, point, ParameterType.IsCorrect),
+            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.IsCorrect),
                     new ParameterResult(DateTime.Now, correctPoint)));
             if (IsCancel(whEnd, cancel))
             {

@@ -50,7 +50,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
                 return;
             }
             if (calibDate!=null)
-                OnResultUpdated(new EventArgTestResult(new ParameterDescriptor(KeyCalibDate, null, ParameterType.Metadata), new ParameterResult(DateTime.Now, calibDate.Value)));
+                OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyCalibDate, null, ParameterType.Metadata), new ParameterResult(DateTime.Now, calibDate.Value)));
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));

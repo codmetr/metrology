@@ -10,7 +10,7 @@ namespace KipTM.Archive.DTO
         public TestResult()
         {
             Etalon = new List<DeviceDescriptor>();
-            Results = new Dictionary<ParameterDescriptor, ParameterResult>();
+            Results = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -71,6 +71,6 @@ namespace KipTM.Archive.DTO
         /// <summary>
         /// Результаты
         /// </summary>
-        public Dictionary<ParameterDescriptor, ParameterResult> Results { get; set; }
+        public Dictionary<string, object> Results { get; set; }
     }
 }

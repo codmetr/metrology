@@ -23,7 +23,7 @@ namespace KipTM.Model.Checks
         /// <summary>
         /// Шаг запущен
         /// </summary>
-        event EventHandler<EventArgTestResult> ResultUpdated;
+        event EventHandler<EventArgStepResult> ResultUpdated;
 
         /// <summary>
         /// Изменение прогресса шага (0-100 %)

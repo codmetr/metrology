@@ -40,6 +40,8 @@ namespace KipTM.ViewModel
 
         private CheckConfig _checkConfig;
         private CheckConfigViewModel _checkConfigViewModel;
+        private bool _isChecConfigAvailable;
+
         #endregion
 
         #region Конструкторы и инициализация
@@ -77,7 +79,18 @@ namespace KipTM.ViewModel
         #endregion
 
         #region Условия проверки
+        /// <summary>
+        /// Доступность конфигурации проверки
+        /// </summary>
+        public bool IsCheckConfigAvailable
+        {
+            get { return _isChecConfigAvailable; }
+            set { Set(ref _isChecConfigAvailable, value); }
+        }
 
+        /// <summary>
+        /// Представление конфигурации проверки
+        /// </summary>
         public CheckConfigViewModel CheckConfig
         {
             get { return _checkConfigViewModel; }
@@ -94,11 +107,41 @@ namespace KipTM.ViewModel
         public IMethodViewModel Check
         {
             get { return _selectedCheck; }
-            set { Set(ref _selectedCheck, value); }
+            set
+            {
+                if (_selectedCheck == value)
+                    return;
+                DetachMethod(_selectedCheck);
+                Set(ref _selectedCheck, value);
+                AttachMethod(_selectedCheck);
+            }
         }
         #endregion
 
         #region Сервисные методы
+        /// <summary>
+        /// Прикрепить обработчики к методике
+        /// </summary>
+        /// <param name="method"></param>
+        private void AttachMethod(IMethodViewModel method)
+        {
+            if(method==null)
+                return;
+            method.Started += method_Started;
+            method.Stoped += method_Stoped;
+        }
+
+        /// <summary>
+        /// Открепить обработчики от методики
+        /// </summary>
+        /// <param name="method"></param>
+        private void DetachMethod(IMethodViewModel method)
+        {
+            if(method==null)
+                return;
+            method.Started -= method_Started;
+            method.Stoped -= method_Stoped;
+        }
 
         private IMethodViewModel GetViewModelFor(ICheckMethod methodic)
         {
@@ -115,6 +158,26 @@ namespace KipTM.ViewModel
                 return new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(_checkConfig.SelectedDeviceTypeKey), _deviceManager, _checkConfig.Result);
             }
             return null;
+        }
+
+        /// <summary>
+        /// Выполнение методики завершено
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void method_Stoped(object sender, EventArgs e)
+        {
+            IsCheckConfigAvailable = true;
+        }
+
+        /// <summary>
+        /// Методика запущена на выполнение
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void method_Started(object sender, EventArgs e)
+        {
+            IsCheckConfigAvailable = false;
         }
 
         void _checkConfigViewModel_CheckedDeviseChannelChanged(object sender, EventArgs e)

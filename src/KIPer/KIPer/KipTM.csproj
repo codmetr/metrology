@@ -111,6 +111,7 @@
     <Compile Include="Model\Checks\ADTSMethodBase.cs" />
     <Compile Include="Model\Checks\ADTSTestMethod.cs" />
     <Compile Include="Model\Checks\CheckConfig.cs" />
+    <Compile Include="Model\Checks\EventArgs\EventArgTestStepResult.cs" />
     <Compile Include="Model\Checks\EventArgs\EventArgEnd.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\ToBaseStep.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\InitStep.cs" />
@@ -120,7 +121,7 @@
     <Compile Include="Model\Channels\IEthalonChannel.cs" />
     <Compile Include="Model\Checks\EventArgs\EventArgError.cs" />
     <Compile Include="Model\Checks\EventArgs\EventArgProgress.cs" />
-    <Compile Include="Model\Checks\EventArgs\EventArgResultParam.cs" />
+    <Compile Include="Model\Checks\EventArgs\EventArgStepResult.cs" />
     <Compile Include="Model\Checks\ICheckMethod.cs" />
     <Compile Include="Model\Checks\Steps\ADTSTest\EndStep.cs" />
     <Compile Include="Model\Checks\Steps\ADTSTest\DoPointStep.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Settings\MainSettings.cs" />
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
     <Compile Include="ViewModel\Channels\PACEEchalonChannelViewModel.cs" />
+    <Compile Include="ViewModel\Checks\ADTSBaseViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTSCalibrationViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckConfigViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckViewModel.cs" />

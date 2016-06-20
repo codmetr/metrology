@@ -33,10 +33,12 @@ namespace KipTM.ViewModel.Checks
     /// </para>
     /// </summary>
     [MethodicViewModelAttribute(typeof(ADTSCheckMethod))]
-    public class ADTSCalibrationViewModel : ViewModelBase, IMethodViewModel
+    public class ADTSCalibrationViewModel : ADTSBaseViewModel
     {
-        private string _titleBtnNext;
+        /*
+        #region members
         private ADTSCheckMethod _methodic;
+        private string _titleBtnNext;
         private IUserChannel _userChannel;
         private UserEthalonChannel _userEchalonChannel;
         private IPropertyPool _propertyPool;
@@ -46,7 +48,6 @@ namespace KipTM.ViewModel.Checks
 
         private double _realValue;
 
-        private CancellationTokenSource _cancellation;
         private bool _accept;
         private IEnumerable<StepViewModel> _steps;
         private string _note;
@@ -62,13 +63,20 @@ namespace KipTM.ViewModel.Checks
         private object _ethalonChannel;
         private object _ethalonChannelViewModel;
         private bool _stopEnabled = false;
+        #endregion
+        */
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
         /// </summary>
-        public ADTSCalibrationViewModel(ADTSCheckMethod methodic, IPropertyPool propertyPool, IDeviceManager deviceManager, TestResult resultPool)
+        public ADTSCalibrationViewModel(
+            ADTSCheckMethod methodic, IPropertyPool propertyPool,
+            IDeviceManager deviceManager, TestResult resultPool) :
+            base(methodic, propertyPool, deviceManager, resultPool)
+        {}
+
+        /*
         {
-            _cancellation = new CancellationTokenSource();
             _userChannel = new UserChannel();
             _userEchalonChannel = new UserEthalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
             _methodic = methodic;
@@ -88,58 +96,12 @@ namespace KipTM.ViewModel.Checks
 
             _userChannel.QueryStarted += _userChannel_QueryStarted;
 
-            Results = new ObservableCollection<KeyValuePair<ParameterDescriptor, ParameterResult>>();
+            Results = new ObservableCollection<EventArgTestStepResult>();
             Steps = _methodic.Steps.Select(el=>new StepViewModel(el));
             TitleBtnNext = "Старт";
             _currentAction = DoStart;
             _dispatcher = Dispatcher.CurrentDispatcher;
         }
-
-        #region Interface for config
-        public event EventHandler Started;
-
-        public event EventHandler Stoped;
-
-        public ADTSViewModel ADTS
-        {
-            get { return _adtsViewModel; }
-        }
-
-        public void SetConnection(ITransportChannelType connection)
-        {
-            _connection = connection;
-        }
-
-        private void ResultUpdated(object sender, EventArgTestResult eventArgTestResult)
-        {
-            foreach (var result in eventArgTestResult.Result)
-            {
-                _dispatcher.Invoke(() =>
-                {
-                    Results.Add(result);
-                    _resultPool.Results.Add(result.Key, result.Value);
-                });
-            }
-        }
-
-        public void SlectUserEthalonChannel()
-        {
-            _methodic.SetEthalonChannel(_userEchalonChannel, null);
-            _ethalonTypeKey = null;
-            _ethalonChannelType = null;
-            IsUserChannel = true;
-            EthalonChannel = null;
-        }
-
-        public void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings)
-        {
-            _ethalonTypeKey = ethalonTypeKey;
-            _ethalonChannelType = settings;
-            IsUserChannel = _ethalonTypeKey == null;
-            EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType);
-        }
-        #endregion
-
         #region Properties for View
         public bool IsUserChannel
         {
@@ -190,7 +152,7 @@ namespace KipTM.ViewModel.Checks
             set { Set(ref _waitUserReaction, value); }
         }
 
-        public ObservableCollection<KeyValuePair<ParameterDescriptor, ParameterResult>> Results { get; private set; }
+        public ObservableCollection<EventArgTestStepResult> Results { get; private set; }
 
         public ICommand SetCurrentValueAsPoint { get { return new CommandWrapper(DoStopOnCurrentValue); } }
         
@@ -353,6 +315,6 @@ namespace KipTM.ViewModel.Checks
             if (_methodic != null && _methodic.StepsChanged != null) _methodic.StepsChanged -= OnStepsChanged;
             if (_userChannel != null) _userChannel.QueryStarted -= _userChannel_QueryStarted;
             base.Cleanup();
-        }
+        }*/
     }
 }

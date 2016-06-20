@@ -64,7 +64,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
                 }
             }
 
-            OnResultUpdated(new EventArgTestResult(new ParameterDescriptor(KeyCalibDate, null, ParameterType.Metadata), new ParameterResult(DateTime.Now, testDate)));
+            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyCalibDate, null, ParameterType.Metadata), new ParameterResult(DateTime.Now, testDate)));
 
             if (cancel.IsCancellationRequested)
             {
