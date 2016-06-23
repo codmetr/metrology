@@ -44,17 +44,15 @@ namespace KipTM.ViewModel.Checks
         private object _ethalonChannelViewModel;
         private bool _stopEnabled = false;
 
-        protected ADTSBaseViewModel(ADTSMethodBase methodic, IPropertyPool propertyPool,
+        protected ADTSBaseViewModel(ADTSMethodBase method, IPropertyPool propertyPool,
             IDeviceManager deviceManager, TestResult resultPool)
         {
-            Method = methodic;
+            Method = method;
             _propertyPool = propertyPool;
             // Базовая инициализация
-            var adts = _propertyPool.ByKey(methodic.ChannelKey);
+            var adts = _propertyPool.ByKey(method.ChannelKey);
             Method.Init(adts);
-            Method.StepsChanged += OnStepsChanged;
-            Method.ResultUpdated += ResultUpdated;
-
+            AttachEvent(method);
 
             Steps = Method.Steps.Select(el => new StepViewModel(el));
             
@@ -268,6 +266,7 @@ namespace KipTM.ViewModel.Checks
             }
         }
 
+        #region Event reaction
         /// <summary>
         /// Установить текущее значение точкой проверки
         /// </summary>
@@ -426,6 +425,26 @@ namespace KipTM.ViewModel.Checks
             });
         }
 
+        void EndMethod(object sender, EventArgs e)
+        {
+            _resultPool.Results = M ;
+        }
+        #endregion
+
+        private void AttachEvent(ADTSMethodBase model)
+        {
+            model.StepsChanged += OnStepsChanged;
+            model.ResultUpdated += ResultUpdated;
+            model.EndMethod += EndMethod;
+        }
+
+        private void DetachEvent(ADTSMethodBase model)
+        {
+            model.StepsChanged -= OnStepsChanged;
+            model.ResultUpdated -= ResultUpdated;
+            model.EndMethod -= EndMethod;
+        }
+
         object GetViewModelForChannel(object model) //TODO обеспечить получение визуальной модели по реальной модели
         {
             if (model is PACEEthalonChannel)
@@ -438,11 +457,9 @@ namespace KipTM.ViewModel.Checks
         public override void Cleanup()
         {
             if (Method != null)
-            {
-                Method.StepsChanged -= OnStepsChanged;
-                Method.ResultUpdated -= ResultUpdated;
-            }
-            if (_userChannel != null) _userChannel.QueryStarted -= OnQueryStarted;
+                DetachEvent(Method);
+            if (_userChannel != null)
+                _userChannel.QueryStarted -= OnQueryStarted;
             base.Cleanup();
         }
         #endregion

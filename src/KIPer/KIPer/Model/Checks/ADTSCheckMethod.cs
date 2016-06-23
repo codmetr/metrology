@@ -47,14 +47,14 @@ namespace KipTM.Model.Checks
             var channel = propertyes.GetProperty<CalibChannel>(ADTSCheckMethod.KeyChannel);
             var rate = propertyes.GetProperty<double>(ADTSCheckMethod.KeyRate);
             var unit = propertyes.GetProperty<PressureUnits>(ADTSCheckMethod.KeyUnit);
-            return Init(new ADTSMethodParameters(channel, points, rate, unit));
+            return FillSteps(new ADTSMethodParameters(channel, points, rate, unit));
         }
 
         /// <summary>
-        /// Инициализация 
+        /// Заполнение списка шагов 
         /// </summary>
         /// <returns></returns>
-        public override bool Init(ADTSMethodParameters parameters)
+        public bool FillSteps(ADTSMethodParameters parameters)
         {
             _logger.With(l => l.Trace("Init ADTSCheckMethodic"));
 

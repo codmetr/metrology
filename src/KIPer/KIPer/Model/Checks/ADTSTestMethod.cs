@@ -47,14 +47,14 @@ namespace KipTM.Model.Checks
             var channel = propertyes.GetProperty<CalibChannel>(KeyPropertyChannel);
             var rate = propertyes.GetProperty<double>(KeyPropertyRate);
             var unit = propertyes.GetProperty<PressureUnits>(KeyPropertyUnit);
-            return Init(new ADTSMethodParameters(channel, points, rate, unit));
+            return FillSteps(new ADTSMethodParameters(channel, points, rate, unit));
         }
 
         /// <summary>
-        /// Инициализация 
+        /// Заполнение списка шагов 
         /// </summary>
         /// <returns></returns>
-        public override bool Init(ADTSMethodParameters parameters)
+        public bool FillSteps(ADTSMethodParameters parameters)
         {
             _logger.With(l => l.Trace("Init ADTSTestMethodic"));
 
@@ -101,6 +101,7 @@ namespace KipTM.Model.Checks
             {
                 _result.PointsResults.Add(_resultPoint);
                 _resultPoint = null;
+
             }
         }
         #region Fill results

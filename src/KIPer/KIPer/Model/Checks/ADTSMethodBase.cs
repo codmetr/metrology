@@ -38,6 +38,7 @@ namespace KipTM.Model.Checks
         public ITransportChannelType ChannelType;
         public ITransportChannelType EthalonChannelType;
 
+        #region events
         /// <summary>
         /// Ошибка
         /// </summary>
@@ -67,6 +68,7 @@ namespace KipTM.Model.Checks
         /// Проход закончен
         /// </summary>
         public event EventHandler EndMethod;
+        #endregion
 
         protected ADTSMethodBase(Logger logger)
         {
@@ -74,87 +76,17 @@ namespace KipTM.Model.Checks
             _cancelSource = new CancellationTokenSource();
         }
 
+        #region ICheckMethod
+        /// <summary>
+        /// Название методики
+        /// </summary>
         public string Title{get { return MethodName; }}
-
-        public IEnumerable<ADTSPoint> Points { get; set; }
-
-        public CalibChannel Channel{get { return _calibChan; } set { _calibChan = value; }}
-
-        public string ChannelKey
-        {
-            get
-            {
-                switch (_calibChan)
-                {
-                    case CalibChannel.PT:
-                        return KeySettingsPT;
-                    case CalibChannel.PS:
-                        return KeySettingsPS;
-                    case CalibChannel.PTPS:
-                        return KeySettingsPSPT;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
-
-        public IEnumerable<ITestStep> Steps
-        {
-            get { return _steps; }
-            protected set
-            {
-                _steps = value;
-                OnStepsChanged();
-            }
-        }
-
-        public void SetEthalonChannel(IEthalonChannel ethalonChannel, ITransportChannelType transport)
-        {
-            _ethalonChannel = ethalonChannel;
-            EthalonChannelType = transport;
-            foreach (var testStep in Steps)
-            {
-                var step = testStep as ISettedEthalonChannel;
-                if(step==null)
-                    continue;
-                step.SetEthalonChannel(ethalonChannel);
-            }
-        }
-
-        public void SetUserChannel(IUserChannel userChannel)
-        {
-            _userChannel = userChannel;
-            foreach (var testStep in Steps)
-            {
-                var step = testStep as ISettedUserChannel;
-                if (step == null)
-                    continue;
-                step.SetUserChannel(_userChannel);
-            }
-        }
-
-        public void SetADTS(ADTSModel adts)
-        {
-            _adts = adts;
-            
-        }
-
-        public ADTSModel GetADTS()
-        {
-            return _adts;
-        }
 
         /// <summary>
         /// Инициализация 
         /// </summary>
         /// <returns></returns>
         public abstract bool Init(IPropertyPool propertyes);
-
-        /// <summary>
-        /// Инициализация 
-        /// </summary>
-        /// <returns></returns>
-        public abstract bool Init(ADTSMethodParameters parameters);
 
         /// <summary>
         /// Запуск методики
@@ -207,6 +139,61 @@ namespace KipTM.Model.Checks
                 }
             Cancel(); 
             ToBaseAction();
+        }
+
+        /// <summary>
+        /// Список шагов
+        /// </summary>
+        public IEnumerable<ITestStep> Steps
+        {
+            get { return _steps; }
+            protected set
+            {
+                _steps = value;
+                OnStepsChanged();
+            }
+        }
+        #endregion
+
+        public string ChannelKey
+        {
+            get
+            {
+                switch (_calibChan)
+                {
+                    case CalibChannel.PT:
+                        return KeySettingsPT;
+                    case CalibChannel.PS:
+                        return KeySettingsPS;
+                    case CalibChannel.PTPS:
+                        return KeySettingsPSPT;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        public void SetEthalonChannel(IEthalonChannel ethalonChannel, ITransportChannelType transport)
+        {
+            _ethalonChannel = ethalonChannel;
+            EthalonChannelType = transport;
+            foreach (var testStep in Steps)
+            {
+                var step = testStep as ISettedEthalonChannel;
+                if(step==null)
+                    continue;
+                step.SetEthalonChannel(ethalonChannel);
+            }
+        }
+
+        public void SetADTS(ADTSModel adts)
+        {
+            _adts = adts;
+        }
+
+        public ADTSModel GetADTS()
+        {
+            return _adts;
         }
 
         /// <summary>
@@ -272,9 +259,9 @@ namespace KipTM.Model.Checks
 
         protected abstract void StepEnd(object sender, EventArgEnd e);
 
-        protected virtual void StepResultUpdated(object sender, EventArgTestStepResult e)
+        protected virtual void StepResultUpdated(object sender, EventArgStepResult e)
         {
-            OnResultUpdated(e);
+            FillResult(e);
         }
         #endregion
 
@@ -314,11 +301,6 @@ namespace KipTM.Model.Checks
         {
             var handler = EndMethod;
             if (handler != null) handler(this, e);
-        }
-
-        protected virtual void StepResultUpdated(object sender, EventArgStepResult e)
-        {
-            FillResult(e);
         }
         #endregion
 
