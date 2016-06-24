@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B00215BC-0620-414B-83AB-6B88A152E0C2}</ProjectGuid>
+    <ProjectGuid>{EF16E7B3-223E-4F66-9685-A6CCB3973C28}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ADTSData</RootNamespace>
-    <AssemblyName>ADTSData</AssemblyName>
+    <RootNamespace>ADTSChecks</RootNamespace>
+    <AssemblyName>ADTSChecks</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,10 +39,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdtsPointResult.cs" />
-    <Compile Include="AdtsResults.cs" />
-    <Compile Include="IAdtsTestResults.cs" />
+    <Compile Include="ADTSChechPoint.cs" />
+    <Compile Include="ADTSCheckMethod.cs" />
+    <Compile Include="ADTSCheckParameters.cs" />
+    <Compile Include="ADTSMethodBase.cs" />
+    <Compile Include="AdtsPointService.cs" />
+    <Compile Include="ADTSTestMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Steps\ADTSCalibration\DoPointStep.cs" />
+    <Compile Include="Steps\ADTSCalibration\FinishStep.cs" />
+    <Compile Include="Steps\ADTSCalibration\InitStep.cs" />
+    <Compile Include="Steps\ADTSCalibration\ToBaseStep.cs" />
+    <Compile Include="Steps\ADTSTest\DoPointStep.cs" />
+    <Compile Include="Steps\ADTSTest\EndStep.cs" />
+    <Compile Include="Steps\ADTSTest\InitStep.cs" />
+    <Compile Include="Steps\ISettedEthalonChannel.cs" />
+    <Compile Include="Steps\ISettedUserChannel.cs" />
+    <Compile Include="Steps\IStoppedOnPoint.cs" />
+    <Compile Include="Steps\ITestStep.cs" />
+    <Compile Include="Steps\IToBaseStep.cs" />
+    <Compile Include="Steps\TestStep.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

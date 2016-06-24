@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ADTSData
 {
-    public class AdtsTestResults
+    public class AdtsTestResults : IAdtsTestResults
     {
         public DateTime CheckTime { get; set; }
         public List<AdtsPointResult> PointsResults { get; set; } 

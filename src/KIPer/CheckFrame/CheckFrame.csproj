@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B00215BC-0620-414B-83AB-6B88A152E0C2}</ProjectGuid>
+    <ProjectGuid>{81B358FE-6B31-49FF-AB34-45CB960E57B6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ADTSData</RootNamespace>
-    <AssemblyName>ADTSData</AssemblyName>
+    <RootNamespace>CheckFrame</RootNamespace>
+    <AssemblyName>CheckFrame</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,9 +39,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdtsPointResult.cs" />
-    <Compile Include="AdtsResults.cs" />
-    <Compile Include="IAdtsTestResults.cs" />
+    <Compile Include="Checks\CheckConfig.cs" />
+    <Compile Include="Checks\EventArgs\EventArgEnd.cs" />
+    <Compile Include="Checks\EventArgs\EventArgError.cs" />
+    <Compile Include="Checks\EventArgs\EventArgProgress.cs" />
+    <Compile Include="Checks\EventArgs\EventArgStepResult.cs" />
+    <Compile Include="Checks\EventArgs\EventArgTestStepResult.cs" />
+    <Compile Include="Checks\ICheckMethod.cs" />
+    <Compile Include="Checks\Steps\ISettedEthalonChannel.cs" />
+    <Compile Include="Checks\Steps\ISettedUserChannel.cs" />
+    <Compile Include="Checks\Steps\IStoppedOnPoint.cs" />
+    <Compile Include="Checks\Steps\ITestStep.cs" />
+    <Compile Include="Checks\Steps\IToBaseStep.cs" />
+    <Compile Include="Checks\Steps\TestStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

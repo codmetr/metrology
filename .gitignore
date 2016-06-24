@@ -45,3 +45,5 @@ src/KIPer/Reports/ReportAdts/obj/
 src/KIPer/Reports/ReportAdts/bin/
 src/KIPer/ADTSData/bin/
 src/KIPer/ADTSData/obj/
+src/KIPer/ADTSChecks/obj/
+src/KIPer/CheckFrame/obj/
