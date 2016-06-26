@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using ArchiveData.DTO;
-using ArchiveData.DTO.Params;
 
-namespace KipTM.Archive.DTO
+namespace ArchiveData.DTO
 {
     public class TestResult
     {
         public TestResult()
         {
             Etalon = new List<DeviceDescriptor>();
-            Results = new Dictionary<string, object>();
+            Results = new List<TestStepResult>();
         }
 
         /// <summary>
@@ -71,6 +69,6 @@ namespace KipTM.Archive.DTO
         /// <summary>
         /// Результаты
         /// </summary>
-        public Dictionary<string, object> Results { get; set; }
+        public List<TestStepResult> Results { get; set; }
     }
 }

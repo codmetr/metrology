@@ -161,6 +161,7 @@
     <Compile Include="ViewModel\Channels\PACEEchalonChannelViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTSBaseViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTSCalibrationViewModel.cs" />
+    <Compile Include="ViewModel\Checks\AdtsCheckStateViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckConfigViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTSTestViewModel.cs" />
@@ -200,8 +201,8 @@
     <Compile Include="View\Archive\ParamResDataGridView.xaml.cs">
       <DependentUpon>ParamResDataGridView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Checks\ADTSCalibrationView.xaml.cs">
-      <DependentUpon>ADTSCalibrationView.xaml</DependentUpon>
+    <Compile Include="View\Checks\AdtsCheckView.xaml.cs">
+      <DependentUpon>AdtsCheckView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Checks\CheckConfigView.xaml.cs">
       <DependentUpon>CheckConfigView.xaml</DependentUpon>
@@ -214,6 +215,9 @@
     </Compile>
     <Compile Include="View\Checks\PACE1000EthalonChannelView.xaml.cs">
       <DependentUpon>PACE1000EthalonChannelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Checks\Steps\AdtsPointResultView.xaml.cs">
+      <DependentUpon>AdtsPointResultView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Converters\DoubleToTimespanConverter.cs" />
     <Compile Include="View\DeviceTypes\DeviceTypesView.xaml.cs">
@@ -290,7 +294,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Checks\ADTSCalibrationView.xaml">
+    <Page Include="View\Checks\AdtsCheckView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -307,6 +311,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Checks\PACE1000EthalonChannelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Checks\Steps\AdtsPointResultView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -375,6 +383,7 @@
       <CustomToolNamespace>KipTM</CustomToolNamespace>
     </EmbeddedResource>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

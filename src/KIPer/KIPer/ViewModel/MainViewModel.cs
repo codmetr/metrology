@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
+using ADTSData;
+using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using KipTM.Archive.DTO;
 using KipTM.Interfaces;
 using KipTM.Model;
 using KipTM.Model.Devices;
@@ -12,6 +13,7 @@ using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 using KipTM.View;
 using KipTM.View.Checks;
+using KipTM.View.Checks.Steps;
 using KipTM.View.Services;
 using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Checks;
@@ -88,8 +90,9 @@ namespace KipTM.ViewModel
                 {typeof(CheckViewModel), typeof(CheckView)},
                 {typeof(CheckConfigViewModel), typeof(CheckConfigView)},
                 {typeof(MechanicalManometerViewModel), typeof(MechanicalManometerView)},
-                {typeof(ADTSCalibrationViewModel), typeof(ADTSCalibrationView)},
-                {typeof(ADTSTestViewModel), typeof(ADTSCalibrationView)},
+                {typeof(ADTSCalibrationViewModel), typeof(AdtsCheckView)},
+                {typeof(ADTSTestViewModel), typeof(AdtsCheckView)},
+                {typeof(AdtsPointResult), typeof(AdtsPointResultView)},
             };
         }
 

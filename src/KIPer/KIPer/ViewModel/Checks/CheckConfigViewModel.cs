@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using GalaSoft.MvvmLight;
-using KipTM.Archive.DTO;
 using KipTM.Model.Checks;
 using KipTM.Model.TransportChannels;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using KipTM.Archive.DTO;
 
 namespace ArchiveData.DTO
 {

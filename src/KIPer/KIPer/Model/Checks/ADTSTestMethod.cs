@@ -30,7 +30,8 @@ namespace KipTM.Model.Checks
         private AdtsTestResults _result;
         private AdtsPointResult _resultPoint;
 
-        public ADTSTestMethod(NLog.Logger logger) : base(logger)
+        public ADTSTestMethod(NLog.Logger logger)
+            : base(logger)
         {
             MethodName = "Поверка ADTS";
             _result = new AdtsTestResults();
@@ -102,12 +103,17 @@ namespace KipTM.Model.Checks
 
         protected override void StepEnd(object sender, EventArgEnd e)
         {
-            if (_resultPoint != null)
+            if (e.Key == DoPointStep.KeyStep && _resultPoint != null)
             {
                 _result.PointsResults.Add(_resultPoint);
                 OnResultUpdated(new EventArgTestStepResult(e.Key, _resultPoint));
                 _resultPoint = null;
             }
+            else if (e.Key == InitStep.KeyStep)
+            {
+                //OnResultUpdated(new EventArgTestStepResult(e.Key, _result.CheckTime));
+            }
+
         }
         #region Fill results
         /// <summary>

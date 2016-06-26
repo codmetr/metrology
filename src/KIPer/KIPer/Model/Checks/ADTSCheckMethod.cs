@@ -60,9 +60,6 @@ namespace KipTM.Model.Checks
 
             _calibChan = parameters.CalibChannel;
 
-            //if (_userChannel == null)
-            //    throw new NullReferenceException("\"UserChannel\" not fount in parameters as IUserChannel");
-
             var steps = new List<ITestStep>();
 
             // добавление шага инициализации
@@ -101,14 +98,20 @@ namespace KipTM.Model.Checks
 
         protected override void StepEnd(object sender, EventArgEnd e)
         {
-            if (_resultPoint != null)
+            if (e.Key == DoPointStep.KeyStep && _resultPoint != null)
             {
                 _result.PointsResults.Add(_resultPoint);
+                OnResultUpdated(new EventArgTestStepResult(e.Key, _resultPoint));
                 _resultPoint = null;
+            }
+            else if (e.Key == InitStep.KeyStep)
+            {
+                OnResultUpdated(new EventArgTestStepResult(e.Key, _result.CheckTime));
             }
         }
 
         #region Fill results
+        /// <summary>
         /// Распределить результат в нужное поле результата
         /// </summary>
         /// <param name="descriptor"></param>

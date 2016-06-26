@@ -7,10 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
+using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Archive;
-using KipTM.Archive.DTO;
 using KipTM.Model;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
@@ -22,27 +22,25 @@ namespace KipTM.ViewModel.Checks
 {
     public abstract class ADTSBaseViewModel : ViewModelBase, IMethodViewModel
     {
-        private string _titleBtnNext;
+        #region Members
         protected IUserChannel _userChannel;
         protected UserEthalonChannel _userEchalonChannel;
-        private IEnumerable<StepViewModel> _steps;
         protected IPropertyPool _propertyPool;
-        private bool _waitUserReaction;
         private ITransportChannelType _connection;
         private double _realValue;
         private bool _accept;
-        private string _note;
         protected Action _currentAction;
         protected Dispatcher _dispatcher;
         protected IDeviceManager _deviceManager;
         private string _ethalonTypeKey;
-        private ITransportChannelType _ethalonChannelType;
         protected TestResult _resultPool;
-        protected ADTSViewModel _adtsViewModel;
-        private bool _isUserChannel;
         private object _ethalonChannel;
-        private object _ethalonChannelViewModel;
+        private ITransportChannelType _ethalonChannelType;
         private bool _stopEnabled = false;
+
+        private AdtsCheckStateViewModel _stateViewModel;
+
+        #endregion
 
         protected ADTSBaseViewModel(ADTSMethodBase method, IPropertyPool propertyPool,
             IDeviceManager deviceManager, TestResult resultPool)
@@ -54,22 +52,60 @@ namespace KipTM.ViewModel.Checks
             Method.Init(adts);
             AttachEvent(method);
 
-            Steps = Method.Steps.Select(el => new StepViewModel(el));
             
             _userChannel = new UserChannel();
-            _userEchalonChannel = new UserEthalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
             _deviceManager = deviceManager;
             _resultPool = resultPool;
-            _adtsViewModel = new ADTSViewModel(_deviceManager);
-            Results = new ObservableCollection<EventArgTestStepResult>();
             _userChannel.QueryStarted += OnQueryStarted;
             _currentAction = DoStart;
             _dispatcher = Dispatcher.CurrentDispatcher;
-            TitleBtnNext = "Старт";
+            _userEchalonChannel = new UserEthalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
+
+            _stateViewModel = new AdtsCheckStateViewModel();
+            _stateViewModel.TitleBtnNext = "Старт";
+            _stateViewModel.ADTS = new ADTSViewModel(_deviceManager);
+            _stateViewModel.Steps = Method.Steps.Select(el => new StepViewModel(el));
+            _stateViewModel.ResultsLog = new ObservableCollection<EventArgTestStepResult>();
         }
 
+        #region IMethodViewModel
 
-        #region Interface for config
+        /// <summary>
+        /// Задать подключение для ADTS
+        /// </summary>
+        /// <param name="connection"></param>
+        public void SetConnection(ITransportChannelType connection)
+        {
+            _connection = connection;
+        }
+
+        /// <summary>
+        /// Установить эталонный канал
+        /// </summary>
+        /// <param name="ethalonTypeKey"></param>
+        /// <param name="settings"></param>
+        public void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings)
+        {
+            _ethalonTypeKey = ethalonTypeKey;
+            _ethalonChannelType = settings;
+            State.IsUserChannel = _ethalonTypeKey == null;
+            EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType);
+        }
+
+        /// <summary>
+        /// Установить пользователя эталонным каналом
+        /// </summary>
+        public void SlectUserEthalonChannel()
+        {
+            Method.SetEthalonChannel(_userEchalonChannel, null);
+            _ethalonTypeKey = null;
+            _ethalonChannelType = null;
+            State.IsUserChannel = true;
+            EthalonChannel = null;
+        }
+
+        public TestResult CurrentResult{get { return _resultPool; }}
+
         /// <summary>
         /// Проверка запущена
         /// </summary>
@@ -83,79 +119,7 @@ namespace KipTM.ViewModel.Checks
         #endregion
 
         #region Interface of state
-        /// <summary>
-        /// Представление сосотояния ADTS
-        /// </summary>
-        public ADTSViewModel ADTS
-        {
-            get { return _adtsViewModel; }
-        }
-
-        public bool IsUserChannel
-        {
-            get { return _isUserChannel; }
-            set
-            {
-                Set(ref _isUserChannel, value);
-                RaisePropertyChanged("IsNotUserChannel");
-            }
-        }
-
-        public bool IsNotUserChannel
-        {
-            get { return !_isUserChannel; }
-        }
-
-        /// <summary>
-        /// Описатели шагов проверки
-        /// </summary>
-        public IEnumerable<StepViewModel> Steps
-        {
-            get { return _steps; }
-            set { Set(ref _steps, value); }
-        }
-
-        /// <summary>
-        /// Представление Эталонного канала
-        /// </summary>
-        public object EthalonChannelViewModel
-        {
-            get { return _ethalonChannelViewModel; }
-            set { Set(ref _ethalonChannelViewModel, value); }
-        }
-
-        /// <summary>
-        /// Название кнопки Старт/Далее
-        /// </summary>
-        public string TitleBtnNext
-        {
-            get { return _titleBtnNext; }
-            set { Set(ref _titleBtnNext, value); }
-        }
-
-        /// <summary>
-        /// Примечание к роверке
-        /// </summary>
-        public string Note
-        {
-            get { return _note; }
-            set { Set(ref _note, value); }
-        }
-
-        /// <summary>
-        /// Ожидать реакцию пользователя
-        /// </summary>
-        public bool WaitUserReaction
-        {
-            get { return _waitUserReaction; }
-            set { Set(ref _waitUserReaction, value); }
-        }
-
-        /// <summary>
-        /// Результаты
-        /// </summary>
-        public ObservableCollection<EventArgTestStepResult> Results { get; private set; }
-
+        public AdtsCheckStateViewModel State{get { return _stateViewModel; }}
         #endregion
 
         #region Interface of rule
@@ -213,43 +177,6 @@ namespace KipTM.ViewModel.Checks
 
         #endregion
 
-        #region Interface of config
-        /// <summary>
-        /// Задать подключение для ADTS
-        /// </summary>
-        /// <param name="connection"></param>
-        public void SetConnection(ITransportChannelType connection)
-        {
-            _connection = connection;
-        }
-
-        /// <summary>
-        /// Установить эталонный канал
-        /// </summary>
-        /// <param name="ethalonTypeKey"></param>
-        /// <param name="settings"></param>
-        public void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings)
-        {
-            _ethalonTypeKey = ethalonTypeKey;
-            _ethalonChannelType = settings;
-            IsUserChannel = _ethalonTypeKey == null;
-            EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType);
-        }
-
-        /// <summary>
-        /// Установить пользователя эталонным каналом
-        /// </summary>
-        public void SlectUserEthalonChannel()
-        {
-            Method.SetEthalonChannel(_userEchalonChannel, null);
-            _ethalonTypeKey = null;
-            _ethalonChannelType = null;
-            IsUserChannel = true;
-            EthalonChannel = null;
-        }
-
-        #endregion
-
         #region Services
         protected virtual ADTSMethodBase Method { get; set; }
 
@@ -262,7 +189,7 @@ namespace KipTM.ViewModel.Checks
             set
             {
                 Set(ref _ethalonChannel, value);
-                EthalonChannelViewModel = GetViewModelForChannel(_ethalonChannel);
+                State.EthalonChannelViewModel = GetViewModelForChannel(_ethalonChannel);
             }
         }
 
@@ -291,12 +218,12 @@ namespace KipTM.ViewModel.Checks
         /// </summary>
         protected void DoStart()
         {
-            TitleBtnNext = "Далее";
+            State.TitleBtnNext = "Далее";
             //var visaSett = _connection.SelectedChannel.Settings as VisaSettings;
             //if (visaSett != null)
             //    visaSett.Address = _connection.Address;
             Method.ChannelType = _connection;
-            _adtsViewModel.Start(Method.GetADTS(), _connection);
+            State.ADTS.Start(Method.GetADTS(), _connection);
             // Задаем эталон
             if (_ethalonTypeKey != null && _ethalonChannelType != null)
                 Method.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType), _ethalonChannelType);
@@ -318,7 +245,7 @@ namespace KipTM.ViewModel.Checks
         /// </summary>
         private void DoNext()
         {
-            TitleBtnNext = "Далее";
+            State.TitleBtnNext = "Далее";
             if (_userChannel.QueryType == UserQueryType.GetRealValue)
             {
                 _userChannel.RealValue = RealValue;
@@ -331,7 +258,7 @@ namespace KipTM.ViewModel.Checks
         /// </summary>
         private void DoAccept()
         {
-            TitleBtnNext = "Старт";
+            State.TitleBtnNext = "Старт";
             if (_userChannel.QueryType == UserQueryType.GetAccept)
             {
                 _userChannel.AcceptValue = true;
@@ -346,7 +273,7 @@ namespace KipTM.ViewModel.Checks
         /// </summary>
         private void DoCancel()
         {
-            TitleBtnNext = "Старт";
+            State.TitleBtnNext = "Старт";
 
             Method.Stop();
 
@@ -385,7 +312,7 @@ namespace KipTM.ViewModel.Checks
         /// <param name="eventArgs"></param>
         protected void OnStepsChanged(object sender, EventArgs eventArgs)
         {
-            Steps = new ObservableCollection<StepViewModel>(Method.Steps.Select(el => new StepViewModel(el)));
+            State.Steps = new ObservableCollection<StepViewModel>(Method.Steps.Select(el => new StepViewModel(el)));
         }
 
         /// <summary>
@@ -397,15 +324,15 @@ namespace KipTM.ViewModel.Checks
         {
             if (_userChannel.QueryType == UserQueryType.GetRealValue)
             {
-                TitleBtnNext = "Далее";
-                Note = string.Format("Укажите эталонное значение и нажмите \"{0}\"", TitleBtnNext);
+                State.TitleBtnNext = "Далее";
+                State.Note = string.Format("Укажите эталонное значение и нажмите \"{0}\"", State.TitleBtnNext);
                 RealValue = _userChannel.RealValue;
                 _currentAction = DoNext;
             }
             else if (_userChannel.QueryType == UserQueryType.GetAccept)
             {
-                TitleBtnNext = "Отмена";
-                Note = string.Format("Что бы применить результат калибровки нажмите \"Подтвердить\", в противном случае нажмите \"{0}\"", TitleBtnNext);
+                State.TitleBtnNext = "Отмена";
+                State.Note = string.Format("Что бы применить результат калибровки нажмите \"Подтвердить\", в противном случае нажмите \"{0}\"", State.TitleBtnNext);
                 AcceptEnabled = true;
                 _currentAction = DoCancel;
             }
@@ -420,14 +347,14 @@ namespace KipTM.ViewModel.Checks
         {
             _dispatcher.Invoke(() =>
             {
-                Results.Add(eventArgTestResult);
-                _resultPool.Results.Add(eventArgTestResult.Key, eventArgTestResult.Result);
+                State.ResultsLog.Add(eventArgTestResult);
+                _resultPool.Results.Add(new TestStepResult( eventArgTestResult.Key, eventArgTestResult.Result));
             });
         }
 
         void EndMethod(object sender, EventArgs e)
         {
-            _resultPool.Results = M ;
+            //_resultPool.Results = M ;
         }
         #endregion
 

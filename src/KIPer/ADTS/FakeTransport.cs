@@ -14,6 +14,7 @@ namespace ADTS
         private string _unit = "PSI";
         private IDictionary<string, string> _rate = new Dictionary<string, string>();
         private IDictionary<string, string> _aim = new Dictionary<string, string>();
+        private string _status = "10";
 
 
         public bool Open(int address)
@@ -47,7 +48,7 @@ namespace ADTS
                 case ADTSParser.KeyGetState: return "ON";
                 case ADTSParser.KeyGetCalibrationResult: return "0.5,0";
                 case ADTSParser.KeyGetUnitPressure: return _unit;
-                case ADTSParser.KeyGetStatusOfADTS: return "10";
+                case ADTSParser.KeyGetStatusOfADTS: return _status;
                 default:
                     if (reqArr[0] == ADTSParser.KeySetState.Split(" ".ToCharArray())[0])
                         return "";
@@ -83,6 +84,8 @@ namespace ADTS
                             _aim[aim[0]] = aim[1];
                         else
                             _aim.Add(aim[0], aim[1]);
+
+                        _status = (1 << 8 | 1 << 10).ToString();
                         return "";
                     }
                     else if (reqArr[0] == ADTSParser.KeyGetAim.Split(" ".ToCharArray())[0])

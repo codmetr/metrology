@@ -21,6 +21,8 @@ namespace KipTM.Model.Checks
         public const string KeySettingsPT = "ADTSCalibrationPt";
         public const string KeySettingsPSPT = "ADTSCalibrationPsPt";
 
+        protected string MethodName = "ADTS";
+
         protected ADTSModel _adts;
         protected CancellationTokenSource _cancelSource;
         protected readonly NLog.Logger _logger;
@@ -34,10 +36,14 @@ namespace KipTM.Model.Checks
         protected ITestStep _currenTestStep = null;
         protected readonly object _currenTestStepLocker = new object();
 
-        protected string MethodName = "ADTS";
-
         public ITransportChannelType ChannelType;
         public ITransportChannelType EthalonChannelType;
+
+        protected ADTSMethodBase(Logger logger)
+        {
+            _logger = logger;
+            _cancelSource = new CancellationTokenSource();
+        }
 
         #region events
         /// <summary>
@@ -71,13 +77,8 @@ namespace KipTM.Model.Checks
         public event EventHandler EndMethod;
         #endregion
 
-        protected ADTSMethodBase(Logger logger)
-        {
-            _logger = logger;
-            _cancelSource = new CancellationTokenSource();
-        }
-
         #region ICheckMethod
+        
         /// <summary>
         /// Название методики
         /// </summary>
@@ -317,12 +318,13 @@ namespace KipTM.Model.Checks
                 SwitchParameter(parameterResult.Key, parameterResult.Value);
             }
         }
+
         /// <summary>
         /// Распределить результат в нужное поле результата
         /// </summary>
         /// <param name="descriptor"></param>
         /// <param name="result"></param>
-        protected virtual void SwitchParameter(ParameterDescriptor descriptor, ParameterResult result)
+        protected abstract void SwitchParameter(ParameterDescriptor descriptor, ParameterResult result);
 
         #endregion
 

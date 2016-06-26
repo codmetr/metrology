@@ -11,7 +11,6 @@ using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Archive;
-using KipTM.Archive.DTO;
 using KipTM.Interfaces;
 using KipTM.Model;
 using KipTM.Model.Channels;
@@ -228,11 +227,12 @@ namespace KipTM.ViewModel
         private void DoSave()
         {
             
+            throw new NotImplementedException("DoSave");
         }
 
         private void DoShowReport()
         {
-
+            throw new NotImplementedException("DoShowReport");
         }
         #endregion
 

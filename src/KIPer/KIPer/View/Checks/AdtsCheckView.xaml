@@ -1,10 +1,12 @@
-﻿<UserControl x:Class="KipTM.View.Checks.ADTSCalibrationView"
+﻿<UserControl x:Class="KipTM.View.Checks.AdtsCheckView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:checks="clr-namespace:KipTM.ViewModel.Checks"
              xmlns:pressureElementControls="clr-namespace:PressureElementControls;assembly=PressureElementControls"
+             xmlns:adtsData="clr-namespace:ADTSData;assembly=ADTSData"
+             xmlns:steps="clr-namespace:KipTM.View.Checks.Steps"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="700" d:DataContext="{d:DesignInstance checks:ADTSBaseViewModel}">
     <UserControl.Resources>
@@ -12,25 +14,24 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Skins/SimpleElements.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
-        <Style TargetType="TextBlock" x:Key="TitleStyle">
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Width" Value="50"/>
-        </Style>
-        <!--<Style TargetType="TextBlock" x:Key="ValueStyle">
+            <Style TargetType="TextBlock" x:Key="TitleStyle">
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="Width" Value="50"/>
+            </Style>
+            <!--<Style TargetType="TextBlock" x:Key="ValueStyle">
             <Setter Property="Margin" Value="3"/>
             <Setter Property="Background" Value="#FF818147"/>
         </Style>-->
 
-        <Style TargetType="TextBlock" x:Key="ValueStateStyle" BasedOn="{StaticResource ValueStyle}">
-            <Setter Property="Width" Value="50"/>
-        </Style>
+            <Style TargetType="TextBlock" x:Key="ValueStateStyle" BasedOn="{StaticResource ValueStyle}">
+                <Setter Property="Width" Value="50"/>
+            </Style>
 
-        <Style TargetType="Button" x:Key="ErrorBtnStyle">
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Width" Value="40"/>
-        </Style>
-
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <Style TargetType="Button" x:Key="ErrorBtnStyle">
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="Width" Value="40"/>
+            </Style>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <GroupBox Header="Калибровка ADTS">
@@ -49,7 +50,7 @@
             <TabControl Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Width="230">
                 <TabItem Header="Шаги" >
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding Steps}">
+                        <ItemsControl ItemsSource="{Binding State.Steps}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="3">
@@ -74,7 +75,7 @@
                 </TabItem>
                 <TabItem Header="Результаты">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding Results}" MinWidth="200">
+                        <ItemsControl ItemsSource="{Binding State.ResultsLog}" MinWidth="200">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="3">
@@ -83,8 +84,7 @@
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="{Binding Key.LocalizedString}"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding Value.Value}" Style="{StaticResource ValueStateStyle}" HorizontalAlignment="Right"/>
+                                            <ContentPresenter Content="{Binding Result}"/>
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
@@ -99,11 +99,11 @@
                 </TabItem>
             </TabControl>
             <StackPanel Grid.Column="1" Grid.Row="0">
-                <ContentPresenter Content="{Binding ADTS}" />
+                <ContentPresenter Content="{Binding State.ADTS}" />
                 <Button Content="Принять текущее значение за точку" Command="{Binding SetCurrentValueAsPoint}"/>
             </StackPanel>
             <GroupBox Header="Ввод корректировки ADTS" Grid.Column="1" Grid.Row="1" 
-                      Visibility="{Binding IsUserChannel, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                      Visibility="{Binding State.IsUserChannel, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                     <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="-0.05">-0.05</Button>
                     <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="-0.02">-0.02</Button>
@@ -115,12 +115,12 @@
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Эталонный канал" Grid.Column="1" Grid.Row="1" 
-                      Visibility="{Binding IsNotUserChannel, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <ContentPresenter Content="{Binding EthalonChannelViewModel, UpdateSourceTrigger=PropertyChanged}"/>
+                      Visibility="{Binding State.IsNotUserChannel, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ContentPresenter Content="{Binding State.EthalonChannelViewModel, UpdateSourceTrigger=PropertyChanged}"/><!-- IsEnabled="{Binding State.WaitUserReaction}"-->
             </GroupBox>
             <TextBlock Name="tbNoteMsg" Grid.Column="1" Grid.Row="2"
                        VerticalAlignment="Bottom" TextWrapping="Wrap" TextAlignment="Center" Margin="5"
-                       Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}"/>
+                       Text="{Binding State.Note, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel Grid.Column="1" Grid.Row="3"
                         HorizontalAlignment="Center" Orientation="Horizontal">
                 <!--<pressureElementControls:StateIndicator State="{Binding TempVal, UpdateSourceTrigger=PropertyChanged}" Height="16" Width="16"/>-->
@@ -133,7 +133,7 @@
                 <Button
                     HorizontalAlignment="Center" VerticalAlignment="Bottom"
                     Width="150" Height="30" Margin="5"
-                    Content="{Binding TitleBtnNext, UpdateSourceTrigger=PropertyChanged}"
+                    Content="{Binding State.TitleBtnNext, UpdateSourceTrigger=PropertyChanged}"
                     Command="{Binding Start}"/>
                 <Button
                     HorizontalAlignment="Center" VerticalAlignment="Bottom"

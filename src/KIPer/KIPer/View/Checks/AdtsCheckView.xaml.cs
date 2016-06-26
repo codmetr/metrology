@@ -18,9 +18,9 @@ namespace KipTM.View.Checks
     /// <summary>
     /// Interaction logic for ADTSCalibrationView.xaml
     /// </summary>
-    public partial class ADTSCalibrationView : UserControl
+    public partial class AdtsCheckView : UserControl
     {
-        public ADTSCalibrationView()
+        public AdtsCheckView()
         {
             InitializeComponent();
         }

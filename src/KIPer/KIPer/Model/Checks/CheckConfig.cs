@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ArchiveData.DTO;
 using KipTM.Archive;
-using KipTM.Archive.DTO;
 using KipTM.Model.Channels;
 using KipTM.Model.TransportChannels;
 using KipTM.Settings;
