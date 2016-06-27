@@ -383,7 +383,6 @@
       <CustomToolNamespace>KipTM</CustomToolNamespace>
     </EmbeddedResource>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="Nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

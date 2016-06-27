@@ -94,14 +94,14 @@ namespace KipTM.ViewModel.Checks
         }
 
         /// <summary>
-        /// Лаборатория
+        /// Атмосферное давление, гПа
         /// </summary>
-        public string Laboratory
+        public string AtmospherePressure
         {
-            get { return _model.Laboratory; }
+            get { return _model.AtmospherePressure; }
             set
             {
-                _model.Laboratory = value;
+                _model.AtmospherePressure = value;
                 RaisePropertyChanged();
             }
         }
@@ -151,25 +151,26 @@ namespace KipTM.ViewModel.Checks
         }
 
         /// <summary>
-        /// Производитель
+        /// Заказчик
         /// </summary>
-        public string Manufacturer { get { return _model.Manufacturer; } }
-
-        /// <summary>
-        /// Инвентарный номер
-        /// </summary>
-        public string InventarNumber
+        public string Client
         {
-            get { return _model.InventarNumber; }
+            get { return _model.Client; }
             set
             {
-                _model.InventarNumber = value;
+                _model.Client = value;
                 RaisePropertyChanged();
             }
         }
 
         /// <summary>
-        /// Серийный номер
+        /// Производитель
+        /// </summary>
+        public string Manufacturer { get { return _model.Manufacturer; } }
+
+
+        /// <summary>
+        /// Заводской номер
         /// </summary>
         public string SerialNumber
         {
@@ -287,20 +288,6 @@ namespace KipTM.ViewModel.Checks
             set
             {
                 _model.EthalonManufacturer = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        /// <summary>
-        /// Инвентарный номер
-        /// </summary>
-        public string EthalonInventarNumber
-        {
-            get { return _model.EthalonInventarNumber; }
-            set
-            {
-                _model.EthalonInventarNumber = value;
                 RaisePropertyChanged();
             }
         }

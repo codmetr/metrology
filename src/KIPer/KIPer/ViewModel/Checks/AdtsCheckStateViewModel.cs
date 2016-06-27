@@ -18,6 +18,7 @@ namespace KipTM.ViewModel.Checks
     public class AdtsCheckStateViewModel : ViewModelBase
     {
         #region Members
+        private string _titleSteps;
         private string _titleBtnNext;
         private bool _waitUserReaction;
         private string _note;
@@ -34,6 +35,15 @@ namespace KipTM.ViewModel.Checks
         /// </summary>
         public AdtsCheckStateViewModel()
         {
+        }
+
+        /// <summary>
+        /// Название списка шагов
+        /// </summary>
+        public string TitleSteps
+        {
+            get { return _titleSteps; }
+            set { Set(ref _titleSteps, value); }
         }
 
         /// <summary>

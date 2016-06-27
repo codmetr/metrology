@@ -43,6 +43,8 @@ namespace KipTM.ViewModel.Checks
             IDeviceManager deviceManager, TestResult resultPool):
             base(methodic, propertyPool, deviceManager, resultPool)
         {
+            Title = "Поверка ADTS";
+            _stateViewModel.TitleSteps = "Поверяемые точки";
         }
     }
 }

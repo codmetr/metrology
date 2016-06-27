@@ -32,8 +32,8 @@
             <Button Command="{Binding Report}">Протокол</Button>
         </StackPanel>
 
-        <GroupBox Header="Ход проверик" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
-            <ContentPresenter Content="{Binding Check}"/>
+        <GroupBox Header="Проверка/Калибровка СИ"  Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
+            <ContentPresenter Content="{Binding Check}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"/>
         </GroupBox>
     </Grid>
 </UserControl>

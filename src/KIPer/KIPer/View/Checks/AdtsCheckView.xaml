@@ -34,7 +34,7 @@
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <GroupBox Header="Калибровка ADTS">
+    <GroupBox Header="{Binding Title}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -48,7 +48,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TabControl Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Width="230">
-                <TabItem Header="Шаги" >
+                <TabItem Header="{Binding State.TitleSteps}" >
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <ItemsControl ItemsSource="{Binding State.Steps}">
                             <ItemsControl.ItemTemplate>

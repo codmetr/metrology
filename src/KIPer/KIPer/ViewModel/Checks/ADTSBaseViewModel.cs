@@ -38,7 +38,8 @@ namespace KipTM.ViewModel.Checks
         private ITransportChannelType _ethalonChannelType;
         private bool _stopEnabled = false;
 
-        private AdtsCheckStateViewModel _stateViewModel;
+        protected AdtsCheckStateViewModel _stateViewModel;
+        private string _title;
 
         #endregion
 
@@ -61,7 +62,9 @@ namespace KipTM.ViewModel.Checks
             _dispatcher = Dispatcher.CurrentDispatcher;
             _userEchalonChannel = new UserEthalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
 
+            Title = "ADTS";
             _stateViewModel = new AdtsCheckStateViewModel();
+            _stateViewModel.TitleSteps = "Щаги";
             _stateViewModel.TitleBtnNext = "Старт";
             _stateViewModel.ADTS = new ADTSViewModel(_deviceManager);
             _stateViewModel.Steps = Method.Steps.Select(el => new StepViewModel(el));
@@ -119,6 +122,13 @@ namespace KipTM.ViewModel.Checks
         #endregion
 
         #region Interface of state
+
+        public string Title
+        {
+            get { return _title; }
+            protected set { _title = value; }
+        }
+
         public AdtsCheckStateViewModel State{get { return _stateViewModel; }}
         #endregion
 

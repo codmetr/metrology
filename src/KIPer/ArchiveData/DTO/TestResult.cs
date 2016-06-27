@@ -27,9 +27,9 @@ namespace ArchiveData.DTO
         public DateTime Timestamp { get; set; }
 
         /// <summary>
-        /// Лаборатория
+        /// Атмосферное давление, гПа
         /// </summary>
-        public string Laboratory { get; set; }
+        public string AtmospherePressure { get; set; }
 
         /// <summary>
         /// Температура
@@ -37,9 +37,14 @@ namespace ArchiveData.DTO
         public string Temperature { get; set; }
 
         /// <summary>
-        /// Влажность
+        /// Относительная влажность, %
         /// </summary>
         public string Humidity { get; set; }
+
+        /// <summary>
+        /// Заказчик
+        /// </summary>
+        public string Client { get; set; }
 
         /// <summary>
         /// Тип поверки

@@ -172,9 +172,9 @@ namespace KipTM.Model.Checks
         public DateTime CheckDateTime { get { return _result.Timestamp; } set { _result.Timestamp = value; } }
 
         /// <summary>
-        /// Лаборатория
+        /// Атмосферное давление, гПа
         /// </summary>
-        public string Laboratory { get { return _result.Laboratory; } set { _result.Laboratory = value; } }
+        public string AtmospherePressure { get { return _result.AtmospherePressure; } set { _result.AtmospherePressure = value; } }
 
         /// <summary>
         /// Температура
@@ -226,16 +226,16 @@ namespace KipTM.Model.Checks
         public string Manufacturer { get { return _result.TargetDevice.DeviceType.DeviceManufacturer; } }
 
         /// <summary>
-        /// Инвентарный номер
+        /// Заказчик
         /// </summary>
-        public string InventarNumber
+        public string Client
         {
-            get { return _result.TargetDevice.InventarNumber; }
-            set { _result.TargetDevice.InventarNumber = value; }
+            get { return _result.Client; }
+            set { _result.Client = value; }
         }
 
         /// <summary>
-        /// Серийный номер
+        /// Заводской номер
         /// </summary>
         public string SerialNumber
         {
@@ -365,15 +365,6 @@ namespace KipTM.Model.Checks
                     throw new SettingsPropertyIsReadOnlyException("EthalonManufacturer can not set in no user channel");
                 Ethalon.DeviceType = new DeviceTypeDescriptor(Ethalon.DeviceType.Model, _ethalon.DeviceType.DeviceCommonType, value);
             }
-        }
-
-        /// <summary>
-        /// Инвентарный номер эталона
-        /// </summary>
-        public string EthalonInventarNumber
-        {
-            get { return Ethalon.InventarNumber; }
-            set { Ethalon.InventarNumber = value; }
         }
 
         /// <summary>

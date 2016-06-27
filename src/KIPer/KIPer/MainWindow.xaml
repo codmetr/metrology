@@ -32,7 +32,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <ItemsControl Grid.Column="0" Grid.Row="0" Style="{StaticResource MenuCollectionStyle}">
-            <Button Style="{StaticResource ButtonTabStyle}" Content="Проверки" Command="{Binding SelectChecks}"/>
+            <Button Style="{StaticResource ButtonTabStyle}" Content="ПОВЕРКА СИ" Command="{Binding SelectChecks}"/>
             <!--<Button Style="{StaticResource ButtonTabStyle}" Content="Архив" Command="{Binding SelectArchive}"/>
             <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
             <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>

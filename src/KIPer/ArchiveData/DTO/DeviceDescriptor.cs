@@ -15,12 +15,7 @@ namespace ArchiveData.DTO
         public DeviceTypeDescriptor DeviceType { get; set; }
 
         /// <summary>
-        /// Инвентарный номер
-        /// </summary>
-        public string InventarNumber { get; set; }
-
-        /// <summary>
-        /// Серийный номер
+        /// Заводской номер
         /// </summary>
         public string SerialNumber { get; set; }
 
