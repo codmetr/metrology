@@ -107,6 +107,9 @@ namespace KipTM.ViewModel.Checks
             EthalonChannel = null;
         }
 
+        /// <summary>
+        /// Текущий результат
+        /// </summary>
         public TestResult CurrentResult{get { return _resultPool; }}
 
         /// <summary>
