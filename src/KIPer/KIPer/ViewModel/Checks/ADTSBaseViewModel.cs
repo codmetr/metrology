@@ -232,9 +232,6 @@ namespace KipTM.ViewModel.Checks
         protected void DoStart()
         {
             State.TitleBtnNext = "Далее";
-            //var visaSett = _connection.SelectedChannel.Settings as VisaSettings;
-            //if (visaSett != null)
-            //    visaSett.Address = _connection.Address;
             Method.ChannelType = _connection;
             State.ADTS.Start(Method.GetADTS(), _connection);
             // Задаем эталон

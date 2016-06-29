@@ -1,4 +1,5 @@
 ﻿using System;
+using ArchiveData.DTO;
 using KipTM.Model.Channels;
 using KipTM.Model.TransportChannels;
 
@@ -24,6 +25,11 @@ namespace KipTM.ViewModel.Checks
         /// <param name="settings"></param>
         void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings);
 
+        /// <summary>
+        /// Текущий результат
+        /// </summary>
+        TestResult CurrentResult { get; }
+        
         /// <summary>
         /// Методика запущена
         /// </summary>

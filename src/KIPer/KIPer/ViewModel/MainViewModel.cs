@@ -18,6 +18,7 @@ using KipTM.View.Services;
 using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Checks;
 using KipTM.ViewModel.Services;
+using SQLiteArchive;
 
 namespace KipTM.ViewModel
 {
@@ -32,7 +33,8 @@ namespace KipTM.ViewModel
         private readonly IDataService _dataService;
         private IMethodsService _methodicService;
         private MainSettings _settings;
-        private ArchiveService _archive;
+        private IPropertiesLibrary _propertiesLibrary;
+        private IArchive _archive;
 
         private readonly ServiceViewModel _services;
 
@@ -50,11 +52,12 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IDataService dataService, IMethodsService methodicService, MainSettings settings, ArchiveService archive)
+        public MainViewModel(IDataService dataService, IMethodsService methodicService, MainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive)
         {
             _dataService = dataService;
             _methodicService = methodicService;
             _settings = settings;
+            _propertiesLibrary = propertiesLibrary;
             _archive = archive;
 
             _dataService.LoadResults();
@@ -107,7 +110,7 @@ namespace KipTM.ViewModel
             _deviceTypes = new DeviceTypesViewModel();
             _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
-            _checks = new CheckViewModel(_settings, _methodicService, _archive.PropertyPool, _archive.DictionariesPool, _dataService.DeviceManager, new TestResult());
+            _checks = new CheckViewModel(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, _dataService.DeviceManager, new TestResult(), res => _archive.Save<TestResult>("", res)); //TODO реорганизовать по нормальному
             SelectChecks.Execute(null);
         }
 

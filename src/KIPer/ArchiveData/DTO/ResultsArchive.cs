@@ -15,6 +15,16 @@ namespace ArchiveData.DTO
             throw new NotImplementedException();
         }
 
+        public bool Save()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddResult(TestResult result)
+        {
+            Results.Add(result);
+        }
+
         public List<TestResult> Results { get; private set; }
     }
 }

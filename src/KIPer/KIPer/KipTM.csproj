@@ -105,7 +105,8 @@
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Interfaces\IService.cs" />
-    <Compile Include="Model\ArchiveService.cs" />
+    <Compile Include="Model\IPropertiesLibrary.cs" />
+    <Compile Include="Model\PropertiesLibrary.cs" />
     <Compile Include="Model\Channels\PACEEchalonChannel.cs" />
     <Compile Include="Model\Checks\ADTSChechPoint.cs" />
     <Compile Include="Model\Checks\ADTSMethodBase.cs" />

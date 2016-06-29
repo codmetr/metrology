@@ -33,6 +33,7 @@ namespace KipTM.ViewModel
         private readonly IDeviceManager _deviceManager;
         private readonly IPropertyPool _propertyPool;
         private IMethodViewModel _selectedCheck;
+        private Action<TestResult> _saver;
         
         private SelectChannelViewModel _checkDeviceChanel;
         private SelectChannelViewModel _ethalonChanel;
@@ -54,7 +55,7 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the CheckViewModel class.
         /// </summary>
-        public CheckViewModel(MainSettings settings, IMethodsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries, IDeviceManager deviceManager, TestResult result)
+        public CheckViewModel(MainSettings settings, IMethodsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries, IDeviceManager deviceManager, TestResult result, Action<TestResult> saver)
         {
             _checkConfig = new CheckConfig(settings, methodics, propertyPool, dictionaries, result);
             _checkConfigViewModel = new CheckConfigViewModel(_checkConfig);
@@ -67,6 +68,7 @@ namespace KipTM.ViewModel
             _checkConfigViewModel.EthalonDeviseChannelChanged += _checkConfigViewModel_EthalonDeviseChannelChanged;
             _propertyPool = propertyPool;
             _deviceManager = deviceManager;
+            _saver = saver;
             Check = GetViewModelFor(_checkConfig.SelectedCheckType);
             
             if (Check != null)
@@ -226,7 +228,8 @@ namespace KipTM.ViewModel
 
         private void DoSave()
         {
-            
+            if(_saver!=null)
+                _saver(Check.CurrentResult);
             throw new NotImplementedException("DoSave");
         }
 

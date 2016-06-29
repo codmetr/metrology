@@ -39,7 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTO\ArchivePool.cs" />
+    <Compile Include="DTO\ResultsArchive.cs" />
     <Compile Include="DTO\DeviceDescriptor.cs" />
     <Compile Include="DTO\DeviceTypeDescriptor.cs" />
     <Compile Include="DTO\IDeviceTypeDescriptor.cs" />

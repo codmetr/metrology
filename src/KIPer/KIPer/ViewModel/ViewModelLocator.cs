@@ -38,7 +38,7 @@ namespace KipTM.ViewModel
 
             SimpleIoc.Default.Register<SQLiteArchive.IArchive, SQLiteArchive.Archive>();
             SimpleIoc.Default.Register<MainSettings>(() => ServiceLocator.Current.GetInstance<SQLiteArchive.IArchive>().Load(MainSettings.SettingsFileName, MainSettings.GetDefault()));
-            SimpleIoc.Default.Register<ArchiveService>();
+            SimpleIoc.Default.Register<IPropertiesLibrary, PropertiesLibrary>();
             if (ViewModelBase.IsInDesignModeStatic)
             {
                 SimpleIoc.Default.Register<IDataService, Design.DesignDataService>();
@@ -48,6 +48,7 @@ namespace KipTM.ViewModel
                 SimpleIoc.Default.Register<IDataService, DataService>();
             }
             SimpleIoc.Default.Register<IMethodsService, MethodsService>();
+
             SimpleIoc.Default.Register<MainViewModel>();
 
             //SimpleIoc.Default.Register<IServiceProvider, ServiceProvider>();
