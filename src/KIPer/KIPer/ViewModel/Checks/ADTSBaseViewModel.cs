@@ -256,6 +256,7 @@ namespace KipTM.ViewModel.Checks
         private void DoNext()
         {
             State.TitleBtnNext = "Далее";
+            State.Note = "Подождите";
             if (_userChannel.QueryType == UserQueryType.GetRealValue)
             {
                 _userChannel.RealValue = RealValue;

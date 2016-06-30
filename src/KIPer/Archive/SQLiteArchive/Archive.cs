@@ -26,9 +26,12 @@ namespace SQLiteArchive
                 File.Delete(path);
             }
             var archiveType = typeof(T);
-            var xmlSerializer = new XmlSerializer(archiveType);
+            var realTypes = (new List<Type>()).FillNoObjectTypes(typeof (T));
+            var allTypes = (new List<Type>()).FillNoObjectTypes(entity, typeof(T));
+            var arrSubTypes = allTypes.Where(el => !realTypes.Contains(el));
+            var xmlSerializer = new XmlSerializer(archiveType, arrSubTypes.ToArray());
             var dir = Path.GetDirectoryName(path);
-            if (!Directory.Exists(dir))
+            if (dir != null && !Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
             using (FileStream fs = new FileStream(path, FileMode.Create))
             {
@@ -56,6 +59,6 @@ namespace SQLiteArchive
             return result;
         }
 
-
+        
     }
 }

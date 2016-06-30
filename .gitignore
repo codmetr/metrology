@@ -47,3 +47,5 @@ src/KIPer/ADTSData/bin/
 src/KIPer/ADTSData/obj/
 src/KIPer/ADTSChecks/obj/
 src/KIPer/CheckFrame/obj/
+src/KIPer/SerialiserTest/obj/
+src/KIPer/SerialiserTest/bin/

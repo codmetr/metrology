@@ -12,6 +12,13 @@ namespace ArchiveData.DTO
             DeviceType = deviceType;
         }
 
+        /// <summary>
+        /// для сериализатора
+        /// </summary>
+        public DeviceDescriptor():this(null)
+        {
+        }
+
         public DeviceTypeDescriptor DeviceType { get; set; }
 
         /// <summary>

@@ -76,6 +76,10 @@
         <File Name="$(var.ADTS.TargetFileName)" Source="$(var.ADTS.TargetPath)" KeyPath="yes" />
         <File Name="$(var.ADTS.TargetName).pdb" Source="$(var.ADTS.TargetDir)$(var.ADTS.TargetName).pdb" CompanionFile="$(var.ADTS.TargetFileName)"/>
       </Component>
+      <Component Guid="2E1987B5-D7E6-47E2-AF5B-924B28DD5A2A">
+        <File Name="$(var.ADTSData.TargetFileName)" Source="$(var.ADTSData.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.ADTSData.TargetName).pdb" Source="$(var.ADTSData.TargetDir)$(var.ADTSData.TargetName).pdb" CompanionFile="$(var.ADTSData.TargetFileName)"/>
+      </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A3A">
         <File Name="$(var.ArchiveData.TargetFileName)" Source="$(var.ArchiveData.TargetPath)" KeyPath="yes" />
         <File Name="$(var.ArchiveData.TargetName).pdb" Source="$(var.ArchiveData.TargetDir)$(var.ArchiveData.TargetName).pdb" CompanionFile="$(var.ArchiveData.TargetFileName)"/>

@@ -13,19 +13,27 @@
         }
 
         /// <summary>
+        /// для сериализатора
+        /// </summary>
+        public DeviceTypeDescriptor()
+            : this(string.Empty, string.Empty, string.Empty)
+        {
+        }
+
+        /// <summary>
         /// Модель прибора
         /// </summary>
-        public string Model { get; private set; }
+        public string Model { get; set; }
 
         /// <summary>
         /// Класс устройств
         /// </summary>
-        public string DeviceCommonType { get; private set; }
+        public string DeviceCommonType { get; set; }
 
         /// <summary>
         /// Изготовитель
         /// </summary>
-        public string DeviceManufacturer { get; private set; }
+        public string DeviceManufacturer { get; set; }
 
     }
 }
