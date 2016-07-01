@@ -29,6 +29,10 @@ namespace SQLiteArchive
             var realTypes = (new List<Type>()).FillNoObjectTypes(typeof (T));
             var allTypes = (new List<Type>()).FillNoObjectTypes(entity, typeof(T));
             var arrSubTypes = allTypes.Where(el => !realTypes.Contains(el));
+            foreach (var subType in arrSubTypes)
+            {
+                subType.GetCustomAttributesData().Add(new XmlElementAttribute("link", Namespace="http://www.w3.org/2005/Atom"));]);
+            }
             var xmlSerializer = new XmlSerializer(archiveType, arrSubTypes.ToArray());
             var dir = Path.GetDirectoryName(path);
             if (dir != null && !Directory.Exists(dir))
@@ -53,6 +57,7 @@ namespace SQLiteArchive
 
             using (FileStream fs = new FileStream(path, FileMode.Open))
             {
+
                 XmlReader reader = XmlReader.Create(fs);
                 result = (T)xmlSerializer.Deserialize(reader);
             }
