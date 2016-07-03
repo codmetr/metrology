@@ -10,7 +10,7 @@ namespace SerialiserTest
     public class UnitTest1
     {
         [TestMethod]
-        public void TestMethod1()
+        public void TestMethodSaveAndLoad()
         {
             var result = new TestResult();
             result.Results.Add(new TestStepResult("1", DateTime.Now));
@@ -20,7 +20,14 @@ namespace SerialiserTest
             result.Results.Add(new TestStepResult("5", new AdtsPointResult() { Error = 0.1, IsCorrect = true, Point = 100, RealValue = 100.1, Tolerance = 0.2 }));
             var archive = new Archive();
             archive.Save("test", result);
-            archive.Load()
+            result = archive.Load <TestResult>("test");
+            archive.Test();
+        }
+        [TestMethod]
+        public void TestMethodSaveAndLoadSqlite()
+        {
+            var archive = new Archive();
+            archive.Test();
         }
     }
 }

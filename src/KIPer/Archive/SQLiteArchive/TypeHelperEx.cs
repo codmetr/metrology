@@ -55,31 +55,7 @@ namespace SQLiteArchive
 
         public static List<Type> FillNoObjectTypes(this List<Type> types, object targetObject, Type targetType)
         {
-
             return FillNoObjectTypesExcludeParrent(types, new List<Type>(), targetObject, targetType);
-
-            //if (types.Contains(targetType))
-            //    return types;
-            //if (targetType != typeof(object))
-            //{
-            //    types.Add(targetType);
-            //}
-            //else
-            //{
-            //    return types;
-            //}
-            //var properties = targetType.GetProperties();
-            //foreach (var proptype in targetType.GetProperties())
-            //{
-            //    var indexes = proptype.GetIndexParameters();
-            //    if (indexes.Any())
-            //    {
-            //        types = FillNoInListTypesPropertyIndex(types, targetObject, proptype);
-            //        continue;
-            //    }
-            //    types = FillNoInListTypesProperty(types, targetObject, proptype);
-            //}
-            //return types;
         }
 
         public static List<Type> FillNoObjectTypesExcludeParrent(List<Type> types, List<Type> parentTypes, object targetObject, Type targetType)
@@ -153,22 +129,22 @@ namespace SQLiteArchive
             return types;
         }
 
-        public static List<Type> FillNoInListTypes(this List<Type> types, object targetObject, Type targetType, List<Type> excludeTypes)
-        {
-            if (types.Contains(targetType))
-                return types;
-            if (!excludeTypes.Contains(targetType))
-                types.Add(targetType);
-            foreach (var proptype in targetType.GetProperties())
-            {
-                var propVal = proptype.GetValue(targetObject, null);
-                if (proptype.PropertyType != typeof(object))
-                    types = types.FillNoInListTypes(propVal, proptype.PropertyType, excludeTypes);
-                else if (propVal != null)
-                    types = types.FillNoInListTypes(propVal, propVal.GetType(), excludeTypes);
-            }
-            return types;
-        }
+        //public static List<Type> FillNoInListTypes(this List<Type> types, object targetObject, Type targetType, List<Type> excludeTypes)
+        //{
+        //    if (types.Contains(targetType))
+        //        return types;
+        //    if (!excludeTypes.Contains(targetType))
+        //        types.Add(targetType);
+        //    foreach (var proptype in targetType.GetProperties())
+        //    {
+        //        var propVal = proptype.GetValue(targetObject, null);
+        //        if (proptype.PropertyType != typeof(object))
+        //            types = types.FillNoInListTypes(propVal, proptype.PropertyType, excludeTypes);
+        //        else if (propVal != null)
+        //            types = types.FillNoInListTypes(propVal, propVal.GetType(), excludeTypes);
+        //    }
+        //    return types;
+        //}
 
     }
 }
