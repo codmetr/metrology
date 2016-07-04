@@ -59,6 +59,7 @@
         <File Name="$(var.KipTM.TargetFileName)" Source="$(var.KipTM.TargetPath)" KeyPath="yes" />
         <File Name="$(var.KipTM.TargetName).pdb" Source="$(var.KipTM.TargetDir)$(var.KipTM.TargetName).pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="$(var.KipTM.TargetFileName).config" Source="$(var.KipTM.TargetDir)$(var.KipTM.TargetFileName).config" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="icon-metrology.png" Source="$(var.KipTM.TargetDir)Content\icon-metrology.png" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="System.Windows.Interactivity.dll" Source="$(var.KipTM.TargetDir)System.Windows.Interactivity.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="StructureMap.dll" Source="$(var.KipTM.TargetDir)StructureMap.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="Microsoft.Practices.ServiceLocation.dll" Source="$(var.KipTM.TargetDir)Microsoft.Practices.ServiceLocation.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>

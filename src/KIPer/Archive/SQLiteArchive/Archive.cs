@@ -75,10 +75,7 @@ namespace SQLiteArchive
 
             // Load extra Types
             List<Type> arrSubTypes = new List<Type>();
-            if (File.Exists(path))
-            {
                 arrSubTypes = LoadExtraTypes(key);
-            }
 
             var archiveType = typeof(T);
             var xmlSerializer = new XmlSerializer(archiveType, arrSubTypes.ToArray());
@@ -143,6 +140,8 @@ namespace SQLiteArchive
         private List<Type> LoadExtraTypes(string key)
         {
             var pathExtTypes = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonDocuments), string.Format(_archiveFileFormat, string.Format(ExtraTypesKeyFormat, key)));
+            if(!File.Exists(pathExtTypes))
+                return new List<Type>();
             List<Type> arrSubTypes = new List<Type>();
             var xmlSerializerExtTypes = new XmlSerializer(typeof(List<string>));
 
