@@ -230,7 +230,8 @@ namespace KipTM.ViewModel
         {
             if(_saver!=null)
                 _saver(Check.CurrentResult);
-            throw new NotImplementedException("DoSave");
+            else
+                throw new NullReferenceException("Saver is null");
         }
 
         private void DoShowReport()
