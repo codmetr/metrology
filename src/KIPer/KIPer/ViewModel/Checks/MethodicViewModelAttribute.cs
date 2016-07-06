@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KipTM.ViewModel.Checks
 {
-    public class MethodicViewModelAttribute:Attribute
+    public class MethodViewModelAttribute:Attribute
     {
         private readonly Type _modelType;
 
@@ -14,7 +14,7 @@ namespace KipTM.ViewModel.Checks
         /// Указание какой модели репдназначен данный ViewModel
         /// </summary>
         /// <param name="modelType"></param>
-        public MethodicViewModelAttribute(Type modelType)
+        public MethodViewModelAttribute(Type modelType)
         {
             _modelType = modelType;
         }

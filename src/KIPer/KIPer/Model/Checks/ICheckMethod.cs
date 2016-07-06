@@ -27,7 +27,7 @@ namespace KipTM.Model.Checks
         /// <summary>
         /// Список шагов
         /// </summary>
-        IEnumerable<ITestStep> Steps { get; } 
+        IEnumerable<CheckStepConfig> Steps { get; } 
 
         /// <summary>
         /// Остановка проверки

@@ -60,37 +60,37 @@ namespace KipTM.Model.Checks
 
             _calibChan = parameters.CalibChannel;
 
-            var steps = new List<ITestStep>();
+            var steps = new List<CheckStepConfig>();
 
             // добавление шага инициализации
-            ITestStep step = new InitStep("Инициализация калибровки", _adts, _calibChan, _logger);
+            CheckStepConfig step = new CheckStepConfig(new InitStep("Инициализация калибровки", _adts, _calibChan, _logger), true);
             steps.Add(step);
-            AttachStep(step);
+            AttachStep(step.Step);
 
             // добавление шага прохождения точек
             Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
                 : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
             foreach (var point in parameters.Points)
             {
-                step = new DoPointStep(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger);
-                AttachStep(step);
+                step = new CheckStepConfig(new DoPointStep(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger), false);
+                AttachStep(step.Step);
                 steps.Add(step);
             }
 
             // добавление шага подтверждения калибровки
-            step = new FinishStep("Подтверждение калибровки", _adts, _userChannel, _logger);
-            AttachStep(step);
+            step = new CheckStepConfig(new FinishStep("Подтверждение калибровки", _adts, _userChannel, _logger), true);
+            AttachStep(step.Step);
             steps.Add(step);
 
             // добавление шага перевода в базовое состояние
-            step = new ToBaseStep("Перевод в базовое состояние", _adts, _logger);
-            AttachStep(step);
+            step = new CheckStepConfig(new ToBaseStep("Перевод в базовое состояние", _adts, _logger), true);
+            AttachStep(step.Step);
             steps.Add(step);
             if (Steps != null)
                 foreach (var testStep in Steps)
                 {
                     if (testStep != null)
-                        DetachStep(testStep);
+                        DetachStep(testStep.Step);
                 }
             Steps = steps;
             return true;

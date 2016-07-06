@@ -67,7 +67,7 @@ namespace KipTM.ViewModel.Checks
             _stateViewModel.TitleSteps = "Щаги";
             _stateViewModel.TitleBtnNext = "Старт";
             _stateViewModel.ADTS = new ADTSViewModel(_deviceManager);
-            _stateViewModel.Steps = Method.Steps.Select(el => new StepViewModel(el));
+            _stateViewModel.Steps = Method.Steps.Select(el => new StepViewModel(el.Step));
             _stateViewModel.ResultsLog = new ObservableCollection<EventArgTestStepResult>();
         }
 
@@ -323,7 +323,7 @@ namespace KipTM.ViewModel.Checks
         /// <param name="eventArgs"></param>
         protected void OnStepsChanged(object sender, EventArgs eventArgs)
         {
-            State.Steps = new ObservableCollection<StepViewModel>(Method.Steps.Select(el => new StepViewModel(el)));
+            State.Steps = new ObservableCollection<StepViewModel>(Method.Steps.Select(el => new StepViewModel(el.Step)));
         }
 
         /// <summary>

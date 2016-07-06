@@ -64,11 +64,11 @@ namespace KipTM.Model.Checks
             //if (_userChannel == null)
             //    throw new NullReferenceException("\"UserChannel\" not fount in parameters as IUserChannel");
 
-            var steps = new List<ITestStep>();
+            var steps = new List<CheckStepConfig>();
 
             // добавление шага инициализации
-            ITestStep step = new InitStep("Инициализация поверки", _adts, _calibChan, _logger);
-            AttachStep(step);
+            CheckStepConfig step = new CheckStepConfig(new InitStep("Инициализация поверки", _adts, _calibChan, _logger), true);
+            AttachStep(step.Step);
             steps.Add(step);
 
             // добавление шагов прохождения точек
@@ -81,21 +81,21 @@ namespace KipTM.Model.Checks
 
             foreach (var point in parameters.Points)
             {
-                step = new DoPointStep(string.Format("Поверка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger);
-                AttachStep(step);
+                step = new CheckStepConfig(new DoPointStep(string.Format("Поверка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger), false);
+                AttachStep(step.Step);
                 steps.Add(step);
             }
 
             // добавление шага завешения
-            step = new EndStep("Завершение поверки", _adts, _logger);
-            AttachStep(step);
+            step = new CheckStepConfig(new EndStep("Завершение поверки", _adts, _logger), true);
+            AttachStep(step.Step);
             steps.Add(step);
 
             if (Steps != null) // Отвязать события прошлых шагов
                 foreach (var testStep in Steps)
                 {
                     if (testStep != null)
-                        DetachStep(testStep);
+                        DetachStep(testStep.Step);
                 }
             Steps = steps;
             return true;

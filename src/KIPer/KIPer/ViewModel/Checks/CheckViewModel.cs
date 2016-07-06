@@ -144,6 +144,11 @@ namespace KipTM.ViewModel
             method.Stoped -= method_Stoped;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="methodic"></param>
+        /// <returns></returns>
         private IMethodViewModel GetViewModelFor(ICheckMethod methodic)
         {
             if (methodic is ADTSCheckMethod)
@@ -181,6 +186,11 @@ namespace KipTM.ViewModel
             IsCheckConfigAvailable = false;
         }
 
+        /// <summary>
+        /// Изменен канал подключения целевого устройства
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void _checkConfigViewModel_CheckedDeviseChannelChanged(object sender, EventArgs e)
         {
             if (Check != null)
@@ -189,20 +199,41 @@ namespace KipTM.ViewModel
             }
         }
 
+        /// <summary>
+        /// Изменен канал подключения эталона
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void _checkConfigViewModel_EthalonDeviseChannelChanged(object sender, EventArgs e)
         {
             UpdateEthalon();
         }
 
+        /// <summary>
+        /// Изменен тип эталона
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void _checkConfig_SelectedEthalonTypeChanged(object sender, EventArgs e)
         {
             UpdateEthalon();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void _checkConfig_SelectedChannelChanged(object sender, EventArgs e)
         {
+
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void _checkConfig_SelectedCheckTypeChanged(object sender, EventArgs e)
         {
             Check = GetViewModelFor(_checkConfig.SelectedCheckType);
@@ -226,6 +257,9 @@ namespace KipTM.ViewModel
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void DoSave()
         {
             if(_saver!=null)
@@ -234,6 +268,9 @@ namespace KipTM.ViewModel
                 throw new NullReferenceException("Saver is null");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void DoShowReport()
         {
             throw new NotImplementedException("DoShowReport");

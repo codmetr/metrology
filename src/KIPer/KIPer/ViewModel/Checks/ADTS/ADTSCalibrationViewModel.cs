@@ -19,6 +19,7 @@ using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
 using KipTM.Settings;
+using KipTM.View.Checks;
 using KipTM.ViewModel;
 using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Services;
@@ -31,20 +32,19 @@ namespace KipTM.ViewModel.Checks
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    [MethodicViewModelAttribute(typeof(ADTSTestMethod))]
-    public class ADTSTestViewModel : ADTSBaseViewModel
+    [MethodViewModelAttribute(typeof(ADTSCheckMethod))]
+    public class ADTSCalibrationViewModel : ADTSBaseViewModel
     {
-
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
         /// </summary>
-        public ADTSTestViewModel(
-            ADTSTestMethod methodic, IPropertyPool propertyPool,
-            IDeviceManager deviceManager, TestResult resultPool):
-            base(methodic, propertyPool, deviceManager, resultPool)
+        public ADTSCalibrationViewModel(
+            ADTSCheckMethod methodic, IPropertyPool propertyPool,
+            IDeviceManager deviceManager, TestResult resultPool) :
+                base(methodic, propertyPool, deviceManager, resultPool)
         {
-            Title = "Поверка ADTS";
-            _stateViewModel.TitleSteps = "Поверяемые точки";
+            Title = "Калибровка ADTS";
+            _stateViewModel.TitleSteps = "Калибруемые точки";
         }
     }
 }

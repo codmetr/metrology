@@ -330,6 +330,9 @@ namespace KipTM.Model.Checks
             }
         }
 
+        /// <summary>
+        /// Эталоном выбран прибор без элетронного интерфейса
+        /// </summary>
         public bool IsAnalogEthalon
         {
             get { return _isAnalogEthalon; }

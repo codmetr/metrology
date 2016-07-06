@@ -31,7 +31,7 @@ namespace KipTM.Model.Checks
         protected IEthalonChannel _ethalonChannel;
         protected IUserChannel _userChannel;
 
-        private IEnumerable<ITestStep> _steps;
+        private IEnumerable<CheckStepConfig> _steps;
 
         protected ITestStep _currenTestStep = null;
         protected readonly object _currenTestStepLocker = new object();
@@ -105,18 +105,20 @@ namespace KipTM.Model.Checks
             foreach (var testStep in Steps)
             {
                 whStep.Reset();
-                PrepareStartStep(testStep);
+                PrepareStartStep(testStep.Step);
                 var step = testStep;
-                Task.Factory.StartNew(() => step.Start(whStep), cancel);
+                if(!step.Enabled)
+                    continue;
+                Task.Factory.StartNew(() => step.Step.Start(whStep), cancel);
                 while (!whStep.WaitOne(waitPeriod))
                 {
                     if (cancel.IsCancellationRequested)
                     {
-                        testStep.Stop();
+                        testStep.Step.Stop();
                         break;
                     }
                 }
-                AfterEndStep(testStep);
+                AfterEndStep(testStep.Step);
                 if (cancel.IsCancellationRequested)
                 {
                     break;
@@ -137,7 +139,7 @@ namespace KipTM.Model.Checks
             if (Steps != null)
                 foreach (var testStep in Steps)
                 {
-                    if (testStep != null) testStep.ResultUpdated -= StepResultUpdated;
+                    if (testStep != null) testStep.Step.ResultUpdated -= StepResultUpdated;
                 }
             Cancel(); 
             ToBaseAction();
@@ -146,7 +148,7 @@ namespace KipTM.Model.Checks
         /// <summary>
         /// Список шагов
         /// </summary>
-        public IEnumerable<ITestStep> Steps
+        public IEnumerable<CheckStepConfig> Steps
         {
             get { return _steps; }
             protected set
@@ -331,11 +333,11 @@ namespace KipTM.Model.Checks
         protected virtual void ToBaseAction()
         {
             var whStep = new ManualResetEvent(false);
-            var end = Steps.FirstOrDefault(el => el is IToBaseStep);
+            var end = Steps.FirstOrDefault(el => el.Step is IToBaseStep);
             if (end != null)
             {
                 whStep.Reset();
-                end.Start(whStep);
+                end.Step.Start(whStep);
             }
         }
     }
