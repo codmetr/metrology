@@ -41,9 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ag488.cs" />
+    <Compile Include="ITransportIEEE488ByAddress.cs" />
     <Compile Include="VisaIEEE488.cs" />
     <Compile Include="ITransportIEEE488.cs" />
-    <Compile Include="TransportIEEE488.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

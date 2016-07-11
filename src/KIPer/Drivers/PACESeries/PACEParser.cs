@@ -6,6 +6,9 @@ using System.Text;
 
 namespace PACESeries
 {
+    /// <summary>
+    /// Транслятор протокола PACE
+    /// </summary>
     public class PACEParser
     {
         #region Keys
@@ -29,11 +32,21 @@ namespace PACESeries
         #endregion
 
         #region GetIdentificator "*IDN?"
+        /// <summary>
+        /// Получить команду "Запрос идентификатора"
+        /// </summary>
+        /// <returns>Команда</returns>
         public string GetCommandGetIdentificator()
         {
             return KeyGetIdentificator;
         }
 
+        /// <summary>
+        /// Разобрать ответ на команду "Запрос идентификатора"
+        /// </summary>
+        /// <param name="message">Ответ</param>
+        /// <param name="idn">Идентификатор</param>
+        /// <returns>Удалось разобрать</returns>
         public bool ParseGetIdentificator(string message, out string idn)
         {
             var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>()
@@ -46,11 +59,23 @@ namespace PACESeries
         #endregion
 
         #region GetDate ":SYST:DATE?"
+        /// <summary>
+        /// Получить команду "Запрос текущей даты"
+        /// </summary>
+        /// <returns>Команда</returns>
         public string GetCommandGetDate()
         {
             return KeyGetDate;
         }
 
+        /// <summary>
+        /// Разобрать ответ на команду "Запрос текущей даты"
+        /// </summary>
+        /// <param name="message">Ответ</param>
+        /// <param name="year">год</param>
+        /// <param name="month">месяц</param>
+        /// <param name="day">день</param>
+        /// <returns>Удалось разобрать</returns>
         public bool ParseGetDate(string message, out int year, out int month, out int day)
         {
             var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>()
@@ -67,11 +92,23 @@ namespace PACESeries
         #endregion
 
         #region GetDate ":SYST:TIME?"
+        /// <summary>
+        /// Получить команду "Запрос текущего времени"
+        /// </summary>
+        /// <returns>Команда</returns>
         public string GetCommandGetTime()
         {
             return KeyGetTime;
         }
 
+        /// <summary>
+        /// Разобрать ответ на команду "Запрос текущего времени"
+        /// </summary>
+        /// <param name="message">Ответ</param>
+        /// <param name="hour">час</param>
+        /// <param name="minute">минута</param>
+        /// <param name="sec">секунда</param>
+        /// <returns>Удалось разобрать</returns>
         public bool ParseGetTime(string message, out int hour, out int minute, out int sec)
         {
             var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>()
@@ -88,6 +125,10 @@ namespace PACESeries
         #endregion
 
         #region SetLocalLockOutMode ":LLO"
+        /// <summary>
+        /// Получить команду "Установка режима LLO"
+        /// </summary>
+        /// <returns>Команда</returns>
         public string GetCommandSetLocalLockOutMode()
         {
             return KeySetLocalLockOut;
@@ -95,6 +136,10 @@ namespace PACESeries
         #endregion
 
         #region SetOffLocalLockOutMode ":GTL"
+        /// <summary>
+        /// Получить команду "Установка режима LLO"
+        /// </summary>
+        /// <returns>Команда</returns>
         public string GetCommandSetOffLocalLockOutMode()
         {
             return KeySetOffLocalLockOut;
@@ -102,6 +147,10 @@ namespace PACESeries
         #endregion
          
         #region SetLocal ":LOC"
+        /// <summary>
+        /// Получить команду "Установка режима LOC"
+        /// </summary>
+        /// <returns>Команда</returns>
         public string GetCommandSetLocal()
         {
             return KeySetLocal;
@@ -109,6 +158,10 @@ namespace PACESeries
         #endregion
 
         #region SetRemote ":REM"
+        /// <summary>
+        /// Получить команду "Установка режима REM"
+        /// </summary>
+        /// <returns>Команда</returns>
         public string GetCommandSetRemote()
         {
             return KeySetRemote;
@@ -116,11 +169,21 @@ namespace PACESeries
         #endregion
 
         #region GetPressureUnit ":UNIT:PRES?"
+        /// <summary>
+        /// Получить команду "Запрос единиц давления"
+        /// </summary>
+        /// <returns>Команда</returns>
         public string GetCommandGetPressureUnit()
         {
             return KeyGetUnitPressure;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message">Ответ</param>
+        /// <param name="unit"></param>
+        /// <returns>Удалось разобрать</returns>
         public bool ParseGetPressureUnit(string message, out PressureUnits? unit)
         {
             unit = null;
@@ -131,7 +194,11 @@ namespace PACESeries
         #endregion
 
         #region SetPressureUnit "UNIT:PRES <units>"
-
+        /// <summary>
+        /// Получить команду "Установить единицы давления"
+        /// </summary>
+        /// <param name="unit">единицы давления</param>
+        /// <returns>Команда</returns>
         public string GetCommandSetPressureUnit(PressureUnits unit)
         {
             string unitstr = null;
@@ -144,30 +211,30 @@ namespace PACESeries
 
         #region GetPressure ":SENS:PRES?"
         /// <summary>
-        /// Получить команду на измерение давления
+        /// Получить команду "Измерение давления"
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Команда</returns>
         public string GetCommandGetPressure()
         {
             return KeyGetPressure;
         }
 
         /// <summary>
-        /// Получить команду на измерение давления по каналу
+        /// Получить команду "Измерение давления по каналу"
         /// </summary>
-        /// <param name="channel"></param>
-        /// <returns></returns>
+        /// <param name="channel">Канал</param>
+        /// <returns>Команда</returns>
         public string GetCommandGetPressure(int channel)
         {
             return string.Format(KeyGetPressureByChannelFormat, channel);
         }
 
         /// <summary>
-        /// Разобрать результат команды на измерение давления
+        /// Разобрать результат команды "Измерение давления"
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="message">Ответ</param>
+        /// <param name="value">Значение давления</param>
+        /// <returns>Удалось разобрать</returns>
         public bool ParseGetPressure(string message, out double? value)
         {
             value = null;
@@ -179,30 +246,30 @@ namespace PACESeries
 
         #region GetPressureRange ":SENS:PRES:RANG?"
         /// <summary>
-        /// Получить команду на получение ограничение канала давления
+        /// Получить команду "Получение ограничение канала давления"
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Команда</returns>
         public string GetCommandGetPressureRange()
         {
             return KeyGetPressureRange;
         }
 
         /// <summary>
-        /// Получить команду на получение ограничение канала давления по каналу
+        /// Получить команду "Получение ограничение канала давления по каналу"
         /// </summary>
-        /// <param name="channel"></param>
-        /// <returns></returns>
+        /// <param name="channel">Канал</param>
+        /// <returns>Команда</returns>
         public string GetCommandGetPressureRange(int channel)
         {
             return string.Format(KeyGetPressureRangeByChannelFormat, channel);
         }
 
         /// <summary>
-        /// Разобрать результат команды на получение ограничение канала давления
+        /// Разобрать результат команды "Получение ограничение канала давления"
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="message">Ответ</param>
+        /// <param name="value">Ограничение</param>
+        /// <returns>Удалось разобрать</returns>
         public bool ParseGetPressureRange(string message, out string value)
         {
             value = null;
@@ -214,19 +281,19 @@ namespace PACESeries
 
         #region SetPressureRange ":SENS:PRES:RANG"
         /// <summary>
-        /// Получить команду на установку ограничение канала давления
+        /// Получить команду "Установку ограничение канала давления"
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Команда</returns>
         public string GetCommandSetPressureRange(string range)
         {
             return string.Format(KeySetPressureRangeFormat, range);
         }
 
         /// <summary>
-        /// Получить команду на установку ограничение канала давления по каналу
+        /// Получить команду "Установку ограничение канала давления по каналу"
         /// </summary>
-        /// <param name="channel"></param>
-        /// <returns></returns>
+        /// <param name="channel">Канал</param>
+        /// <returns>Команда</returns>
         public string GetCommandSetPressureRange(int channel, string range)
         {
             return string.Format(KeySetPressureRangeByChannelFormat, channel, range);
@@ -235,30 +302,30 @@ namespace PACESeries
 
         #region GetAllRanges ":INST:CAT:ALL?"
         /// <summary>
-        /// Получить команду на получение всех допустимых ограничений канала давления
+        /// Получить команду "Получение всех допустимых ограничений канала давления"
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Команда</returns>
         public string GetCommandGetAllRanges()
         {
             return KeyGetAvailableRange;
         }
 
         /// <summary>
-        /// Получить команду на получение всех допустимых ограничений канала давления по каналу
+        /// Получить команду "Получение всех допустимых ограничений канала давления по каналу"
         /// </summary>
-        /// <param name="channel"></param>
-        /// <returns></returns>
+        /// <param name="channel">Канал</param>
+        /// <returns>Команда</returns>
         public string GetCommandGetAllRanges(int channel)
         {
             return string.Format(KeyGetAvailableRangeByChannelFormat, channel);
         }
 
         /// <summary>
-        /// Разобрать результат команды на получение ограничение канала давления
+        /// Разобрать результат команды "Получение ограничение каналов давления"
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="message">Ответ</param>
+        /// <param name="value">Список ограничений</param>
+        /// <returns>Удалось разобрать</returns>
         public bool ParseGetAllRanges(string message, out IEnumerable<string> value)
         {
             value = null;
@@ -269,6 +336,12 @@ namespace PACESeries
         #endregion
         
         #region Protocol parser
+        /// <summary>
+        /// Сбор команды
+        /// </summary>
+        /// <param name="frame">форма команды</param>
+        /// <param name="parameters">набор параметров</param>
+        /// <returns>команда</returns>
         private string CompilCommand(string frame, IDictionary<string, string> parameters)
         {
             string result = frame;
@@ -292,11 +365,22 @@ namespace PACESeries
             return result;
         }
 
+        /// <summary>
+        /// Разбор ответа
+        /// </summary>
+        /// <param name="answer">Ответ</param>
+        /// <returns>Набор параметров</returns>
         private string[] ParseAnswer(string answer)
         {
             return answer.Trim().Split(' ')[1].Split(',');
         }
 
+        /// <summary>
+        /// Разбор ответа
+        /// </summary>
+        /// <param name="answer">Ответ</param>
+        /// <param name="parameterTypes">Типы параметров</param>
+        /// <returns>Набор разобранных параметров</returns>
         private IDictionary<string, object> ParseAnswer(string answer, Dictionary<string, PeremeterTypes> parameterTypes)
         {
             var result = new Dictionary<string, object>();
@@ -375,6 +459,11 @@ namespace PACESeries
             return result;
         }
 
+        /// <summary>
+        /// Единицы измерения в строку
+        /// </summary>
+        /// <param name="unit">Единицы измерения давления</param>
+        /// <returns>строковое представление единицы измерения давления</returns>
         private string PressureUnitToString(PressureUnits unit)
         {
             string unitstr = null;

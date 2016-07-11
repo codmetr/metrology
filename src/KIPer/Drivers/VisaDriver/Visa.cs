@@ -11,6 +11,10 @@ namespace VisaDriver
         private Ivi.Visa.Interop.FormattedIO488 ioArbFG;
         private Ivi.Visa.Interop.IMessage msg;
 
+        /// <summary>
+        /// Канал Visa
+        /// </summary>
+        /// <param name="address">Адрес прибора</param>
         public Visa(string address)
         {
             try
@@ -27,6 +31,11 @@ namespace VisaDriver
             }
         }
 
+        /// <summary>
+        /// Переключение к заданому адресу
+        /// </summary>
+        /// <param name="address">Адрес прибора</param>
+        /// <returns>true - Удалось подключиться</returns>
         public bool SetAddress(string address)
         {
             if (this.ioArbFG.IO!=null)
@@ -42,20 +51,31 @@ namespace VisaDriver
             catch (SystemException ex)
             {
                 this.ioArbFG.IO = null;
-                return false;
+                throw;
             }
         }
 
+        /// <summary>
+        /// Записать в канал
+        /// </summary>
+        /// <param name="message">Сообщение</param>
         public void WriteString(string message)
         {
             ioArbFG.WriteString(message, true);
         }
 
+        /// <summary>
+        /// Прочитать из канала
+        /// </summary>
+        /// <returns>Ответ</returns>
         public string ReadString()
         {
             return ioArbFG.ReadString();
         }
 
+        /// <summary>
+        /// Закрыть подключение
+        /// </summary>
         public void Dispose()
         {
             ioArbFG.IO.Close();
