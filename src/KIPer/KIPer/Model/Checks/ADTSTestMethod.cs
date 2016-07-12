@@ -51,6 +51,16 @@ namespace KipTM.Model.Checks
             return FillSteps(new ADTSMethodParameters(channel, points, rate, unit));
         }
 
+        public override object GetCustomConfig(IPropertyPool propertyPool)
+        {
+            var propertyes = propertyPool.ByKey(ChannelKey);
+            var points = propertyes.GetProperty<List<ADTSPoint>>(KeyPropertyPoints);
+            var channel = propertyes.GetProperty<CalibChannel>(KeyPropertyChannel);
+            var rate = propertyes.GetProperty<double>(KeyPropertyRate);
+            var unit = propertyes.GetProperty<PressureUnits>(KeyPropertyUnit);
+            return new ADTSMethodParameters(channel, points, rate, unit);
+        }
+
         /// <summary>
         /// Заполнение списка шагов 
         /// </summary>
@@ -81,7 +91,10 @@ namespace KipTM.Model.Checks
 
             foreach (var point in parameters.Points)
             {
-                step = new CheckStepConfig(new DoPointStep(string.Format("Поверка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger), false);
+                step =
+                    new CheckStepConfig(
+                        new DoPointStep(string.Format("Поверка точки {0}", point.Pressure), _adts, param, point.Pressure,
+                            point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger), false);
                 AttachStep(step.Step);
                 steps.Add(step);
             }

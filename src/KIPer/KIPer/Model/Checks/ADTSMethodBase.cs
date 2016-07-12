@@ -88,7 +88,9 @@ namespace KipTM.Model.Checks
         /// Инициализация 
         /// </summary>
         /// <returns></returns>
-        public abstract bool Init(IPropertyPool propertyes);
+        public abstract bool Init(object customConf);
+
+        public abstract object GetCustomConfig(IPropertyPool propertyPool);
 
         /// <summary>
         /// Запуск методики

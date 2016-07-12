@@ -18,5 +18,10 @@ namespace KipTM.Model.Checks
         /// Допустимая погрешность на контрольном давлении
         /// </summary>
         public double Tolerance { get; set; }
+
+        /// <summary>
+        /// Признак необходимости проверки указанной точки
+        /// </summary>
+        public bool IsAvailable { get; set; }
     }
 }

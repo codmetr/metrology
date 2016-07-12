@@ -168,7 +168,6 @@ namespace KipTM.ViewModel.Checks
         /// </summary>
         public string Manufacturer { get { return _model.Manufacturer; } }
 
-
         /// <summary>
         /// Заводской номер
         /// </summary>
@@ -368,6 +367,12 @@ namespace KipTM.ViewModel.Checks
         }
 
 
+        #endregion
+
+        #region Настройка конкретного типа проверки конкретного устройства
+        public object CustomSetiings { 
+            get { return _model.CustomSettings; }
+        }
         #endregion
 
         public override void Cleanup()

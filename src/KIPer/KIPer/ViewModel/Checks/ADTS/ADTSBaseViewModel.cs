@@ -50,7 +50,7 @@ namespace KipTM.ViewModel.Checks
             _propertyPool = propertyPool;
             // Базовая инициализация
             var adts = _propertyPool.ByKey(method.ChannelKey);
-            Method.Init(adts);
+            Method.Init(Method.GetCustomConfig(adts));
             AttachEvent(method);
 
             

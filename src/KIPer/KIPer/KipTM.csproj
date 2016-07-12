@@ -109,7 +109,7 @@
     <Compile Include="Model\IPropertiesLibrary.cs" />
     <Compile Include="Model\PropertiesLibrary.cs" />
     <Compile Include="Model\Channels\PACEEchalonChannel.cs" />
-    <Compile Include="Model\Checks\ADTSChechPoint.cs" />
+    <Compile Include="Model\Checks\ADTSPoint.cs" />
     <Compile Include="Model\Checks\ADTSMethodBase.cs" />
     <Compile Include="Model\Checks\AdtsPointService.cs" />
     <Compile Include="Model\Checks\ADTSTestMethod.cs" />
@@ -120,7 +120,7 @@
     <Compile Include="Model\Checks\Steps\ADTSCalibration\InitStep.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\DoPointStep.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\FinishStep.cs" />
-    <Compile Include="Model\Checks\ADTSCheckParameters.cs" />
+    <Compile Include="Model\Checks\ADTSMethodParameters.cs" />
     <Compile Include="Model\Channels\IEthalonChannel.cs" />
     <Compile Include="Model\Checks\EventArgs\EventArgError.cs" />
     <Compile Include="Model\Checks\EventArgs\EventArgProgress.cs" />

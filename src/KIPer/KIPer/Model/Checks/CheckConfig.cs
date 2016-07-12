@@ -200,11 +200,13 @@ namespace KipTM.Model.Checks
                     return;
                 _selectedType = value;
                 _result.TargetDevice.DeviceType = _selectedType;
+                var properties = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel);
+                CustomSettings = _check[_selectedCheckTypeKey].GetCustomConfig(properties);
             }
         }
 
         /// <summary>
-        /// Тип устройства
+        /// Тип устройства строка 
         /// </summary>
         public string SelectedDeviceTypeKey
         {
@@ -217,6 +219,8 @@ namespace KipTM.Model.Checks
                 SelectedDeviceType = _avalableDeviceTypes[_devTypeKey];
                 _result.TargetDevice.DeviceType = SelectedDeviceType;
                 _check = _methodics.MethodsForType(_devTypeKey);
+                var properties = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel);
+                CustomSettings = _check[_selectedCheckTypeKey].GetCustomConfig(properties);
             }
         }
 
@@ -396,6 +400,12 @@ namespace KipTM.Model.Checks
             get { return _ethalon; }
             protected set { _ethalon = value; }
         }
+
+        #endregion
+
+        #region Custom settings
+
+        public object CustomSettings { get; set; }
 
         #endregion
 

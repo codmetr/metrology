@@ -50,6 +50,16 @@ namespace KipTM.Model.Checks
             return FillSteps(new ADTSMethodParameters(channel, points, rate, unit));
         }
 
+        public override object GetCustomConfig(IPropertyPool propertyPool)
+        {
+            var propertyes = propertyPool.ByKey(ChannelKey);
+            var points = propertyes.GetProperty<List<ADTSPoint>>(ADTSCheckMethod.KeyPoints);
+            var channel = propertyes.GetProperty<CalibChannel>(ADTSCheckMethod.KeyChannel);
+            var rate = propertyes.GetProperty<double>(ADTSCheckMethod.KeyRate);
+            var unit = propertyes.GetProperty<PressureUnits>(ADTSCheckMethod.KeyUnit);
+            return new ADTSMethodParameters(channel, points, rate, unit);
+        }
+
         /// <summary>
         /// Заполнение списка шагов 
         /// </summary>

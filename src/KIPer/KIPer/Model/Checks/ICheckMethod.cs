@@ -13,10 +13,17 @@ namespace KipTM.Model.Checks
         string Title { get; }
 
         /// <summary>
+        /// Получить 
+        /// </summary>
+        /// <param name="propertyPool"></param>
+        /// <returns></returns>
+        object GetCustomConfig(IPropertyPool propertyPool);
+
+        /// <summary>
         /// Инициализация 
         /// </summary>
         /// <returns></returns>
-        bool Init(IPropertyPool propertyes);
+        bool Init(object customConf);
 
         /// <summary>
         /// Запуск калибровки
