@@ -42,13 +42,9 @@ namespace KipTM.Model.Checks
         /// Инициализация 
         /// </summary>
         /// <returns></returns>
-        public override bool Init(IPropertyPool propertyes)
+        public override bool Init(object customConf)
         {
-            var points = propertyes.GetProperty<List<ADTSPoint>>(KeyPropertyPoints);
-            var channel = propertyes.GetProperty<CalibChannel>(KeyPropertyChannel);
-            var rate = propertyes.GetProperty<double>(KeyPropertyRate);
-            var unit = propertyes.GetProperty<PressureUnits>(KeyPropertyUnit);
-            return FillSteps(new ADTSMethodParameters(channel, points, rate, unit));
+            return FillSteps(customConf as ADTSMethodParameters);
         }
 
         public override object GetCustomConfig(IPropertyPool propertyPool)
