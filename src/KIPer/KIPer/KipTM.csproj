@@ -189,6 +189,9 @@
     <Compile Include="ViewModel\Archive\ITestResultViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\MethodicViewModel.cs" />
+    <Compile Include="ViewModel\Master\Workflow.cs" />
+    <Compile Include="ViewModel\Master\WorkflowStep.cs" />
+    <Compile Include="ViewModel\Master\WorkflowStepChangeEvent.cs" />
     <Compile Include="ViewModel\Services\ADTSViewModel.cs" />
     <Compile Include="ViewModel\Services\SelectChannelViewModel.cs" />
     <Compile Include="ViewModel\Services\Pace1000ViewModel.cs" />

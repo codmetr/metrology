@@ -5,15 +5,22 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using IEEE488;
 
-
 namespace PACESeries
 {
+    /// <summary>
+    /// Драйвер PACE1000
+    /// </summary>
     public class PACE1000Driver:IDisposable
     {
         private readonly PACEParser _parser;
         private readonly ITransportIEEE488 _transport;
         private readonly int _address;
 
+        /// <summary>
+        /// Драйвер PACE1000
+        /// </summary>
+        /// <param name="address">Адрес</param>
+        /// <param name="transport">Канал обмена</param>
         public PACE1000Driver(int address, ITransportIEEE488 transport)
         {
             _transport = transport;
@@ -21,10 +28,18 @@ namespace PACESeries
             _parser = new PACEParser();
         }
 
+        /// <summary>
+        /// Драйвер PACE1000
+        /// </summary>
+        /// <param name="transport">Канал обмена</param>
         public PACE1000Driver(ITransportIEEE488 transport):this(default (int), transport)
         {
         }
 
+        /// <summary>
+        /// Открыть подключение
+        /// </summary>
+        /// <returns>true - удалось подключиться</returns>
         public bool Open()
         {
             if (_transport == null)
@@ -35,7 +50,7 @@ namespace PACESeries
         /// <summary>
         /// Получить идентификатор устройства
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Идентификатор</returns>
         public string GetIdentificator()
         {
             var idn = string.Empty;
@@ -51,7 +66,7 @@ namespace PACESeries
         /// <summary>
         /// Получить текущее значение давления
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Значение давления</returns>
         public double GetPressure()
         {
             _transport.Send(_parser.GetCommandGetPressure());
@@ -70,7 +85,7 @@ namespace PACESeries
         /// <summary>
         /// Получить текущую дату на приборе
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Дата на приборе</returns>
         public DateTime? GetDate()
         {
             int year;
@@ -98,7 +113,7 @@ namespace PACESeries
         /// <summary>
         /// Получить диапазон измерения давления
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Диапазон давления</returns>
         public string GetPressureRange()
         {
             _transport.Send(_parser.GetCommandGetPressureRange());
@@ -113,7 +128,7 @@ namespace PACESeries
         /// <summary>
         /// Получить допустимые диапазоны измерения давления
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Список поддерживаемых диапазонов</returns>
         public IEnumerable<string> GetAllPressureRanges()
         {
             _transport.Send(_parser.GetCommandGetAllRanges());
@@ -128,7 +143,7 @@ namespace PACESeries
         /// <summary>
         /// Установить диапазон давления
         /// </summary>
-        /// <param name="range"></param>
+        /// <param name="range">Диапазон давления из списка <see cref="GetAllPressureRanges"/></param>
         /// <returns></returns>
         public bool SetPressureRange(string range)
         {
@@ -141,7 +156,7 @@ namespace PACESeries
         /// <summary>
         /// Получить единицы измерения давления
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Единицы давления</returns>
         public PressureUnits? GetPressureUnit()
         {
             PressureUnits? result;
@@ -157,7 +172,8 @@ namespace PACESeries
         /// <summary>
         /// Установить единицы измерения давления
         /// </summary>
-        /// <returns></returns>
+        /// <param name="unit">Единицы давления</param>
+        /// <returns>Удалось установить единицы давления</returns>
         public bool SetPressureUnit(PressureUnits unit)
         {
             _transport.Send(_parser.GetCommandSetPressureUnit(unit));
@@ -197,6 +213,9 @@ namespace PACESeries
             _transport.Send(_parser.GetCommandSetRemote());
         }
 
+        /// <summary>
+        /// Зарыть подключение
+        /// </summary>
         public void Dispose()
         {
             _transport.Close(_address);

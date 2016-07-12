@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PACE1000VisaTest", "PACE1000VisaTest.csproj", "{9C9E549A-2AF4-452B-8051-B53ED780BA49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PACESeries", "..\PACESeries\PACESeries.csproj", "{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IEEE488", "..\..\IEEE488Transport\IEEE488.csproj", "{3FEC76C3-B933-4461-AA8D-85360D3F41C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisaDriver", "..\VisaDriver\VisaDriver.csproj", "{CBEA7A6C-2EA6-4329-99EE-4290A9801A0A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C9E549A-2AF4-452B-8051-B53ED780BA49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C9E549A-2AF4-452B-8051-B53ED780BA49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C9E549A-2AF4-452B-8051-B53ED780BA49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C9E549A-2AF4-452B-8051-B53ED780BA49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FEC76C3-B933-4461-AA8D-85360D3F41C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FEC76C3-B933-4461-AA8D-85360D3F41C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FEC76C3-B933-4461-AA8D-85360D3F41C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FEC76C3-B933-4461-AA8D-85360D3F41C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBEA7A6C-2EA6-4329-99EE-4290A9801A0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBEA7A6C-2EA6-4329-99EE-4290A9801A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBEA7A6C-2EA6-4329-99EE-4290A9801A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBEA7A6C-2EA6-4329-99EE-4290A9801A0A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
