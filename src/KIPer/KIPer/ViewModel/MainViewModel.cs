@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Interfaces;
 using KipTM.Model;
+using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
 using KipTM.Settings;
@@ -17,6 +18,8 @@ using KipTM.View.Checks.Steps;
 using KipTM.View.Services;
 using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Checks;
+using KipTM.ViewModel.Checks.States;
+using KipTM.ViewModel.Master;
 using KipTM.ViewModel.Services;
 using SQLiteArchive;
 
@@ -44,6 +47,7 @@ namespace KipTM.ViewModel
         private DeviceTypesViewModel _deviceTypes;
         private DeviceTypesViewModel _etalonTypes;
         private CheckViewModel _checks;
+        private Workflow _workflow;
 
         private string _helpMessage;
         private object _selectedAction;
@@ -91,6 +95,7 @@ namespace KipTM.ViewModel
 
                 //Вкладка Проверка
                 {typeof(CheckViewModel), typeof(CheckView)},
+                {typeof(Workflow), typeof(WorkflowView)},
                 {typeof(CheckConfigViewModel), typeof(CheckConfigView)},
                 {typeof(MechanicalManometerViewModel), typeof(MechanicalManometerView)},
                 {typeof(ADTSCalibrationViewModel), typeof(AdtsCheckView)},
@@ -110,7 +115,17 @@ namespace KipTM.ViewModel
             _deviceTypes = new DeviceTypesViewModel();
             _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
-            _checks = new CheckViewModel(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, _dataService.DeviceManager, new TestResult(), res => _archive.Save<TestResult>("", res)); //TODO реорганизовать по нормальному
+            var checkFabrik = new CheckFabrik(_dataService.DeviceManager, _propertiesLibrary.PropertyPool);
+            var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, new TestResult());
+            var checkConfigViewModel = new CheckConfigViewModel(checkConfig);
+            _checks = new CheckViewModel(checkConfig, res => _archive.Save<TestResult>("", res), checkFabrik); //TODO реорганизовать по нормальному
+
+            _workflow = new Workflow(new List<IWorkflowStep>()
+            {
+                new ConfigCheckState(checkConfigViewModel),
+                new ADTSCheckState(() => checkFabrik.GetViewModelFor(checkConfig))
+            });
+
             SelectChecks.Execute(null);
         }
 
@@ -179,7 +194,7 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = _checks;
+                    SelectedAction = Checks;
                     HelpMessage = "Выполнение поверки";
                 });
             }
@@ -275,6 +290,7 @@ namespace KipTM.ViewModel
 
         public DeviceTypesViewModel EtalonTypes { get { return _etalonTypes; } }
 
-        public CheckViewModel Checks { get { return _checks; } }
+        //public CheckViewModel Checks { get { return _checks; } }
+        public Workflow Checks { get { return _workflow; } }
     }
 }

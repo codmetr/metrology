@@ -16,6 +16,7 @@ using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.TransportChannels;
 using KipTM.ViewModel.Channels;
+using KipTM.ViewModel.Master;
 using KipTM.ViewModel.Services;
 
 namespace KipTM.ViewModel.Checks

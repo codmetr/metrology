@@ -30,8 +30,7 @@ namespace KipTM.ViewModel
     public class CheckViewModel : ViewModelBase
     {
         #region Внутренние переменные
-        private readonly IDeviceManager _deviceManager;
-        private readonly IPropertyPool _propertyPool;
+        private readonly ICheckFabrik _checkFabrik;
         private IMethodViewModel _selectedCheck;
         private Action<TestResult> _saver;
         
@@ -55,9 +54,9 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the CheckViewModel class.
         /// </summary>
-        public CheckViewModel(MainSettings settings, IMethodsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries, IDeviceManager deviceManager, TestResult result, Action<TestResult> saver)
+        public CheckViewModel(CheckConfig checkConfig, Action<TestResult> saver, ICheckFabrik checkFabrik)
         {
-            _checkConfig = new CheckConfig(settings, methodics, propertyPool, dictionaries, result);
+            _checkConfig = checkConfig;
             _checkConfigViewModel = new CheckConfigViewModel(_checkConfig);
 
             _checkConfig.SelectedCheckTypeChanged += _checkConfig_SelectedCheckTypeChanged;
@@ -66,10 +65,9 @@ namespace KipTM.ViewModel
 
             _checkConfigViewModel.CheckedDeviseChannelChanged += _checkConfigViewModel_CheckedDeviseChannelChanged;
             _checkConfigViewModel.EthalonDeviseChannelChanged += _checkConfigViewModel_EthalonDeviseChannelChanged;
-            _propertyPool = propertyPool;
-            _deviceManager = deviceManager;
             _saver = saver;
-            Check = GetViewModelFor(_checkConfig.SelectedCheckType);
+            _checkFabrik = checkFabrik;
+            Check = _checkFabrik.GetViewModelFor(_checkConfig);
             
             if (Check != null)
             {
@@ -147,21 +145,21 @@ namespace KipTM.ViewModel
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="methodic"></param>
         /// <returns></returns>
-        private IMethodViewModel GetViewModelFor(ICheckMethod methodic)
+        private static IMethodViewModel GetViewModelFor(IDeviceManager deviceManager, CheckConfig checkConfig, IPropertyPool propertyPool)
         {
-            if (methodic is ADTSCheckMethod)
+            var method = checkConfig.SelectedCheckType;
+            if (method is ADTSCheckMethod)
             {
-                var adtsMethodic = methodic as ADTSCheckMethod;
-                adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
-                return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(_checkConfig.SelectedDeviceTypeKey), _deviceManager, _checkConfig.Result);
+                var adtsMethodic = method as ADTSCheckMethod;
+                adtsMethodic.SetADTS(deviceManager.GetModel<ADTSModel>());
+                return new ADTSCalibrationViewModel(adtsMethodic, propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey), deviceManager, checkConfig.Result);
             }
-            else if (methodic is ADTSTestMethod)
+            else if (method is ADTSTestMethod)
             {
-                var adtsMethodic = methodic as ADTSTestMethod;
-                adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
-                return new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(_checkConfig.SelectedDeviceTypeKey), _deviceManager, _checkConfig.Result);
+                var adtsMethodic = method as ADTSTestMethod;
+                adtsMethodic.SetADTS(deviceManager.GetModel<ADTSModel>());
+                return new ADTSTestViewModel(adtsMethodic, propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey), deviceManager, checkConfig.Result);
             }
             return null;
         }
@@ -236,7 +234,7 @@ namespace KipTM.ViewModel
         /// <param name="e"></param>
         void _checkConfig_SelectedCheckTypeChanged(object sender, EventArgs e)
         {
-            Check = GetViewModelFor(_checkConfig.SelectedCheckType);
+            Check = _checkFabrik.GetViewModelFor(_checkConfig);
             if (Check != null)
             {
                 Check.SetConnection(_checkConfigViewModel.GetCheckedDeviseChannel());
