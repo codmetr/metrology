@@ -12,12 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KipTM.ViewModel;
 
 namespace KipTM.View
 {
     /// <summary>
     /// Interaction logic for DeviceTypeView.xaml
     /// </summary>
+    [ViewAttribute(typeof(DeviceTypeViewModel))]
     public partial class DeviceTypeView : UserControl
     {
         public DeviceTypeView()

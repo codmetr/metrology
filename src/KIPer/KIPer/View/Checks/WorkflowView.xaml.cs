@@ -12,12 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KipTM.ViewModel.Master;
 
 namespace KipTM.View.Checks
 {
     /// <summary>
     /// Interaction logic for WorkflowView.xaml
     /// </summary>
+    [ViewAttribute(typeof(Workflow))]
     public partial class WorkflowView : UserControl
     {
         public WorkflowView()

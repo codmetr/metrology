@@ -22,6 +22,7 @@ using KipTM.ViewModel.Checks.States;
 using KipTM.ViewModel.Master;
 using KipTM.ViewModel.Services;
 using SQLiteArchive;
+using Tools;
 
 namespace KipTM.ViewModel
 {
@@ -40,8 +41,6 @@ namespace KipTM.ViewModel
         private IArchive _archive;
 
         private readonly ServiceViewModel _services;
-
-        private readonly Dictionary<Type, Type> ViewModelViewDic;
 
         private IArchivesViewModel _tests;
         private DeviceTypesViewModel _deviceTypes;
@@ -72,36 +71,6 @@ namespace KipTM.ViewModel
                 new Pace1000ViewModel(_dataService.DeviceManager),
                 new ADTSViewModel(_dataService.DeviceManager)
             });
-            ViewModelViewDic = new Dictionary<Type, Type>()
-            {
-                //Вкладка Сервис
-                {typeof(ServiceViewModel), typeof(ServicesView)},
-                {typeof(Pace1000ViewModel), typeof(PACE1000View)},
-                {typeof(ADTSViewModel), typeof(ADTSView)},
-                {typeof(SelectChannelViewModel), typeof(SelectChannelView)},
-                {typeof(VisaSettings), typeof(VisaSettingsView)},
-
-                //Вкладка Архив
-                {typeof(ArchivesViewModel), typeof(ArchivesView)},
-                {typeof(TestResultViewModel), typeof(ResultView)},
-                
-                //Вкладка Приборы
-                {typeof(DeviceTypesViewModel), typeof(DeviceTypesView)},
-                {typeof(DeviceTypeViewModel), typeof(DeviceTypeView)},
-
-                //Вкладка Эталоны
-                {typeof(EtalonTypeViewModel), typeof(EtalonTypeView)},
-                {typeof(PACEEchalonChannelViewModel), typeof(PACE1000EthalonChannelView)},
-
-                //Вкладка Проверка
-                {typeof(CheckViewModel), typeof(CheckView)},
-                {typeof(Workflow), typeof(WorkflowView)},
-                {typeof(CheckConfigViewModel), typeof(CheckConfigView)},
-                {typeof(MechanicalManometerViewModel), typeof(MechanicalManometerView)},
-                {typeof(ADTSCalibrationViewModel), typeof(AdtsCheckView)},
-                {typeof(ADTSTestViewModel), typeof(AdtsCheckView)},
-                {typeof(AdtsPointResult), typeof(AdtsPointResultView)},
-            };
         }
 
         public void Load()
@@ -162,25 +131,7 @@ namespace KipTM.ViewModel
                         var view = mainView as Window;
                         if (view == null)
                             return;
-
-                        try
-                        {
-                            foreach (var mod in ViewModelViewDic)
-                            {
-                                var typeModel = mod.Key;
-                                var typeView = mod.Value;
-                                var template = new DataTemplate
-                                {
-                                    DataType = typeModel,
-                                    VisualTree = new FrameworkElementFactory(typeView)
-                                };
-                                view.Resources.Add(new DataTemplateKey(typeModel), template);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            throw;
-                        }
+                        ViewViewmodelMatcher.AddMatch(view.Resources, ViewAttribute.CheckView, ViewAttribute.CheckViewModel);
                     });
             }
         }

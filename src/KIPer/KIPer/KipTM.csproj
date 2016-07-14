@@ -153,7 +153,6 @@
     <Compile Include="Model\TransportChannels\ITransportChannelType.cs" />
     <Compile Include="Model\TransportChannels\Visa\VisaChannelDescriptor.cs" />
     <Compile Include="Model\TransportChannels\Visa\VisaSettings.cs" />
-    <Compile Include="Services.cs" />
     <Compile Include="Settings\ComPortSettings.cs" />
     <Compile Include="Settings\DeviceTypeSettings.cs" />
     <Compile Include="Settings\EtalonSettings.cs" />
@@ -263,6 +262,7 @@
     <Compile Include="View\Services\VisaSettingsView.xaml.cs">
       <DependentUpon>VisaSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ViewAttribute.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -451,6 +451,10 @@
     <ProjectReference Include="..\MineLoop\MainLoop.csproj">
       <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
       <Name>MainLoop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools\Tools.csproj">
+      <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
+      <Name>Tools</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

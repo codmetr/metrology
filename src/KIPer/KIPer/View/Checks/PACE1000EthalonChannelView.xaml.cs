@@ -12,12 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KipTM.ViewModel.Channels;
 
 namespace KipTM.View.Checks
 {
     /// <summary>
     /// Interaction logic for PACE1000View.xaml
     /// </summary>
+    [ViewAttribute(typeof(PACEEchalonChannelViewModel))]
     public partial class PACE1000EthalonChannelView : UserControl
     {
         public PACE1000EthalonChannelView()

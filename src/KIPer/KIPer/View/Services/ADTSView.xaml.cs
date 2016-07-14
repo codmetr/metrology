@@ -12,12 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KipTM.ViewModel.Services;
 
 namespace KipTM.View.Services
 {
     /// <summary>
     /// Interaction logic for ADTSView.xaml
     /// </summary>
+    [ViewAttribute(typeof(ADTSViewModel))]
     public partial class ADTSView : UserControl
     {
         public ADTSView()

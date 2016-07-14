@@ -114,6 +114,10 @@
         <File Name="$(var.MainLoop.TargetFileName)" Source="$(var.MainLoop.TargetPath)" KeyPath="yes" />
         <File Name="$(var.MainLoop.TargetName).pdb" Source="$(var.MainLoop.TargetDir)$(var.MainLoop.TargetName).pdb" CompanionFile="$(var.MainLoop.TargetFileName)"/>
       </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A2A">
+        <File Name="$(var.Tools.TargetFileName)" Source="$(var.Tools.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.Tools.TargetName).pdb" Source="$(var.Tools.TargetDir)$(var.Tools.TargetName).pdb" CompanionFile="$(var.Tools.TargetFileName)"/>
+      </Component>
       <Component Guid="44623CF8-CAEF-474A-AC50-21020572B436">
         <File Name="$(var.PressureElementControls.TargetFileName)" Source="$(var.PressureElementControls.TargetPath)" KeyPath="yes" />
         <File Name="$(var.PressureElementControls.TargetName).pdb" Source="$(var.PressureElementControls.TargetDir)$(var.PressureElementControls.TargetName).pdb" CompanionFile="$(var.PressureElementControls.TargetFileName)"/>

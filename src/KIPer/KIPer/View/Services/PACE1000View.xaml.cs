@@ -12,12 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KipTM.ViewModel;
 
 namespace KipTM.View
 {
     /// <summary>
     /// Interaction logic for PACE5000View.xaml
     /// </summary>
+    [ViewAttribute(typeof(Pace1000ViewModel))]
     public partial class PACE1000View : UserControl
     {
 

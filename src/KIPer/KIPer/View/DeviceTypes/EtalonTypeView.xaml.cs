@@ -12,12 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KipTM.ViewModel;
 
 namespace KipTM.View
 {
     /// <summary>
     /// Interaction logic for EtalonDeviceTypeView.xaml
     /// </summary>
+    [ViewAttribute(typeof(EtalonTypeViewModel))]
     public partial class EtalonTypeView : UserControl
     {
         public EtalonTypeView()
