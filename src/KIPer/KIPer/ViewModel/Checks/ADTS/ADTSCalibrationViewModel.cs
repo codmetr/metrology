@@ -40,8 +40,8 @@ namespace KipTM.ViewModel.Checks
         /// </summary>
         public ADTSCalibrationViewModel(
             ADTSCheckMethod methodic, IPropertyPool propertyPool,
-            IDeviceManager deviceManager, TestResult resultPool) :
-                base(methodic, propertyPool, deviceManager, resultPool)
+            IDeviceManager deviceManager, TestResult resultPool, ADTSMethodParameters customConf) :
+                base(methodic, propertyPool, deviceManager, resultPool, customConf)
         {
             Title = "Калибровка ADTS";
             _stateViewModel.TitleSteps = "Калибруемые точки";

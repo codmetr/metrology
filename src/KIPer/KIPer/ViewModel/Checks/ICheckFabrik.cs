@@ -1,6 +1,7 @@
 ﻿using KipTM.Archive;
 using KipTM.Model;
 using KipTM.Model.Checks;
+using KipTM.Model.TransportChannels;
 
 namespace KipTM.ViewModel.Checks
 {
@@ -10,6 +11,6 @@ namespace KipTM.ViewModel.Checks
         /// 
         /// </summary>
         /// <returns></returns>
-        IMethodViewModel GetViewModelFor(CheckConfig checkConfig);
+        IMethodViewModel GetViewModelFor(CheckConfig checkConfig, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel);
     }
 }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:checks="clr-namespace:KipTM.ViewModel.Checks"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="400" d:DataContext="{d:DesignInstance checks:CheckConfigViewModel}">
+             d:DesignHeight="600" d:DesignWidth="600" d:DataContext="{d:DesignInstance checks:CheckConfigViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,11 +18,14 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="0" Grid.Row="0">
+            <!--Условия поверки-->
             <GroupBox Header="Условия поверки">
                 <StackPanel>
                     <TextBlock>Дата поверки:</TextBlock>
@@ -64,53 +67,54 @@
             </GroupBox>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="0">
-            <!--<GroupBox Header="Эталон">-->
+            <!--Настройки эталона-->
+            <GroupBox Header="Настройки эталона:">
                 <StackPanel>
-                    <TextBlock>Настройки эталона:</TextBlock>
-                    <GroupBox Header="Эталон">
-                        <StackPanel>
-                            <TextBlock>Тип СИ:</TextBlock>
-                            <ComboBox
+                    <TextBlock>Тип СИ:</TextBlock>
+                    <ComboBox
                                 ItemsSource="{Binding EthalonTypes}"
                                 SelectedItem="{Binding SelectedEthalonType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Text="Тип аналоговога прибора:">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsAnalogEthalon}" Value="TRUE">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                            <TextBox Text="{Binding EthalonDeviceType, UpdateSourceTrigger=PropertyChanged}">
-                                <TextBox.Style>
-                                    <Style TargetType="TextBox">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsAnalogEthalon}" Value="TRUE">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                            <TextBlock>Завдской номер:</TextBlock>
-                            <TextBox Text="{Binding EthalonSerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock>Дата предыдущей поверки:</TextBlock>
-                            <DatePicker SelectedDate="{Binding EthalonPreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Expander Header="Настройки подключения"
+                    <TextBlock Text="Тип аналоговога прибора:">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsAnalogEthalon}" Value="TRUE">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBox Text="{Binding EthalonDeviceType, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsAnalogEthalon}" Value="TRUE">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    <TextBlock>Завдской номер:</TextBlock>
+                    <TextBox Text="{Binding EthalonSerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock>Дата предыдущей поверки:</TextBlock>
+                    <DatePicker SelectedDate="{Binding EthalonPreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Expander Header="Настройки подключения"
                                        Visibility="{Binding IsNoAnalogEthalon, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
-                                <StackPanel>
-                                    <ContentPresenter Content="{Binding EthalonChanel}"/>
-                                </StackPanel>
-                            </Expander>
+                        <StackPanel>
+                            <ContentPresenter Content="{Binding EthalonChanel}"/>
                         </StackPanel>
-                    </GroupBox>
+                    </Expander>
                 </StackPanel>
-            <!--</GroupBox>-->
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Grid.Column="2" Grid.Row="0">
+            <GroupBox Header="Настройки методики" Visibility="{Binding IsCustomSettingsAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ContentPresenter Content="{Binding CustomSetiings, UpdateSourceTrigger=PropertyChanged}"/>
+            </GroupBox>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -19,20 +19,23 @@ namespace KipTM.ViewModel.Checks
         private readonly CheckConfig _model;
         private SelectChannelViewModel _checkDeviceChanel;
         private SelectChannelViewModel _ethalonChanel;
+        private object _customSetiings;
+        private bool _isCustomSettingsAvailable;
 
 
         /// <summary>
         /// Initializes a new instance of the CheckConfigViewModel class.
         /// </summary>
-        public CheckConfigViewModel(CheckConfig model)
+        public CheckConfigViewModel(CheckConfig model, SelectChannelViewModel checkDeviceChanel, SelectChannelViewModel ethalonChanel)
         {
             _model = model;
+            CustomSetiings = _model.CustomSettings;
             _model.SelectedChannelChanged += _model_SelectedChannelChanged;
             _model.SelectedCheckTypeChanged += _model_SelectedCheckTypeChanged;
             _model.SelectedEthalonTypeChanged += _model_SelectedEthalonTypeChanged;
-            _checkDeviceChanel = new SelectChannelViewModel();
+            _checkDeviceChanel = checkDeviceChanel;
             _checkDeviceChanel.ChannelTypeChanget += _checkDeviceChanel_ChannelTypeChanget;
-            _ethalonChanel = new SelectChannelViewModel();
+            _ethalonChanel = ethalonChanel;
             _ethalonChanel.ChannelTypeChanget += _ethalonChanel_ChannelTypeChanget;
         }
 
@@ -135,6 +138,7 @@ namespace KipTM.ViewModel.Checks
         #endregion
 
         #region Настройки проверяемого устройства
+
         /// <summary>
         /// Тип устройства
         /// </summary>
@@ -146,6 +150,7 @@ namespace KipTM.ViewModel.Checks
                 if (_model.SelectedDeviceTypeKey == value)
                     return;
                 _model.SelectedDeviceTypeKey = value;
+                CustomSetiings = _model.CustomSettings;
                 RaisePropertyChanged();
                 RaisePropertyChanged("Manufacturer");
             }
@@ -167,7 +172,10 @@ namespace KipTM.ViewModel.Checks
         /// <summary>
         /// Производитель
         /// </summary>
-        public string Manufacturer { get { return _model.Manufacturer; } }
+        public string Manufacturer
+        {
+            get { return _model.Manufacturer; }
+        }
 
         /// <summary>
         /// Заводской номер
@@ -204,6 +212,7 @@ namespace KipTM.ViewModel.Checks
             set
             {
                 _model.SelectedCheckTypeKey = value;
+                CustomSetiings = _model.CustomSettings;
                 RaisePropertyChanged();
             }
         }
@@ -217,6 +226,7 @@ namespace KipTM.ViewModel.Checks
             set
             {
                 _model.SelectedChannel = value;
+                CustomSetiings = _model.CustomSettings;
                 RaisePropertyChanged();
             }
         }
@@ -371,9 +381,29 @@ namespace KipTM.ViewModel.Checks
         #endregion
 
         #region Настройка конкретного типа проверки конкретного устройства
-        public object CustomSetiings { 
-            get { return _model.CustomSettings; }
+
+        /// <summary>
+        /// Настройка конкретной методики
+        /// </summary>
+        public object CustomSetiings
+        {
+            get { return _customSetiings; }
+            set
+            {
+                Set(ref _customSetiings, value);
+                IsCustomSettingsAvailable = _customSetiings != null;
+            }
         }
+
+        /// <summary>
+        /// Наличие настройки конкретной методики
+        /// </summary>
+        public bool IsCustomSettingsAvailable
+        {
+            get { return _isCustomSettingsAvailable; }
+            set { Set(ref _isCustomSettingsAvailable, value); }
+        }
+
         #endregion
 
         public override void Cleanup()

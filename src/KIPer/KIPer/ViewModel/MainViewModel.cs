@@ -86,13 +86,15 @@ namespace KipTM.ViewModel
 
             var checkFabrik = new CheckFabrik(_dataService.DeviceManager, _propertiesLibrary.PropertyPool);
             var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, new TestResult());
-            var checkConfigViewModel = new CheckConfigViewModel(checkConfig);
-            _checks = new CheckViewModel(checkConfig, res => _archive.Save<TestResult>("", res), checkFabrik); //TODO реорганизовать по нормальному
+            var channelTargetDevice = new SelectChannelViewModel();
+            var channelEthalonDevice = new SelectChannelViewModel();
+            var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice);
+            //_checks = new CheckViewModel(checkConfig, res => _archive.Save<TestResult>("", res), checkFabrik, channelTargetDevice, channelEthalonDevice); //TODO реорганизовать по нормальному
 
             _workflow = new Workflow(new List<IWorkflowStep>()
             {
                 new ConfigCheckState(checkConfigViewModel),
-                new ADTSCheckState(() => checkFabrik.GetViewModelFor(checkConfig))
+                new ADTSCheckState(() => checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel))
             });
 
             SelectChecks.Execute(null);

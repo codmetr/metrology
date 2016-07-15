@@ -25,7 +25,7 @@ namespace KipTM.ViewModel
         private readonly IEnumerable<ITransportChannelType> _channels;
 
         /// <summary>
-        /// Initializes a new instance of the Pace5000ViewModel class.
+        /// Initializes a new instance of the SelectChannelViewModel class.
         /// </summary>
         public SelectChannelViewModel()
         {

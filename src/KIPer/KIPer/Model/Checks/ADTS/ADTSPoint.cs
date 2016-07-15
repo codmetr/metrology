@@ -9,6 +9,11 @@ namespace KipTM.Model.Checks
 
     public class ADTSPoint
     {
+        public ADTSPoint()
+        {
+            IsAvailable = true;
+        }
+
         /// <summary>
         /// Контрольное давление
         /// </summary>

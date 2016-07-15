@@ -14,11 +14,6 @@ namespace KipTM.ViewModel.Checks
         void SetConnection(ITransportChannelType connection);
 
         /// <summary>
-        /// Пользовательский канал эталоном 
-        /// </summary>
-        void SlectUserEthalonChannel();
-
-        /// <summary>
         /// Установить эталонный канал
         /// </summary>
         /// <param name="ethalonTypeKey"></param>

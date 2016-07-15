@@ -45,13 +45,13 @@ namespace KipTM.ViewModel.Checks
         #endregion
 
         protected ADTSBaseViewModel(ADTSMethodBase method, IPropertyPool propertyPool,
-            IDeviceManager deviceManager, TestResult resultPool)
+            IDeviceManager deviceManager, TestResult resultPool, ADTSMethodParameters customConfig)
         {
             Method = method;
             _propertyPool = propertyPool;
             // Базовая инициализация
             var adts = _propertyPool.ByKey(method.ChannelKey);
-            Method.Init(Method.GetCustomConfig(adts));
+            Method.Init(customConfig);
             AttachEvent(method);
 
             
@@ -90,22 +90,19 @@ namespace KipTM.ViewModel.Checks
         /// <param name="settings"></param>
         public void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings)
         {
+            if (string.IsNullOrEmpty(ethalonTypeKey) || settings == null)
+            {
+                Method.SetEthalonChannel(_userEchalonChannel, null);
+                _ethalonTypeKey = null;
+                _ethalonChannelType = null;
+                State.IsUserChannel = true;
+                EthalonChannel = null;
+                return;
+            }
             _ethalonTypeKey = ethalonTypeKey;
             _ethalonChannelType = settings;
             State.IsUserChannel = _ethalonTypeKey == null;
             EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType);
-        }
-
-        /// <summary>
-        /// Установить пользователя эталонным каналом
-        /// </summary>
-        public void SlectUserEthalonChannel()
-        {
-            Method.SetEthalonChannel(_userEchalonChannel, null);
-            _ethalonTypeKey = null;
-            _ethalonChannelType = null;
-            State.IsUserChannel = true;
-            EthalonChannel = null;
         }
 
         /// <summary>

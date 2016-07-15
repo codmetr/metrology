@@ -40,8 +40,8 @@ namespace KipTM.ViewModel.Checks
         /// </summary>
         public ADTSTestViewModel(
             ADTSTestMethod methodic, IPropertyPool propertyPool,
-            IDeviceManager deviceManager, TestResult resultPool):
-            base(methodic, propertyPool, deviceManager, resultPool)
+            IDeviceManager deviceManager, TestResult resultPool, ADTSMethodParameters customConf):
+            base(methodic, propertyPool, deviceManager, resultPool, customConf)
         {
             Title = "Поверка ADTS";
             _stateViewModel.TitleSteps = "Поверяемые точки";

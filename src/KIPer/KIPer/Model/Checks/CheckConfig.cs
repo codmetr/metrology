@@ -16,7 +16,7 @@ namespace KipTM.Model.Checks
     {
         #region Внутренние переменные
         private readonly IMethodsService _methodics;
-        private IDictionary<string, ICheckMethod> _check;
+        private IDictionary<string, ICheckMethod> _checks;
         private readonly IPropertyPool _propertyPool;
         private string _selectedCheckTypeKey;
         private ICheckMethod _selectedCheckType;
@@ -75,7 +75,7 @@ namespace KipTM.Model.Checks
             if (_devTypeKey != null)
             {
                 _result.TargetDevice = new DeviceDescriptor(_selectedType);
-                _check = _methodics.MethodsForType(_devTypeKey);
+                _checks = _methodics.MethodsForType(_devTypeKey);
                 Channels = _propertyPool.ByKey(_devTypeKey).GetAllKeys();
                 _result.Channel = Channels.First();
                 SelectedCheckTypeKey = CheckTypes.First();
@@ -144,7 +144,7 @@ namespace KipTM.Model.Checks
         /// </summary>
         public IEnumerable<string> CheckTypes
         {
-            get { return _check.Keys; }
+            get { return _checks.Keys; }
         }
 
         /// <summary>
@@ -200,8 +200,13 @@ namespace KipTM.Model.Checks
                     return;
                 _selectedType = value;
                 _result.TargetDevice.DeviceType = _selectedType;
+                _checks = _methodics.MethodsForType(_devTypeKey);
+                if (!_checks.ContainsKey(_selectedCheckTypeKey) && _checks.Count>0)
+                {
+                    SelectedCheckTypeKey = _checks.First().Key;
+                }
                 var properties = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel);
-                CustomSettings = _check[_selectedCheckTypeKey].GetCustomConfig(properties);
+                CustomSettings = _checks[_selectedCheckTypeKey].GetCustomConfig(properties);
             }
         }
 
@@ -217,17 +222,19 @@ namespace KipTM.Model.Checks
                     return;
                 _devTypeKey = value;
                 SelectedDeviceType = _avalableDeviceTypes[_devTypeKey];
-                _result.TargetDevice.DeviceType = SelectedDeviceType;
-                _check = _methodics.MethodsForType(_devTypeKey);
-                var properties = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel);
-                CustomSettings = _check[_selectedCheckTypeKey].GetCustomConfig(properties);
             }
         }
 
         /// <summary>
         /// Производитель
         /// </summary>
-        public string Manufacturer { get { return _result.TargetDevice.DeviceType.DeviceManufacturer; } }
+        public string Manufacturer
+        {
+            get
+            {
+                return _result.TargetDevice.DeviceType.DeviceManufacturer;
+            }
+        }
 
         /// <summary>
         /// Заказчик
@@ -265,10 +272,7 @@ namespace KipTM.Model.Checks
             set
             {
                 _selectedCheckTypeKey = value;
-                _result.CheckType = _selectedCheckTypeKey;
-                SelectedCheckType = _check[_selectedCheckTypeKey];
-                var properties = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel);
-                SelectedCheckType.Init(SelectedCheckType.GetCustomConfig(properties));
+                SelectedCheckType = _checks[_selectedCheckTypeKey];
             }
         }
 
@@ -281,6 +285,10 @@ namespace KipTM.Model.Checks
             private set
             {
                 _selectedCheckType = value;
+                _result.CheckType = _selectedCheckTypeKey;
+                var properties = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel);
+                CustomSettings = SelectedCheckType.GetCustomConfig(properties);
+                SelectedCheckType.Init(CustomSettings); //todo maybe move to CheckViewModel
                 OnSelectedCheckTypeChanged();
             }
         }
@@ -297,7 +305,8 @@ namespace KipTM.Model.Checks
                     return;
                 _result.Channel = value;
                 var properties = _propertyPool.ByKey(_devTypeKey).ByKey(value);
-                SelectedCheckType.Init(SelectedCheckType.GetCustomConfig(properties)); //todo maybe move to CheckViewModel
+                CustomSettings = SelectedCheckType.GetCustomConfig(properties);
+                SelectedCheckType.Init(CustomSettings); //todo maybe move to CheckViewModel
                 OnSelectedChannelChanged();
             }
         }
@@ -405,6 +414,9 @@ namespace KipTM.Model.Checks
 
         #region Custom settings
 
+        /// <summary>
+        /// Настройка конкретной методики
+        /// </summary>
         public object CustomSettings { get; set; }
 
         #endregion

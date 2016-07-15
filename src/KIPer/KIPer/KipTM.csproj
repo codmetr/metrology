@@ -109,10 +109,10 @@
     <Compile Include="Model\IPropertiesLibrary.cs" />
     <Compile Include="Model\PropertiesLibrary.cs" />
     <Compile Include="Model\Channels\PACEEchalonChannel.cs" />
-    <Compile Include="Model\Checks\ADTSPoint.cs" />
-    <Compile Include="Model\Checks\ADTSMethodBase.cs" />
-    <Compile Include="Model\Checks\AdtsPointService.cs" />
-    <Compile Include="Model\Checks\ADTSTestMethod.cs" />
+    <Compile Include="Model\Checks\ADTS\ADTSPoint.cs" />
+    <Compile Include="Model\Checks\ADTS\ADTSMethodBase.cs" />
+    <Compile Include="Model\Checks\ADTS\AdtsPointService.cs" />
+    <Compile Include="Model\Checks\ADTS\ADTSTestMethod.cs" />
     <Compile Include="Model\Checks\CheckConfig.cs" />
     <Compile Include="Model\Checks\EventArgs\EventArgTestStepResult.cs" />
     <Compile Include="Model\Checks\EventArgs\EventArgEnd.cs" />
@@ -120,7 +120,7 @@
     <Compile Include="Model\Checks\Steps\ADTSCalibration\InitStep.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\DoPointStep.cs" />
     <Compile Include="Model\Checks\Steps\ADTSCalibration\FinishStep.cs" />
-    <Compile Include="Model\Checks\ADTSMethodParameters.cs" />
+    <Compile Include="Model\Checks\ADTS\ADTSMethodParameters.cs" />
     <Compile Include="Model\Channels\IEthalonChannel.cs" />
     <Compile Include="Model\Checks\EventArgs\EventArgError.cs" />
     <Compile Include="Model\Checks\EventArgs\EventArgProgress.cs" />
@@ -140,7 +140,7 @@
     <Compile Include="Model\Channels\UserEchalonChannel.cs" />
     <Compile Include="Model\Channels\UserQueryType.cs" />
     <Compile Include="Model\Devices\ADTSModel.cs" />
-    <Compile Include="Model\Checks\ADTSCheckMethod.cs" />
+    <Compile Include="Model\Checks\ADTS\ADTSCheckMethod.cs" />
     <Compile Include="Model\DeviceManager.cs" />
     <Compile Include="Model\Devices\PACE1000Model.cs" />
     <Compile Include="Model\DataService.cs" />
@@ -212,6 +212,9 @@
     </Compile>
     <Compile Include="View\Checks\AdtsCheckView.xaml.cs">
       <DependentUpon>AdtsCheckView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Checks\ADTSConfigView.xaml.cs">
+      <DependentUpon>ADTSConfigView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Checks\CheckConfigView.xaml.cs">
       <DependentUpon>CheckConfigView.xaml</DependentUpon>
@@ -308,6 +311,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Checks\AdtsCheckView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Checks\ADTSConfigView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

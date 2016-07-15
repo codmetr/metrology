@@ -54,10 +54,10 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the CheckViewModel class.
         /// </summary>
-        public CheckViewModel(CheckConfig checkConfig, Action<TestResult> saver, ICheckFabrik checkFabrik)
+        public CheckViewModel(CheckConfig checkConfig, Action<TestResult> saver, ICheckFabrik checkFabrik, SelectChannelViewModel checkDeviceChanel, SelectChannelViewModel ethalonChanel)
         {
             _checkConfig = checkConfig;
-            _checkConfigViewModel = new CheckConfigViewModel(_checkConfig);
+            _checkConfigViewModel = new CheckConfigViewModel(_checkConfig, checkDeviceChanel, ethalonChanel);
 
             _checkConfig.SelectedCheckTypeChanged += _checkConfig_SelectedCheckTypeChanged;
             _checkConfig.SelectedChannelChanged += _checkConfig_SelectedChannelChanged;
@@ -67,7 +67,7 @@ namespace KipTM.ViewModel
             _checkConfigViewModel.EthalonDeviseChannelChanged += _checkConfigViewModel_EthalonDeviseChannelChanged;
             _saver = saver;
             _checkFabrik = checkFabrik;
-            Check = _checkFabrik.GetViewModelFor(_checkConfig);
+            Check = _checkFabrik.GetViewModelFor(_checkConfig, _checkConfigViewModel.GetCheckedDeviseChannel(), _checkConfigViewModel.GetEthalonDeviseChannel());
             
             if (Check != null)
             {
@@ -143,28 +143,6 @@ namespace KipTM.ViewModel
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private static IMethodViewModel GetViewModelFor(IDeviceManager deviceManager, CheckConfig checkConfig, IPropertyPool propertyPool)
-        {
-            var method = checkConfig.SelectedCheckType;
-            if (method is ADTSCheckMethod)
-            {
-                var adtsMethodic = method as ADTSCheckMethod;
-                adtsMethodic.SetADTS(deviceManager.GetModel<ADTSModel>());
-                return new ADTSCalibrationViewModel(adtsMethodic, propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey), deviceManager, checkConfig.Result);
-            }
-            else if (method is ADTSTestMethod)
-            {
-                var adtsMethodic = method as ADTSTestMethod;
-                adtsMethodic.SetADTS(deviceManager.GetModel<ADTSModel>());
-                return new ADTSTestViewModel(adtsMethodic, propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey), deviceManager, checkConfig.Result);
-            }
-            return null;
-        }
-
-        /// <summary>
         /// Выполнение методики завершено
         /// </summary>
         /// <param name="sender"></param>
@@ -234,7 +212,7 @@ namespace KipTM.ViewModel
         /// <param name="e"></param>
         void _checkConfig_SelectedCheckTypeChanged(object sender, EventArgs e)
         {
-            Check = _checkFabrik.GetViewModelFor(_checkConfig);
+            Check = _checkFabrik.GetViewModelFor(_checkConfig, _checkConfigViewModel.GetCheckedDeviseChannel(), _checkConfigViewModel.GetEthalonDeviseChannel());
             if (Check != null)
             {
                 Check.SetConnection(_checkConfigViewModel.GetCheckedDeviseChannel());
@@ -247,11 +225,10 @@ namespace KipTM.ViewModel
             if (!_checkConfig.IsAnalogEthalon)
             {
                 Check.SetEthalonChannel(_checkConfig.SelectedEthalonTypeKey, _checkConfigViewModel.GetEthalonDeviseChannel()); //ToDo добавить настройки подключения
-                return;
             }
             else
             {
-                Check.SlectUserEthalonChannel();
+                Check.SetEthalonChannel(null, null);
             }
         }
 
