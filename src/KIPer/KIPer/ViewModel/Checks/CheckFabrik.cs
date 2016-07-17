@@ -35,22 +35,26 @@ namespace KipTM.ViewModel.Checks
                 var adtsMethodic = method as ADTSCheckMethod;
                 adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
                 adtsMethodic.ChannelType = checkDeviceChanel;
+                adtsMethodic.FillSteps(checkConfig.CustomSettings as ADTSMethodParameters);
                 if (checkConfig.SelectedEthalonTypeKey == UserEthalonChannel.Key)
                     adtsMethodic.SetEthalonChannel(null, null);
                 else
                     adtsMethodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonDeviceType, ethalonChanel), ethalonChanel);
-                return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey), _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSMethodParameters);
+                return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
+                    _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSMethodParameters);
             }
             else if (method is ADTSTestMethod)
             {
                 var adtsMethodic = method as ADTSTestMethod;
                 adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
                 adtsMethodic.ChannelType = checkDeviceChanel;
+                //adtsMethodic.FillSteps(checkConfig.CustomSettings as ADTSMethodParameters);
                 if (checkConfig.SelectedEthalonTypeKey == UserEthalonChannel.Key)
                     adtsMethodic.SetEthalonChannel(null, null);
                 else
                     adtsMethodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonDeviceType, ethalonChanel), ethalonChanel);
-                return new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey), _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSMethodParameters);
+                return new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
+                    _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSMethodParameters);
             }
             return null;
         }

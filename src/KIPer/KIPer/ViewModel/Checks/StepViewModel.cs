@@ -16,13 +16,15 @@ namespace KipTM.ViewModel.Checks
         private double _progress;
         private string _note;
         private StepState _state;
+        private bool _isEnabled;
 
         /// <summary>
         /// Initializes a new instance of the StepViewModel class.
         /// </summary>
-        public StepViewModel(ITestStep step)
+        public StepViewModel(ITestStep step, bool isEnabled)
         {
             _step = step;
+            _isEnabled = isEnabled;
             Title = _step.Name;
             Progress = 0.0;
             _state = StepState.Base;
@@ -32,6 +34,11 @@ namespace KipTM.ViewModel.Checks
             _step.End += _step_End;
             _step.Error += _step_Error;
             _step.ProgressChanged += _step_ProgressChanged;
+        }
+
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
         }
 
         public string Title

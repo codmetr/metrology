@@ -90,7 +90,7 @@ namespace KipTM.Model.Checks
                 step =
                     new CheckStepConfig(
                         new DoPointStep(string.Format("Поверка точки {0}", point.Pressure), _adts, param, point.Pressure,
-                            point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger), false);
+                            point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger), false, point.IsAvailable);
                 AttachStep(step.Step);
                 steps.Add(step);
             }

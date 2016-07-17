@@ -53,7 +53,7 @@
                         <ItemsControl ItemsSource="{Binding State.Steps}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="3">
+                                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="3" Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
