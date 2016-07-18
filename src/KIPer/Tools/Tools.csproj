@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringFormatExtention.cs" />
     <Compile Include="StringToByteArrayConverter.cs" />
+    <Compile Include="TypeHelper.cs" />
     <Compile Include="ViewViewmodelMatcher.cs" />
     <Compile Include="Watcher.cs" />
   </ItemGroup>

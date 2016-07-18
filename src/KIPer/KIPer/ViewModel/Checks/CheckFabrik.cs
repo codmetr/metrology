@@ -35,7 +35,6 @@ namespace KipTM.ViewModel.Checks
                 var adtsMethodic = method as ADTSCheckMethod;
                 adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
                 adtsMethodic.ChannelType = checkDeviceChanel;
-                adtsMethodic.FillSteps(checkConfig.CustomSettings as ADTSMethodParameters);
                 if (checkConfig.SelectedEthalonTypeKey == UserEthalonChannel.Key)
                     adtsMethodic.SetEthalonChannel(null, null);
                 else
@@ -48,7 +47,6 @@ namespace KipTM.ViewModel.Checks
                 var adtsMethodic = method as ADTSTestMethod;
                 adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
                 adtsMethodic.ChannelType = checkDeviceChanel;
-                //adtsMethodic.FillSteps(checkConfig.CustomSettings as ADTSMethodParameters);
                 if (checkConfig.SelectedEthalonTypeKey == UserEthalonChannel.Key)
                     adtsMethodic.SetEthalonChannel(null, null);
                 else

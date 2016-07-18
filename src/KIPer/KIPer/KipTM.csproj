@@ -485,6 +485,10 @@
       <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
       <Name>MainLoop</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Reports\ReportService\ReportService.csproj">
+      <Project>{71e2479c-c370-44bd-b6e0-48aa88101e7b}</Project>
+      <Name>ReportService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tools\Tools.csproj">
       <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
       <Name>Tools</Name>
@@ -498,6 +502,11 @@
     <Resource Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>mkdir "$(TargetDir)Reports"
+COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.dll" "$(TargetDir)ReportAdts.dll"
+COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.pdb" "$(TargetDir)ReportAdts.pdb"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

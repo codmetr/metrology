@@ -51,6 +51,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AdtsReportData.cs" />
+    <Compile Include="ADTSReporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ReportService\ReportService.csproj">
+      <Project>{71e2479c-c370-44bd-b6e0-48aa88101e7b}</Project>
+      <Name>ReportService</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

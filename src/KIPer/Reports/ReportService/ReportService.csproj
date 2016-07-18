@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\Lib\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IReport.cs" />
+    <Compile Include="ReportAttribute.cs" />
     <Compile Include="ReportFabrik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -46,6 +51,10 @@
     <ProjectReference Include="..\..\ArchiveData\ArchiveData.csproj">
       <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
       <Name>ArchiveData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\Tools.csproj">
+      <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
+      <Name>Tools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
