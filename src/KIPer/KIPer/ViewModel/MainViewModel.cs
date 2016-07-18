@@ -85,7 +85,8 @@ namespace KipTM.ViewModel
             _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
             var checkFabrik = new CheckFabrik(_dataService.DeviceManager, _propertiesLibrary.PropertyPool);
-            var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, new TestResult());
+            var result = new TestResult();
+            var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, result);
             var channelTargetDevice = new SelectChannelViewModel();
             var channelEthalonDevice = new SelectChannelViewModel();
             var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice);
@@ -94,7 +95,8 @@ namespace KipTM.ViewModel
             _workflow = new Workflow(new List<IWorkflowStep>()
             {
                 new ConfigCheckState(checkConfigViewModel),
-                new ADTSCheckState(() => checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel))
+                new ADTSCheckState(() => checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel)),
+                new ResultState(()=>new TestResultViewModel(result))
             });
 
             SelectChecks.Execute(null);

@@ -185,7 +185,7 @@ namespace KipTM.Model.Checks
             EthalonChannelType = transport;
             foreach (var testStep in Steps)
             {
-                var step = testStep as ISettedEthalonChannel;
+                var step = testStep.Step as ISettedEthalonChannel;
                 if(step==null)
                     continue;
                 step.SetEthalonChannel(ethalonChannel);

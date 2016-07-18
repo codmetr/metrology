@@ -50,3 +50,5 @@ src/KIPer/CheckFrame/obj/
 src/KIPer/SerialiserTest/obj/
 src/KIPer/SerialiserTest/bin/
 *.user
+src/KIPer/Tools/bin/
+src/KIPer/Tools/obj/

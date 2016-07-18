@@ -272,6 +272,7 @@ namespace KipTM.Model.Checks
             set
             {
                 _selectedCheckTypeKey = value;
+                _result.CheckType = value;
                 SelectedCheckType = _checks[_selectedCheckTypeKey];
             }
         }

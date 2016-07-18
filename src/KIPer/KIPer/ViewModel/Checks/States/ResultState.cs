@@ -8,23 +8,28 @@ using KipTM.ViewModel.Master;
 
 namespace KipTM.ViewModel.Checks.States
 {
-    class ReportState : IWorkflowStep
+    class ResultState : IWorkflowStep
     {
-        private TestResult _result;
+        private TestResultViewModel _result;
+        private readonly Func<TestResultViewModel> _checkFabric;
 
+        public ResultState(Func<TestResultViewModel> checkFabric)
+        {
+            _checkFabric = checkFabric;
+        }
 
         public event EventHandler<WorkflowStepChangeEvent> NextAvailabilityChanged;
         public event EventHandler<WorkflowStepChangeEvent> BackAvailabilityChanged;
         public void StateIn()
         {
-            throw new NotImplementedException();
+            _result = _checkFabric();
         }
 
         public void StateOut()
         {
-            throw new NotImplementedException();
+            
         }
 
-        public object ViewModel { get; private set; }
+        public object ViewModel { get { return _result; } }
     }
 }

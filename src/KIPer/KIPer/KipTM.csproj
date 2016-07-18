@@ -183,6 +183,7 @@
     <Compile Include="ViewModel\Checks\MethodicViewModelAttribute.cs" />
     <Compile Include="ViewModel\Checks\States\ADTSCheckState.cs" />
     <Compile Include="ViewModel\Checks\States\ConfigCheckState.cs" />
+    <Compile Include="ViewModel\Checks\States\ResultState.cs" />
     <Compile Include="ViewModel\Checks\States\ReportState.cs" />
     <Compile Include="ViewModel\Checks\StepState.cs" />
     <Compile Include="ViewModel\Checks\StepViewModel.cs" />

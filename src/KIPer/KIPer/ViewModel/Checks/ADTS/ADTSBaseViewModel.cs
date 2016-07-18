@@ -54,7 +54,7 @@ namespace KipTM.ViewModel.Checks
             Method.Init(customConfig);
             AttachEvent(method);
 
-            
+            _connection = Method.ChannelType;
             _userChannel = new UserChannel();
             _deviceManager = deviceManager;
             _resultPool = resultPool;
@@ -62,6 +62,8 @@ namespace KipTM.ViewModel.Checks
             _currentAction = DoStart;
             _dispatcher = Dispatcher.CurrentDispatcher;
             _userEchalonChannel = new UserEthalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
+            if (Method.EthalonChannelType == null)
+                Method.SetEthalonChannel(_userEchalonChannel, null);
 
             Title = "ADTS";
             _stateViewModel = new AdtsCheckStateViewModel();

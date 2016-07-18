@@ -18,11 +18,36 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border>
+        <GroupBox Header="Общие параметры" Grid.Column="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <TextBlock Grid.Column="0" Grid.Row="0">Тип теста:</TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding TestType}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="1">Прибор:</TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Device.DeviceType.Model}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="2">Серийный номер:</TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Device.SerialNumber}"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Общие параметры" Grid.Column="1">
             <!--<archive:ParamResCollectionView x:Name="TestList" MinWidth="50" DataContext="{Binding Parameters}"/>-->
             <archive:ParamResDataGridView x:Name="TestList" MinWidth="50" DataContext="{Binding Parameters}"/>
-        </Border>
+        </GroupBox>
     </Grid>
 </UserControl>
