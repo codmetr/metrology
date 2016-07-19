@@ -62,8 +62,10 @@ namespace KipTM.ViewModel.Checks
             _currentAction = DoStart;
             _dispatcher = Dispatcher.CurrentDispatcher;
             _userEchalonChannel = new UserEthalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
-            if (Method.EthalonChannelType == null)
-                Method.SetEthalonChannel(_userEchalonChannel, null);
+            //if (Method.EthalonChannelType == null)
+            //{
+            //    Method.SetEthalonChannel(_userEchalonChannel, null);
+            //}
 
             Title = "ADTS";
             _stateViewModel = new AdtsCheckStateViewModel();
@@ -92,13 +94,13 @@ namespace KipTM.ViewModel.Checks
         /// <param name="settings"></param>
         public void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings)
         {
-            if (string.IsNullOrEmpty(ethalonTypeKey) || settings == null)
+            if (string.IsNullOrEmpty(ethalonTypeKey) || ethalonTypeKey == UserEthalonChannel.Key || settings == null)
             {
                 Method.SetEthalonChannel(_userEchalonChannel, null);
                 _ethalonTypeKey = null;
                 _ethalonChannelType = null;
                 State.IsUserChannel = true;
-                EthalonChannel = null;
+                EthalonChannel = _userEchalonChannel;
                 return;
             }
             _ethalonTypeKey = ethalonTypeKey;

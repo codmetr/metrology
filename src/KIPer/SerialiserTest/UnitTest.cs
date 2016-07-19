@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ADTSData;
 using ArchiveData.DTO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,13 +22,25 @@ namespace SerialiserTest
             var archive = new Archive();
             archive.Save("test", result);
             result = archive.Load <TestResult>("test");
-            archive.Test();
         }
         [TestMethod]
         public void TestMethodSaveAndLoadSqlite()
         {
             var archive = new Archive();
             archive.Test();
+        }
+
+        [TestMethod]
+        public void TestListOfList()
+        {
+            var result = new List<List<string>>()
+            {
+                new List<string>(){"1", "2"},
+                new List<string>(){"3", "4"},
+            };
+            var archive = new Archive();
+            archive.Save("test", result);
+            result = archive.Load<List<List<string>>>("test");
         }
     }
 }

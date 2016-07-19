@@ -24,11 +24,12 @@ namespace KipTM.ViewModel.Checks
         }
 
         /// <summary>
-        /// 
+        /// Фабрика модели представления методики
         /// </summary>
         /// <returns></returns>
         public IMethodViewModel GetViewModelFor(CheckConfig checkConfig, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
         {
+            IMethodViewModel result = null;
             var method = checkConfig.SelectedCheckType;
             if (method is ADTSCheckMethod)
             {
@@ -39,8 +40,9 @@ namespace KipTM.ViewModel.Checks
                     adtsMethodic.SetEthalonChannel(null, null);
                 else
                     adtsMethodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonDeviceType, ethalonChanel), ethalonChanel);
-                return new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
+                result = new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
                     _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSMethodParameters);
+                result.SetEthalonChannel(checkConfig.SelectedEthalonTypeKey, ethalonChanel);
             }
             else if (method is ADTSTestMethod)
             {
@@ -51,10 +53,11 @@ namespace KipTM.ViewModel.Checks
                     adtsMethodic.SetEthalonChannel(null, null);
                 else
                     adtsMethodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonDeviceType, ethalonChanel), ethalonChanel);
-                return new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
+                result = new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
                     _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSMethodParameters);
+                result.SetEthalonChannel(checkConfig.SelectedEthalonTypeKey, ethalonChanel);
             }
-            return null;
+            return result;
         }
     }
 }

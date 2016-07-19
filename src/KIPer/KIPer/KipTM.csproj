@@ -167,6 +167,8 @@
     <Compile Include="Settings\EtalonSettings.cs" />
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\MainSettings.cs" />
+    <Compile Include="ViewModel\Archive\ADTS\ADTSResultsViewFabric.cs" />
+    <Compile Include="ViewModel\Archive\ADTS\ADTSResultsViewModelFabric.cs" />
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
     <Compile Include="ViewModel\Channels\PACEEchalonChannelViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTS\ADTSBaseViewModel.cs" />

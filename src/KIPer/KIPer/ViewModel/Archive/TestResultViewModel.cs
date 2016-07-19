@@ -75,6 +75,7 @@ namespace KipTM.ViewModel
                 _time = _result.Timestamp;
                 _device = new DeviceViewModel(_result.TargetDevice);
                 _etalons = new ObservableCollection<IDeviceViewModel>(_result.Etalon.Select(el=>new DeviceViewModel(el)));
+                Parameters = new ObservableCollection<IParameterResultViewModel>(_result.Results.Select(el=>new ParameterResultViewModel(){NameParameter = el.StepKey, PointMeashuring = el.Result.ToString()}));
             }
         }
 
