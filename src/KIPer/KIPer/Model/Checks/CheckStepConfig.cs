@@ -19,17 +19,26 @@ namespace KipTM.Model.Checks
             _enabled = enabled;
         }
 
+        /// <summary>
+        /// Обязательный
+        /// </summary>
         public bool Mandatory
         {
             get { return _mandatory; }
         }
 
+        /// <summary>
+        /// Задействован
+        /// </summary>
         public bool Enabled
         {
             get { return _enabled; }
             set { _enabled = value; }
         }
 
+        /// <summary>
+        /// Шаг
+        /// </summary>
         public ITestStep Step
         {
             get { return _step; }

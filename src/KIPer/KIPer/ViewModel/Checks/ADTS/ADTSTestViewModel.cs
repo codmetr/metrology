@@ -31,7 +31,6 @@ namespace KipTM.ViewModel.Checks
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    [MethodViewModelAttribute(typeof(ADTSTestMethod))]
     public class ADTSTestViewModel : ADTSBaseViewModel
     {
 

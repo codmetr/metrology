@@ -31,6 +31,7 @@ namespace KipTM.ViewModel
             _result = result;
             if (IsInDesignMode)
             {
+                #region Design
                 TestType = "поверка";
                 User = "Иван Иванович Иванов";
                 Time = DateTime.Parse("11/11/11");
@@ -67,6 +68,7 @@ namespace KipTM.ViewModel
                         Error = "0.01"
                     },
                 });
+            #endregion
             }
             else
             {

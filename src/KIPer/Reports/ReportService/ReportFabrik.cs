@@ -11,8 +11,15 @@ namespace ReportService
 {
     public class ReportFabrik
     {
+        private static ReportFabrik _instance = null;
         private Container _container;
-        public void Configure()
+
+        private ReportFabrik()
+        {
+            Configure();
+        }
+        
+        public ReportFabrik Configure()
         {
             _container = new Container();
             _container.Configure(x => x.Scan(scaner =>
@@ -20,8 +27,10 @@ namespace ReportService
                 scaner.AssembliesFromPath("Reports");
                 scaner.AddAllTypesOf<IReport>();
             }));
-
+            return this;
         }
+
+        public static ReportFabrik Reporter{get { return _instance ?? (_instance = (new ReportFabrik()).Configure()); }}
 
         public IReport GetCustomReporter(TestResult result, string key)
         {

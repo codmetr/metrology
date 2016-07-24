@@ -139,19 +139,29 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
         /// <summary>
         /// Установить эталонный канал
         /// </summary>
-        /// <param name="ehalon"></param>
+        /// <param name="ehalon">эталонный канал</param>
         public void SetEthalonChannel(IEthalonChannel ehalon)
         {
             _ethalonChannel = ehalon;
         }
 
         /// <summary>
-        /// Установить теущее значение как точку
+        /// Установить теущее точку как ключевую
         /// </summary>
         public void SetCurrentValueAsPoint()
         {
             _setCurrentValueAsPoint.Set();
         }
+
+        /// <summary>
+        /// Ключевая точка
+        /// </summary>
+        public double Point { get { return _point; } }
+
+        /// <summary>
+        /// Допуск на ключевой точке
+        /// </summary>
+        public double Tolerance { get { return _tolerance; } }
 
         /// <summary>
         /// Обертка для выполнения подшага
@@ -194,5 +204,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             }
             return false;
         }
+
+
     }
 }

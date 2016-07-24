@@ -7,8 +7,15 @@ using KipTM.Model.Channels;
 
 namespace KipTM.Model.Checks.Steps
 {
+    /// <summary>
+    /// Шаг поддерживает установку эталонного канала
+    /// </summary>
     interface ISettedEthalonChannel
     {
+        /// <summary>
+        /// Установить эталонный канал
+        /// </summary>
+        /// <param name="ehalon">эталонный канал</param>
         void SetEthalonChannel(IEthalonChannel ehalon);
     }
 }

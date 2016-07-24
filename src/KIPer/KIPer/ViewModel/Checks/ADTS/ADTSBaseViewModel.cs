@@ -228,6 +228,7 @@ namespace KipTM.ViewModel.Checks
                 RealValue = RealValue + correction;
         }
 
+        #region Обработчики кнопок последовательности
         /// <summary>
         /// Запуск проверки
         /// </summary>
@@ -299,7 +300,9 @@ namespace KipTM.ViewModel.Checks
             StopEnabled = false;
             OnStoped();
         }
+        #endregion
 
+        #region Обработчики событий
         /// <summary>
         /// Проверка запущена
         /// </summary>
@@ -369,6 +372,8 @@ namespace KipTM.ViewModel.Checks
         {
             //_resultPool.Results = M ;
         }
+        #endregion
+
         #endregion
 
         private void AttachEvent(ADTSMethodBase model)

@@ -6,7 +6,7 @@ using ReportService;
 
 namespace ReportAdts
 {
-    [Report()]
+    //[Report()]
     public class ADTSReporter
     {
     }

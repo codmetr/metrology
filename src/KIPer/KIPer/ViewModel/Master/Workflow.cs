@@ -13,6 +13,23 @@ namespace KipTM.ViewModel.Master
     {
         private readonly List<IWorkflowStep> _states;
         private int _index;
+        /// <summary>
+        /// Значение доступности следующего шага исходя из текущего индекса
+        /// </summary>
+        private bool _nextAvailableByIndex;
+        /// <summary>
+        /// Значение доступности следующего шага исходя из состояния текущего шага
+        /// </summary>
+        private bool _backAvailableByStep = true;
+        /// <summary>
+        /// Значение доступности предыдущего шага исходя из текущего индекса
+        /// </summary>
+        private bool _backAvailableByIndex;
+        /// <summary>
+        /// Значение доступности предыдущего шага исходя из состояния текущего шага
+        /// </summary>
+        private bool _nextAvailableByStep = true;
+
         private bool _nextAvailable;
         private bool _backAvailable;
         private IWorkflowStep _currentState;
@@ -28,8 +45,11 @@ namespace KipTM.ViewModel.Master
             else
                 return;
             CurrentState = _states[_index];
-            NextAvailable = _index < _states.Count - 1;
-            BackAvailable = _index > 0;
+            _nextAvailableByIndex = _index < _states.Count - 1;
+            _backAvailableByIndex = _index > 0;
+
+            OnPropertyChanged("NextAvailable");
+            OnPropertyChanged("BackAvailable");
         }
 
 
@@ -39,32 +59,28 @@ namespace KipTM.ViewModel.Master
             private set
             {
                 if (_currentState != null)
+                {
+                    Detach(_currentState);
                     _currentState.StateOut();
+                }
                 _currentState = value;
                 if (_currentState != null)
+                {
+                    Attach(_currentState);
                     _currentState.StateIn();
+                }
                 OnPropertyChanged();
             }
         }
 
         public bool NextAvailable
         {
-            get { return _nextAvailable; }
-            set
-            {
-                _nextAvailable = value; 
-                OnPropertyChanged();
-            }
+            get { return _nextAvailableByIndex && _nextAvailableByStep; }
         }
 
         public bool BackAvailable
         {
-            get { return _backAvailable; }
-            set
-            {
-                _backAvailable = value; 
-                OnPropertyChanged();
-            }
+            get { return _backAvailableByIndex && _backAvailableByStep; }
         }
 
 
@@ -82,8 +98,10 @@ namespace KipTM.ViewModel.Master
             }
             _index++;
             CurrentState = _states[_index];
-            NextAvailable = _index < _states.Count - 1;
-            BackAvailable = _index > 0;
+            _nextAvailableByIndex = _index < _states.Count - 1;
+            _backAvailableByIndex = _index > 0;
+            OnPropertyChanged("NextAvailable");
+            OnPropertyChanged("BackAvailable");
         }
 
         private void _back()
@@ -97,8 +115,10 @@ namespace KipTM.ViewModel.Master
 
             _index--;
             CurrentState = _states[_index];
-            NextAvailable = _index < _states.Count - 1;
-            BackAvailable = _index > 0;
+            _nextAvailableByIndex = _index < _states.Count - 1;
+            _backAvailableByIndex = _index > 0;
+            OnPropertyChanged("NextAvailable");
+            OnPropertyChanged("BackAvailable");
         }
 
         public void Attach(IWorkflowStep step)
@@ -115,12 +135,14 @@ namespace KipTM.ViewModel.Master
 
         void step_NextAvailabilityChanged(object sender, WorkflowStepChangeEvent e)
         {
-            NextAvailable |= e.NewState;
+            _nextAvailableByStep = e.NewState;
+            OnPropertyChanged("NextAvailable");
         }
 
         void step_BackAvailabilityChanged(object sender, WorkflowStepChangeEvent e)
         {
-            BackAvailable |= e.NewState;
+            _backAvailableByStep = e.NewState;
+            OnPropertyChanged("BackAvailable");
         }
 
         #region INotifiPropertyChanged

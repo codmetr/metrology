@@ -39,11 +39,38 @@ namespace KipTM.ViewModel.Checks.States
         public void StateIn()
         {
             _check = _checkFabric();
+            if(_check!=null)
+                AttachEvents(_check);
         }
 
         public void StateOut()
         {
-            
+            if (_check != null)
+                DetachEvents(_check);
+        }
+
+        private void AttachEvents(IMethodViewModel check)
+        {
+            check.Started += check_Started;
+            check.Stoped += check_Stoped;
+        }
+
+        private void DetachEvents(IMethodViewModel check)
+        {
+            check.Started -= check_Started;
+            check.Stoped -= check_Stoped;
+        }
+
+        void check_Started(object sender, EventArgs e)
+        {
+            OnNextAvailabilityChanged(new WorkflowStepChangeEvent(false));
+            OnBackAvailabilityChanged(new WorkflowStepChangeEvent(false));
+        }
+
+        void check_Stoped(object sender, EventArgs e)
+        {
+            OnNextAvailabilityChanged(new WorkflowStepChangeEvent(true));
+            OnBackAvailabilityChanged(new WorkflowStepChangeEvent(true));
         }
 
     }

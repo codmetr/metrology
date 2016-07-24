@@ -167,10 +167,10 @@
     <Compile Include="Settings\EtalonSettings.cs" />
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\MainSettings.cs" />
-    <Compile Include="ViewModel\Archive\ADTS\ADTSResultsViewFabric.cs" />
-    <Compile Include="ViewModel\Archive\ADTS\ADTSResultsViewModelFabric.cs" />
+    <Compile Include="ViewModel\ResultMarker\ADTS\ADTSPointResultsFabrik.cs" />
+    <Compile Include="ViewModel\ResultMarker\ADTS\ADTSResultsViewModelFabric.cs" />
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
-    <Compile Include="ViewModel\Channels\PACEEchalonChannelViewModel.cs" />
+    <Compile Include="ViewModel\Checks\Channels\PACEEchalonChannelViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTS\ADTSBaseViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTS\ADTSCalibrationViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTS\AdtsCheckStateViewModel.cs" />
@@ -180,9 +180,8 @@
     <Compile Include="ViewModel\Checks\CheckViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTS\ADTSTestViewModel.cs" />
     <Compile Include="ViewModel\Checks\ICheckFabrik.cs" />
-    <Compile Include="ViewModel\Checks\IMethodViewModel.cs" />
+    <Compile Include="ViewModel\Checks\Channels\IMethodViewModel.cs" />
     <Compile Include="ViewModel\Checks\MechanicalManometerViewModel.cs" />
-    <Compile Include="ViewModel\Checks\MethodicViewModelAttribute.cs" />
     <Compile Include="ViewModel\Checks\States\ADTSCheckState.cs" />
     <Compile Include="ViewModel\Checks\States\ConfigCheckState.cs" />
     <Compile Include="ViewModel\Checks\States\ResultState.cs" />
@@ -191,7 +190,7 @@
     <Compile Include="ViewModel\Checks\StepViewModel.cs" />
     <Compile Include="ViewModel\CommandWrapper.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypesViewModel.cs" />
-    <Compile Include="ViewModel\DeviceTypes\DeviceTypeViewModel.cs" />
+    <Compile Include="ViewModel\Checks\DeviceTypeViewModel.cs" />
     <Compile Include="ViewModel\Archive\DeviceViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\EtalonTypeViewModel.cs" />
     <Compile Include="Model\Devices\FunctionDescriptor.cs" />
@@ -208,6 +207,10 @@
     <Compile Include="ViewModel\Master\IWorkflowStep.cs" />
     <Compile Include="ViewModel\Master\Workflow.cs" />
     <Compile Include="ViewModel\Master\WorkflowStepChangeEvent.cs" />
+    <Compile Include="ViewModel\ResultMarker\IResultMarker.cs" />
+    <Compile Include="ViewModel\ResultMarker\IResultMarkerFabrik.cs" />
+    <Compile Include="ViewModel\ResultMarker\ResultMarkerAttribute.cs" />
+    <Compile Include="ViewModel\ResultMarker\ResultMarkerFabrik.cs" />
     <Compile Include="ViewModel\Services\ADTSViewModel.cs" />
     <Compile Include="ViewModel\Services\SelectChannelViewModel.cs" />
     <Compile Include="ViewModel\Services\Pace1000ViewModel.cs" />
