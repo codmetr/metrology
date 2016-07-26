@@ -16,6 +16,6 @@ namespace KipTM.ViewModel.ResultMarker
         /// </summary>
         /// <param name="target">заданный объект</param>
         /// <returns>писатель результата</returns>
-        IEnumerable<IParameterResultViewModel> Make(object target);
+        IEnumerable<IParameterResultViewModel> Make(object target, IResultMarkerFabrik markerFabric);
     }
 }

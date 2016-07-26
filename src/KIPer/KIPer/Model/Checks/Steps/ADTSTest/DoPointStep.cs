@@ -22,7 +22,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
         private readonly PressureUnits _unit;
         private IEthalonChannel _ethalonChannel;
         private readonly NLog.Logger _logger;
-        private ManualResetEvent _setCurrentValueAsPoint = new ManualResetEvent(false);
+        private readonly ManualResetEvent _setCurrentValueAsPoint = new ManualResetEvent(false);
         private CancellationTokenSource _cancellationTokenSource;
 
         public DoPointStep(string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate, PressureUnits unit, IEthalonChannel ethalonChannel, Logger logger)

@@ -168,7 +168,7 @@
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\MainSettings.cs" />
     <Compile Include="ViewModel\ResultMarker\ADTS\ADTSPointResultsFabrik.cs" />
-    <Compile Include="ViewModel\ResultMarker\ADTS\ADTSResultsViewModelFabric.cs" />
+    <Compile Include="ViewModel\ResultMarker\ADTS\ADTSTestFabrik.cs" />
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
     <Compile Include="ViewModel\Checks\Channels\PACEEchalonChannelViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTS\ADTSBaseViewModel.cs" />
@@ -207,6 +207,7 @@
     <Compile Include="ViewModel\Master\IWorkflowStep.cs" />
     <Compile Include="ViewModel\Master\Workflow.cs" />
     <Compile Include="ViewModel\Master\WorkflowStepChangeEvent.cs" />
+    <Compile Include="ViewModel\ResultMarker\NoExpectedTypeParameterException.cs" />
     <Compile Include="ViewModel\ResultMarker\IResultMarker.cs" />
     <Compile Include="ViewModel\ResultMarker\IResultMarkerFabrik.cs" />
     <Compile Include="ViewModel\ResultMarker\ResultMarkerAttribute.cs" />

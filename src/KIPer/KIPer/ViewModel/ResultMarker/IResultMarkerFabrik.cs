@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace KipTM.ViewModel.ResultMarker
 {
@@ -11,5 +12,13 @@ namespace KipTM.ViewModel.ResultMarker
         /// <param name="item"></param>
         /// <returns></returns>
         IEnumerable<IParameterResultViewModel> GetMarkers<T>(T item);
+
+        /// <summary>
+        /// Получить представление(маркер) заданного элемента
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        IEnumerable<IParameterResultViewModel> GetMarkers(Type T, object item);
     }
 }

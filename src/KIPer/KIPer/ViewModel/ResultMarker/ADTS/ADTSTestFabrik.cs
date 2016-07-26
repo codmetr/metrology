@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KipTM.Model.Checks.Steps.ADTSTest;
+using KipTM.Model.Checks;
 using KipTM.ViewModel.ResultMarker;
 
 namespace KipTM.ViewModel.Archive.ADTS
@@ -11,8 +11,8 @@ namespace KipTM.ViewModel.Archive.ADTS
     /// <summary>
     /// Генератор представления для точек проверки ADTS
     /// </summary>
-    [ResultMarker(typeof(DoPointStep))]
-    public class ADTSPointResultsFabrik:IResultMarker
+    [ResultMarker(typeof(ADTSTestMethod))]
+    public class ADTSTestFabrik : IResultMarker
     {
         /// <summary>
         /// Получить описатель результата для заданного объекта
@@ -22,9 +22,9 @@ namespace KipTM.ViewModel.Archive.ADTS
         public IEnumerable<IParameterResultViewModel> Make(object target, IResultMarkerFabrik markerFabric)
         {
             if (target == null) throw new ArgumentNullException("target");
-            if (!(target is DoPointStep)) throw new NoExpectedTypeParameterException(typeof(DoPointStep), target.GetType());
+            if (!(target is ADTSTestMethod)) throw new NoExpectedTypeParameterException(typeof(ADTSTestMethod), target.GetType());
 
-            return Make((DoPointStep)target);
+            return Make((ADTSTestMethod)target, markerFabric);
         }
 
         /// <summary>
@@ -32,10 +32,9 @@ namespace KipTM.ViewModel.Archive.ADTS
         /// </summary>
         /// <param name="target">заданный типизированный объект</param>
         /// <returns>описатель результата</returns>
-        private IEnumerable<IParameterResultViewModel> Make(DoPointStep target)
+        private IEnumerable<IParameterResultViewModel> Make(ADTSTestMethod target, IResultMarkerFabrik markerFabric)
         {
-            var itemMarker = new ParameterResultViewModel() { NameParameter = target.Name, Tolerance = target.Tolerance.ToString() };
-            var result = new List<IParameterResultViewModel> { itemMarker };
+            var result = target.Steps.Where(el=>el.Enabled).SelectMany(el => markerFabric.GetMarkers(el.Step.GetType(), el.Step)).ToList();
             return result;
         }
 

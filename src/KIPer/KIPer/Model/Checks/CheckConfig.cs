@@ -289,7 +289,7 @@ namespace KipTM.Model.Checks
                 _result.CheckType = _selectedCheckTypeKey;
                 var properties = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel);
                 CustomSettings = SelectedCheckType.GetCustomConfig(properties);
-                SelectedCheckType.Init(CustomSettings); //todo maybe move to CheckViewModel
+                SelectedCheckType.Init(CustomSettings); //todo maybe move out
                 OnSelectedCheckTypeChanged();
             }
         }
@@ -307,7 +307,7 @@ namespace KipTM.Model.Checks
                 _result.Channel = value;
                 var properties = _propertyPool.ByKey(_devTypeKey).ByKey(value);
                 CustomSettings = SelectedCheckType.GetCustomConfig(properties);
-                SelectedCheckType.Init(CustomSettings); //todo maybe move to CheckViewModel
+                SelectedCheckType.Init(CustomSettings); //todo maybe move out
                 OnSelectedChannelChanged();
             }
         }

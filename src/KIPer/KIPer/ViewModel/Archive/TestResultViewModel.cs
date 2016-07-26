@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ArchiveData.DTO;
@@ -26,7 +27,7 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
         /// </summary>
-        public TestResultViewModel(TestResult result)
+        public TestResultViewModel(TestResult result, IEnumerable<IParameterResultViewModel> expectedResuls)
         {
             _result = result;
             if (IsInDesignMode)
@@ -77,7 +78,8 @@ namespace KipTM.ViewModel
                 _time = _result.Timestamp;
                 _device = new DeviceViewModel(_result.TargetDevice);
                 _etalons = new ObservableCollection<IDeviceViewModel>(_result.Etalon.Select(el=>new DeviceViewModel(el)));
-                Parameters = new ObservableCollection<IParameterResultViewModel>(_result.Results.Select(el=>new ParameterResultViewModel(){NameParameter = el.StepKey, PointMeashuring = el.Result.ToString()}));
+                //Parameters = new ObservableCollection<IParameterResultViewModel>(_result.Results.Select(el=>new ParameterResultViewModel(){NameParameter = el.StepKey, PointMeashuring = el.Result.ToString()}));
+                Parameters = new ObservableCollection<IParameterResultViewModel>(expectedResuls);
             }
         }
 

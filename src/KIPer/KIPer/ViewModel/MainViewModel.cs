@@ -20,6 +20,7 @@ using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Checks;
 using KipTM.ViewModel.Checks.States;
 using KipTM.ViewModel.Master;
+using KipTM.ViewModel.ResultMarker;
 using KipTM.ViewModel.Services;
 using SQLiteArchive;
 using Tools;
@@ -50,12 +51,12 @@ namespace KipTM.ViewModel
 
         private string _helpMessage;
         private object _selectedAction;
-
+        private IResultMarkerFabrik _resulMaker;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IDataService dataService, IMethodsService methodicService, MainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive)
+        public MainViewModel(IDataService dataService, IMethodsService methodicService, MainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive, IResultMarkerFabrik resulMaker)
         {
             _dataService = dataService;
             _methodicService = methodicService;
@@ -65,7 +66,7 @@ namespace KipTM.ViewModel
 
             _dataService.LoadResults();
             _dataService.InitDevices();
-
+            _resulMaker = resulMaker;
             _services = new ServiceViewModel(new List<IService>()
             {
                 new Pace1000ViewModel(_dataService.DeviceManager),
@@ -96,7 +97,7 @@ namespace KipTM.ViewModel
             {
                 new ConfigCheckState(checkConfigViewModel),
                 new ADTSCheckState(() => checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel)),
-                new ResultState(()=>new TestResultViewModel(result))
+                new ResultState(()=>new TestResultViewModel(result, _resulMaker.GetMarkers(checkConfig.SelectedCheckType.GetType(), checkConfig.SelectedCheckType)))
             });
 
             SelectChecks.Execute(null);

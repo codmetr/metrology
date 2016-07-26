@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace KipTM.ViewModel.ResultMarker
 {
-    class ResultMarkerFabrik : IResultMarkerFabrik
+    public class ResultMarkerFabrik : IResultMarkerFabrik
     {
         private static IResultMarkerFabrik _markerSolver = null;
         private readonly Dictionary<Type, IResultMarker> _markers = new Dictionary<Type, IResultMarker>();
+
+        private ResultMarkerFabrik(){}
 
         #region Config
         /// <summary>
@@ -43,12 +45,12 @@ namespace KipTM.ViewModel.ResultMarker
         private void ConfigType(Assembly assembly, Type type)
         {
             var intefaceMarkerType = typeof(IResultMarker);
-            if (!intefaceMarkerType.IsAssignableFrom(type))
+            if (!intefaceMarkerType.IsAssignableFrom(type) || intefaceMarkerType == type)
                 return;
             IResultMarker marker;
             try
             {
-                marker = assembly.CreateInstance(type.AssemblyQualifiedName) as IResultMarker;
+                marker = assembly.CreateInstance(type.FullName) as IResultMarker;
             }
             catch (Exception ex)
             {
@@ -79,18 +81,29 @@ namespace KipTM.ViewModel.ResultMarker
         }
 
         /// <summary>
-        /// Получить текстовое проедставление(маркер) заданного элемента
+        /// Получить представление(маркер) заданного элемента
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="item"></param>
         /// <returns></returns>
         public IEnumerable<IParameterResultViewModel> GetMarkers<T>(T item)
         {
+            return GetMarkers(typeof (T), item);
+        }
+
+        /// <summary>
+        /// Получить представление(маркер) заданного элемента
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public IEnumerable<IParameterResultViewModel> GetMarkers(Type T, object item)
+        {
             if (item == null)
-                return null;
-            if (!_markers.ContainsKey(typeof(T)))
-                return null;
-            return _markers[typeof(T)].Make(item);
+                return new List<IParameterResultViewModel>();
+            if (!_markers.ContainsKey(T))
+                return new List<IParameterResultViewModel>();
+            return _markers[T].Make(item, this);
         }
     }
 }
