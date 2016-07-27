@@ -167,7 +167,10 @@
     <Compile Include="Settings\EtalonSettings.cs" />
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\MainSettings.cs" />
-    <Compile Include="ViewModel\ResultMarker\ADTS\ADTSPointResultsFabrik.cs" />
+    <Compile Include="ViewModel\ResultFiller\FillerAttribute.cs" />
+    <Compile Include="ViewModel\ResultFiller\IResultFiller.cs" />
+    <Compile Include="ViewModel\ResultFiller\ResultFillerFabrik.cs" />
+    <Compile Include="ViewModel\ResultMarker\ADTS\ADTSTestPointStepFabrik.cs" />
     <Compile Include="ViewModel\ResultMarker\ADTS\ADTSTestFabrik.cs" />
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
     <Compile Include="ViewModel\Checks\Channels\PACEEchalonChannelViewModel.cs" />
@@ -207,11 +210,8 @@
     <Compile Include="ViewModel\Master\IWorkflowStep.cs" />
     <Compile Include="ViewModel\Master\Workflow.cs" />
     <Compile Include="ViewModel\Master\WorkflowStepChangeEvent.cs" />
-    <Compile Include="ViewModel\ResultMarker\NoExpectedTypeParameterException.cs" />
-    <Compile Include="ViewModel\ResultMarker\IResultMarker.cs" />
-    <Compile Include="ViewModel\ResultMarker\IResultMarkerFabrik.cs" />
-    <Compile Include="ViewModel\ResultMarker\ResultMarkerAttribute.cs" />
-    <Compile Include="ViewModel\ResultMarker\ResultMarkerFabrik.cs" />
+    <Compile Include="ViewModel\ResultMarker\ADTS\ADTSCheckFabrik.cs" />
+    <Compile Include="ViewModel\ResultMarker\ADTS\ADTSCheckPointStepFabrik.cs" />
     <Compile Include="ViewModel\Services\ADTSViewModel.cs" />
     <Compile Include="ViewModel\Services\SelectChannelViewModel.cs" />
     <Compile Include="ViewModel\Services\Pace1000ViewModel.cs" />
@@ -487,6 +487,10 @@
     <ProjectReference Include="..\IEEE488Transport\IEEE488.csproj">
       <Project>{3fec76c3-b933-4461-aa8d-85360d3f41c4}</Project>
       <Name>IEEE488</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MarkerService\MarkerService.csproj">
+      <Project>{fbdcd95e-3006-4d82-b232-24ced8aa05f8}</Project>
+      <Name>MarkerService</Name>
     </ProjectReference>
     <ProjectReference Include="..\MineLoop\MainLoop.csproj">
       <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>

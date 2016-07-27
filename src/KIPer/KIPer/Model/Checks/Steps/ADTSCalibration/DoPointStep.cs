@@ -149,6 +149,16 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
         }
 
         /// <summary>
+        /// Ключевая точка
+        /// </summary>
+        public double Point { get { return _point; } }
+
+        /// <summary>
+        /// Допуск на ключевой точке
+        /// </summary>
+        public double Tolerance { get { return _tolerance; } }
+
+        /// <summary>
         /// Обертка для выполнения подшага
         /// </summary>
         /// <param name="whEnd"></param>

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace KipTM.ViewModel.ResultMarker
+namespace MarkerService
 {
     /// <summary>
     /// Получен неожиданный тип параметра

@@ -364,7 +364,7 @@ namespace KipTM.ViewModel.Checks
             _dispatcher.Invoke(() =>
             {
                 State.ResultsLog.Add(eventArgTestResult);
-                _resultPool.Results.Add(new TestStepResult( eventArgTestResult.Key, eventArgTestResult.Result));
+                _resultPool.Results.Add(new TestStepResult(Method.Key, eventArgTestResult.Key, eventArgTestResult.Result));
             });
         }
 

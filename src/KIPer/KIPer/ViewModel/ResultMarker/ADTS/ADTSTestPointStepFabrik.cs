@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KipTM.Model.Checks.Steps.ADTSTest;
-using KipTM.ViewModel.ResultMarker;
+using MarkerService;
 
 namespace KipTM.ViewModel.Archive.ADTS
 {
     /// <summary>
     /// Генератор представления для точек проверки ADTS
     /// </summary>
-    [ResultMarker(typeof(DoPointStep))]
-    public class ADTSPointResultsFabrik:IResultMarker
+    [Marker(typeof(DoPointStep))]
+    public class ADTSTestPointStepFabrik : IMarker<IParameterResultViewModel>
     {
         /// <summary>
         /// Получить описатель результата для заданного объекта
         /// </summary>
         /// <param name="target">заданный объект</param>
         /// <returns>описатель результата</returns>
-        public IEnumerable<IParameterResultViewModel> Make(object target, IResultMarkerFabrik markerFabric)
+        public IEnumerable<IParameterResultViewModel> Make(object target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
         {
             if (target == null) throw new ArgumentNullException("target");
             if (!(target is DoPointStep)) throw new NoExpectedTypeParameterException(typeof(DoPointStep), target.GetType());

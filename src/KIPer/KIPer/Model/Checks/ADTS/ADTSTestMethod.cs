@@ -33,6 +33,7 @@ namespace KipTM.Model.Checks
         public ADTSTestMethod(NLog.Logger logger)
             : base(logger)
         {
+            base.Key = ADTSTestMethod.Key;
             MethodName = "Поверка ADTS";
             _result = new AdtsTestResults();
             _resultPoint = new AdtsPointResult();

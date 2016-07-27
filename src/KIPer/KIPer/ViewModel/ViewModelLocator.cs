@@ -16,7 +16,7 @@ using GalaSoft.MvvmLight.Ioc;
 using KipTM.Archive;
 using KipTM.Interfaces;
 using KipTM.Settings;
-using KipTM.ViewModel.ResultMarker;
+using MarkerService;
 using Microsoft.Practices.ServiceLocation;
 using KipTM.Model;
 using System;
@@ -40,7 +40,7 @@ namespace KipTM.ViewModel
             SimpleIoc.Default.Register<SQLiteArchive.IArchive, SQLiteArchive.Archive>();
             SimpleIoc.Default.Register<MainSettings>(() => ServiceLocator.Current.GetInstance<SQLiteArchive.IArchive>().Load(MainSettings.SettingsFileName, MainSettings.GetDefault()));
             SimpleIoc.Default.Register<IPropertiesLibrary, PropertiesLibrary>();
-            SimpleIoc.Default.Register<IResultMarkerFabrik>(()=>ResultMarkerFabrik.Locator, true);
+            SimpleIoc.Default.Register<IMarkerFabrik<IParameterResultViewModel>>(() => MarkerFabrik<IParameterResultViewModel>.Locator, true);
             if (ViewModelBase.IsInDesignModeStatic)
             {
                 SimpleIoc.Default.Register<IDataService, Design.DesignDataService>();

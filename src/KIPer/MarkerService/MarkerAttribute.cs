@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace KipTM.ViewModel.ResultMarker
+namespace MarkerService
 {
     /// <summary>
-    /// Указывает что тип - фабрика маркеров результатов
+    /// Указывает что тип - фабрика маркеров
     /// </summary>
-    public class ResultMarkerAttribute:Attribute
+    public class MarkerAttribute:Attribute
     {
         /// <summary>
-        /// Указывает что тип - фабрика маркеров результатов
+        /// Указывает что тип - фабрика маркеров
         /// </summary>
         /// <param name="targetType">Тип, для которого формируется маркер</param>
-        public ResultMarkerAttribute(Type targetType)
+        public MarkerAttribute(Type targetType)
         {
             TargetType = targetType;
         }

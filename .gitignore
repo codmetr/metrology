@@ -52,3 +52,7 @@ src/KIPer/SerialiserTest/bin/
 *.user
 src/KIPer/Tools/bin/
 src/KIPer/Tools/obj/
+src/KIPer/MarkerService/bin/
+src/KIPer/MarkerService/obj/
+src/KIPer/LogicTest/obj/
+src/KIPer/LogicTest/bin/

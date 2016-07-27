@@ -8,6 +8,11 @@ namespace KipTM.Model.Checks
     public interface ICheckMethod
     {
         /// <summary>
+        /// Идентификатор методики
+        /// </summary>
+        string Key { get; }
+
+        /// <summary>
         /// Название методики
         /// </summary>
         string Title { get; }

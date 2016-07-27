@@ -7,6 +7,7 @@ namespace ArchiveData.DTO
 {
     public class TestStepResult
     {
+        private string _checkKey;
         private string _stepKey;
         private object _result;
 
@@ -15,10 +16,18 @@ namespace ArchiveData.DTO
             
         }
 
-        public TestStepResult(string stepKey, object result):this()
+        public TestStepResult(string checkKey, string stepKey, object result)
+            : this()
         {
+            _checkKey = checkKey;
             _stepKey = stepKey;
             _result = result;
+        }
+
+        public string CheckKey
+        {
+            get { return _checkKey; }
+            set { _checkKey = value; }
         }
 
         public string StepKey

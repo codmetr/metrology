@@ -78,7 +78,11 @@ namespace KipTM.Model.Checks
         #endregion
 
         #region ICheckMethod
-        
+        /// <summary>
+        /// Идентификатор методики
+        /// </summary>
+        public string Key { get; protected set; }
+
         /// <summary>
         /// Название методики
         /// </summary>

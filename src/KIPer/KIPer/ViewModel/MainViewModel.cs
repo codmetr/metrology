@@ -20,8 +20,8 @@ using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Checks;
 using KipTM.ViewModel.Checks.States;
 using KipTM.ViewModel.Master;
-using KipTM.ViewModel.ResultMarker;
 using KipTM.ViewModel.Services;
+using MarkerService;
 using SQLiteArchive;
 using Tools;
 
@@ -51,12 +51,12 @@ namespace KipTM.ViewModel
 
         private string _helpMessage;
         private object _selectedAction;
-        private IResultMarkerFabrik _resulMaker;
+        private IMarkerFabrik<IParameterResultViewModel> _resulMaker;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IDataService dataService, IMethodsService methodicService, MainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive, IResultMarkerFabrik resulMaker)
+        public MainViewModel(IDataService dataService, IMethodsService methodicService, MainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive, IMarkerFabrik<IParameterResultViewModel> resulMaker)
         {
             _dataService = dataService;
             _methodicService = methodicService;
