@@ -39,12 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IMarker.cs" />
-    <Compile Include="IMarkerFabrik.cs" />
+    <Compile Include="Filler\FillerAttribute.cs" />
+    <Compile Include="Filler\IFiller.cs" />
+    <Compile Include="Filler\IFillerFabrik.cs" />
+    <Compile Include="Filler\ResultFillerFabrik.cs" />
+    <Compile Include="Marker\IMarker.cs" />
+    <Compile Include="Marker\IMarkerFabrik.cs" />
     <Compile Include="NoExpectedTypeParameterException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MarkerAttribute.cs" />
-    <Compile Include="MarkerFabrik.cs" />
+    <Compile Include="Marker\MarkerAttribute.cs" />
+    <Compile Include="Marker\MarkerFabrik.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tools\Tools.csproj">

@@ -5,6 +5,8 @@ using System.Linq;
 using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
 using KipTM.Model.Devices;
+using KipTM.ViewModel.ResultFiller;
+using MarkerService.Filler;
 
 namespace KipTM.ViewModel
 {
@@ -27,7 +29,7 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
         /// </summary>
-        public TestResultViewModel(TestResult result, IEnumerable<IParameterResultViewModel> expectedResuls)
+        public TestResultViewModel(TestResult result, IEnumerable<IParameterResultViewModel> expectedResuls, IFillerFabrik<IParameterResultViewModel> _filler)
         {
             _result = result;
             if (IsInDesignMode)
@@ -79,7 +81,21 @@ namespace KipTM.ViewModel
                 _device = new DeviceViewModel(_result.TargetDevice);
                 _etalons = new ObservableCollection<IDeviceViewModel>(_result.Etalon.Select(el=>new DeviceViewModel(el)));
                 //Parameters = new ObservableCollection<IParameterResultViewModel>(_result.Results.Select(el=>new ParameterResultViewModel(){NameParameter = el.StepKey, PointMeashuring = el.Result.ToString()}));
-                Parameters = new ObservableCollection<IParameterResultViewModel>(expectedResuls);
+
+                var results = new List<IParameterResultViewModel>(expectedResuls);
+                foreach (var stepResult in result.Results)
+                {
+                    var filledResult = _filler.FillMarker(stepResult.Result.GetType(), new Tuple<string, string>(stepResult.CheckKey, stepResult.StepKey), stepResult.Result);
+                    if(filledResult == null)
+                        continue;
+                    var index = results.FindIndex((el) => el.PointMeashuring == filledResult.PointMeashuring);
+                    if (index >= 0)
+                    {
+                        results.RemoveAt(index);
+                        results.Insert(index, filledResult);
+                    }
+                }
+                Parameters = new ObservableCollection<IParameterResultViewModel>(results);
             }
         }
 

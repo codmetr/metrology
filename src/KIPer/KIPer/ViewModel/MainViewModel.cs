@@ -20,8 +20,10 @@ using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Checks;
 using KipTM.ViewModel.Checks.States;
 using KipTM.ViewModel.Master;
+using KipTM.ViewModel.ResultFiller;
 using KipTM.ViewModel.Services;
 using MarkerService;
+using MarkerService.Filler;
 using SQLiteArchive;
 using Tools;
 
@@ -52,11 +54,12 @@ namespace KipTM.ViewModel
         private string _helpMessage;
         private object _selectedAction;
         private IMarkerFabrik<IParameterResultViewModel> _resulMaker;
+        private IFillerFabrik<IParameterResultViewModel> _filler;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IDataService dataService, IMethodsService methodicService, MainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive, IMarkerFabrik<IParameterResultViewModel> resulMaker)
+        public MainViewModel(IDataService dataService, IMethodsService methodicService, MainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive, IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler)
         {
             _dataService = dataService;
             _methodicService = methodicService;
@@ -67,6 +70,7 @@ namespace KipTM.ViewModel
             _dataService.LoadResults();
             _dataService.InitDevices();
             _resulMaker = resulMaker;
+            _filler = filler;
             _services = new ServiceViewModel(new List<IService>()
             {
                 new Pace1000ViewModel(_dataService.DeviceManager),
@@ -97,7 +101,7 @@ namespace KipTM.ViewModel
             {
                 new ConfigCheckState(checkConfigViewModel),
                 new ADTSCheckState(() => checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel)),
-                new ResultState(()=>new TestResultViewModel(result, _resulMaker.GetMarkers(checkConfig.SelectedCheckType.GetType(), checkConfig.SelectedCheckType)))
+                new ResultState(()=>new TestResultViewModel(result, _resulMaker.GetMarkers(checkConfig.SelectedCheckType.GetType(), checkConfig.SelectedCheckType), _filler))
             });
 
             SelectChecks.Execute(null);

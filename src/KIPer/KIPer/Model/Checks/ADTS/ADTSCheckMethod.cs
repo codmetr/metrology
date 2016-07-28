@@ -20,7 +20,8 @@ namespace KipTM.Model.Checks
 {
     public class ADTSCheckMethod : ADTSMethodBase
     {
-        public static string Key = "Калибровка ADTS";
+        //public static string Key = "Калибровка ADTS";
+        public const string Key = "Калибровка ADTS";
 
         public const string KeyPoints = "Points";
         public const string KeyRate = "Rate";

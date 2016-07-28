@@ -34,7 +34,14 @@ namespace KipTM.ViewModel.Archive.ADTS
         /// <returns>описатель результата</returns>
         private IEnumerable<IParameterResultViewModel> Make(DoPointStep target)
         {
-            var itemMarker = new ParameterResultViewModel() { NameParameter = target.Name, Tolerance = target.Tolerance.ToString() };
+            var itemMarker = new ParameterResultViewModel()
+            {
+                NameParameter = string.Format("Поверка точки {0}", target.Point),
+                Error = "",
+                PointMeashuring = target.Point.ToString("F2"),
+                Tolerance = target.Tolerance.ToString("F2"),
+                Unit = "kPa",
+            };
             var result = new List<IParameterResultViewModel> { itemMarker };
             return result;
         }

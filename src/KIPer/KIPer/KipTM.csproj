@@ -167,9 +167,9 @@
     <Compile Include="Settings\EtalonSettings.cs" />
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\MainSettings.cs" />
-    <Compile Include="ViewModel\ResultFiller\FillerAttribute.cs" />
-    <Compile Include="ViewModel\ResultFiller\IResultFiller.cs" />
-    <Compile Include="ViewModel\ResultFiller\ResultFillerFabrik.cs" />
+    <Compile Include="ViewModel\ResultFiller\ADTS\ADTSCheckPointFiller.cs" />
+    <Compile Include="ViewModel\ResultFiller\ADTS\ADTSTestPointFiller.cs" />
+    <Compile Include="ViewModel\ResultFiller\ADTS\FillerKey.cs" />
     <Compile Include="ViewModel\ResultMarker\ADTS\ADTSTestPointStepFabrik.cs" />
     <Compile Include="ViewModel\ResultMarker\ADTS\ADTSTestFabrik.cs" />
     <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />

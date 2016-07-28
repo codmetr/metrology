@@ -20,7 +20,7 @@ namespace KipTM.Model.Checks
 {
     public class ADTSTestMethod : ADTSMethodBase
     {
-        public static string Key = "Поверка ADTS";
+        public const string Key = "Поверка ADTS";
 
         public const string KeyPropertyPoints = "Points";
         public const string KeyPropertyRate = "Rate";

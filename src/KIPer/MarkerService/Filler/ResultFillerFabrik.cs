@@ -4,22 +4,26 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using MarkerService.Filler;
 using Tools;
 
 namespace KipTM.ViewModel.ResultFiller
 {
-    class ResultFillerFabrik
+    public class FillerFabrik<T> : IFillerFabrik<T>
     {
-        private static ResultFillerFabrik _fillersSolver = null;
+        public static FillerFabrik<T> _fillersSolver = null;
 
-        private Dictionary<Tuple<string, string>, IResultFiller> _fillers =
-            new Dictionary<Tuple<string, string>, IResultFiller>();
+        private readonly Dictionary<object, IFiller<T>> _fillers =
+            new Dictionary<object, IFiller<T>>();
+
+        private FillerFabrik()
+        {}
 
         #region Config
         /// <summary>
         /// Построить справочник заполнятелей из всех типов всех сборок
         /// </summary>
-        private ResultFillerFabrik Config()
+        private FillerFabrik<T> Config()
         {
             foreach (var assemblyType in TypeScaner.GetAllTypes())
             {// для каждой сборки
@@ -33,50 +37,50 @@ namespace KipTM.ViewModel.ResultFiller
         /// </summary>
         private void ConfigType(Assembly assembly, Type type)
         {
-            var intefaceMarkerType = typeof(IResultFiller);
+            var intefaceMarkerType = typeof(IFiller<T>);
             if (!intefaceMarkerType.IsAssignableFrom(type) || intefaceMarkerType == type)
                 return;
-            IResultFiller filler;
+            IFiller<T> filler;
             try
             {
-                filler = assembly.CreateInstance(type.FullName) as IResultFiller;
+                filler = assembly.CreateInstance(type.FullName) as IFiller<T>;
             }
             catch (Exception ex)
             {
                 throw new Exception(string.Format("Error create instance type [{0}] asselbly[{1}] ", type.AssemblyQualifiedName, assembly.FullName), ex);
             }
 
-            var attributes = type.GetCustomAttributes(typeof(FillerAttribute), false).Select(el => el as FillerAttribute);
+            var attributes = type.GetCustomAttributes(typeof(FillerAttribute), true).Select(el => el as FillerAttribute);
             foreach (var attribute in attributes)
             {// для каждого атрибута
-                if (_fillers.ContainsKey(new Tuple<string, string>(attribute.TypeKey, attribute.ResultKey)))
+                if (_fillers.ContainsKey(attribute.Key))
                     continue;
-                _fillers.Add(new Tuple<string, string>(attribute.TypeKey, attribute.ResultKey), filler);
+                _fillers.Add(attribute.Key, filler);
             }
         }
         #endregion
 
-        public static ResultFillerFabrik Locator
+        public static IFillerFabrik<T> Locator
         {
             get
             {
-                return _fillersSolver ?? (_fillersSolver = (new ResultFillerFabrik()).Config());
+                return _fillersSolver ?? (_fillersSolver = (new FillerFabrik<T>()).Config());
             }
         }
 
-        public IParameterResultViewModel GetResult<Ttarget>(string typeKey, string resultKey, Ttarget result)
+        public T FillMarker<TTarget>(object Key, TTarget result)
         {
-            return GetResult(typeof(Ttarget), typeKey, resultKey, result);
+            return FillMarker(typeof(TTarget), Key, result);
         }
 
-        public IParameterResultViewModel GetResult(Type Ttarget, string typeKey, string resultKey, object item)
+        public T FillMarker(Type ttarget, object Key, object item)
         {
             if (item == null)
-                return null;
-            var key = new Tuple<string, string>(typeKey, resultKey);
+                return default(T);
+            var key = Key;
             if (!_fillers.ContainsKey(key))
-                return null;
-            return _fillers[key].GetFillResultMarker(item);
+                return default(T);
+            return _fillers[key].FillMarker(item);
         }
     }
 }
