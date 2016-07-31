@@ -20,7 +20,7 @@ namespace KipTM.ViewModel.Checks
         #region Members
         private string _titleSteps;
         private string _titleBtnNext;
-        private bool _waitUserReaction;
+        private bool _waitUserReaction = true;
         private string _note;
         protected ADTSViewModel _adtsViewModel;
         private bool _isUserChannel;

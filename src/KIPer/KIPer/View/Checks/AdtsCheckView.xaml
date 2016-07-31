@@ -133,6 +133,7 @@
                 <Button
                     HorizontalAlignment="Center" VerticalAlignment="Bottom"
                     Width="150" Height="30" Margin="5"
+                    IsEnabled="{Binding State.WaitUserReaction, UpdateSourceTrigger=PropertyChanged}"
                     Content="{Binding State.TitleBtnNext, UpdateSourceTrigger=PropertyChanged}"
                     Command="{Binding Start}"/>
                 <Button

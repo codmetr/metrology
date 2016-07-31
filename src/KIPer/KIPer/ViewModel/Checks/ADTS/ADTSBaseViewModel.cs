@@ -234,6 +234,7 @@ namespace KipTM.ViewModel.Checks
         /// </summary>
         protected void DoStart()
         {
+            
             State.TitleBtnNext = "Далее";
             Method.ChannelType = _connection;
             State.ADTS.Start(Method.GetADTS(), _connection);
@@ -249,7 +250,10 @@ namespace KipTM.ViewModel.Checks
                 DoCancel();
                 _currentAction = DoStart;
             });
+            // Разблокировать стоп
+            // Заблокировать старт
             StopEnabled = true;
+            State.WaitUserReaction = false; 
             OnStarted();
         }
 
@@ -260,6 +264,7 @@ namespace KipTM.ViewModel.Checks
         {
             State.TitleBtnNext = "Далее";
             State.Note = "Подождите";
+            State.WaitUserReaction = false;
             if (_userChannel.QueryType == UserQueryType.GetRealValue)
             {
                 _userChannel.RealValue = RealValue;
@@ -279,6 +284,7 @@ namespace KipTM.ViewModel.Checks
                 _userChannel.AgreeValue = true;
             }
             AcceptEnabled = false;
+            State.WaitUserReaction = false;
             OnStoped();
         }
 
@@ -296,6 +302,7 @@ namespace KipTM.ViewModel.Checks
                 _userChannel.AcceptValue = false;
                 _userChannel.AgreeValue = true;
             }
+            State.WaitUserReaction = true;
             AcceptEnabled = false;
             StopEnabled = false;
             OnStoped();
@@ -341,6 +348,7 @@ namespace KipTM.ViewModel.Checks
             if (_userChannel.QueryType == UserQueryType.GetRealValue)
             {
                 State.TitleBtnNext = "Далее";
+                State.WaitUserReaction = true;
                 State.Note = string.Format("Укажите эталонное значение и нажмите \"{0}\"", State.TitleBtnNext);
                 RealValue = _userChannel.RealValue;
                 _currentAction = DoNext;
@@ -348,6 +356,7 @@ namespace KipTM.ViewModel.Checks
             else if (_userChannel.QueryType == UserQueryType.GetAccept)
             {
                 State.TitleBtnNext = "Отмена";
+                State.WaitUserReaction = true;
                 State.Note = string.Format("Что бы применить результат калибровки нажмите \"Подтвердить\", в противном случае нажмите \"{0}\"", State.TitleBtnNext);
                 AcceptEnabled = true;
                 _currentAction = DoCancel;

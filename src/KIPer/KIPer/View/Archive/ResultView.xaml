@@ -45,7 +45,7 @@
                 <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Device.SerialNumber}"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Общие параметры" Grid.Column="1">
+        <GroupBox Header="Результаты" Grid.Column="1">
             <!--<archive:ParamResCollectionView x:Name="TestList" MinWidth="50" DataContext="{Binding Parameters}"/>-->
             <archive:ParamResDataGridView x:Name="TestList" MinWidth="50" DataContext="{Binding Parameters}"/>
         </GroupBox>

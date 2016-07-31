@@ -56,3 +56,5 @@ src/KIPer/MarkerService/bin/
 src/KIPer/MarkerService/obj/
 src/KIPer/LogicTest/obj/
 src/KIPer/LogicTest/bin/
+src/KIPer/TestReport/bin/
+src/KIPer/TestReport/obj/
