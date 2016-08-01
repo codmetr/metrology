@@ -11,12 +11,12 @@ namespace ReportAdts
     //[Report()]
     public class ADTSReporter
     {
-        public ReportClass GetReport(AdtsCommonReportData commonData, IEnumerable<AdtsReportData> reportData)
+        public ReportClass GetReport(AdtsCommonReportData commonData, IEnumerable<AdtsReportData> staticData, IEnumerable<AdtsReportData> dinamicData)
         {
             var result = new ADTSCheckReport();
             result.SetDataSource(new []{commonData});
-            var adtsReportDatas = reportData as AdtsReportData[] ?? reportData.ToArray();
-            result.Subreports["staticChannel"].SetDataSource(adtsReportDatas);
+            result.Subreports["staticChannel"].SetDataSource(staticData);
+            result.Subreports["dinamicChannel"].SetDataSource(dinamicData);
             return result;
         }
     }
