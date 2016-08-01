@@ -7,14 +7,14 @@ namespace ReportAdts
 {
     public class AdtsReportData
     {
-        public string Point { get; set; }
+        public object Point { get; set; }
 
-        public string RealValue { get; set; }
+        public object RealValue { get; set; }
 
-        public string ErrorValue { get; set; }
+        public object ErrorValue { get; set; }
 
-        public string Tolerance { get; set; }
+        public object Tolerance { get; set; }
 
-        public string IsCorrect { get; set; }
+        public object IsCorrect { get; set; }
     }
 }

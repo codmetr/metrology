@@ -13,12 +13,10 @@ namespace ReportAdts
     {
         public ReportClass GetReport(AdtsCommonReportData commonData, IEnumerable<AdtsReportData> reportData)
         {
-            var result = new ADTSReport();
-            //result.Load(@"\ADTSReporter.rpt");
+            var result = new ADTSCheckReport();
             result.SetDataSource(new []{commonData});
-//            result.SetDataSource(commonData);
-            result.Subreports[@"StaticChannel"].SetDataSource(reportData.ToArray());
-            result.Subreports[@"DinamicCannel"].SetDataSource(reportData.ToArray());
+            var adtsReportDatas = reportData as AdtsReportData[] ?? reportData.ToArray();
+            result.Subreports["staticChannel"].SetDataSource(adtsReportDatas);
             return result;
         }
     }

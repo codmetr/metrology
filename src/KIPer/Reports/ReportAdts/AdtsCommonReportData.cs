@@ -7,28 +7,28 @@ namespace ReportAdts
 {
     public class AdtsCommonReportData
     {
-        public string ReportNumber { get; set; }
+        public object ReportNumber { get; set; }
 
-        public string DeviceType { get; set; }
+        public object DeviceType { get; set; }
 
-        public string SerialNumber { get; set; }
+        public object SerialNumber { get; set; }
 
-        public string ChannelRange { get; set; }
+        public object ChannelRange { get; set; }
 
-        public string CheckDate { get; set; }
+        public object CheckDate { get; set; }
 
-        public string EthalonDeviceType { get; set; }
+        public object EthalonDeviceType { get; set; }
 
-        public string EthalonError { get; set; }
+        public object EthalonError { get; set; }
 
-        public string EthalonChannelRange { get; set; }
+        public object EthalonChannelRange { get; set; }
 
-        public string CheckMethod { get; set; }
+        public object CheckMethod { get; set; }
 
-        public string TypeSeviceEquipement { get; set; }
+        public object TypeSeviceEquipement { get; set; }
 
-        public string AtmosphericPressure { get; set; }
+        public object AtmosphericPressure { get; set; }
 
-        public string Temperature { get; set; }
+        public object Temperature { get; set; }
     }
 }
