@@ -33,7 +33,7 @@ namespace ReportService
 
         public static ReportFabrik Locator{get { return _instance ?? (_instance = (new ReportFabrik()).Configure()); }}
 
-        public object GetReporter(TestResult result, Type tagretType)
+        public object GetReporter( Type tagretType, TestResult result)
         {
             var reporters = GetReporters();
             foreach (var reporter in reporters)

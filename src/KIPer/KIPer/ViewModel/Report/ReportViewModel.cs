@@ -21,9 +21,9 @@ namespace KipTM.ViewModel.Report
 
         public ReportViewModel(IReportFabrik reportFabric, Type getType, TestResult result)
         {
-            var reporter = reportFabric.GetCustomReporter(getType, result);
+            var reporter = reportFabric.GetReporter(getType, result);
             if (reporter != null)
-                ReportSource = reporter.Report;
+                ReportSource = reporter;
         }
 
         /// <summary>
