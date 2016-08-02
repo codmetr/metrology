@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ArchiveData.DTO;
+using GalaSoft.MvvmLight;
+using ReportService;
+
+namespace KipTM.ViewModel.Report
+{
+    /// <summary>
+    /// This class contains properties that a View can data bind to.
+    /// <para>
+    /// See http://www.galasoft.ch/mvvm
+    /// </para>
+    /// </summary>
+    public class ReportViewModel : ViewModelBase, IReportViewModel
+    {
+        private object _reportSource;
+
+        public ReportViewModel(IReportFabrik reportFabric, Type getType, TestResult result)
+        {
+            var reporter = reportFabric.GetCustomReporter(getType, result);
+            if (reporter != null)
+                ReportSource = reporter.Report;
+        }
+
+        /// <summary>
+        /// Фактический источник данных для отчета
+        /// </summary>
+        public object ReportSource
+        {
+            get { return _reportSource; }
+            set { Set(ref _reportSource, value); }
+        }
+    }
+}

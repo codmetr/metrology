@@ -167,6 +167,8 @@
     <Compile Include="Settings\EtalonSettings.cs" />
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\MainSettings.cs" />
+    <Compile Include="ViewModel\Report\IReportViewModel.cs" />
+    <Compile Include="ViewModel\Report\ReportViewModel.cs" />
     <Compile Include="ViewModel\ResultFiller\ADTS\ADTSCheckPointFiller.cs" />
     <Compile Include="ViewModel\ResultFiller\ADTS\ADTSTestPointFiller.cs" />
     <Compile Include="ViewModel\ResultFiller\ADTS\FillerKey.cs" />
@@ -180,7 +182,6 @@
     <Compile Include="ViewModel\Checks\ADTS\AdtsConfigViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckConfigViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckFabrik.cs" />
-    <Compile Include="ViewModel\Checks\CheckViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTS\ADTSTestViewModel.cs" />
     <Compile Include="ViewModel\Checks\ICheckFabrik.cs" />
     <Compile Include="ViewModel\Checks\Channels\IMethodViewModel.cs" />
@@ -235,9 +236,6 @@
     </Compile>
     <Compile Include="View\Checks\CheckConfigView.xaml.cs">
       <DependentUpon>CheckConfigView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Checks\CheckView.xaml.cs">
-      <DependentUpon>CheckView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Checks\MechanicalManometerView.xaml.cs">
       <DependentUpon>MechanicalManometerView.xaml</DependentUpon>
@@ -345,10 +343,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Checks\CheckConfigView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Checks\CheckView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

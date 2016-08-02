@@ -5,32 +5,18 @@ using System.Text;
 
 namespace ReportService
 {
-    //public class ReportAttribute:Attribute
-    //{
-    //    private readonly Type _targetType;
-    //
-    //    public ReportAttribute(Type targetType)
-    //    {
-    //        _targetType = targetType;
-    //    }
-    //
-    //    public Type TargetReportKey
-    //    {
-    //        get { return _targetType; }
-    //    }
-    //}
     public class ReportAttribute : Attribute
     {
-        private readonly string _targetKey;
+        private readonly Type _targetType;
 
-        public ReportAttribute(string targetKey)
+        public ReportAttribute(Type targetType)
         {
-            _targetKey = targetKey;
+            _targetType = targetType;
         }
 
-        public string TargetReportKey
+        public Type TargetReportKey
         {
-            get { return _targetKey; }
+            get { return _targetType; }
         }
     }
 }

@@ -42,7 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IReport.cs" />
+    <Compile Include="IReporter.cs" />
+    <Compile Include="IReportFabrik.cs" />
     <Compile Include="ReportAttribute.cs" />
     <Compile Include="ReportFabrik.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

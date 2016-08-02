@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CrystalDecisions.CrystalReports.Engine;
 
 namespace KipTM.View
 {
@@ -15,6 +16,11 @@ namespace KipTM.View
         public ReportHost()
         {
             InitializeComponent();
+        }
+
+        public void SetSource(ReportClass source)
+        {
+            reportViewer.ReportSource = source;
         }
     }
 }

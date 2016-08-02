@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using ArchiveData.DTO;
 using StructureMap;
 using Tools;
 
 namespace ReportService
 {
-    public class ReportFabrik
+    /// <summary>
+    /// Получение списка 
+    /// </summary>
+    public class ReportFabrik : IReportFabrik
     {
         private static ReportFabrik _instance = null;
         private Container _container;
@@ -25,22 +26,44 @@ namespace ReportService
             _container.Configure(x => x.Scan(scaner =>
             {
                 scaner.AssembliesFromPath("Reports");
-                scaner.AddAllTypesOf<IReport>();
+                scaner.AddAllTypesOf<IReporter>();
             }));
             return this;
         }
 
-        public static ReportFabrik Reporter{get { return _instance ?? (_instance = (new ReportFabrik()).Configure()); }}
+        public static ReportFabrik Locator{get { return _instance ?? (_instance = (new ReportFabrik()).Configure()); }}
 
-        public IReport GetCustomReporter(TestResult result, string key)
+        public object GetReporter(TestResult result, Type tagretType)
         {
             var reporters = GetReporters();
-            return reporters.Where(el => { return el.GetType().GetAttributes(typeof(ReportAttribute)).Any(atr => (atr as ReportAttribute).TargetReportKey == key); }).FirstOrDefault();
+            foreach (var reporter in reporters)
+            {
+                var reportAtr =reporter.GetType().GetAttributes(typeof (ReportAttribute));
+                foreach (var atrib in reportAtr)
+                {
+                    var atr = atrib as ReportAttribute;
+                    if(atr == null)
+                        continue;
+                    if (atr.TargetReportKey != tagretType)
+                        continue;
+                    return reporter.GetReport(result);
+                }
+            }
+            return null;
         }
 
-        private IEnumerable<IReport> GetReporters()
+        private IEnumerable<IReporter> GetReporters()
         {
-            return _container.GetAllInstances<IReport>().Where(el => el.GetType().GetAttributes(typeof(ReportAttribute)).Any());
+            return _container.GetAllInstances<IReporter>().Where(el => el.GetType().GetAttributes(typeof(ReportAttribute)).Any());
         }
+
+        #region Implementation of IReportFabrik
+
+        public IReporter GetCustomReporter(Type targetT, TestResult result)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

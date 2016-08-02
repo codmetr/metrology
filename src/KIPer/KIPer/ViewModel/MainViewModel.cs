@@ -20,10 +20,12 @@ using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Checks;
 using KipTM.ViewModel.Checks.States;
 using KipTM.ViewModel.Master;
+using KipTM.ViewModel.Report;
 using KipTM.ViewModel.ResultFiller;
 using KipTM.ViewModel.Services;
 using MarkerService;
 using MarkerService.Filler;
+using ReportService;
 using SQLiteArchive;
 using Tools;
 
@@ -48,29 +50,34 @@ namespace KipTM.ViewModel
         private IArchivesViewModel _tests;
         private DeviceTypesViewModel _deviceTypes;
         private DeviceTypesViewModel _etalonTypes;
-        private CheckViewModel _checks;
         private Workflow _workflow;
 
         private string _helpMessage;
         private object _selectedAction;
         private IMarkerFabrik<IParameterResultViewModel> _resulMaker;
         private IFillerFabrik<IParameterResultViewModel> _filler;
+        private IReportFabrik _reportFabric;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IDataService dataService, IMethodsService methodicService, MainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive, IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler)
+        public MainViewModel(
+            IDataService dataService, IMethodsService methodicService, MainSettings settings,
+            IPropertiesLibrary propertiesLibrary, IArchive archive,
+            IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
+            IReportFabrik reportFabric)
         {
             _dataService = dataService;
             _methodicService = methodicService;
             _settings = settings;
             _propertiesLibrary = propertiesLibrary;
             _archive = archive;
-
+            
             _dataService.LoadResults();
             _dataService.InitDevices();
             _resulMaker = resulMaker;
             _filler = filler;
+            _reportFabric = reportFabric;
             _services = new ServiceViewModel(new List<IService>()
             {
                 new Pace1000ViewModel(_dataService.DeviceManager),
@@ -101,7 +108,8 @@ namespace KipTM.ViewModel
             {
                 new ConfigCheckState(checkConfigViewModel),
                 new ADTSCheckState(() => checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel)),
-                new ResultState(()=>new TestResultViewModel(result, _resulMaker.GetMarkers(checkConfig.SelectedCheckType.GetType(), checkConfig.SelectedCheckType), _filler))
+                new ResultState(()=>new TestResultViewModel(result, _resulMaker.GetMarkers(checkConfig.SelectedCheckType.GetType(), checkConfig.SelectedCheckType), _filler)),
+                new ReportState(()=>new ReportViewModel(_reportFabric, checkConfig.SelectedCheckType.GetType(), result)),
             });
 
             SelectChecks.Execute(null);

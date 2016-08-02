@@ -22,6 +22,7 @@ using MarkerService.Filler;
 using Microsoft.Practices.ServiceLocation;
 using KipTM.Model;
 using System;
+using ReportService;
 
 namespace KipTM.ViewModel
 {
@@ -44,6 +45,7 @@ namespace KipTM.ViewModel
             SimpleIoc.Default.Register<IPropertiesLibrary, PropertiesLibrary>();
             SimpleIoc.Default.Register<IMarkerFabrik<IParameterResultViewModel>>(() => MarkerFabrik<IParameterResultViewModel>.Locator, true);
             SimpleIoc.Default.Register<IFillerFabrik<IParameterResultViewModel>>(() => FillerFabrik<IParameterResultViewModel>.Locator, true);
+            SimpleIoc.Default.Register<IReportFabrik>(() => ReportFabrik.Locator, true);
             if (ViewModelBase.IsInDesignModeStatic)
             {
                 SimpleIoc.Default.Register<IDataService, Design.DesignDataService>();
