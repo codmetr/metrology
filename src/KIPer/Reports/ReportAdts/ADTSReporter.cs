@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using ADTSData;
 using CrystalDecisions.CrystalReports.Engine;
 using KipTM.Model.Checks;
 using ReportService;
@@ -45,7 +46,18 @@ namespace ReportAdts
 
             foreach (var stepResult in result.Results)
             {
-                
+                var res = stepResult.Result as AdtsPointResult;
+                if (res==null)
+                    continue;
+
+                testResults.Add(new AdtsReportData()
+                {
+                    Point = res.Point.ToString("f2"),
+                    Tolerance = res.Tolerance.ToString("f2"),
+                    ErrorValue = res.Error.ToString("f2"),
+                    RealValue = res.RealValue.ToString("f2"),
+                    IsCorrect = res.IsCorrect,
+                });
             }
 
             return GetReport(commonData, checkResults, testResults);
