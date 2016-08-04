@@ -35,6 +35,8 @@ namespace ReportService
 
         public object GetReporter( Type tagretType, TestResult result)
         {
+            
+            
             var reporters = GetReporters();
             foreach (var reporter in reporters)
             {

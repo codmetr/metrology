@@ -46,7 +46,10 @@ namespace KipTM.ViewModel.Checks.States
         public void StateOut()
         {
             if (_check != null)
+            {
+                _check.Cleanup();
                 DetachEvents(_check);
+            }
         }
 
         private void AttachEvents(IMethodViewModel check)

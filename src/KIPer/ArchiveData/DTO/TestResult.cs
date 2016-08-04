@@ -9,6 +9,7 @@ namespace ArchiveData.DTO
         {
             Etalon = new List<DeviceDescriptor>();
             Results = new List<TestStepResult>();
+            Timestamp = DateTime.Now;
         }
 
         /// <summary>

@@ -34,5 +34,10 @@ namespace KipTM.ViewModel.Checks
         /// Методика остановлена
         /// </summary>
         event EventHandler Stoped;
+
+        /// <summary>
+        /// Отчищение состояний
+        /// </summary>
+        void Cleanup();
     }
 }

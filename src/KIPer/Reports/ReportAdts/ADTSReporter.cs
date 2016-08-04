@@ -30,7 +30,7 @@ namespace ReportAdts
             {
                 CheckDate = result.Timestamp.ToString("d"),
                 DeviceType = result.TargetDevice.DeviceType,
-                CheckMethod = result.CheckType,
+                CheckMethod = "K199",//result.CheckType,
                 SerialNumber = result.TargetDevice.SerialNumber,
                 ChannelRange = result.Channel,
                 AtmosphericPressure = result.AtmospherePressure,
@@ -44,19 +44,20 @@ namespace ReportAdts
             var checkResults = new List<AdtsReportData>();
             var testResults = new List<AdtsReportData>();
 
+            
             foreach (var stepResult in result.Results)
             {
                 var res = stepResult.Result as AdtsPointResult;
                 if (res==null)
                     continue;
 
-                testResults.Add(new AdtsReportData()
+                checkResults.Add(new AdtsReportData()
                 {
                     Point = res.Point.ToString("f2"),
                     Tolerance = res.Tolerance.ToString("f2"),
                     ErrorValue = res.Error.ToString("f2"),
                     RealValue = res.RealValue.ToString("f2"),
-                    IsCorrect = res.IsCorrect,
+                    IsCorrect = res.IsCorrect ? "соответствует" : "не соответствует",
                 });
             }
 
