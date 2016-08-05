@@ -41,17 +41,17 @@ namespace ReportAdts
                 commonData.EthalonDeviceType = ethalon.DeviceType;
             }
 
-            var checkResults = new List<AdtsReportData>();
-            var testResults = new List<AdtsReportData>();
+            var staticResults = new List<AdtsReportData>();
+            var dinamicResults = new List<AdtsReportData>();
 
-            
-            foreach (var stepResult in result.Results)
+
+            foreach (var stepResult in result.Results.Where(res => res.ChannelKey == ADTSMethodBase.KeySettingsPS))
             {
                 var res = stepResult.Result as AdtsPointResult;
                 if (res==null)
                     continue;
 
-                checkResults.Add(new AdtsReportData()
+                staticResults.Add(new AdtsReportData()
                 {
                     Point = res.Point.ToString("f2"),
                     Tolerance = res.Tolerance.ToString("f2"),
@@ -61,7 +61,23 @@ namespace ReportAdts
                 });
             }
 
-            return GetReport(commonData, checkResults, testResults);
+            foreach (var stepResult in result.Results.Where(res => res.ChannelKey == ADTSMethodBase.KeySettingsPT))
+            {
+                var res = stepResult.Result as AdtsPointResult;
+                if (res==null)
+                    continue;
+
+                dinamicResults.Add(new AdtsReportData()
+                {
+                    Point = res.Point.ToString("f2"),
+                    Tolerance = res.Tolerance.ToString("f2"),
+                    ErrorValue = res.Error.ToString("f2"),
+                    RealValue = res.RealValue.ToString("f2"),
+                    IsCorrect = res.IsCorrect ? "соответствует" : "не соответствует",
+                });
+            }
+
+            return GetReport(commonData, staticResults, dinamicResults);
         }
     }
 }

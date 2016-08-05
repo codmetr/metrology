@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
+using ADTSData;
 using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -372,8 +373,42 @@ namespace KipTM.ViewModel.Checks
         {
             _dispatcher.Invoke(() =>
             {
+                var newRes = eventArgTestResult.Result as AdtsPointResult;
                 State.ResultsLog.Add(eventArgTestResult);
-                _resultPool.Results.Add(new TestStepResult(Method.Key, eventArgTestResult.Key, eventArgTestResult.Result));
+                AdtsPointResult fidedRes = null;
+                if (newRes == null)
+                {
+                    // новый результат не AdtsPointResult, потому не с чем сравнивать
+                    _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChannelKey, eventArgTestResult.Key, eventArgTestResult.Result));
+                    return;
+                }
+
+                // поиск точки в имеющихся результатах
+                foreach (var stepResult in _resultPool.Results)
+                {
+                    var res = stepResult.Result as AdtsPointResult;
+                    if (res == null)
+                        continue;
+                    if (Math.Abs(res.Point - newRes.Point) < 0.001f &&
+                        stepResult.CheckKey == Method.Key &&
+                        stepResult.ChannelKey == Method.ChannelKey)
+                    {
+                        fidedRes = res;
+                        break;
+                    }
+                }
+
+                if (fidedRes == null)
+                {
+                    // это новая точка
+                    _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChannelKey, eventArgTestResult.Key, eventArgTestResult.Result));
+                    return;
+                }
+
+                fidedRes.RealValue = newRes.RealValue;
+                fidedRes.Tolerance = newRes.Tolerance;
+                fidedRes.Error = newRes.Error;
+                fidedRes.IsCorrect = newRes.IsCorrect;
             });
         }
 
