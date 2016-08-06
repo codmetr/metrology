@@ -46,11 +46,11 @@ namespace KipTM.Model.Devices
         private IDictionary<EventWaitHandle, Func<State, bool>> _waitStatePool; 
         #endregion
 
-        internal static string Key { get { return "ADTS"; } }
-        internal static string Model { get { return "ADTS405"; } }
-        internal static string DeviceCommonType { get { return "Калибратор давления"; } }
-        internal static string DeviceManufacturer { get { return "GE Druk"; } }
-        internal static IEnumerable<string> TypesEtalonParameters = new[]
+        public static string Key { get { return "ADTS"; } }
+        public static string Model { get { return "ADTS405"; } }
+        public static string DeviceCommonType { get { return "Калибратор давления"; } }
+        public static string DeviceManufacturer { get { return "GE Druk"; } }
+        public static IEnumerable<string> TypesEtalonParameters = new[]
         {"давление", "авиационная высота", "авиационная скорость"};
 
         public ADTSModel(string title, ILoops loops, IDeviceManager deviceManager)

@@ -6,6 +6,7 @@ using System.Text;
 using ADTSData;
 using CrystalDecisions.CrystalReports.Engine;
 using KipTM.Model.Checks;
+using KipTM.Model.Devices;
 using ReportService;
 using ArchiveData.DTO;
 
@@ -29,16 +30,18 @@ namespace ReportAdts
             var commonData = new AdtsCommonReportData()
             {
                 CheckDate = result.Timestamp.ToString("d"),
-                DeviceType = result.TargetDevice.DeviceType,
+                DeviceType = result.TargetDevice.DeviceType.Model,
+                ChannelRange = getRangeFromType(result.TargetDevice.DeviceType),
                 CheckMethod = "K199",//result.CheckType,
                 SerialNumber = result.TargetDevice.SerialNumber,
-                ChannelRange = result.Channel,
                 AtmosphericPressure = result.AtmospherePressure,
                 Temperature = result.Temperature,
             };
             if (ethalon != null)
             {
                 commonData.EthalonDeviceType = ethalon.DeviceType;
+                commonData.EthalonError = getErrorFromType(ethalon.DeviceType);
+                commonData.EthalonChannelRange = getRangeFromType(ethalon.DeviceType);
             }
 
             var staticResults = new List<AdtsReportData>();
@@ -50,15 +53,7 @@ namespace ReportAdts
                 var res = stepResult.Result as AdtsPointResult;
                 if (res==null)
                     continue;
-
-                staticResults.Add(new AdtsReportData()
-                {
-                    Point = res.Point.ToString("f2"),
-                    Tolerance = res.Tolerance.ToString("f2"),
-                    ErrorValue = res.Error.ToString("f2"),
-                    RealValue = res.RealValue.ToString("f2"),
-                    IsCorrect = res.IsCorrect ? "соответствует" : "не соответствует",
-                });
+                staticResults.Add(dataToReport(res));
             }
 
             foreach (var stepResult in result.Results.Where(res => res.ChannelKey == ADTSMethodBase.KeySettingsPT))
@@ -66,18 +61,34 @@ namespace ReportAdts
                 var res = stepResult.Result as AdtsPointResult;
                 if (res==null)
                     continue;
-
-                dinamicResults.Add(new AdtsReportData()
-                {
-                    Point = res.Point.ToString("f2"),
-                    Tolerance = res.Tolerance.ToString("f2"),
-                    ErrorValue = res.Error.ToString("f2"),
-                    RealValue = res.RealValue.ToString("f2"),
-                    IsCorrect = res.IsCorrect ? "соответствует" : "не соответствует",
-                });
+                dinamicResults.Add(dataToReport(res));
             }
 
             return GetReport(commonData, staticResults, dinamicResults);
+        }
+
+        private AdtsReportData dataToReport(AdtsPointResult data)
+        {
+            return new AdtsReportData()
+            {
+                Point = data.Point.ToString("f2"),
+                Tolerance = data.Tolerance.ToString("f2"),
+                ErrorValue = data.Error.ToString("f2"),
+                RealValue = data.RealValue.ToString("f2"),
+                IsCorrect = data.IsCorrect ? "соответствует" : "не соответствует",
+            };
+        }
+
+        private string getRangeFromType(DeviceTypeDescriptor type)
+        {
+            return type.Model == ADTSModel.Model
+                ? "Ps (35…1128) mbar;\nPt  (35…3500) mbar"
+                : type.Model == PACE1000Model.Model ? "1300mbar, 3500 mbar" : "";
+        }
+
+        private string getErrorFromType(DeviceTypeDescriptor type)
+        {
+            return type.Model == PACE1000Model.Model ? "± 0,005% ВПИ" : "";
         }
     }
 }
