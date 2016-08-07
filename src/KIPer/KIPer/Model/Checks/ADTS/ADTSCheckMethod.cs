@@ -80,7 +80,11 @@ namespace KipTM.Model.Checks
                 : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
             foreach (var point in parameters.Points)
             {
-                step = new CheckStepConfig(new DoPointStep(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure, point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _logger), false);
+                step =
+                    new CheckStepConfig(
+                        new DoPointStep(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure,
+                            point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _userChannel, _logger),
+                        false);
                 AttachStep(step.Step);
                 steps.Add(step);
             }

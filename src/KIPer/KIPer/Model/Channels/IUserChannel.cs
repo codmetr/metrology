@@ -4,6 +4,9 @@ using KipTM.Model.Checks;
 
 namespace KipTM.Model.Channels
 {
+    /// <summary>
+    /// Пользовательский интерфейс
+    /// </summary>
     public interface IUserChannel
     {
         /// <summary>

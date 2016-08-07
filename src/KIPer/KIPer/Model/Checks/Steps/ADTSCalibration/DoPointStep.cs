@@ -22,11 +22,15 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
         private readonly double _rate;
         private readonly PressureUnits _unit;
         private IEthalonChannel _ethalonChannel;
+        private IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
         private ManualResetEvent _setCurrentValueAsPoint = new ManualResetEvent(false);
         private CancellationTokenSource _cancellationTokenSource;
+        private readonly TimeSpan _checkCancelPeriod;
 
-        public DoPointStep(string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate, PressureUnits unit, IEthalonChannel ethalonChannel, Logger logger)
+        public DoPointStep(
+            string name, ADTSModel adts, Parameters param, double point, double tolerance, double rate,
+            PressureUnits unit, IEthalonChannel ethalonChannel, IUserChannel userChannel, Logger logger)
         {
             Name = name;
             _adts = adts;
@@ -38,6 +42,8 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             _logger = logger;
             _ethalonChannel = ethalonChannel;
             _cancellationTokenSource = new CancellationTokenSource();
+            _checkCancelPeriod = TimeSpan.FromMilliseconds(10);
+            _userChannel = userChannel;
         }
 
         public override void Start(EventWaitHandle whEnd)
@@ -200,5 +206,29 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             return false;
         }
 
+        private bool WaitUserAccept(EventWaitHandle whEnd)
+        {
+            var cancel = _cancellationTokenSource.Token;
+            _userChannel.Message = string.Format(string.Format("Установлена точка {0}, для продолжения нажмите \"Далее\"", _point));//TODO: локализовать
+            
+            var wh = new ManualResetEvent(false);
+            _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
+            while (!wh.WaitOne(_checkCancelPeriod))
+            {
+                if (cancel.IsCancellationRequested)
+                    break;
+            }
+            bool accept = _userChannel.AcceptValue;
+            if (cancel.IsCancellationRequested)
+            {
+                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
+                whEnd.Set();
+                OnEnd(new EventArgEnd(KeyStep, false));
+                return false;
+            }
+
+            _logger.With(l => l.Trace(string.Format("Calibration accept: {0}", accept ? "accept" : "deny")));
+            return true;
+        }
     }
 }

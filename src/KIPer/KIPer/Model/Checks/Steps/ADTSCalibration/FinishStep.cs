@@ -65,7 +65,7 @@ namespace KipTM.Model.Checks.Steps.ADTSCalibration
             }
             _userChannel.Message = string.Format("Применить результат калибровки?");//TODO: локализовать
             var wh = new ManualResetEvent(false);
-            _userChannel.NeedQuery(UserQueryType.GetRealValue, wh);
+            _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
             while (!wh.WaitOne(_checkCancelPeriod))
             {
                 if (cancel.IsCancellationRequested)
