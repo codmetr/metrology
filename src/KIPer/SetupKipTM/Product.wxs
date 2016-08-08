@@ -12,6 +12,7 @@
     <Property Id="Shortcut" Value="$(var.ProductName).lnk" />
     <Feature Id="ProductFeature" Title="KipTM" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="ReportsComponents" />
       <ComponentRef Id="Shortcuts" />
       <ComponentRef Id="DesktopShortcuts" />
     </Feature>
@@ -24,7 +25,9 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="ManufacturerFolder" Name="$(var.Manufacturer)">
-          <Directory Id="ApplicationFolder" Name="$(var.ProductName)"/>
+          <Directory Id="ApplicationFolder" Name="$(var.ProductName)">
+            <Directory Id="ReportFolder" Name="Reports"/>
+          </Directory>
         </Directory>
         <Directory Id="ProgramMenuFolder">
           <Directory Id="ShortcutApplicationFolder" Name="$(var.ProductName)" />
@@ -85,6 +88,14 @@
         <File Name="$(var.ArchiveData.TargetFileName)" Source="$(var.ArchiveData.TargetPath)" KeyPath="yes" />
         <File Name="$(var.ArchiveData.TargetName).pdb" Source="$(var.ArchiveData.TargetDir)$(var.ArchiveData.TargetName).pdb" CompanionFile="$(var.ArchiveData.TargetFileName)"/>
       </Component>
+      <!--<Component Guid="2E1987B5-D7E6-47E7-AF5B-924B284D5A3A">
+        <File Name="$(var.ReportAdts.TargetFileName)" Source="$(var.KipTM.TargetDir)Reports\$(var.ReportAdts.TargetFileName)" KeyPath="yes" />
+        <File Name="$(var.ReportAdts.TargetName).pdb" Source="$(var.KipTM.TargetDir)Reports\$(var.ReportAdts.TargetName).pdb" CompanionFile="$(var.ReportAdts.TargetFileName)"/>
+      </Component>-->
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-324B28DD5A3A">
+        <File Name="$(var.ReportService.TargetFileName)" Source="$(var.ReportService.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.ReportService.TargetName).pdb" Source="$(var.ReportService.TargetDir)$(var.ReportService.TargetName).pdb" CompanionFile="$(var.ReportService.TargetFileName)"/>
+      </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A4A">
         <File Name="$(var.IEEE488.TargetFileName)" Source="$(var.IEEE488.TargetPath)" KeyPath="yes" />
         <File Name="$(var.IEEE488.TargetName).pdb" Source="$(var.IEEE488.TargetDir)$(var.IEEE488.TargetName).pdb" CompanionFile="$(var.IEEE488.TargetFileName)"/>
@@ -114,7 +125,7 @@
         <File Name="$(var.MainLoop.TargetFileName)" Source="$(var.MainLoop.TargetPath)" KeyPath="yes" />
         <File Name="$(var.MainLoop.TargetName).pdb" Source="$(var.MainLoop.TargetDir)$(var.MainLoop.TargetName).pdb" CompanionFile="$(var.MainLoop.TargetFileName)"/>
       </Component>
-      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A2A">
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-124B28DD5A2A">
         <File Name="$(var.Tools.TargetFileName)" Source="$(var.Tools.TargetPath)" KeyPath="yes" />
         <File Name="$(var.Tools.TargetName).pdb" Source="$(var.Tools.TargetDir)$(var.Tools.TargetName).pdb" CompanionFile="$(var.Tools.TargetFileName)"/>
       </Component>
@@ -130,6 +141,14 @@
       <!-- <Component Id="ProductComponent"> -->
       <!-- TODO: Insert files, registry keys, and other resources here. -->
       <!-- </Component> -->
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="ReportsComponents" Directory="ReportFolder">
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B284D5A3A">
+        <File Name="$(var.ReportAdts.TargetFileName)" Source="$(var.KipTM.TargetDir)Reports\$(var.ReportAdts.TargetFileName)" KeyPath="yes" />
+        <File Name="$(var.ReportAdts.TargetName).pdb" Source="$(var.KipTM.TargetDir)Reports\$(var.ReportAdts.TargetName).pdb" CompanionFile="$(var.ReportAdts.TargetFileName)"/>
+      </Component>
     </ComponentGroup>
   </Fragment>
 </Wix>
