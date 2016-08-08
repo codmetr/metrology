@@ -13,6 +13,8 @@
     <Feature Id="ProductFeature" Title="KipTM" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
       <ComponentGroupRef Id="ReportsComponents" />
+      <ComponentGroupRef Id="x64Components" />
+      <ComponentGroupRef Id="x86Components" />
       <ComponentRef Id="Shortcuts" />
       <ComponentRef Id="DesktopShortcuts" />
     </Feature>
@@ -27,6 +29,8 @@
         <Directory Id="ManufacturerFolder" Name="$(var.Manufacturer)">
           <Directory Id="ApplicationFolder" Name="$(var.ProductName)">
             <Directory Id="ReportFolder" Name="Reports"/>
+            <Directory Id="x64Folder" Name="x64"/>
+            <Directory Id="x86Folder" Name="x86"/>
           </Directory>
         </Directory>
         <Directory Id="ProgramMenuFolder">
@@ -116,10 +120,10 @@
         <File Name="System.Data.SQLite.Linq.dll" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.Linq.dll" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
         <File Name="System.Data.SQLite.Linq.pdb" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.Linq.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
         <File Name="System.Data.SQLite.Linq.xml" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.Linq.xml" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="x64SQLite.Interop.dll" Source="$(var.SQLiteArchive.TargetDir)x64\SQLite.Interop.dll" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+        <!--<File Name="x64SQLite.Interop.dll" Source="$(var.SQLiteArchive.TargetDir)x64\SQLite.Interop.dll" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
         <File Name="x64SQLite.Interop.pdb" Source="$(var.SQLiteArchive.TargetDir)x64\SQLite.Interop.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
         <File Name="x86SQLite.Interop.dll" Source="$(var.SQLiteArchive.TargetDir)x86\SQLite.Interop.dll" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="x86SQLite.Interop.pdb" Source="$(var.SQLiteArchive.TargetDir)x86\SQLite.Interop.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+        <File Name="x86SQLite.Interop.pdb" Source="$(var.SQLiteArchive.TargetDir)x86\SQLite.Interop.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>-->
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A1A">
         <File Name="$(var.MainLoop.TargetFileName)" Source="$(var.MainLoop.TargetPath)" KeyPath="yes" />
@@ -128,6 +132,10 @@
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-124B28DD5A2A">
         <File Name="$(var.Tools.TargetFileName)" Source="$(var.Tools.TargetPath)" KeyPath="yes" />
         <File Name="$(var.Tools.TargetName).pdb" Source="$(var.Tools.TargetDir)$(var.Tools.TargetName).pdb" CompanionFile="$(var.Tools.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-164B28DD5A2A">
+        <File Name="$(var.MarkerService.TargetFileName)" Source="$(var.MarkerService.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.MarkerService.TargetName).pdb" Source="$(var.MarkerService.TargetDir)$(var.MarkerService.TargetName).pdb" CompanionFile="$(var.MarkerService.TargetFileName)"/>
       </Component>
       <Component Guid="44623CF8-CAEF-474A-AC50-21020572B436">
         <File Name="$(var.PressureElementControls.TargetFileName)" Source="$(var.PressureElementControls.TargetPath)" KeyPath="yes" />
@@ -141,6 +149,22 @@
       <!-- <Component Id="ProductComponent"> -->
       <!-- TODO: Insert files, registry keys, and other resources here. -->
       <!-- </Component> -->
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="x64Components" Directory="x64Folder">
+      <Component Guid="6E1987B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Name="x64SQLite.Interop.dll" Source="$(var.SQLiteArchive.TargetDir)x64\SQLite.Interop.dll" KeyPath="yes"/>
+        <File Name="x64SQLite.Interop.pdb" Source="$(var.SQLiteArchive.TargetDir)x64\SQLite.Interop.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="x86Components" Directory="x86Folder">
+      <Component Guid="2E1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Name="x86SQLite.Interop.dll" Source="$(var.SQLiteArchive.TargetDir)x86\SQLite.Interop.dll" KeyPath="yes"/>
+        <File Name="x86SQLite.Interop.pdb" Source="$(var.SQLiteArchive.TargetDir)x86\SQLite.Interop.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+      </Component>
     </ComponentGroup>
   </Fragment>
   <Fragment>

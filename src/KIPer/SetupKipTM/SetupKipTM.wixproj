@@ -104,6 +104,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\MarkerService\MarkerService.csproj">
+      <Name>MarkerService</Name>
+      <Project>{fbdcd95e-3006-4d82-b232-24ced8aa05f8}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\MineLoop\MainLoop.csproj">
       <Name>MainLoop</Name>
       <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
