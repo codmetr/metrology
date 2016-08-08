@@ -2,26 +2,18 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
-using ADTSData;
 using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Interfaces;
 using KipTM.Model;
 using KipTM.Model.Checks;
-using KipTM.Model.Devices;
-using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 using KipTM.View;
-using KipTM.View.Checks;
-using KipTM.View.Checks.Steps;
-using KipTM.View.Services;
-using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Checks;
 using KipTM.ViewModel.Checks.States;
 using KipTM.ViewModel.Master;
 using KipTM.ViewModel.Report;
-using KipTM.ViewModel.ResultFiller;
 using KipTM.ViewModel.Services;
 using MarkerService;
 using MarkerService.Filler;
@@ -41,7 +33,7 @@ namespace KipTM.ViewModel
     {
         private readonly IDataService _dataService;
         private IMethodsService _methodicService;
-        private MainSettings _settings;
+        private IMainSettings _settings;
         private IPropertiesLibrary _propertiesLibrary;
         private IArchive _archive;
 
@@ -51,6 +43,7 @@ namespace KipTM.ViewModel
         private DeviceTypesViewModel _deviceTypes;
         private DeviceTypesViewModel _etalonTypes;
         private Workflow _workflow;
+        private List<IWorkflowStep> _steps;
 
         private string _helpMessage;
         private object _selectedAction;
@@ -62,7 +55,7 @@ namespace KipTM.ViewModel
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel(
-            IDataService dataService, IMethodsService methodicService, MainSettings settings,
+            IDataService dataService, IMethodsService methodicService, IMainSettings settings,
             IPropertiesLibrary propertiesLibrary, IArchive archive,
             IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
             IReportFabrik reportFabric)
@@ -104,13 +97,14 @@ namespace KipTM.ViewModel
             var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice);
             //_checks = new CheckViewModel(checkConfig, res => _archive.Save<TestResult>("", res), checkFabrik, channelTargetDevice, channelEthalonDevice); //TODO реорганизовать по нормальному
 
-            _workflow = new Workflow(new List<IWorkflowStep>()
+            _steps = new List<IWorkflowStep>()
             {
                 new ConfigCheckState(checkConfigViewModel),
                 new ADTSCheckState(() => checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel)),
                 new ResultState(()=>new TestResultViewModel(result, _resulMaker.GetMarkers(checkConfig.SelectedCheckType.GetType(), checkConfig.SelectedCheckType), _filler)),
                 new ReportState(()=>new ReportViewModel(_reportFabric, checkConfig.SelectedCheckType.GetType(), result)),
-            });
+            };
+            _workflow = new Workflow(_steps);
 
             SelectChecks.Execute(null);
         }
@@ -260,5 +254,16 @@ namespace KipTM.ViewModel
 
         //public CheckViewModel Checks { get { return _checks; } }
         public Workflow Checks { get { return _workflow; } }
+
+        public override void Cleanup()
+        {
+            base.Cleanup();
+            foreach (var step in _steps)
+            {
+                var dispStep = step.ViewModel as IDisposable;
+                if(dispStep!=null)
+                    dispStep.Dispose();
+            }
+        }
     }
 }

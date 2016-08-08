@@ -58,3 +58,8 @@ src/KIPer/LogicTest/obj/
 src/KIPer/LogicTest/bin/
 src/KIPer/TestReport/bin/
 src/KIPer/TestReport/obj/
+src/KIPer/Tools.View/obj/
+src/KIPer/KipTM.Interfaces/obj/
+src/KIPer/KipTM.Interfaces/bin/
+src/KIPer/ADTSChecks/bin/
+src/KIPer/Tools.View/bin/

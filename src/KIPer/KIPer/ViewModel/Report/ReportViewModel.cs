@@ -15,7 +15,7 @@ namespace KipTM.ViewModel.Report
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class ReportViewModel : ViewModelBase, IReportViewModel
+    public class ReportViewModel : ViewModelBase, IReportViewModel, IDisposable
     {
         private object _reportSource;
 
@@ -33,6 +33,19 @@ namespace KipTM.ViewModel.Report
         {
             get { return _reportSource; }
             set { Set(ref _reportSource, value); }
+        }
+
+        public override void Cleanup()
+        {
+            base.Cleanup();
+            var disp = _reportSource as IDisposable;
+            if(disp!=null)
+                disp.Dispose();
+        }
+
+        public void Dispose()
+        {
+            Cleanup();
         }
     }
 }

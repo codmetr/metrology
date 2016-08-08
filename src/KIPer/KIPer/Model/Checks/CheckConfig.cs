@@ -37,7 +37,7 @@ namespace KipTM.Model.Checks
         #endregion
 
         #region Конструкторы и инициализация
-        public CheckConfig(MainSettings settings, IMethodsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries, TestResult result)
+        public CheckConfig(IMainSettings settings, IMethodsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries, TestResult result)
         {
             _result = result;
             _methodics = methodics;
@@ -53,7 +53,7 @@ namespace KipTM.Model.Checks
         /// </summary>
         /// <param name="settings"></param>
         /// <param name="dictionaries"></param>
-        private void LoadAvalableCheckDevices(MainSettings settings, DictionariesPool dictionaries)
+        private void LoadAvalableCheckDevices(IMainSettings settings, DictionariesPool dictionaries)
         {
             // заполнение списка поддерживаемых устройств и выбор первого элемента
             var avalableDeviceTypes = new Dictionary<string, DeviceTypeDescriptor>();
@@ -86,7 +86,7 @@ namespace KipTM.Model.Checks
         /// Загрузить набор допустимых эталонов
         /// </summary>
         /// <param name="settings"></param>
-        private void LoadAvalableEthalons(MainSettings settings)
+        private void LoadAvalableEthalons(IMainSettings settings)
         {
             var avalableEthalonTypes = new Dictionary<string, DeviceTypeDescriptor>();
             _ethalonTypeKey = null;

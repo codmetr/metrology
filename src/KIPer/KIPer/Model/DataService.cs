@@ -22,7 +22,7 @@ namespace KipTM.Model
         
         private const string ResultsArchiveFileName = "results";
 
-        readonly MainSettings _settings;
+        readonly IMainSettings _settings;
         private readonly IArchive _archive;
         private IDeviceManager _deviceManager;
         private ResultsArchive _resultsArchive;
@@ -31,7 +31,7 @@ namespace KipTM.Model
         private readonly List<DeviceDescriptor> _etalons;
 
 
-        public DataService(IArchive archive, MainSettings settings)
+        public DataService(IArchive archive, IMainSettings settings)
         {
             _archive = archive;
             _settings = settings;
@@ -93,7 +93,7 @@ namespace KipTM.Model
         /// <summary>
         /// Настройки
         /// </summary>
-        public MainSettings Settings
+        public IMainSettings Settings
         {
             get { return _settings; }
         }

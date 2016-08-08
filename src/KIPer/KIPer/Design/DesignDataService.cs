@@ -24,7 +24,7 @@ namespace KipTM.Design
 
         public IDictionary<string, ICheckMethod> Methodics { get; private set; }
         public ResultsArchive ResultsArchive { get; private set; }
-        public MainSettings Settings { get; private set; }
+        public IMainSettings Settings { get; private set; }
 
         public void LoadSettings()
         {

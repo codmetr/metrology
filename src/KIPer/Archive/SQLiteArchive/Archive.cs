@@ -34,7 +34,7 @@ namespace SQLiteArchive
             {
                 File.Delete(path);
             }
-            var archiveType = typeof(T);
+            var archiveType = entity == null ? typeof(T) : entity.GetType();
             var realTypes = (new List<Type>()).FillNoObjectTypes(typeof (T));
             var allTypes = (new List<Type>()).FillNoObjectTypes(entity, typeof(T));
             var arrSubTypes = allTypes.Where(el => !realTypes.Contains(el)).ToList();

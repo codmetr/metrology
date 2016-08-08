@@ -9,7 +9,7 @@ using KipTM.Model.Checks;
 
 namespace KipTM.Settings
 {
-    public class MainSettings
+    public class MainSettings : IMainSettings
     {
         public const string SettingsFileName = "settings";
 
@@ -90,13 +90,13 @@ namespace KipTM.Settings
             return res;
         }
 
-        public List<DeviceTypeSettings> Devices;
+        public List<DeviceTypeSettings> Devices { get; set; }
 
-        public List<DeviceSettings> LastEtalons;
+        public List<DeviceSettings> LastEtalons { get; set; }
 
-        public List<DeviceSettings> LastDevices;
+        public List<DeviceSettings> LastDevices { get; set; }
 
-        public List<ComPortSettings> Ports;
+        public List<ComPortSettings> Ports { get; set; }
 
     }
 }

@@ -41,7 +41,7 @@ namespace KipTM.ViewModel
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<SQLiteArchive.IArchive, SQLiteArchive.Archive>();
-            SimpleIoc.Default.Register<MainSettings>(() => ServiceLocator.Current.GetInstance<SQLiteArchive.IArchive>().Load(MainSettings.SettingsFileName, MainSettings.GetDefault()));
+            SimpleIoc.Default.Register<IMainSettings>(() => ServiceLocator.Current.GetInstance<SQLiteArchive.IArchive>().Load(MainSettings.SettingsFileName, MainSettings.GetDefault()));
             SimpleIoc.Default.Register<IPropertiesLibrary, PropertiesLibrary>();
             SimpleIoc.Default.Register<IMarkerFabrik<IParameterResultViewModel>>(() => MarkerFabrik<IParameterResultViewModel>.Locator, true);
             SimpleIoc.Default.Register<IFillerFabrik<IParameterResultViewModel>>(() => FillerFabrik<IParameterResultViewModel>.Locator, true);
@@ -62,7 +62,6 @@ namespace KipTM.ViewModel
             //ioc = new Container();
             //ioc.Configure((reg)=>reg.ForRequestedType<>());
         }
-
 
         /// <summary>
         /// Gets the Main property.
@@ -88,6 +87,7 @@ namespace KipTM.ViewModel
             var dsdisp = ds as IDisposable;
             if(dsdisp != null)
                 dsdisp.Dispose();
+            ServiceLocator.Current.GetInstance<MainViewModel>().Cleanup();
         }
     }
 }
