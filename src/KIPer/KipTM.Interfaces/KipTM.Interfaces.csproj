@@ -53,6 +53,7 @@
     <Compile Include="Archive\IPropertyPool.cs" />
     <Compile Include="Channels\IEthalonChannel.cs" />
     <Compile Include="Channels\IUserChannel.cs" />
+    <Compile Include="Channels\UserChannel.cs" />
     <Compile Include="Channels\UserQueryType.cs" />
     <Compile Include="Checks\CheckStepConfig.cs" />
     <Compile Include="Checks\EventArgs\EventArgEnd.cs" />

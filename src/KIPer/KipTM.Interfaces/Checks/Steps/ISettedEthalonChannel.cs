@@ -10,7 +10,7 @@ namespace KipTM.Model.Checks.Steps
     /// <summary>
     /// Шаг поддерживает установку эталонного канала
     /// </summary>
-    interface ISettedEthalonChannel
+    public interface ISettedEthalonChannel
     {
         /// <summary>
         /// Установить эталонный канал

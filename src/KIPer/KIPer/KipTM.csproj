@@ -117,6 +117,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Model\Checks\CheckStepConfig.cs" />
+    <Compile Include="Model\Checks\Steps\IPausedStep.cs" />
     <Compile Include="Model\IPropertiesLibrary.cs" />
     <Compile Include="Model\PropertiesLibrary.cs" />
     <Compile Include="Model\Channels\PACEEchalonChannel.cs" />

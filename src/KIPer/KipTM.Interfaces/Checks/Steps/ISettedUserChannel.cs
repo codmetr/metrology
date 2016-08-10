@@ -7,7 +7,7 @@ using KipTM.Model.Channels;
 
 namespace KipTM.Model.Checks.Steps
 {
-    interface ISettedUserChannel
+    public interface ISettedUserChannel
     {
         void SetUserChannel(IUserChannel userChannel);
     }

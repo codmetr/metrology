@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>..\Lib\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,12 +42,70 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Channels\PACEEchalonChannel.cs" />
+    <Compile Include="Channels\UserEchalonChannel.cs" />
+    <Compile Include="Checks\ADTS\ADTSCheckMethod.cs" />
+    <Compile Include="Checks\ADTS\ADTSMethodBase.cs" />
+    <Compile Include="Checks\ADTS\ADTSMethodParameters.cs" />
+    <Compile Include="Checks\ADTS\ADTSPoint.cs" />
+    <Compile Include="Checks\ADTS\AdtsPointService.cs" />
+    <Compile Include="Checks\ADTS\ADTSTestMethod.cs" />
+    <Compile Include="Checks\CheckStepConfig.cs" />
+    <Compile Include="Checks\EventArgs\EventArgEnd.cs" />
+    <Compile Include="Checks\EventArgs\EventArgError.cs" />
+    <Compile Include="Checks\EventArgs\EventArgProgress.cs" />
+    <Compile Include="Checks\EventArgs\EventArgStepResult.cs" />
+    <Compile Include="Checks\EventArgs\EventArgTestStepResult.cs" />
+    <Compile Include="Checks\Steps\ADTSCalibration\DoPointStep.cs" />
+    <Compile Include="Checks\Steps\ADTSCalibration\FinishStep.cs" />
+    <Compile Include="Checks\Steps\ADTSCalibration\InitStep.cs" />
+    <Compile Include="Checks\Steps\ADTSCalibration\ToBaseStep.cs" />
+    <Compile Include="Checks\Steps\ADTSTest\DoPointStep.cs" />
+    <Compile Include="Checks\Steps\ADTSTest\EndStep.cs" />
+    <Compile Include="Checks\Steps\ADTSTest\InitStep.cs" />
+    <Compile Include="Devices\ADTSModel.cs" />
+    <Compile Include="Devices\PACE1000Model.cs" />
+    <Compile Include="IDeviceManager.cs" />
+    <Compile Include="IMethodsService.cs" />
+    <Compile Include="IPropertiesLibrary.cs" />
+    <Compile Include="MethodsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransportChannels\Fake\VisaChannelDescriptor.cs" />
+    <Compile Include="TransportChannels\Visa\VisaChannelDescriptor.cs" />
+    <Compile Include="TransportChannels\Visa\VisaSettings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ADTSData\ADTSData.csproj">
+      <Project>{b00215bc-0620-414b-83ab-6b88a152e0c2}</Project>
+      <Name>ADTSData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ADTS\ADTS.csproj">
+      <Project>{e032255a-ad56-44cd-8525-87293538e958}</Project>
+      <Name>ADTS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
+      <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
+      <Name>ArchiveData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Drivers\PACESeries\PACESeries.csproj">
+      <Project>{3d3db0eb-5b92-4d8f-8547-82ff7184c59a}</Project>
+      <Name>PACESeries</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IEEE488Transport\IEEE488.csproj">
+      <Project>{3fec76c3-b933-4461-aa8d-85360d3f41c4}</Project>
+      <Name>IEEE488</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
       <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
       <Name>KipTM.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MineLoop\MainLoop.csproj">
+      <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
+      <Name>MainLoop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools\Tools.csproj">
+      <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
+      <Name>Tools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

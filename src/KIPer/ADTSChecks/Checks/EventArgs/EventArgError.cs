@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KipTM.Model.Checks.Steps
+namespace KipTM.Model.Checks
 {
-    public interface IToBaseStep: ITestStep
+    public class EventArgError : EventArgs
     {
+        public string ErrorString;
+        public object Error;
     }
 }
