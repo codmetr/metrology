@@ -142,6 +142,11 @@
                     Content="Стоп"
                     Visibility="{Binding StopEnabled, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Stop}"/>
+                <Button
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                    Width="150" Height="30" Margin="5"
+                    Visibility="{Binding PauseEnabled, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding PauseResume}" Content="Пауза/Продолжить"/>
             </StackPanel>
         </Grid>
     </GroupBox>

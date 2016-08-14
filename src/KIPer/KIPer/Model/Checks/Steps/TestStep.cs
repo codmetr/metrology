@@ -18,11 +18,6 @@ namespace KipTM.Model.Checks.Steps
         }
 
         /// <summary>
-        /// Набор необходимых измерительных и управляющих каналов
-        /// </summary>
-        //public abstract IEnumerable<string> RequiredChannels { get; }
-
-        /// <summary>
         /// Запустить тест
         /// </summary>
         public abstract void Start(EventWaitHandle whEnd);

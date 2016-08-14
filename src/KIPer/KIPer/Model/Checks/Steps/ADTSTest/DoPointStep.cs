@@ -9,7 +9,7 @@ using Tools;
 
 namespace KipTM.Model.Checks.Steps.ADTSTest
 {
-    class DoPointStep : TestStep, IStoppedOnPoint, ISettedEthalonChannel, IPausedStep
+    class DoPointStep : TestStep, IStoppedOnPoint, ISettedEthalonChannel, IPausedStep, ISettedUserChannel
     {
         #region members
         public const string KeyStep = "DoPointStep";
@@ -22,7 +22,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
         private readonly double _rate;
         private readonly PressureUnits _unit;
         private IEthalonChannel _ethalonChannel;
-        private readonly IUserChannel _userChannel;
+        private IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
         private readonly ManualResetEvent _setCurrentValueAsPoint = new ManualResetEvent(false);
         private CancellationTokenSource _cancellationTokenSource;
@@ -77,7 +77,6 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             Thread.Sleep(TimeSpan.FromSeconds(1));
 
             // Установить цель для ADST
-            IsPauseAvailable = true;
             if (!DoOne(whEnd, cancel, () => _adts.SetParameter(_param, point, cancel), "[ERROR] Set point"))
             {
                 OnEnd(new EventArgEnd(KeyStep, false));
@@ -87,30 +86,31 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             Thread.Sleep(TimeSpan.FromSeconds(2));
 
             // Дождаться установки параметра или примененения текущей точки как целевой
+            IsPauseAvailable = true;
             EventWaitHandle wh = _param == Parameters.PT ? _adts.WaitPitotSetted() : _adts.WaitPressureSetted();
-            var whArray = new WaitHandle[] {wh, _setCurrentValueAsPoint};
-            int exitIndex = WaitHandle.WaitAny(whArray, waitPointPeriod);
-            while (exitIndex == WaitHandle.WaitTimeout)
-            { //todo support pause
-                if (cancel.IsCancellationRequested)
-                {
-                    _adts.StopWaitStatus(wh);
-                    whEnd.Set();
-                    OnEnd(new EventArgEnd(KeyStep, false));
-                    return;
-                }
-                exitIndex = WaitHandle.WaitAny(whArray, waitPointPeriod);
-            }
-            IsPauseAvailable = false;
-            if (exitIndex == 1)
+            bool isSettedCurrent;
+            if (!Wait(wh, _setCurrentValueAsPoint, waitPointPeriod, cancel, out isSettedCurrent))
             {
                 _adts.StopWaitStatus(wh);
-                point = _param == Parameters.PT ? _adts.Pitot.GetValueOrDefault(_point) : _adts.Pressure.GetValueOrDefault(_point);
+                whEnd.Set();
+                OnEnd(new EventArgEnd(KeyStep, false));
+                return;
+            }
+            if (isSettedCurrent)
+            {
+                // Установка текущего зкачения как ключевого
+                _adts.StopWaitStatus(wh);
+                point = _param == Parameters.PT
+                    ? _adts.Pitot.GetValueOrDefault(_point)
+                    : _adts.Pressure.GetValueOrDefault(_point);
                 _adts.SetParameter(_param, point, cancel);
             }
 
-            if (IsCancel(whEnd, cancel))
+            IsPauseAvailable = false;
+
+            if (cancel.IsCancellationRequested)
             {
+                DoEndCancel(whEnd);
                 return;
             }
             // Получить эталонное значение
@@ -118,8 +118,8 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
 
             _userChannel.Message =
                 string.Format(
-                    "Установлено на точке {0} {1} полученно эталонное значение {2} {3}. Для продолжения нажмите \"Далее\"",
-                    point.ToString("F2"), _unit.ToString(), realValue.ToString("F2"), _unit.ToString());
+                    "Установлено на точке {0} {1} полученно эталонное значение {2} {3}. Для продолжения нажмите ",
+                    point.ToString("F2"), _unit.ToString(), realValue.ToString("F2"), _unit.ToString()) + "\"{0}\"";
             wh.Reset();
             _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
             wh.WaitOne(TimeSpan.FromSeconds(30));
@@ -135,8 +135,9 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
                     new ParameterResult(DateTime.Now, _tolerance)));
             OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.IsCorrect),
                     new ParameterResult(DateTime.Now, correctPoint)));
-            if (IsCancel(whEnd, cancel))
+            if (cancel.IsCancellationRequested)
             {
+                DoEndCancel(whEnd);
                 return;
             }
 
@@ -144,8 +145,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             OnProgressChanged(new EventArgProgress(100,
                 string.Format("Точка {0}: Реальное значени {1}({2})",
                     point, realValue, correctPoint ? "correct" : "incorrect")));
-            whEnd.Set();
-            OnEnd(new EventArgEnd(KeyStep, true));
+            DoEnd(whEnd, true);
             return;
         }
 
@@ -174,6 +174,13 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
 
         #endregion
 
+        #region ISettedUserChannel
+        public void SetUserChannel(IUserChannel userChannel)
+        {
+            _userChannel = userChannel;
+        }
+        #endregion
+
         #region IStoppedOnPoint
         /// <summary>
         /// Установить теущее точку как ключевую
@@ -187,6 +194,9 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
 
         #region IPausedStep
 
+        /// <summary>
+        /// Указывает что вызов паузы допустим
+        /// </summary>
         public event EventHandler PauseAccessibilityChanged;
 
         protected virtual void OnPauseAccessibilityChanged()
@@ -195,6 +205,9 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Указывает что вызов паузы допустим
+        /// </summary>
         public bool IsPauseAvailable
         {
             get { return _isPauseAvailable; }
@@ -205,17 +218,25 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
             }
         }
 
+        /// <summary>
+        /// Поставить на паузу
+        /// </summary>
+        /// <returns></returns>
         public bool Pause()
         {
             if (!IsPauseAvailable)
                 return false;
             var cancel = _cancellationTokenSource.Token;
             _stateBeforeHold = _adts.StateADTS ?? State.Control;
-            if(_stateBeforeHold==State.Hold)
-                _stateBeforeHold=State.Control;
+            if (_stateBeforeHold == State.Hold)
+                _stateBeforeHold = State.Control;
             return _adts.SetState(State.Hold, cancel);
         }
 
+        /// <summary>
+        /// Восстановить с паузы
+        /// </summary>
+        /// <returns></returns>
         public bool Resume()
         {
             if (!IsPauseAvailable)
@@ -247,7 +268,7 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
         /// <param name="func"></param>
         /// <param name="errorMessage"></param>
         /// <returns></returns>
-        private bool DoOne(EventWaitHandle whEnd, CancellationToken cancel, Func<bool> func, string errorMessage )
+        private bool DoOne(EventWaitHandle whEnd, CancellationToken cancel, Func<bool> func, string errorMessage)
         {
             if (!func())
             {
@@ -256,31 +277,48 @@ namespace KipTM.Model.Checks.Steps.ADTSTest
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return false;
             }
-            if (IsCancel(whEnd, cancel))
+            if (cancel.IsCancellationRequested)
             {
+                DoEndCancel(whEnd);
                 return false;
             }
             return true;
         }
 
-        /// <summary>
-        /// Обертка для проверки на "отмену" операции
-        /// </summary>
-        /// <param name="whEnd"></param>
-        /// <param name="cancel"></param>
-        /// <returns></returns>
-        private bool IsCancel(EventWaitHandle whEnd, CancellationToken cancel)
+
+        private bool Wait(EventWaitHandle wh, EventWaitHandle whSetCurentValue, TimeSpan waitPointPeriod, CancellationToken cancel, out bool isSettedCurrentPoint)
         {
-            if (cancel.IsCancellationRequested)
+            isSettedCurrentPoint = false;
+            var whArray = new WaitHandle[] { wh, whSetCurentValue };
+            int exitIndex = WaitHandle.WaitAny(whArray, waitPointPeriod);
+            while (exitIndex == WaitHandle.WaitTimeout)
             {
-                _logger.With(l => l.Trace(string.Format("Cancel test")));
-                whEnd.Set();
-                OnEnd(new EventArgEnd(KeyStep, false));
-                return true;
+                //todo support pause
+                if (cancel.IsCancellationRequested)
+                {
+                    return false;
+                }
+                exitIndex = WaitHandle.WaitAny(whArray, waitPointPeriod);
             }
-            return false;
+            if (exitIndex == 1)
+            {
+                isSettedCurrentPoint = true;
+            }
+            return true;
         }
 
+        private void DoEnd(EventWaitHandle whEnd, bool result)
+        {
+            whEnd.Set();
+            OnEnd(new EventArgEnd(KeyStep, result));
+        }
+
+        private void DoEndCancel(EventWaitHandle whEnd)
+        {
+            _logger.With(l => l.Trace(string.Format("Cancel test")));
+            whEnd.Set();
+            OnEnd(new EventArgEnd(KeyStep, false));
+        }
         #endregion
     }
 }

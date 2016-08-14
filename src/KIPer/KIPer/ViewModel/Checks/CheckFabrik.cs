@@ -30,31 +30,39 @@ namespace KipTM.ViewModel.Checks
         public IMethodViewModel GetViewModelFor(CheckConfig checkConfig, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
         {
             IMethodViewModel result = null;
-            var method = checkConfig.SelectedCheckType;
+            var method = checkConfig.SelectedMethod;
+            if (method is ADTSMethodBase)
+            {
+                result = ConfigAdtsMethod(method as ADTSMethodBase, checkConfig, checkDeviceChanel, ethalonChanel);
+            }
+            
+            return result;
+        }
+
+        IMethodViewModel ConfigAdtsMethod(ADTSMethodBase method, CheckConfig checkConfig, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
+        {
+            IMethodViewModel result = null;
+            method.SetADTS(_deviceManager.GetModel<ADTSModel>());
+            method.ChannelType = checkDeviceChanel;
+            if (checkConfig.SelectedEthalonTypeKey == UserEthalonChannel.Key)
+                method.SetEthalonChannel(null, null);
+            else
+                method.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonDeviceType, ethalonChanel), ethalonChanel);
+
             if (method is ADTSCheckMethod)
             {
                 var adtsMethodic = method as ADTSCheckMethod;
-                adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
-                adtsMethodic.ChannelType = checkDeviceChanel;
-                if (checkConfig.SelectedEthalonTypeKey == UserEthalonChannel.Key)
-                    adtsMethodic.SetEthalonChannel(null, null);
-                else
-                    adtsMethodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonDeviceType, ethalonChanel), ethalonChanel);
                 result = new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
                     _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSMethodParameters);
-                result.SetEthalonChannel(checkConfig.SelectedEthalonTypeKey, ethalonChanel);
             }
             else if (method is ADTSTestMethod)
             {
                 var adtsMethodic = method as ADTSTestMethod;
-                adtsMethodic.SetADTS(_deviceManager.GetModel<ADTSModel>());
-                adtsMethodic.ChannelType = checkDeviceChanel;
-                if (checkConfig.SelectedEthalonTypeKey == UserEthalonChannel.Key)
-                    adtsMethodic.SetEthalonChannel(null, null);
-                else
-                    adtsMethodic.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonDeviceType, ethalonChanel), ethalonChanel);
                 result = new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
                     _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSMethodParameters);
+            }
+            if (result != null)
+            {
                 result.SetEthalonChannel(checkConfig.SelectedEthalonTypeKey, ethalonChanel);
             }
             return result;

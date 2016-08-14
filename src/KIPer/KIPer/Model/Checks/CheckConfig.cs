@@ -15,7 +15,7 @@ namespace KipTM.Model.Checks
     public class CheckConfig
     {
         #region Внутренние переменные
-        private readonly IMethodsService _methodics;
+        private readonly IMethodsService _method;
         private IDictionary<string, ICheckMethod> _checks;
         private readonly IPropertyPool _propertyPool;
         private string _selectedCheckTypeKey;
@@ -37,10 +37,10 @@ namespace KipTM.Model.Checks
         #endregion
 
         #region Конструкторы и инициализация
-        public CheckConfig(IMainSettings settings, IMethodsService methodics, IPropertyPool propertyPool, DictionariesPool dictionaries, TestResult result)
+        public CheckConfig(IMainSettings settings, IMethodsService method, IPropertyPool propertyPool, DictionariesPool dictionaries, TestResult result)
         {
             _result = result;
-            _methodics = methodics;
+            _method = method;
             _propertyPool = propertyPool;
 
             LoadAvalableCheckDevices(settings, dictionaries);
@@ -75,10 +75,10 @@ namespace KipTM.Model.Checks
             if (_devTypeKey != null)
             {
                 _result.TargetDevice = new DeviceDescriptor(_selectedType);
-                _checks = _methodics.MethodsForType(_devTypeKey);
+                _checks = _method.MethodsForType(_devTypeKey);
                 Channels = _propertyPool.ByKey(_devTypeKey).GetAllKeys();
                 _result.Channel = Channels.First();
-                SelectedCheckTypeKey = CheckTypes.First();
+                SelectedMethodKey = CheckTypes.First();
             }
         }
 
@@ -200,10 +200,10 @@ namespace KipTM.Model.Checks
                     return;
                 _selectedType = value;
                 _result.TargetDevice.DeviceType = _selectedType;
-                _checks = _methodics.MethodsForType(_devTypeKey);
+                _checks = _method.MethodsForType(_devTypeKey);
                 if (!_checks.ContainsKey(_selectedCheckTypeKey) && _checks.Count>0)
                 {
-                    SelectedCheckTypeKey = _checks.First().Key;
+                    SelectedMethodKey = _checks.First().Key;
                 }
                 var properties = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel);
                 CustomSettings = _checks[_selectedCheckTypeKey].GetCustomConfig(properties);
@@ -266,21 +266,21 @@ namespace KipTM.Model.Checks
         /// <summary>
         /// Выбранная методика
         /// </summary>
-        public string SelectedCheckTypeKey
+        public string SelectedMethodKey
         {
             get { return _selectedCheckTypeKey; }
             set
             {
                 _selectedCheckTypeKey = value;
                 _result.CheckType = value;
-                SelectedCheckType = _checks[_selectedCheckTypeKey];
+                SelectedMethod = _checks[_selectedCheckTypeKey];
             }
         }
 
         /// <summary>
         /// Выбранная методика
         /// </summary>
-        public ICheckMethod SelectedCheckType
+        public ICheckMethod SelectedMethod
         {
             get { return _selectedCheckType; }
             private set
@@ -288,8 +288,8 @@ namespace KipTM.Model.Checks
                 _selectedCheckType = value;
                 _result.CheckType = _selectedCheckTypeKey;
                 var properties = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel);
-                CustomSettings = SelectedCheckType.GetCustomConfig(properties);
-                SelectedCheckType.Init(CustomSettings); //todo maybe move out
+                CustomSettings = SelectedMethod.GetCustomConfig(properties);
+                SelectedMethod.Init(CustomSettings); //todo maybe move out
                 OnSelectedCheckTypeChanged();
             }
         }
@@ -306,8 +306,8 @@ namespace KipTM.Model.Checks
                     return;
                 _result.Channel = value;
                 var properties = _propertyPool.ByKey(_devTypeKey).ByKey(value);
-                CustomSettings = SelectedCheckType.GetCustomConfig(properties);
-                SelectedCheckType.Init(CustomSettings); //todo maybe move out
+                CustomSettings = SelectedMethod.GetCustomConfig(properties);
+                SelectedMethod.Init(CustomSettings); //todo maybe move out
                 OnSelectedChannelChanged();
             }
         }

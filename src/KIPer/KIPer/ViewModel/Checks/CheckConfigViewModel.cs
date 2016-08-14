@@ -208,10 +208,10 @@ namespace KipTM.ViewModel.Checks
         /// </summary>
         public string SelectedCheckType
         {
-            get { return _model.SelectedCheckTypeKey; }
+            get { return _model.SelectedMethodKey; }
             set
             {
-                _model.SelectedCheckTypeKey = value;
+                _model.SelectedMethodKey = value;
                 CustomSetiings = _model.CustomSettings;
                 RaisePropertyChanged();
             }

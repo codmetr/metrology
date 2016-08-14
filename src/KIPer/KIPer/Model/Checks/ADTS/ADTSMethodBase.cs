@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -39,6 +39,9 @@ namespace KipTM.Model.Checks
         public ITransportChannelType ChannelType;
         public ITransportChannelType EthalonChannelType;
 
+        private IPausedStep _currentPause = null;
+        private bool _isPauseAvailable;
+
         protected ADTSMethodBase(Logger logger)
         {
             _logger = logger;
@@ -47,49 +50,55 @@ namespace KipTM.Model.Checks
 
         #region events
         /// <summary>
-        /// Ошибка
+        /// РћС€РёР±РєР°
         /// </summary>
         public event EventHandler<EventArgError> Error;
 
         /// <summary>
-        /// Изменился прогресс
+        /// РР·РјРµРЅРёР»СЃСЏ РїСЂРѕРіСЂРµСЃСЃ
         /// </summary>
         public event EventHandler<EventArgProgress> Progress;
 
         /// <summary>
-        /// Изменился набор точек
+        /// РР·РјРµРЅРёР»СЃСЏ РЅР°Р±РѕСЂ С‚РѕС‡РµРє
         /// </summary>
         public event EventHandler PointsChanged;
 
         /// <summary>
-        /// Изменился набор шагов
+        /// РР·РјРµРЅРёР»СЃСЏ РЅР°Р±РѕСЂ С€Р°РіРѕРІ
         /// </summary>
         public event EventHandler StepsChanged;
 
         /// <summary>
-        /// Получен результат
+        /// РџРѕР»СѓС‡РµРЅ СЂРµР·СѓР»СЊС‚Р°С‚
         /// </summary>
         public event EventHandler<EventArgTestStepResult> ResultUpdated;
 
         /// <summary>
-        /// Проход закончен
+        /// РџСЂРѕС…РѕРґ Р·Р°РєРѕРЅС‡РµРЅ
         /// </summary>
         public event EventHandler EndMethod;
+
+        /// <summary>
+        /// РЈРєР°Р·С‹РІР°РµС‚ С‡С‚Рѕ РґРѕСЃС‚СѓРїРЅРѕСЃС‚СЊ РєРЅРѕРїРєРё "РџР°СѓР·Р°" РёР·РјРµРЅРёР»Р°СЃСЊ
+        /// </summary>
+        public event EventHandler PauseAvailableChanged;
+
         #endregion
 
         #region ICheckMethod
         /// <summary>
-        /// Идентификатор методики
+        /// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РјРµС‚РѕРґРёРєРё
         /// </summary>
         public string Key { get; protected set; }
 
         /// <summary>
-        /// Название методики
+        /// РќР°Р·РІР°РЅРёРµ РјРµС‚РѕРґРёРєРё
         /// </summary>
         public string Title{get { return MethodName; }}
 
         /// <summary>
-        /// Инициализация 
+        /// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ 
         /// </summary>
         /// <returns></returns>
         public abstract bool Init(object customConf);
@@ -97,7 +106,7 @@ namespace KipTM.Model.Checks
         public abstract object GetCustomConfig(IPropertyPool propertyPool);
 
         /// <summary>
-        /// Запуск методики
+        /// Р—Р°РїСѓСЃРє РјРµС‚РѕРґРёРєРё
         /// </summary>
         /// <returns></returns>
         public bool Start()
@@ -111,10 +120,10 @@ namespace KipTM.Model.Checks
             foreach (var testStep in Steps)
             {
                 whStep.Reset();
-                PrepareStartStep(testStep.Step);
                 var step = testStep;
                 if(!step.Enabled)
                     continue;
+                PrepareStartStep(step.Step);
                 Task.Factory.StartNew(() => step.Step.Start(whStep), cancel);
                 while (!whStep.WaitOne(waitPeriod))
                 {
@@ -126,10 +135,9 @@ namespace KipTM.Model.Checks
                 }
                 AfterEndStep(testStep.Step);
                 if (cancel.IsCancellationRequested)
-                {
                     break;
-                }
             }
+            SetCurrentPause(null);
             _ethalonChannel.Stop();
 
             OnEndMethod(null);
@@ -138,7 +146,7 @@ namespace KipTM.Model.Checks
         }
 
         /// <summary>
-        /// Остановка методики
+        /// РћСЃС‚Р°РЅРѕРІРєР° РјРµС‚РѕРґРёРєРё
         /// </summary>
         public void Stop()
         {
@@ -152,7 +160,7 @@ namespace KipTM.Model.Checks
         }
 
         /// <summary>
-        /// Список шагов
+        /// РЎРїРёСЃРѕРє С€Р°РіРѕРІ
         /// </summary>
         public IEnumerable<CheckStepConfig> Steps
         {
@@ -165,6 +173,9 @@ namespace KipTM.Model.Checks
         }
         #endregion
 
+        /// <summary>
+        /// РљР»СЋС‡СЊ РєР°РЅР°Р»Р°
+        /// </summary>
         public string ChannelKey
         {
             get
@@ -183,6 +194,11 @@ namespace KipTM.Model.Checks
             }
         }
 
+        /// <summary>
+        /// Р—Р°РґР°С‚СЊ РєР°РЅР°Р» СЌС‚Р°Р»РѕРЅР°
+        /// </summary>
+        /// <param name="ethalonChannel"></param>
+        /// <param name="transport"></param>
         public void SetEthalonChannel(IEthalonChannel ethalonChannel, ITransportChannelType transport)
         {
             _ethalonChannel = ethalonChannel;
@@ -196,18 +212,42 @@ namespace KipTM.Model.Checks
             }
         }
 
+        /// <summary>
+        /// Р—Р°РґР°С‚СЊ РєР°РЅР°Р» СЃРІСЏР·Рё СЃ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј
+        /// </summary>
+        /// <param name="userChannel"></param>
+        public void SetUserChannel(IUserChannel userChannel)
+        {
+            _userChannel = userChannel;
+            foreach (var testStep in Steps)
+            {
+                var step = testStep.Step as ISettedUserChannel;
+                if (step == null)
+                    continue;
+                step.SetUserChannel(userChannel);
+            }
+        }
+
+        /// <summary>
+        /// Р—Р°РґР°С‚СЊ РђР”РўРЎ
+        /// </summary>
+        /// <param name="adts"></param>
         public void SetADTS(ADTSModel adts)
         {
             _adts = adts;
         }
 
+        /// <summary>
+        /// РџРѕР»СѓС‡РёС‚СЊ РјРѕРґРµР»СЊ РђР”РўРЎ
+        /// </summary>
+        /// <returns></returns>
         public ADTSModel GetADTS()
         {
             return _adts;
         }
 
         /// <summary>
-        /// Установить текущую точку как очередную ожидаемую
+        /// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С‚РµРєСѓС‰СѓСЋ С‚РѕС‡РєСѓ РєР°Рє РѕС‡РµСЂРµРґРЅСѓСЋ РѕР¶РёРґР°РµРјСѓСЋ
         /// </summary>
         public void SetCurrentValueAsPoint()
         {
@@ -222,7 +262,72 @@ namespace KipTM.Model.Checks
         }
 
         /// <summary>
-        /// Отмена
+        /// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С‚РµРєСѓС‰РёР№ С€Р°Рі РєР°Рє РѕР±СЉРµРєС‚ РїР°СѓР·С‹
+        /// </summary>
+        /// <param name="paused"></param>
+        private void SetCurrentPause(IPausedStep paused)
+        {
+            if (_currentPause != null)
+                _currentPause.PauseAccessibilityChanged -= CurrentPauseOnPauseAccessibilityChanged;
+
+            _currentPause = paused;
+            IsPauseAvailable = false;
+            if (_currentPause == null)
+                return;
+            IsPauseAvailable = _currentPause.IsPauseAvailable;
+            _currentPause.PauseAccessibilityChanged += CurrentPauseOnPauseAccessibilityChanged;
+        }
+
+        /// <summary>
+        /// РћР±СЂР°Р±РѕС‚РєР° СЃРѕР±С‹С‚РёСЏ РёР·РјРµРЅРµРЅРёСЏ РґРѕСЃС‚СѓРїРЅРѕСЃС‚Рё РїР°СѓР·С‹
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        private void CurrentPauseOnPauseAccessibilityChanged(object sender, EventArgs eventArgs)
+        {
+            if (_currentPause == null)
+                return;
+            IsPauseAvailable = _currentPause.IsPauseAvailable;
+        }
+
+        /// <summary>
+        /// Р”РѕСЃС‚СѓРїРЅРѕСЃС‚СЊ РїР°СѓР·С‹
+        /// </summary>
+        public bool IsPauseAvailable
+        {
+            get { return _isPauseAvailable; }
+            set { 
+                if(_isPauseAvailable == value)
+                    return;
+                _isPauseAvailable = value; 
+                OnPauseAvailableChanged();
+            }
+        }
+
+        /// <summary>
+        /// РџРѕСЃС‚Р°РІРёС‚СЊ С‚РµРєСѓС‰РёР№ С€Р°Рі РЅР° РїР°СѓР·Сѓ
+        /// </summary>
+        public void Pause()
+        {
+            if (_currentPause == null)
+                return;
+
+            _currentPause.Pause();
+        }
+
+        /// <summary>
+        /// Р’РѕР·РѕР±РЅРѕРІРёС‚СЊ С‚РµРєСѓС‰РёР№ С€Р°Рі СЃ РїР°СѓР·С‹
+        /// </summary>
+        public void Resume()
+        {
+            if (_currentPause == null)
+                return;
+
+            _currentPause.Resume();
+        }
+
+        /// <summary>
+        /// РћС‚РјРµРЅР°
         /// </summary>
         public void Cancel()
         {
@@ -232,7 +337,7 @@ namespace KipTM.Model.Checks
 
         #region Steps events
         /// <summary>
-        /// Вызывается перед запуском шага
+        /// Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїРµСЂРµРґ Р·Р°РїСѓСЃРєРѕРј С€Р°РіР°
         /// </summary>
         /// <param name="step"></param>
         protected virtual void PrepareStartStep(ITestStep step)
@@ -240,11 +345,13 @@ namespace KipTM.Model.Checks
             lock (_currenTestStepLocker)
             {
                 _currenTestStep = step;
+                // РџСЂРёРІСЏР·Р°С‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ РїР°СѓР·С‹, РµСЃР»Рё РѕРЅР° РІРѕР·РјРѕР¶РЅР° РґР»СЏ РґР°РЅРЅРѕРіРѕ С‚РёРїР° С€Р°РіР°
+                SetCurrentPause(step as IPausedStep);
             }
         }
 
         /// <summary>
-        /// Вызывается после завершения шага
+        /// Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїРѕСЃР»Рµ Р·Р°РІРµСЂС€РµРЅРёСЏ С€Р°РіР°
         /// </summary>
         /// <param name="step"></param>
         protected virtual void AfterEndStep(ITestStep step)
@@ -252,6 +359,8 @@ namespace KipTM.Model.Checks
             lock (_currenTestStepLocker)
             {
                 _currenTestStep = null;
+                // РћС‚РІСЏР·Р°С‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ РїР°СѓР·С‹
+                SetCurrentPause(null);
             }
         }
 
@@ -312,11 +421,17 @@ namespace KipTM.Model.Checks
             var handler = EndMethod;
             if (handler != null) handler(this, e);
         }
+
+        protected virtual void OnPauseAvailableChanged()
+        {
+            EventHandler handler = PauseAvailableChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
         #endregion
 
         #region Fill results
         /// <summary>
-        /// Заполнение полученных результатов проверки
+        /// Р—Р°РїРѕР»РЅРµРЅРёРµ РїРѕР»СѓС‡РµРЅРЅС‹С… СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ РїСЂРѕРІРµСЂРєРё
         /// </summary>
         /// <param name="e"></param>
         private void FillResult(EventArgStepResult e)
@@ -328,7 +443,7 @@ namespace KipTM.Model.Checks
         }
 
         /// <summary>
-        /// Распределить результат в нужное поле результата
+        /// Р Р°СЃРїСЂРµРґРµР»РёС‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚ РІ РЅСѓР¶РЅРѕРµ РїРѕР»Рµ СЂРµР·СѓР»СЊС‚Р°С‚Р°
         /// </summary>
         /// <param name="descriptor"></param>
         /// <param name="result"></param>

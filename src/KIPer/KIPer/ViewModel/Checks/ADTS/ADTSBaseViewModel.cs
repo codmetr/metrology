@@ -42,6 +42,8 @@ namespace KipTM.ViewModel.Checks
 
         protected AdtsCheckStateViewModel _stateViewModel;
         private string _title;
+        private bool _pauseEnabled = false;
+        private bool _isPaused;
 
         #endregion
 
@@ -57,6 +59,7 @@ namespace KipTM.ViewModel.Checks
 
             _connection = Method.ChannelType;
             _userChannel = new UserChannel();
+            Method.SetUserChannel(_userChannel);
             _deviceManager = deviceManager;
             _resultPool = resultPool;
             _userChannel.QueryStarted += OnQueryStarted;
@@ -165,6 +168,11 @@ namespace KipTM.ViewModel.Checks
         public ICommand Accept { get { return new RelayCommand(DoAccept); } }
 
         /// <summary>
+        /// Остановит проверку
+        /// </summary>
+        public ICommand PauseResume { get { return new GalaSoft.MvvmLight.Command.RelayCommand(DoPauseResume); } }
+
+        /// <summary>
         /// Эталонное значение
         /// </summary>
         public double RealValue
@@ -191,6 +199,18 @@ namespace KipTM.ViewModel.Checks
             set { Set(ref _stopEnabled, value); }
         }
 
+        public bool PauseEnabled
+        {
+            get { return _pauseEnabled; }
+            set { Set(ref _pauseEnabled, value); }
+        }
+
+        public bool IsPaused
+        {
+            get { return _isPaused; }
+            set { Set(ref _isPaused, value); }
+        }
+
         #endregion
 
         #region Services
@@ -210,6 +230,21 @@ namespace KipTM.ViewModel.Checks
         }
 
         #region Event reaction
+        /// <summary>
+        /// Устаноить/снять с паузы
+        /// </summary>
+        private void DoPauseResume()
+        {
+            if (IsPaused)
+            {
+                Method.Resume();
+            }
+            else
+            {
+                Method.Pause();
+            }
+        }
+
         /// <summary>
         /// Установить текущее значение точкой проверки
         /// </summary>
@@ -358,7 +393,7 @@ namespace KipTM.ViewModel.Checks
             {
                 State.TitleBtnNext = "Отмена";
                 State.WaitUserReaction = true;
-                State.Note = string.Format("Что бы применить результат калибровки нажмите \"Подтвердить\", в противном случае нажмите \"{0}\"", State.TitleBtnNext);
+                State.Note = string.Format(_userChannel.Message, "Подтвердить");//string.Format("Что бы применить результат калибровки нажмите \"Подтвердить\", в противном случае нажмите \"{0}\"", State.TitleBtnNext);
                 AcceptEnabled = true;
                 _currentAction = DoCancel;
             }
@@ -416,6 +451,11 @@ namespace KipTM.ViewModel.Checks
         {
             //_resultPool.Results = M ;
         }
+
+        void model_PauseAvailableChanged(object sender, EventArgs e)
+        {
+            PauseEnabled = Method.IsPauseAvailable;
+        }
         #endregion
 
         #endregion
@@ -425,6 +465,7 @@ namespace KipTM.ViewModel.Checks
             model.StepsChanged += OnStepsChanged;
             model.ResultUpdated += ResultUpdated;
             model.EndMethod += EndMethod;
+            model.PauseAvailableChanged += model_PauseAvailableChanged;
         }
 
         private void DetachEvent(ADTSMethodBase model)
@@ -432,6 +473,7 @@ namespace KipTM.ViewModel.Checks
             model.StepsChanged -= OnStepsChanged;
             model.ResultUpdated -= ResultUpdated;
             model.EndMethod -= EndMethod;
+            model.PauseAvailableChanged -= model_PauseAvailableChanged;
         }
 
         object GetViewModelForChannel(object model) //TODO обеспечить получение визуальной модели по реальной модели
