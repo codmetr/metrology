@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ADTSChecks</RootNamespace>
     <AssemblyName>ADTSChecks</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog">
@@ -42,37 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Channels\PACEEchalonChannel.cs" />
-    <Compile Include="Channels\UserEchalonChannel.cs" />
-    <Compile Include="Checks\ADTS\ADTSCheckMethod.cs" />
-    <Compile Include="Checks\ADTS\ADTSMethodBase.cs" />
-    <Compile Include="Checks\ADTS\ADTSMethodParameters.cs" />
-    <Compile Include="Checks\ADTS\ADTSPoint.cs" />
-    <Compile Include="Checks\ADTS\AdtsPointService.cs" />
-    <Compile Include="Checks\ADTS\ADTSTestMethod.cs" />
-    <Compile Include="Checks\CheckStepConfig.cs" />
-    <Compile Include="Checks\EventArgs\EventArgEnd.cs" />
-    <Compile Include="Checks\EventArgs\EventArgError.cs" />
-    <Compile Include="Checks\EventArgs\EventArgProgress.cs" />
-    <Compile Include="Checks\EventArgs\EventArgStepResult.cs" />
-    <Compile Include="Checks\EventArgs\EventArgTestStepResult.cs" />
-    <Compile Include="Checks\Steps\ADTSCalibration\DoPointStep.cs" />
-    <Compile Include="Checks\Steps\ADTSCalibration\FinishStep.cs" />
-    <Compile Include="Checks\Steps\ADTSCalibration\InitStep.cs" />
-    <Compile Include="Checks\Steps\ADTSCalibration\ToBaseStep.cs" />
-    <Compile Include="Checks\Steps\ADTSTest\DoPointStep.cs" />
-    <Compile Include="Checks\Steps\ADTSTest\EndStep.cs" />
-    <Compile Include="Checks\Steps\ADTSTest\InitStep.cs" />
-    <Compile Include="Devices\ADTSModel.cs" />
-    <Compile Include="Devices\PACE1000Model.cs" />
-    <Compile Include="IDeviceManager.cs" />
-    <Compile Include="IMethodsService.cs" />
-    <Compile Include="IPropertiesLibrary.cs" />
-    <Compile Include="MethodsService.cs" />
+    <Compile Include="Model\Checks\ADTSMethodBase.cs" />
+    <Compile Include="Model\Checks\ADTSMethodParameters.cs" />
+    <Compile Include="Model\Checks\ADTSPoint.cs" />
+    <Compile Include="Model\Checks\AdtsPointService.cs" />
+    <Compile Include="Model\Checks\ADTSTestMethod.cs" />
+    <Compile Include="Model\Devices\ADTSModel.cs" />
+    <Compile Include="Model\Devices\PACE1000Model.cs" />
+    <Compile Include="Model\Steps\ADTSTest\DoPointStep.cs" />
+    <Compile Include="Model\Steps\ADTSTest\EndStep.cs" />
+    <Compile Include="Model\Steps\ADTSTest\InitStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransportChannels\Fake\VisaChannelDescriptor.cs" />
-    <Compile Include="TransportChannels\Visa\VisaChannelDescriptor.cs" />
-    <Compile Include="TransportChannels\Visa\VisaSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ADTSData\ADTSData.csproj">
@@ -87,17 +70,13 @@
       <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
       <Name>ArchiveData</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CheckFrame\CheckFrame.csproj">
+      <Project>{81b358fe-6b31-49ff-ab34-45cb960e57b6}</Project>
+      <Name>CheckFrame</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Drivers\PACESeries\PACESeries.csproj">
       <Project>{3d3db0eb-5b92-4d8f-8547-82ff7184c59a}</Project>
       <Name>PACESeries</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IEEE488Transport\IEEE488.csproj">
-      <Project>{3fec76c3-b933-4461-aa8d-85360d3f41c4}</Project>
-      <Name>IEEE488</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
-      <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
-      <Name>KipTM.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\MineLoop\MainLoop.csproj">
       <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
@@ -108,6 +87,7 @@
       <Name>Tools</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

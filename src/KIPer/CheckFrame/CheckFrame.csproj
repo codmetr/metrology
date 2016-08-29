@@ -39,20 +39,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Checks\CheckConfig.cs" />
-    <Compile Include="Checks\EventArgs\EventArgEnd.cs" />
-    <Compile Include="Checks\EventArgs\EventArgError.cs" />
-    <Compile Include="Checks\EventArgs\EventArgProgress.cs" />
-    <Compile Include="Checks\EventArgs\EventArgStepResult.cs" />
-    <Compile Include="Checks\EventArgs\EventArgTestStepResult.cs" />
-    <Compile Include="Checks\ICheckMethod.cs" />
-    <Compile Include="Checks\Steps\ISettedEthalonChannel.cs" />
-    <Compile Include="Checks\Steps\ISettedUserChannel.cs" />
-    <Compile Include="Checks\Steps\IStoppedOnPoint.cs" />
-    <Compile Include="Checks\Steps\ITestStep.cs" />
-    <Compile Include="Checks\Steps\IToBaseStep.cs" />
-    <Compile Include="Checks\Steps\TestStep.cs" />
+    <Compile Include="Archive\IPropertyPool.cs" />
+    <Compile Include="Model\Channels\IEthalonChannel.cs" />
+    <Compile Include="Model\Channels\IUserChannel.cs" />
+    <Compile Include="Model\Channels\UserQueryType.cs" />
+    <Compile Include="Model\Checks\CheckStepConfig.cs" />
+    <Compile Include="Model\Checks\EventArgs\EventArgEnd.cs" />
+    <Compile Include="Model\Checks\EventArgs\EventArgError.cs" />
+    <Compile Include="Model\Checks\EventArgs\EventArgProgress.cs" />
+    <Compile Include="Model\Checks\EventArgs\EventArgStepResult.cs" />
+    <Compile Include="Model\Checks\EventArgs\EventArgTestStepResult.cs" />
+    <Compile Include="Model\Checks\ICheckMethod.cs" />
+    <Compile Include="Model\Checks\Steps\IPausedStep.cs" />
+    <Compile Include="Model\Checks\Steps\ISettedEthalonChannel.cs" />
+    <Compile Include="Model\Checks\Steps\ISettedUserChannel.cs" />
+    <Compile Include="Model\Checks\Steps\IStoppedOnPoint.cs" />
+    <Compile Include="Model\Checks\Steps\ITestStep.cs" />
+    <Compile Include="Model\Checks\Steps\IToBaseStep.cs" />
+    <Compile Include="Model\Checks\Steps\TestStep.cs" />
+    <Compile Include="Model\IDeviceManager.cs" />
+    <Compile Include="Model\TransportChannels\ITransportChannelType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
+      <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
+      <Name>ArchiveData</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

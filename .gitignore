@@ -63,3 +63,5 @@ src/KIPer/KipTM.Interfaces/obj/
 src/KIPer/KipTM.Interfaces/bin/
 src/KIPer/ADTSChecks/bin/
 src/KIPer/Tools.View/bin/
+src/KIPer/_ReSharper.KipTM/
+src/KIPer/CheckFrame/bin/

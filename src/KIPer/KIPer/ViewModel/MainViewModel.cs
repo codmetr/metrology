@@ -101,8 +101,8 @@ namespace KipTM.ViewModel
             {
                 new ConfigCheckState(checkConfigViewModel),
                 new ADTSCheckState(() => checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel)),
-                new ResultState(()=>new TestResultViewModel(result, _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(), checkConfig.SelectedMethod), _filler)),
-                new ReportState(()=>new ReportViewModel(_reportFabric, checkConfig.SelectedMethod.GetType(), result)),
+                new ResultState(() =>new TestResultViewModel(result, _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(), checkConfig.SelectedMethod), _filler)),
+                new ReportState(() =>new ReportViewModel(_reportFabric, checkConfig.SelectedMethod.GetType(), result)),
             };
             _workflow = new Workflow(_steps);
 
