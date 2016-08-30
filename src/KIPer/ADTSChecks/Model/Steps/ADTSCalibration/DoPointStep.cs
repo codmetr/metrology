@@ -10,7 +10,7 @@ using Tools;
 
 namespace KipTM.Model.Checks.Steps.ADTSCalibration
 {
-    class DoPointStep : TestStep, IStoppedOnPoint, ISettedEthalonChannel
+    public class DoPointStep : TestStep, IStoppedOnPoint, ISettedEthalonChannel
     {
         public const string KeyStep = "DoPointStep";
         public const string KeyPressure = "Pressure";

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ADTSData;
+﻿using ADTSData;
 using ArchiveData.DTO.Params;
 
 namespace KipTM.Model.Checks

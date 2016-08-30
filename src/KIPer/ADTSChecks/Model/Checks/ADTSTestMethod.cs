@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using ADTS;
 using ADTSData;
 using ArchiveData.DTO.Params;
 using KipTM.Archive;
-using KipTM.Model.Channels;
-using KipTM.Model.Checks.Steps;
 using KipTM.Model.Checks.Steps.ADTSTest;
-using KipTM.Model.Devices;
-using KipTM.Model.TransportChannels;
 using Tools;
 
 namespace KipTM.Model.Checks

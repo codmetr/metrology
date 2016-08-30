@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading;
-using KipTM.Model.Checks;
 
 namespace KipTM.Model.Channels
 {
     /// <summary>
     /// Запрос на получение эталонного значение от пользователя
     /// </summary>
-    internal class UserChannel : IUserChannel
+    public class UserChannel : IUserChannel
     {
         private EventWaitHandle _wh = null;
         private bool _agreeValue;

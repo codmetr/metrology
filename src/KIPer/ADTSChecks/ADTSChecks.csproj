@@ -33,18 +33,36 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\Lib\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Channels\PACEEchalonChannel.cs" />
+    <Compile Include="Model\Checks\ADTSCheckMethod.cs" />
     <Compile Include="Model\Checks\ADTSMethodBase.cs" />
     <Compile Include="Model\Checks\ADTSMethodParameters.cs" />
     <Compile Include="Model\Checks\ADTSPoint.cs" />
@@ -52,10 +70,18 @@
     <Compile Include="Model\Checks\ADTSTestMethod.cs" />
     <Compile Include="Model\Devices\ADTSModel.cs" />
     <Compile Include="Model\Devices\PACE1000Model.cs" />
+    <Compile Include="Model\Steps\ADTSCalibration\DoPointStep.cs" />
+    <Compile Include="Model\Steps\ADTSCalibration\FinishStep.cs" />
+    <Compile Include="Model\Steps\ADTSCalibration\InitStep.cs" />
+    <Compile Include="Model\Steps\ADTSCalibration\ToBaseStep.cs" />
     <Compile Include="Model\Steps\ADTSTest\DoPointStep.cs" />
     <Compile Include="Model\Steps\ADTSTest\EndStep.cs" />
     <Compile Include="Model\Steps\ADTSTest\InitStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\Checks\ADTSBaseViewModel.cs" />
+    <Compile Include="ViewModel\Checks\AdtsCheckStateViewModel.cs" />
+    <Compile Include="ViewModel\Checks\Channels\PACEEchalonChannelViewModel.cs" />
+    <Compile Include="ViewModel\Services\ADTSViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ADTSData\ADTSData.csproj">
@@ -87,7 +113,12 @@
       <Name>Tools</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="View\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
