@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using KipTM.Model.Checks.Steps.ADTSCalibration;
+using KipTM.Model.Checks;
 using MarkerService;
 
 namespace KipTM.ViewModel.Archive.ADTS
@@ -11,8 +9,8 @@ namespace KipTM.ViewModel.Archive.ADTS
     /// <summary>
     /// Генератор представления для точек проверки ADTS
     /// </summary>
-    [Marker(typeof(DoPointStep))]
-    public class ADTSCheckPointStepFabrik : IMarker<IParameterResultViewModel>
+    [Marker(typeof(ADTSTestMethod))]
+    public class ADTSTestFabrik : IMarker<IParameterResultViewModel>
     {
         /// <summary>
         /// Получить описатель результата для заданного объекта
@@ -22,9 +20,9 @@ namespace KipTM.ViewModel.Archive.ADTS
         public IEnumerable<IParameterResultViewModel> Make(object target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
         {
             if (target == null) throw new ArgumentNullException("target");
-            if (!(target is DoPointStep)) throw new NoExpectedTypeParameterException(typeof(DoPointStep), target.GetType());
+            if (!(target is ADTSTestMethod)) throw new NoExpectedTypeParameterException(typeof(ADTSTestMethod), target.GetType());
 
-            return Make((DoPointStep)target);
+            return Make((ADTSTestMethod)target, markerFabric);
         }
 
         /// <summary>
@@ -32,17 +30,9 @@ namespace KipTM.ViewModel.Archive.ADTS
         /// </summary>
         /// <param name="target">заданный типизированный объект</param>
         /// <returns>описатель результата</returns>
-        private IEnumerable<IParameterResultViewModel> Make(DoPointStep target)
+        private IEnumerable<IParameterResultViewModel> Make(ADTSTestMethod target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
         {
-            var itemMarker = new ParameterResultViewModel()
-            {
-                NameParameter = string.Format("Калибровка точки {0}", target.Point),
-                PointMeashuring = target.Point.ToString("F2"),
-                Tolerance = target.Tolerance.ToString("F2"),
-                Error = "",
-                Unit = "kPa"
-            };
-            var result = new List<IParameterResultViewModel> { itemMarker };
+            var result = target.Steps.Where(el=>el.Enabled).SelectMany(el => markerFabric.GetMarkers(el.Step.GetType(), el.Step)).ToList();
             return result;
         }
 

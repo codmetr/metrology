@@ -24,6 +24,14 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ADTSChecks\ADTSChecks.csproj">
+      <Name>ADTSChecks</Name>
+      <Project>{ef16e7b3-223e-4f66-9685-a6ccb3973c28}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\ADTSData\ADTSData.csproj">
       <Name>ADTSData</Name>
       <Project>{b00215bc-0620-414b-83ab-6b88a152e0c2}</Project>
@@ -51,6 +59,14 @@
     <ProjectReference Include="..\Archive\SQLiteArchive\SQLiteArchive.csproj">
       <Name>SQLiteArchive</Name>
       <Project>{5ddfab0d-1f66-4337-bd2f-ece434d68794}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\CheckFrame\CheckFrame.csproj">
+      <Name>CheckFrame</Name>
+      <Project>{81b358fe-6b31-49ff-ab34-45cb960e57b6}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>

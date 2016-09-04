@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using KipTM.Model.Checks;
 using MarkerService;
 
@@ -11,8 +9,8 @@ namespace KipTM.ViewModel.Archive.ADTS
     /// <summary>
     /// Генератор представления для точек проверки ADTS
     /// </summary>
-    [Marker(typeof(ADTSTestMethod))]
-    public class ADTSTestFabrik : IMarker<IParameterResultViewModel>
+    [Marker(typeof(ADTSCheckMethod))]
+    public class ADTSCheckFabrik : IMarker<IParameterResultViewModel>
     {
         /// <summary>
         /// Получить описатель результата для заданного объекта
@@ -32,7 +30,7 @@ namespace KipTM.ViewModel.Archive.ADTS
         /// </summary>
         /// <param name="target">заданный типизированный объект</param>
         /// <returns>описатель результата</returns>
-        private IEnumerable<IParameterResultViewModel> Make(ADTSTestMethod target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
+        private IEnumerable<IParameterResultViewModel> Make(ADTSCheckMethod target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
         {
             var result = target.Steps.Where(el=>el.Enabled).SelectMany(el => markerFabric.GetMarkers(el.Step.GetType(), el.Step)).ToList();
             return result;

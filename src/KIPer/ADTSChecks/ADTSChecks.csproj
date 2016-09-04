@@ -33,17 +33,21 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GalaSoft.MvvmLight">
+    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras">
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform">
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.2.0.37226, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\Lib\NLog.dll</HintPath>
@@ -52,6 +56,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -79,8 +84,17 @@
     <Compile Include="Model\Steps\ADTSTest\InitStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\Checks\ADTSBaseViewModel.cs" />
+    <Compile Include="ViewModel\Checks\ADTSCalibrationViewModel.cs" />
     <Compile Include="ViewModel\Checks\AdtsCheckStateViewModel.cs" />
+    <Compile Include="ViewModel\Checks\ADTSTestViewModel.cs" />
     <Compile Include="ViewModel\Checks\Channels\PACEEchalonChannelViewModel.cs" />
+    <Compile Include="ViewModel\ResultFiller\ADTS\ADTSCheckPointFiller.cs" />
+    <Compile Include="ViewModel\ResultFiller\ADTS\ADTSTestPointFiller.cs" />
+    <Compile Include="ViewModel\ResultFiller\ADTS\FillerKey.cs" />
+    <Compile Include="ViewModel\ResultMarker\ADTS\ADTSCheckFabrik.cs" />
+    <Compile Include="ViewModel\ResultMarker\ADTS\ADTSCheckPointStepFabrik.cs" />
+    <Compile Include="ViewModel\ResultMarker\ADTS\ADTSTestFabrik.cs" />
+    <Compile Include="ViewModel\ResultMarker\ADTS\ADTSTestPointStepFabrik.cs" />
     <Compile Include="ViewModel\Services\ADTSViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +117,10 @@
     <ProjectReference Include="..\Drivers\PACESeries\PACESeries.csproj">
       <Project>{3d3db0eb-5b92-4d8f-8547-82ff7184c59a}</Project>
       <Name>PACESeries</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MarkerService\MarkerService.csproj">
+      <Project>{fbdcd95e-3006-4d82-b232-24ced8aa05f8}</Project>
+      <Name>MarkerService</Name>
     </ProjectReference>
     <ProjectReference Include="..\MineLoop\MainLoop.csproj">
       <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>

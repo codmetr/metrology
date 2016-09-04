@@ -133,6 +133,14 @@
         <File Name="$(var.Tools.TargetFileName)" Source="$(var.Tools.TargetPath)" KeyPath="yes" />
         <File Name="$(var.Tools.TargetName).pdb" Source="$(var.Tools.TargetDir)$(var.Tools.TargetName).pdb" CompanionFile="$(var.Tools.TargetFileName)"/>
       </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-127B28DD5A2A">
+        <File Name="$(var.ADTSChecks.TargetFileName)" Source="$(var.ADTSChecks.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.ADTSChecks.TargetName).pdb" Source="$(var.ADTSChecks.TargetDir)$(var.ADTSChecks.TargetName).pdb" CompanionFile="$(var.ADTSChecks.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-124B28DD5A2A">
+        <File Name="$(var.CheckFrame.TargetFileName)" Source="$(var.CheckFrame.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.CheckFrame.TargetName).pdb" Source="$(var.CheckFrame.TargetDir)$(var.CheckFrame.TargetName).pdb" CompanionFile="$(var.CheckFrame.TargetFileName)"/>
+      </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-164B28DD5A2A">
         <File Name="$(var.MarkerService.TargetFileName)" Source="$(var.MarkerService.TargetPath)" KeyPath="yes" />
         <File Name="$(var.MarkerService.TargetName).pdb" Source="$(var.MarkerService.TargetDir)$(var.MarkerService.TargetName).pdb" CompanionFile="$(var.MarkerService.TargetFileName)"/>
