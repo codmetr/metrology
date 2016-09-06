@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:adtsData="clr-namespace:ADTSData;assembly=ADTSData"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance adtsData:AdtsPointResult}">
+             d:DesignHeight="50" d:DesignWidth="300" d:DataContext="{d:DesignInstance adtsData:AdtsPointResult}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

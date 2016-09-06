@@ -75,7 +75,7 @@ namespace KipTM.Model.Checks
                     new CheckStepConfig(
                         new DoPointStep(string.Format("Калибровка точки {0}", point.Pressure), _adts, param, point.Pressure,
                             point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _userChannel, _logger),
-                        false);
+                        false, point.IsAvailable);
                 AttachStep(step.Step);
                 steps.Add(step);
             }

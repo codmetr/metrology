@@ -20,9 +20,9 @@ namespace KipTM.ViewModel.Archive.ADTS
         public IEnumerable<IParameterResultViewModel> Make(object target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
         {
             if (target == null) throw new ArgumentNullException("target");
-            if (!(target is ADTSTestMethod)) throw new NoExpectedTypeParameterException(typeof(ADTSTestMethod), target.GetType());
+            if (!(target is ADTSCheckMethod)) throw new NoExpectedTypeParameterException(typeof(ADTSCheckMethod), target.GetType());
 
-            return Make((ADTSTestMethod)target, markerFabric);
+            return Make((ADTSCheckMethod)target, markerFabric);
         }
 
         /// <summary>
