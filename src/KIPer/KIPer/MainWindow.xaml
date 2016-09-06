@@ -31,14 +31,17 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ItemsControl Grid.Column="0" Grid.Row="0" Style="{StaticResource MenuCollectionStyle}">
-            <Button Style="{StaticResource ButtonTabStyle}" Content="ПОВЕРКА СИ" Command="{Binding SelectChecks}"/>
-            <!--<Button Style="{StaticResource ButtonTabStyle}" Content="Архив" Command="{Binding SelectArchive}"/>
-            <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
-            <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
-            <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>-->
-            <Button Style="{StaticResource ButtonTabStyle}" Content="Сервис" Command="{Binding SelectService}"/>
-        </ItemsControl>
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+            <Image Source="Content/icon.png" Height="30" Margin="5,5,5,5"/>
+            <ItemsControl Style="{StaticResource MenuCollectionStyle}">
+                <Button Style="{StaticResource ButtonTabStyle}" Content="ПОВЕРКА СИ" Command="{Binding SelectChecks}"/>
+                <!--<Button Style="{StaticResource ButtonTabStyle}" Content="Архив" Command="{Binding SelectArchive}"/>
+                <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
+                <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
+                <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>-->
+                <Button Style="{StaticResource ButtonTabStyle}" Content="Сервис" Command="{Binding SelectService}"/>
+            </ItemsControl>
+        </StackPanel>
         <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}" x:Name="HelpBorder" Height="35">
             <ScrollViewer>
                 <TextBox 
@@ -51,6 +54,6 @@
         <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource ActualTabBorderStyle}">
             <ContentPresenter Content="{Binding SelectedAction}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Border>
-        
+
     </Grid>
 </Window>
