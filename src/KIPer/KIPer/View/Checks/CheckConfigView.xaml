@@ -49,7 +49,7 @@
                     <TextBlock>Заводской номер:</TextBlock>
                     <TextBox Text="{Binding SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>Дата прошлой поверки:</TextBlock>
-                    <DatePicker SelectedDate="{Binding PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DatePicker FirstDayOfWeek="Monday" DisplayDate="{Binding PreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>Тип операции:</TextBlock>
                     <ComboBox
                         ItemsSource="{Binding CheckTypes}"
@@ -58,7 +58,7 @@
                     <ComboBox
                         ItemsSource="{Binding Channels}"
                         SelectedItem="{Binding SelectedChannel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Expander Header="Настройки подключения">
+                    <Expander Header="Настройки подключения" IsExpanded="True">
                         <StackPanel>
                             <ContentPresenter Content="{Binding CheckDeviceChanel}"/>
                         </StackPanel>
@@ -101,8 +101,8 @@
                     <TextBlock>Завдской номер:</TextBlock>
                     <TextBox Text="{Binding EthalonSerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>Дата предыдущей поверки:</TextBlock>
-                    <DatePicker SelectedDate="{Binding EthalonPreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Expander Header="Настройки подключения"
+                    <DatePicker FirstDayOfWeek="Monday" DisplayDate="{Binding EthalonPreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Expander Header="Настройки подключения" IsExpanded="True"
                                        Visibility="{Binding IsNoAnalogEthalon, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
                         <StackPanel>
                             <ContentPresenter Content="{Binding EthalonChanel}"/>

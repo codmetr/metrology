@@ -21,7 +21,7 @@
     <!--цвет фона кнопки основного меню-->
     <SolidColorBrush x:Key="ButtonTabBrush" Color="Gray"/>
     <!--цвет шрифта кнопки основного меню-->
-    <SolidColorBrush x:Key="ButtonTabForegroundBrush" Color="White"/>
+    <SolidColorBrush x:Key="ButtonTabForegroundBrush" Color="#FF040000"/>
 
     <!--цвет бордюра области подсказок-->
     <SolidColorBrush x:Key="HelpBorderBrush" Color="CadetBlue"/>

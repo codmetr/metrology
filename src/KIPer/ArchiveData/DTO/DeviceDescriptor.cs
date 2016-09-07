@@ -10,6 +10,7 @@ namespace ArchiveData.DTO
         public DeviceDescriptor(DeviceTypeDescriptor deviceType)
         {
             DeviceType = deviceType;
+            PreviousCheckTime = DateTime.Now;
         }
 
         /// <summary>

@@ -50,6 +50,8 @@ namespace KipTM.ViewModel
         private IMarkerFabrik<IParameterResultViewModel> _resulMaker;
         private IFillerFabrik<IParameterResultViewModel> _filler;
         private IReportFabrik _reportFabric;
+        private bool _isActiveCheck;
+        private bool _isActiveService;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -156,6 +158,8 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
+                    IsActiveCheck = true;
+                    IsActiveService = false;
                     SelectedAction = Checks;
                     HelpMessage = "Выполнение поверки";
                 });
@@ -222,7 +226,6 @@ namespace KipTM.ViewModel
             }
         }
 
-
         /// <summary>
         /// Выбрана вкладка Настройки
         /// </summary>
@@ -232,12 +235,31 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
+                    IsActiveCheck = false;
+                    IsActiveService = true;
                     SelectedAction = _services;
                     HelpMessage = "Сервисная вкладка для отладки различных механизмов";
                 });
             }
         }
 
+        /// <summary>
+        /// Активна вкладка Проверки
+        /// </summary>
+        public bool IsActiveCheck
+        {
+            get { return _isActiveCheck; }
+            set { Set(ref _isActiveCheck, value); }
+        }
+
+        /// <summary>
+        /// Активна вкладка Проверки
+        /// </summary>
+        public bool IsActiveService
+        {
+            get { return _isActiveService; }
+            set { Set(ref _isActiveService, value); }
+        }
 
         ////public override void Cleanup()
         ////{

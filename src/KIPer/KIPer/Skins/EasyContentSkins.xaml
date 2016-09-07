@@ -5,6 +5,11 @@
         <!--<ResourceDictionary Source="ColorLightSkin.xaml"/>-->
     </ResourceDictionary.MergedDictionaries>
 
+    <Style TargetType="GroupBox">
+        <Setter Property="Padding" Value="5"/>
+        
+    </Style>
+    
     <Style TargetType="ItemsControl" x:Key="MenuCollectionStyle">
         <Setter Property="ItemsPanel">
             <Setter.Value>
@@ -16,8 +21,12 @@
     </Style>
     <Style TargetType="Button" x:Key="ButtonTabStyle">
         <Setter Property="Height" Value="24"/>
-        <Setter Property="Width" Value="80"/>
+        <Setter Property="Width" Value="100"/>
         <Setter Property="Margin" Value="3"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontStyle" Value="Normal"/>
+        <!--
         <Setter Property="Foreground" Value="{StaticResource ButtonTabForegroundBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -28,7 +37,7 @@
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
-        </Setter>
+        </Setter>-->
     </Style>
 
     <Style TargetType="Border" x:Key="CommonBorderStyle">

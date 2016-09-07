@@ -8,6 +8,12 @@
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance master:Workflow}">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Style TargetType="Button" x:Key="NextBackStyle">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="70"/>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -20,10 +26,12 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ContentPresenter Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Content="{Binding CurrentState.ViewModel, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Column="0" Grid.Row="1" Visibility="{Binding BackAvailable, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" Command="{Binding Back}">
+        <Button Grid.Column="0" Grid.Row="1" Style="{StaticResource NextBackStyle}"
+                Visibility="{Binding BackAvailable, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" Command="{Binding Back}">
             Назад
         </Button>
-        <Button Grid.Column="2" Grid.Row="1" Visibility="{Binding NextAvailable, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" Command="{Binding Next}">
+        <Button Grid.Column="2" Grid.Row="1" Style="{StaticResource NextBackStyle}"
+                Visibility="{Binding NextAvailable, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" Command="{Binding Next}">
             Вперед
         </Button>
     </Grid>

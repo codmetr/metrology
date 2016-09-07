@@ -98,7 +98,7 @@
             </TabControl>
             <StackPanel Grid.Column="1" Grid.Row="0">
                 <ContentPresenter Content="{Binding State.ADTS}" />
-                <Button Content="Принять текущее значение за точку" Command="{Binding SetCurrentValueAsPoint}"/>
+                <Button Content="Принять текущее значение за точку" Command="{Binding SetCurrentValueAsPoint}" Margin="5"/>
             </StackPanel>
             <GroupBox Header="Ввод корректировки ADTS" Grid.Column="1" Grid.Row="1" 
                       Visibility="{Binding State.IsUserChannel, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -130,7 +130,7 @@
                     Command="{Binding Accept}"/>
                 <Button
                     HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                    Width="150" Height="30" Margin="5"
+                    Width="150" Height="30" Margin="5" FontSize="14"
                     IsEnabled="{Binding State.WaitUserReaction, UpdateSourceTrigger=PropertyChanged}"
                     Content="{Binding State.TitleBtnNext, UpdateSourceTrigger=PropertyChanged}"
                     Command="{Binding Start}"/>

@@ -6,7 +6,8 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        Height="768" Width="1024" Title="КипТМ"
+        Height="705" Width="840"
+        Title="КипТМ"
         x:Name="MainViewWindow" Icon="Content/icon.png"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <i:Interaction.Triggers>
@@ -26,6 +27,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -34,12 +36,38 @@
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
             <Image Source="Content/icon.png" Height="30" Margin="5,5,5,5"/>
             <ItemsControl Style="{StaticResource MenuCollectionStyle}">
-                <Button Style="{StaticResource ButtonTabStyle}" Content="ПОВЕРКА СИ" Command="{Binding SelectChecks}"/>
                 <!--<Button Style="{StaticResource ButtonTabStyle}" Content="Архив" Command="{Binding SelectArchive}"/>
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>-->
-                <Button Style="{StaticResource ButtonTabStyle}" Content="Сервис" Command="{Binding SelectService}"/>
+                <Button Content="ПОВЕРКА СИ" Command="{Binding SelectChecks}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource ButtonTabStyle}" TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsActiveCheck, UpdateSourceTrigger=PropertyChanged}" Value="TRUE">
+                                    <Setter Property="FontWeight" Value="ExtraBold"/>
+                                    <Setter Property="FontStyle" Value="Italic"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <!--<Button Style="{StaticResource ButtonTabStyle}" Content="Архив" Command="{Binding SelectArchive}"/>
+                <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
+                <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
+                <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>-->
+                <Button Content="Сервис" Command="{Binding SelectService}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource ButtonTabStyle}" TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsActiveService, UpdateSourceTrigger=PropertyChanged}" Value="TRUE">
+                                    <Setter Property="FontWeight" Value="ExtraBold"/>
+                                    <Setter Property="FontStyle" Value="Italic"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </ItemsControl>
         </StackPanel>
         <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}" x:Name="HelpBorder" Height="35">
@@ -54,6 +82,10 @@
         <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource ActualTabBorderStyle}">
             <ContentPresenter Content="{Binding SelectedAction}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Border>
-
+        <StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
+            <TextBlock Text="{Binding ElementName=MainViewWindow, Path=Height}"/>
+            <TextBlock>Х</TextBlock>
+            <TextBlock Text="{Binding ElementName=MainViewWindow, Path=Width}"/>
+        </StatusBar>
     </Grid>
 </Window>
