@@ -7,16 +7,16 @@ namespace ReportService
 {
     public class ReportAttribute : Attribute
     {
-        private readonly Type _targetType;
+        private readonly string _targetKey = null;
 
-        public ReportAttribute(Type targetType)
+        public ReportAttribute(string targetKey)
         {
-            _targetType = targetType;
+            _targetKey = targetKey;
         }
 
-        public Type TargetReportKey
+        public string ReportKey
         {
-            get { return _targetType; }
+            get { return _targetKey; }
         }
     }
 }

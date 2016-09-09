@@ -5,6 +5,6 @@ namespace ReportService
 {
     public interface IReportFabrik
     {
-        object GetReporter(Type targetT, TestResult result);
+        object GetReporter(TestResult result);
     }
 }

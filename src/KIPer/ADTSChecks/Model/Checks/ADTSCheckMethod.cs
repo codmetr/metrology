@@ -22,7 +22,8 @@ namespace KipTM.Model.Checks
         private AdtsTestResults _result;
         private AdtsPointResult _resultPoint;
 
-        public ADTSCheckMethod(NLog.Logger logger) : base(logger)
+        public ADTSCheckMethod(NLog.Logger logger)
+            : base(logger)
         {
             base.Key = ADTSCheckMethod.Key;
             MethodName = "Калибровка ADTS";

@@ -33,18 +33,18 @@ namespace ReportService
 
         public static ReportFabrik Locator{get { return _instance ?? (_instance = (new ReportFabrik()).Configure()); }}
 
-        public object GetReporter( Type tagretType, TestResult result)
+        public object GetReporter(TestResult result)
         {
             var reporters = GetReporters();
             foreach (var reporter in reporters)
             {
-                var reportAtr =reporter.GetType().GetAttributes(typeof (ReportAttribute));
+                var reportAtr = reporter.GetType().GetAttributes(typeof(ReportAttribute));
                 foreach (var atrib in reportAtr)
                 {
                     var atr = atrib as ReportAttribute;
-                    if(atr == null)
+                    if (atr == null)
                         continue;
-                    if (atr.TargetReportKey != tagretType)
+                    if (atr.ReportKey != result.CheckType)
                         continue;
                     return reporter.GetReport(result);
                 }

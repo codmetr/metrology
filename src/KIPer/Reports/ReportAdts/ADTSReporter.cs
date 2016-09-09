@@ -12,7 +12,8 @@ using ArchiveData.DTO;
 
 namespace ReportAdts
 {
-    [Report(typeof(ADTSTestMethod))]
+    //[Report(typeof(ADTSTestMethod))]
+    [Report(ADTSTestMethod.Key)]
     public class ADTSReporter: IReporter
     {
         public ReportClass GetReport(AdtsCommonReportData commonData, IEnumerable<AdtsReportData> staticData, IEnumerable<AdtsReportData> dinamicData)
