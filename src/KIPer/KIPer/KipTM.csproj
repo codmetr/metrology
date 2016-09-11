@@ -132,6 +132,7 @@
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\IMainSettings.cs" />
     <Compile Include="Settings\MainSettings.cs" />
+    <Compile Include="ViewModel\Checks\CustomConfigFabrik.cs" />
     <Compile Include="ViewModel\Report\IReportViewModel.cs" />
     <Compile Include="ViewModel\Report\ReportViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckConfigViewModel.cs" />

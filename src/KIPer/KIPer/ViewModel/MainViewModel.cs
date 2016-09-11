@@ -96,7 +96,8 @@ namespace KipTM.ViewModel
             var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, result);
             var channelTargetDevice = new SelectChannelViewModel();
             var channelEthalonDevice = new SelectChannelViewModel();
-            var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice);
+            var configViewModelFabrik = new CustomConfigFabrik();
+            var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice, configViewModelFabrik);
 
             _steps = new List<IWorkflowStep>()
             {

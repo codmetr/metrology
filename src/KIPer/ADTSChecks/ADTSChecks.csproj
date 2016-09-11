@@ -52,6 +52,7 @@
     <Reference Include="NLog">
       <HintPath>..\Lib\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -88,6 +89,8 @@
     <Compile Include="ViewModel\Checks\AdtsCheckStateViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTSTestViewModel.cs" />
     <Compile Include="ViewModel\Checks\Channels\PACEEchalonChannelViewModel.cs" />
+    <Compile Include="ViewModel\Checks\ADTSCheckConfigViewModel.cs" />
+    <Compile Include="ViewModel\Checks\DoubleBindingRule.cs" />
     <Compile Include="ViewModel\ResultFiller\ADTS\ADTSCheckPointFiller.cs" />
     <Compile Include="ViewModel\ResultFiller\ADTS\ADTSTestPointFiller.cs" />
     <Compile Include="ViewModel\ResultFiller\ADTS\FillerKey.cs" />

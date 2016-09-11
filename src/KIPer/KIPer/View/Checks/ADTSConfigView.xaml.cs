@@ -1,25 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using KipTM.Model.Checks;
+﻿using System.Windows.Controls;
+using KipTM.ViewModel.Checks;
 
 namespace KipTM.View.Checks
 {
     /// <summary>
     /// Interaction logic for ADTSConfigView.xaml
     /// </summary>
-    [View(typeof(ADTSMethodParameters))]
+    [View(typeof(ADTSCheckConfigViewModel))]
     public partial class ADTSConfigView : UserControl
     {
         public ADTSConfigView()

@@ -3,14 +3,47 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:checks="clr-namespace:KipTM.Model.Checks;assembly=ADTSChecks"
+             xmlns:checks="clr-namespace:KipTM.ViewModel.Checks;assembly=ADTSChecks"
+             xmlns:checks1="clr-namespace:KipTM.Model.Checks;assembly=ADTSChecks"
+             xmlns:checks2="clr-namespace:ADTSChecks.ViewModel.Checks;assembly=ADTSChecks"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance checks:ADTSMethodParameters}">
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance checks:ADTSCheckConfigViewModel}">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <DockPanel LastChildFill="True">
+                            <TextBlock DockPanel.Dock="Right" Foreground="Red" FontSize="14" FontWeight="Bold"
+                                                       Text="*"/>
+                            <ToolTip></ToolTip>
+                            <Border BorderBrush="Green" BorderThickness="1">
+                                <AdornedElementPlaceholder Name="adornerPlaceholder"/>
+                            </Border>
+                        </DockPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="Foreground" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </UserControl.Resources>
     <Grid>
-        <GroupBox Header="Настройка методики для ADTS">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <GroupBox Header="Настройка методики для ADTS" Grid.Row="0">
             <ItemsControl ItemsSource="{Binding Points, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="checks:ADTSPoint">
+                    <DataTemplate DataType="checks1:ADTSPoint">
                         <Border BorderBrush="Black" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox IsChecked="{Binding IsAvailable, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="5"/>
@@ -25,5 +58,24 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </GroupBox>
+        <GroupBox Header="Добавление точки" Grid.Row="1">
+            <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>Ключевле давление:</TextBlock>
+                <TextBox Width="70" >
+                    <TextBox.Text>
+                        <Binding Path="NewPressure" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <checks2:DoubleBindingRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBlock>кПа</TextBlock>
+                <Button Command="{Binding AddPoint}">Добавить точку</Button>
+            </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
     </Grid>
 </UserControl>

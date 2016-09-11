@@ -56,7 +56,7 @@
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>-->
-                <Button Content="Сервис" Command="{Binding SelectService}">
+                <Button Content="СЕРВИС" Command="{Binding SelectService}">
                     <Button.Style>
                         <Style BasedOn="{StaticResource ButtonTabStyle}" TargetType="{x:Type Button}">
                             <Style.Triggers>

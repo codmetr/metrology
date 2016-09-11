@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ADTS;
 
 
@@ -7,14 +8,14 @@ namespace KipTM.Model.Checks
     public class ADTSMethodParameters
     {
         private readonly CalibChannel _calibChannel;
-        private readonly IEnumerable<ADTSPoint> _points;
+        private readonly List<ADTSPoint> _points;
         private readonly double _rate;
         private readonly PressureUnits _unit;
 
         public ADTSMethodParameters(CalibChannel calibChannel, IEnumerable<ADTSPoint> points, double rate, PressureUnits unit)
         {
             _calibChannel = calibChannel;
-            _points = points;
+            _points = new List<ADTSPoint>(points);
             _rate = rate;
             _unit = unit;
         }
@@ -24,7 +25,7 @@ namespace KipTM.Model.Checks
             get { return _calibChannel; }
         }
 
-        public IEnumerable<ADTSPoint> Points
+        public List<ADTSPoint> Points
         {
             get { return _points; }
         }
