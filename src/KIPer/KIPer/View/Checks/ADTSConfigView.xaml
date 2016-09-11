@@ -31,6 +31,9 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="TextBlock" x:Key="TitleStyle">
+            <Setter Property="Width" Value="120"/>
+        </Style>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Margin" Value="5"/>
         </Style>
@@ -60,20 +63,31 @@
         </GroupBox>
         <GroupBox Header="Добавление точки" Grid.Row="1">
             <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock>Ключевле давление:</TextBlock>
-                <TextBox Width="70" >
-                    <TextBox.Text>
-                        <Binding Path="NewPressure" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource TitleStyle}">Ключевле давление:</TextBlock>
+                    <TextBox Width="70" >
+                        <TextBox.Text>
+                            <Binding Path="NewPressure" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <checks2:DoubleBindingRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBlock>кПа</TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource TitleStyle}"><Run Text="Допуск:"/></TextBlock>
+                    <TextBox Width="70" >
+                        <Binding Path="NewTolerance" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
                                 <checks2:DoubleBindingRule/>
                             </Binding.ValidationRules>
                         </Binding>
-                    </TextBox.Text>
-                </TextBox>
-                <TextBlock>кПа</TextBlock>
-                <Button Command="{Binding AddPoint}">Добавить точку</Button>
-            </StackPanel>
+                    </TextBox>
+                    <TextBlock><Run Text="кПа"/></TextBlock>
+                </StackPanel>
+                <Button Command="{Binding AddPoint}" HorizontalAlignment="Right">Добавить точку</Button>
             </StackPanel>
         </GroupBox>
 

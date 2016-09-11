@@ -117,7 +117,8 @@
                 <ContentPresenter Content="{Binding State.EthalonChannelViewModel, UpdateSourceTrigger=PropertyChanged}"/><!-- IsEnabled="{Binding State.WaitUserReaction}"-->
             </GroupBox>
             <TextBlock Name="tbNoteMsg" Grid.Column="1" Grid.Row="2"
-                       VerticalAlignment="Bottom" TextWrapping="Wrap" TextAlignment="Center" Margin="5"
+                       VerticalAlignment="Bottom" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Margin="5"
+                       Width="400"
                        Text="{Binding State.Note, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel Grid.Column="1" Grid.Row="3"
                         HorizontalAlignment="Center" Orientation="Horizontal">

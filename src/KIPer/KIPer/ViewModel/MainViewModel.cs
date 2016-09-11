@@ -144,7 +144,7 @@ namespace KipTM.ViewModel
                         var view = mainView as Window;
                         if (view == null)
                             return;
-                        ViewViewmodelMatcher.AddMatch(view.Resources, ViewAttribute.CheckView, ViewAttribute.CheckViewModel);
+                        ViewViewmodelMatcher.AddMatch(view.Resources, ViewAttribute.CheckView, ViewAttribute.CheckViewModelCashOnly);
                     });
             }
         }

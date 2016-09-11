@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -16,23 +17,50 @@ namespace Tools
         /// <param name="findViewModel"></param>
         public static void AddMatch(System.Windows.ResourceDictionary resouceDictionary, Func<Type, bool> findView, Func<Type, Type, bool> findViewModel)
         {
-            var types = GetAllTyes();
-            List<Type> viewTypes = new List<Type>();
-            foreach (var type in types)
+            try
             {
-                if (findView(type))
+
+                var types = GetAllTyes();
+                List<Type> viewTypes = new List<Type>();
+                foreach (var type in types)
                 {
-                    viewTypes.Add(type);
+                    if (findView(type))
+                    {
+                        viewTypes.Add(type);
+                    }
                 }
+                var sw = new Stopwatch();
+                sw.Start();
+                var tempDict = new Dictionary<Type, Type>();
+                var timeList = new List<long>();
+                var timeTypeList = new List<string>();
+                foreach (var type in types)
+                {
+                    var timestart = sw.ElapsedTicks;
+                    var typeView = viewTypes.FirstOrDefault(el => findViewModel(type, el));
+                    if (typeView != null)
+                    {
+                        tempDict.Add(type, typeView);
+                    }
+                    timeList.Add(sw.ElapsedTicks - timestart);
+                    timeTypeList.Add(type.AssemblyQualifiedName);
+                }
+                var max = timeList.IndexOf(timeList.Max());
+
+                var time0 = sw.ElapsedMilliseconds;
+                sw.Restart();
+                foreach (var typeKV in tempDict)
+                {
+                    var dataTemplate = FormDataTemplate(typeKV.Key, typeKV.Value);
+                    resouceDictionary.Add(new DataTemplateKey(typeKV.Key), dataTemplate);
+                }
+                var time1 = sw.ElapsedMilliseconds;
+                sw.Stop();
             }
-            foreach (var type in types)
+            catch (Exception ex)
             {
-                var typeView = viewTypes.FirstOrDefault(el => findViewModel(type, el));
-                if (typeView != null)
-                {
-                    var dataTemplate = FormDataTemplate(type, typeView);
-                    resouceDictionary.Add(new DataTemplateKey(type), dataTemplate);
-                }
+                ex.ToString();
+                throw;
             }
         }
 

@@ -19,7 +19,7 @@ namespace KipTM.ViewModel.Checks
         private ADTSMethodParameters _customConf;
         private ObservableCollection<ADTSPoint> _points;
         private double _newPressure;
-        private double _newTolerance;
+        private double _newTolerance = 0.1;
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
