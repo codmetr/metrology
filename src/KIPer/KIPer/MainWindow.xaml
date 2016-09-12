@@ -80,7 +80,7 @@
             </ScrollViewer>
         </Border>
         <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource ActualTabBorderStyle}">
-            <ContentPresenter Content="{Binding SelectedAction}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <ContentPresenter Content="{Binding SelectedAction}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5"/>
         </Border>
         <StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
             <TextBlock Text="{Binding ElementName=MainViewWindow, Path=Height}"/>
