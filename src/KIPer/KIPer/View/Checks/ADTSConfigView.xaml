@@ -44,15 +44,14 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="tbSelectIndicator" Text=">" FontWeight="Bold" Visibility="Collapsed" VerticalAlignment="Center"/>
                     <ContentPresenter Grid.Column="1"/>
                 </Grid>
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsSelected" Value="true">
-                    <Setter TargetName="tbSelectIndicator" Property="Visibility" Value="Visible"/>
-                    <Setter TargetName="border" Property="Background" Value="Azure" />
+                    <Setter TargetName="border" Property="Background" Value="LightGray" />
                     <Setter TargetName="border" Property="BorderThickness" Value="1" />
+                    <Setter TargetName="border" Property="Margin" Value="4,0" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -64,7 +63,9 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <GroupBox Header="Настройка методики для ADTS" Grid.Row="0">
-            <ListView x:Name="PointsList" ItemsSource="{Binding Points, UpdateSourceTrigger=PropertyChanged}">
+            <ListView x:Name="PointsList"
+                      ItemsSource="{Binding Points, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding Path=SelectedPoint, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="Template" Value="{StaticResource ListBoxItemUdDownTemplate}" />
@@ -82,15 +83,66 @@
                                 <TextBlock VerticalAlignment="Center" Margin="5">мБар</TextBlock>
                             </StackPanel>
                         </Border>
-                        
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
         </GroupBox>
         <GroupBox Header="Коррекция очередности" Grid.Row="1">
             <StackPanel Orientation="Horizontal">
-                <Button Command="{Binding Up}" CommandParameter="{Binding ElementName=PointsList, Path=SelectedIndex}">Поднять</Button>
-                <Button Command="{Binding Down}" CommandParameter="{Binding ElementName=PointsList, Path=SelectedIndex}">Опустить</Button>
+                <StackPanel Orientation="Vertical" Width="20">
+                    <Button Command="{Binding Up}" CommandParameter="{Binding ElementName=PointsList, Path=SelectedIndex}" Margin="3,1">
+                        <Image>
+                            <Image.Source>
+                                <DrawingImage>
+                                    <DrawingImage.Drawing>
+                                        <GeometryDrawing Geometry="M0,10 L5,0 L10,10 Z">
+                                            <GeometryDrawing.Pen>
+                                                <Pen DashCap="Flat" Brush="Black"/>
+                                            </GeometryDrawing.Pen>
+                                            <GeometryDrawing.Brush>
+                                                <SolidColorBrush Color="Black"></SolidColorBrush>
+                                            </GeometryDrawing.Brush>
+                                        </GeometryDrawing>
+                                    </DrawingImage.Drawing>
+                                </DrawingImage>
+                            </Image.Source>
+                        </Image>
+                    </Button>
+                    <Button Command="{Binding Down}" CommandParameter="{Binding ElementName=PointsList, Path=SelectedIndex}" Margin="3,1">
+                        <Image>
+                            <Image.Source>
+                                <DrawingImage>
+                                    <DrawingImage.Drawing>
+                                        <GeometryDrawing Geometry="M0,0 L5,10 L10,0 Z">
+                                            <GeometryDrawing.Pen>
+                                                <Pen DashCap="Flat" Brush="Black"/>
+                                            </GeometryDrawing.Pen>
+                                            <GeometryDrawing.Brush>
+                                                <SolidColorBrush Color="Black"></SolidColorBrush>
+                                            </GeometryDrawing.Brush>
+                                        </GeometryDrawing>
+                                    </DrawingImage.Drawing>
+                                </DrawingImage>
+                            </Image.Source>
+                        </Image>
+                    </Button>
+                </StackPanel>
+                <ContentPresenter Content="{Binding Path=SelectedPoint, UpdateSourceTrigger=PropertyChanged}">
+                    <ContentPresenter.ContentTemplate>
+                        <DataTemplate DataType="checks:ADTSPionViewModel">
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center" Margin="5">Контрольная точка:</TextBlock>
+                                    <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Value.Pressure, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
+                                    <TextBlock VerticalAlignment="Center" Margin="5">мБар, Допуск:</TextBlock>
+                                    <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Value.Tolerance, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
+                                    <TextBlock VerticalAlignment="Center" Margin="5">мБар</TextBlock>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+
+                    </ContentPresenter.ContentTemplate>
+                </ContentPresenter>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Добавление точки" Grid.Row="2">

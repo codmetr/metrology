@@ -23,6 +23,11 @@ namespace KipTM.ViewModel.Checks
         private ObservableCollection<ADTSPionViewModel> _points;
         private double _newPressure;
         private double _newTolerance = 0.1;
+        private ICommand _up;
+        private ICommand _down;
+        private ICommand _addPoint;
+        private ADTSPionViewModel _selectedPoint;
+
 
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
@@ -30,47 +35,29 @@ namespace KipTM.ViewModel.Checks
         public ADTSCheckConfigViewModel(ADTSMethodParameters customConf)
         {
             _customConf = customConf;
-            _points = new ObservableCollection<ADTSPionViewModel>(_customConf.Points.Select(el=>new ADTSPionViewModel(el, Up, Down)));
+            _points = new ObservableCollection<ADTSPionViewModel>(_customConf.Points.Select(el => new ADTSPionViewModel(el, Up, Down)));
             UpdatePoints(_points);
 
-            _up = new CommandWrapper((arg) =>
-            {
-                var index = (int?)arg;
-                if (index == null)
-                    return;
+            _up = new CommandWrapper((arg) => DoUp((int?)arg));
 
-                if (_points.Count == 0 || index.Value >= _points.Count)
-                    return;
+            _down = new CommandWrapper((arg) => DoDown((int?)arg));
 
-                if (index.Value < 1)
-                    return;
-
-                var val = _points[index.Value];
-                _points.RemoveAt(index.Value);
-                _points.Insert(index.Value - 1, val);
-                UpdatePoints(_points);
-            });
-
-            _down = new CommandWrapper((arg) =>
-            {
-                var index = (int?)arg;
-                if (index == null)
-                    return;
-
-                if (_points.Count == 0 || index.Value >= _points.Count)
-                    return;
-
-                if (index.Value < 1)
-                    return;
-
-                var val = _points[index.Value];
-                _points.RemoveAt(index.Value);
-                _points.Insert(index.Value - 1, val);
-                UpdatePoints(_points);
-            });
+            _addPoint = new CommandWrapper(DoAddPoint);
         }
 
+        /// <summary>
+        /// Коллекция точек
+        /// </summary>
         public ObservableCollection<ADTSPionViewModel> Points { get { return _points; } }
+
+        /// <summary>
+        /// Выделенная точка
+        /// </summary>
+        public ADTSPionViewModel SelectedPoint
+        {
+            get { return _selectedPoint; }
+            set { Set(ref _selectedPoint, value); }
+        }
 
         /// <summary>
         /// Контрольное давление
@@ -90,49 +77,11 @@ namespace KipTM.ViewModel.Checks
             set { Set(ref _newTolerance, value); }
         }
 
-        private ICommand _up;
-        private ICommand _down;
+        public ICommand AddPoint { get { return _addPoint; } }
 
-        public ICommand AddPoint
-        {
-            get
-            {
-                return new CommandWrapper(() =>
-                    {
-                        if (_points == null)
-                            return;
-                        var point = new ADTSPoint()
-                        {
-                            IsAvailable = true,
-                            Pressure = NewPressure,
-                            Tolerance = NewTolerance
-                        };
+        public ICommand Up { get { return _up; } }
 
-                        if (_points.Count == 0 || point.Pressure < _points.Last().Value.Pressure)
-                        {
-                            _points.Add(new ADTSPionViewModel(point, Up, Down));
-                            _customConf.Points.Add(point);
-                            UpdatePoints(_points);
-                            return;
-                        }
-
-                        int index = _points.Count - 1;
-                        for (int i = _points.Count-1; i >=0 ; i--)
-                        {
-                            if (point.Pressure < _points[i].Value.Pressure)
-                                break;
-                            index = i;
-                        }
-                        _points.Insert(index, new ADTSPionViewModel(point, Up, Down));
-                        _customConf.Points.Insert(index, point);
-                        UpdatePoints(_points);
-                    });
-            }
-        }
-
-        public ICommand Up{get{return _up;}}
-
-        public ICommand Down{get{return _down;}}
+        public ICommand Down { get { return _down; } }
 
         private void UpdatePoints(ObservableCollection<ADTSPionViewModel> points)
         {
@@ -141,6 +90,74 @@ namespace KipTM.ViewModel.Checks
                 points[i].Index = i;
             }
         }
+
+        private void DoUp(int? index)
+        {
+            if (index == null)
+                return;
+
+            if (_points.Count == 0 || index.Value >= _points.Count)
+                return;
+
+            if (index.Value < 1)
+                return;
+
+            var val = _points[index.Value];
+            _points.RemoveAt(index.Value);
+            _points.Insert(index.Value - 1, val);
+            SelectedPoint = val;
+            UpdatePoints(_points);
+        }
+
+        private void DoDown(int? index)
+        {
+            if (index == null)
+                return;
+
+            if (_points.Count == 0 || index.Value >= _points.Count)
+                return;
+
+            if (index.Value >= _points.Count - 1)
+                return;
+
+            var val = _points[index.Value];
+            _points.RemoveAt(index.Value);
+            _points.Insert(index.Value + 1, val);
+            SelectedPoint = val;
+            UpdatePoints(_points);
+        }
+
+        private void DoAddPoint()
+        {
+            if (_points == null)
+                return;
+            var point = new ADTSPoint()
+            {
+                IsAvailable = true,
+                Pressure = NewPressure,
+                Tolerance = NewTolerance
+            };
+
+            if (_points.Count == 0 || point.Pressure < _points.Last().Value.Pressure)
+            {
+                _points.Add(new ADTSPionViewModel(point, Up, Down));
+                _customConf.Points.Add(point);
+                UpdatePoints(_points);
+                return;
+            }
+
+            int index = _points.Count - 1;
+            for (int i = _points.Count - 1; i >= 0; i--)
+            {
+                if (point.Pressure < _points[i].Value.Pressure)
+                    break;
+                index = i;
+            }
+            _points.Insert(index, new ADTSPionViewModel(point, Up, Down));
+            _customConf.Points.Insert(index, point);
+            UpdatePoints(_points);
+        }
+
     }
 
     public class ADTSPionViewModel
