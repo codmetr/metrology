@@ -146,8 +146,8 @@ namespace KipTM.ViewModel.Checks
     public class ADTSPionViewModel
     {
         private readonly ADTSPoint _value;
-        private ICommand _up;
-        private ICommand _down;
+        private readonly ICommand _up;
+        private readonly ICommand _down;
 
         public ADTSPionViewModel(ADTSPoint value, ICommand up, ICommand down)
         {

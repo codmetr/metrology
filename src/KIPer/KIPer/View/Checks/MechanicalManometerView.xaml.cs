@@ -13,13 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KipTM.ViewModel.Checks;
+using Tools;
 
 namespace KipTM.View.Checks
 {
     /// <summary>
     /// Interaction logic for MechanicalManometerView.xaml
     /// </summary>
-    [ViewAttribute(typeof(MechanicalManometerViewModel))]
+    [View(typeof(MechanicalManometerViewModel))]
     public partial class MechanicalManometerView : UserControl
     {
         public MechanicalManometerView()

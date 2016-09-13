@@ -13,13 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KipTM.Model.TransportChannels;
+using Tools;
 
 namespace KipTM.View.Services
 {
     /// <summary>
     /// Interaction logic for VisaSettingsView.xaml
     /// </summary>
-    [ViewAttribute(typeof(VisaSettings))]
+    [View(typeof(VisaSettings))]
     public partial class VisaSettingsView : UserControl
     {
         public VisaSettingsView()

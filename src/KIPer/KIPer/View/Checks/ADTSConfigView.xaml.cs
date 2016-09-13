@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using KipTM.ViewModel.Checks;
+using Tools;
 
 namespace KipTM.View.Checks
 {

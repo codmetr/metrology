@@ -233,7 +233,6 @@
     <Compile Include="View\Services\VisaSettingsView.xaml.cs">
       <DependentUpon>VisaSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ViewAttribute.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

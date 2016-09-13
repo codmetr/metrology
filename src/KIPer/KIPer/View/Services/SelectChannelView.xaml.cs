@@ -13,13 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KipTM.ViewModel;
+using Tools;
 
 namespace KipTM.View
 {
     /// <summary>
     /// Interaction logic for PACE5000View.xaml
     /// </summary>
-    [ViewAttribute(typeof(SelectChannelViewModel))]
+    [View(typeof(SelectChannelViewModel))]
     public partial class SelectChannelView : UserControl
     {
         public SelectChannelView()

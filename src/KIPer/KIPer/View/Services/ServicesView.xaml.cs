@@ -13,13 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KipTM.ViewModel;
+using Tools;
 
 namespace KipTM.View
 {
     /// <summary>
     /// Interaction logic for ServicesView.xaml
     /// </summary>
-    [ViewAttribute(typeof(ServiceViewModel))]
+    [View(typeof(ServiceViewModel))]
     public partial class ServicesView : UserControl
     {
         public ServicesView()

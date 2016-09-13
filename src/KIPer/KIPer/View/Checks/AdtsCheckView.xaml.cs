@@ -13,13 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KipTM.ViewModel.Checks;
+using Tools;
 
 namespace KipTM.View.Checks
 {
     /// <summary>
     /// Interaction logic for ADTSCalibrationView.xaml
     /// </summary>
-    [ViewAttribute(typeof(ADTSBaseViewModel))]
+    [View(typeof(ADTSBaseViewModel))]
     public partial class AdtsCheckView : UserControl
     {
         public AdtsCheckView()

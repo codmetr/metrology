@@ -13,13 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KipTM.ViewModel;
+using Tools;
 
 namespace KipTM.View
 {
     /// <summary>
     /// Interaction logic for TestsView.xaml
     /// </summary>
-    [ViewAttribute(typeof(ArchivesViewModel))]
+    [View(typeof(ArchivesViewModel))]
     public partial class ArchivesView : UserControl
     {
         public ArchivesView()

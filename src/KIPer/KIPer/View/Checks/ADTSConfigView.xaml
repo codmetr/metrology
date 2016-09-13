@@ -38,23 +38,21 @@
             <Setter Property="Margin" Value="5"/>
         </Style>
         <ControlTemplate x:Key="ListBoxItemUdDownTemplate" TargetType="{x:Type ListBoxItem}">
-            <Border Name="border" Padding="2">
+            <Border Name="border" Padding="2" BorderThickness="0">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <ContentPresenter Grid.Column="0"/>
-                    <UniformGrid x:Name="UpDounBtns" Grid.Column="1" Columns="1" Visibility="Collapsed">
-                        <Button Command="{Binding Up}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=SelectedIndex}">Вверх</Button>
-                        <Button Command="{Binding Down}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=SelectedIndex}">Вниз</Button>
-                    </UniformGrid>
+                    <TextBlock x:Name="tbSelectIndicator" Text=">" FontWeight="Bold" Visibility="Collapsed" VerticalAlignment="Center"/>
+                    <ContentPresenter Grid.Column="1"/>
                 </Grid>
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsSelected" Value="true">
-                    <Setter TargetName="UpDounBtns" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="tbSelectIndicator" Property="Visibility" Value="Visible"/>
                     <Setter TargetName="border" Property="Background" Value="Azure" />
+                    <Setter TargetName="border" Property="BorderThickness" Value="1" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -63,31 +61,39 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <GroupBox Header="Настройка методики для ADTS" Grid.Row="0">
-            <ListView ItemsSource="{Binding Points, UpdateSourceTrigger=PropertyChanged}">
+            <ListView x:Name="PointsList" ItemsSource="{Binding Points, UpdateSourceTrigger=PropertyChanged}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="Template" Value="{StaticResource ListBoxItemUdDownTemplate}" />
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListView.ItemTemplate>
-                    <DataTemplate DataType="checks1:ADTSPoint">
+                    <DataTemplate DataType="checks:ADTSPionViewModel">
                         <Border BorderBrush="Black" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding IsAvailable, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="5"/>
+                                <CheckBox IsChecked="{Binding Value.IsAvailable, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="5"/>
                                 <TextBlock VerticalAlignment="Center" Margin="5">Контрольная точка:</TextBlock>
-                                <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Pressure, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Value.Pressure, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
                                 <TextBlock VerticalAlignment="Center" Margin="5">мБар, Допуск:</TextBlock>
-                                <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Tolerance, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Value.Tolerance, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
                                 <TextBlock VerticalAlignment="Center" Margin="5">мБар</TextBlock>
                             </StackPanel>
                         </Border>
+                        
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
         </GroupBox>
-        <GroupBox Header="Добавление точки" Grid.Row="1">
+        <GroupBox Header="Коррекция очередности" Grid.Row="1">
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding Up}" CommandParameter="{Binding ElementName=PointsList, Path=SelectedIndex}">Поднять</Button>
+                <Button Command="{Binding Down}" CommandParameter="{Binding ElementName=PointsList, Path=SelectedIndex}">Опустить</Button>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Добавление точки" Grid.Row="2">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource TitleStyle}">Ключевое давление:</TextBlock>

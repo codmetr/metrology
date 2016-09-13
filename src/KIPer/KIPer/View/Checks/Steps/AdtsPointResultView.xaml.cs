@@ -13,13 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ADTSData;
+using Tools;
 
 namespace KipTM.View.Checks.Steps
 {
     /// <summary>
     /// Interaction logic for AdtsPointResultView.xaml
     /// </summary>
-    [ViewAttribute(typeof(AdtsPointResult))]
+    [View(typeof(AdtsPointResult))]
     public partial class AdtsPointResultView : UserControl
     {
         public AdtsPointResultView()

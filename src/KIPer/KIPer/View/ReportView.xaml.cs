@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CrystalDecisions.CrystalReports.Engine;
 using KipTM.ViewModel.Report;
+using Tools;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace KipTM.View
