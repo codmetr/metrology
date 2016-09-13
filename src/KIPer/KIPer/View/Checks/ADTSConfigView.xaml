@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:checks="clr-namespace:KipTM.ViewModel.Checks;assembly=ADTSChecks"
-             xmlns:checks1="clr-namespace:KipTM.Model.Checks;assembly=ADTSChecks"
              xmlns:checks2="clr-namespace:ADTSChecks.ViewModel.Checks;assembly=ADTSChecks"
+             xmlns:checks1="clr-namespace:KipTM.Model.Checks;assembly=ADTSChecks"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance checks:ADTSCheckConfigViewModel}">
     <UserControl.Resources>
@@ -72,14 +72,14 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListView.ItemTemplate>
-                    <DataTemplate DataType="checks:ADTSPionViewModel">
+                    <DataTemplate DataType="checks1:ADTSPoint">
                         <Border BorderBrush="Black" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding Value.IsAvailable, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="5"/>
+                                <CheckBox IsChecked="{Binding IsAvailable, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="5"/>
                                 <TextBlock VerticalAlignment="Center" Margin="5">Контрольная точка:</TextBlock>
-                                <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Value.Pressure, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Pressure, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
                                 <TextBlock VerticalAlignment="Center" Margin="5">мБар, Допуск:</TextBlock>
-                                <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Value.Tolerance, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Tolerance, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
                                 <TextBlock VerticalAlignment="Center" Margin="5">мБар</TextBlock>
                             </StackPanel>
                         </Border>
@@ -129,13 +129,13 @@
                 </StackPanel>
                 <ContentPresenter Content="{Binding Path=SelectedPoint, UpdateSourceTrigger=PropertyChanged}">
                     <ContentPresenter.ContentTemplate>
-                        <DataTemplate DataType="checks:ADTSPionViewModel">
+                        <DataTemplate DataType="checks1:ADTSPoint">
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock VerticalAlignment="Center" Margin="5">Контрольная точка:</TextBlock>
-                                    <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Value.Pressure, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
+                                    <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Pressure, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
                                     <TextBlock VerticalAlignment="Center" Margin="5">мБар, Допуск:</TextBlock>
-                                    <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Value.Tolerance, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
+                                    <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Tolerance, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
                                     <TextBlock VerticalAlignment="Center" Margin="5">мБар</TextBlock>
                                 </StackPanel>
                             </Border>
