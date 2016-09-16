@@ -1,9 +1,11 @@
-﻿using ArchiveData.DTO;
+﻿using ADTSChecks.Model.Checks;
+using ArchiveData.DTO;
 using KipTM.Archive;
 using KipTM.Model;
 using KipTM.Model.Checks;
+using KipTM.ViewModel.Checks;
 
-namespace KipTM.ViewModel.Checks
+namespace ADTSChecks.ViewModel.Checks
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.

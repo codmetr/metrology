@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
+using ADTSChecks.ViewModel.Services;
 using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -14,7 +15,6 @@ using KipTM.ViewModel.Checks;
 using KipTM.ViewModel.Checks.States;
 using KipTM.ViewModel.Master;
 using KipTM.ViewModel.Report;
-using KipTM.ViewModel.Services;
 using MarkerService;
 using MarkerService.Filler;
 using ReportService;
@@ -80,6 +80,9 @@ namespace KipTM.ViewModel
             });
         }
 
+        /// <summary>
+        /// загрузка всех состояний
+        /// </summary>
         public void Load()
         {
             _tests = new ArchivesViewModel();

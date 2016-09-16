@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:pressureElementControls="clr-namespace:PressureElementControls;assembly=PressureElementControls"
              xmlns:checks="clr-namespace:KipTM.ViewModel.Checks;assembly=ADTSChecks"
+             xmlns:checks1="clr-namespace:ADTSChecks.ViewModel.Checks;assembly=ADTSChecks"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="700" d:DataContext="{d:DesignInstance checks:ADTSBaseViewModel}">
+             d:DesignHeight="300" d:DesignWidth="700" d:DataContext="{d:DesignInstance checks1:ADTSBaseViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

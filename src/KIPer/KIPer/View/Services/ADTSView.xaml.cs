@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using KipTM.ViewModel.Services;
+using ADTSChecks.ViewModel.Services;
 using Tools;
 
 namespace KipTM.View.Services

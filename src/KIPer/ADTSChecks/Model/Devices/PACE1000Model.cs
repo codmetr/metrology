@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using KipTM.Model;
 using KipTM.Model.TransportChannels;
 using MainLoop;
 using PACESeries;
 
-namespace KipTM.Model.Devices
+namespace ADTSChecks.Model.Devices
 {
     public class PACE1000Model
     {

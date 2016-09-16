@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ADTSChecks.Model.Checks;
+using ADTSChecks.Model.Devices;
 using KipTM.Interfaces;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
@@ -16,12 +18,12 @@ namespace KipTM.Model
         public MethodsService()
         {
             _methods = new Dictionary<string, Dictionary<string, ICheckMethod>>();
-            var adtsCheck = new ADTSCheckMethod(NLog.LogManager.GetLogger("ADTSCheckMethod"));
+            var adtsCheck = new AdtsCheckMethod(NLog.LogManager.GetLogger("ADTSCheckMethod"));
             var adtsTest = new ADTSTestMethod(NLog.LogManager.GetLogger("ADTSTestMethod"));
             _methods.Add(ADTSModel.Key,new Dictionary<string, ICheckMethod>()
             {
                 {ADTSTestMethod.Key, adtsTest},
-                {ADTSCheckMethod.Key, adtsCheck},
+                {AdtsCheckMethod.Key, adtsCheck},
             }); 
 
         }

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MarkerService.Filler;
 
-namespace KipTM.ViewModel.ResultFiller.ADTS
+namespace ADTSChecks.ViewModel.ResultFiller.ADTS
 {
     public class FillerKeyAttribute:FillerAttribute
     {

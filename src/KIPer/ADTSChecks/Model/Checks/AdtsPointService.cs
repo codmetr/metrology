@@ -1,7 +1,7 @@
 ﻿using ADTSData;
 using ArchiveData.DTO.Params;
 
-namespace KipTM.Model.Checks
+namespace ADTSChecks.Model.Checks
 {
     public static class AdtsPointService
     {

@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using ADTS;
 
-
-namespace KipTM.Model.Checks
+namespace ADTSChecks.Model.Checks
 {
     public class ADTSMethodParameters
     {

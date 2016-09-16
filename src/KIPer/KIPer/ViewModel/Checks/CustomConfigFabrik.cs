@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ADTSChecks.Model.Checks;
+using ADTSChecks.ViewModel.Checks;
 using KipTM.Model.Checks;
 
 namespace KipTM.ViewModel.Checks

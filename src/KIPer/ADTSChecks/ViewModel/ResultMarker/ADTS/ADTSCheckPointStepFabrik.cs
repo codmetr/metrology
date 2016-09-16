@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using KipTM.Model.Checks.Steps.ADTSCalibration;
+using ADTSChecks.Model.Steps.ADTSCalibration;
+using KipTM.ViewModel;
 using MarkerService;
 
-namespace KipTM.ViewModel.Archive.ADTS
+namespace ADTSChecks.ViewModel.ResultMarker.ADTS
 {
     /// <summary>
     /// Генератор представления для точек проверки ADTS

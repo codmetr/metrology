@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ADTSChecks.Model.Checks;
+using ADTSChecks.Model.Devices;
+using ADTSChecks.ViewModel.Checks;
 using KipTM.Archive;
 using KipTM.Model;
 using KipTM.Model.Channels;
@@ -49,9 +52,9 @@ namespace KipTM.ViewModel.Checks
             else
                 method.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonDeviceType, ethalonChanel), ethalonChanel);
 
-            if (method is ADTSCheckMethod)
+            if (method is AdtsCheckMethod)
             {
-                var adtsMethodic = method as ADTSCheckMethod;
+                var adtsMethodic = method as AdtsCheckMethod;
                 result = new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
                     _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSMethodParameters);
             }

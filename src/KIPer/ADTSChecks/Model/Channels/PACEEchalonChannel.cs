@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using KipTM.Model.Checks;
-using KipTM.Model.Devices;
+using ADTSChecks.Model.Devices;
+using KipTM.Model.Channels;
 using KipTM.Model.TransportChannels;
 
-namespace KipTM.Model.Channels
+namespace ADTSChecks.Model.Channels
 {
     public class PACEEthalonChannel : IEthalonChannel
     {

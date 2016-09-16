@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading;
-using ADTS;
+using ADTSChecks.Model.Devices;
+using KipTM.Model.Checks;
+using KipTM.Model.Checks.Steps;
 using KipTM.Model.Devices;
 using NLog;
 using Tools;
 
-namespace KipTM.Model.Checks.Steps.ADTSTest
+namespace ADTSChecks.Model.Steps.ADTSTest
 {
     class EndStep : TestStep, IToBaseStep
     {

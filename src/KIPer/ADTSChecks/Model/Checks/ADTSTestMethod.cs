@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using ADTS;
+using ADTSChecks.Model.Steps.ADTSTest;
 using ADTSData;
 using ArchiveData.DTO.Params;
 using KipTM.Archive;
-using KipTM.Model.Checks.Steps.ADTSTest;
+using KipTM.Model.Checks;
 using Tools;
 
-namespace KipTM.Model.Checks
+namespace ADTSChecks.Model.Checks
 {
     public class ADTSTestMethod : ADTSMethodBase
     {

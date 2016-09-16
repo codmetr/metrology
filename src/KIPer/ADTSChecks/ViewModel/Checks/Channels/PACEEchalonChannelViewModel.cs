@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using ADTSChecks.Model.Channels;
+using GalaSoft.MvvmLight;
 using KipTM.Model.Channels;
 
 namespace KipTM.ViewModel.Channels
@@ -9,7 +10,7 @@ namespace KipTM.ViewModel.Channels
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class PACEEchalonChannelViewModel : ViewModelBase
+    public class PaceEchalonChannelViewModel : ViewModelBase
     {
         private PACEEthalonChannel _model;
         private bool _isActive;
@@ -19,7 +20,7 @@ namespace KipTM.ViewModel.Channels
         /// <summary>
         /// Initializes a new instance of the PACEEchalonChannelViewModel class.
         /// </summary>
-        public PACEEchalonChannelViewModel(PACEEthalonChannel model)
+        public PaceEchalonChannelViewModel(PACEEthalonChannel model)
         {
             _model = model;
             _model.ActiveStateChange += _model_ActiveStateChange;

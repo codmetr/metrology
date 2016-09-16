@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
+using KipTM.Model;
 using KipTM.Model.TransportChannels;
 using MainLoop;
 
-namespace KipTM.Model.Devices
+namespace ADTSChecks.Model.Devices
 {
     public class ADTSModel
     {

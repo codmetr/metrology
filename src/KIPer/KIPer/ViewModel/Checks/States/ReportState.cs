@@ -9,7 +9,7 @@ using KipTM.ViewModel.Report;
 
 namespace KipTM.ViewModel.Checks.States
 {
-    class ReportState : IWorkflowStep
+    class ReportState : IWorkflowStep, IDisposable
     {
         private IReportViewModel _report;
         private readonly Func<IReportViewModel> _reportFabric;
@@ -24,6 +24,9 @@ namespace KipTM.ViewModel.Checks.States
         public event EventHandler<WorkflowStepChangeEvent> BackAvailabilityChanged;
         public void StateIn()
         {
+            var reportDispose = _report as IDisposable;
+            if (reportDispose != null)
+                reportDispose.Dispose();
             _report = _reportFabric();
         }
 
@@ -33,5 +36,12 @@ namespace KipTM.ViewModel.Checks.States
         }
 
         public object ViewModel { get { return _report; } }
+
+        public void Dispose()
+        {
+            var reportDispose = _report as IDisposable;
+            if (reportDispose != null)
+                reportDispose.Dispose();
+        }
     }
 }

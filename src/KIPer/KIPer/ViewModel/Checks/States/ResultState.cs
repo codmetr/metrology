@@ -22,7 +22,7 @@ namespace KipTM.ViewModel.Checks.States
         public event EventHandler<WorkflowStepChangeEvent> BackAvailabilityChanged;
         public void StateIn()
         {
-            _result = _checkFabric();
+             _result = _checkFabric();
         }
 
         public void StateOut()

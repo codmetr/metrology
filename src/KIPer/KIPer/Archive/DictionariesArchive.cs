@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using ADTSChecks.Model.Checks;
+using ADTSChecks.Model.Devices;
 using KipTM.Archive.DataTypes;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
@@ -39,7 +41,7 @@ namespace KipTM.Archive
             {
                 new ArchivedKeyValuePair(ADTSModel.Key, new List<string>()
                 {
-                    ADTSCheckMethod.Key,
+                    AdtsCheckMethod.Key,
                 }),
             };
         }

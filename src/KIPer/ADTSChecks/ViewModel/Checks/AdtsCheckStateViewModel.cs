@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using ADTSChecks.ViewModel.Services;
 using GalaSoft.MvvmLight;
-using KipTM.Model.Channels;
 using KipTM.Model.Checks;
-using KipTM.Model.TransportChannels;
-using KipTM.ViewModel.Services;
+using KipTM.ViewModel.Checks;
 
-namespace KipTM.ViewModel.Checks
+namespace ADTSChecks.ViewModel.Checks
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.

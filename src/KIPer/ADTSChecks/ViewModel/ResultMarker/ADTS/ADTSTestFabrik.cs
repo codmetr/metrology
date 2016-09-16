@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ADTSChecks.Model.Checks;
 using KipTM.Model.Checks;
+using KipTM.ViewModel;
 using MarkerService;
 
-namespace KipTM.ViewModel.Archive.ADTS
+namespace ADTSChecks.ViewModel.ResultMarker.ADTS
 {
     /// <summary>
     /// Генератор представления для точек проверки ADTS

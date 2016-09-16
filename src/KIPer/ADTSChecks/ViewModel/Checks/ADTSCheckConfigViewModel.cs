@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
-using ArchiveData.DTO;
+using ADTSChecks.Model.Checks;
 using GalaSoft.MvvmLight;
-using KipTM.Archive;
-using KipTM.Model;
 using KipTM.Model.Checks;
+using KipTM.ViewModel;
+using KipTM.ViewModel.Checks;
 
-namespace KipTM.ViewModel.Checks
+namespace ADTSChecks.ViewModel.Checks
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.

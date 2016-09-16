@@ -7,6 +7,8 @@ namespace MarkerService
     /// </summary>
     public class MarkerAttribute:Attribute
     {
+        private Type _targetType;
+
         /// <summary>
         /// Указывает что тип - фабрика маркеров
         /// </summary>
@@ -19,6 +21,10 @@ namespace MarkerService
         /// <summary>
         /// Тип, для которого формируется маркер
         /// </summary>
-        public Type TargetType { get; private set; }
+        public Type TargetType
+        {
+            get { return _targetType; }
+            private set { _targetType = value; }
+        }
     }
 }

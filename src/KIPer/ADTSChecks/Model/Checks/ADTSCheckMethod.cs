@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using ADTS;
+using ADTSChecks.Model.Steps.ADTSCalibration;
 using ADTSData;
 using ArchiveData.DTO.Params;
 using KipTM.Archive;
-using KipTM.Model.Checks.Steps.ADTSCalibration;
+using KipTM.Model.Checks;
 using Tools;
 
-namespace KipTM.Model.Checks
+namespace ADTSChecks.Model.Checks
 {
-    public class ADTSCheckMethod : ADTSMethodBase
+    public class AdtsCheckMethod : ADTSMethodBase
     {
         //public static string Key = "Калибровка ADTS";
         public const string Key = "Калибровка ADTS";
@@ -22,10 +23,10 @@ namespace KipTM.Model.Checks
         private AdtsTestResults _result;
         private AdtsPointResult _resultPoint;
 
-        public ADTSCheckMethod(NLog.Logger logger)
+        public AdtsCheckMethod(NLog.Logger logger)
             : base(logger)
         {
-            base.Key = ADTSCheckMethod.Key;
+            base.Key = AdtsCheckMethod.Key;
             MethodName = "Калибровка ADTS";
             _result = new AdtsTestResults();
             _resultPoint = new AdtsPointResult();
@@ -43,10 +44,10 @@ namespace KipTM.Model.Checks
         public override object GetCustomConfig(IPropertyPool propertyes)
         {
             //var propertyes = propertyPool.ByKey(ChannelKey);
-            var points = propertyes.GetProperty<List<ADTSPoint>>(ADTSCheckMethod.KeyPoints);
-            var channel = propertyes.GetProperty<CalibChannel>(ADTSCheckMethod.KeyChannel);
-            var rate = propertyes.GetProperty<double>(ADTSCheckMethod.KeyRate);
-            var unit = propertyes.GetProperty<PressureUnits>(ADTSCheckMethod.KeyUnit);
+            var points = propertyes.GetProperty<List<ADTSPoint>>(AdtsCheckMethod.KeyPoints);
+            var channel = propertyes.GetProperty<CalibChannel>(AdtsCheckMethod.KeyChannel);
+            var rate = propertyes.GetProperty<double>(AdtsCheckMethod.KeyRate);
+            var unit = propertyes.GetProperty<PressureUnits>(AdtsCheckMethod.KeyUnit);
             return new ADTSMethodParameters(channel, points, rate, unit);
         }
 

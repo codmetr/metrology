@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
+using ADTSChecks.Model.Channels;
+using ADTSChecks.Model.Devices;
 using IEEE488;
 using KipTM.Model.Channels;
 using KipTM.Model.Devices;

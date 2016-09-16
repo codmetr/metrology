@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ADTSChecks.Model.Checks;
+using ADTSChecks.Model.Steps.ADTSCalibration;
 using ADTSData;
 using KipTM.Model.Checks;
+using KipTM.ViewModel;
 using MarkerService;
-using KipTM.Model.Checks.Steps.ADTSCalibration;
 using MarkerService.Filler;
 
-namespace KipTM.ViewModel.ResultFiller.ADTS
+namespace ADTSChecks.ViewModel.ResultFiller.ADTS
 {
-    [FillerKey(ADTSCheckMethod.Key, DoPointStep.KeyStep)]
-    class ADTSCheckPointFiller : IFiller<IParameterResultViewModel>
+    [FillerKey(AdtsCheckMethod.Key, DoPointStep.KeyStep)]
+    public class ADTSCheckPointFiller : IFiller<IParameterResultViewModel>
     {
         public IParameterResultViewModel FillMarker<T>(T result)
         {

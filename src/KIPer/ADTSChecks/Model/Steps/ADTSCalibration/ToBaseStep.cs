@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
-using ArchiveData.DTO.Params;
-using KipTM.Model.Channels;
+using ADTSChecks.Model.Devices;
+using KipTM.Model.Checks;
+using KipTM.Model.Checks.Steps;
 using KipTM.Model.Devices;
 using NLog;
 using Tools;
 
-namespace KipTM.Model.Checks.Steps.ADTSCalibration
+namespace ADTSChecks.Model.Steps.ADTSCalibration
 {
     class ToBaseStep : TestStep, IToBaseStep
     {

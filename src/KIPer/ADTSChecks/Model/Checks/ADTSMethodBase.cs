@@ -4,15 +4,16 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
+using ADTSChecks.Model.Devices;
 using ArchiveData.DTO.Params;
 using KipTM.Archive;
 using KipTM.Model.Channels;
+using KipTM.Model.Checks;
 using KipTM.Model.Checks.Steps;
-using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
 using NLog;
 
-namespace KipTM.Model.Checks
+namespace ADTSChecks.Model.Checks
 {
     public abstract class ADTSMethodBase : ICheckMethod
     {

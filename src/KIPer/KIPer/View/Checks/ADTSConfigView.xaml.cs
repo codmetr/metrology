@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using ADTSChecks.ViewModel.Checks;
 using KipTM.ViewModel.Checks;
 using Tools;
 

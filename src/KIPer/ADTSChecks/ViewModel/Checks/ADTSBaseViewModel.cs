@@ -1,12 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
+using ADTSChecks.Model.Channels;
+using ADTSChecks.Model.Checks;
+using ADTSChecks.ViewModel.Services;
 using ADTSData;
 using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
@@ -16,10 +17,11 @@ using KipTM.Model;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.TransportChannels;
+using KipTM.ViewModel;
 using KipTM.ViewModel.Channels;
-using KipTM.ViewModel.Services;
+using KipTM.ViewModel.Checks;
 
-namespace KipTM.ViewModel.Checks
+namespace ADTSChecks.ViewModel.Checks
 {
     public abstract class ADTSBaseViewModel : ViewModelBase, IMethodViewModel
     {
@@ -479,7 +481,7 @@ namespace KipTM.ViewModel.Checks
         {
             if (model is PACEEthalonChannel)
             {
-                return new PACEEchalonChannelViewModel(model as PACEEthalonChannel);
+                return new PaceEchalonChannelViewModel(model as PACEEthalonChannel);
             }
             return null;
         }

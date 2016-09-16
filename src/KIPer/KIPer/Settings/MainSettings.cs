@@ -4,6 +4,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ADTSChecks.Model.Devices;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 
@@ -41,20 +42,20 @@ namespace KipTM.Settings
             {
                 new DeviceTypeSettings()
                 {
-                    Key = KipTM.Model.Devices.ADTSModel.Key,
-                    Model = KipTM.Model.Devices.ADTSModel.Model,
-                    DeviceCommonType = KipTM.Model.Devices.ADTSModel.DeviceCommonType,
-                    DeviceManufacturer = KipTM.Model.Devices.ADTSModel.DeviceManufacturer,
-                    TypesEtalonParameters = new List<string>(KipTM.Model.Devices.ADTSModel.TypesEtalonParameters),
+                    Key = ADTSModel.Key,
+                    Model = ADTSModel.Model,
+                    DeviceCommonType = ADTSModel.DeviceCommonType,
+                    DeviceManufacturer = ADTSModel.DeviceManufacturer,
+                    TypesEtalonParameters = new List<string>(ADTSModel.TypesEtalonParameters),
                     //AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key, UserEchalonChannel.Key},
                 },
                 new DeviceTypeSettings()
                 {
-                    Key = KipTM.Model.Devices.PACE1000Model.Key,
-                    Model = KipTM.Model.Devices.PACE1000Model.Model,
-                    DeviceCommonType = KipTM.Model.Devices.PACE1000Model.DeviceCommonType,
-                    DeviceManufacturer = KipTM.Model.Devices.PACE1000Model.DeviceManufacturer,
-                    TypesEtalonParameters = new List<string>(KipTM.Model.Devices.ADTSModel.TypesEtalonParameters),
+                    Key = PACE1000Model.Key,
+                    Model = PACE1000Model.Model,
+                    DeviceCommonType = PACE1000Model.DeviceCommonType,
+                    DeviceManufacturer = PACE1000Model.DeviceManufacturer,
+                    TypesEtalonParameters = new List<string>(ADTSModel.TypesEtalonParameters),
                     //AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key, UserEchalonChannel.Key},
                 },
 
@@ -64,11 +65,11 @@ namespace KipTM.Settings
                 new DeviceSettings()
                 {
                     Address = "0",
-                    Name = KipTM.Model.Devices.PACE1000Model.Key,
-                    Model = KipTM.Model.Devices.PACE1000Model.Model,
-                    DeviceCommonType = KipTM.Model.Devices.PACE1000Model.DeviceCommonType,
-                    DeviceManufacturer = KipTM.Model.Devices.PACE1000Model.DeviceManufacturer,
-                    TypesEtalonParameters = new List<string>(KipTM.Model.Devices.PACE1000Model.TypesEtalonParameters),
+                    Name = PACE1000Model.Key,
+                    Model = PACE1000Model.Model,
+                    DeviceCommonType = PACE1000Model.DeviceCommonType,
+                    DeviceManufacturer = PACE1000Model.DeviceManufacturer,
+                    TypesEtalonParameters = new List<string>(PACE1000Model.TypesEtalonParameters),
                     SerialNumber = "123",
                     NamePort = "COM1"
                 },
@@ -78,11 +79,11 @@ namespace KipTM.Settings
                 new DeviceSettings()
                 {
                     Address = "0",
-                    Name = KipTM.Model.Devices.ADTSModel.Key,
-                    Model = KipTM.Model.Devices.ADTSModel.Model,
-                    DeviceCommonType = KipTM.Model.Devices.ADTSModel.DeviceCommonType,
-                    DeviceManufacturer = KipTM.Model.Devices.ADTSModel.DeviceManufacturer,
-                    TypesEtalonParameters = new List<string>(KipTM.Model.Devices.ADTSModel.TypesEtalonParameters),
+                    Name = ADTSModel.Key,
+                    Model = ADTSModel.Model,
+                    DeviceCommonType = ADTSModel.DeviceCommonType,
+                    DeviceManufacturer = ADTSModel.DeviceManufacturer,
+                    TypesEtalonParameters = new List<string>(ADTSModel.TypesEtalonParameters),
                     SerialNumber = "123",
                     NamePort = "COM2"
                 },

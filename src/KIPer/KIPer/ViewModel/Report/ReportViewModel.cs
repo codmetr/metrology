@@ -45,6 +45,9 @@ namespace KipTM.ViewModel.Report
 
         public void Dispose()
         {
+            var reportDispose = ReportSource as IDisposable;
+            if (reportDispose != null)
+                reportDispose.Dispose();
             Cleanup();
         }
     }

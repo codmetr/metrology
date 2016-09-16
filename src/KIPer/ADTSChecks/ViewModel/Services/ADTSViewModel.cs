@@ -4,13 +4,15 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Input;
 using ADTS;
+using ADTSChecks.Model.Devices;
 using GalaSoft.MvvmLight;
 using KipTM.Interfaces;
 using KipTM.Model;
 using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
+using KipTM.ViewModel;
 
-namespace KipTM.ViewModel.Services
+namespace ADTSChecks.ViewModel.Services
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ADTSChecks.ViewModel.Checks;
 using KipTM.ViewModel.Checks;
 using Tools;
 

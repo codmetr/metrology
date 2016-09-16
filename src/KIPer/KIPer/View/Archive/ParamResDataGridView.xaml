@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:KipTM.ViewModel"
+             xmlns:viewModel1="clr-namespace:KipTM.ViewModel;assembly=CheckFrame"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -17,14 +18,14 @@
         <DataGrid.Columns>
             <DataGridTemplateColumn Header="Параметр">
                 <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="viewModel:IParameterResultViewModel">
+                    <DataTemplate DataType="viewModel1:IParameterResultViewModel">
                        <TextBlock Text="{Binding NameParameter}" Style="{StaticResource ItemedValueTextBoxStyle}" HorizontalAlignment="Center"/>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
             <DataGridTemplateColumn Header="Проверяемая точка">
                 <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="viewModel:IParameterResultViewModel">
+                    <DataTemplate DataType="viewModel1:IParameterResultViewModel">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding PointMeashuring}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                             <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
@@ -34,7 +35,7 @@
             </DataGridTemplateColumn>
             <DataGridTemplateColumn Header="Допуск">
                 <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="viewModel:IParameterResultViewModel">
+                    <DataTemplate DataType="viewModel1:IParameterResultViewModel">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding Tolerance}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                             <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
@@ -44,7 +45,7 @@
             </DataGridTemplateColumn>
             <DataGridTemplateColumn Header="Результат">
                 <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="viewModel:IParameterResultViewModel">
+                    <DataTemplate DataType="viewModel1:IParameterResultViewModel">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5,0,5,0">
                             <TextBlock Text="{Binding Error}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                             <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>

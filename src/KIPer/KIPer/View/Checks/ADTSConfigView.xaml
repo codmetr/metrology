@@ -6,8 +6,9 @@
              xmlns:checks="clr-namespace:KipTM.ViewModel.Checks;assembly=ADTSChecks"
              xmlns:checks2="clr-namespace:ADTSChecks.ViewModel.Checks;assembly=ADTSChecks"
              xmlns:checks1="clr-namespace:KipTM.Model.Checks;assembly=ADTSChecks"
+             xmlns:checks3="clr-namespace:ADTSChecks.Model.Checks;assembly=ADTSChecks"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance checks:ADTSCheckConfigViewModel}">
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance checks2:ADTSCheckConfigViewModel}">
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="5"/>
@@ -72,7 +73,7 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListView.ItemTemplate>
-                    <DataTemplate DataType="checks1:ADTSPoint">
+                    <DataTemplate DataType="checks3:ADTSPoint">
                         <Border BorderBrush="Black" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox IsChecked="{Binding IsAvailable, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="5"/>
@@ -129,7 +130,7 @@
                 </StackPanel>
                 <ContentPresenter Content="{Binding Path=SelectedPoint, UpdateSourceTrigger=PropertyChanged}">
                     <ContentPresenter.ContentTemplate>
-                        <DataTemplate DataType="checks1:ADTSPoint">
+                        <DataTemplate DataType="checks3:ADTSPoint">
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock VerticalAlignment="Center" Margin="5">Контрольная точка:</TextBlock>
