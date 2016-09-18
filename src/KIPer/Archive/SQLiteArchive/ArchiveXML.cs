@@ -1,26 +1,24 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
 namespace SQLiteArchive
 {
-    public class Archive : IArchive
+    public class ArchiveXML : IArchive
     {
         public string _archiveFileFormat = "KTM\\KipTM\\Archive\\{0}.xml";
         const string ExtraTypesKeyFormat = "{0}_extraTypes";
 
-        public Archive()
+        public ArchiveXML()
         {
-            //var conn = new SQLiteConnection()
+            
         }
 
         /// <summary>
@@ -88,27 +86,6 @@ namespace SQLiteArchive
                 result = (T)xmlSerializer.Deserialize(reader);
             }
             return result;
-        }
-
-
-        public void Test()
-        {
-            SQLiteConnection conn = new SQLiteConnection("Data Source=filename.db; Version=3;");
-            try
-            {
-                conn.Open();
-            }
-            catch (SQLiteException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            if (conn.State == ConnectionState.Open)
-            {
-                // ******
-            }
-
-            conn.Dispose();
         }
 
         /// <summary>
@@ -191,31 +168,6 @@ namespace SQLiteArchive
                     break;
             }
             return result;
-        }
-
-        public bool GetStructureTypeList(object target, List<string> typeSet, string branch)
-        {
-            var targetType = target.GetType();
-            var properties = targetType.GetProperties();
-            foreach (var propertyInfo in properties)
-            {
-                if(IsSimple(propertyInfo.PropertyType))
-                    typeSet.Add(CombinePath(branch, propertyInfo.Name));
-                var pvalue = propertyInfo.GetValue(target, null);
-                var plist = pvalue as IList;
-                if()
-            }
-            return true;
-        }
-
-        private bool IsSimple(Type type)
-        {
-            return type == typeof(int) || type == typeof(double) || type == typeof(string);
-        }
-
-        string CombinePath(string brunch, string point)
-        {
-            return string.Format("{0}.{1}", brunch, point);
         }
     }
 }

@@ -40,11 +40,11 @@ namespace KipTM.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            SimpleIoc.Default.Register<SQLiteArchive.IArchive, SQLiteArchive.Archive>();
+            SimpleIoc.Default.Register<SQLiteArchive.IArchive, SQLiteArchive.ArchiveXML>();
             SimpleIoc.Default.Register<IMainSettings>(() => ServiceLocator.Current.GetInstance<SQLiteArchive.IArchive>().Load(MainSettings.SettingsFileName, MainSettings.GetDefault()));
             SimpleIoc.Default.Register<IPropertiesLibrary, PropertiesLibrary>();
-            SimpleIoc.Default.Register<IMarkerFabrik<IParameterResultViewModel>>(() => MarkerFabrik<IParameterResultViewModel>.Locator, true);
-            SimpleIoc.Default.Register<IFillerFabrik<IParameterResultViewModel>>(() => FillerFabrik<IParameterResultViewModel>.Locator, true);
+            SimpleIoc.Default.Register<IMarkerFabrik<IParameterResultViewModel>>(() => MarkerFabrik<IParameterResultViewModel>.Locator, false);
+            SimpleIoc.Default.Register<IFillerFabrik<IParameterResultViewModel>>(() => FillerFabrik<IParameterResultViewModel>.Locator, false);
             SimpleIoc.Default.Register<IReportFabrik>(() => ReportFabrik.Locator, true);
             if (ViewModelBase.IsInDesignModeStatic)
             {
