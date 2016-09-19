@@ -49,7 +49,9 @@
   <ItemGroup>
     <Compile Include="Archive.cs" />
     <Compile Include="ArchiveXML.cs" />
+    <Compile Include="IArchiveCustomized.cs" />
     <Compile Include="IArchive.cs" />
+    <Compile Include="IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeHelperEx.cs" />
   </ItemGroup>

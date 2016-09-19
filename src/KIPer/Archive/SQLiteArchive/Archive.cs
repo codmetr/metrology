@@ -199,11 +199,18 @@ namespace SQLiteArchive
             var properties = targetType.GetProperties();
             foreach (var propertyInfo in properties)
             {
+                var propertyBrunch = CombinePath(branch, propertyInfo.Name);
                 if(IsSimple(propertyInfo.PropertyType))
-                    typeSet.Add(CombinePath(branch, propertyInfo.Name));
+                    typeSet.Add(propertyBrunch);
                 var pvalue = propertyInfo.GetValue(target, null);
                 var plist = pvalue as IList;
-                if()
+                if (plist != null)
+                {
+                    foreach (var item in plist)
+                    {
+                        GetStructureTypeList(item, typeSet, propertyBrunch);
+                    }
+                }
             }
             return true;
         }
