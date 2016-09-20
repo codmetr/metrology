@@ -13,6 +13,21 @@ namespace ArchiveData.DTO
         }
 
         /// <summary>
+        /// Тип поверки
+        /// </summary>
+        public string CheckType { get; set; }
+
+        /// <summary>
+        /// Дата проверки
+        /// </summary>
+        public DateTime Timestamp { get; set; }
+
+        /// <summary>
+        /// Ключь типа проверяемого устройства
+        /// </summary>
+        public string TargetDeviceKey { get; set; }
+
+        /// <summary>
         /// Пользователь проводивший проверку
         /// </summary>
         public string User { get; set; }
@@ -21,11 +36,6 @@ namespace ArchiveData.DTO
         /// Пометка к поверке
         /// </summary>
         public string Note { get; set; }
-
-        /// <summary>
-        /// Дата проверки
-        /// </summary>
-        public DateTime Timestamp { get; set; }
 
         /// <summary>
         /// Атмосферное давление, гПа
@@ -48,19 +58,9 @@ namespace ArchiveData.DTO
         public string Client { get; set; }
 
         /// <summary>
-        /// Тип поверки
-        /// </summary>
-        public string CheckType { get; set; }
-
-        /// <summary>
         /// Канал устройства
         /// </summary>
         public string Channel { get; set; }
-
-        /// <summary>
-        /// Ключь типа проверяемого устройства
-        /// </summary>
-        public string TargetDeviceKey { get; set; }
 
         /// <summary>
         /// Целевое устройство
