@@ -4,6 +4,7 @@ using ADTSData;
 using ArchiveData.DTO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SQLiteArchive;
+using System.IO;
 
 namespace SerialiserTest
 {
@@ -41,6 +42,13 @@ namespace SerialiserTest
             var archive = new Archive();
             archive.Save("test", result);
             result = archive.Load<List<List<string>>>("test");
+        }
+
+        [TestMethod]
+        public void TestLoad()
+        {
+            var repo = new SqliteRepo();
+            repo.CreateRepository("123.db");
         }
     }
 }
