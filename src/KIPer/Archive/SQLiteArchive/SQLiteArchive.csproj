@@ -49,6 +49,10 @@
   <ItemGroup>
     <Compile Include="Archive.cs" />
     <Compile Include="ArchiveXML.cs" />
+    <Compile Include="Repo\DictionaryTreeRepo.cs" />
+    <Compile Include="Repo\Entity.cs" />
+    <Compile Include="Repo\MaxId.cs" />
+    <Compile Include="Repo\TreeRepo.cs" />
     <Compile Include="IArchiveCustomized.cs" />
     <Compile Include="IArchive.cs" />
     <Compile Include="IRepository.cs" />
