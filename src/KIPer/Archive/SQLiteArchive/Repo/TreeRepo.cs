@@ -9,18 +9,18 @@ namespace SQLiteArchive.Repo
 {
     public class TreeRepo
     {
-        private readonly int _Id;
+        private readonly int _id;
         private IDictionary<string, Entity> _properties;
         private DictionaryTreeRepo _childs;
 
         public TreeRepo(int id)
         {
-            _Id = id;
+            _id = id;
         }
 
         public TreeRepo()
         {
-            _Id = MaxId.Next;
+            _id = MaxId.Next;
         }
 
         public int Id { get { return _id; } }
@@ -29,8 +29,9 @@ namespace SQLiteArchive.Repo
         {
             get
             {
-                if (!_properties.ContainsKey(key))
-                    _properties.Add(key, string.Empty);
+                if (_properties.ContainsKey(key))
+                    return _properties[key];
+                _properties.Add(key, new Entity());
                 return _properties[key];
             }
             set

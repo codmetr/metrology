@@ -7,16 +7,16 @@ namespace SQLiteArchive.Repo
 {
     public class Entity
     {
-        private readonly int _Id;
+        private readonly int _id;
         
         public Entity(int id)
         {
-            _Id = id;
+            _id = id;
         }
 
         public Entity()
         {
-            _Id = MaxId.Next;
+            _id = MaxId.Next;
         }
 
         public int Id { get { return _id; } }

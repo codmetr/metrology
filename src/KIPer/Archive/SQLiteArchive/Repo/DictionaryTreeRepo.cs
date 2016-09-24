@@ -11,8 +11,20 @@ namespace SQLiteArchive.Repo
 
         public TreeRepo this[string key]
         {
-            get { }
-            set;
+            get
+            {
+                if (_childs.ContainsKey(key))
+                    return _childs[key];
+                _childs.Add(key, new TreeRepo());
+                return _childs[key];
+            }
+            set
+            {
+                if (_childs.ContainsKey(key))
+                    _childs[key] = value;
+                else
+                    _childs.Add(key, value);
+            }
         }
 
     }
