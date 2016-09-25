@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
+using SQLiteArchive.Repo;
 
 namespace SQLiteArchive
 {
@@ -11,28 +13,37 @@ namespace SQLiteArchive
     {
         private string path;
 
-        private IEnumerable<DataRow> GetAllRows(out string error)
+        private IEnumerable<DataRow> GetAllRows()
         {
-            error = string.Empty;
             if (!File.Exists(path))
             {
-                error = "file not found";
-                return null;
+                yield break;
             }
 
             using (var conn = new SQLiteConnection(path))
             {
-                SQLiteCommand cmd = new SQLiteCommand("SELECT * from data");
+                var cmd = new SQLiteCommand("SELECT * from data", conn);
+                var reader = cmd.ExecuteReader();
 
+                do
+                {
+                    var id = (int) reader["Id"];
+                    var parrentId = (int)reader["parrent"];
+                    var val = (string)reader["value"];
+                    yield return new DataRow(id, parrentId, val);
+                } while (reader.NextResult());
                 conn.Close();
             }
         }
 
-        public bool Load(string path, out string error)
+        public bool Load()
         {
-            error = string.Empty;
-            var data = GetAllRows(out error);
-
+            IDictionary<int, TreeRepo> 
+            var data = GetAllRows();
+            foreach (var dataRow in data)
+            {
+                
+            }
             return true;
         }
 
