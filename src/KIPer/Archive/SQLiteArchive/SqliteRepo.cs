@@ -9,19 +9,29 @@ namespace SQLiteArchive
 {
     public class SqliteRepo : IRepository
     {
-        public bool Load(string path, out string error)
+        private string path;
+
+        private IEnumerable<DataRow> GetAllRows(out string error)
         {
             error = string.Empty;
             if (!File.Exists(path))
             {
                 error = "file not found";
-                return false;
+                return null;
             }
 
             using (var conn = new SQLiteConnection(path))
             {
-                SQLiteCommand cmd = new SQLiteCommand("SELECT *");
+                SQLiteCommand cmd = new SQLiteCommand("SELECT * from data");
+
+                conn.Close();
             }
+        }
+
+        public bool Load(string path, out string error)
+        {
+            error = string.Empty;
+            var data = GetAllRows(out error);
 
             return true;
         }
