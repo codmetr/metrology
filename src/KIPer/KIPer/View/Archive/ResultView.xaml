@@ -33,6 +33,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
                 <TextBlock Grid.Column="0" Grid.Row="0">Тип теста:</TextBlock>
@@ -43,6 +44,7 @@
 
                 <TextBlock Grid.Column="0" Grid.Row="2">Серийный номер:</TextBlock>
                 <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Device.SerialNumber}"/>
+                <Button Grid.Row="4" Content="Сохранить" Command="{Binding Save}"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Результаты" Grid.Column="1">

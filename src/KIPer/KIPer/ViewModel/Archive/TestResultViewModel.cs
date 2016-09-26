@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using KipTM.Model.Devices;
 using KipTM.ViewModel.ResultFiller;
 using MarkerService.Filler;
+using System.Windows.Input;
 
 namespace KipTM.ViewModel
 {
@@ -24,12 +25,13 @@ namespace KipTM.ViewModel
         private ObservableCollection<IParameterResultViewModel> _parameters;
         private string _testType;
         private ObservableCollection<IDeviceViewModel> _etalons;
+        private Action<TestResult> _save;
 
         private readonly TestResult _result;
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
         /// </summary>
-        public TestResultViewModel(TestResult result, IEnumerable<IParameterResultViewModel> expectedResuls, IFillerFabrik<IParameterResultViewModel> _filler)
+        public TestResultViewModel(TestResult result, IEnumerable<IParameterResultViewModel> expectedResuls, IFillerFabrik<IParameterResultViewModel> _filler, Action<TestResult> save)
         {
             _result = result;
             if (IsInDesignMode)
@@ -38,7 +40,7 @@ namespace KipTM.ViewModel
                 TestType = "поверка";
                 User = "Иван Иванович Иванов";
                 Time = DateTime.Parse("11/11/11");
-                Device = new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("UNIK 5000", "Датчик давления", "GE")){SerialNumber = "111"});
+                Device = new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("UNIK 5000", "Датчик давления", "GE")) { SerialNumber = "111" });
                 Etalons = new ObservableCollection<IDeviceViewModel>(new IDeviceViewModel[]
                 {
                     new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("PACE5000", "Датчик давления", "GE Druk")){SerialNumber = "222"}),
@@ -71,7 +73,7 @@ namespace KipTM.ViewModel
                         Error = "0.01"
                     },
                 });
-            #endregion
+                #endregion
             }
             else
             {
@@ -79,14 +81,14 @@ namespace KipTM.ViewModel
                 _user = _result.User;
                 _time = _result.Timestamp;
                 _device = new DeviceViewModel(_result.TargetDevice);
-                _etalons = new ObservableCollection<IDeviceViewModel>(_result.Etalon.Select(el=>new DeviceViewModel(el)));
+                _etalons = new ObservableCollection<IDeviceViewModel>(_result.Etalon.Select(el => new DeviceViewModel(el)));
                 //Parameters = new ObservableCollection<IParameterResultViewModel>(_result.Results.Select(el=>new ParameterResultViewModel(){NameParameter = el.StepKey, PointMeashuring = el.Result.ToString()}));
 
                 var results = new List<IParameterResultViewModel>(expectedResuls);
                 foreach (var stepResult in result.Results)
                 {
                     var filledResult = _filler.FillMarker(stepResult.Result.GetType(), new Tuple<string, string>(stepResult.CheckKey, stepResult.StepKey), stepResult.Result);
-                    if(filledResult == null)
+                    if (filledResult == null)
                         continue;
                     var index = results.FindIndex((el) => el.PointMeashuring == filledResult.PointMeashuring);
                     if (index >= 0)
@@ -96,6 +98,7 @@ namespace KipTM.ViewModel
                     }
                 }
                 Parameters = new ObservableCollection<IParameterResultViewModel>(results);
+                _save = save;
             }
         }
 
@@ -151,6 +154,13 @@ namespace KipTM.ViewModel
         {
             get { return _etalons; }
             set { Set(ref _etalons, value); }
+        }
+
+        public ICommand Save { get { return new CommandWrapper(() => { DoSave(); }); } }
+
+        private void DoSave()
+        {
+            _save(_result);
         }
     }
 }
