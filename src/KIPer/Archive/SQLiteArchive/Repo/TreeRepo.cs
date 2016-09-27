@@ -7,32 +7,39 @@ using System.Text;
 
 namespace SQLiteArchive.Repo
 {
-    public class TreeRepo
+    public class TreeEntity
     {
+        private readonly int _parrentId;
         private readonly int _id;
-        private IDictionary<string, Entity> _properties;
-        private DictionaryTreeRepo _childs;
+        private IDictionary<string, TreeEntity> _properties;
+        private string _key;
+        private string _value;
 
-        public TreeRepo(int id)
+        public TreeEntity(int id, int parrentId)
         {
             _id = id;
+            _parrentId = parrentId;
         }
 
-        public TreeRepo()
-        {
-            _id = MaxId.Next;
-        }
+        public TreeEntity(int parrentId)
+            : this(MaxId.Next, parrentId)
+        {}
 
         public int Id { get { return _id; } }
 
-        public Entity this[string key]
+        public int ParrentId { get { return _parrentId; } }
+
+        public string Key { get { return _key; } set { _key = value; }}
+
+        public string Value { get { return _value; } set { _value = value; } }
+
+        public TreeEntity this[string key]
         {
             get
             {
                 if (_properties.ContainsKey(key))
                     return _properties[key];
-                _properties.Add(key, new Entity());
-                return _properties[key];
+                throw new IndexOutOfRangeException(string.Format("no object by key {0}", key));
             }
             set
             {
@@ -42,7 +49,5 @@ namespace SQLiteArchive.Repo
                     _properties[key] = value;
             }
         }
-
-        public DictionaryTreeRepo Childs { get { return _childs; } }
     }
 }

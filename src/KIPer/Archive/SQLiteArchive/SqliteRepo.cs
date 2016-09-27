@@ -29,8 +29,9 @@ namespace SQLiteArchive
                 {
                     var id = (int) reader["Id"];
                     var parrentId = (int)reader["parrent"];
+                    var key = (string)reader["key"];
                     var val = (string)reader["value"];
-                    yield return new DataRow(id, parrentId, val);
+                    yield return new DataRow(id, parrentId, key, val);
                 } while (reader.NextResult());
                 conn.Close();
             }
@@ -38,11 +39,15 @@ namespace SQLiteArchive
 
         public bool Load()
         {
-            IDictionary<int, TreeRepo> 
+            IDictionary<int, TreeEntity> nodes = new Dictionary<int, TreeEntity>();
             var data = GetAllRows();
             foreach (var dataRow in data)
             {
-                
+                var item = new TreeEntity(dataRow.Id, dataRow.ParrentId) {Key = dataRow.Key, Value = dataRow.Value};
+                if(!nodes.ContainsKey(dataRow.ParrentId))
+                    nodes[dataRow.ParrentId][dataRow.Key] = item;
+
+                nodes.Add(dataRow.Id, item);
             }
             return true;
         }
