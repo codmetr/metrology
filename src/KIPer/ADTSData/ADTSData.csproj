@@ -41,8 +41,19 @@
   <ItemGroup>
     <Compile Include="AdtsPointResult.cs" />
     <Compile Include="AdtsResults.cs" />
+    <Compile Include="ADTSRpo.cs" />
     <Compile Include="IAdtsTestResults.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
+      <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
+      <Name>ArchiveData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Archive\SQLiteArchive\SQLiteArchive.csproj">
+      <Project>{5ddfab0d-1f66-4337-bd2f-ece434d68794}</Project>
+      <Name>SQLiteArchive</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

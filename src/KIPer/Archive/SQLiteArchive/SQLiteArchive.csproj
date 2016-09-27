@@ -50,6 +50,7 @@
     <Compile Include="Archive.cs" />
     <Compile Include="ArchiveXML.cs" />
     <Compile Include="DataRow.cs" />
+    <Compile Include="Repo\ITreeEntity.cs" />
     <Compile Include="Repo\MaxId.cs" />
     <Compile Include="Repo\TreeRepo.cs" />
     <Compile Include="IArchiveCustomized.cs" />

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SQLiteArchive.Repo
 {
-    public class TreeEntity
+    public class TreeEntity : SQLiteArchive.Repo.ITreeEntity
     {
         private readonly int _parrentId;
         private readonly int _id;
