@@ -25,6 +25,13 @@ namespace SQLiteArchive.Repo
             : this(MaxId.Next, parrentId)
         {}
 
+        public static TreeEntity Make(int parrentId, string value)
+        {
+            var res = new TreeEntity(parrentId);
+            res.Value = value;
+            return res;
+        }
+
         public int Id { get { return _id; } }
 
         public int ParrentId { get { return _parrentId; } }

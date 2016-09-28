@@ -27,7 +27,7 @@ namespace SQLiteArchive
 
                 do
                 {
-                    var id = (int) reader["Id"];
+                    var id = (int)reader["Id"];
                     var parrentId = (int)reader["parrent"];
                     var key = (string)reader["key"];
                     var val = (string)reader["value"];
@@ -43,8 +43,8 @@ namespace SQLiteArchive
             var data = GetAllRows();
             foreach (var dataRow in data)
             {
-                var item = new TreeEntity(dataRow.Id, dataRow.ParrentId) {Key = dataRow.Key, Value = dataRow.Value};
-                if(!nodes.ContainsKey(dataRow.ParrentId))
+                var item = new TreeEntity(dataRow.Id, dataRow.ParrentId) { Key = dataRow.Key, Value = dataRow.Value };
+                if (!nodes.ContainsKey(dataRow.ParrentId))
                     nodes[dataRow.ParrentId][dataRow.Key] = item;
 
                 nodes.Add(dataRow.Id, item);
@@ -64,9 +64,9 @@ namespace SQLiteArchive
 
         public bool CreateRepository(string path)
         {
-            if(File.Exists(path))
+            if (File.Exists(path))
                 File.Delete(path);
-            using (var connection = new SQLiteConnection(string.Format("Data Source={0};Version=3;",path)))
+            using (var connection = new SQLiteConnection(string.Format("Data Source={0};Version=3;", path)))
             {
                 connection.Open();
                 SQLiteCommand cmdCreateMainTable = new SQLiteCommand("CREATE TABLE Checks (" +

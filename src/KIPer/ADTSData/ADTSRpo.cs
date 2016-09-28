@@ -24,8 +24,7 @@ namespace ADTSData
             result.Channel = root["Channel"].Value;
             result.TargetDevice = LoadDeviceDescriptor(root["TargetDevice"]);
             result.Etalon = root["Etalon"].Childs.Select(LoadDeviceDescriptor).ToList();
-            result.Results = root["Results"].Childs.Select(LoadDeviceDescriptor).ToList();
-
+            result.Results = root["Results"].Childs.Select(LoadTestStepResult).ToList();
             //TODO load all other
 
             return result;
@@ -34,7 +33,17 @@ namespace ADTSData
 
         public void Save(ITreeEntity root, TestResult result)
         {
-
+            root["CheckType"] = new TreeEntity(root.Id) { Value = result.CheckType };
+            root["Timestamp"] = new TreeEntity(root.Id) { Value = result.Timestamp.ToString() };
+            root["TargetDeviceKey"] = new TreeEntity(root.Id) { Value = result.TargetDeviceKey };
+            root["User"] = new TreeEntity(root.Id) { Value = result.User };
+            root["Note"] = new TreeEntity(root.Id) { Value = result.Note };
+            root["AtmospherePressure"] = new TreeEntity(root.Id) { Value = result.AtmospherePressure };
+            root["Temperature"] = new TreeEntity(root.Id) { Value = result.Temperature };
+            root["Humidity"] = new TreeEntity(root.Id) { Value = result.Humidity };
+            root["Client"] = new TreeEntity(root.Id) { Value = result.Client };
+            root["Channel"] = new TreeEntity(root.Id) { Value = result.Channel };
+            root["TargetDevice"] = new TreeEntity(root.Id) { Value = result.Channel };
         }
 
 
@@ -48,23 +57,49 @@ namespace ADTSData
             };
         }
 
+        private TreeEntity Save(DeviceDescriptor obj, ITreeEntity parrent)
+        {
+            var result = new TreeEntity(parrent.Id);
+            result["PreviousCheckTime"] = TreeEntity.Make(result.Id, obj.PreviousCheckTime.ToString());
+            result["SerialNumber"] = TreeEntity.Make(result.Id, obj.SerialNumber);
+            result["DeviceType"] = Save(obj.DeviceType, result);
+            return result;
+        }
+
         private DeviceTypeDescriptor LoadDeviceTypeDescriptor(ITreeEntity root)
         {
             return new DeviceTypeDescriptor()
-                {
-                    Model = root["Model"].Value,
-                    DeviceCommonType = root["DeviceCommonType"].Value,
-                    DeviceManufacturer = root["DeviceManufacturer"].Value,
-                };
+            {   Model = root["Model"].Value,
+                DeviceCommonType = root["DeviceCommonType"].Value,
+                DeviceManufacturer = root["DeviceManufacturer"].Value};
+        }
+
+        private TreeEntity Save(DeviceTypeDescriptor obj, ITreeEntity parrent)
+        {
+            var result = new TreeEntity(parrent.Id);
+            result["Model"] = TreeEntity.Make(result.Id, obj.Model);
+            result["DeviceCommonType"] = TreeEntity.Make(result.Id, obj.DeviceCommonType);
+            result["DeviceManufacturer"] = TreeEntity.Make(result.Id, obj.DeviceManufacturer);
+            return result;
         }
 
         private TestStepResult LoadTestStepResult(ITreeEntity root)
         {
             return new TestStepResult()
-            {
-                ChannelKey = root["ChannelKey"].Value,
+            {   ChannelKey = root["ChannelKey"].Value,
                 CheckKey = root["CheckKey"].Value,
-            }
+                StepKey = root["StepKey"].Value,
+                Result = LoadAdtsPointResult(root["Result"])};
+        }
+
+        private AdtsPointResult LoadAdtsPointResult(ITreeEntity root)
+        {
+            return new AdtsPointResult()
+            {   Point = double.Parse(root["Point"].Value),
+                Tolerance = double.Parse(root["Point"].Value),
+                RealValue = double.Parse(root["Point"].Value),
+                Error = double.Parse(root["Point"].Value),
+                IsCorrect = bool.Parse(root["Point"].Value)};
         }
     }
 }
