@@ -22,18 +22,9 @@ namespace ADTSData
             result.Humidity = root["Humidity"].Value;
             result.Client = root["Client"].Value;
             result.Channel = root["Channel"].Value;
-            result.TargetDevice = new DeviceDescriptor()
-            {
-                DeviceType = new DeviceTypeDescriptor()
-                {
-                    Model = root["TargetDevice"]["DeviceType"]["Model"].Value,
-                    DeviceCommonType = root["TargetDevice"]["DeviceType"]["DeviceCommonType"].Value,
-                    DeviceManufacturer = root["TargetDevice"]["DeviceType"]["DeviceManufacturer"].Value,
-                },
-                PreviousCheckTime = DateTime.Parse(root["TargetDevice"]["PreviousCheckTime"].Value)
-                SerialNumber = root["TargetDevice"]["SerialNumber"].Value,
-            };
-
+            result.TargetDevice = LoadDeviceDescriptor(root["TargetDevice"]);
+            result.Etalon = root["Etalon"].Childs.Select(LoadDeviceDescriptor).ToList();
+            result.Results = root["Results"].Childs.Select(LoadDeviceDescriptor).ToList();
 
             //TODO load all other
 
@@ -44,6 +35,36 @@ namespace ADTSData
         public void Save(ITreeEntity root, TestResult result)
         {
 
+        }
+
+
+        private DeviceDescriptor LoadDeviceDescriptor(ITreeEntity root)
+        {
+            return new DeviceDescriptor()
+            {
+                DeviceType = LoadDeviceTypeDescriptor(root["DeviceType"]),
+                PreviousCheckTime = DateTime.Parse(root["PreviousCheckTime"].Value),
+                SerialNumber = root["SerialNumber"].Value,
+            };
+        }
+
+        private DeviceTypeDescriptor LoadDeviceTypeDescriptor(ITreeEntity root)
+        {
+            return new DeviceTypeDescriptor()
+                {
+                    Model = root["Model"].Value,
+                    DeviceCommonType = root["DeviceCommonType"].Value,
+                    DeviceManufacturer = root["DeviceManufacturer"].Value,
+                };
+        }
+
+        private TestStepResult LoadTestStepResult(ITreeEntity root)
+        {
+            return new TestStepResult()
+            {
+                ChannelKey = root["ChannelKey"].Value,
+                CheckKey = root["CheckKey"].Value,
+            }
         }
     }
 }

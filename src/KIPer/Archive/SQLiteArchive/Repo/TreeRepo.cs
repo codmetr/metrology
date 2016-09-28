@@ -49,5 +49,7 @@ namespace SQLiteArchive.Repo
                     _properties[key] = value;
             }
         }
+
+        public IEnumerable<TreeEntity> Childs{get { return _properties.Values; }}
     }
 }
