@@ -52,16 +52,16 @@ namespace ADTSChecks.ViewModel.Services
             _deviceManager = deviceManager;
             _avalableUnits = new[]
             {
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.MBar,_pressureUnitToString(PressureUnits.MBar)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inH2O4,_pressureUnitToString(PressureUnits.inH2O4)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inHg,_pressureUnitToString(PressureUnits.inHg)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.mmHg,_pressureUnitToString(PressureUnits.mmHg)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.Pa,_pressureUnitToString(PressureUnits.Pa)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.hPa,_pressureUnitToString(PressureUnits.hPa)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.psi,_pressureUnitToString(PressureUnits.psi)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inH2O60F,_pressureUnitToString(PressureUnits.inH2O60F)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.KgCm2,_pressureUnitToString(PressureUnits.KgCm2)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.mmH2O4,_pressureUnitToString(PressureUnits.mmH2O4)),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.MBar, PressureUnits.MBar.ToStr()),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inH2O4,PressureUnits.inH2O4.ToStr()),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inHg,PressureUnits.inHg.ToStr()),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.mmHg,PressureUnits.mmHg.ToStr()),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.Pa,PressureUnits.Pa.ToStr()),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.hPa,PressureUnits.hPa.ToStr()),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.psi,PressureUnits.psi.ToStr()),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inH2O60F,PressureUnits.inH2O60F.ToStr()),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.KgCm2,PressureUnits.KgCm2.ToStr()),
+                new PressureUnitDescriptor<PressureUnits>(PressureUnits.mmH2O4,PressureUnits.mmH2O4.ToStr()),
             };
             SelectedUnit = _avalableUnits.First();
         }
@@ -347,7 +347,7 @@ namespace ADTSChecks.ViewModel.Services
         {
             if (_model != null && _model.PUnits != null)
             {
-                PressureUnit = _pressureUnitToString(_model.PUnits.Value);
+                PressureUnit = _model.PUnits.Value.ToStr();
             }
         }
         #endregion
@@ -407,42 +407,6 @@ namespace ADTSChecks.ViewModel.Services
         private void _setPitotRate()
         {
             _model.SetRate(Parameters.PT, PitotRateAim, _cancellation.Token);
-        }
-
-        string _pressureUnitToString(PressureUnits unit)
-        {
-            switch (unit)
-            {
-                case PressureUnits.None:
-                    break;
-                case PressureUnits.MBar:
-                    return "мБар";
-                case PressureUnits.inH2O4:
-                    return "дюйм.вод.ст.";
-                case PressureUnits.inH2O20:
-                    return "дюйм.вод.ст.20С";
-                case PressureUnits.inHg:
-                    return "дюйм.рт.ст.";
-                case PressureUnits.mmHg:
-                    return "мм рт.ст";
-                case PressureUnits.Pa:
-                    return "Па";
-                case PressureUnits.hPa:
-                    return "гПа";
-                case PressureUnits.psi:
-                    return "Фунт-сила на кв. дюйм";
-                case PressureUnits.inH2O60F:
-                    return "дюйм.вод.ст.60F";
-                case PressureUnits.KgCm2:
-                    return "кгс//см";
-                case PressureUnits.FS:
-                    return "Фунт-сила";
-                case PressureUnits.mmH2O4:
-                    return "мм вод.ст";
-                default:
-                    throw new ArgumentOutOfRangeException("unit");
-            }
-            return string.Empty;
         }
         #endregion
     }

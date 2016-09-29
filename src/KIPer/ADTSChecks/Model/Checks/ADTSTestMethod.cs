@@ -18,6 +18,7 @@ namespace ADTSChecks.Model.Checks
         public const string KeyPropertyRate = "Rate";
         public const string KeyPropertyUnit = "Unit";
         public const string KeyPropertyChannel = "Channel";
+        public PressureUnits _unit;
 
         private AdtsTestResults _result;
         private AdtsPointResult _resultPoint;
@@ -46,8 +47,8 @@ namespace ADTSChecks.Model.Checks
             var points = propertyes.GetProperty<List<ADTSPoint>>(KeyPropertyPoints);
             var channel = propertyes.GetProperty<CalibChannel>(KeyPropertyChannel);
             var rate = propertyes.GetProperty<double>(KeyPropertyRate);
-            var unit = propertyes.GetProperty<PressureUnits>(KeyPropertyUnit);
-            return new ADTSMethodParameters(channel, points, rate, unit);
+            _unit = propertyes.GetProperty<PressureUnits>(KeyPropertyUnit);
+            return new ADTSMethodParameters(channel, points, rate, _unit);
         }
 
         /// <summary>
@@ -80,7 +81,7 @@ namespace ADTSChecks.Model.Checks
 
             foreach (var point in parameters.Points)
             {
-                step = new CheckStepConfig( new DoPointStep(string.Format("Поверка точки {0}", point.Pressure), _adts, param, point.Pressure,
+                step = new CheckStepConfig(new DoPointStep(string.Format("Поверка точки {0} {1}", point.Pressure, _unit.ToStr()), _adts, param, point.Pressure,
                         point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _userChannel, _logger), false, point.IsAvailable);
                 AttachStep(step.Step);
                 steps.Add(step);

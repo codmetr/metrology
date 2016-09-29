@@ -32,7 +32,7 @@
                     <DatePicker FirstDayOfWeek="Monday" DisplayDate="{Binding CheckDateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>Температура, °С:</TextBlock>
                     <TextBox Text="{Binding Temperature, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock>Атмосферное давление, гПа:</TextBlock>
+                    <TextBlock>Атмосферное давление, кПа:</TextBlock>
                     <TextBox Text="{Binding AtmospherePressure, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>Относительная влажность, %:</TextBlock>
                     <TextBox Text="{Binding Humidity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -74,7 +74,7 @@
                     <ComboBox
                                 ItemsSource="{Binding EthalonTypes}"
                                 SelectedItem="{Binding SelectedEthalonType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock Text="Тип аналоговога прибора:">
+                    <TextBlock Text="Тип СИ:">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -98,7 +98,7 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <TextBlock>Завдской номер:</TextBlock>
+                    <TextBlock>Заводской номер:</TextBlock>
                     <TextBox Text="{Binding EthalonSerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>Дата предыдущей поверки:</TextBlock>
                     <DatePicker FirstDayOfWeek="Monday" DisplayDate="{Binding EthalonPreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -112,7 +112,8 @@
             </GroupBox>
         </StackPanel>
         <StackPanel Grid.Column="2" Grid.Row="0">
-            <GroupBox Header="Настройки методики" Visibility="{Binding IsCustomSettingsAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <GroupBox Header="Настройки методики"
+                      Visibility="{Binding IsCustomSettingsAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ContentPresenter Content="{Binding CustomSetiings, UpdateSourceTrigger=PropertyChanged}"/>
             </GroupBox>
         </StackPanel>

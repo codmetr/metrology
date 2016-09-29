@@ -39,6 +39,7 @@ namespace ReportAdts
                 SerialNumber = result.TargetDevice.SerialNumber,
                 AtmosphericPressure = result.AtmospherePressure,
                 Temperature = result.Temperature,
+                ReportNumber = "123"
             };
             if (ethalon != null)
             {

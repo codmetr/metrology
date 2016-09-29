@@ -201,4 +201,44 @@ namespace ADTS
         }
         #endregion Набор статических методов для работы с ADTS
 
+    public static class Extentions
+    {
+
+        public static string ToStr(this PressureUnits unit)
+        {
+            switch (unit)
+            {
+                case PressureUnits.None:
+                    break;
+                case PressureUnits.MBar:
+                    return "мБар";
+                case PressureUnits.inH2O4:
+                    return "дюйм.вод.ст.";
+                case PressureUnits.inH2O20:
+                    return "дюйм.вод.ст.20С";
+                case PressureUnits.inHg:
+                    return "дюйм.рт.ст.";
+                case PressureUnits.mmHg:
+                    return "мм рт.ст";
+                case PressureUnits.Pa:
+                    return "Па";
+                case PressureUnits.hPa:
+                    return "гПа";
+                case PressureUnits.psi:
+                    return "Фунт-сила на кв. дюйм";
+                case PressureUnits.inH2O60F:
+                    return "дюйм.вод.ст.60F";
+                case PressureUnits.KgCm2:
+                    return "кгс//см";
+                case PressureUnits.FS:
+                    return "Фунт-сила";
+                case PressureUnits.mmH2O4:
+                    return "мм вод.ст";
+                default:
+                    throw new ArgumentOutOfRangeException("unit");
+            }
+            return string.Empty;
+        }
+
+    }
 }

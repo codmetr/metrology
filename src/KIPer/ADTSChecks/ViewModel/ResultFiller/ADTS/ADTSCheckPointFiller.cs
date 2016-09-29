@@ -36,7 +36,7 @@ namespace ADTSChecks.ViewModel.ResultFiller.ADTS
                 Error = result.RealValue.ToString("F2"),
                 PointMeashuring = result.Point.ToString("F2"),
                 Tolerance = result.Tolerance.ToString("F2"),
-                Unit = "kPa"
+                Unit = "мБар"
             };
         }
     }

@@ -8,7 +8,7 @@
              xmlns:checks1="clr-namespace:KipTM.Model.Checks;assembly=ADTSChecks"
              xmlns:checks3="clr-namespace:ADTSChecks.Model.Checks;assembly=ADTSChecks"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance checks2:ADTSCheckConfigViewModel}">
+             d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{d:DesignInstance checks2:ADTSCheckConfigViewModel}">
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="5"/>
@@ -63,7 +63,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="Настройка методики для ADTS" Grid.Row="0">
+        <GroupBox Header="Поверяемые точки для ADTS" Grid.Row="0">
             <ListView x:Name="PointsList"
                       ItemsSource="{Binding Points, UpdateSourceTrigger=PropertyChanged}"
                       SelectedItem="{Binding Path=SelectedPoint, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
@@ -133,7 +133,7 @@
                         <DataTemplate DataType="checks3:ADTSPoint">
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Center" Margin="5">Контрольная точка:</TextBlock>
+                                    <TextBlock VerticalAlignment="Center" Margin="5">Поверяемая точка:</TextBlock>
                                     <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Pressure, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
                                     <TextBlock VerticalAlignment="Center" Margin="5">мБар, Допуск:</TextBlock>
                                     <TextBlock VerticalAlignment="Center" Margin="5" Text="{Binding Tolerance, UpdateSourceTrigger=PropertyChanged}" Width="40" TextAlignment="Right"/>
@@ -149,7 +149,7 @@
         <GroupBox Header="Добавление точки" Grid.Row="2">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource TitleStyle}">Ключевое давление:</TextBlock>
+                    <TextBlock Style="{StaticResource TitleStyle}">Давление точки:</TextBlock>
                     <TextBox Width="70" >
                         <TextBox.Text>
                             <Binding Path="NewPressure" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
@@ -159,7 +159,7 @@
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
-                    <TextBlock>кПа</TextBlock>
+                    <TextBlock>мБар</TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource TitleStyle}" Text="Допуск:"/>
@@ -170,7 +170,7 @@
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox>
-                    <TextBlock><Run Text="кПа"/></TextBlock>
+                    <TextBlock><Run Text="мБар"/></TextBlock>
                 </StackPanel>
                 <Button Command="{Binding AddPoint}" HorizontalAlignment="Right">Добавить точку</Button>
             </StackPanel>

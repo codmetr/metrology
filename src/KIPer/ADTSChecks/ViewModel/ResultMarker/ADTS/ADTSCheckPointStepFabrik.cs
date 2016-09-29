@@ -38,7 +38,7 @@ namespace ADTSChecks.ViewModel.ResultMarker.ADTS
                 PointMeashuring = target.Point.ToString("F2"),
                 Tolerance = target.Tolerance.ToString("F2"),
                 Error = "",
-                Unit = "kPa"
+                Unit = "мБар"
             };
             var result = new List<IParameterResultViewModel> { itemMarker };
             return result;

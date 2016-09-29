@@ -162,6 +162,11 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
         public double Point { get { return _point; } }
 
         /// <summary>
+        /// Ключевая точка
+        /// </summary>
+        public string Unit { get { return _unit.ToStr(); } }
+
+        /// <summary>
         /// Допуск на ключевой точке
         /// </summary>
         public double Tolerance { get { return _tolerance; } }
