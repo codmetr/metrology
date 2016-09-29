@@ -9,9 +9,9 @@ namespace SQLiteArchive.Repo
 {
     public class TreeEntity : SQLiteArchive.Repo.ITreeEntity
     {
-        private readonly int _parrentId;
+        private int _parrentId;
         private readonly int _id;
-        private IDictionary<string, TreeEntity> _properties;
+        private IDictionary<string, TreeEntity> _properties = new Dictionary<string, TreeEntity>();
         private string _key;
         private string _value;
 
@@ -24,6 +24,10 @@ namespace SQLiteArchive.Repo
         public TreeEntity(int parrentId)
             : this(MaxId.Next, parrentId)
         {}
+
+        public TreeEntity()
+            : this(MaxId.Next, 0)
+        { }
 
         public static TreeEntity Make(int parrentId, string value)
         {
@@ -54,9 +58,23 @@ namespace SQLiteArchive.Repo
                     _properties.Add(key, value);
                 else
                     _properties[key] = value;
+                value.Key = key;
+                value._parrentId = Id;
             }
         }
 
-        public IEnumerable<TreeEntity> Childs{get { return _properties.Values; }}
+        public IEnumerable<TreeEntity> Childs
+        {
+            get { return _properties.Values; }
+        }
+
+        public TreeEntity AddRange(IEnumerable<TreeEntity> items)
+        {
+            foreach (var item in items)
+            {
+                this[item.Key] = item;
+            }
+            return this;
+        }
     }
 }

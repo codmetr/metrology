@@ -9,6 +9,11 @@ namespace ADTSData
 {
     public class ADTSRpo
     {
+        /// <summary>
+        /// Загрузка резльтата
+        /// </summary>
+        /// <param name="root"></param>
+        /// <returns></returns>
         public TestResult Load(ITreeEntity root)
         {
             var result= new TestResult();
@@ -31,6 +36,11 @@ namespace ADTSData
 
         }
 
+        /// <summary>
+        /// Сохранение результата
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="result"></param>
         public void Save(ITreeEntity root, TestResult result)
         {
             root["CheckType"] = new TreeEntity(root.Id) { Value = result.CheckType };
@@ -43,10 +53,15 @@ namespace ADTSData
             root["Humidity"] = new TreeEntity(root.Id) { Value = result.Humidity };
             root["Client"] = new TreeEntity(root.Id) { Value = result.Client };
             root["Channel"] = new TreeEntity(root.Id) { Value = result.Channel };
-            root["TargetDevice"] = new TreeEntity(root.Id) { Value = result.Channel };
+            root["TargetDevice"] =  Save(result.TargetDevice, root);
+            root["Etalon"] = new TreeEntity(root.Id).AddRange(result.Etalon.Select(el=>Save(el, null)));//TODO придумать как выбирать ключи
         }
 
-
+        /// <summary>
+        /// Загрузка Описателя устройства
+        /// </summary>
+        /// <param name="root"></param>
+        /// <returns></returns>
         private DeviceDescriptor LoadDeviceDescriptor(ITreeEntity root)
         {
             return new DeviceDescriptor()
@@ -57,15 +72,27 @@ namespace ADTSData
             };
         }
 
+        /// <summary>
+        /// Сохранени Описателя устройства
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="parrent"></param>
+        /// <returns></returns>
         private TreeEntity Save(DeviceDescriptor obj, ITreeEntity parrent)
         {
             var result = new TreeEntity(parrent.Id);
             result["PreviousCheckTime"] = TreeEntity.Make(result.Id, obj.PreviousCheckTime.ToString());
             result["SerialNumber"] = TreeEntity.Make(result.Id, obj.SerialNumber);
             result["DeviceType"] = Save(obj.DeviceType, result);
+            //TODO придумать как выбирать ключи result.Key = ???
             return result;
         }
 
+        /// <summary>
+        /// Загрузка описателя типа устройства
+        /// </summary>
+        /// <param name="root"></param>
+        /// <returns></returns>
         private DeviceTypeDescriptor LoadDeviceTypeDescriptor(ITreeEntity root)
         {
             return new DeviceTypeDescriptor()
@@ -74,6 +101,12 @@ namespace ADTSData
                 DeviceManufacturer = root["DeviceManufacturer"].Value};
         }
 
+        /// <summary>
+        /// Сохранени Описателя типа устройства
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="parrent"></param>
+        /// <returns></returns>
         private TreeEntity Save(DeviceTypeDescriptor obj, ITreeEntity parrent)
         {
             var result = new TreeEntity(parrent.Id);
@@ -83,6 +116,11 @@ namespace ADTSData
             return result;
         }
 
+        /// <summary>
+        /// Загрузка результата шага
+        /// </summary>
+        /// <param name="root"></param>
+        /// <returns></returns>
         private TestStepResult LoadTestStepResult(ITreeEntity root)
         {
             return new TestStepResult()
@@ -92,6 +130,11 @@ namespace ADTSData
                 Result = LoadAdtsPointResult(root["Result"])};
         }
 
+        /// <summary>
+        /// загрузка результата точки
+        /// </summary>
+        /// <param name="root"></param>
+        /// <returns></returns>
         private AdtsPointResult LoadAdtsPointResult(ITreeEntity root)
         {
             return new AdtsPointResult()
