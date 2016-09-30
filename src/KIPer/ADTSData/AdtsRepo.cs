@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ADTSData.Keys;
 
 namespace ADTSData
 {
-    public class ADTSRpo
+    public class AdtsRepo
     {
         /// <summary>
         /// Загрузка резльтата
@@ -54,7 +55,9 @@ namespace ADTSData
             root["Client"] = new TreeEntity(root.Id) { Value = result.Client };
             root["Channel"] = new TreeEntity(root.Id) { Value = result.Channel };
             root["TargetDevice"] =  Save(result.TargetDevice, root);
-            root["Etalon"] = new TreeEntity(root.Id).AddRange(result.Etalon.Select(el=>Save(el, null)));//TODO придумать как выбирать ключи
+            root["Etalon"] = new TreeEntity(root.Id).AddRange(result.Etalon.Select(el=>Save(el, null)));
+            root.Key = result.GetKey();
+            //TODO придумать как выбирать ключи
         }
 
         /// <summary>
@@ -84,7 +87,7 @@ namespace ADTSData
             result["PreviousCheckTime"] = TreeEntity.Make(result.Id, obj.PreviousCheckTime.ToString());
             result["SerialNumber"] = TreeEntity.Make(result.Id, obj.SerialNumber);
             result["DeviceType"] = Save(obj.DeviceType, result);
-            //TODO придумать как выбирать ключи result.Key = ???
+            result.Key = obj.GetKey();
             return result;
         }
 
@@ -98,7 +101,8 @@ namespace ADTSData
             return new DeviceTypeDescriptor()
             {   Model = root["Model"].Value,
                 DeviceCommonType = root["DeviceCommonType"].Value,
-                DeviceManufacturer = root["DeviceManufacturer"].Value};
+                DeviceManufacturer = root["DeviceManufacturer"].Value
+            };
         }
 
         /// <summary>
@@ -113,6 +117,7 @@ namespace ADTSData
             result["Model"] = TreeEntity.Make(result.Id, obj.Model);
             result["DeviceCommonType"] = TreeEntity.Make(result.Id, obj.DeviceCommonType);
             result["DeviceManufacturer"] = TreeEntity.Make(result.Id, obj.DeviceManufacturer);
+            result.Key = obj.GetKey();
             return result;
         }
 

@@ -41,8 +41,11 @@
   <ItemGroup>
     <Compile Include="AdtsPointResult.cs" />
     <Compile Include="AdtsResults.cs" />
-    <Compile Include="ADTSRpo.cs" />
+    <Compile Include="AdtsRepo.cs" />
     <Compile Include="IAdtsTestResults.cs" />
+    <Compile Include="Keys\DeviceTypeDescriptorKey.cs" />
+    <Compile Include="Keys\DeviceDescriptorKey.cs" />
+    <Compile Include="Keys\TestResultKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
