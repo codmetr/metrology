@@ -7,7 +7,7 @@ namespace KipTM.Model.Channels
 {
     public class UserEthalonChannel : IEthalonChannel
     {
-        public static string Key = "UserChannel";
+        public static string Key = "Пользовательский канал";
 
         private readonly IUserChannel _userChannel;
         private readonly TimeSpan _waitPeriod;
