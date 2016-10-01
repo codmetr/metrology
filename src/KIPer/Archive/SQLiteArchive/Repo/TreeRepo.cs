@@ -27,7 +27,7 @@ namespace SQLiteArchive.Repo
 
         public TreeEntity()
             : this(MaxId.Next, 0)
-        { }
+        {}
 
         public static TreeEntity Make(int parrentId, string value)
         {

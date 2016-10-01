@@ -61,15 +61,6 @@
     <Compile Include="TypeHelperEx.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="System.Data.SQLite.EF6.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="System.Data.SQLite.EF6.pdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="System.Data.SQLite.EF6.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="System.Data.SQLite.Linq.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
