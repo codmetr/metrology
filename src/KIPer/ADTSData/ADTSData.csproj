@@ -43,6 +43,7 @@
     <Compile Include="AdtsResults.cs" />
     <Compile Include="AdtsRepo.cs" />
     <Compile Include="IAdtsTestResults.cs" />
+    <Compile Include="Keys\TestStepResultKey.cs" />
     <Compile Include="Keys\DeviceTypeDescriptorKey.cs" />
     <Compile Include="Keys\DeviceDescriptorKey.cs" />
     <Compile Include="Keys\TestResultKey.cs" />

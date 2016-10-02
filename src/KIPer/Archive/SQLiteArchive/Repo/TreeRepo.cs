@@ -14,11 +14,13 @@ namespace SQLiteArchive.Repo
         private IDictionary<string, TreeEntity> _properties = new Dictionary<string, TreeEntity>();
         private string _key;
         private string _value;
+        private ValueWrapper _values;
 
         public TreeEntity(int id, int parrentId)
         {
             _id = id;
             _parrentId = parrentId;
+            _values = new ValueWrapper(this);
         }
 
         public TreeEntity(int parrentId)
@@ -43,6 +45,11 @@ namespace SQLiteArchive.Repo
         public string Key { get { return _key; } set { _key = value; }}
 
         public string Value { get { return _value; } set { _value = value; } }
+
+        public ValueWrapper Values
+        {
+            get { return _values; }
+        }
 
         public TreeEntity this[string key]
         {
@@ -74,6 +81,12 @@ namespace SQLiteArchive.Repo
             {
                 this[item.Key] = item;
             }
+            return this;
+        }
+
+        public TreeEntity SetKey(string key)
+        {
+            _key = key;
             return this;
         }
     }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace SQLiteArchive.Repo
 {
     public interface ITreeEntity
@@ -8,5 +10,7 @@ namespace SQLiteArchive.Repo
         int ParrentId { get; }
         TreeEntity this[string key] { get; set; }
         string Value { get; set; }
+        ValueWrapper Values { get; }
+        IEnumerable<TreeEntity> Childs { get; }
     }
 }
