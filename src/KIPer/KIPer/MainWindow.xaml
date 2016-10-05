@@ -34,7 +34,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
-            <Image Source="Content/icon.png" Height="30" Margin="5,5,5,5"/>
+            <Image Source="Content/icon.png" Height="50" Margin="5,5,5,5"/>
             <ItemsControl Style="{StaticResource MenuCollectionStyle}">
                 <!--<Button Style="{StaticResource ButtonTabStyle}" Content="Архив" Command="{Binding SelectArchive}"/>
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
@@ -70,7 +70,7 @@
                 </Button>
             </ItemsControl>
         </StackPanel>
-        <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}" x:Name="HelpBorder" Height="35">
+        <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}" x:Name="HelpBorder" Height="50">
             <ScrollViewer>
                 <TextBox 
                     Background="{Binding Background, ElementName=HelpBorder}"

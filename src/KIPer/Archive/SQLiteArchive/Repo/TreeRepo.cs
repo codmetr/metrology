@@ -84,6 +84,16 @@ namespace SQLiteArchive.Repo
             return this;
         }
 
+        public TreeEntity RemoveRange(IEnumerable<TreeEntity> items)
+        {
+            foreach (var item in items)
+            {
+                if (_properties.ContainsKey(item.Key))
+                    _properties.Remove(item.Key);
+            }
+            return this;
+        }
+
         public TreeEntity SetKey(string key)
         {
             _key = key;

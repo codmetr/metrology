@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Data;
+using System.Globalization;
 using ArchiveData.DTO;
 using SQLiteArchive.Repo;
 using System;
@@ -12,7 +13,7 @@ namespace ADTSData
     public class AdtsRepo
     {
         /// <summary>
-        /// Загрузка резльтата
+        /// Загрузка резльтата из дерева репозитория
         /// </summary>
         /// <param name="root"></param>
         /// <returns></returns>
@@ -38,7 +39,7 @@ namespace ADTSData
         }
 
         /// <summary>
-        /// Сохранение результата
+        /// Сохранение результата в дерева репозитория
         /// </summary>
         /// <param name="root"></param>
         /// <param name="result"></param>
@@ -60,6 +61,11 @@ namespace ADTSData
             root.Key = result.GetKey();
         }
 
+        /// <summary>
+        /// Обновление состояния дерева репозитория
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="result"></param>
         public void Update(ITreeEntity root, TestResult result)
         {
             root.Values["CheckType"] = result.CheckType;
@@ -73,11 +79,41 @@ namespace ADTSData
             root.Values["Client"] = result.Client;
             root.Values["Channel"] = result.Channel;
             if (root.Childs.Any(el => el.Key == "TargetDevice"))
-            {
-                
-            }
+                Update(result.TargetDevice, root["TargetDevice"]);
             else
                 root["TargetDevice"] = Save(result.TargetDevice);
+
+            if (root.Childs.Any(el => el.Key == "Etalon"))
+            {
+                var forDelete = root["Etalon"].Childs.ToList();
+                foreach (var deviceDescriptor in result.Etalon)
+                {
+                    if (forDelete.All(el => el.Key != deviceDescriptor.GetKey()))
+                        continue;
+                    var item = Update(deviceDescriptor, root["Etalon"][deviceDescriptor.GetKey()]);
+                    forDelete.Remove(item);
+                }
+                root["Etalon"].RemoveRange(forDelete);
+            }
+            else
+                root["Etalon"] = new TreeEntity(root.Id).AddRange(result.Etalon.Select(el => Save(el).SetKey(el.GetKey())));
+
+            if (root.Childs.Any(el => el.Key == "Results"))
+            {
+                var forDelete = root["Results"].Childs.ToList();
+                foreach (var res in result.Results)
+                {
+                    if (forDelete.All(el => el.Key != res.GetKey()))
+                        continue;
+                    var item = Update(res, root["Etalon"][res.GetKey()]);
+                    forDelete.Remove(item);
+                }
+                root["Results"].RemoveRange(forDelete);
+            }
+            else
+                root["Results"] = new TreeEntity(root.Id).AddRange(result.Results.Select(el => Save(el).SetKey(el.GetKey())));
+
+            
         }
 
         #region DeviceDescriptor
@@ -98,24 +134,34 @@ namespace ADTSData
         }
 
         /// <summary>
-        /// Сохранени Описателя устройства
+        /// Сохранение Описателя устройства
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         private TreeEntity Save(DeviceDescriptor obj)
         {
             var result = new TreeEntity();
-            result["PreviousCheckTime"] = TreeEntity.Make(result.Id, obj.PreviousCheckTime.ToString());
+            result["PreviousCheckTime"] = TreeEntity.Make(result.Id, obj.PreviousCheckTime.ToString(CultureInfo.InvariantCulture));
             result["SerialNumber"] = TreeEntity.Make(result.Id, obj.SerialNumber);
             result["DeviceType"] = Save(obj.DeviceType);
             result.Key = obj.GetKey();
             return result;
         }
 
+        /// <summary>
+        /// Обновить состояние описателя в соответствие с описателем устройства
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         private TreeEntity Update(DeviceDescriptor obj, TreeEntity entity)
         {
-
-
+            entity.Values["PreviousCheckTime"] = obj.PreviousCheckTime.ToString(CultureInfo.InvariantCulture);
+            entity.Values["SerialNumber"] = obj.SerialNumber;
+            if (entity.Childs.Any(el => el.Key == "DeviceType"))
+                Update(obj.DeviceType, entity["DeviceType"]);
+            else
+                entity["DeviceType"] = Save(obj.DeviceType);
             return entity;
         }
         #endregion
@@ -152,6 +198,20 @@ namespace ADTSData
             return result;
         }
 
+        /// <summary>
+        /// Обновить состояние описателя в соответствие с описателем типа устройства
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        private TreeEntity Update(DeviceTypeDescriptor obj, TreeEntity entity)
+        {
+            entity.Values["Model"] = obj.Model;
+            entity.Values["DeviceCommonType"] = obj.DeviceCommonType;
+            entity.Values["DeviceManufacturer"] = obj.DeviceManufacturer;
+            return entity;
+        }
+
         #endregion
 
         #region TestStepResult
@@ -173,7 +233,7 @@ namespace ADTSData
         }
 
         /// <summary>
-        /// Сохранени Описателя типа устройства
+        /// Сохранени результата шага
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -185,6 +245,25 @@ namespace ADTSData
             result["StepKey"] = TreeEntity.Make(result.Id, obj.StepKey);
             result["Result"] = Save(obj.Result as AdtsPointResult);
             return result;
+        }
+
+        /// <summary>
+        /// Обновить состояние описателя в соответствие с результатом шага
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        private TreeEntity Update(TestStepResult obj, TreeEntity entity)
+        {
+            entity.Values["ChannelKey"] = obj.ChannelKey;
+            entity.Values["CheckKey"] = obj.CheckKey;
+            entity.Values["StepKey"] = obj.StepKey;
+
+            if (entity.Childs.Any(el => el.Key == "Result"))
+                Update(obj.Result as AdtsPointResult, entity["Result"]);
+            else
+                entity["Result"] = Save(obj.Result as AdtsPointResult);
+            return entity;
         }
 
         #endregion
@@ -222,6 +301,21 @@ namespace ADTSData
             result["Error"] = TreeEntity.Make(result.Id, obj.Error.ToString(CultureInfo.InvariantCulture));
             result["IsCorrect"] = TreeEntity.Make(result.Id, obj.IsCorrect.ToString(CultureInfo.InvariantCulture));
             return result;
+        }
+
+        /// <summary>
+        /// Обновление результата проверки конкретной точки
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private TreeEntity Update(AdtsPointResult obj, TreeEntity entity)
+        {
+            entity.Values["Point"] = obj.Point.ToString(CultureInfo.InvariantCulture);
+            entity.Values["Tolerance"] = obj.Tolerance.ToString(CultureInfo.InvariantCulture);
+            entity.Values["RealValue"] = obj.RealValue.ToString(CultureInfo.InvariantCulture);
+            entity.Values["Error"] = obj.Error.ToString(CultureInfo.InvariantCulture);
+            entity.Values["IsCorrect"] = obj.IsCorrect.ToString(CultureInfo.InvariantCulture);
+            return entity;
         }
 
         #endregion
