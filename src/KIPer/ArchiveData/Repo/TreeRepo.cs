@@ -11,10 +11,10 @@ namespace SQLiteArchive.Repo
     {
         private int _parrentId;
         private readonly int _id;
-        private IDictionary<string, TreeEntity> _properties = new Dictionary<string, TreeEntity>();
+        private readonly IDictionary<string, ITreeEntity> _properties = new Dictionary<string, ITreeEntity>();
         private string _key;
         private string _value;
-        private ValueWrapper _values;
+        private readonly ValueWrapper _values;
 
         public TreeEntity(int id, int parrentId)
         {
@@ -51,7 +51,7 @@ namespace SQLiteArchive.Repo
             get { return _values; }
         }
 
-        public TreeEntity this[string key]
+        public ITreeEntity this[string key]
         {
             get
             {
@@ -66,16 +66,16 @@ namespace SQLiteArchive.Repo
                 else
                     _properties[key] = value;
                 value.Key = key;
-                value._parrentId = Id;
+                value.SetParrent(this);
             }
         }
 
-        public IEnumerable<TreeEntity> Childs
+        public IEnumerable<ITreeEntity> Childs
         {
             get { return _properties.Values; }
         }
 
-        public TreeEntity AddRange(IEnumerable<TreeEntity> items)
+        public ITreeEntity AddRange(IEnumerable<ITreeEntity> items)
         {
             foreach (var item in items)
             {
@@ -84,7 +84,7 @@ namespace SQLiteArchive.Repo
             return this;
         }
 
-        public TreeEntity RemoveRange(IEnumerable<TreeEntity> items)
+        public ITreeEntity RemoveRange(IEnumerable<ITreeEntity> items)
         {
             foreach (var item in items)
             {
@@ -94,9 +94,15 @@ namespace SQLiteArchive.Repo
             return this;
         }
 
-        public TreeEntity SetKey(string key)
+        public ITreeEntity SetKey(string key)
         {
             _key = key;
+            return this;
+        }
+
+        public ITreeEntity SetParrent(ITreeEntity parrent)
+        {
+            _parrentId = parrent.Id;
             return this;
         }
     }

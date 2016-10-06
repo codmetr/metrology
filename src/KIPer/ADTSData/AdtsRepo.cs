@@ -13,7 +13,7 @@ namespace ADTSData
     public class AdtsRepo
     {
         /// <summary>
-        /// Загрузка резльтата из дерева репозитория
+        /// Загрузка результата из дерева репозитория
         /// </summary>
         /// <param name="root"></param>
         /// <returns></returns>
@@ -66,7 +66,7 @@ namespace ADTSData
         /// </summary>
         /// <param name="root"></param>
         /// <param name="result"></param>
-        public void Update(ITreeEntity root, TestResult result)
+        public ITreeEntity Update(ITreeEntity root, TestResult result)
         {
             root.Values["CheckType"] = result.CheckType;
             root.Values["Timestamp"] = result.Timestamp.ToString(CultureInfo.InvariantCulture);
@@ -113,7 +113,7 @@ namespace ADTSData
             else
                 root["Results"] = new TreeEntity(root.Id).AddRange(result.Results.Select(el => Save(el).SetKey(el.GetKey())));
 
-            
+            return root;
         }
 
         #region DeviceDescriptor

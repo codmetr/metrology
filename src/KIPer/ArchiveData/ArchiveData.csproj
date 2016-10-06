@@ -49,7 +49,14 @@
     <Compile Include="DTO\TestResult.cs" />
     <Compile Include="DTO\TestStepResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repo\IRepo.cs" />
+    <Compile Include="Repo\ITreeEntity.cs" />
+    <Compile Include="Repo\MaxId.cs" />
+    <Compile Include="Repo\RepoFabrik.cs" />
+    <Compile Include="Repo\TreeRepo.cs" />
+    <Compile Include="Repo\ValueWrapper.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
