@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
-using System.IO;
-using System.Linq;
-using System.Text;
 
-namespace SQLiteArchive.Repo
+namespace ArchiveData.Repo
 {
-    public class TreeEntity : SQLiteArchive.Repo.ITreeEntity
+    public class TreeEntity : ITreeEntity
     {
         private int _parrentId;
         private readonly int _id;

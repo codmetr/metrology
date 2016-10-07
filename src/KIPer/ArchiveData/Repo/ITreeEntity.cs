@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace SQLiteArchive.Repo
+namespace ArchiveData.Repo
 {
     public interface ITreeEntity
     {

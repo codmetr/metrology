@@ -1,4 +1,4 @@
-﻿namespace SQLiteArchive.Repo
+﻿namespace ArchiveData.Repo
 {
     public interface IRepo<T>
     {

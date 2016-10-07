@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Timers;
+﻿using System.Linq;
 
-namespace SQLiteArchive.Repo
+namespace ArchiveData.Repo
 {
     public class ValueWrapper
     {

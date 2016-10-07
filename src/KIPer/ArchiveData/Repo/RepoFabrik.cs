@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SQLiteArchive.Repo
+namespace ArchiveData.Repo
 {
     public class RepoFabrik
     {

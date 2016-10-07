@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using System.Globalization;
 using ArchiveData.DTO;
-using SQLiteArchive.Repo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,7 @@ using ADTSData.Keys;
 
 namespace ADTSData
 {
-    public class AdtsRepo
+/*    public class AdtsRepo
     {
         /// <summary>
         /// Загрузка результата из дерева репозитория
@@ -320,4 +319,5 @@ namespace ADTSData
 
         #endregion
     }
+*/
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ArchiveData.DTO;
-using SQLiteArchive.Repo;
+using ArchiveData.Repo;
 
 namespace ADTSData.RepoParsers
 {
@@ -47,7 +47,7 @@ namespace ADTSData.RepoParsers
         /// <param name="entity"></param>
         /// <param name="node"></param>
         /// <returns></returns>
-        public TreeEntity Update(TreeEntity node, TestStepResult entity)
+        public ITreeEntity Update(ITreeEntity node, TestStepResult entity)
         {
             node.Values["ChannelKey"] = entity.ChannelKey;
             node.Values["CheckKey"] = entity.CheckKey;

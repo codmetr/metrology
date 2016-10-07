@@ -68,7 +68,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\ArchiveData\ArchiveData.csproj">
+      <Project>{26676346-C100-4CC9-869F-80175B33DF76}</Project>
+      <Name>ArchiveData</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
