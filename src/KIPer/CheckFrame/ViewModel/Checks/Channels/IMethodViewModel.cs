@@ -1,9 +1,8 @@
 ﻿using System;
 using ArchiveData.DTO;
-using KipTM.Model.Channels;
-using KipTM.Model.TransportChannels;
+using CheckFrame.Model.TransportChannels;
 
-namespace KipTM.ViewModel.Checks
+namespace CheckFrame.ViewModel.Checks.Channels
 {
     public interface IMethodViewModel
     {

@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Windows.Input;
 using ADTSChecks.Model.Checks;
+using CheckFrame.ViewModel.Checks;
 using GalaSoft.MvvmLight;
-using KipTM.Model.Checks;
 using KipTM.ViewModel;
-using KipTM.ViewModel.Checks;
+using Tools.View;
 
 namespace ADTSChecks.ViewModel.Checks
 {

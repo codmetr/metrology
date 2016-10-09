@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Agilent.TMFramework.Connectivity;
+using Tools.View;
+
 namespace IEEE488Terminal
 {
     public class TerminalViewModel:INotifyPropertyChanged

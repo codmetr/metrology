@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace KipTM.Model.Checks
+﻿namespace CheckFrame.Model.Checks.EventArgs
 {
-    public class EventArgEnd:EventArgs
+    public class EventArgEnd:System.EventArgs
     {
         private readonly bool _result;
         private readonly string _key;

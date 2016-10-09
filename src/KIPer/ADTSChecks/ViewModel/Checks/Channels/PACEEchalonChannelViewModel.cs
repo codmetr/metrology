@@ -1,6 +1,5 @@
 ﻿using ADTSChecks.Model.Channels;
 using GalaSoft.MvvmLight;
-using KipTM.Model.Channels;
 
 namespace KipTM.ViewModel.Channels
 {

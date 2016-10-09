@@ -1,4 +1,4 @@
-﻿namespace KipTM.ViewModel.Checks
+﻿namespace CheckFrame.ViewModel.Checks
 {
     public interface ICustomSettingsViewModel
     {

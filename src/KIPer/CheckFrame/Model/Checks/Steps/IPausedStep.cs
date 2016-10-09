@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KipTM.Model.Checks.Steps
+namespace CheckFrame.Model.Checks.Steps
 {
     /// <summary>
     /// Шаг подерживает паузу

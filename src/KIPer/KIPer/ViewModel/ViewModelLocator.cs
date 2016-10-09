@@ -11,6 +11,7 @@
 
 using System.Reflection;
 using System.Windows;
+using CheckFrame.ViewModel.Archive;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using KipTM.Archive;

@@ -4,6 +4,8 @@ using System.Windows;
 using System.Windows.Input;
 using ADTSChecks.ViewModel.Services;
 using ArchiveData.DTO;
+using CheckFrame.Interfaces;
+using CheckFrame.ViewModel.Archive;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Interfaces;
@@ -12,9 +14,11 @@ using KipTM.Model.Checks;
 using KipTM.Settings;
 using KipTM.View;
 using KipTM.ViewModel.Checks;
-using KipTM.ViewModel.Checks.States;
-using KipTM.ViewModel.Master;
+using KipTM.ViewModel.Checks.Config;
+using KipTM.ViewModel.DeviceTypes;
 using KipTM.ViewModel.Report;
+using KipTM.ViewModel.Workflow;
+using KipTM.ViewModel.Workflow.States;
 using MarkerService;
 using MarkerService.Filler;
 using ReportService;
@@ -40,9 +44,9 @@ namespace KipTM.ViewModel
         private readonly ServiceViewModel _services;
 
         private IArchivesViewModel _tests;
-        private DeviceTypesViewModel _deviceTypes;
-        private DeviceTypesViewModel _etalonTypes;
-        private Workflow _workflow;
+        private DeviceTypeCollectionViewModel _deviceTypes;
+        private DeviceTypeCollectionViewModel _etalonTypes;
+        private Workflow.Workflow _workflow;
         private List<IWorkflowStep> _steps;
 
         private string _helpMessage;
@@ -88,10 +92,10 @@ namespace KipTM.ViewModel
             _tests = new ArchivesViewModel();
             _tests.LoadTests(_dataService.ResultsArchive);
 
-            _etalonTypes = new DeviceTypesViewModel();
+            _etalonTypes = new DeviceTypeCollectionViewModel();
             _etalonTypes.LoadTypes(_dataService.EtalonTypes);
 
-            _deviceTypes = new DeviceTypesViewModel();
+            _deviceTypes = new DeviceTypeCollectionViewModel();
             _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
             var checkFabrik = new CheckFabrik(_dataService.DeviceManager, _propertiesLibrary.PropertyPool);
@@ -111,7 +115,7 @@ namespace KipTM.ViewModel
                     checkConfig.SelectedMethod), _filler, (res)=>{/*TODO make save*/})),
                 new ReportState(() => new ReportViewModel(_reportFabric, result)),
             };
-            _workflow = new Workflow(_steps);
+            _workflow = new Workflow.Workflow(_steps);
 
             SelectChecks.Execute(null);
         }
@@ -275,12 +279,12 @@ namespace KipTM.ViewModel
 
         public IArchivesViewModel Tests { get { return _tests; } }
 
-        public DeviceTypesViewModel DeviceTypes { get { return _deviceTypes; } }
+        public DeviceTypeCollectionViewModel DeviceTypes { get { return _deviceTypes; } }
 
-        public DeviceTypesViewModel EtalonTypes { get { return _etalonTypes; } }
+        public DeviceTypeCollectionViewModel EtalonTypes { get { return _etalonTypes; } }
 
         //public CheckViewModel Checks { get { return _checks; } }
-        public Workflow Checks { get { return _workflow; } }
+        public Workflow.Workflow Checks { get { return _workflow; } }
 
         public override void Cleanup()
         {

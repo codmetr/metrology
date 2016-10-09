@@ -2,8 +2,8 @@
 using ADTS;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
+using CheckFrame.Model.Channels;
 using KipTM.Archive.DataTypes;
-using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 

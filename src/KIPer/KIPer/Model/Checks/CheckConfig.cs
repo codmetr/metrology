@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ArchiveData.DTO;
+using CheckFrame.Archive;
+using CheckFrame.Model.Channels;
+using CheckFrame.Model.Checks;
 using KipTM.Archive;
-using KipTM.Model.Channels;
 using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 

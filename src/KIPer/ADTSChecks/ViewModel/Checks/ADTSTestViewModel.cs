@@ -1,9 +1,7 @@
 ﻿using ADTSChecks.Model.Checks;
 using ArchiveData.DTO;
-using KipTM.Archive;
-using KipTM.Model;
-using KipTM.Model.Checks;
-using KipTM.ViewModel.Checks;
+using CheckFrame.Archive;
+using CheckFrame.Model;
 
 namespace ADTSChecks.ViewModel.Checks
 {

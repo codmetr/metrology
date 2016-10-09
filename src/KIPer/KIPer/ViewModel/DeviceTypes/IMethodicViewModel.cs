@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using CheckFrame.ViewModel.Archive;
 using KipTM.Model.Devices;
 
-namespace KipTM.ViewModel
+namespace KipTM.ViewModel.DeviceTypes
 {
     /// <summary>
     /// Методика проверки

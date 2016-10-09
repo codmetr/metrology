@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace KipTM.Model.Channels
+namespace CheckFrame.Model.Channels
 {
     /// <summary>
     /// Запрос на получение эталонного значение от пользователя

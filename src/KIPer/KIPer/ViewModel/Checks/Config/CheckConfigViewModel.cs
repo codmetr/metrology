@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using CheckFrame.Model.TransportChannels;
+using CheckFrame.ViewModel.Checks;
 using GalaSoft.MvvmLight;
 using KipTM.Model.Checks;
 using KipTM.Model.TransportChannels;
-using KipTM.ViewModel.Master;
 
-namespace KipTM.ViewModel.Checks
+namespace KipTM.ViewModel.Checks.Config
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.

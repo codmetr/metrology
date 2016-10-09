@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace KipTM.ViewModel
+namespace Tools.View
 {
     public class CommandWrapper : ICommand
     {

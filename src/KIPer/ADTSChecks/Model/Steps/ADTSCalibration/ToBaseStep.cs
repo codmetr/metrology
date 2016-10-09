@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading;
 using ADTSChecks.Model.Devices;
-using KipTM.Model.Checks;
-using KipTM.Model.Checks.Steps;
-using KipTM.Model.Devices;
+using CheckFrame.Model.Checks.EventArgs;
+using CheckFrame.Model.Checks.Steps;
 using NLog;
 using Tools;
 

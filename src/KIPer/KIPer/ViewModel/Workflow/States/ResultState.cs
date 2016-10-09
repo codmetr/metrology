@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ArchiveData.DTO;
-using KipTM.ViewModel.Master;
 
-namespace KipTM.ViewModel.Checks.States
+namespace KipTM.ViewModel.Workflow.States
 {
     class ResultState : IWorkflowStep
     {

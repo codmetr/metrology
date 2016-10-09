@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using CheckFrame.ViewModel.Archive;
 using GalaSoft.MvvmLight;
 using KipTM.Model.Devices;
+using KipTM.ViewModel.DeviceTypes;
 
 namespace KipTM.ViewModel
 {

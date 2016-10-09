@@ -1,4 +1,6 @@
-﻿namespace KipTM.Archive
+﻿using CheckFrame.Archive;
+
+namespace KipTM.Archive
 {
     public interface IArchivePool : IPropertyPool
     {

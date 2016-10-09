@@ -3,10 +3,9 @@ using System.Threading;
 using ADTS;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO.Params;
-using KipTM.Model.Channels;
-using KipTM.Model.Checks;
-using KipTM.Model.Checks.Steps;
-using KipTM.Model.Devices;
+using CheckFrame.Model.Channels;
+using CheckFrame.Model.Checks.EventArgs;
+using CheckFrame.Model.Checks.Steps;
 using NLog;
 using Tools;
 

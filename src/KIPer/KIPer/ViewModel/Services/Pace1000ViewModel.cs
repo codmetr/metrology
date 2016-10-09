@@ -5,6 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ADTSChecks.Model.Devices;
+using CheckFrame.Interfaces;
+using CheckFrame.Model;
+using CheckFrame.Model.TransportChannels;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using KipTM.Interfaces;
@@ -12,6 +15,7 @@ using KipTM.Model;
 using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
 using PACESeries;
+using Tools.View;
 
 namespace KipTM.ViewModel
 {

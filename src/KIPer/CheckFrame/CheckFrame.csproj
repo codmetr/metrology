@@ -96,12 +96,15 @@
     <Compile Include="ViewModel\Checks\ICustomSettingsViewModel.cs" />
     <Compile Include="ViewModel\Checks\StepState.cs" />
     <Compile Include="ViewModel\Checks\StepViewModel.cs" />
-    <Compile Include="ViewModel\CommandWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
       <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
       <Name>ArchiveData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools.View\Tools.View.csproj">
+      <Project>{69ab619c-5b3a-4ee7-9318-73d92e75f812}</Project>
+      <Name>Tools.View</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

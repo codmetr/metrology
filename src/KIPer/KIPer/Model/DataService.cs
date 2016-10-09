@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using ADTS;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
+using CheckFrame.Model;
 using KipTM.Interfaces;
 using KipTM.Model.Checks;
 using KipTM.Settings;

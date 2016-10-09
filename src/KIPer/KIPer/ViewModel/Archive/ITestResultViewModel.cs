@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using CheckFrame.ViewModel.Archive;
 
 namespace KipTM.ViewModel
 {

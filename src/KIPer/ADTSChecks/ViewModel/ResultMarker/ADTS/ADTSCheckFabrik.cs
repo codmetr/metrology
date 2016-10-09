@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ADTSChecks.Model.Checks;
-using KipTM.Model.Checks;
+using CheckFrame.ViewModel.Archive;
 using KipTM.ViewModel;
 using MarkerService;
 

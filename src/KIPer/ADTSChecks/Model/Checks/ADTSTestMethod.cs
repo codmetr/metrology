@@ -4,8 +4,9 @@ using ADTS;
 using ADTSChecks.Model.Steps.ADTSTest;
 using ADTSData;
 using ArchiveData.DTO.Params;
-using KipTM.Archive;
-using KipTM.Model.Checks;
+using CheckFrame.Archive;
+using CheckFrame.Model.Checks;
+using CheckFrame.Model.Checks.EventArgs;
 using Tools;
 
 namespace ADTSChecks.Model.Checks

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading;
-using KipTM.Model.Checks;
-using KipTM.Model.TransportChannels;
+using CheckFrame.Model.TransportChannels;
 
-namespace KipTM.Model.Channels
+namespace CheckFrame.Model.Channels
 {
     public class UserEthalonChannel : IEthalonChannel
     {

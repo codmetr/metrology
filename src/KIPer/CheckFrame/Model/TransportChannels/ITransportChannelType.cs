@@ -1,4 +1,4 @@
-﻿namespace KipTM.Model.TransportChannels
+﻿namespace CheckFrame.Model.TransportChannels
 {
     public interface ITransportChannelType
     {

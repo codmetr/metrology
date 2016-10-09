@@ -84,6 +84,7 @@
     <Compile Include="Model\Steps\ADTSTest\EndStep.cs" />
     <Compile Include="Model\Steps\ADTSTest\InitStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModelFabrik.cs" />
     <Compile Include="ViewModel\Checks\ADTSBaseViewModel.cs" />
     <Compile Include="ViewModel\Checks\ADTSCalibrationViewModel.cs" />
     <Compile Include="ViewModel\Checks\AdtsCheckStateViewModel.cs" />
@@ -128,6 +129,10 @@
     <ProjectReference Include="..\MineLoop\MainLoop.csproj">
       <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
       <Name>MainLoop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools.View\Tools.View.csproj">
+      <Project>{69AB619C-5B3A-4EE7-9318-73D92E75F812}</Project>
+      <Name>Tools.View</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tools\Tools.csproj">
       <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>

@@ -7,8 +7,6 @@ using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
 using ADTSData;
 using CrystalDecisions.CrystalReports.Engine;
-using KipTM.Model.Checks;
-using KipTM.Model.Devices;
 using ReportService;
 using ArchiveData.DTO;
 

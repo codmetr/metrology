@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KipTM.ViewModel;
+using KipTM.ViewModel.DeviceTypes;
 using Tools;
 
 namespace KipTM.View

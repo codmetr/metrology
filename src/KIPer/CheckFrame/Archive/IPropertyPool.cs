@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KipTM.Archive
+namespace CheckFrame.Archive
 {
     public interface IPropertyPool
     {

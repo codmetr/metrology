@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CheckFrame.Model.Checks.Steps;
 
-namespace KipTM.Model.Checks
+namespace CheckFrame.Model.Checks
 {
     public class CheckStepConfig
     {

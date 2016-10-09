@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using CheckFrame.Model.Checks.EventArgs;
 
-namespace KipTM.Model.Checks
+namespace CheckFrame.Model.Checks.Steps
 {
     public interface ITestStep
     {
@@ -18,7 +15,7 @@ namespace KipTM.Model.Checks
         /// <summary>
         /// Шаг запущен
         /// </summary>
-        event EventHandler<EventArgs> Started;
+        event EventHandler<System.EventArgs> Started;
 
         /// <summary>
         /// Шаг запущен

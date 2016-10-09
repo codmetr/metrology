@@ -1,7 +1,8 @@
-﻿using GalaSoft.MvvmLight;
-using KipTM.Model.Checks;
+﻿using CheckFrame.Model.Checks.EventArgs;
+using CheckFrame.Model.Checks.Steps;
+using GalaSoft.MvvmLight;
 
-namespace KipTM.ViewModel.Checks
+namespace CheckFrame.ViewModel.Checks
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.

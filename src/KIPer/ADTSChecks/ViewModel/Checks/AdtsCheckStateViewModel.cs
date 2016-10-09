@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ADTSChecks.ViewModel.Services;
+using CheckFrame.Model.Checks.EventArgs;
+using CheckFrame.ViewModel.Checks;
 using GalaSoft.MvvmLight;
-using KipTM.Model.Checks;
-using KipTM.ViewModel.Checks;
 
 namespace ADTSChecks.ViewModel.Checks
 {

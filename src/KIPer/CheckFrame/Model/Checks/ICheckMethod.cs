@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using KipTM.Archive;
+using CheckFrame.Archive;
 
-namespace KipTM.Model.Checks
+namespace CheckFrame.Model.Checks
 {
     public interface ICheckMethod
     {

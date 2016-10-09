@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using CheckFrame.Interfaces;
 using GalaSoft.MvvmLight;
 using KipTM.Interfaces;
+using Tools.View;
 
 namespace KipTM.ViewModel
 {

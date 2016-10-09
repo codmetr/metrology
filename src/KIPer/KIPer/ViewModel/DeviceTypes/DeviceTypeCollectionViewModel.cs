@@ -4,7 +4,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
-namespace KipTM.ViewModel
+namespace KipTM.ViewModel.DeviceTypes
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.
@@ -12,14 +12,14 @@ namespace KipTM.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class DeviceTypesViewModel : ViewModelBase, IDeviceTypesViewModel
+    public class DeviceTypeCollectionViewModel : ViewModelBase, IDeviceTypesViewModel
     {
         private ObservableCollection<object> _types;
 
         /// <summary>
         /// Initializes a new instance of the DeviceTypesViewModel class.
         /// </summary>
-        public DeviceTypesViewModel()
+        public DeviceTypeCollectionViewModel()
         {
         }
 

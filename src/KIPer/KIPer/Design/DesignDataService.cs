@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using ArchiveData.DTO;
+using CheckFrame.Model;
+using CheckFrame.Model.Checks;
 using KipTM.Interfaces;
 using KipTM.Model;
 using KipTM.Model.Checks;

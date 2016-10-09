@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KipTM.ViewModel;
+using KipTM.ViewModel.DeviceTypes;
 using Tools;
 
 namespace KipTM.View
@@ -20,7 +21,7 @@ namespace KipTM.View
     /// <summary>
     /// Interaction logic for DeviceTypesView.xaml
     /// </summary>
-    [View(typeof(DeviceTypesViewModel))]
+    [View(typeof(DeviceTypeCollectionViewModel))]
     public partial class DeviceTypesView : UserControl
     {
         public DeviceTypesView()

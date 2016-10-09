@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using KipTM.Model.Checks;
-using KipTM.ViewModel.Master;
+using CheckFrame.ViewModel.Checks.Channels;
+using KipTM.ViewModel.Checks;
 
-namespace KipTM.ViewModel.Checks.States
+namespace KipTM.ViewModel.Workflow.States
 {
     public class ADTSCheckState : IWorkflowStep
     {

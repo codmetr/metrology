@@ -2,7 +2,7 @@
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Steps.ADTSCalibration;
 using ADTSData;
-using KipTM.Model.Checks;
+using CheckFrame.ViewModel.Archive;
 using KipTM.ViewModel;
 using MarkerService;
 using MarkerService.Filler;

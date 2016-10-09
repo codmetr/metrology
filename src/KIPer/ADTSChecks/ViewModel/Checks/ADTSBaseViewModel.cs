@@ -10,16 +10,18 @@ using ADTSChecks.Model.Checks;
 using ADTSChecks.ViewModel.Services;
 using ADTSData;
 using ArchiveData.DTO;
+using CheckFrame.Archive;
+using CheckFrame.Model;
+using CheckFrame.Model.Channels;
+using CheckFrame.Model.Checks.EventArgs;
+using CheckFrame.Model.TransportChannels;
+using CheckFrame.ViewModel.Checks;
+using CheckFrame.ViewModel.Checks.Channels;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using KipTM.Archive;
-using KipTM.Model;
-using KipTM.Model.Channels;
-using KipTM.Model.Checks;
-using KipTM.Model.TransportChannels;
 using KipTM.ViewModel;
 using KipTM.ViewModel.Channels;
-using KipTM.ViewModel.Checks;
+using Tools.View;
 
 namespace ADTSChecks.ViewModel.Checks
 {

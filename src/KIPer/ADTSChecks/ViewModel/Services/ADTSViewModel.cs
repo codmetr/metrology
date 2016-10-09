@@ -5,12 +5,13 @@ using System.Threading;
 using System.Windows.Input;
 using ADTS;
 using ADTSChecks.Model.Devices;
+using CheckFrame.Interfaces;
+using CheckFrame.Model;
+using CheckFrame.Model.Devices;
+using CheckFrame.Model.TransportChannels;
 using GalaSoft.MvvmLight;
-using KipTM.Interfaces;
-using KipTM.Model;
-using KipTM.Model.Devices;
-using KipTM.Model.TransportChannels;
 using KipTM.ViewModel;
+using Tools.View;
 
 namespace ADTSChecks.ViewModel.Services
 {

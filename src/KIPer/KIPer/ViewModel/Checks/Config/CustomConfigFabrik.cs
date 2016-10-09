@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ADTSChecks.Model.Checks;
+﻿using ADTSChecks.Model.Checks;
 using ADTSChecks.ViewModel.Checks;
-using KipTM.Model.Checks;
+using CheckFrame.ViewModel.Checks;
 
-namespace KipTM.ViewModel.Checks
+namespace KipTM.ViewModel.Checks.Config
 {
     public class CustomConfigFabrik
     {

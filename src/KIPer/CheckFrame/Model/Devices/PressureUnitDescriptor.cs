@@ -1,4 +1,4 @@
-﻿namespace KipTM.Model.Devices
+﻿namespace CheckFrame.Model.Devices
 {
     public class PressureUnitDescriptor<T>
     {

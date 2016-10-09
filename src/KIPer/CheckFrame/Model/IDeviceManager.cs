@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using KipTM.Model.Channels;
-using KipTM.Model.TransportChannels;
+﻿using CheckFrame.Model.Channels;
+using CheckFrame.Model.TransportChannels;
 
-namespace KipTM.Model
+namespace CheckFrame.Model
 {
     public interface IDeviceManager
     {

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KipTM.ViewModel.Checks;
+using KipTM.ViewModel.Checks.Config;
 using Tools;
 
 namespace KipTM.View.Checks

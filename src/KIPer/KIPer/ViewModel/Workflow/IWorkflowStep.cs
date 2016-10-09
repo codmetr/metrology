@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KipTM.ViewModel.Master
+namespace KipTM.ViewModel.Workflow
 {
     public interface IWorkflowStep
     {

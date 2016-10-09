@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using KipTM.Model.TransportChannels;
+﻿using CheckFrame.Model.TransportChannels;
 
-namespace KipTM.Interfaces
+namespace CheckFrame.Interfaces
 {
     public interface IService
     {

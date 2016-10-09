@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace KipTM.ViewModel
+namespace KipTM.ViewModel.DeviceTypes
 {
     public interface IDeviceTypesViewModel
     {

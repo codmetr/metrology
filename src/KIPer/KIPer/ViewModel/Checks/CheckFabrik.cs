@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
 using ADTSChecks.ViewModel.Checks;
+using ArchiveData.DTO;
+using CheckFrame.Archive;
+using CheckFrame.Model;
+using CheckFrame.Model.Channels;
+using CheckFrame.Model.Checks;
+using CheckFrame.Model.TransportChannels;
+using CheckFrame.ViewModel.Checks.Channels;
 using KipTM.Archive;
 using KipTM.Model;
-using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
@@ -69,6 +75,18 @@ namespace KipTM.ViewModel.Checks
                 result.SetEthalonChannel(checkConfig.SelectedEthalonTypeKey, ethalonChanel);
             }
             return result;
+        }
+
+        /// <summary>
+        /// получить презентор типа проверки
+        /// </summary>
+        /// <returns></returns>
+        public IMethodViewModel GetViewModelFor(
+            ICheckMethod method, IEthalonChannel ethalonChannel,
+            ITransportChannelType checkDeviceTransport, ITransportChannelType ethalonTransport,
+            IPropertyPool propertyPool, TestResult result, object customSettings)
+        {
+            throw new NotImplementedException();
         }
     }
 }

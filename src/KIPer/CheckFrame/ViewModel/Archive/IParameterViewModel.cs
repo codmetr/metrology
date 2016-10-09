@@ -1,4 +1,4 @@
-﻿namespace KipTM.ViewModel
+﻿namespace CheckFrame.ViewModel.Archive
 {
     /// <summary>
     /// Описатель параметра

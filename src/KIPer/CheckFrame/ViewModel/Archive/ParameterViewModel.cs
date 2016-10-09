@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace KipTM.ViewModel
+namespace CheckFrame.ViewModel.Archive
 {
     public class ParameterViewModel : ViewModelBase, IParameterViewModel
     {

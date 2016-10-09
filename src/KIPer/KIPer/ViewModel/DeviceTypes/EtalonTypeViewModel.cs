@@ -2,7 +2,7 @@
 using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
 
-namespace KipTM.ViewModel
+namespace KipTM.ViewModel.DeviceTypes
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.

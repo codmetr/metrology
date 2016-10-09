@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading;
-using KipTM.Model.Checks;
 
-namespace KipTM.Model.Channels
+namespace CheckFrame.Model.Channels
 {
     /// <summary>
     /// Пользовательский интерфейс

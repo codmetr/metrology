@@ -1,4 +1,5 @@
-﻿namespace KipTM.ViewModel
+﻿
+namespace CheckFrame.ViewModel.Archive
 {
     /// <summary>
     /// This class contains properties that a View can data bind to.

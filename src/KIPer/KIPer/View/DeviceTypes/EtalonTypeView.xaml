@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:KipTM.ViewModel"
+             xmlns:deviceTypes="clr-namespace:KipTM.ViewModel.DeviceTypes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance viewModel:EtalonTypeViewModel}">
+             d:DataContext="{d:DesignInstance deviceTypes:EtalonTypeViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

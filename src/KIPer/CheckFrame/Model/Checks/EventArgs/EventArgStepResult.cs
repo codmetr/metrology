@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ArchiveData.DTO.Params;
 
-namespace KipTM.Model.Checks
+namespace CheckFrame.Model.Checks.EventArgs
 {
-    public class EventArgStepResult : EventArgs
+    public class EventArgStepResult : System.EventArgs
     {
         public EventArgStepResult(ParameterDescriptor descr, ParameterResult res)
         {

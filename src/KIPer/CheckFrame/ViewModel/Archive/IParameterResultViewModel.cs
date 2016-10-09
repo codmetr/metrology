@@ -1,4 +1,5 @@
-﻿namespace KipTM.ViewModel
+﻿
+namespace CheckFrame.ViewModel.Archive
 {
     public interface IParameterResultViewModel : IParameterViewModel
     {

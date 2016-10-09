@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
+using CheckFrame.Model.Checks.EventArgs;
 
-namespace KipTM.Model.Checks.Steps
+namespace CheckFrame.Model.Checks.Steps
 {
     public abstract class TestStep:ITestStep
     {
@@ -30,7 +30,7 @@ namespace KipTM.Model.Checks.Steps
         /// <summary>
         /// Шаг запущен
         /// </summary>
-        public event EventHandler<EventArgs> Started;
+        public event EventHandler<System.EventArgs> Started;
 
         /// <summary>
         /// Изменение прогресса шага (0-100 %)
@@ -56,8 +56,8 @@ namespace KipTM.Model.Checks.Steps
 
         protected virtual void OnStarted()
         {
-            EventHandler<EventArgs> handler = Started;
-            if (handler != null) handler(this, EventArgs.Empty);
+            EventHandler<System.EventArgs> handler = Started;
+            if (handler != null) handler(this, System.EventArgs.Empty);
         }
 
         protected virtual void OnProgressChanged(EventArgProgress e)

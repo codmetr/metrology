@@ -1,4 +1,4 @@
-﻿namespace KipTM.Model.Channels
+﻿namespace CheckFrame.Model.Channels
 {
     public enum UserQueryType
     {

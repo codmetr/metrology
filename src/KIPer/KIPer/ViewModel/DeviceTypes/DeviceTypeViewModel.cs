@@ -2,7 +2,7 @@
 using ArchiveData.DTO;
 using GalaSoft.MvvmLight;
 
-namespace KipTM.ViewModel
+namespace KipTM.ViewModel.DeviceTypes
 {
     /// <summary>
     /// Комплексный описатель типа устройства
