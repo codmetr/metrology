@@ -67,6 +67,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IViewModelFabrik.cs" />
     <Compile Include="Model\Channels\PACEEchalonChannel.cs" />
     <Compile Include="Model\Checks\ADTSCheckMethod.cs" />
     <Compile Include="Model\Checks\ADTSMethodBase.cs" />

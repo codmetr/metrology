@@ -16,7 +16,7 @@ using CheckFrame.ViewModel.Checks.Channels;
 
 namespace ADTSChecks
 {
-    public class ViewModelFabrik
+    public class ViewModelFabrik : ADTSChecks.IViewModelFabrik
     {
         /// <summary>
         /// получить презентор типа проверки
