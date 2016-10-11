@@ -158,7 +158,7 @@ namespace KipTM.ViewModel
             set { Set(ref _etalons, value); }
         }
 
-        public ICommand Save { get { return new CommandWrapper(() => { DoSave(); }); } }
+        public ICommand Save { get { return new CommandWrapper(DoSave); } }
 
         private void DoSave()
         {

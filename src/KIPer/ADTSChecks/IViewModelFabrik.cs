@@ -1,4 +1,11 @@
 ﻿using System;
+using CheckFrame.Model;
+using CheckFrame.ViewModel.Checks.Channels;
+using CheckFrame.Model.Checks;
+using CheckFrame.Model.Channels;
+using CheckFrame.Model.TransportChannels;
+using ArchiveData.DTO;
+using CheckFrame.Archive;
 namespace ADTSChecks
 {
     interface IViewModelFabrik
@@ -16,10 +23,8 @@ namespace ADTSChecks
         /// <param name="testResult"></param>
         /// <param name="customSettings"></param>
         /// <returns></returns>
-        CheckFrame.ViewModel.Checks.Channels.IMethodViewModel GetViewModelFor(
-            CheckFrame.Model.Checks.ICheckMethod methodObj, CheckFrame.Model.Channels.IEthalonChannel ethalonChannel,
-            string ethalonTypeKey, CheckFrame.Model.TransportChannels.ITransportChannelType checkDeviceTransport,
-            CheckFrame.Model.TransportChannels.ITransportChannelType ethalonTransport, CheckFrame.Model.IDeviceManager deviceManager,
-            CheckFrame.Archive.IPropertyPool propertyPool, ArchiveData.DTO.TestResult testResult, object customSettings);
+        IMethodViewModel GetViewModelFor( ICheckMethod methodObj, IEthalonChannel ethalonChannel,
+            string ethalonTypeKey, ITransportChannelType checkDeviceTransport, ITransportChannelType ethalonTransport,
+            IDeviceManager deviceManager, IPropertyPool propertyPool, TestResult testResult, object customSettings);
     }
 }

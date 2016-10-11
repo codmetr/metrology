@@ -25,6 +25,9 @@ using Tools.View;
 
 namespace ADTSChecks.ViewModel.Checks
 {
+    /// <summary>
+    /// Базовый класс визуальной модели проверки
+    /// </summary>
     public abstract class ADTSBaseViewModel : ViewModelBase, IMethodViewModel
     {
         #region Members
@@ -134,13 +137,18 @@ namespace ADTSChecks.ViewModel.Checks
         #endregion
 
         #region Interface of state
-
+        /// <summary>
+        /// Заголовок проверки
+        /// </summary>
         public string Title
         {
             get { return _title; }
             protected set { _title = value; }
         }
 
+        /// <summary>
+        /// Модель состояния проверки
+        /// </summary>
         public AdtsCheckStateViewModel State{get { return _stateViewModel; }}
         #endregion
 
@@ -202,12 +210,18 @@ namespace ADTSChecks.ViewModel.Checks
             set { Set(ref _stopEnabled, value); }
         }
 
+        /// <summary>
+        /// Доступна кнопка пауза
+        /// </summary>
         public bool PauseEnabled
         {
             get { return _pauseEnabled; }
             set { Set(ref _pauseEnabled, value); }
         }
 
+        /// <summary>
+        /// Проверка поставлена на паузу
+        /// </summary>
         public bool IsPaused
         {
             get { return _isPaused; }
