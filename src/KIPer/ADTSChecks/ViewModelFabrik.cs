@@ -28,28 +28,28 @@ namespace ADTSChecks
         {
             IMethodViewModel result = null;
             var method = methodObj as ADTSMethodBase;
-            if (method != null)
-            {
-                method.SetADTS(deviceManager.GetModel<ADTSModel>());
-                method.ChannelType = checkDeviceTransport;
-                method.SetEthalonChannel(ethalonChannel, ethalonTransport);
+            if (method == null)
+                return result;
 
-                if (method is AdtsCheckMethod)
-                {
-                    var adtsMethodic = method as AdtsCheckMethod;
-                    result = new ADTSCalibrationViewModel(adtsMethodic, propertyPool,
-                        deviceManager, testResult, customSettings as ADTSMethodParameters);
-                }
-                else if (method is ADTSTestMethod)
-                {
-                    var adtsMethodic = method as ADTSTestMethod;
-                    result = new ADTSTestViewModel(adtsMethodic, propertyPool,
-                        deviceManager, testResult, customSettings as ADTSMethodParameters);
-                }
-                if (result != null)
-                {
-                    result.SetEthalonChannel(ethalonTypeKey, ethalonTransport);
-                }
+            method.SetADTS(deviceManager.GetModel<ADTSModel>());
+            method.ChannelType = checkDeviceTransport;
+            method.SetEthalonChannel(ethalonChannel, ethalonTransport);
+
+            if (method is AdtsCheckMethod)
+            {
+                var adtsMethodic = method as AdtsCheckMethod;
+                result = new ADTSCalibrationViewModel(adtsMethodic, propertyPool,
+                    deviceManager, testResult, customSettings as ADTSMethodParameters);
+            }
+            else if (method is ADTSTestMethod)
+            {
+                var adtsMethodic = method as ADTSTestMethod;
+                result = new ADTSTestViewModel(adtsMethodic, propertyPool,
+                    deviceManager, testResult, customSettings as ADTSMethodParameters);
+            }
+            if (result != null)
+            {
+                result.SetEthalonChannel(ethalonTypeKey, ethalonTransport);
             }
 
             return result;

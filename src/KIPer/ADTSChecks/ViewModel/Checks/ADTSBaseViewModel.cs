@@ -287,7 +287,6 @@ namespace ADTSChecks.ViewModel.Checks
         /// </summary>
         protected void DoStart()
         {
-            
             State.TitleBtnNext = "Далее";
             Method.ChannelType = _connection;
             State.ADTS.Start(Method.GetADTS(), _connection);

@@ -17,6 +17,7 @@ namespace KipTM.Model.Checks
     public class CheckConfig
     {
         #region Внутренние переменные
+
         private readonly IMethodsService _method;
         private IDictionary<string, ICheckMethod> _checks;
         private readonly IPropertyPool _propertyPool;

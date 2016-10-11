@@ -81,8 +81,7 @@ namespace KipTM.ViewModel.Checks
         /// получить презентор типа проверки
         /// </summary>
         /// <returns></returns>
-        public IMethodViewModel GetViewModelFor(
-            ICheckMethod method, IEthalonChannel ethalonChannel,
+        public IMethodViewModel GetViewModelFor( ICheckMethod method, IEthalonChannel ethalonChannel,
             ITransportChannelType checkDeviceTransport, ITransportChannelType ethalonTransport,
             IPropertyPool propertyPool, TestResult result, object customSettings)
         {

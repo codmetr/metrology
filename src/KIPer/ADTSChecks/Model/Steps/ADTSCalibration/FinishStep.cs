@@ -65,8 +65,8 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
                 return;
             }
             _userChannel.Message =
-                string.Format(
-                    "Что бы применить результат калибровки нажмите \"Подтвердить\", в противном случае нажмите ") + "\"{0}\"";//string.Format("Применить результат калибровки?");//TODO: локализовать
+                string.Format("Что бы применить результат калибровки нажмите \"Подтвердить\", в противном случае нажмите ") +
+                "\"{0}\"";//string.Format("Применить результат калибровки?");//TODO: локализовать
             var wh = new ManualResetEvent(false);
             _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
             while (!wh.WaitOne(_checkCancelPeriod))
