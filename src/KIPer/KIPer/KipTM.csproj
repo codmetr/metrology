@@ -125,7 +125,7 @@
     <Compile Include="Model\Devices\PressureUnitDescriptor.cs" />
     <Compile Include="Model\IMethodsService.cs" />
     <Compile Include="Model\MethodsService.cs" />
-    <Compile Include="Model\TransportChannels\Fake\VisaChannelDescriptor.cs" />
+    <Compile Include="Model\TransportChannels\Fake\FakeChannelDescriptor.cs" />
     <Compile Include="Model\TransportChannels\Visa\VisaChannelDescriptor.cs" />
     <Compile Include="Model\TransportChannels\Visa\VisaSettings.cs" />
     <Compile Include="Settings\ComPortSettings.cs" />
@@ -140,10 +140,10 @@
     <Compile Include="ViewModel\Checks\Config\CheckConfigViewModel.cs" />
     <Compile Include="ViewModel\Checks\CheckFabrik.cs" />
     <Compile Include="ViewModel\Checks\ICheckFabrik.cs" />
-    <Compile Include="ViewModel\Workflow\States\ADTSCheckState.cs" />
-    <Compile Include="ViewModel\Workflow\States\ConfigCheckState.cs" />
-    <Compile Include="ViewModel\Workflow\States\ResultState.cs" />
-    <Compile Include="ViewModel\Workflow\States\ReportState.cs" />
+    <Compile Include="Workflow\States\ADTSCheckState.cs" />
+    <Compile Include="Workflow\States\ConfigCheckState.cs" />
+    <Compile Include="Workflow\States\ResultState.cs" />
+    <Compile Include="Workflow\States\ReportState.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypeCollectionViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\DeviceTypeViewModel.cs" />
     <Compile Include="ViewModel\Archive\DeviceViewModel.cs" />
@@ -157,9 +157,9 @@
     <Compile Include="ViewModel\Archive\ITestResultViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\DeviceTypes\MethodicViewModel.cs" />
-    <Compile Include="ViewModel\Workflow\IWorkflowStep.cs" />
-    <Compile Include="ViewModel\Workflow\Workflow.cs" />
-    <Compile Include="ViewModel\Workflow\WorkflowStepChangeEvent.cs" />
+    <Compile Include="Workflow\IWorkflowStep.cs" />
+    <Compile Include="Workflow\Workflow.cs" />
+    <Compile Include="Workflow\WorkflowStepChangeEvent.cs" />
     <Compile Include="ViewModel\Services\SelectChannelViewModel.cs" />
     <Compile Include="ViewModel\Services\Pace1000ViewModel.cs" />
     <Compile Include="ViewModel\Services\ParameterValuePair.cs" />
@@ -167,10 +167,10 @@
     <Compile Include="ViewModel\Archive\ArchivesViewModel.cs" />
     <Compile Include="ViewModel\Archive\TestResultViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="View\Archive\ParamResCollectionView.xaml.cs">
+    <Compile Include="Archive\View\ParamResCollectionView.xaml.cs">
       <DependentUpon>ParamResCollectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Archive\ParamResDataGridView.xaml.cs">
+    <Compile Include="Archive\View\ParamResDataGridView.xaml.cs">
       <DependentUpon>ParamResDataGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Checks\AdtsCheckView.xaml.cs">
@@ -179,7 +179,7 @@
     <Compile Include="View\Checks\ADTSConfigView.xaml.cs">
       <DependentUpon>ADTSConfigView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Checks\CheckConfigView.xaml.cs">
+    <Compile Include="Model\Checks\View\CheckConfigView.xaml.cs">
       <DependentUpon>CheckConfigView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Checks\PACE1000EthalonChannelView.xaml.cs">
@@ -188,7 +188,7 @@
     <Compile Include="View\Checks\Steps\AdtsPointResultView.xaml.cs">
       <DependentUpon>AdtsPointResultView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Checks\WorkflowView.xaml.cs">
+    <Compile Include="Workflow\View\WorkflowView.xaml.cs">
       <DependentUpon>WorkflowView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Converters\DoubleToTimespanConverter.cs" />
@@ -222,10 +222,10 @@
     <Compile Include="View\Services\ServicesView.xaml.cs">
       <DependentUpon>ServicesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Archive\ArchivesView.xaml.cs">
+    <Compile Include="Archive\View\ArchivesView.xaml.cs">
       <DependentUpon>ArchivesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Archive\ResultView.xaml.cs">
+    <Compile Include="Archive\View\ResultView.xaml.cs">
       <DependentUpon>ResultView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Services\VisaSettingsView.xaml.cs">
@@ -267,11 +267,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Archive\ParamResCollectionView.xaml">
+    <Page Include="Archive\View\ParamResCollectionView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Archive\ParamResDataGridView.xaml">
+    <Page Include="Archive\View\ParamResDataGridView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -283,7 +283,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Checks\CheckConfigView.xaml">
+    <Page Include="Model\Checks\View\CheckConfigView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -295,7 +295,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Checks\WorkflowView.xaml">
+    <Page Include="Workflow\View\WorkflowView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -335,11 +335,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Archive\ArchivesView.xaml">
+    <Page Include="Archive\View\ArchivesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Archive\ResultView.xaml">
+    <Page Include="Archive\View\ResultView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
