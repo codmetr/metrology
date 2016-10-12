@@ -24,6 +24,7 @@ using MarkerService.Filler;
 using ReportService;
 using SQLiteArchive;
 using Tools;
+using ADTSChecks.Model.Devices;
 
 namespace KipTM.ViewModel
 {
@@ -80,7 +81,7 @@ namespace KipTM.ViewModel
             _services = new ServiceViewModel(new List<IService>()
             {
                 new Pace1000ViewModel(_dataService.DeviceManager),
-                new ADTSViewModel(_dataService.DeviceManager)
+                new ADTSViewModel(_dataService.DeviceManager.GetModel<ADTSModel>())
             });
         }
 

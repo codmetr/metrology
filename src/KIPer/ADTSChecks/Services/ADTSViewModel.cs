@@ -23,7 +23,6 @@ namespace ADTSChecks.ViewModel.Services
     /// </summary>
     public class ADTSViewModel : ViewModelBase, IService
     {
-        private IDeviceManager _deviceManager;
         private ADTSModel _model;
         private string _statusAdts;
         private string _stateAdts;
@@ -48,9 +47,9 @@ namespace ADTSChecks.ViewModel.Services
         /// <summary>
         /// Initializes a new instance of the ADTSViewModel class.
         /// </summary>
-        public ADTSViewModel(IDeviceManager deviceManager)
+        public ADTSViewModel(ADTSModel model)
         {
-            _deviceManager = deviceManager;
+            _model = model;
             _avalableUnits = new[]
             {
                 new PressureUnitDescriptor<PressureUnits>(PressureUnits.MBar, PressureUnits.MBar.ToStr()),
@@ -69,25 +68,14 @@ namespace ADTSChecks.ViewModel.Services
 
         public string Title { get { return ADTSModel.Model; } }
 
-        public void Start(ADTSModel model, ITransportChannelType channel)
-        {
-            if (_model != null)
-            {
-                _model.StopAutoUpdate();
-                DetachEvents(_model);
-            }
-            _model = model;
-            if (_model != null)
-            {
-                _model.Start(channel);
-                _model.StartAutoUpdate();
-                AttachEvents(_model);
-            }
-        }
-
         public void Start(ITransportChannelType channel)
         {
-            Start(_deviceManager.GetModel<ADTSModel>(), channel);
+            _model.StopAutoUpdate();
+            DetachEvents(_model);
+
+            _model.Start(channel);
+            _model.StartAutoUpdate();
+            AttachEvents(_model);
         }
 
         public void Stop()
@@ -99,7 +87,6 @@ namespace ADTSChecks.ViewModel.Services
             }
             _cancellation.Cancel();
             _cancellation = new CancellationTokenSource();
-            _model = null;
         }
 
         public ICommand UpdatePressure { get { return new CommandWrapper(_uptetePressure); } }
@@ -124,7 +111,7 @@ namespace ADTSChecks.ViewModel.Services
 
         public ICommand SetPitotRate { get { return new CommandWrapper(_setPitotRate); } }
 
-        
+
         #region State
         /// <summary>
         /// Стабилизированно на значении
@@ -294,7 +281,7 @@ namespace ADTSChecks.ViewModel.Services
         {
             if (_model != null && _model.StatusADTS != null)
             {
-                IsStableAtAimValue = (_model.StatusADTS.Value & Status.StableAtAimValue)>0;
+                IsStableAtAimValue = (_model.StatusADTS.Value & Status.StableAtAimValue) > 0;
                 IsSafeAtGround = (_model.StatusADTS.Value & Status.SafeAtGround) > 0;
                 IsRamping = (_model.StatusADTS.Value & Status.Ramping) > 0;
                 IsPsAtSetPointAndInControlMode = (_model.StatusADTS.Value & Status.PsAtSetPointAndInControlMode) > 0;

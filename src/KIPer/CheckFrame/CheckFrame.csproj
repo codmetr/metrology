@@ -85,14 +85,14 @@
     <Compile Include="Checks\Steps\IToBaseStep.cs" />
     <Compile Include="Checks\Steps\TestStep.cs" />
     <Compile Include="Devices\PressureUnitDescriptor.cs" />
-    <Compile Include="IDeviceManager.cs" />
+    <Compile Include="Devices\IDeviceManager.cs" />
     <Compile Include="TransportChannels\ITransportChannelType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Archive\ViewModel\IParameterResultViewModel.cs" />
     <Compile Include="Archive\ViewModel\IParameterViewModel.cs" />
     <Compile Include="Archive\ViewModel\ParameterResultViewModel.cs" />
     <Compile Include="Archive\ViewModel\ParameterViewModel.cs" />
-    <Compile Include="Checks\ViewModel\Channels\IMethodViewModel.cs" />
+    <Compile Include="Channels\ViewModel\IMethodViewModel.cs" />
     <Compile Include="Checks\ViewModel\ICustomSettingsViewModel.cs" />
     <Compile Include="Checks\ViewModel\StepState.cs" />
     <Compile Include="Checks\ViewModel\StepViewModel.cs" />

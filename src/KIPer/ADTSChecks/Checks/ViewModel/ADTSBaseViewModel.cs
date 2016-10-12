@@ -81,7 +81,7 @@ namespace ADTSChecks.ViewModel.Checks
             _stateViewModel = new AdtsCheckStateViewModel();
             _stateViewModel.TitleSteps = "Щаги";
             _stateViewModel.TitleBtnNext = "Старт";
-            _stateViewModel.ADTS = new ADTSViewModel(_deviceManager);
+            _stateViewModel.ADTS = new ADTSViewModel(Method.GetADTS());
             _stateViewModel.Steps = Method.Steps.Select(el => new StepViewModel(el.Step, el.Enabled));
             _stateViewModel.ResultsLog = new ObservableCollection<EventArgTestStepResult>();
         }
@@ -289,7 +289,7 @@ namespace ADTSChecks.ViewModel.Checks
         {
             State.TitleBtnNext = "Далее";
             Method.ChannelType = _connection;
-            State.ADTS.Start(Method.GetADTS(), _connection);
+            State.ADTS.Start(_connection);
             // Задаем эталон
             if (_ethalonTypeKey != null && _ethalonChannelType != null)
                 Method.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType), _ethalonChannelType);

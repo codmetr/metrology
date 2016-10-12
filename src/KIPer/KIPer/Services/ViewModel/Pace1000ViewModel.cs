@@ -77,7 +77,6 @@ namespace KipTM.ViewModel
 
         public void Start(ITransportChannelType channel)
         {
-            _model = _deviceManager.GetModel<PACE1000Model>();
             _model.Start(channel);
             _model.PressureChanged += _model_PressureChanged;
             _model.PressureUnitChanged += _model_PressureUnitChanged;
