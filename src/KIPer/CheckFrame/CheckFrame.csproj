@@ -65,37 +65,37 @@
   <ItemGroup>
     <Compile Include="Archive\IPropertyPool.cs" />
     <Compile Include="Interfaces\IService.cs" />
-    <Compile Include="Model\Channels\IEthalonChannel.cs" />
-    <Compile Include="Model\Channels\IUserChannel.cs" />
-    <Compile Include="Model\Channels\UserChannel.cs" />
-    <Compile Include="Model\Channels\UserEchalonChannel.cs" />
-    <Compile Include="Model\Channels\UserQueryType.cs" />
-    <Compile Include="Model\Checks\CheckStepConfig.cs" />
-    <Compile Include="Model\Checks\EventArgs\EventArgEnd.cs" />
-    <Compile Include="Model\Checks\EventArgs\EventArgError.cs" />
-    <Compile Include="Model\Checks\EventArgs\EventArgProgress.cs" />
-    <Compile Include="Model\Checks\EventArgs\EventArgStepResult.cs" />
-    <Compile Include="Model\Checks\EventArgs\EventArgTestStepResult.cs" />
-    <Compile Include="Model\Checks\ICheckMethod.cs" />
-    <Compile Include="Model\Checks\Steps\IPausedStep.cs" />
-    <Compile Include="Model\Checks\Steps\ISettedEthalonChannel.cs" />
-    <Compile Include="Model\Checks\Steps\ISettedUserChannel.cs" />
-    <Compile Include="Model\Checks\Steps\IStoppedOnPoint.cs" />
-    <Compile Include="Model\Checks\Steps\ITestStep.cs" />
-    <Compile Include="Model\Checks\Steps\IToBaseStep.cs" />
-    <Compile Include="Model\Checks\Steps\TestStep.cs" />
-    <Compile Include="Model\Devices\PressureUnitDescriptor.cs" />
-    <Compile Include="Model\IDeviceManager.cs" />
-    <Compile Include="Model\TransportChannels\ITransportChannelType.cs" />
+    <Compile Include="Channels\IEthalonChannel.cs" />
+    <Compile Include="Channels\IUserChannel.cs" />
+    <Compile Include="Channels\UserChannel.cs" />
+    <Compile Include="Channels\UserEchalonChannel.cs" />
+    <Compile Include="Channels\UserQueryType.cs" />
+    <Compile Include="Checks\CheckStepConfig.cs" />
+    <Compile Include="Checks\EventArgs\EventArgEnd.cs" />
+    <Compile Include="Checks\EventArgs\EventArgError.cs" />
+    <Compile Include="Checks\EventArgs\EventArgProgress.cs" />
+    <Compile Include="Checks\EventArgs\EventArgStepResult.cs" />
+    <Compile Include="Checks\EventArgs\EventArgTestStepResult.cs" />
+    <Compile Include="Checks\ICheckMethod.cs" />
+    <Compile Include="Checks\Steps\IPausedStep.cs" />
+    <Compile Include="Checks\Steps\ISettedEthalonChannel.cs" />
+    <Compile Include="Checks\Steps\ISettedUserChannel.cs" />
+    <Compile Include="Checks\Steps\IStoppedOnPoint.cs" />
+    <Compile Include="Checks\Steps\ITestStep.cs" />
+    <Compile Include="Checks\Steps\IToBaseStep.cs" />
+    <Compile Include="Checks\Steps\TestStep.cs" />
+    <Compile Include="Devices\PressureUnitDescriptor.cs" />
+    <Compile Include="IDeviceManager.cs" />
+    <Compile Include="TransportChannels\ITransportChannelType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\Archive\IParameterResultViewModel.cs" />
-    <Compile Include="ViewModel\Archive\IParameterViewModel.cs" />
-    <Compile Include="ViewModel\Archive\ParameterResultViewModel.cs" />
-    <Compile Include="ViewModel\Archive\ParameterViewModel.cs" />
-    <Compile Include="ViewModel\Checks\Channels\IMethodViewModel.cs" />
-    <Compile Include="ViewModel\Checks\ICustomSettingsViewModel.cs" />
-    <Compile Include="ViewModel\Checks\StepState.cs" />
-    <Compile Include="ViewModel\Checks\StepViewModel.cs" />
+    <Compile Include="Archive\ViewModel\IParameterResultViewModel.cs" />
+    <Compile Include="Archive\ViewModel\IParameterViewModel.cs" />
+    <Compile Include="Archive\ViewModel\ParameterResultViewModel.cs" />
+    <Compile Include="Archive\ViewModel\ParameterViewModel.cs" />
+    <Compile Include="Checks\ViewModel\Channels\IMethodViewModel.cs" />
+    <Compile Include="Checks\ViewModel\ICustomSettingsViewModel.cs" />
+    <Compile Include="Checks\ViewModel\StepState.cs" />
+    <Compile Include="Checks\ViewModel\StepViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
@@ -110,6 +110,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

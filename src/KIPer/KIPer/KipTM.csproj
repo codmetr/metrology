@@ -116,56 +116,56 @@
     <Compile Include="Archive\PropertyArchive.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="Model\IPropertiesLibrary.cs" />
-    <Compile Include="Model\PropertiesLibrary.cs" />
-    <Compile Include="Model\Checks\CheckConfig.cs" />
-    <Compile Include="Model\DeviceManager.cs" />
-    <Compile Include="Model\DataService.cs" />
-    <Compile Include="Interfaces\IDataService.cs" />
-    <Compile Include="Model\Devices\PressureUnitDescriptor.cs" />
-    <Compile Include="Model\IMethodsService.cs" />
-    <Compile Include="Model\MethodsService.cs" />
-    <Compile Include="Model\TransportChannels\Fake\FakeChannelDescriptor.cs" />
-    <Compile Include="Model\TransportChannels\Visa\VisaChannelDescriptor.cs" />
-    <Compile Include="Model\TransportChannels\Visa\VisaSettings.cs" />
+    <Compile Include="DataService\IPropertiesLibrary.cs" />
+    <Compile Include="DataService\PropertiesLibrary.cs" />
+    <Compile Include="Checks\CheckConfig.cs" />
+    <Compile Include="DataService\DeviceManager.cs" />
+    <Compile Include="DataService\DataService.cs" />
+    <Compile Include="DataService\IDataService.cs" />
+    <Compile Include="Devices\PressureUnitDescriptor.cs" />
+    <Compile Include="DataService\IMethodsService.cs" />
+    <Compile Include="DataService\MethodsService.cs" />
+    <Compile Include="TransportChannels\Fake\FakeChannelDescriptor.cs" />
+    <Compile Include="TransportChannels\Visa\VisaChannelDescriptor.cs" />
+    <Compile Include="TransportChannels\Visa\VisaSettings.cs" />
     <Compile Include="Settings\ComPortSettings.cs" />
     <Compile Include="Settings\DeviceTypeSettings.cs" />
     <Compile Include="Settings\EtalonSettings.cs" />
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\IMainSettings.cs" />
     <Compile Include="Settings\MainSettings.cs" />
-    <Compile Include="ViewModel\Checks\Config\CustomConfigFabrik.cs" />
-    <Compile Include="ViewModel\Report\IReportViewModel.cs" />
-    <Compile Include="ViewModel\Report\ReportViewModel.cs" />
-    <Compile Include="ViewModel\Checks\Config\CheckConfigViewModel.cs" />
-    <Compile Include="ViewModel\Checks\CheckFabrik.cs" />
-    <Compile Include="ViewModel\Checks\ICheckFabrik.cs" />
+    <Compile Include="Checks\ViewModel\Config\CustomConfigFabrik.cs" />
+    <Compile Include="Report\ViewModel\IReportViewModel.cs" />
+    <Compile Include="Report\ViewModel\ReportViewModel.cs" />
+    <Compile Include="Checks\ViewModel\Config\CheckConfigViewModel.cs" />
+    <Compile Include="Checks\ViewModel\CheckFabrik.cs" />
+    <Compile Include="Checks\ViewModel\ICheckFabrik.cs" />
     <Compile Include="Workflow\States\ADTSCheckState.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />
     <Compile Include="Workflow\States\ResultState.cs" />
     <Compile Include="Workflow\States\ReportState.cs" />
-    <Compile Include="ViewModel\DeviceTypes\DeviceTypeCollectionViewModel.cs" />
-    <Compile Include="ViewModel\DeviceTypes\DeviceTypeViewModel.cs" />
-    <Compile Include="ViewModel\Archive\DeviceViewModel.cs" />
-    <Compile Include="ViewModel\DeviceTypes\EtalonTypeViewModel.cs" />
-    <Compile Include="Model\Devices\FunctionDescriptor.cs" />
-    <Compile Include="ViewModel\Archive\IDeviceViewModel.cs" />
-    <Compile Include="ViewModel\DeviceTypes\IDeviceTypesViewModel.cs" />
-    <Compile Include="Model\Devices\IFunctionDescriptor.cs" />
-    <Compile Include="ViewModel\DeviceTypes\IMethodicViewModel.cs" />
-    <Compile Include="ViewModel\Archive\IArchivesViewModel.cs" />
-    <Compile Include="ViewModel\Archive\ITestResultViewModel.cs" />
+    <Compile Include="Devices\ViewModel\DeviceTypeCollectionViewModel.cs" />
+    <Compile Include="Devices\ViewModel\DeviceTypeViewModel.cs" />
+    <Compile Include="Archive\ViewModel\DeviceViewModel.cs" />
+    <Compile Include="Devices\ViewModel\EtalonTypeViewModel.cs" />
+    <Compile Include="Devices\FunctionDescriptor.cs" />
+    <Compile Include="Archive\ViewModel\IDeviceViewModel.cs" />
+    <Compile Include="Devices\ViewModel\IDeviceTypesViewModel.cs" />
+    <Compile Include="Devices\IFunctionDescriptor.cs" />
+    <Compile Include="Devices\ViewModel\IMethodicViewModel.cs" />
+    <Compile Include="Archive\ViewModel\IArchivesViewModel.cs" />
+    <Compile Include="Archive\ViewModel\ITestResultViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\DeviceTypes\MethodicViewModel.cs" />
+    <Compile Include="Devices\ViewModel\MethodicViewModel.cs" />
     <Compile Include="Workflow\IWorkflowStep.cs" />
     <Compile Include="Workflow\Workflow.cs" />
     <Compile Include="Workflow\WorkflowStepChangeEvent.cs" />
-    <Compile Include="ViewModel\Services\SelectChannelViewModel.cs" />
-    <Compile Include="ViewModel\Services\Pace1000ViewModel.cs" />
-    <Compile Include="ViewModel\Services\ParameterValuePair.cs" />
-    <Compile Include="ViewModel\Services\ServiceViewModel.cs" />
-    <Compile Include="ViewModel\Archive\ArchivesViewModel.cs" />
-    <Compile Include="ViewModel\Archive\TestResultViewModel.cs" />
+    <Compile Include="Services\ViewModel\SelectChannelViewModel.cs" />
+    <Compile Include="Services\ViewModel\Pace1000ViewModel.cs" />
+    <Compile Include="Services\ViewModel\ParameterValuePair.cs" />
+    <Compile Include="Services\ViewModel\ServiceViewModel.cs" />
+    <Compile Include="Archive\ViewModel\ArchivesViewModel.cs" />
+    <Compile Include="Archive\ViewModel\TestResultViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="Archive\View\ParamResCollectionView.xaml.cs">
       <DependentUpon>ParamResCollectionView.xaml</DependentUpon>
@@ -179,7 +179,7 @@
     <Compile Include="View\Checks\ADTSConfigView.xaml.cs">
       <DependentUpon>ADTSConfigView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\Checks\View\CheckConfigView.xaml.cs">
+    <Compile Include="Checks\View\CheckConfigView.xaml.cs">
       <DependentUpon>CheckConfigView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Checks\PACE1000EthalonChannelView.xaml.cs">
@@ -192,34 +192,34 @@
       <DependentUpon>WorkflowView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Converters\DoubleToTimespanConverter.cs" />
-    <Compile Include="View\DeviceTypes\DeviceTypesView.xaml.cs">
+    <Compile Include="Devices\View\DeviceTypesView.xaml.cs">
       <DependentUpon>DeviceTypesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\DeviceTypes\DeviceTypeView.xaml.cs">
+    <Compile Include="Devices\View\DeviceTypeView.xaml.cs">
       <DependentUpon>DeviceTypeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\DeviceTypes\EtalonTypeView.xaml.cs">
+    <Compile Include="Devices\View\EtalonTypeView.xaml.cs">
       <DependentUpon>EtalonTypeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ReportHost.cs">
+    <Compile Include="Report\ReportHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="View\ReportHost.Designer.cs">
+    <Compile Include="Report\ReportHost.Designer.cs">
       <DependentUpon>ReportHost.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\ReportView.xaml.cs">
+    <Compile Include="Report\ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Services\ADTSView.xaml.cs">
+    <Compile Include="Services\ADTSView.xaml.cs">
       <DependentUpon>ADTSView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Services\SelectChannelView.xaml.cs">
+    <Compile Include="Services\SelectChannelView.xaml.cs">
       <DependentUpon>SelectChannelView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Services\PACE1000View.xaml.cs">
+    <Compile Include="Services\PACE1000View.xaml.cs">
       <DependentUpon>PACE1000View.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Services\ServicesView.xaml.cs">
+    <Compile Include="Services\ServicesView.xaml.cs">
       <DependentUpon>ServicesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Archive\View\ArchivesView.xaml.cs">
@@ -228,7 +228,7 @@
     <Compile Include="Archive\View\ResultView.xaml.cs">
       <DependentUpon>ResultView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Services\VisaSettingsView.xaml.cs">
+    <Compile Include="TransportChannels\Visa\VisaSettingsView.xaml.cs">
       <DependentUpon>VisaSettingsView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -283,7 +283,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Model\Checks\View\CheckConfigView.xaml">
+    <Page Include="Checks\View\CheckConfigView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -299,39 +299,39 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\DeviceTypes\DeviceTypesView.xaml">
+    <Page Include="Devices\View\DeviceTypesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\DeviceTypes\DeviceTypeView.xaml">
+    <Page Include="Devices\View\DeviceTypeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\DeviceTypes\EtalonTypeView.xaml">
+    <Page Include="Devices\View\EtalonTypeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ReportView.xaml">
+    <Page Include="Report\ReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Services\ADTSView.xaml">
+    <Page Include="Services\ADTSView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Services\SelectChannelView.xaml">
+    <Page Include="Services\SelectChannelView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Services\PACE1000View.xaml">
+    <Page Include="Services\PACE1000View.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Services\PACE5000ViewStyles.xaml">
+    <Page Include="Services\PACE5000ViewStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Services\ServicesView.xaml">
+    <Page Include="Services\ServicesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -343,7 +343,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Services\VisaSettingsView.xaml">
+    <Page Include="TransportChannels\Visa\VisaSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -367,7 +367,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <CustomToolNamespace>KipTM</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\ReportHost.resx">
+    <EmbeddedResource Include="Report\ReportHost.resx">
       <DependentUpon>ReportHost.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
