@@ -34,8 +34,8 @@ namespace KipTM.ViewModel
         private TimeSpan _autoreadPeriod;
         private ObservableCollection<ParameterValuePair> _deviceParameters = new ObservableCollection<ParameterValuePair>();
         private string _unit;
-        private IEnumerable<PressureUnitDescriptor<PressureUnits>> _avalableUnits;
-        private PressureUnitDescriptor<PressureUnits> _selectedUnit;
+        private IEnumerable<UnitDescriptor<PressureUnits>> _avalableUnits;
+        private UnitDescriptor<PressureUnits> _selectedUnit;
 
         /// <summary>
         /// Initializes a new instance of the Pace1000ViewModel class.
@@ -45,20 +45,20 @@ namespace KipTM.ViewModel
             _deviceManager = deviceManager;
             _avalableUnits = new[]
             {
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.MBar,_pressureUnitToString(PressureUnits.MBar)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.Bar,_pressureUnitToString(PressureUnits.Bar)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inH2O4,_pressureUnitToString(PressureUnits.inH2O4)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inH2O,_pressureUnitToString(PressureUnits.inH2O)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inHg,_pressureUnitToString(PressureUnits.inHg)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.mmHg,_pressureUnitToString(PressureUnits.mmHg)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.Pa,_pressureUnitToString(PressureUnits.Pa)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.hPa,_pressureUnitToString(PressureUnits.hPa)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.kPa,_pressureUnitToString(PressureUnits.kPa)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.psi,_pressureUnitToString(PressureUnits.psi)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inH2O60F,_pressureUnitToString(PressureUnits.inH2O60F)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.KgCm2,_pressureUnitToString(PressureUnits.KgCm2)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.ATM,_pressureUnitToString(PressureUnits.ATM)),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.mmH2O4,_pressureUnitToString(PressureUnits.mmH2O4)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.MBar,_pressureUnitToString(PressureUnits.MBar)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.Bar,_pressureUnitToString(PressureUnits.Bar)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.inH2O4,_pressureUnitToString(PressureUnits.inH2O4)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.inH2O,_pressureUnitToString(PressureUnits.inH2O)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.inHg,_pressureUnitToString(PressureUnits.inHg)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.mmHg,_pressureUnitToString(PressureUnits.mmHg)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.Pa,_pressureUnitToString(PressureUnits.Pa)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.hPa,_pressureUnitToString(PressureUnits.hPa)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.kPa,_pressureUnitToString(PressureUnits.kPa)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.psi,_pressureUnitToString(PressureUnits.psi)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.inH2O60F,_pressureUnitToString(PressureUnits.inH2O60F)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.KgCm2,_pressureUnitToString(PressureUnits.KgCm2)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.ATM,_pressureUnitToString(PressureUnits.ATM)),
+                new UnitDescriptor<PressureUnits>(PressureUnits.mmH2O4,_pressureUnitToString(PressureUnits.mmH2O4)),
             };
             SelectedUnit = _avalableUnits.First();
         }
@@ -110,12 +110,12 @@ namespace KipTM.ViewModel
             private set { Set(ref _unit, value); }
         }
 
-        public IEnumerable<PressureUnitDescriptor<PressureUnits>> AvalableUnits
+        public IEnumerable<UnitDescriptor<PressureUnits>> AvalableUnits
         {
             get { return _avalableUnits; }
         }
 
-        public PressureUnitDescriptor<PressureUnits> SelectedUnit
+        public UnitDescriptor<PressureUnits> SelectedUnit
         {
             get { return _selectedUnit; }
             set { Set(ref _selectedUnit, value); }

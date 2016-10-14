@@ -7,9 +7,13 @@ using PACESeries;
 
 namespace KipTM.Model.Devices
 {
-    public class PressureUnitDescriptor<T>
+    /// <summary>
+    /// Строковый описательть эдиниц измерения
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class UnitDescriptor<T>
     {
-        public PressureUnitDescriptor(T unit, string unitString)
+        public UnitDescriptor(T unit, string unitString)
         {
             UnitString = unitString;
             Unit = unit;
