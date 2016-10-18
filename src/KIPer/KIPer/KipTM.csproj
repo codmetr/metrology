@@ -122,9 +122,12 @@
     <Compile Include="DataService\DeviceManager.cs" />
     <Compile Include="DataService\DataService.cs" />
     <Compile Include="DataService\IDataService.cs" />
-    <Compile Include="Devices\PressureUnitDescriptor.cs" />
+    <Compile Include="Devices\UnitDescriptor.cs" />
     <Compile Include="DataService\IMethodsService.cs" />
     <Compile Include="DataService\MethodsService.cs" />
+    <Compile Include="EventAggregator\EventAggregator.cs" />
+    <Compile Include="EventAggregator\IEventAggregator.cs" />
+    <Compile Include="EventAggregator\ISubscriber.cs" />
     <Compile Include="TransportChannels\Fake\FakeChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaSettings.cs" />
@@ -140,7 +143,7 @@
     <Compile Include="Checks\ViewModel\Config\CheckConfigViewModel.cs" />
     <Compile Include="Checks\ViewModel\CheckFabrik.cs" />
     <Compile Include="Checks\ViewModel\ICheckFabrik.cs" />
-    <Compile Include="Workflow\States\ADTSCheckState.cs" />
+    <Compile Include="Workflow\States\CheckState.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />
     <Compile Include="Workflow\States\ResultState.cs" />
     <Compile Include="Workflow\States\ReportState.cs" />

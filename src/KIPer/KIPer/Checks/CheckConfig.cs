@@ -47,7 +47,6 @@ namespace KipTM.Model.Checks
             _propertyPool = propertyPool;
 
             LoadAvalableCheckDevices(settings, dictionaries);
-
             LoadAvalableEthalons(settings);
         }
 

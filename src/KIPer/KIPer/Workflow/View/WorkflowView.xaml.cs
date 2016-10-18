@@ -20,7 +20,7 @@ namespace KipTM.View.Checks
     /// <summary>
     /// Interaction logic for WorkflowView.xaml
     /// </summary>
-    [View(typeof(Workflow))]
+    [View(typeof(KipTM.ViewModel.Workflow.Workflow))]
     public partial class WorkflowView : UserControl
     {
         public WorkflowView()

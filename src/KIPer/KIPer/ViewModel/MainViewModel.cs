@@ -19,6 +19,7 @@ using KipTM.ViewModel.DeviceTypes;
 using KipTM.ViewModel.Report;
 using KipTM.ViewModel.Workflow;
 using KipTM.ViewModel.Workflow.States;
+using KipTM.Workflow.States;
 using MarkerService;
 using MarkerService.Filler;
 using ReportService;
@@ -110,7 +111,7 @@ namespace KipTM.ViewModel
             _steps = new List<IWorkflowStep>()
             {
                 new ConfigCheckState(checkConfigViewModel),
-                new ADTSCheckState(() => checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel)),
+                new CheckState(() => checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel)),
                 new ResultState(() => new TestResultViewModel(
                     result, _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(),
                     checkConfig.SelectedMethod), _filler, (res)=>{/*TODO make save*/})),
@@ -274,7 +275,6 @@ namespace KipTM.ViewModel
         ////public override void Cleanup()
         ////{
         ////    // Clean up if needed
-
         ////    base.Cleanup();
         ////}
 

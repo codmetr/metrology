@@ -1,15 +1,15 @@
 ﻿using System;
 using CheckFrame.ViewModel.Checks.Channels;
-using KipTM.ViewModel.Checks;
+using KipTM.ViewModel.Workflow;
 
-namespace KipTM.ViewModel.Workflow.States
+namespace KipTM.Workflow.States
 {
-    public class ADTSCheckState : IWorkflowStep
+    public class CheckState : IWorkflowStep
     {
         private IMethodViewModel _check;
         private readonly Func<IMethodViewModel> _checkFabric;
 
-        public ADTSCheckState(Func<IMethodViewModel> checkFabric)
+        public CheckState(Func<IMethodViewModel> checkFabric)
         {
             _checkFabric = checkFabric;
         }
@@ -35,7 +35,7 @@ namespace KipTM.ViewModel.Workflow.States
         public void StateIn()
         {
             _check = _checkFabric();
-            if(_check!=null)
+            if(_check != null)
                 AttachEvents(_check);
         }
 
