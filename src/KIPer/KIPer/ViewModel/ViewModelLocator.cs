@@ -23,6 +23,7 @@ using MarkerService.Filler;
 using Microsoft.Practices.ServiceLocation;
 using KipTM.Model;
 using System;
+using KipTM.EventAggregator;
 using ReportService;
 
 namespace KipTM.ViewModel
@@ -41,6 +42,7 @@ namespace KipTM.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
+            SimpleIoc.Default.Register<IEventAggregator, EventAggregator.EventAggregator>();
             SimpleIoc.Default.Register<SQLiteArchive.IArchive, SQLiteArchive.ArchiveXML>();
             SimpleIoc.Default.Register<IMainSettings>(() => ServiceLocator.Current.GetInstance<SQLiteArchive.IArchive>().Load(MainSettings.SettingsFileName, MainSettings.GetDefault()));
             SimpleIoc.Default.Register<IPropertiesLibrary, PropertiesLibrary>();

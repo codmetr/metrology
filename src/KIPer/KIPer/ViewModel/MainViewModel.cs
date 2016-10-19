@@ -26,6 +26,8 @@ using ReportService;
 using SQLiteArchive;
 using Tools;
 using ADTSChecks.Model.Devices;
+using KipTM.EventAggregator;
+using KipTM.Workflow.States.Events;
 
 namespace KipTM.ViewModel
 {
@@ -35,7 +37,7 @@ namespace KipTM.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase, ISubscriber<EventCheckState>
     {
         private readonly IDataService _dataService;
         private IMethodsService _methodicService;
@@ -44,6 +46,7 @@ namespace KipTM.ViewModel
         private IArchive _archive;
 
         private readonly ServiceViewModel _services;
+        private readonly IEventAggregator _eventAggregator;
 
         private IArchivesViewModel _tests;
         private DeviceTypeCollectionViewModel _deviceTypes;
@@ -63,11 +66,12 @@ namespace KipTM.ViewModel
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel(
-            IDataService dataService, IMethodsService methodicService, IMainSettings settings,
-            IPropertiesLibrary propertiesLibrary, IArchive archive,
+            IEventAggregator eventAggregator, IDataService dataService, IMethodsService methodicService,
+            IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive,
             IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
             IReportFabrik reportFabric)
         {
+            _eventAggregator = eventAggregator;
             _dataService = dataService;
             _methodicService = methodicService;
             _settings = settings;
@@ -108,13 +112,16 @@ namespace KipTM.ViewModel
             var configViewModelFabrik = new CustomConfigFabrik();
             var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice, configViewModelFabrik);
 
+            _eventAggregator.Subscribe(this);
+
             _steps = new List<IWorkflowStep>()
             {
                 new ConfigCheckState(checkConfigViewModel),
-                new CheckState(() => checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel)),
-                new ResultState(() => new TestResultViewModel(
-                    result, _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(),
-                    checkConfig.SelectedMethod), _filler, (res)=>{/*TODO make save*/})),
+                new CheckState(() =>
+                        checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel,
+                            channelEthalonDevice.SelectedChannel), _eventAggregator),
+                new ResultState(() => new TestResultViewModel(result, _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(),
+                        checkConfig.SelectedMethod), _filler, (res) =>{/*TODO make save*/})),
                 new ReportState(() => new ReportViewModel(_reportFabric, result)),
             };
             _workflow = new Workflow.Workflow(_steps);
@@ -289,6 +296,7 @@ namespace KipTM.ViewModel
 
         public override void Cleanup()
         {
+            _eventAggregator.Unsubscribe(this);
             base.Cleanup();
             foreach (var step in _steps)
             {
@@ -297,5 +305,24 @@ namespace KipTM.ViewModel
                     dispStep.Dispose();
             }
         }
+
+        #region Events
+
+        public void OnEvent(EventCheckState message)
+        {
+            if (message.Runned)
+            {
+                IsActiveCheck = false;
+                IsActiveService = false;
+            }
+            else
+            {
+                IsActiveCheck = true;
+                IsActiveService = true;
+            }
+        }
+
+        #endregion
+
     }
 }

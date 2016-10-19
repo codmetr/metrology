@@ -7,28 +7,6 @@ namespace KipTM.EventAggregator
 {
     public class EventAggregator : IEventAggregator
     {
-        internal class EventSubscriber : IEquatable<EventSubscriber>
-        {
-            public Type SubscriberType { get; set; }
-
-            public object Token { get; set; }
-
-            public override int GetHashCode()
-            {
-                return SubscriberType.GetHashCode();
-            }
-
-            public override bool Equals(object obj)
-            {
-                return Equals(obj as EventSubscriber);
-            }
-
-            public bool Equals(EventSubscriber obj)
-            {
-                return obj.SubscriberType == SubscriberType && obj.Token == Token;
-            }
-        }
-        
         private readonly SynchronizationContext _context;
         private readonly Dictionary<EventSubscriber, List<WeakReference>> _eventSubscriberLists = new Dictionary<EventSubscriber, List<WeakReference>>();
         private readonly object _registerLock = new object();

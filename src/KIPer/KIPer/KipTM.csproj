@@ -126,6 +126,7 @@
     <Compile Include="DataService\IMethodsService.cs" />
     <Compile Include="DataService\MethodsService.cs" />
     <Compile Include="EventAggregator\EventAggregator.cs" />
+    <Compile Include="EventAggregator\EventSubscriber.cs" />
     <Compile Include="EventAggregator\IEventAggregator.cs" />
     <Compile Include="EventAggregator\ISubscriber.cs" />
     <Compile Include="TransportChannels\Fake\FakeChannelDescriptor.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Checks\ViewModel\ICheckFabrik.cs" />
     <Compile Include="Workflow\States\CheckState.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />
+    <Compile Include="Workflow\States\Events\EventCheckState.cs" />
     <Compile Include="Workflow\States\ResultState.cs" />
     <Compile Include="Workflow\States\ReportState.cs" />
     <Compile Include="Devices\ViewModel\DeviceTypeCollectionViewModel.cs" />

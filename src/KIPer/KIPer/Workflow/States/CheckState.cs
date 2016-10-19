@@ -1,6 +1,8 @@
 ﻿using System;
 using CheckFrame.ViewModel.Checks.Channels;
+using KipTM.EventAggregator;
 using KipTM.ViewModel.Workflow;
+using KipTM.Workflow.States.Events;
 
 namespace KipTM.Workflow.States
 {
@@ -8,10 +10,12 @@ namespace KipTM.Workflow.States
     {
         private IMethodViewModel _check;
         private readonly Func<IMethodViewModel> _checkFabric;
+        private readonly IEventAggregator _eventAggregator;
 
-        public CheckState(Func<IMethodViewModel> checkFabric)
+        public CheckState(Func<IMethodViewModel> checkFabric, IEventAggregator eventAggregator)
         {
             _checkFabric = checkFabric;
+            _eventAggregator = eventAggregator;
         }
 
         public event EventHandler<WorkflowStepChangeEvent> NextAvailabilityChanged;
@@ -62,12 +66,14 @@ namespace KipTM.Workflow.States
 
         void check_Started(object sender, EventArgs e)
         {
+            _eventAggregator.Send(new EventCheckState(true));
             OnNextAvailabilityChanged(new WorkflowStepChangeEvent(false));
             OnBackAvailabilityChanged(new WorkflowStepChangeEvent(false));
         }
 
         void check_Stoped(object sender, EventArgs e)
         {
+            _eventAggregator.Send(new EventCheckState(false));
             OnNextAvailabilityChanged(new WorkflowStepChangeEvent(true));
             OnBackAvailabilityChanged(new WorkflowStepChangeEvent(true));
         }
