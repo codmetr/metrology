@@ -39,6 +39,7 @@
             this.reportViewer.DisplayBackgroundEdge = false;
             this.reportViewer.DisplayStatusBar = false;
             this.reportViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.reportViewer.EnableDrillDown = false;
             this.reportViewer.Location = new System.Drawing.Point(0, 0);
             this.reportViewer.Name = "reportViewer";
             this.reportViewer.ShowCloseButton = false;

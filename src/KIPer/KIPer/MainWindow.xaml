@@ -6,7 +6,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        Height="715" Width="840"
+        Height="730" Width="840"
         Title="КипТМ"
         x:Name="MainViewWindow" Icon="Content/icon.png"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
@@ -40,7 +40,7 @@
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>-->
-                <Button Content="ПОВЕРКА СИ" Command="{Binding SelectChecks}">
+                <Button Content="ПОВЕРКА СИ" Command="{Binding SelectChecks}" IsEnabled="{Binding IsActiveSwitchServices, UpdateSourceTrigger=PropertyChanged}">
                     <Button.Style>
                         <Style BasedOn="{StaticResource ButtonTabStyle}" TargetType="{x:Type Button}">
                             <Style.Triggers>
@@ -56,7 +56,7 @@
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>-->
-                <Button Content="СЕРВИС" Command="{Binding SelectService}">
+                <Button Content="СЕРВИС" Command="{Binding SelectService}" IsEnabled="{Binding IsActiveSwitchServices, UpdateSourceTrigger=PropertyChanged}">
                     <Button.Style>
                         <Style BasedOn="{StaticResource ButtonTabStyle}" TargetType="{x:Type Button}">
                             <Style.Triggers>

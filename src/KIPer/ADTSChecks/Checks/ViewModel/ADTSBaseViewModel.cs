@@ -337,7 +337,6 @@ namespace ADTSChecks.ViewModel.Checks
             }
             AcceptEnabled = false;
             State.WaitUserReaction = false;
-            OnStoped();
         }
 
         /// <summary>
@@ -357,7 +356,6 @@ namespace ADTSChecks.ViewModel.Checks
             State.WaitUserReaction = true;
             AcceptEnabled = false;
             StopEnabled = false;
-            OnStoped();
         }
         #endregion
 
@@ -465,7 +463,7 @@ namespace ADTSChecks.ViewModel.Checks
 
         void EndMethod(object sender, EventArgs e)
         {
-            //_resultPool.Results = M ;
+            OnStoped();
         }
 
         void model_PauseAvailableChanged(object sender, EventArgs e)

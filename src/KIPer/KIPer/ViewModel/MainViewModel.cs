@@ -39,6 +39,8 @@ namespace KipTM.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase, ISubscriber<EventCheckState>
     {
+        #region Переменные
+
         private readonly IDataService _dataService;
         private IMethodsService _methodicService;
         private IMainSettings _settings;
@@ -61,6 +63,11 @@ namespace KipTM.ViewModel
         private IReportFabrik _reportFabric;
         private bool _isActiveCheck;
         private bool _isActiveService;
+        private bool _isActiveSwitchServices = true;
+
+        #endregion
+
+        #region Инициализация загрузка
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -77,17 +84,17 @@ namespace KipTM.ViewModel
             _settings = settings;
             _propertiesLibrary = propertiesLibrary;
             _archive = archive;
-            
+
             _dataService.LoadResults();
             _dataService.InitDevices();
             _resulMaker = resulMaker;
             _filler = filler;
             _reportFabric = reportFabric;
             _services = new ServiceViewModel(new List<IService>()
-            {
-                new Pace1000ViewModel(_dataService.DeviceManager),
-                new ADTSViewModel(_dataService.DeviceManager.GetModel<ADTSModel>())
-            });
+                                                 {
+                                                     new Pace1000ViewModel(_dataService.DeviceManager),
+                                                     new ADTSViewModel(_dataService.DeviceManager.GetModel<ADTSModel>())
+                                                 });
         }
 
         /// <summary>
@@ -106,28 +113,40 @@ namespace KipTM.ViewModel
 
             var checkFabrik = new CheckFabrik(_dataService.DeviceManager, _propertiesLibrary.PropertyPool);
             var result = new TestResult();
-            var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, result);
+            var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool,
+                                              _propertiesLibrary.DictionariesPool, result);
             var channelTargetDevice = new SelectChannelViewModel();
             var channelEthalonDevice = new SelectChannelViewModel();
             var configViewModelFabrik = new CustomConfigFabrik();
-            var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice, configViewModelFabrik);
+            var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice,
+                                                                configViewModelFabrik);
 
             _eventAggregator.Subscribe(this);
 
             _steps = new List<IWorkflowStep>()
-            {
-                new ConfigCheckState(checkConfigViewModel),
-                new CheckState(() =>
-                        checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel,
-                            channelEthalonDevice.SelectedChannel), _eventAggregator),
-                new ResultState(() => new TestResultViewModel(result, _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(),
-                        checkConfig.SelectedMethod), _filler, (res) =>{/*TODO make save*/})),
-                new ReportState(() => new ReportViewModel(_reportFabric, result)),
-            };
+                         {
+                             new ConfigCheckState(checkConfigViewModel),
+                             new CheckState(() =>
+                                            checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel,
+                                                                        channelEthalonDevice.SelectedChannel),
+                                            _eventAggregator),
+                             new ResultState(
+                                 () =>
+                                 new TestResultViewModel(result,
+                                                         _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(),
+                                                                                checkConfig.SelectedMethod), _filler,
+                                                         (res) =>
+                                                             {
+/*TODO make save*/
+                                                             })),
+                             new ReportState(() => new ReportViewModel(_reportFabric, result)),
+                         };
             _workflow = new Workflow.Workflow(_steps);
 
             SelectChecks.Execute(null);
         }
+
+        #endregion
 
         /// <summary>
         /// Поясняющее сообщение 
@@ -145,6 +164,33 @@ namespace KipTM.ViewModel
         {
             get { return _selectedAction; }
             set { Set(ref _selectedAction, value); }
+        }
+
+        /// <summary>
+        /// Активна вкладка Проверки
+        /// </summary>
+        public bool IsActiveCheck
+        {
+            get { return _isActiveCheck; }
+            set { Set(ref _isActiveCheck, value); }
+        }
+
+        /// <summary>
+        /// Активна вкладка Проверки
+        /// </summary>
+        public bool IsActiveService
+        {
+            get { return _isActiveService; }
+            set { Set(ref _isActiveService, value); }
+        }
+
+        /// <summary>
+        /// Доступность переключения сервисов
+        /// </summary>
+        public bool IsActiveSwitchServices
+        {
+            get { return _isActiveSwitchServices; }
+            set { Set(ref _isActiveSwitchServices, value); }
         }
 
         /// <summary>
@@ -261,37 +307,12 @@ namespace KipTM.ViewModel
             }
         }
 
-        /// <summary>
-        /// Активна вкладка Проверки
-        /// </summary>
-        public bool IsActiveCheck
-        {
-            get { return _isActiveCheck; }
-            set { Set(ref _isActiveCheck, value); }
-        }
-
-        /// <summary>
-        /// Активна вкладка Проверки
-        /// </summary>
-        public bool IsActiveService
-        {
-            get { return _isActiveService; }
-            set { Set(ref _isActiveService, value); }
-        }
-
-        ////public override void Cleanup()
-        ////{
-        ////    // Clean up if needed
-        ////    base.Cleanup();
-        ////}
-
         public IArchivesViewModel Tests { get { return _tests; } }
 
         public DeviceTypeCollectionViewModel DeviceTypes { get { return _deviceTypes; } }
 
         public DeviceTypeCollectionViewModel EtalonTypes { get { return _etalonTypes; } }
 
-        //public CheckViewModel Checks { get { return _checks; } }
         public Workflow.Workflow Checks { get { return _workflow; } }
 
         public override void Cleanup()
@@ -310,19 +331,16 @@ namespace KipTM.ViewModel
 
         public void OnEvent(EventCheckState message)
         {
-            if (message.Runned)
-            {
-                IsActiveCheck = false;
-                IsActiveService = false;
-            }
-            else
-            {
-                IsActiveCheck = true;
-                IsActiveService = true;
-            }
+            IsActiveSwitchServices = !message.Runned;
         }
 
         #endregion
+
+        ////public override void Cleanup()
+        ////{
+        ////    // Clean up if needed
+        ////    base.Cleanup();
+        ////}
 
     }
 }
