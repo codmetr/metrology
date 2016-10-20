@@ -1,0 +1,43 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--фон главного окна-->
+    <ImageBrush x:Key="MineWindowBrush" ImageSource="../Content/dark brushed metal texture steel black stock photo scratch wallpaper (1).jpg" Opacity="0.5" Stretch="None"/>
+
+    <!--фон невыделенного элемента ListBox-->
+    <SolidColorBrush x:Key="NoSelectedBrush" Color="#FF02C3B2"/>
+    <!--цвет бордюра невыделенного элемента ListBox-->
+    <SolidColorBrush x:Key="SelectedBorderBrush" Color="#FF0C3A36"/>
+    <!--фон заголовка выделенного элемента ListBox-->
+    <SolidColorBrush x:Key="SelectedTitleBrush" Color="#FFCBCBCB"/>
+    <!--фон пояснений выделенного элемента ListBox-->
+    <SolidColorBrush x:Key="SelectedNoteBrush" Color="#FFCBCBCB"/>
+    <!--цвет шрифта пояснений выделенного элемента ListBox-->
+    <SolidColorBrush x:Key="SelectedNoteForegroundBrush" Color="#FF19192E"/>
+    <!--цвет бордюра пояснения выделенного элемента ListBox-->
+    <SolidColorBrush x:Key="SelectedNoteBorderBrush" Color="#FF032925"/>
+
+    <!--цвет бордюра кнопки основного меню-->
+    <SolidColorBrush x:Key="ButtonTabBorderBrush" Color="Black"/>
+    <!--цвет фона кнопки основного меню-->
+    <SolidColorBrush x:Key="ButtonTabBrush" Color="Gray"/>
+    <!--цвет шрифта кнопки основного меню-->
+    <SolidColorBrush x:Key="ButtonTabForegroundBrush" Color="#FF040000"/>
+
+    <!--цвет бордюра области подсказок-->
+    <SolidColorBrush x:Key="HelpBorderBrush" Color="CadetBlue"/>
+    <!--цвет фона области подсказок-->
+    <SolidColorBrush x:Key="HelpBrush" Color="#FF898A8F"/>
+
+    <!--цвет бордюра основной области-->
+    <SolidColorBrush x:Key="ActualTabBorderBrush" Color="Gray"/>
+    <!--цвет фона основной области-->
+    <SolidColorBrush x:Key="ActualTabBrush" Color="#FFC1C1C1"/>
+
+    <!--цвет текста в элементе не выделяемой коллекции-->
+    <SolidColorBrush x:Key="ItemedTextBoxForegroundBrush" Color="#FF27273A"/>
+    <!--цвет бордюра в элементе не выделяемой коллекции-->
+    <SolidColorBrush x:Key="ItemedTextBoxBorderBrush" Color="#FF27273A"/>
+    <!--цвет фона в элементе не выделяемой коллекции-->
+    <SolidColorBrush x:Key="ItemedTextBoxBrush" Color="#FFDEDEDE"/>
+    
+</ResourceDictionary>

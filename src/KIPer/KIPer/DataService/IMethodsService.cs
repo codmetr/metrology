@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using CheckFrame.Model.Checks;
-using KipTM.Model.Checks;
 
 namespace KipTM.Model
 {

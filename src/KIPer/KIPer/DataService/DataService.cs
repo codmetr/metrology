@@ -11,7 +11,6 @@ using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
 using CheckFrame.Model;
 using KipTM.Interfaces;
-using KipTM.Model.Checks;
 using KipTM.Settings;
 using KipTM.Model.Devices;
 using PACESeries;

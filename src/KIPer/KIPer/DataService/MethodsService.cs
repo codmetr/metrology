@@ -7,7 +7,6 @@ using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
 using CheckFrame.Model.Checks;
 using KipTM.Interfaces;
-using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 
 namespace KipTM.Model

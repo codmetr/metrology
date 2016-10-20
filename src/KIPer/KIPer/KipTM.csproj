@@ -129,6 +129,10 @@
     <Compile Include="EventAggregator\EventSubscriber.cs" />
     <Compile Include="EventAggregator\IEventAggregator.cs" />
     <Compile Include="EventAggregator\ISubscriber.cs" />
+    <Compile Include="Services\FillReportView.xaml.cs">
+      <DependentUpon>FillReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ViewModel\FillReportViewModel.cs" />
     <Compile Include="TransportChannels\Fake\FakeChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaSettings.cs" />
@@ -248,6 +252,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Services\FillReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Skins\ColorLightSkin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -257,6 +265,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Skins\ColorGraySkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Skins\ColorGray2Skin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Skins\Easy2ContentSkins.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -456,9 +472,14 @@
   <ItemGroup>
     <Resource Include="Content\icon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Content\scratched-metal-texture.jpg" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\dark brushed metal texture steel black stock photo scratch wallpaper %281%29.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using ADTS;
 using KipTM.Archive.DataTypes;
-using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 
 namespace KipTM.Archive

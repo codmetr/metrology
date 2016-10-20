@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ADTSChecks.Model.Devices;
-using KipTM.Model.Checks;
 
 namespace KipTM.Settings
 {

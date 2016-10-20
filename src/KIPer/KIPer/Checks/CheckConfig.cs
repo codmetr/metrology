@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ArchiveData.DTO;
 using CheckFrame.Archive;
 using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks;
 using KipTM.Archive;
-using KipTM.Model.TransportChannels;
+using KipTM.Model;
 using KipTM.Settings;
 
-namespace KipTM.Model.Checks
+namespace KipTM.Checks
 {
     public class CheckConfig
     {

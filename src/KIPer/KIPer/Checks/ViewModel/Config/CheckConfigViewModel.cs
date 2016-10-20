@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CheckFrame.Model.TransportChannels;
 using CheckFrame.ViewModel.Checks;
 using GalaSoft.MvvmLight;
-using KipTM.Model.Checks;
+using KipTM.Checks;
 using KipTM.Model.TransportChannels;
 
 namespace KipTM.ViewModel.Checks.Config
