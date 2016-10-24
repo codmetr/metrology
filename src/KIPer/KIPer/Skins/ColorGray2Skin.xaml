@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--фон главного окна-->
-    <ImageBrush x:Key="MineWindowBrush" ImageSource="../Content/dark brushed metal texture steel black stock photo scratch wallpaper (1).jpg" Opacity="0.5" Stretch="None"/>
+    <!--<ImageBrush x:Key="MineWindowBrush" ImageSource="../Content/dark brushed metal texture steel black stock photo scratch wallpaper (1).jpg" Opacity="0.5" Stretch="None"/>-->
+    <SolidColorBrush x:Key="MineWindowBrush" Color="WhiteSmoke"/>
 
     <!--фон невыделенного элемента ListBox-->
     <SolidColorBrush x:Key="NoSelectedBrush" Color="#FF02C3B2"/>
@@ -15,6 +16,11 @@
     <SolidColorBrush x:Key="SelectedNoteForegroundBrush" Color="#FF19192E"/>
     <!--цвет бордюра пояснения выделенного элемента ListBox-->
     <SolidColorBrush x:Key="SelectedNoteBorderBrush" Color="#FF032925"/>
+
+    <!--цвет бордюра группы элементов-->
+    <SolidColorBrush x:Key="GroupBoxBorderBrush" Color="Black"/>
+    <!--цвет фона группы элементов-->
+    <SolidColorBrush x:Key="GroupBoxBrush" Color="#FF29ACE2"/>
 
     <!--цвет бордюра кнопки основного меню-->
     <SolidColorBrush x:Key="ButtonTabBorderBrush" Color="Black"/>

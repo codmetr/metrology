@@ -40,7 +40,7 @@
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
                 <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>-->
-                <Button Content="ПОВЕРКА СИ" Command="{Binding SelectChecks}" IsEnabled="{Binding IsActiveSwitchServices, UpdateSourceTrigger=PropertyChanged}">
+                <Button Content="ПОВЕРКА СИ" Command="{Binding SelectChecks}" IsEnabled="{Binding IsActiveSwitchServices, UpdateSourceTrigger=PropertyChanged}" Background="#FFDDDDDD">
                     <Button.Style>
                         <Style BasedOn="{StaticResource ButtonTabStyle}" TargetType="{x:Type Button}">
                             <Style.Triggers>

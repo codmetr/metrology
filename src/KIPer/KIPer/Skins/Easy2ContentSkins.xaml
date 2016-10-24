@@ -7,7 +7,9 @@
 
     <Style TargetType="GroupBox">
         <Setter Property="Padding" Value="5"/>
-        
+        <Setter Property="Background" Value="{StaticResource GroupBoxBrush}"/>
+        <!--<Setter Property="Foreground" Value="{StaticResource GroupBoxBorderBrush}"/>-->
+        <Setter Property="BorderThickness" Value="0"/>
     </Style>
     
     <Style TargetType="ItemsControl" x:Key="MenuCollectionStyle">

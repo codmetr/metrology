@@ -5,6 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
+    <UserControl.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="../Skins/MainSkin.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -22,5 +29,8 @@
             <TextBlock>Шаблон отчета:</TextBlock>
             <ComboBox Width="150"/>
         </StackPanel>
+        <GroupBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Header="Именованные параметры:" Margin="-5,0,5,0">
+        </GroupBox>
+        <GroupBox Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Header="Группированные параметры:"/>
     </Grid>
 </UserControl>
