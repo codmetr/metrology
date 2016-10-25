@@ -140,7 +140,13 @@
     <Compile Include="Services\FillReportView.xaml.cs">
       <DependentUpon>FillReportView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\ViewModel\FillReportViewModel.cs" />
+    <Compile Include="Services\ViewModel\FillReport\FormulaComplexError.cs" />
+    <Compile Include="Services\ViewModel\FillReport\FormulaDifError.cs" />
+    <Compile Include="Services\ViewModel\FillReport\FillReportViewModel.cs" />
+    <Compile Include="Services\ViewModel\FillReport\FormulaAbsError.cs" />
+    <Compile Include="Services\ViewModel\FillReport\IFormulaDescriptor.cs" />
+    <Compile Include="Services\ViewModel\FillReport\ParameterRow.cs" />
+    <Compile Include="Services\ViewModel\FillReport\ParametersSet.cs" />
     <Compile Include="TransportChannels\Fake\FakeChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaSettings.cs" />

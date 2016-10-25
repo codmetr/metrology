@@ -14,6 +14,7 @@ using KipTM.Interfaces;
 using KipTM.Model;
 using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
+using KipTM.Services.ViewModel;
 using PACESeries;
 using Tools.View;
 

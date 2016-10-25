@@ -7,11 +7,11 @@
 
     <Style TargetType="GroupBox">
         <Setter Property="Padding" Value="5"/>
-        <Setter Property="Background" Value="{StaticResource GroupBoxBrush}"/>
+        <!--<Setter Property="Background" Value="{StaticResource GroupBoxBrush}"/>-->
         <!--<Setter Property="Foreground" Value="{StaticResource GroupBoxBorderBrush}"/>-->
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
-    
+
     <Style TargetType="ItemsControl" x:Key="MenuCollectionStyle">
         <Setter Property="ItemsPanel">
             <Setter.Value>
@@ -103,7 +103,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
     </Style>
-    
+
     <Style TargetType="ListBox" x:Key="CollectionMineListStyle">
         <Setter Property="Width" Value="300"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
