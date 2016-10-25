@@ -9,8 +9,14 @@ namespace KipTM.Services.ViewModel
 {
     public class ParameterGroup
     {
+        /// <summary>
+        /// Название группы параметров
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Группа параметров
+        /// </summary>
         public ObservableCollection<ParameterRow> Parameters { get; set; } 
     }
 }

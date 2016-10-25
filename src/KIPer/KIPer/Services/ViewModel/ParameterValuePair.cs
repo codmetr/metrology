@@ -3,6 +3,6 @@
     public class ParameterValuePair
     {
         public virtual string Parameter { get; set; }
-        public virtual string Vlaue { get; set; }
+        public virtual string Value { get; set; }
     }
 }

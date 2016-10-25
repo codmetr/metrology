@@ -9,10 +9,17 @@ namespace KipTM.Services.ViewModel
 {
     public class ParameterRow
     {
+        /// <summary>
+        /// Точка проверки
+        /// </summary>
         public double Point { get; set; }
-
+        /// <summary>
+        /// Измеренное значение
+        /// </summary>
         public double Measured { get; set; }
-
+        /// <summary>
+        /// Описатель вида погрешности
+        /// </summary>
         public IFormulaDescriptor Formula { get; set; }
     }
 }

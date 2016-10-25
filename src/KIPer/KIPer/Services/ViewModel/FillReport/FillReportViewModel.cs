@@ -5,15 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using KipTM.Services.ViewModel.FillReport;
 
 namespace KipTM.Services.ViewModel
 {
     public class FillReportViewModel : ViewModelBase
     {
-        public ObservableCollection<string> TemplatesReports { get; set; }
+        /// <summary>
+        /// Набор доступных шаблонов
+        /// </summary>
+        public ObservableCollection<TemplateReportData> TemplatesReports { get; set; }
 
-        public ObservableCollection<ParameterValuePair> NamedParameters { get; set; }
+        /// <summary>
+        /// Выбранный шаблон
+        /// </summary>
+        public TemplateReportData SelectedTemplate { get; set; }
 
-        public ObservableCollection<ParameterGroup> ParameterGroups { get; set; }
+        /// <summary>
+        /// Список доступных формул
+        /// </summary>
+        public ObservableCollection<IFormulaDescriptor> Formulas { get; set; }
     }
 }

@@ -147,6 +147,7 @@
     <Compile Include="Services\ViewModel\FillReport\IFormulaDescriptor.cs" />
     <Compile Include="Services\ViewModel\FillReport\ParameterRow.cs" />
     <Compile Include="Services\ViewModel\FillReport\ParametersSet.cs" />
+    <Compile Include="Services\ViewModel\FillReport\TemplateReportData.cs" />
     <Compile Include="TransportChannels\Fake\FakeChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaSettings.cs" />
