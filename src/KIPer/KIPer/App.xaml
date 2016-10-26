@@ -9,9 +9,14 @@
              mc:Ignorable="d ignore">
     
     <Application.Resources>
+        <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
         <!--Global View Model Locator-->
+        </ResourceDictionary.MergedDictionaries>
         <vm:ViewModelLocator x:Key="Locator"
                              d:IsDataSource="True" />
+        </ResourceDictionary>
     </Application.Resources>
     
     

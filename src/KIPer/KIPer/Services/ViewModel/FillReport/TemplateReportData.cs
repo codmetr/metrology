@@ -25,5 +25,10 @@ namespace KipTM.Services.ViewModel.FillReport
         /// </summary>
         public ObservableCollection<ParameterGroup> ParameterGroups { get; set; }
 
+        /// <summary>
+        /// Выбранная группа параметров
+        /// </summary>
+        public ParameterGroup SelectedGroup { get; set; }
+
     }
 }

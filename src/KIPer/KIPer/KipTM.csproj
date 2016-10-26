@@ -140,6 +140,15 @@
     <Compile Include="Services\FillReportView.xaml.cs">
       <DependentUpon>FillReportView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\Formuls\FormulaComplexErrorView.xaml.cs">
+      <DependentUpon>FormulaComplexErrorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Formuls\FormulaDifErrorView.xaml.cs">
+      <DependentUpon>FormulaDifErrorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Formuls\FormulaAbsErrorView.xaml.cs">
+      <DependentUpon>FormulaAbsErrorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\ViewModel\FillReport\FormulaComplexError.cs" />
     <Compile Include="Services\ViewModel\FillReport\FormulaDifError.cs" />
     <Compile Include="Services\ViewModel\FillReport\FillReportViewModel.cs" />
@@ -268,6 +277,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Services\FillReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Services\Formuls\FormulaComplexErrorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Services\Formuls\FormulaDifErrorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Services\Formuls\FormulaAbsErrorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

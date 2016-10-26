@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ignore="http://www.galasoft.ch/ignore"
+        xmlns:Fluent="urn:fluent-ribbon"
         mc:Ignorable="d ignore"
         Height="730" Width="840"
         Title="КипТМ"
@@ -33,7 +34,27 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+        <Fluent:Ribbon Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+            <!--Backstage-->
+            <Fluent:Ribbon.Menu>
+                <Fluent:Backstage>
+                    
+                </Fluent:Backstage>
+            </Fluent:Ribbon.Menu>
+
+            <!--Tabs-->
+            <Fluent:RibbonTabItem Header="Home">
+                <Fluent:RibbonGroupBox Header="Group">
+                    <Fluent:Button Header="Green"
+                           Icon="Images\Green.png"
+                           LargeIcon="Images\GreenLarge.png" />
+                    <Fluent:Button Header="Grey" 
+                           Icon="Images\Gray.png"
+                           LargeIcon="Images\GrayLarge.png" />
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+        </Fluent:Ribbon>
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Visibility="Collapsed">
             <Image Source="Content/icon.png" Height="50" Margin="5,5,5,5"/>
             <ItemsControl Style="{StaticResource MenuCollectionStyle}">
                 <!--<Button Style="{StaticResource ButtonTabStyle}" Content="Архив" Command="{Binding SelectArchive}"/>
@@ -70,7 +91,7 @@
                 </Button>
             </ItemsControl>
         </StackPanel>
-        <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}" x:Name="HelpBorder" Height="50">
+        <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}" x:Name="HelpBorder" Height="50" Visibility="Collapsed">
             <ScrollViewer>
                 <TextBox 
                     Background="{Binding Background, ElementName=HelpBorder}"

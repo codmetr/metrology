@@ -25,5 +25,10 @@ namespace KipTM.Services.ViewModel
         /// Список доступных формул
         /// </summary>
         public ObservableCollection<IFormulaDescriptor> Formulas { get; set; }
+
+        /// <summary>
+        /// Выбранная формула
+        /// </summary>
+        public IFormulaDescriptor SelectedFormula { get; set; }
     }
 }
