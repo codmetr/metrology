@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using ADTSChecks.ViewModel.Services;
@@ -214,6 +215,41 @@ namespace KipTM.ViewModel
         }
 
         /// <summary>
+        /// Закрытие окна
+        /// </summary>
+        public ICommand Close
+        {
+            get
+            {
+                return new RelayCommand<object>(
+                    (mainView) =>
+                    {
+                        var view = mainView as Window;
+                        if (view == null)
+                            return;
+                        view.Close();
+                    });
+            }
+        }
+
+        /// <summary>
+        /// Закрытие окна
+        /// </summary>
+        public ICommand GoToUrl
+        {
+            get
+            {
+                return new RelayCommand<object>(
+                    (url) =>
+                    {
+                        var strUrl = url as string;
+                        if (strUrl != null)
+                            System.Diagnostics.Process.Start(strUrl);
+                    });
+            }
+        }
+
+        /// <summary>
         /// Выбрана вкладка Проверки
         /// </summary>
         public ICommand SelectChecks
@@ -297,10 +333,14 @@ namespace KipTM.ViewModel
         {
             get
             {
-                return new RelayCommand(() =>
+                return new RelayCommand<object>((arg) =>
                 {
+                    var serveseKey = arg as string;
+                    if (serveseKey == null)
+                        return;
                     IsActiveCheck = false;
                     IsActiveService = true;
+                    _services.SelectedService = _services.Services.FirstOrDefault(el => el.Title == serveseKey);
                     SelectedAction = _services;
                     HelpMessage = "Сервисная вкладка для отладки различных механизмов";
                 });

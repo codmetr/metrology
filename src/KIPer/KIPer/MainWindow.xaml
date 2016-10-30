@@ -1,34 +1,33 @@
-﻿<ribbon:RibbonWindow
+﻿<ribbon:RibbonWindow x:Class="KipTM.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ignore="http://www.galasoft.ch/ignore"
-        xmlns:ribbon="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon" x:Class="KipTM.MainWindow"
+        xmlns:ribbon="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon"
         mc:Ignorable="d ignore"
         Height="730" Width="840"
-        Title="КипТМ"
-        x:Name="MainViewWindow" Icon="Content/icon.png" WindowStyle="ThreeDBorderWindow">
-    <!--xmlns:Fluent="urn:fluent-ribbon"-->
+        Title="КипТМ" Icon="Content/icon.png"
+        x:Name="MainViewWindow">
     <ribbon:RibbonWindow.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
+            <!--<ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Skins/MainSkin.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>-->
         </ResourceDictionary>
     </ribbon:RibbonWindow.Resources>
 
-    <Window.DataContext>
+    <ribbon:RibbonWindow.DataContext>
         <Binding Path="Main" Source="{StaticResource Locator}"/>
-    </Window.DataContext>
+    </ribbon:RibbonWindow.DataContext>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadView}" CommandParameter="{Binding ElementName=MainViewWindow}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Grid x:Name="LayoutRoot" Background="{StaticResource MineWindowBrush}">
+    <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -39,64 +38,52 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <ribbon:Ribbon Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" IsEnabled="{Binding IsActiveSwitchServices, UpdateSourceTrigger=PropertyChanged}">
-            
+            <ribbon:Ribbon.ApplicationMenu>
+                <ribbon:RibbonApplicationMenu CanUserResizeVertically="True" Label="KipTM"
+                    LargeImageSource="Content/icon.png"
+                    SmallImageSource="Content/icon.png">
+                    <ribbon:RibbonApplicationMenuItem Header="КТМ" CanUserResizeVertically="True">
+                        <ribbon:RibbonButton Label="Перейти на сайт" Command="{Binding GoToUrl}" CommandParameter="http://kiptm.ru/"/>
+                            <!--<Image Source="Content/KTM_logo.jpg" Stretch="UniformToFill" Height="300"/>-->
+                    </ribbon:RibbonApplicationMenuItem>
+                    <ribbon:RibbonApplicationSplitMenuItem/>
+                    <!--<ribbon:RibbonApplicationMenu.FooterPaneContent>
+                        <ribbon:RibbonApplicationMenuItem 
+                            Header="Выход" HorizontalAlignment="Right"
+                            ImageSource="Content/exit.png"
+                            Command="{Binding Close}"
+                            CommandParameter="{Binding ElementName=MainViewWindow}"/>
+                    </ribbon:RibbonApplicationMenu.FooterPaneContent>-->
+                </ribbon:RibbonApplicationMenu>
+            </ribbon:Ribbon.ApplicationMenu>
             <ribbon:RibbonTab Header="ПОВЕРКА СИ">
-                <ribbon:RibbonToggleButton 
-                    Label="ADTS" Command="{Binding SelectChecks}"
-                    LargeImageSource="Content/adts405.jpg"
-                    SmallImageSource="Content/adts405.jpg"/>
+                <ribbon:RibbonGroup x:Name="GroupCheck" Header="Давление">
+                    <ribbon:RibbonToggleButton 
+                        Label="ADTS" Command="{Binding SelectChecks}" CommandParameter="ADTSCheck"
+                        LargeImageSource="Content/adts405.jpg"
+                        SmallImageSource="Content/adts405.jpg">
+                    </ribbon:RibbonToggleButton>
+                </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
             <ribbon:RibbonTab Header="СЕРВИС">
-                
+                <ribbon:RibbonGroup x:Name="GroupAdts" Header="ADTS 405/403">
+                    <ribbon:RibbonButton 
+                        Label="ADTS" Command="{Binding SelectService}"  CommandParameter="PACE1000"
+                        LargeImageSource="Content/adts405.jpg"
+                        SmallImageSource="Content/adts405.jpg">
+                    </ribbon:RibbonButton>
+                </ribbon:RibbonGroup>
+                <!--<ribbon:RibbonGroup x:Name="GroupServicesPase" Header="PACE">
+                    <ribbon:RibbonButton 
+                        Label="PACE 1000" Command="{Binding SelectService}" CommandParameter="PACE1000"
+                        LargeImageSource="Content/pace1000.jpg"
+                        SmallImageSource="Content/pace1000.jpg">
+                    </ribbon:RibbonButton>
+                </ribbon:RibbonGroup>-->
             </ribbon:RibbonTab>
         </ribbon:Ribbon>
-                <!--        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Visibility="Collapsed">
-            <Image Source="Content/icon.png" Height="50" Margin="5,5,5,5"/>
-            <ItemsControl Style="{StaticResource MenuCollectionStyle}">
-<Button Style="{StaticResource ButtonTabStyle}" Content="Архив" Command="{Binding SelectArchive}"/>
-                <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
-                <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
-                <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>
-                <Button Content="ПОВЕРКА СИ" Command="{Binding SelectChecks}" IsEnabled="{Binding IsActiveSwitchServices, UpdateSourceTrigger=PropertyChanged}" Background="#FFDDDDDD">
-                    <Button.Style>
-                        <Style BasedOn="{StaticResource ButtonTabStyle}" TargetType="{x:Type Button}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsActiveCheck, UpdateSourceTrigger=PropertyChanged}" Value="TRUE">
-                                    <Setter Property="FontWeight" Value="ExtraBold"/>
-                                    <Setter Property="FontStyle" Value="Italic"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <Button Style="{StaticResource ButtonTabStyle}" Content="Архив" Command="{Binding SelectArchive}"/>
-                <Button Style="{StaticResource ButtonTabStyle}" Content="Приборы" Command="{Binding SelectTargetDevices}"/>
-                <Button Style="{StaticResource ButtonTabStyle}" Content="Эталоны" Command="{Binding SelectEtalonDevices}"/>
-                <Button Style="{StaticResource ButtonTabStyle}" Content="Настройки" Command="{Binding SelectSettings}"/>
-                <Button Content="СЕРВИС" Command="{Binding SelectService}" IsEnabled="{Binding IsActiveSwitchServices, UpdateSourceTrigger=PropertyChanged}">
-                    <Button.Style>
-                        <Style BasedOn="{StaticResource ButtonTabStyle}" TargetType="{x:Type Button}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsActiveService, UpdateSourceTrigger=PropertyChanged}" Value="TRUE">
-                                    <Setter Property="FontWeight" Value="ExtraBold"/>
-                                    <Setter Property="FontStyle" Value="Italic"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-            </ItemsControl>
-        </StackPanel> -->
-        <!--<Border Grid.Column="1" Grid.Row="0" Style="{StaticResource HelpBorderStyle}" x:Name="HelpBorder" Height="50" Visibility="Collapsed">
-            <ScrollViewer>
-                <TextBox 
-					Background="{Binding Background, ElementName=HelpBorder}"
-					HorizontalAlignment="Stretch" VerticalAlignment="Center"
-					TextAlignment="Center" TextWrapping="Wrap" BorderThickness="0"
-					Text="{Binding HelpMessage}"/>
-            </ScrollViewer>
-        </Border>-->
-       <StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
+        <ContentPresenter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  Content="{Binding SelectedAction}"/>
+        <StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
             <TextBlock Text="{Binding Height, ElementName=MainViewWindow}"/>
             <TextBlock><Run Text="Х"/></TextBlock>
             <TextBlock Text="{Binding Width, ElementName=MainViewWindow}"/>

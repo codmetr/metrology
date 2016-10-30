@@ -28,8 +28,6 @@ namespace KipTM.Model
 
         private readonly ILoops _loops = new Loops();
 
-        private readonly ADTSModel _adtsModel;
-
         private readonly IDictionary<string, Func<ITransportChannelType, IEthalonChannel>> _ethalonChannels;
 
         private readonly IDictionary<string, Tuple<ITransportIEEE488, SerialPort>> _ports = new Dictionary<string, Tuple<ITransportIEEE488, SerialPort>>();

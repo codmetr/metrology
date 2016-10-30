@@ -125,6 +125,7 @@
     <Compile Include="Archive\DictionariesPool.cs" />
     <Compile Include="Archive\IArchivePool.cs" />
     <Compile Include="Archive\PropertyArchive.cs" />
+    <Compile Include="CloseCommand.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="DataService\IPropertiesLibrary.cs" />
@@ -522,6 +523,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Content\adts405.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\KTM_logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\pace1000.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
