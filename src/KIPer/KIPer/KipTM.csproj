@@ -520,6 +520,9 @@
   <ItemGroup>
     <Resource Include="Content\dark brushed metal texture steel black stock photo scratch wallpaper %281%29.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\adts405.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)Reports"
