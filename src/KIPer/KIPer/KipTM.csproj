@@ -533,6 +533,9 @@
   <ItemGroup>
     <Resource Include="Content\pace1000.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\Website.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)Reports"

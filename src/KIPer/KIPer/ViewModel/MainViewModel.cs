@@ -218,21 +218,9 @@ namespace KipTM.ViewModel
         /// Закрытие окна
         /// </summary>
         public ICommand Close
-        {
-            get
-            {
-                return new RelayCommand<object>(
-                    (mainView) =>
-                    {
-                        var view = mainView as Window;
-                        if (view == null)
-                            return;
-                        view.Close();
-                    });
-            }
-        }
+        {   get{return new RelayCommand(() =>{Application.Current.MainWindow.Close();});}}
 
-        /// <summary>
+        ///// <summary>
         /// Закрытие окна
         /// </summary>
         public ICommand GoToUrl

@@ -40,7 +40,11 @@ namespace KipTM.ViewModel
         public IService SelectedService
         {
             get { return _selectedService; }
-            set { Set(ref _selectedService, value); }
+            set
+            {
+                Set(ref _selectedService, value);
+                ShowedService = SelectedService;
+            }
         }
 
         public IService ShowedService
@@ -72,7 +76,7 @@ namespace KipTM.ViewModel
             IsCanConnect = false;
             IsCanNotConnect = true;
 
-            ShowedService = SelectedService;
+            //ShowedService = SelectedService;
             ShowedService.Start(Channel.GetSelectedChannelType());
         }
 
@@ -82,7 +86,7 @@ namespace KipTM.ViewModel
             IsCanNotConnect = false;
 
             ShowedService.Stop();
-            ShowedService = null;
+            //ShowedService = null;
         }
     }
 }

@@ -9,7 +9,7 @@
              d:DataContext="{d:DesignInstance viewModel:ServiceViewModel}">
     <!--<UserControl.Resources><ResourceDictionary><ResourceDictionary.MergedDictionaries><ResourceDictionary Source="../../Skins/MainSkin.xaml"/></ResourceDictionary.MergedDictionaries></ResourceDictionary></UserControl.Resources>-->
     <UserControl.Resources>
-        <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
+        <!--<ResourceDictionary Source="../../Skins/MainSkin.xaml"/>-->
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -17,7 +17,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
-            <DockPanel >
+            <!--<DockPanel >
                 <TextBlock Margin="3">Тип устройства</TextBlock>
                 <ComboBox
                     IsEnabled="{Binding IsCanConnect}"
@@ -29,8 +29,8 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-            </DockPanel>
-            <ContentPresenter Content="{Binding ShowedService}"/>
+            </DockPanel>-->
+            <ContentPresenter Content="{Binding ShowedService, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsCanNotConnect, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         <StackPanel Grid.Column="1">
             <ContentPresenter Content="{Binding Channel}"/>

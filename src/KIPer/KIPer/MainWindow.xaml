@@ -42,18 +42,20 @@
                 <ribbon:RibbonApplicationMenu CanUserResizeVertically="True" Label="KipTM"
                     LargeImageSource="Content/icon.png"
                     SmallImageSource="Content/icon.png">
-                    <ribbon:RibbonApplicationMenuItem Header="КТМ" CanUserResizeVertically="True">
-                        <ribbon:RibbonButton Label="Перейти на сайт" Command="{Binding GoToUrl}" CommandParameter="http://kiptm.ru/"/>
-                            <!--<Image Source="Content/KTM_logo.jpg" Stretch="UniformToFill" Height="300"/>-->
+                    <ribbon:RibbonApplicationMenuItem Header="КТМ" ImageSource="Content/icon.png">
+                        <ribbon:RibbonApplicationMenuItem
+                            Header="Перейти на сайт"
+                            ImageSource="Content/Website.ico"
+                            Command="{Binding GoToUrl}" CommandParameter="http://kiptm.ru/"
+                            ToolTipFooterTitle="http://kiptm.ru/"/>
                     </ribbon:RibbonApplicationMenuItem>
                     <ribbon:RibbonApplicationSplitMenuItem/>
-                    <!--<ribbon:RibbonApplicationMenu.FooterPaneContent>
+                    <ribbon:RibbonApplicationMenu.FooterPaneContent>
                         <ribbon:RibbonApplicationMenuItem 
                             Header="Выход" HorizontalAlignment="Right"
                             ImageSource="Content/exit.png"
-                            Command="{Binding Close}"
-                            CommandParameter="{Binding ElementName=MainViewWindow}"/>
-                    </ribbon:RibbonApplicationMenu.FooterPaneContent>-->
+                            Command="{Binding Close}"/>
+                    </ribbon:RibbonApplicationMenu.FooterPaneContent>
                 </ribbon:RibbonApplicationMenu>
             </ribbon:Ribbon.ApplicationMenu>
             <ribbon:RibbonTab Header="ПОВЕРКА СИ">
@@ -66,20 +68,18 @@
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
             <ribbon:RibbonTab Header="СЕРВИС">
-                <ribbon:RibbonGroup x:Name="GroupAdts" Header="ADTS 405/403">
+                <ribbon:RibbonGroup x:Name="GroupDeviceService" Header="Прямое управление">
                     <ribbon:RibbonButton 
-                        Label="ADTS" Command="{Binding SelectService}"  CommandParameter="PACE1000"
+                        Label="ADTS" Command="{Binding SelectService}"  CommandParameter="ADTS405"
                         LargeImageSource="Content/adts405.jpg"
                         SmallImageSource="Content/adts405.jpg">
                     </ribbon:RibbonButton>
-                </ribbon:RibbonGroup>
-                <!--<ribbon:RibbonGroup x:Name="GroupServicesPase" Header="PACE">
                     <ribbon:RibbonButton 
                         Label="PACE 1000" Command="{Binding SelectService}" CommandParameter="PACE1000"
                         LargeImageSource="Content/pace1000.jpg"
                         SmallImageSource="Content/pace1000.jpg">
                     </ribbon:RibbonButton>
-                </ribbon:RibbonGroup>-->
+                </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
         </ribbon:Ribbon>
         <ContentPresenter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  Content="{Binding SelectedAction}"/>
