@@ -121,9 +121,7 @@
     <Compile Include="Archive\DictionariesPool.cs" />
     <Compile Include="Archive\IArchivePool.cs" />
     <Compile Include="Archive\PropertyArchive.cs" />
-    <Compile Include="CloseCommand.cs" />
     <Compile Include="Design\DesignDataService.cs" />
-    <Compile Include="Enums.cs" />
     <Compile Include="DataService\IPropertiesLibrary.cs" />
     <Compile Include="DataService\PropertiesLibrary.cs" />
     <Compile Include="Checks\CheckConfig.cs" />
@@ -164,6 +162,7 @@
     <Compile Include="Checks\ViewModel\Config\CheckConfigViewModel.cs" />
     <Compile Include="Checks\ViewModel\CheckFabrik.cs" />
     <Compile Include="Checks\ViewModel\ICheckFabrik.cs" />
+    <Compile Include="ViewModel\Events\EventError.cs" />
     <Compile Include="Workflow\States\CheckState.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />
     <Compile Include="Workflow\States\Events\EventCheckState.cs" />
