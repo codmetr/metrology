@@ -60,11 +60,11 @@
             </ribbon:Ribbon.ApplicationMenu>
             <ribbon:RibbonTab Header="ПОВЕРКА СИ">
                 <ribbon:RibbonGroup x:Name="GroupCheck" Header="Давление">
-                    <ribbon:RibbonToggleButton 
+                    <ribbon:RibbonButton 
                         Label="ADTS" Command="{Binding SelectChecks}" CommandParameter="ADTSCheck"
                         LargeImageSource="Content/adts405.jpg"
                         SmallImageSource="Content/adts405.jpg">
-                    </ribbon:RibbonToggleButton>
+                    </ribbon:RibbonButton>
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
             <ribbon:RibbonTab Header="СЕРВИС">
@@ -84,9 +84,10 @@
         </ribbon:Ribbon>
         <ContentPresenter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  Content="{Binding SelectedAction}"/>
         <StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
-            <TextBlock Text="{Binding Height, ElementName=MainViewWindow}"/>
+            <TextBlock Text="{Binding HelpMessage, UpdateSourceTrigger=PropertyChanged}"/>
+            <!--<TextBlock Text="{Binding Height, ElementName=MainViewWindow}"/>
             <TextBlock><Run Text="Х"/></TextBlock>
-            <TextBlock Text="{Binding Width, ElementName=MainViewWindow}"/>
+            <TextBlock Text="{Binding Width, ElementName=MainViewWindow}"/>-->
         </StatusBar>
     </Grid>
 </ribbon:RibbonWindow>

@@ -111,19 +111,9 @@
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A7A">
         <File Name="$(var.SQLiteArchive.TargetFileName)" Source="$(var.SQLiteArchive.TargetPath)" KeyPath="yes" />
         <File Name="$(var.SQLiteArchive.TargetName).pdb" Source="$(var.SQLiteArchive.TargetDir)$(var.SQLiteArchive.TargetName).pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="System.Data.SQLite.dll" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.dll" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="System.Data.SQLite.pdb" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="System.Data.SQLite.xml" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.xml" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="System.Data.SQLite.EF6.dll" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.EF6.dll" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="System.Data.SQLite.EF6.pdb" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.EF6.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="System.Data.SQLite.EF6.xml" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.EF6.xml" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
         <File Name="System.Data.SQLite.Linq.dll" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.Linq.dll" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
         <File Name="System.Data.SQLite.Linq.pdb" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.Linq.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
         <File Name="System.Data.SQLite.Linq.xml" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.Linq.xml" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <!--<File Name="x64SQLite.Interop.dll" Source="$(var.SQLiteArchive.TargetDir)x64\SQLite.Interop.dll" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="x64SQLite.Interop.pdb" Source="$(var.SQLiteArchive.TargetDir)x64\SQLite.Interop.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="x86SQLite.Interop.dll" Source="$(var.SQLiteArchive.TargetDir)x86\SQLite.Interop.dll" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="x86SQLite.Interop.pdb" Source="$(var.SQLiteArchive.TargetDir)x86\SQLite.Interop.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>-->
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A1A">
         <File Name="$(var.MainLoop.TargetFileName)" Source="$(var.MainLoop.TargetPath)" KeyPath="yes" />
@@ -137,7 +127,7 @@
         <File Name="$(var.ADTSChecks.TargetFileName)" Source="$(var.ADTSChecks.TargetPath)" KeyPath="yes" />
         <File Name="$(var.ADTSChecks.TargetName).pdb" Source="$(var.ADTSChecks.TargetDir)$(var.ADTSChecks.TargetName).pdb" CompanionFile="$(var.ADTSChecks.TargetFileName)"/>
       </Component>
-      <Component Guid="2E1987B5-D7E6-47E7-AF5B-124B28DD5A2A">
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-124B28DD5B2A">
         <File Name="$(var.CheckFrame.TargetFileName)" Source="$(var.CheckFrame.TargetPath)" KeyPath="yes" />
         <File Name="$(var.CheckFrame.TargetName).pdb" Source="$(var.CheckFrame.TargetDir)$(var.CheckFrame.TargetName).pdb" CompanionFile="$(var.CheckFrame.TargetFileName)"/>
       </Component>

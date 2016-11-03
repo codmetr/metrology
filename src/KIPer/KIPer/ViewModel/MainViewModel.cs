@@ -127,19 +127,11 @@ namespace KipTM.ViewModel
             _steps = new List<IWorkflowStep>()
                          {
                              new ConfigCheckState(checkConfigViewModel),
-                             new CheckState(() =>
-                                            checkFabrik.GetViewModelFor(checkConfig, channelTargetDevice.SelectedChannel,
-                                                                        channelEthalonDevice.SelectedChannel),
-                                            _eventAggregator),
-                             new ResultState(
-                                 () =>
-                                 new TestResultViewModel(result,
-                                                         _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(),
-                                                                                checkConfig.SelectedMethod), _filler,
-                                                         (res) =>
-                                                             {
-/*TODO make save*/
-                                                             })),
+                             new CheckState(() => checkFabrik.GetViewModelFor(checkConfig, 
+                                 channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel), _eventAggregator),
+                             new ResultState(() => new TestResultViewModel(result,
+                                 _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(), checkConfig.SelectedMethod), _filler,
+                                 (res) =>{/*TODO make save*/})),
                              new ReportState(() => new ReportViewModel(_reportFabric, result)),
                          };
             _workflow = new Workflow.Workflow(_steps);
