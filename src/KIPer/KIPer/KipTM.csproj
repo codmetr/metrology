@@ -50,10 +50,6 @@
     <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
     <Reference Include="CrystalDecisions.Windows.Forms, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="FlashControlV71, Version=1.0.3187.32366, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
-    <Reference Include="Fluent, Version=4.0.3.394, Culture=neutral, PublicKeyToken=3e436e32a8c5546f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Fluent.Ribbon.4.0.3.394\lib\net45\Fluent.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
       <Private>True</Private>
@@ -153,14 +149,6 @@
     <Compile Include="Services\Formuls\FormulaAbsErrorView.xaml.cs">
       <DependentUpon>FormulaAbsErrorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\ViewModel\FillReport\FormulaComplexError.cs" />
-    <Compile Include="Services\ViewModel\FillReport\FormulaDifError.cs" />
-    <Compile Include="Services\ViewModel\FillReport\FillReportViewModel.cs" />
-    <Compile Include="Services\ViewModel\FillReport\FormulaAbsError.cs" />
-    <Compile Include="Services\ViewModel\FillReport\IFormulaDescriptor.cs" />
-    <Compile Include="Services\ViewModel\FillReport\ParameterRow.cs" />
-    <Compile Include="Services\ViewModel\FillReport\ParametersSet.cs" />
-    <Compile Include="Services\ViewModel\FillReport\TemplateReportData.cs" />
     <Compile Include="TransportChannels\Fake\FakeChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaSettings.cs" />
@@ -199,7 +187,6 @@
     <Compile Include="Workflow\WorkflowStepChangeEvent.cs" />
     <Compile Include="Services\ViewModel\SelectChannelViewModel.cs" />
     <Compile Include="Services\ViewModel\Pace1000ViewModel.cs" />
-    <Compile Include="Services\ViewModel\ParameterValuePair.cs" />
     <Compile Include="Services\ViewModel\ServiceViewModel.cs" />
     <Compile Include="Archive\ViewModel\ArchivesViewModel.cs" />
     <Compile Include="Archive\ViewModel\TestResultViewModel.cs" />
