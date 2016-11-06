@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -19,8 +20,10 @@ using CheckFrame.ViewModel.Checks;
 using CheckFrame.ViewModel.Checks.Channels;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using KipTM.EventAggregator;
 using KipTM.ViewModel;
 using KipTM.ViewModel.Channels;
+using KipTM.ViewModel.Events;
 using Tools.View;
 
 namespace ADTSChecks.ViewModel.Checks
@@ -31,6 +34,8 @@ namespace ADTSChecks.ViewModel.Checks
     public abstract class ADTSBaseViewModel : ViewModelBase, IMethodViewModel
     {
         #region Members
+
+        private IEventAggregator _agregator;
         protected IUserChannel _userChannel;
         protected UserEthalonChannel _userEchalonChannel;
         protected IPropertyPool _propertyPool;
@@ -87,6 +92,11 @@ namespace ADTSChecks.ViewModel.Checks
         }
 
         #region IMethodViewModel
+
+        public void SetAggregator(IEventAggregator agregator)
+        {
+            _agregator = agregator;
+        }
 
         /// <summary>
         /// Задать подключение для ADTS
@@ -289,7 +299,18 @@ namespace ADTSChecks.ViewModel.Checks
         {
             State.TitleBtnNext = "Далее";
             Method.ChannelType = _connection;
-            State.ADTS.Start(_connection);
+            try
+            {
+                State.ADTS.Start(_connection);
+            }
+            catch //todo поймать ошибку подключения
+            {
+                if(_agregator!=null)
+                    _agregator.Post(new ErrorMessageEventArg("Не удалось подключить АДТС"));
+                // В базовое состояние
+                ToStart();
+                return;
+            }
             // Задаем эталон
             if (_ethalonTypeKey != null && _ethalonChannelType != null)
                 Method.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType), _ethalonChannelType);
@@ -298,13 +319,16 @@ namespace ADTSChecks.ViewModel.Checks
             // Запускаем
             Task.Run(() =>
             {
+                // Выполнить шаг
                 Method.Start();
-                DoCancel();
+                // В базовое состояние
+                ToStart();
+                // Следующее действие - следующий шаг
                 _currentAction = DoStart;
             });
             // Разблокировать стоп
-            // Заблокировать старт
             StopEnabled = true;
+            // Заблокировать старт
             State.WaitUserReaction = false; 
             OnStarted();
         }
@@ -343,6 +367,25 @@ namespace ADTSChecks.ViewModel.Checks
         /// Отмена проверки
         /// </summary>
         private void DoCancel()
+        {
+            State.TitleBtnNext = "Старт";
+
+            Method.Stop();
+
+            if (_userChannel.QueryType == UserQueryType.GetAccept)
+            {
+                _userChannel.AcceptValue = false;
+                _userChannel.AgreeValue = true;
+            }
+            State.WaitUserReaction = true;
+            AcceptEnabled = false;
+            StopEnabled = false;
+        }
+
+        /// <summary>
+        /// В исходное состояние
+        /// </summary>
+        private void ToStart()
         {
             State.TitleBtnNext = "Старт";
 

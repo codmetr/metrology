@@ -28,6 +28,7 @@ using SQLiteArchive;
 using Tools;
 using ADTSChecks.Model.Devices;
 using KipTM.EventAggregator;
+using KipTM.ViewModel.Events;
 using KipTM.Workflow.States.Events;
 
 namespace KipTM.ViewModel
@@ -38,10 +39,11 @@ namespace KipTM.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase, ISubscriber<EventCheckState>
+    public class MainViewModel : ViewModelBase, ISubscriber<EventCheckState>, ISubscriber<ErrorMessageEventArg>, ISubscriber<HelpMessageEventArg>
     {
         #region Переменные
 
+        private readonly NLog.Logger _logger = null;
         private readonly IDataService _dataService;
         private IMethodsService _methodicService;
         private IMainSettings _settings;
@@ -58,6 +60,7 @@ namespace KipTM.ViewModel
         private List<IWorkflowStep> _steps;
 
         private string _helpMessage;
+        private bool _isError;
         private object _selectedAction;
         private IMarkerFabrik<IParameterResultViewModel> _resulMaker;
         private IFillerFabrik<IParameterResultViewModel> _filler;
@@ -79,6 +82,14 @@ namespace KipTM.ViewModel
             IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
             IReportFabrik reportFabric)
         {
+            try
+            {
+                _logger = NLog.LogManager.GetCurrentClassLogger();
+            }
+            catch (Exception)
+            {
+                _logger = null;
+            }
             _eventAggregator = eventAggregator;
             _dataService = dataService;
             _methodicService = methodicService;
@@ -103,40 +114,47 @@ namespace KipTM.ViewModel
         /// </summary>
         public void Load()
         {
-            _tests = new ArchivesViewModel();
-            _tests.LoadTests(_dataService.ResultsArchive);
+            try
+            {
+                _tests = new ArchivesViewModel();
+                _tests.LoadTests(_dataService.ResultsArchive);
 
-            _etalonTypes = new DeviceTypeCollectionViewModel();
-            _etalonTypes.LoadTypes(_dataService.EtalonTypes);
+                _etalonTypes = new DeviceTypeCollectionViewModel();
+                _etalonTypes.LoadTypes(_dataService.EtalonTypes);
 
-            _deviceTypes = new DeviceTypeCollectionViewModel();
-            _deviceTypes.LoadTypes(_dataService.DeviceTypes);
+                _deviceTypes = new DeviceTypeCollectionViewModel();
+                _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
-            var checkFabrik = new CheckFabrik(_dataService.DeviceManager, _propertiesLibrary.PropertyPool);
-            var result = new TestResult();
-            var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool,
-                                              _propertiesLibrary.DictionariesPool, result);
-            var channelTargetDevice = new SelectChannelViewModel();
-            var channelEthalonDevice = new SelectChannelViewModel();
-            var configViewModelFabrik = new CustomConfigFabrik();
-            var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice,
-                                                                configViewModelFabrik);
+                var checkFabrik = new CheckFabrik(_dataService.DeviceManager, _propertiesLibrary.PropertyPool);
+                var result = new TestResult();
+                var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool,
+                    _propertiesLibrary.DictionariesPool, result);
+                var channelTargetDevice = new SelectChannelViewModel();
+                var channelEthalonDevice = new SelectChannelViewModel();
+                var configViewModelFabrik = new CustomConfigFabrik();
+                var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice,
+                    configViewModelFabrik);
 
-            _eventAggregator.Subscribe(this);
+                _eventAggregator.Subscribe(this);
 
-            _steps = new List<IWorkflowStep>()
-                         {
-                             new ConfigCheckState(checkConfigViewModel),
-                             new CheckState(() => checkFabrik.GetViewModelFor(checkConfig, 
-                                 channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel), _eventAggregator),
-                             new ResultState(() => new TestResultViewModel(result,
-                                 _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(), checkConfig.SelectedMethod), _filler,
-                                 (res) =>{/*TODO make save*/})),
-                             new ReportState(() => new ReportViewModel(_reportFabric, result)),
-                         };
-            _workflow = new Workflow.Workflow(_steps);
+                _steps = new List<IWorkflowStep>()
+                {
+                    new ConfigCheckState(checkConfigViewModel),
+                    new CheckState(() => checkFabrik.GetViewModelFor(checkConfig, 
+                        channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel), _eventAggregator),
+                    new ResultState(() => new TestResultViewModel(result,
+                        _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(), checkConfig.SelectedMethod), _filler,
+                        (res) =>{/*TODO make save*/})),
+                    new ReportState(() => new ReportViewModel(_reportFabric, result)),
+                };
+                _workflow = new Workflow.Workflow(_steps);
 
-            SelectChecks.Execute(null);
+                SelectChecks.Execute(null);
+            }
+            catch (Exception e)
+            {
+                _logger.With(l => l.Error(string.Format("Load error: {0}", e.ToString())));
+            }
         }
 
         #endregion
@@ -148,6 +166,15 @@ namespace KipTM.ViewModel
         {
             get { return _helpMessage; }
             set { Set(ref _helpMessage, value); }
+        }
+
+        /// <summary>
+        /// Сообшение - описание ошибки
+        /// </summary>
+        public bool IsError
+        {
+            get { return _isError; }
+            set { Set(ref _isError, value); }
         }
 
         /// <summary>
@@ -212,7 +239,7 @@ namespace KipTM.ViewModel
         public ICommand Close
         {   get{return new RelayCommand(() =>{Application.Current.MainWindow.Close();});}}
 
-        ///// <summary>
+        /// <summary>
         /// Закрытие окна
         /// </summary>
         public ICommand GoToUrl
@@ -241,7 +268,7 @@ namespace KipTM.ViewModel
                     IsActiveCheck = true;
                     IsActiveService = false;
                     SelectedAction = Checks;
-                    HelpMessage = "Выполнение поверки";
+                    SetHelpMessage("Выполнение поверки");
                 });
             }
         }
@@ -256,7 +283,7 @@ namespace KipTM.ViewModel
                 return new RelayCommand(() =>
                 {
                     SelectedAction = _tests;//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Архив Проверок:\nсписок пойденных поверок";
+                    SetHelpMessage("Архив Проверок: список пойденных поверок");
                 });
             }
         }
@@ -271,7 +298,7 @@ namespace KipTM.ViewModel
                 return new RelayCommand(() =>
                 {
                     SelectedAction = _deviceTypes;//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Список поддерживаемых типов проверяемых приборов";
+                    SetHelpMessage("Список поддерживаемых типов проверяемых приборов");
                 });
             }
         }
@@ -286,7 +313,7 @@ namespace KipTM.ViewModel
                 return new RelayCommand(() =>
                 {
                     SelectedAction = _etalonTypes;//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Список поддерживаемых типов эталонных приборов";
+                    SetHelpMessage("Список поддерживаемых типов эталонных приборов");
                 });
             }
         }
@@ -301,7 +328,7 @@ namespace KipTM.ViewModel
                 return new RelayCommand(() =>
                 {
                     SelectedAction = "Здесь будут элементы управления настройками приложения";//todo установить выбор соответсвующего ViewModel
-                    HelpMessage = "Настройки приложения";
+                    SetHelpMessage("Настройки приложения");
                 });
             }
         }
@@ -322,7 +349,7 @@ namespace KipTM.ViewModel
                     IsActiveService = true;
                     _services.SelectedService = _services.Services.FirstOrDefault(el => el.Title == serveseKey);
                     SelectedAction = _services;
-                    HelpMessage = "Сервисная вкладка для отладки различных механизмов";
+                    SetHelpMessage("Сервисная вкладка для отладки различных механизмов");
                 });
             }
         }
@@ -347,11 +374,28 @@ namespace KipTM.ViewModel
             }
         }
 
+        private void SetHelpMessage(string msg)
+        {
+            HelpMessage = msg;
+            IsError = false;
+        }
         #region Events
 
         public void OnEvent(EventCheckState message)
         {
             IsActiveSwitchServices = !message.Runned;
+        }
+
+        public void OnEvent(ErrorMessageEventArg message)
+        {
+            HelpMessage = message.Error;
+            IsError = true;
+        }
+
+        public void OnEvent(HelpMessageEventArg message)
+        {
+            HelpMessage = message.Message;
+            IsError = false;
         }
 
         #endregion
@@ -361,6 +405,5 @@ namespace KipTM.ViewModel
         ////    // Clean up if needed
         ////    base.Cleanup();
         ////}
-
     }
 }

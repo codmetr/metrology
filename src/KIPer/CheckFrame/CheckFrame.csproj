@@ -64,6 +64,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Archive\IPropertyPool.cs" />
+    <Compile Include="EventAggregator\EventAggregator.cs" />
+    <Compile Include="EventAggregator\EventSubscriber.cs" />
+    <Compile Include="EventAggregator\Events\ErrorMessageEventArg.cs" />
+    <Compile Include="EventAggregator\Events\HelpMessageEventArg.cs" />
+    <Compile Include="EventAggregator\IEventAggregator.cs" />
+    <Compile Include="EventAggregator\ISubscriber.cs" />
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Channels\IEthalonChannel.cs" />
     <Compile Include="Channels\IUserChannel.cs" />

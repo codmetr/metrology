@@ -1,11 +1,14 @@
 ﻿using System;
 using ArchiveData.DTO;
 using CheckFrame.Model.TransportChannels;
+using KipTM.EventAggregator;
 
 namespace CheckFrame.ViewModel.Checks.Channels
 {
     public interface IMethodViewModel
     {
+        void SetAggregator(IEventAggregator agregator);
+
         /// <summary>
         /// Установить канал подключениея для проверяемого прибора
         /// </summary>

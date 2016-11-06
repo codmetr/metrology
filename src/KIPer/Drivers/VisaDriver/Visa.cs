@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Text;
 using Ivi.Visa.Interop;
 
@@ -21,10 +23,38 @@ namespace VisaDriver
             {
                 rm = new ResourceManager();
                 ioArbFG = new FormattedIO488Class();
-                this.msg = (rm.Open(address, Ivi.Visa.Interop.AccessMode.NO_LOCK, 2000, "")) as IMessage;
+                short pInterfaceType =0;
+                short pInterfaceNumber = 0;
+                string pSessionType = "";
+
+                var al = rm.FindRsrc("*");
+                rm.FindRsrc(address);
+                rm.ParseRsrc(address, ref pInterfaceType, ref pInterfaceNumber, ref pSessionType);
+                var visaSession = rm.Open(address, Ivi.Visa.Interop.AccessMode.NO_LOCK, 2000, "");
+                this.msg = (visaSession) as IMessage;
                 this.ioArbFG.IO = msg;
             }
-            catch (SystemException ex)
+            catch (ArgumentException e)
+            {
+                this.ioArbFG.IO = null;
+                throw;
+            }
+            catch (InvalidCastException e)
+            {
+                this.ioArbFG.IO = null;
+                throw;
+            }
+            catch (COMException e)
+            {
+                this.ioArbFG.IO = null;
+                throw;
+            }
+            catch (Win32Exception e)
+            {
+                this.ioArbFG.IO = null;
+                throw;
+            }
+            catch (Exception e)
             {
                 this.ioArbFG.IO = null;
                 throw;

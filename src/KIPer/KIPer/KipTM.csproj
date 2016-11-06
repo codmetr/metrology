@@ -131,10 +131,6 @@
     <Compile Include="Devices\UnitDescriptor.cs" />
     <Compile Include="DataService\IMethodsService.cs" />
     <Compile Include="DataService\MethodsService.cs" />
-    <Compile Include="EventAggregator\EventAggregator.cs" />
-    <Compile Include="EventAggregator\EventSubscriber.cs" />
-    <Compile Include="EventAggregator\IEventAggregator.cs" />
-    <Compile Include="EventAggregator\ISubscriber.cs" />
     <Compile Include="Services\FillReportView.xaml.cs">
       <DependentUpon>FillReportView.xaml</DependentUpon>
     </Compile>
@@ -162,7 +158,6 @@
     <Compile Include="Checks\ViewModel\Config\CheckConfigViewModel.cs" />
     <Compile Include="Checks\ViewModel\CheckFabrik.cs" />
     <Compile Include="Checks\ViewModel\ICheckFabrik.cs" />
-    <Compile Include="ViewModel\Events\EventError.cs" />
     <Compile Include="Workflow\States\CheckState.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />
     <Compile Include="Workflow\States\Events\EventCheckState.cs" />
