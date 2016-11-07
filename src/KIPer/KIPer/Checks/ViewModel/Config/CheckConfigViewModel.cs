@@ -4,6 +4,7 @@ using CheckFrame.Model.TransportChannels;
 using CheckFrame.ViewModel.Checks;
 using GalaSoft.MvvmLight;
 using KipTM.Checks;
+using KipTM.Checks.ViewModel.Config;
 using KipTM.Model.TransportChannels;
 
 namespace KipTM.ViewModel.Checks.Config

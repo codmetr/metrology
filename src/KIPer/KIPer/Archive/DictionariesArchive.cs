@@ -40,7 +40,7 @@ namespace KipTM.Archive
             {
                 new ArchivedKeyValuePair(ADTSModel.Key, new List<string>()
                 {
-                    AdtsCheckMethod.Key,
+                    Calibration.Key,
                 }),
             };
         }

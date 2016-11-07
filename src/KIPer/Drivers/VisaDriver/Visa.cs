@@ -27,7 +27,19 @@ namespace VisaDriver
                 short pInterfaceNumber = 0;
                 string pSessionType = "";
 
-                var al = rm.FindRsrc("*");
+                var allDevices = rm.FindRsrc("?*");
+                bool isFinded = false;
+                foreach (var device in allDevices)
+                {
+                    if(device!=address)
+                        continue;
+                    isFinded = true;
+                    break;
+                }
+                
+                if(!isFinded)
+                    throw new Exception(string.Format("Device \"{0}\" not found in VISA devices", address));
+
                 rm.FindRsrc(address);
                 rm.ParseRsrc(address, ref pInterfaceType, ref pInterfaceNumber, ref pSessionType);
                 var visaSession = rm.Open(address, Ivi.Visa.Interop.AccessMode.NO_LOCK, 2000, "");

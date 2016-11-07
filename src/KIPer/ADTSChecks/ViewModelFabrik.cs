@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ADTSChecks.Checks.Data;
+using ADTSChecks.Checks.ViewModel;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
-using ADTSChecks.ViewModel.Checks;
 using ArchiveData.DTO;
 using CheckFrame.Archive;
 using CheckFrame.Model;
@@ -27,7 +28,7 @@ namespace ADTSChecks
             IDeviceManager deviceManager, IPropertyPool propertyPool, TestResult testResult, object customSettings)
         {
             IMethodViewModel result = null;
-            var method = methodObj as ADTSMethodBase;
+            var method = methodObj as CheckBase;
             if (method == null)
                 return result;
 
@@ -35,17 +36,17 @@ namespace ADTSChecks
             method.ChannelType = checkDeviceTransport;
             method.SetEthalonChannel(ethalonChannel, ethalonTransport);
 
-            if (method is AdtsCheckMethod)
+            if (method is Calibration)
             {
-                var adtsMethodic = method as AdtsCheckMethod;
-                result = new ADTSCalibrationViewModel(adtsMethodic, propertyPool,
-                    deviceManager, testResult, customSettings as ADTSMethodParameters);
+                var adtsMethodic = method as Calibration;
+                result = new CalibrationViewModel(adtsMethodic, propertyPool,
+                    deviceManager, testResult, customSettings as ADTSParameters);
             }
-            else if (method is ADTSTestMethod)
+            else if (method is Test)
             {
-                var adtsMethodic = method as ADTSTestMethod;
-                result = new ADTSTestViewModel(adtsMethodic, propertyPool,
-                    deviceManager, testResult, customSettings as ADTSMethodParameters);
+                var adtsMethodic = method as Test;
+                result = new TestViewModel(adtsMethodic, propertyPool,
+                    deviceManager, testResult, customSettings as ADTSParameters);
             }
             if (result != null)
             {

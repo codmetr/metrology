@@ -13,7 +13,7 @@ using ArchiveData.DTO;
 namespace ReportAdts
 {
     //[Report(typeof(ADTSTestMethod))]
-    [Report(ADTSTestMethod.Key)]
+    [Report(Test.Key)]
     public class ADTSReporter: IReporter
     {
         public ReportClass GetReport(AdtsCommonReportData commonData, IEnumerable<AdtsReportData> staticData, IEnumerable<AdtsReportData> dinamicData)
@@ -50,7 +50,7 @@ namespace ReportAdts
             var dinamicResults = new List<AdtsReportData>();
 
 
-            foreach (var stepResult in result.Results.Where(res => res.ChannelKey == ADTSMethodBase.KeySettingsPS))
+            foreach (var stepResult in result.Results.Where(res => res.ChannelKey == CheckBase.KeySettingsPS))
             {
                 var res = stepResult.Result as AdtsPointResult;
                 if (res==null)
@@ -58,7 +58,7 @@ namespace ReportAdts
                 staticResults.Add(dataToReport(res));
             }
 
-            foreach (var stepResult in result.Results.Where(res => res.ChannelKey == ADTSMethodBase.KeySettingsPT))
+            foreach (var stepResult in result.Results.Where(res => res.ChannelKey == CheckBase.KeySettingsPT))
             {
                 var res = stepResult.Result as AdtsPointResult;
                 if (res==null)

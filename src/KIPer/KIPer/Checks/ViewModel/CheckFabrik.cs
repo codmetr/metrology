@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ADTSChecks.Checks.Data;
+using ADTSChecks.Checks.ViewModel;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
-using ADTSChecks.ViewModel.Checks;
 using ArchiveData.DTO;
 using CheckFrame.Archive;
 using CheckFrame.Model;
@@ -40,15 +41,15 @@ namespace KipTM.ViewModel.Checks
         {
             IMethodViewModel result = null;
             var method = checkConfig.SelectedMethod;
-            if (method is ADTSMethodBase)
+            if (method is CheckBase)
             {
-                result = ConfigAdtsMethod(method as ADTSMethodBase, checkConfig, checkDeviceChanel, ethalonChanel);
+                result = ConfigAdtsMethod(method as CheckBase, checkConfig, checkDeviceChanel, ethalonChanel);
             }
             
             return result;
         }
 
-        IMethodViewModel ConfigAdtsMethod(ADTSMethodBase method, CheckConfig checkConfig, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
+        IMethodViewModel ConfigAdtsMethod(CheckBase method, CheckConfig checkConfig, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
         {
             IMethodViewModel result = null;
             method.SetADTS(_deviceManager.GetModel<ADTSModel>());
@@ -58,17 +59,17 @@ namespace KipTM.ViewModel.Checks
             else
                 method.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonDeviceType, ethalonChanel), ethalonChanel);
 
-            if (method is AdtsCheckMethod)
+            if (method is Calibration)
             {
-                var adtsMethodic = method as AdtsCheckMethod;
-                result = new ADTSCalibrationViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
-                    _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSMethodParameters);
+                var adtsMethodic = method as Calibration;
+                result = new CalibrationViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
+                    _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSParameters);
             }
-            else if (method is ADTSTestMethod)
+            else if (method is Test)
             {
-                var adtsMethodic = method as ADTSTestMethod;
-                result = new ADTSTestViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
-                    _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSMethodParameters);
+                var adtsMethodic = method as Test;
+                result = new TestViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
+                    _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSParameters);
             }
             if (result != null)
             {

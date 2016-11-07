@@ -1,11 +1,11 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
+using ADTSChecks.Checks.Data;
 using ADTSChecks.Model.Channels;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.ViewModel.Services;
@@ -21,17 +21,16 @@ using CheckFrame.ViewModel.Checks.Channels;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.EventAggregator;
-using KipTM.ViewModel;
 using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Events;
 using Tools.View;
 
-namespace ADTSChecks.ViewModel.Checks
+namespace ADTSChecks.Checks.ViewModel
 {
     /// <summary>
     /// Базовый класс визуальной модели проверки
     /// </summary>
-    public abstract class ADTSBaseViewModel : ViewModelBase, IMethodViewModel
+    public abstract class CheckBaseViewModel : ViewModelBase, IMethodViewModel
     {
         #region Members
 
@@ -51,15 +50,15 @@ namespace ADTSChecks.ViewModel.Checks
         private ITransportChannelType _ethalonChannelType;
         private bool _stopEnabled = false;
 
-        protected AdtsCheckStateViewModel _stateViewModel;
+        protected CheckStateViewModel _stateViewModel;
         private string _title;
         private bool _pauseEnabled = false;
         private bool _isPaused;
 
         #endregion
 
-        protected ADTSBaseViewModel(ADTSMethodBase method, IPropertyPool propertyPool,
-            IDeviceManager deviceManager, TestResult resultPool, ADTSMethodParameters customConfig)
+        protected CheckBaseViewModel(CheckBase method, IPropertyPool propertyPool,
+            IDeviceManager deviceManager, TestResult resultPool, ADTSParameters customConfig)
         {
             Method = method;
             _propertyPool = propertyPool;
@@ -83,7 +82,7 @@ namespace ADTSChecks.ViewModel.Checks
             //}
 
             Title = "ADTS";
-            _stateViewModel = new AdtsCheckStateViewModel();
+            _stateViewModel = new CheckStateViewModel();
             _stateViewModel.TitleSteps = "Щаги";
             _stateViewModel.TitleBtnNext = "Старт";
             _stateViewModel.ADTS = new ADTSViewModel(Method.GetADTS());
@@ -159,7 +158,7 @@ namespace ADTSChecks.ViewModel.Checks
         /// <summary>
         /// Модель состояния проверки
         /// </summary>
-        public AdtsCheckStateViewModel State{get { return _stateViewModel; }}
+        public CheckStateViewModel State{get { return _stateViewModel; }}
         #endregion
 
         #region Interface of rule
@@ -241,7 +240,7 @@ namespace ADTSChecks.ViewModel.Checks
         #endregion
 
         #region Services
-        protected virtual ADTSMethodBase Method { get; set; }
+        protected virtual CheckBase Method { get; set; }
 
         /// <summary>
         /// Эталонный канал
@@ -517,7 +516,7 @@ namespace ADTSChecks.ViewModel.Checks
 
         #endregion
 
-        private void AttachEvent(ADTSMethodBase model)
+        private void AttachEvent(CheckBase model)
         {
             model.StepsChanged += OnStepsChanged;
             model.ResultUpdated += ResultUpdated;
@@ -525,7 +524,7 @@ namespace ADTSChecks.ViewModel.Checks
             model.PauseAvailableChanged += model_PauseAvailableChanged;
         }
 
-        private void DetachEvent(ADTSMethodBase model)
+        private void DetachEvent(CheckBase model)
         {
             model.StepsChanged -= OnStepsChanged;
             model.ResultUpdated -= ResultUpdated;

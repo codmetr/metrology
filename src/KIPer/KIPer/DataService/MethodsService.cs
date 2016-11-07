@@ -18,12 +18,12 @@ namespace KipTM.Model
         public MethodsService()
         {
             _methods = new Dictionary<string, Dictionary<string, ICheckMethod>>();
-            var adtsCheck = new AdtsCheckMethod(NLog.LogManager.GetLogger("ADTSCheckMethod"));
-            var adtsTest = new ADTSTestMethod(NLog.LogManager.GetLogger("ADTSTestMethod"));
+            var adtsCheck = new Calibration(NLog.LogManager.GetLogger("ADTSCheckMethod"));
+            var adtsTest = new Test(NLog.LogManager.GetLogger("ADTSTestMethod"));
             _methods.Add(ADTSModel.Key,new Dictionary<string, ICheckMethod>()
             {
-                {ADTSTestMethod.Key, adtsTest},
-                {AdtsCheckMethod.Key, adtsCheck},
+                {Test.Key, adtsTest},
+                {Calibration.Key, adtsCheck},
             }); 
 
         }

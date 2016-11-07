@@ -9,7 +9,7 @@ using MarkerService.Filler;
 
 namespace ADTSChecks.ViewModel.ResultFiller.ADTS
 {
-    [FillerKey(ADTSTestMethod.Key, DoPointStep.KeyStep)]
+    [FillerKey(Test.Key, DoPointStep.KeyStep)]
     public class ADTSTestPointFiller : IFiller<IParameterResultViewModel>
     {
         public IParameterResultViewModel FillMarker<T>(T result)

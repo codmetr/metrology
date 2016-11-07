@@ -27,6 +27,7 @@ using ReportService;
 using SQLiteArchive;
 using Tools;
 using ADTSChecks.Model.Devices;
+using KipTM.Checks.ViewModel.Config;
 using KipTM.EventAggregator;
 using KipTM.ViewModel.Events;
 using KipTM.Workflow.States.Events;

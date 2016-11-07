@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows.Controls;
 
-namespace ADTSChecks.ViewModel.Checks
+namespace ADTSChecks.Checks.ViewModel
 {
     public class DoubleBindingRule : ValidationRule
     {

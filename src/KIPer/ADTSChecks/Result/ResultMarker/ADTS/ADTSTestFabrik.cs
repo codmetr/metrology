@@ -11,7 +11,7 @@ namespace ADTSChecks.ViewModel.ResultMarker.ADTS
     /// <summary>
     /// Генератор представления для точек проверки ADTS
     /// </summary>
-    [Marker(typeof(ADTSTestMethod))]
+    [Marker(typeof(Test))]
     public class ADTSTestFabrik : IMarker<IParameterResultViewModel>
     {
         /// <summary>
@@ -22,9 +22,9 @@ namespace ADTSChecks.ViewModel.ResultMarker.ADTS
         public IEnumerable<IParameterResultViewModel> Make(object target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
         {
             if (target == null) throw new ArgumentNullException("target");
-            if (!(target is ADTSTestMethod)) throw new NoExpectedTypeParameterException(typeof(ADTSTestMethod), target.GetType());
+            if (!(target is Test)) throw new NoExpectedTypeParameterException(typeof(Test), target.GetType());
 
-            return Make((ADTSTestMethod)target, markerFabric);
+            return Make((Test)target, markerFabric);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace ADTSChecks.ViewModel.ResultMarker.ADTS
         /// </summary>
         /// <param name="target">заданный типизированный объект</param>
         /// <returns>описатель результата</returns>
-        private IEnumerable<IParameterResultViewModel> Make(ADTSTestMethod target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
+        private IEnumerable<IParameterResultViewModel> Make(Test target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
         {
             var result = target.Steps.Where(el=>el.Enabled).SelectMany(el => markerFabric.GetMarkers(el.Step.GetType(), el.Step)).ToList();
             return result;

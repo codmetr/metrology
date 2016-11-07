@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:checks="clr-namespace:KipTM.ViewModel.Checks;assembly=ADTSChecks"
-             xmlns:checks2="clr-namespace:ADTSChecks.ViewModel.Checks;assembly=ADTSChecks"
              xmlns:checks3="clr-namespace:ADTSChecks.Model.Checks;assembly=ADTSChecks"
+             xmlns:data="clr-namespace:ADTSChecks.Checks.Data;assembly=ADTSChecks"
+             xmlns:viewModel="clr-namespace:ADTSChecks.Checks.ViewModel;assembly=ADTSChecks"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{d:DesignInstance checks2:ADTSCheckConfigViewModel}">
+             d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{d:DesignInstance viewModel:CheckConfigViewModel}">
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="5"/>
@@ -72,7 +73,7 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListView.ItemTemplate>
-                    <DataTemplate DataType="checks3:ADTSPoint">
+                    <DataTemplate DataType="data:ADTSPoint">
                         <Border BorderBrush="Black" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox IsChecked="{Binding IsAvailable, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="5"/>
@@ -129,7 +130,7 @@
                 </StackPanel>
                 <ContentPresenter Content="{Binding Path=SelectedPoint, UpdateSourceTrigger=PropertyChanged}">
                     <ContentPresenter.ContentTemplate>
-                        <DataTemplate DataType="checks3:ADTSPoint">
+                        <DataTemplate DataType="data:ADTSPoint">
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock VerticalAlignment="Center" Margin="5">Поверяемая точка:</TextBlock>
@@ -153,7 +154,7 @@
                         <TextBox.Text>
                             <Binding Path="NewPressure" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
-                                    <checks2:DoubleBindingRule/>
+                                    <viewModel:DoubleBindingRule/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
@@ -165,7 +166,7 @@
                     <TextBox Width="70" >
                         <Binding Path="NewTolerance" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
-                                <checks2:DoubleBindingRule/>
+                                <viewModel:DoubleBindingRule/>
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox>

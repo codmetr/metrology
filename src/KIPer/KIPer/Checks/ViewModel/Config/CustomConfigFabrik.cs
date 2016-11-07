@@ -1,15 +1,14 @@
-﻿using ADTSChecks.Model.Checks;
-using ADTSChecks.ViewModel.Checks;
+﻿using ADTSChecks.Checks.Data;
 using CheckFrame.ViewModel.Checks;
 
-namespace KipTM.ViewModel.Checks.Config
+namespace KipTM.Checks.ViewModel.Config
 {
     public class CustomConfigFabrik
     {
         public ICustomSettingsViewModel GetCustomSettings(object customSettings)
         {
-            if (customSettings is ADTSMethodParameters)
-                return new ADTSCheckConfigViewModel(customSettings as ADTSMethodParameters);
+            if (customSettings is ADTSParameters)
+                return new ADTSChecks.Checks.ViewModel.CheckConfigViewModel(customSettings as ADTSParameters);
             return null;
         }
     }

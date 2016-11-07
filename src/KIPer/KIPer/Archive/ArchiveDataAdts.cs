@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ADTS;
+using ADTSChecks.Checks.Data;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
 using CheckFrame.Model.Channels;
@@ -23,8 +24,8 @@ namespace KipTM.Archive
         {
             return new List<ArchivedKeyValuePair>
             {
-                new ArchivedKeyValuePair(AdtsCheckMethod.KeySettingsPS, GetDefaultForADTSCheckPS()),
-                new ArchivedKeyValuePair(AdtsCheckMethod.KeySettingsPT, GetDefaultForADTSCheckPT())
+                new ArchivedKeyValuePair(Calibration.KeySettingsPS, GetDefaultForADTSCheckPS()),
+                new ArchivedKeyValuePair(Calibration.KeySettingsPT, GetDefaultForADTSCheckPT())
             };
         }
 
@@ -32,10 +33,10 @@ namespace KipTM.Archive
         {
             return new List<ArchivedKeyValuePair>()
             {
-                new ArchivedKeyValuePair(AdtsCheckMethod.KeyChannel, CalibChannel.PS),
-                new ArchivedKeyValuePair(AdtsCheckMethod.KeyPoints, GetDefaultForADTSCheckPSPoints()),
-                new ArchivedKeyValuePair(AdtsCheckMethod.KeyRate, 50.0),
-                new ArchivedKeyValuePair(AdtsCheckMethod.KeyUnit, PressureUnits.MBar),
+                new ArchivedKeyValuePair(Calibration.KeyChannel, CalibChannel.PS),
+                new ArchivedKeyValuePair(Calibration.KeyPoints, GetDefaultForADTSCheckPSPoints()),
+                new ArchivedKeyValuePair(Calibration.KeyRate, 50.0),
+                new ArchivedKeyValuePair(Calibration.KeyUnit, PressureUnits.MBar),
                 new ArchivedKeyValuePair(CommonPropertyKeys.KeyEthalons, GetDefaultForADTSEthalonTypes()),
             };
         }
@@ -44,10 +45,10 @@ namespace KipTM.Archive
         {
             return new List<ArchivedKeyValuePair>()
             {
-                new ArchivedKeyValuePair(AdtsCheckMethod.KeyChannel, CalibChannel.PT),
-                new ArchivedKeyValuePair(AdtsCheckMethod.KeyPoints, GetDefaultForADTSCheckPTPoints()),
-                new ArchivedKeyValuePair(AdtsCheckMethod.KeyRate, 50.0),
-                new ArchivedKeyValuePair(AdtsCheckMethod.KeyUnit, PressureUnits.MBar),
+                new ArchivedKeyValuePair(Calibration.KeyChannel, CalibChannel.PT),
+                new ArchivedKeyValuePair(Calibration.KeyPoints, GetDefaultForADTSCheckPTPoints()),
+                new ArchivedKeyValuePair(Calibration.KeyRate, 50.0),
+                new ArchivedKeyValuePair(Calibration.KeyUnit, PressureUnits.MBar),
                 new ArchivedKeyValuePair(CommonPropertyKeys.KeyEthalons, GetDefaultForADTSEthalonTypes()),
             };
         }
