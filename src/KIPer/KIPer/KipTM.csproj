@@ -121,6 +121,7 @@
     <Compile Include="Archive\DictionariesPool.cs" />
     <Compile Include="Archive\IArchivePool.cs" />
     <Compile Include="Archive\PropertyArchive.cs" />
+    <Compile Include="Checks\ViewModel\Config\ICustomConfigFabrik.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="DataService\IPropertiesLibrary.cs" />
     <Compile Include="DataService\PropertiesLibrary.cs" />
@@ -191,20 +192,11 @@
     <Compile Include="Archive\View\ParamResDataGridView.xaml.cs">
       <DependentUpon>ParamResDataGridView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Checks\AdtsCheckView.xaml.cs">
-      <DependentUpon>AdtsCheckView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Checks\ADTSConfigView.xaml.cs">
-      <DependentUpon>ADTSConfigView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Checks\View\CheckConfigView.xaml.cs">
       <DependentUpon>CheckConfigView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Checks\PACE1000EthalonChannelView.xaml.cs">
       <DependentUpon>PACE1000EthalonChannelView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Checks\Steps\AdtsPointResultView.xaml.cs">
-      <DependentUpon>AdtsPointResultView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Workflow\View\WorkflowView.xaml.cs">
       <DependentUpon>WorkflowView.xaml</DependentUpon>
@@ -227,9 +219,6 @@
     </Compile>
     <Compile Include="Report\ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Services\ADTSView.xaml.cs">
-      <DependentUpon>ADTSView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\SelectChannelView.xaml.cs">
       <DependentUpon>SelectChannelView.xaml</DependentUpon>
@@ -317,23 +306,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Checks\AdtsCheckView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Checks\ADTSConfigView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Checks\View\CheckConfigView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Checks\PACE1000EthalonChannelView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Checks\Steps\AdtsPointResultView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -354,10 +331,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Report\ReportView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Services\ADTSView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -427,18 +400,6 @@
     <None Include="Content\icon-metrology.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ADTSChecks\ADTSChecks.csproj">
-      <Project>{ef16e7b3-223e-4f66-9685-a6ccb3973c28}</Project>
-      <Name>ADTSChecks</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ADTSData\ADTSData.csproj">
-      <Project>{b00215bc-0620-414b-83ab-6b88a152e0c2}</Project>
-      <Name>ADTSData</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ADTS\ADTS.csproj">
-      <Project>{e032255a-ad56-44cd-8525-87293538e958}</Project>
-      <Name>ADTS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
       <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
       <Name>ArchiveData</Name>
@@ -519,7 +480,10 @@
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)Reports"
 COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.dll" "$(TargetDir)Reports\ReportAdts.dll"
-COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.pdb" "$(TargetDir)Reports\ReportAdts.pdb"</PostBuildEvent>
+COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.pdb" "$(TargetDir)Reports\ReportAdts.pdb"
+mkdir "$(TargetDir)Libs"
+COPY "$(SolutionDir)ADTSChecks\bin\Debug\ADTSChecks.dll" "$(TargetDir)Libs\ADTSChecks.dll"
+COPY "$(SolutionDir)ADTSView\bin\Debug\ADTSView.dll" "$(TargetDir)Libs\ADTSView.dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

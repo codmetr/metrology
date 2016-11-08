@@ -8,9 +8,9 @@
              d:DesignHeight="50" d:DesignWidth="300" d:DataContext="{d:DesignInstance adtsData:AdtsPointResult}">
     <UserControl.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
+            <!--<ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../../Skins/SimpleElements.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>-->
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal">

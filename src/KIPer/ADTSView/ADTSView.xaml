@@ -4,13 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:pressureElementControls="clr-namespace:PressureElementControls;assembly=PressureElementControls"
+             xmlns:services="clr-namespace:ADTSChecks.ViewModel.Services;assembly=ADTSChecks"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="400" d:DataContext="{d:DesignInstance services:ADTSViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
+            <!--<ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Skins/SimpleElements.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>-->
 
             <Style TargetType="pressureElementControls:DiscretInputHorisontalControl">
                 <Setter Property="Height" Value="25"/>

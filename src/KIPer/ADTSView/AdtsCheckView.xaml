@@ -9,9 +9,9 @@
              d:DesignHeight="300" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModel:CheckBaseViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
+            <!--<ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Skins/SimpleElements.xaml"></ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>-->
             <Style TargetType="TextBlock" x:Key="TitleStyle">
                 <Setter Property="Margin" Value="3"/>
                 <Setter Property="Width" Value="50"/>
@@ -21,10 +21,10 @@
             <Setter Property="Background" Value="#FF818147"/>
         </Style>-->
 
-            <Style TargetType="TextBlock" x:Key="ValueStateStyle" BasedOn="{StaticResource ValueStyle}">
+            <Style TargetType="TextBlock" x:Key="ValueStateStyle">
                 <Setter Property="Width" Value="50"/>
             </Style>
-
+            <!-- BasedOn="{StaticResource ValueStyle}"-->
             <Style TargetType="Button" x:Key="ErrorBtnStyle">
                 <Setter Property="Margin" Value="3"/>
                 <Setter Property="Width" Value="40"/>
@@ -106,7 +106,8 @@
                     <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="-0.05">-0.05</Button>
                     <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="-0.02">-0.02</Button>
                     <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="-0.01">-0.01</Button>
-                    <TextBox Style="{StaticResource SettedValueStyle}" Width="50" Text="{Binding RealValue, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Width="50" Text="{Binding RealValue, UpdateSourceTrigger=PropertyChanged}"/>
+                    <!-- Style="{StaticResource SettedValueStyle}"-->
                     <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="+0.01">+0.01</Button>
                     <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="+0.02">+0.02</Button>
                     <Button Style="{StaticResource ErrorBtnStyle}" Command="{Binding CorrectRealValue}" CommandParameter="+0.05">+0.05</Button>

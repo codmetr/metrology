@@ -3,7 +3,7 @@ using CheckFrame.ViewModel.Checks;
 
 namespace KipTM.Checks.ViewModel.Config
 {
-    public class CustomConfigFabrik
+    public class CustomConfigFabrik : ICustomConfigFabrik
     {
         public ICustomSettingsViewModel GetCustomSettings(object customSettings)
         {

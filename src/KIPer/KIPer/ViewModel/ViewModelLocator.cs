@@ -23,6 +23,8 @@ using MarkerService.Filler;
 using Microsoft.Practices.ServiceLocation;
 using KipTM.Model;
 using System;
+using System.IO;
+using System.Linq;
 using KipTM.EventAggregator;
 using ReportService;
 
@@ -40,6 +42,10 @@ namespace KipTM.ViewModel
         //private IContainer ioc;
         public ViewModelLocator()
         {
+            var path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Libs");
+            var referencedPaths = Directory.GetFiles(path, "*.dll").ToList();
+            referencedPaths.ForEach(p => AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(p)));
+
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<IEventAggregator, EventAggregator.EventAggregator>();
