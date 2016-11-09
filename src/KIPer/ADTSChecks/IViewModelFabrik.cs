@@ -3,9 +3,13 @@ using CheckFrame.Model;
 using CheckFrame.ViewModel.Checks.Channels;
 using CheckFrame.Model.Checks;
 using CheckFrame.Model.Channels;
-using CheckFrame.Model.TransportChannels;
 using ArchiveData.DTO;
-using CheckFrame.Archive;
+using KipTM.Archive;
+using KipTM.Model;
+using KipTM.Model.Channels;
+using KipTM.Model.Checks;
+using KipTM.Model.TransportChannels;
+
 namespace ADTSChecks
 {
     interface IViewModelFabrik

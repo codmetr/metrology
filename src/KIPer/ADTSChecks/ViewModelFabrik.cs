@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ADTSChecks.Checks.Data;
+﻿using ADTSChecks.Checks.Data;
 using ADTSChecks.Checks.ViewModel;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
-using CheckFrame.Archive;
 using CheckFrame.Model;
 using CheckFrame.Model.Channels;
-using CheckFrame.Model.Checks;
-using CheckFrame.Model.TransportChannels;
 using CheckFrame.ViewModel.Checks.Channels;
+using KipTM.Archive;
+using KipTM.Model;
+using KipTM.Model.Channels;
+using KipTM.Model.Checks;
+using KipTM.Model.TransportChannels;
 
 namespace ADTSChecks
 {

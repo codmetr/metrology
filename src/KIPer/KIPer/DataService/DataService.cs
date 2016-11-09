@@ -6,8 +6,6 @@ using System.Linq;
 using System.Windows.Documents;
 using System.Xml;
 using System.Xml.Serialization;
-using ADTS;
-using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
 using CheckFrame.Model;
 using KipTM.Interfaces;

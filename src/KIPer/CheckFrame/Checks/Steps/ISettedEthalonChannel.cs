@@ -1,4 +1,5 @@
 ﻿using CheckFrame.Model.Channels;
+using KipTM.Model.Channels;
 
 namespace CheckFrame.Model.Checks.Steps
 {

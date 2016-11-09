@@ -1,7 +1,7 @@
 ﻿using System;
 using ArchiveData.DTO;
-using CheckFrame.Model.TransportChannels;
 using KipTM.EventAggregator;
+using KipTM.Model.TransportChannels;
 
 namespace CheckFrame.ViewModel.Checks.Channels
 {

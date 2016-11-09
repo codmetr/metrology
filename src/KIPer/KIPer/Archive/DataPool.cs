@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CheckFrame.Archive;
 using KipTM.Archive.DataTypes;
 
 namespace KipTM.Archive

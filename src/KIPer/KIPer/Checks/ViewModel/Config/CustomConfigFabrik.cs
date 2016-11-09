@@ -1,5 +1,4 @@
-﻿using ADTSChecks.Checks.Data;
-using CheckFrame.ViewModel.Checks;
+﻿using CheckFrame.ViewModel.Checks;
 
 namespace KipTM.Checks.ViewModel.Config
 {

@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
-using ADTS;
-using ADTSChecks.Checks.Data;
-using ADTSChecks.Model.Checks;
-using ADTSChecks.Model.Devices;
 using CheckFrame.Model.Channels;
 using KipTM.Archive.DataTypes;
-using KipTM.Model.Devices;
+using PACESeries;
 
 namespace KipTM.Archive
 {

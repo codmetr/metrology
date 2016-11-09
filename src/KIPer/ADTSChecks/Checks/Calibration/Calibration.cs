@@ -5,9 +5,8 @@ using ADTSChecks.Checks.Data;
 using ADTSChecks.Model.Steps.ADTSCalibration;
 using ADTSData;
 using ArchiveData.DTO.Params;
-using CheckFrame.Archive;
-using CheckFrame.Model.Checks;
-using CheckFrame.Model.Checks.EventArgs;
+using KipTM.Archive;
+using KipTM.Model.Checks;
 using Tools;
 
 namespace ADTSChecks.Model.Checks

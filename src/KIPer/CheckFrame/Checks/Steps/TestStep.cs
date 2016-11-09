@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using CheckFrame.Model.Checks.EventArgs;
+using KipTM.Model.Checks;
 
 namespace CheckFrame.Model.Checks.Steps
 {

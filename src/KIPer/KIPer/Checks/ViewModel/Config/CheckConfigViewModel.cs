@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CheckFrame.Model.TransportChannels;
 using CheckFrame.ViewModel.Checks;
 using GalaSoft.MvvmLight;
 using KipTM.Checks;

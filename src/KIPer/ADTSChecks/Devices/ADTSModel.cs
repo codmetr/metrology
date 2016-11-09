@@ -5,7 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
 using CheckFrame.Model;
-using CheckFrame.Model.TransportChannels;
+using KipTM.Model;
+using KipTM.Model.TransportChannels;
 using MainLoop;
 
 namespace ADTSChecks.Model.Devices

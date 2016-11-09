@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ADTSChecks.Model.Checks;
-using ADTSChecks.Model.Devices;
-using CheckFrame.Model.Checks;
-using KipTM.Interfaces;
-using KipTM.Model.Devices;
+﻿using System.Collections.Generic;
+using KipTM.Model.Checks;
 
 namespace KipTM.Model
 {

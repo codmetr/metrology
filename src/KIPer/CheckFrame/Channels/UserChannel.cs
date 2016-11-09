@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using KipTM.Model.Channels;
 
 namespace CheckFrame.Model.Channels
 {

@@ -3,7 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using ADTSChecks.Model.Devices;
 using CheckFrame.Model.Channels;
-using CheckFrame.Model.TransportChannels;
+using KipTM.Model.Channels;
+using KipTM.Model.TransportChannels;
 
 namespace ADTSChecks.Model.Channels
 {

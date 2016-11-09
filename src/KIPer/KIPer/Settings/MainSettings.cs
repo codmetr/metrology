@@ -4,7 +4,6 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ADTSChecks.Model.Devices;
 
 namespace KipTM.Settings
 {

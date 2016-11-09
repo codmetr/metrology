@@ -112,7 +112,6 @@
     <Compile Include="Archive\IArchiveDataDefault.cs" />
     <Compile Include="Archive\ArchiveDataAdts.cs" />
     <Compile Include="Archive\DataPool.cs" />
-    <Compile Include="Archive\DataTypes\ArchivedKeyValuePair.cs" />
     <Compile Include="Archive\DataTypes\CheckData.cs" />
     <Compile Include="Archive\DataTypes\CheckKey.cs" />
     <Compile Include="Archive\DataTypes\CheckMetadata.cs" />
@@ -417,6 +416,10 @@
     <ProjectReference Include="..\IEEE488Transport\IEEE488.csproj">
       <Project>{3fec76c3-b933-4461-aa8d-85360d3f41c4}</Project>
       <Name>IEEE488</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
+      <Project>{B8DBF9E3-03D3-457D-B889-D45E1C5131E4}</Project>
+      <Name>KipTM.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\MarkerService\MarkerService.csproj">
       <Project>{fbdcd95e-3006-4d82-b232-24ced8aa05f8}</Project>

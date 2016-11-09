@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CheckFrame.Model;
-using CheckFrame.Model.TransportChannels;
+using KipTM.Model;
+using KipTM.Model.TransportChannels;
 using MainLoop;
 using PACESeries;
 

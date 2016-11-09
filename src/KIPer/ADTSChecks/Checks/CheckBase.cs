@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using ADTS;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO.Params;
-using CheckFrame.Archive;
 using CheckFrame.Model.Channels;
-using CheckFrame.Model.Checks;
-using CheckFrame.Model.Checks.EventArgs;
 using CheckFrame.Model.Checks.Steps;
-using CheckFrame.Model.TransportChannels;
+using KipTM.Archive;
+using KipTM.Model.Channels;
+using KipTM.Model.Checks;
+using KipTM.Model.TransportChannels;
 using NLog;
 
 namespace ADTSChecks.Model.Checks

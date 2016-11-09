@@ -1,12 +1,11 @@
 ﻿using ArchiveData.DTO;
-using CheckFrame.Archive;
 using CheckFrame.Model.Channels;
-using CheckFrame.Model.Checks;
-using CheckFrame.Model.TransportChannels;
 using CheckFrame.ViewModel.Checks.Channels;
 using KipTM.Archive;
 using KipTM.Checks;
 using KipTM.Model;
+using KipTM.Model.Channels;
+using KipTM.Model.Checks;
 using KipTM.Model.TransportChannels;
 
 namespace KipTM.ViewModel.Checks

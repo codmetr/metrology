@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using ArchiveData.DTO;
-using CheckFrame.Archive;
 using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks;
 using KipTM.Archive;
 using KipTM.Model;
+using KipTM.Model.Checks;
 using KipTM.Settings;
 
 namespace KipTM.Checks

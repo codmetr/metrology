@@ -5,10 +5,10 @@ using System.Threading;
 using System.Windows.Input;
 using ADTS;
 using ADTSChecks.Model.Devices;
-using CheckFrame.Interfaces;
-using CheckFrame.Model.TransportChannels;
 using GalaSoft.MvvmLight;
+using KipTM.Interfaces;
 using KipTM.Model.Devices;
+using KipTM.Model.TransportChannels;
 using Tools.View;
 
 namespace ADTSChecks.ViewModel.Services

@@ -1,5 +1,4 @@
 ﻿using System;
-using CheckFrame.Archive;
 
 namespace KipTM.Archive.DataTypes
 {

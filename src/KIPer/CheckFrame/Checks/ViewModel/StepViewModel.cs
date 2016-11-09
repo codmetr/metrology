@@ -1,6 +1,6 @@
-﻿using CheckFrame.Model.Checks.EventArgs;
-using CheckFrame.Model.Checks.Steps;
+﻿using CheckFrame.Model.Checks.Steps;
 using GalaSoft.MvvmLight;
+using KipTM.Model.Checks;
 
 namespace CheckFrame.ViewModel.Checks
 {

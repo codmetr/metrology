@@ -125,6 +125,10 @@
       <Project>{3d3db0eb-5b92-4d8f-8547-82ff7184c59a}</Project>
       <Name>PACESeries</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
+      <Project>{B8DBF9E3-03D3-457D-B889-D45E1C5131E4}</Project>
+      <Name>KipTM.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MarkerService\MarkerService.csproj">
       <Project>{fbdcd95e-3006-4d82-b232-24ced8aa05f8}</Project>
       <Name>MarkerService</Name>
