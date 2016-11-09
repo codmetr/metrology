@@ -64,6 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Archive\IPropertyPool.cs" />
+    <Compile Include="Checks\CheckConfig.cs" />
+    <Compile Include="Devices\UnitDescriptor.cs" />
     <Compile Include="EventAggregator\EventAggregator.cs" />
     <Compile Include="EventAggregator\EventSubscriber.cs" />
     <Compile Include="EventAggregator\Events\ErrorMessageEventArg.cs" />
@@ -90,7 +92,6 @@
     <Compile Include="Checks\Steps\ITestStep.cs" />
     <Compile Include="Checks\Steps\IToBaseStep.cs" />
     <Compile Include="Checks\Steps\TestStep.cs" />
-    <Compile Include="Devices\PressureUnitDescriptor.cs" />
     <Compile Include="Devices\IDeviceManager.cs" />
     <Compile Include="Services\ViewModel\FillReport\FillReportViewModel.cs" />
     <Compile Include="Services\ViewModel\FillReport\FormulaAbsError.cs" />

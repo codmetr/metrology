@@ -14,7 +14,7 @@ src/KIPer/SetupKipTM/bin/
 src/KIPer/SetupKipTM/obj/
 src/KIPer/Archive/SQLiteArchive/obj/
 src/KIPer/Archive/SQLiteArchive/bin/
-doc/ADTS-405_403/Thumbs.db
+*Thumbs.db
 src/KIPer/ADTS/obj/
 src/KIPer/IEEE488Transport/obj/
 src/KIPer/ADTS/bin/
@@ -45,6 +45,8 @@ src/KIPer/Reports/ReportAdts/obj/
 src/KIPer/Reports/ReportAdts/bin/
 src/KIPer/ADTSData/bin/
 src/KIPer/ADTSData/obj/
+src/KIPer/ADTSView/bin/
+src/KIPer/ADTSView/obj/
 src/KIPer/ADTSChecks/obj/
 src/KIPer/CheckFrame/obj/
 src/KIPer/SerialiserTest/obj/

@@ -6,11 +6,9 @@ using System.Windows.Input;
 using ADTS;
 using ADTSChecks.Model.Devices;
 using CheckFrame.Interfaces;
-using CheckFrame.Model;
-using CheckFrame.Model.Devices;
 using CheckFrame.Model.TransportChannels;
 using GalaSoft.MvvmLight;
-using KipTM.ViewModel;
+using KipTM.Model.Devices;
 using Tools.View;
 
 namespace ADTSChecks.ViewModel.Services
@@ -36,8 +34,8 @@ namespace ADTSChecks.ViewModel.Services
         private bool _isPtAtSetPointAndInControlMode;
         private bool _isPtRampingAndAchievingRate;
         private string _pressureUnit;
-        private IEnumerable<PressureUnitDescriptor<PressureUnits>> _avalableUnits;
-        private PressureUnitDescriptor<PressureUnits> _selectedUnit;
+        private IEnumerable<UnitDescriptor<PressureUnits>> _avalableUnits;
+        private UnitDescriptor<PressureUnits> _selectedUnit;
         private CancellationTokenSource _cancellation = new CancellationTokenSource();
         private double _pressureAim;
         private double _pitotAim;
@@ -52,16 +50,16 @@ namespace ADTSChecks.ViewModel.Services
             _model = model;
             _avalableUnits = new[]
             {
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.MBar, PressureUnits.MBar.ToStr()),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inH2O4,PressureUnits.inH2O4.ToStr()),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inHg,PressureUnits.inHg.ToStr()),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.mmHg,PressureUnits.mmHg.ToStr()),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.Pa,PressureUnits.Pa.ToStr()),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.hPa,PressureUnits.hPa.ToStr()),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.psi,PressureUnits.psi.ToStr()),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.inH2O60F,PressureUnits.inH2O60F.ToStr()),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.KgCm2,PressureUnits.KgCm2.ToStr()),
-                new PressureUnitDescriptor<PressureUnits>(PressureUnits.mmH2O4,PressureUnits.mmH2O4.ToStr()),
+                new UnitDescriptor<PressureUnits>(PressureUnits.MBar, PressureUnits.MBar.ToStr()),
+                new UnitDescriptor<PressureUnits>(PressureUnits.inH2O4,PressureUnits.inH2O4.ToStr()),
+                new UnitDescriptor<PressureUnits>(PressureUnits.inHg,PressureUnits.inHg.ToStr()),
+                new UnitDescriptor<PressureUnits>(PressureUnits.mmHg,PressureUnits.mmHg.ToStr()),
+                new UnitDescriptor<PressureUnits>(PressureUnits.Pa,PressureUnits.Pa.ToStr()),
+                new UnitDescriptor<PressureUnits>(PressureUnits.hPa,PressureUnits.hPa.ToStr()),
+                new UnitDescriptor<PressureUnits>(PressureUnits.psi,PressureUnits.psi.ToStr()),
+                new UnitDescriptor<PressureUnits>(PressureUnits.inH2O60F,PressureUnits.inH2O60F.ToStr()),
+                new UnitDescriptor<PressureUnits>(PressureUnits.KgCm2,PressureUnits.KgCm2.ToStr()),
+                new UnitDescriptor<PressureUnits>(PressureUnits.mmH2O4,PressureUnits.mmH2O4.ToStr()),
             };
             SelectedUnit = _avalableUnits.First();
         }
@@ -240,12 +238,12 @@ namespace ADTSChecks.ViewModel.Services
         #endregion
 
         #region Pressure Unit
-        public IEnumerable<PressureUnitDescriptor<PressureUnits>> AvalableUnits
+        public IEnumerable<UnitDescriptor<PressureUnits>> AvalableUnits
         {
             get { return _avalableUnits; }
         }
 
-        public PressureUnitDescriptor<PressureUnits> SelectedUnit
+        public UnitDescriptor<PressureUnits> SelectedUnit
         {
             get { return _selectedUnit; }
             set { Set(ref _selectedUnit, value); }

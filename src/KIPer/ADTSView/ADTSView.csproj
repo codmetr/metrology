@@ -79,6 +79,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="PACE1000EthalonChannelView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Steps\AdtsPointResultView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -91,6 +95,9 @@
     </Compile>
     <Compile Include="ADTSView.xaml.cs">
       <DependentUpon>ADTSView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PACE1000EthalonChannelView.xaml.cs">
+      <DependentUpon>PACE1000EthalonChannelView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Steps\AdtsPointResultView.xaml.cs">
       <DependentUpon>AdtsPointResultView.xaml</DependentUpon>

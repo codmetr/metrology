@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PACESeries;
 
 namespace KipTM.Model.Devices
 {
     /// <summary>
-    /// Строковый описательть эдиниц измерения
+    /// Строковый описательть единиц измерения
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class UnitDescriptor<T>
