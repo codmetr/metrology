@@ -49,6 +49,7 @@
     <Compile Include="Archive\DataTypes\CheckMetadata.cs" />
     <Compile Include="Archive\DataTypes\SimplyPair.cs" />
     <Compile Include="Archive\DictionariesPool.cs" />
+    <Compile Include="Archive\IArchiveDataDefault.cs" />
     <Compile Include="Archive\IArchivePool.cs" />
     <Compile Include="Archive\IPropertyPool.cs" />
     <Compile Include="Channels\IEthalonChannel.cs" />

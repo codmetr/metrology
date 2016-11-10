@@ -85,6 +85,10 @@
       <Project>{81B358FE-6B31-49FF-AB34-45CB960E57B6}</Project>
       <Name>CheckFrame</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\KipTM.Interfaces\KipTM.Interfaces.csproj">
+      <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
+      <Name>KipTM.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ReportService\ReportService.csproj">
       <Project>{71e2479c-c370-44bd-b6e0-48aa88101e7b}</Project>
       <Name>ReportService</Name>

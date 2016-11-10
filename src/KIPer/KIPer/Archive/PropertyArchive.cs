@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using KipTM.Archive.DataTypes;
+using KipTM.Interfaces.Archive;
 using KipTM.Model.Devices;
 
 namespace KipTM.Archive

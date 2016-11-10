@@ -109,7 +109,6 @@
     <Compile Include="Archive\ArchiveBase.cs" />
     <Compile Include="Archive\ChecksPool.cs" />
     <Compile Include="Archive\CommonPropertyKeys.cs" />
-    <Compile Include="Archive\IArchiveDataDefault.cs" />
     <Compile Include="Archive\ArchiveDataAdts.cs" />
     <Compile Include="Archive\DataPool.cs" />
     <Compile Include="Archive\DataTypes\CheckData.cs" />

@@ -149,6 +149,10 @@
       <Project>{30e4408b-ffc2-495c-b7b4-8cf8e621d3de}</Project>
       <Name>PressureElementControls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
+      <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
+      <Name>KipTM.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tools\Tools.csproj">
       <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
       <Name>Tools</Name>

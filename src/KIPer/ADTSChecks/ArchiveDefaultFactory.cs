@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
+using ADTS;
+using ADTSChecks.Checks.Data;
+using ADTSChecks.Model.Checks;
+using ADTSChecks.Model.Devices;
 using CheckFrame.Model.Channels;
+using KipTM.Archive;
 using KipTM.Archive.DataTypes;
 using KipTM.Interfaces.Archive;
-using PACESeries;
 
-namespace KipTM.Archive
+namespace ADTSChecks
 {
-    public class ArchiveDataAdts : IArchiveDataDefault
+    public class ArchiveDefaultFactory : IArchiveDataDefault
     {
         #region GetDefault
         public List<ArchivedKeyValuePair> GetDefaultData()

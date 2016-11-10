@@ -18,7 +18,7 @@ namespace KipTM.Model
         private readonly DictionariesPool _dictionariesPool;
 
 
-        public PropertiesLibrary()
+        public PropertiesLibrary(PropertyArchive prorArchive)
         {
             _propertyPool = new DataPool(ArchiveBase.LoadFromFile(PathProperties, PropertyArchive.GetDefault()));
             _dictionariesArchive = ArchiveBase.LoadFromFile(PathDictionaries, DictionariesArchive.GetDefault());
