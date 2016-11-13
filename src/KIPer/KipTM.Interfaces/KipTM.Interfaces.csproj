@@ -63,6 +63,8 @@
     <Compile Include="Checks\EventArgs\EventArgStepResult.cs" />
     <Compile Include="Checks\EventArgs\EventArgTestStepResult.cs" />
     <Compile Include="Checks\ICheckMethod.cs" />
+    <Compile Include="Checks\IMethodViewModel.cs" />
+    <Compile Include="Checks\ISubscriber.cs" />
     <Compile Include="Checks\Steps\ISettedEthalonChannel.cs" />
     <Compile Include="Checks\Steps\ISettedUserChannel.cs" />
     <Compile Include="Checks\Steps\IStoppedOnPoint.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="Devices\FunctionDescriptor.cs" />
     <Compile Include="Devices\IFunctionDescriptor.cs" />
     <Compile Include="Devices\PressureUnitDescriptor.cs" />
+    <Compile Include="EventAggregator\IEventAggregator.cs" />
     <Compile Include="IDataService.cs" />
     <Compile Include="IDeviceManager.cs" />
     <Compile Include="IMethodsService.cs" />

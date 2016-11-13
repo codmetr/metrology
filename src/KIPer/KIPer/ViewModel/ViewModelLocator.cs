@@ -26,7 +26,9 @@ using System;
 using System.IO;
 using System.Linq;
 using KipTM.EventAggregator;
+using Microsoft.Practices.Unity;
 using ReportService;
+using UnityServiceLocator = KipTM.IOC.UnityServiceLocator;
 
 namespace KipTM.ViewModel
 {
@@ -46,7 +48,13 @@ namespace KipTM.ViewModel
             var referencedPaths = Directory.GetFiles(path, "*.dll").ToList();
             referencedPaths.ForEach(p => AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(p)));
 
+            UnityContainer unityContainer = new UnityContainer();
+
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+            ServiceLocator.SetLocatorProvider(() => new UnityServiceLocator(unityContainer));
+            
+            unityContainer.Configure().
+
             SimpleIoc.Default.Register<IEventAggregator, EventAggregator.EventAggregator>();
             SimpleIoc.Default.Register<SQLiteArchive.IArchive, SQLiteArchive.ArchiveXML>();
             SimpleIoc.Default.Register<IMainSettings>(() => ServiceLocator.Current.GetInstance<SQLiteArchive.IArchive>().Load(MainSettings.SettingsFileName, MainSettings.GetDefault()));
@@ -66,9 +74,6 @@ namespace KipTM.ViewModel
 
             SimpleIoc.Default.Register<MainViewModel>();
 
-            //SimpleIoc.Default.Register<IServiceProvider, ServiceProvider>();
-            //ioc = new Container();
-            //ioc.Configure((reg)=>reg.ForRequestedType<>());
         }
 
         /// <summary>

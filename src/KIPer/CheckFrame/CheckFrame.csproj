@@ -64,13 +64,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checks\CheckConfig.cs" />
+    <Compile Include="Checks\ICheckModelFactory.cs" />
     <Compile Include="Devices\UnitDescriptor.cs" />
     <Compile Include="EventAggregator\EventAggregator.cs" />
     <Compile Include="EventAggregator\EventSubscriber.cs" />
     <Compile Include="EventAggregator\Events\ErrorMessageEventArg.cs" />
     <Compile Include="EventAggregator\Events\HelpMessageEventArg.cs" />
-    <Compile Include="EventAggregator\IEventAggregator.cs" />
-    <Compile Include="EventAggregator\ISubscriber.cs" />
     <Compile Include="Channels\UserChannel.cs" />
     <Compile Include="Channels\UserEchalonChannel.cs" />
     <Compile Include="Checks\Steps\IPausedStep.cs" />
@@ -93,7 +92,6 @@
     <Compile Include="Archive\ViewModel\IParameterViewModel.cs" />
     <Compile Include="Archive\ViewModel\ParameterResultViewModel.cs" />
     <Compile Include="Archive\ViewModel\ParameterViewModel.cs" />
-    <Compile Include="Channels\ViewModel\IMethodViewModel.cs" />
     <Compile Include="Checks\ViewModel\ICustomSettingsViewModel.cs" />
     <Compile Include="Checks\ViewModel\StepState.cs" />
     <Compile Include="Checks\ViewModel\StepViewModel.cs" />
