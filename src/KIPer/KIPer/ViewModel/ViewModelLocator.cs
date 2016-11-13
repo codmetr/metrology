@@ -25,9 +25,12 @@ using KipTM.Model;
 using System;
 using System.IO;
 using System.Linq;
+using KipTM.Design;
 using KipTM.EventAggregator;
+using KipTM.Interfaces.Archive;
 using Microsoft.Practices.Unity;
 using ReportService;
+using SQLiteArchive;
 using UnityServiceLocator = KipTM.IOC.UnityServiceLocator;
 
 namespace KipTM.ViewModel
@@ -50,27 +53,60 @@ namespace KipTM.ViewModel
 
             UnityContainer unityContainer = new UnityContainer();
 
-            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+            //ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             ServiceLocator.SetLocatorProvider(() => new UnityServiceLocator(unityContainer));
-            
-            unityContainer.Configure().
+
+            #region new config
+
+            unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
+            unityContainer.RegisterType<IArchive, ArchiveXML>();
+            unityContainer.RegisterInstance<IMainSettings>(
+                unityContainer.Resolve<IArchive>()
+                    .Load(MainSettings.SettingsFileName, MainSettings.GetDefault()));
+            unityContainer.RegisterInstance<IPropertiesLibrary>(new PropertiesLibrary(unityContainer.ResolveAll<IArchiveDataDefault>()));
+            unityContainer.RegisterInstance<IMarkerFabrik<IParameterResultViewModel>>(
+                MarkerFabrik<IParameterResultViewModel>.Locator);
+            unityContainer.RegisterInstance<IFillerFabrik<IParameterResultViewModel>>(
+                FillerFabrik<IParameterResultViewModel>.Locator);
+            unityContainer.RegisterInstance<IReportFabrik>(ReportFabrik.Locator);
+            if (ViewModelBase.IsInDesignModeStatic)
+            {
+                unityContainer.RegisterType<IDataService, DesignDataService>();
+            }
+            else
+            {
+                unityContainer.RegisterType<IDataService, DataService>();
+            }
+            unityContainer.RegisterType<IMethodsService, MethodsService>();
+            unityContainer.RegisterType<MainViewModel>();
+
+            #endregion
+
+
+            #region old config
 
             SimpleIoc.Default.Register<IEventAggregator, EventAggregator.EventAggregator>();
-            SimpleIoc.Default.Register<SQLiteArchive.IArchive, SQLiteArchive.ArchiveXML>();
-            SimpleIoc.Default.Register<IMainSettings>(() => ServiceLocator.Current.GetInstance<SQLiteArchive.IArchive>().Load(MainSettings.SettingsFileName, MainSettings.GetDefault()));
+            SimpleIoc.Default.Register<IArchive, ArchiveXML>();
+            SimpleIoc.Default.Register<IMainSettings>(
+                () => ServiceLocator.Current.GetInstance<IArchive>()
+                        .Load(MainSettings.SettingsFileName, MainSettings.GetDefault()));
             SimpleIoc.Default.Register<IPropertiesLibrary, PropertiesLibrary>();
-            SimpleIoc.Default.Register<IMarkerFabrik<IParameterResultViewModel>>(() => MarkerFabrik<IParameterResultViewModel>.Locator, false);
-            SimpleIoc.Default.Register<IFillerFabrik<IParameterResultViewModel>>(() => FillerFabrik<IParameterResultViewModel>.Locator, false);
+            SimpleIoc.Default.Register<IMarkerFabrik<IParameterResultViewModel>>(
+                () => MarkerFabrik<IParameterResultViewModel>.Locator, false);
+            SimpleIoc.Default.Register<IFillerFabrik<IParameterResultViewModel>>(
+                () => FillerFabrik<IParameterResultViewModel>.Locator, false);
             SimpleIoc.Default.Register<IReportFabrik>(() => ReportFabrik.Locator, true);
             if (ViewModelBase.IsInDesignModeStatic)
             {
-                SimpleIoc.Default.Register<IDataService, Design.DesignDataService>();
+                SimpleIoc.Default.Register<IDataService, DesignDataService>();
             }
             else
             {
                 SimpleIoc.Default.Register<IDataService, DataService>();
             }
             SimpleIoc.Default.Register<IMethodsService, MethodsService>();
+
+            #endregion
 
             SimpleIoc.Default.Register<MainViewModel>();
 

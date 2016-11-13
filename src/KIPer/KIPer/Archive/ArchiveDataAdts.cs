@@ -5,10 +5,11 @@ using KipTM.Interfaces.Archive;
 using PACESeries;
 
 namespace KipTM.Archive
-{
+{/*
     public class ArchiveDataAdts : IArchiveDataDefault
     {
         #region GetDefault
+
         public List<ArchivedKeyValuePair> GetDefaultData()
         {
             return new List<ArchivedKeyValuePair>
@@ -97,5 +98,5 @@ namespace KipTM.Archive
             return ethalons;
         }
         #endregion
-    }
+    }*/
 }
