@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KipTM.Model.TransportChannels;
 using Tools;
+using Tools.View;
 
 namespace KipTM.View.Services
 {

@@ -153,6 +153,10 @@
       <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
       <Name>KipTM.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tools.View\Tools.View.csproj">
+      <Project>{69AB619C-5B3A-4EE7-9318-73D92E75F812}</Project>
+      <Name>Tools.View</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tools\Tools.csproj">
       <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
       <Name>Tools</Name>

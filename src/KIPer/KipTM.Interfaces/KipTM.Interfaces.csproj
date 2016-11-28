@@ -77,6 +77,7 @@
     <Compile Include="EventAggregator\IEventAggregator.cs" />
     <Compile Include="IDataService.cs" />
     <Compile Include="IDeviceManager.cs" />
+    <Compile Include="IMethodFactory.cs" />
     <Compile Include="IMethodsService.cs" />
     <Compile Include="IPropertiesLibrary.cs" />
     <Compile Include="IService.cs" />
@@ -85,9 +86,11 @@
     <Compile Include="Settings\DeviceSettings.cs" />
     <Compile Include="Settings\DeviceTypeSettings.cs" />
     <Compile Include="Settings\EtalonSettings.cs" />
+    <Compile Include="Settings\IDeviceSettingsFactory.cs" />
+    <Compile Include="Settings\IDeviceTypeSettingsFactory.cs" />
+    <Compile Include="Settings\IEthalonSettingsFactory.cs" />
     <Compile Include="Settings\IMainSettings.cs" />
     <Compile Include="TransportChannels\ITransportChannelType.cs" />
-    <Compile Include="ViewAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">

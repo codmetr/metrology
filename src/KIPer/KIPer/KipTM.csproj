@@ -118,27 +118,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Archive\ArchiveBase.cs" />
     <Compile Include="Archive\ChecksPool.cs" />
     <Compile Include="Archive\CommonPropertyKeys.cs" />
     <Compile Include="Archive\ArchiveDataAdts.cs" />
-    <Compile Include="Archive\DataPool.cs" />
+    <Compile Include="Archive\DictionariesArchiveFactory.cs" />
     <Compile Include="Archive\DataTypes\CheckData.cs" />
     <Compile Include="Archive\DataTypes\CheckKey.cs" />
     <Compile Include="Archive\DataTypes\CheckMetadata.cs" />
     <Compile Include="Archive\DataTypes\SimplyPair.cs" />
     <Compile Include="Archive\DictionariesArchive.cs" />
-    <Compile Include="Archive\DictionariesPool.cs" />
-    <Compile Include="Archive\IArchivePool.cs" />
     <Compile Include="Archive\PropertyArchive.cs" />
     <Compile Include="Checks\ViewModel\Config\ICustomConfigFabrik.cs" />
     <Compile Include="Design\DesignDataService.cs" />
-    <Compile Include="DataService\IPropertiesLibrary.cs" />
     <Compile Include="DataService\PropertiesLibrary.cs" />
     <Compile Include="DataService\DeviceManager.cs" />
     <Compile Include="DataService\DataService.cs" />
-    <Compile Include="DataService\IDataService.cs" />
-    <Compile Include="DataService\IMethodsService.cs" />
     <Compile Include="DataService\MethodsService.cs" />
     <Compile Include="IOC\UnityServiceLocator.cs" />
     <Compile Include="Services\FillReportView.xaml.cs">
@@ -153,21 +147,16 @@
     <Compile Include="Services\Formuls\FormulaAbsErrorView.xaml.cs">
       <DependentUpon>FormulaAbsErrorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\MainSettingsFactory.cs" />
+    <Compile Include="Settings\MainSettings.cs" />
     <Compile Include="TransportChannels\Fake\FakeChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaSettings.cs" />
-    <Compile Include="Settings\ComPortSettings.cs" />
-    <Compile Include="Settings\DeviceTypeSettings.cs" />
-    <Compile Include="Settings\EtalonSettings.cs" />
-    <Compile Include="Settings\DeviceSettings.cs" />
-    <Compile Include="Settings\IMainSettings.cs" />
-    <Compile Include="Settings\MainSettings.cs" />
     <Compile Include="Checks\ViewModel\Config\CustomConfigFabrik.cs" />
     <Compile Include="Report\ViewModel\IReportViewModel.cs" />
     <Compile Include="Report\ViewModel\ReportViewModel.cs" />
     <Compile Include="Checks\ViewModel\Config\CheckConfigViewModel.cs" />
     <Compile Include="Checks\ViewModel\CheckFabrik.cs" />
-    <Compile Include="Checks\ViewModel\ICheckFabrik.cs" />
     <Compile Include="Workflow\States\CheckState.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />
     <Compile Include="Workflow\States\Events\EventCheckState.cs" />

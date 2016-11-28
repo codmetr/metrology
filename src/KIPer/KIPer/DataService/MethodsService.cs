@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using KipTM.Interfaces;
 using KipTM.Model.Checks;
 
 namespace KipTM.Model
@@ -7,16 +9,17 @@ namespace KipTM.Model
     {
         private readonly Dictionary<string, Dictionary<string, ICheckMethod>> _methods;
 
-        public MethodsService()
+        public MethodsService(IEnumerable<IMethodFactory> factories )
         {
-            _methods = new Dictionary<string, Dictionary<string, ICheckMethod>>();
-            var adtsCheck = new Calibration(NLog.LogManager.GetLogger("ADTSCheckMethod"));
-            var adtsTest = new Test(NLog.LogManager.GetLogger("ADTSTestMethod"));
-            _methods.Add(ADTSModel.Key,new Dictionary<string, ICheckMethod>()
-            {
-                {Test.Key, adtsTest},
-                {Calibration.Key, adtsCheck},
-            }); 
+            _methods = factories.Select(el => el.GetDefault()).ToDictionary(el => el.Item1, el => el.Item2);
+            //_methods = new Dictionary<string, Dictionary<string, ICheckMethod>>();
+            //var adtsCheck = new Calibration(NLog.LogManager.GetLogger("ADTSCheckMethod"));
+            //var adtsTest = new Test(NLog.LogManager.GetLogger("ADTSTestMethod"));
+            //_methods.Add(ADTSModel.Key,new Dictionary<string, ICheckMethod>()
+            //{
+            //    {Test.Key, adtsTest},
+            //    {Calibration.Key, adtsCheck},
+            //}); 
 
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Windows.Controls;
 using ADTSChecks.Checks.ViewModel;
 using Tools;
+using Tools.View;
 
 namespace KipTM.View.Checks
 {

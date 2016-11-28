@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using KipTM.ViewModel.Checks;
 using KipTM.ViewModel.Checks.Config;
 using Tools;
+using Tools.View;
 
 namespace KipTM.View.Checks
 {

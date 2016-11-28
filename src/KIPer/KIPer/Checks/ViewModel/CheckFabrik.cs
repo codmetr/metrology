@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using ArchiveData.DTO;
+using CheckFrame.Checks;
 using CheckFrame.Model;
 using CheckFrame.Model.Channels;
 using CheckFrame.ViewModel.Checks.Channels;
 using KipTM.Archive;
 using KipTM.Checks;
+using KipTM.Interfaces.Checks;
 using KipTM.Model;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
+using ReportService;
+using Tools;
 using ITransportChannelType = KipTM.Model.TransportChannels.ITransportChannelType;
 
 namespace KipTM.ViewModel.Checks
@@ -22,67 +28,57 @@ namespace KipTM.ViewModel.Checks
     {
         private readonly IDeviceManager _deviceManager;
         private readonly IPropertyPool _propertyPool;
+        private IDictionary<Type, ICheckModelFactory> _fatories;
 
         public CheckFabrik(IDeviceManager deviceManager, IPropertyPool propertyPool)
         {
             _deviceManager = deviceManager;
             _propertyPool = propertyPool;
+            Load();
         }
 
         /// <summary>
         /// Фабрика модели представления методики
         /// </summary>
         /// <returns></returns>
-        public IMethodViewModel GetViewModelFor(CheckConfig checkConfig, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
+        public IMethodViewModel GetViewModelFor(object method, CheckConfigData checkConfig, object customConfig,
+            TestResult resultBox, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
         {
             IMethodViewModel result = null;
-            var method = checkConfig.SelectedMethod;
-            if (method is CheckBase)
-            {
-                result = ConfigAdtsMethod(method as CheckBase, checkConfig, checkDeviceChanel, ethalonChanel);
-            }
+
+            if (_fatories.ContainsKey(method.GetType()))
+                result = _fatories[method.GetType()].GetViewModel(method, checkConfig, customConfig, resultBox,
+                    checkDeviceChanel, ethalonChanel);
             
             return result;
         }
 
-        IMethodViewModel ConfigAdtsMethod(CheckBase method, CheckConfig checkConfig, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
-        {
-            IMethodViewModel result = null;
-            method.SetADTS(_deviceManager.GetModel<ADTSModel>());
-            method.ChannelType = checkDeviceChanel;
-            if (checkConfig.SelectedEthalonTypeKey == UserEthalonChannel.Key)
-                method.SetEthalonChannel(null, null);
-            else
-                method.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonDeviceType, ethalonChanel), ethalonChanel);
+        #region Service
 
-            if (method is Calibration)
-            {
-                var adtsMethodic = method as Calibration;
-                result = new CalibrationViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
-                    _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSParameters);
-            }
-            else if (method is Test)
-            {
-                var adtsMethodic = method as Test;
-                result = new TestViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.SelectedDeviceTypeKey),
-                    _deviceManager, checkConfig.Result, checkConfig.CustomSettings as ADTSParameters);
-            }
-            if (result != null)
-            {
-                result.SetEthalonChannel(checkConfig.SelectedEthalonTypeKey, ethalonChanel);
-            }
-            return result;
+        /// <summary>
+        /// Загрузить все доступные фабрики презенторов
+        /// </summary>
+        public void Load()
+        {
+            _fatories = GetFactories().ToDictionary(el => el.Item1, el => el.Item2);
         }
 
         /// <summary>
-        /// получить презентор типа проверки
+        /// Получить список фабрик 
         /// </summary>
         /// <returns></returns>
-        public IMethodViewModel GetViewModelFor( ICheckMethod method, IEthalonChannel ethalonChannel,
-            ITransportChannelType checkDeviceTransport, ITransportChannelType ethalonTransport,
-            IPropertyPool propertyPool, TestResult result, object customSettings)
+        private IEnumerable<Tuple<Type, ICheckModelFactory>> GetFactories()
         {
-            throw new NotImplementedException();
+            var types = TypeScaner.GetAllTypes().Where(el => el.GetType().GetAttributes(typeof(ViewModelFactoryAttribute)).Any());
+            foreach (var type in types)
+            {
+                if (typeof(ICheckModelFactory).IsAssignableFrom(type.Item2))
+                    yield return new Tuple<Type, ICheckModelFactory>(type.Item2, type.Item1.CreateInstance(type.Item2.FullName, true, BindingFlags.Default, null,
+                        new[] { (object)_deviceManager, (object)_propertyPool }, CultureInfo.InvariantCulture,
+                        new object[0]) as ICheckModelFactory);
+            }
         }
+
+        #endregion
     }
 }

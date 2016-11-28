@@ -62,7 +62,7 @@ namespace KipTM.ViewModel
             unityContainer.RegisterType<IArchive, ArchiveXML>();
             unityContainer.RegisterInstance<IMainSettings>(
                 unityContainer.Resolve<IArchive>()
-                    .Load(MainSettings.SettingsFileName, MainSettings.GetDefault()));
+                    .Load(MainSettings.SettingsFileName, unityContainer.Resolve<MainSettingsFactory>().GetDefault()));
             unityContainer.RegisterInstance<IPropertiesLibrary>(new PropertiesLibrary(unityContainer.ResolveAll<IArchiveDataDefault>()));
             unityContainer.RegisterInstance<IMarkerFabrik<IParameterResultViewModel>>(
                 MarkerFabrik<IParameterResultViewModel>.Locator);
@@ -89,7 +89,7 @@ namespace KipTM.ViewModel
             SimpleIoc.Default.Register<IArchive, ArchiveXML>();
             SimpleIoc.Default.Register<IMainSettings>(
                 () => ServiceLocator.Current.GetInstance<IArchive>()
-                        .Load(MainSettings.SettingsFileName, MainSettings.GetDefault()));
+                        .Load(MainSettings.SettingsFileName, ServiceLocator.Current.GetInstance < MainSettingsFactory >().GetDefault()));
             SimpleIoc.Default.Register<IPropertiesLibrary, PropertiesLibrary>();
             SimpleIoc.Default.Register<IMarkerFabrik<IParameterResultViewModel>>(
                 () => MarkerFabrik<IParameterResultViewModel>.Locator, false);

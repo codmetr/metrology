@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using ArchiveData.DTO;
+using CheckFrame.Checks;
 using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks;
 using KipTM.Archive;
@@ -19,25 +20,37 @@ namespace KipTM.Checks
         private readonly IMethodsService _method;
         private IDictionary<string, ICheckMethod> _checks;
         private readonly IPropertyPool _propertyPool;
-        private string _selectedCheckTypeKey;
         private ICheckMethod _selectedCheckType;
-        private TestResult _result;
 
         private IDictionary<string, DeviceTypeDescriptor> _avalableDeviceTypes;
-        private string _devTypeKey;
-        private DeviceTypeDescriptor _selectedType;
-
         private IDictionary<string, DeviceTypeDescriptor> _avalableEthalonTypes;
-        private string _ethalonTypeKey;
-        private DeviceTypeDescriptor _selectedEthalonType;
-
-        private DeviceDescriptor _ethalon;
-        private bool _isAnalogEthalon;
         private IEnumerable<string> _channels;
+
+        private TestResult _result;
+        private CheckConfigData _data;
+
+        #endregion
+
+        #region Данные наcтроек
+        /// <summary>
+        /// Данные настроек
+        /// </summary>
+        public CheckConfigData Data
+        {
+            get { return _data; }
+        }
 
         #endregion
 
         #region Конструкторы и инициализация
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <param name="method"></param>
+        /// <param name="propertyPool"></param>
+        /// <param name="dictionaries"></param>
+        /// <param name="result"></param>
         public CheckConfig(IMainSettings settings, IMethodsService method, IPropertyPool propertyPool, DictionariesPool dictionaries, TestResult result)
         {
             _result = result;
@@ -57,26 +70,26 @@ namespace KipTM.Checks
         {
             // заполнение списка поддерживаемых устройств и выбор первого элемента
             var avalableDeviceTypes = new Dictionary<string, DeviceTypeDescriptor>();
-            _devTypeKey = null;
+            _data.TargetTypeKey = null;
             foreach (var deviceType in dictionaries.DeviceTypes)
             {
                 var setDevice = settings.Devices.First(el => el.Key == deviceType);
                 if (setDevice == null)
                     continue;
-                if (_devTypeKey == null)
-                    _devTypeKey = deviceType;
+                if (_data.TargetTypeKey == null)
+                    _data.TargetTypeKey = deviceType;
                 avalableDeviceTypes.Add(deviceType,
                     new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
             }
             _avalableDeviceTypes = avalableDeviceTypes;
-            _selectedCheckTypeKey = DeviceTypes.First();
-            _selectedType = avalableDeviceTypes[_selectedCheckTypeKey];
+            _data.CheckTypeKey = DeviceTypes.First();
+            _data.TargetType = avalableDeviceTypes[_data.CheckTypeKey];
 
-            if (_devTypeKey != null)
+            if (_data.TargetTypeKey != null)
             {
-                _result.TargetDevice = new DeviceDescriptor(_selectedType);
-                _checks = _method.MethodsForType(_devTypeKey);
-                Channels = _propertyPool.ByKey(_devTypeKey).GetAllKeys();
+                _result.TargetDevice = new DeviceDescriptor(_data.TargetType);
+                _checks = _method.MethodsForType(_data.TargetTypeKey);
+                Channels = _propertyPool.ByKey(_data.TargetTypeKey).GetAllKeys();
                 _result.Channel = Channels.First();
                 SelectedMethodKey = CheckTypes.First();
             }
@@ -89,18 +102,18 @@ namespace KipTM.Checks
         private void LoadAvalableEthalons(IMainSettings settings)
         {
             var avalableEthalonTypes = new Dictionary<string, DeviceTypeDescriptor>();
-            _ethalonTypeKey = null;
-            var ethalons = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel).GetProperty<List<string>>(CommonPropertyKeys.KeyEthalons);
+            _data.EthalonTypeKey = null;
+            var ethalons = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(SelectedChannel).GetProperty<List<string>>(CommonPropertyKeys.KeyEthalons);
             foreach (var deviceEthalon in ethalons)
             {
                 var setDevice = settings.Devices.FirstOrDefault(el => el.Key == deviceEthalon);
-                if (_ethalonTypeKey == null)
+                if (_data.EthalonTypeKey == null)
                 {
-                    _ethalonTypeKey = deviceEthalon;
+                    _data.EthalonTypeKey = deviceEthalon;
                 }
                 if (setDevice == null)
                 {
-                    if (_ethalonTypeKey == UserEthalonChannel.Key)
+                    if (_data.EthalonTypeKey == UserEthalonChannel.Key)
                         avalableEthalonTypes.Add(deviceEthalon, 
                             new DeviceTypeDescriptor("Аналоговый прибор", "Приборы без аппаратного интерфейса", ""));
                     else
@@ -114,9 +127,9 @@ namespace KipTM.Checks
             SelectedEthalonTypeKey = EthalonTypes.First();
 
             var ethalonDevType = new DeviceTypeDescriptor("", "", "");
-            if (_devTypeKey != null)
+            if (_data.TargetTypeKey != null)
             {
-                if(_ethalonTypeKey != UserEthalonChannel.Key)
+                if (_data.EthalonTypeKey != UserEthalonChannel.Key)
                     ethalonDevType = SelectedEthalonType;
                 Ethalon = new DeviceDescriptor(ethalonDevType);
                 _result.Etalon = new List<DeviceDescriptor>() { Ethalon };
@@ -193,20 +206,20 @@ namespace KipTM.Checks
         /// </summary>
         public DeviceTypeDescriptor SelectedDeviceType
         {
-            get { return _selectedType; }
+            get { return _data.TargetType; }
             private set
             {
-                if (_selectedType == value)
+                if (_data.TargetType == value)
                     return;
-                _selectedType = value;
-                _result.TargetDevice.DeviceType = _selectedType;
-                _checks = _method.MethodsForType(_devTypeKey);
-                if (!_checks.ContainsKey(_selectedCheckTypeKey) && _checks.Count>0)
+                _data.TargetType = value;
+                _result.TargetDevice.DeviceType = _data.TargetType;
+                _checks = _method.MethodsForType(_data.TargetTypeKey);
+                if (!_checks.ContainsKey(_data.CheckTypeKey) && _checks.Count > 0)
                 {
                     SelectedMethodKey = _checks.First().Key;
                 }
-                var properties = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel);
-                CustomSettings = _checks[_selectedCheckTypeKey].GetCustomConfig(properties);
+                var properties = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(SelectedChannel);
+                CustomSettings = _checks[_data.CheckTypeKey].GetCustomConfig(properties);
             }
         }
 
@@ -215,13 +228,13 @@ namespace KipTM.Checks
         /// </summary>
         public string SelectedDeviceTypeKey
         {
-            get { return _devTypeKey; }
+            get { return _data.TargetTypeKey; }
             set
             {
-                if (_devTypeKey == value)
+                if (_data.TargetTypeKey == value)
                     return;
-                _devTypeKey = value;
-                SelectedDeviceType = _avalableDeviceTypes[_devTypeKey];
+                _data.TargetTypeKey = value;
+                SelectedDeviceType = _avalableDeviceTypes[_data.TargetTypeKey];
             }
         }
 
@@ -268,12 +281,12 @@ namespace KipTM.Checks
         /// </summary>
         public string SelectedMethodKey
         {
-            get { return _selectedCheckTypeKey; }
+            get { return _data.CheckTypeKey; }
             set
             {
-                _selectedCheckTypeKey = value;
+                _data.CheckTypeKey = value;
                 _result.CheckType = value;
-                SelectedMethod = _checks[_selectedCheckTypeKey];
+                SelectedMethod = _checks[_data.CheckTypeKey];
             }
         }
 
@@ -286,8 +299,8 @@ namespace KipTM.Checks
             private set
             {
                 _selectedCheckType = value;
-                _result.CheckType = _selectedCheckTypeKey;
-                var properties = _propertyPool.ByKey(_devTypeKey).ByKey(SelectedChannel);
+                _result.CheckType = _data.CheckTypeKey;
+                var properties = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(SelectedChannel);
                 CustomSettings = SelectedMethod.GetCustomConfig(properties);
                 SelectedMethod.Init(CustomSettings); //todo maybe move out
                 OnSelectedCheckTypeChanged();
@@ -305,7 +318,7 @@ namespace KipTM.Checks
                 if (value == _result.Channel)
                     return;
                 _result.Channel = value;
-                var properties = _propertyPool.ByKey(_devTypeKey).ByKey(value);
+                var properties = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(value);
                 CustomSettings = SelectedMethod.GetCustomConfig(properties);
                 SelectedMethod.Init(CustomSettings); //todo maybe move out
                 OnSelectedChannelChanged();
@@ -320,12 +333,12 @@ namespace KipTM.Checks
         /// </summary>
         public string SelectedEthalonTypeKey
         {
-            get { return _ethalonTypeKey; }
+            get { return _data.EthalonTypeKey; }
             set
             {
-                _ethalonTypeKey = value;
-                IsAnalogEthalon = _ethalonTypeKey == UserEthalonChannel.Key;
-                SelectedEthalonType = _avalableEthalonTypes[_ethalonTypeKey];
+                _data.EthalonTypeKey = value;
+                IsAnalogEthalon = _data.EthalonTypeKey == UserEthalonChannel.Key;
+                SelectedEthalonType = _avalableEthalonTypes[_data.EthalonTypeKey];
             }
         }
 
@@ -334,12 +347,12 @@ namespace KipTM.Checks
         /// </summary>
         public DeviceTypeDescriptor SelectedEthalonType
         {
-            get { return _selectedEthalonType; }
+            get { return _data.EthalonType; }
             set
             {
-               _selectedEthalonType = value;
+                _data.EthalonType = value;
                 if (!IsAnalogEthalon)
-                    Ethalon.DeviceType = _selectedEthalonType;
+                    Ethalon.DeviceType = _data.EthalonType;
                 OnSelectedEthalonTypeChanged();
             }
         }
@@ -349,10 +362,10 @@ namespace KipTM.Checks
         /// </summary>
         public bool IsAnalogEthalon
         {
-            get { return _isAnalogEthalon; }
+            get { return _data.IsAnalogEthalon; }
             set
             {
-                _isAnalogEthalon = value;
+                _data.IsAnalogEthalon = value;
             }
         }
 
@@ -380,7 +393,7 @@ namespace KipTM.Checks
             {
                 if (!IsAnalogEthalon)
                     throw new SettingsPropertyIsReadOnlyException("EthalonManufacturer can not set in no user channel");
-                Ethalon.DeviceType = new DeviceTypeDescriptor(Ethalon.DeviceType.Model, _ethalon.DeviceType.DeviceCommonType, value);
+                Ethalon.DeviceType = new DeviceTypeDescriptor(_data.Ethalon.DeviceType.Model, _data.Ethalon.DeviceType.DeviceCommonType, value);
             }
         }
 
@@ -407,8 +420,8 @@ namespace KipTM.Checks
         /// </summary>
         public DeviceDescriptor Ethalon
         {
-            get { return _ethalon; }
-            protected set { _ethalon = value; }
+            get { return _data.Ethalon; }
+            protected set { _data.Ethalon = value; }
         }
 
         #endregion

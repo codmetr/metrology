@@ -64,7 +64,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checks\CheckConfig.cs" />
+    <Compile Include="Checks\CheckConfigData.cs" />
     <Compile Include="Checks\ICheckModelFactory.cs" />
+    <Compile Include="Checks\ViewModelFactoryAttribute.cs" />
+    <Compile Include="Checks\ViewModel\ICheckFabrik.cs" />
     <Compile Include="Devices\UnitDescriptor.cs" />
     <Compile Include="EventAggregator\EventAggregator.cs" />
     <Compile Include="EventAggregator\EventSubscriber.cs" />

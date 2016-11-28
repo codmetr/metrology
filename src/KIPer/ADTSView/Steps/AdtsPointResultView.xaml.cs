@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ADTSData;
 using Tools;
+using Tools.View;
 
 namespace KipTM.View.Checks.Steps
 {

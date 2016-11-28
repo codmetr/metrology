@@ -28,6 +28,8 @@ using KipTM.Checks.ViewModel.Config;
 using KipTM.EventAggregator;
 using KipTM.ViewModel.Events;
 using KipTM.Workflow.States.Events;
+using Tools.View;
+using ViewViewmodelMatcher = Tools.ViewViewmodelMatcher;
 
 namespace KipTM.ViewModel
 {
@@ -78,7 +80,7 @@ namespace KipTM.ViewModel
             IEventAggregator eventAggregator, IDataService dataService, IMethodsService methodicService,
             IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive,
             IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
-            IReportFabrik reportFabric)
+            IReportFabrik reportFabric, IEnumerable<IService> services )
         {
             try
             {
@@ -100,11 +102,12 @@ namespace KipTM.ViewModel
             _resulMaker = resulMaker;
             _filler = filler;
             _reportFabric = reportFabric;
-            _services = new ServiceViewModel(new List<IService>()
-                                                 {
-                                                     new Pace1000ViewModel(_dataService.DeviceManager),
-                                                     new ADTSViewModel(_dataService.DeviceManager.GetModel<ADTSModel>())
-                                                 });
+            _services = new ServiceViewModel(services);
+                //new List<IService>()
+                //                                 {
+                //                                     new Pace1000ViewModel(_dataService.DeviceManager),
+                //                                     new ADTSViewModel(_dataService.DeviceManager.GetModel<ADTSModel>())
+                //                                 });
         }
 
         /// <summary>
@@ -138,7 +141,7 @@ namespace KipTM.ViewModel
                 _steps = new List<IWorkflowStep>()
                 {
                     new ConfigCheckState(checkConfigViewModel),
-                    new CheckState(() => checkFabrik.GetViewModelFor(checkConfig, 
+                    new CheckState(() => checkFabrik.GetViewModelFor(checkConfig.SelectedMethod, checkConfig.Data, checkConfig.CustomSettings, result,
                         channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel), _eventAggregator),
                     new ResultState(() => new TestResultViewModel(result,
                         _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(), checkConfig.SelectedMethod), _filler,

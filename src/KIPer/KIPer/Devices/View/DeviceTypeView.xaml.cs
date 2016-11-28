@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using KipTM.ViewModel;
 using KipTM.ViewModel.DeviceTypes;
 using Tools;
+using Tools.View;
 
 namespace KipTM.View
 {
