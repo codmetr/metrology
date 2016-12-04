@@ -25,8 +25,17 @@ namespace KipTM.Model
         private readonly IArchive _archive;
         private IDeviceManager _deviceManager;
         private ResultsArchive _resultsArchive;
+        /// <summary>
+        /// Список типов поддерживаемых устройств
+        /// </summary>
         private readonly List<IDeviceTypeDescriptor> _deviceTypes;
+        /// <summary>
+        /// Список типов поддерживаемых эталонов
+        /// </summary>
         private readonly List<IDeviceTypeDescriptor> _ethalonTypes;
+        /// <summary>
+        /// Набор сконфигурированных эталонов
+        /// </summary>
         private readonly List<DeviceDescriptor> _etalons;
 
 
