@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using CheckFrame.Model;
 using CheckFrame.Model.Channels;
 using IEEE488;
+using KipTM.Interfaces.Checks;
 using KipTM.Model.Channels;
 using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
@@ -31,54 +32,55 @@ namespace KipTM.Model
 
         private readonly IDictionary<ITransportChannelType, object> _devicesOnPorts = new Dictionary<ITransportChannelType, object>();
 
-        private IDictionary<Type, Func<object>> _modelFabrics;
+        private IDictionary<Type, IDeviceModelFactory> _modelFabrics;
 
-        private IDictionary<Type, Func<object, object>> _devicesFabrics;
+        private IDictionary<Type, IDeviceFactory> _devicesFabrics;
 
         private IDictionary<string, Func<object, ITransportIEEE488>> _channelsFabrics;
 
 
-        public DeviceManager(Logger logger = null)
+        public DeviceManager(IEnumerable<KeyValuePair<Type, IDeviceModelFactory>> models, IEnumerable<KeyValuePair<Type, IDeviceFactory>> devices, Logger logger = null)
         {
             _logger = logger;
 
             _loops = new Loops();
 
-            _modelFabrics = new Dictionary<Type, Func<object>>()
-            {
-                {typeof(ADTSModel), () => new ADTSModel(ADTSModel.Model, _loops, this)},
-                {typeof(PACE1000Model), () => new PACE1000Model(PACE1000Model.Model, _loops, this)},
-            };
+            _modelFabrics = models.ToDictionary(el => el.Key, el => el.Value);
+            //_modelFabrics = new Dictionary<Type, Func<object>>()
+            //{
+            //    {typeof(ADTSModel), () => new ADTSModel(ADTSModel.Model, _loops, this)},
+            //    {typeof(PACE1000Model), () => new PACE1000Model(PACE1000Model.Model, _loops, this)},
+            //};
 
-
-            _devicesFabrics = new Dictionary<Type, Func<object, object>>()
-            {
-                {
-                    typeof(ADTSDriver),
-                    options =>
-                        {
-                            var param = options as ITransportIEEE488;
-                            if (param == null)
-                                throw new TargetParameterCountException(string.Format(
-                                    "option mast be type: {0}; now type: {1}",
-                                    typeof (ITransportIEEE488), options.GetType()));
-                            return new ADTSDriver(param);
-                        }
-                },
-
-                {
-                    typeof(PACE1000Driver),
-                    options =>
-                        {
-                            var param = options as ITransportIEEE488;
-                            if (param == null)
-                                throw new TargetParameterCountException(string.Format(
-                                    "option mast be type: {0}; now type: {1}",
-                                    typeof (ITransportIEEE488), options.GetType()));
-                            return new PACE1000Driver(param);
-                        }
-                },
-            };
+            _devicesFabrics = devices.ToDictionary(el => el.Key, el => el.Value);
+            //_devicesFabrics = new Dictionary<Type, Func<object, object>>()
+            //{
+            //    {
+            //        typeof(ADTSDriver),
+            //        options =>
+            //            {
+            //                var param = options as ITransportIEEE488;
+            //                if (param == null)
+            //                    throw new TargetParameterCountException(string.Format(
+            //                        "option mast be type: {0}; now type: {1}",
+            //                        typeof (ITransportIEEE488), options.GetType()));
+            //                return new ADTSDriver(param);
+            //            }
+            //    },
+            //
+            //    {
+            //        typeof(PACE1000Driver),
+            //        options =>
+            //            {
+            //                var param = options as ITransportIEEE488;
+            //                if (param == null)
+            //                    throw new TargetParameterCountException(string.Format(
+            //                        "option mast be type: {0}; now type: {1}",
+            //                        typeof (ITransportIEEE488), options.GetType()));
+            //                return new PACE1000Driver(param);
+            //            }
+            //    },
+            //};
 
             _channelsFabrics = new Dictionary<string, Func<object, ITransportIEEE488>>()
             {

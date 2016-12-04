@@ -11,7 +11,7 @@ using KipTM.Model.TransportChannels;
 namespace KipTM.Interfaces.Checks
 {
 
-    public interface ICheckModelFactory
+    public interface ICheckViewModelFactory
     {
         /// <summary>
         /// 

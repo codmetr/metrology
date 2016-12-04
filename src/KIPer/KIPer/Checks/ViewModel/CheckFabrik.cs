@@ -28,7 +28,7 @@ namespace KipTM.ViewModel.Checks
     {
         private readonly IDeviceManager _deviceManager;
         private readonly IPropertyPool _propertyPool;
-        private IDictionary<Type, ICheckModelFactory> _fatories;
+        private IDictionary<Type, ICheckViewModelFactory> _fatories;
 
         public CheckFabrik(IDeviceManager deviceManager, IPropertyPool propertyPool)
         {
@@ -67,15 +67,15 @@ namespace KipTM.ViewModel.Checks
         /// Получить список фабрик 
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<Tuple<Type, ICheckModelFactory>> GetFactories()
+        private IEnumerable<Tuple<Type, ICheckViewModelFactory>> GetFactories()
         {
             var types = TypeScaner.GetAllTypes().Where(el => el.GetType().GetAttributes(typeof(ViewModelFactoryAttribute)).Any());
             foreach (var type in types)
             {
-                if (typeof(ICheckModelFactory).IsAssignableFrom(type.Item2))
-                    yield return new Tuple<Type, ICheckModelFactory>(type.Item2, type.Item1.CreateInstance(type.Item2.FullName, true, BindingFlags.Default, null,
+                if (typeof(ICheckViewModelFactory).IsAssignableFrom(type.Item2))
+                    yield return new Tuple<Type, ICheckViewModelFactory>(type.Item2, type.Item1.CreateInstance(type.Item2.FullName, true, BindingFlags.Default, null,
                         new[] { (object)_deviceManager, (object)_propertyPool }, CultureInfo.InvariantCulture,
-                        new object[0]) as ICheckModelFactory);
+                        new object[0]) as ICheckViewModelFactory);
             }
         }
 

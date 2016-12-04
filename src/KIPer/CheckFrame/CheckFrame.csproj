@@ -63,11 +63,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Channels\IDeviceFactory.cs" />
     <Compile Include="Checks\CheckConfig.cs" />
     <Compile Include="Checks\CheckConfigData.cs" />
-    <Compile Include="Checks\ICheckModelFactory.cs" />
+    <Compile Include="Devices\DeviceFactoryAttribute.cs" />
+    <Compile Include="Devices\DeviceModelFactoryAttribute.cs" />
+    <Compile Include="Checks\ICheckViewModelFactory.cs" />
     <Compile Include="Checks\ViewModelFactoryAttribute.cs" />
     <Compile Include="Checks\ViewModel\ICheckFabrik.cs" />
+    <Compile Include="Devices\IDeviceFactory.cs" />
+    <Compile Include="Devices\IDeviceModelFactory.cs" />
     <Compile Include="Devices\UnitDescriptor.cs" />
     <Compile Include="EventAggregator\EventAggregator.cs" />
     <Compile Include="EventAggregator\EventSubscriber.cs" />
@@ -107,6 +112,10 @@
     <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
       <Project>{B8DBF9E3-03D3-457D-B889-D45E1C5131E4}</Project>
       <Name>KipTM.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MineLoop\MainLoop.csproj">
+      <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
+      <Name>MainLoop</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tools.View\Tools.View.csproj">
       <Project>{69ab619c-5b3a-4ee7-9318-73d92e75f812}</Project>

@@ -24,12 +24,12 @@ using KipTM.Model.TransportChannels;
 namespace KipTM.ViewModel.Checks
 {
     [ViewModelFactoryAttribute(typeof(CheckBase))]
-    public class ADTSModelFactory : ICheckModelFactory
+    public class ADTSViewModelFactory : ICheckViewModelFactory
     {
         private readonly IDeviceManager _deviceManager;
         private readonly IPropertyPool _propertyPool;
 
-        public ADTSModelFactory(IDeviceManager deviceManager, IPropertyPool propertyPool)
+        public ADTSViewModelFactory(IDeviceManager deviceManager, IPropertyPool propertyPool)
         {
             _deviceManager = deviceManager;
             _propertyPool = propertyPool;
