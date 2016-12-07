@@ -51,6 +51,7 @@
     <Compile Include="Archive\DictionariesPool.cs" />
     <Compile Include="Archive\IArchiveDataDefault.cs" />
     <Compile Include="Archive\IArchivePool.cs" />
+    <Compile Include="Archive\IDictionariesArchiveFactory.cs" />
     <Compile Include="Archive\IPropertyPool.cs" />
     <Compile Include="Channels\IEthalonChannel.cs" />
     <Compile Include="Channels\IUserChannel.cs" />
@@ -72,11 +73,14 @@
     <Compile Include="Checks\Steps\IToBaseStep.cs" />
     <Compile Include="Checks\Steps\TestStep.cs" />
     <Compile Include="Devices\FunctionDescriptor.cs" />
+    <Compile Include="Devices\IDeviceFactory.cs" />
+    <Compile Include="Devices\IDeviceModelFactory.cs" />
     <Compile Include="Devices\IFunctionDescriptor.cs" />
     <Compile Include="Devices\PressureUnitDescriptor.cs" />
     <Compile Include="EventAggregator\IEventAggregator.cs" />
     <Compile Include="IDataService.cs" />
     <Compile Include="IDeviceManager.cs" />
+    <Compile Include="IFeaturesDescriptor.cs" />
     <Compile Include="IMethodFactory.cs" />
     <Compile Include="IMethodsService.cs" />
     <Compile Include="IPropertiesLibrary.cs" />
@@ -96,6 +100,10 @@
     <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
       <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
       <Name>ArchiveData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MineLoop\MainLoop.csproj">
+      <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
+      <Name>MainLoop</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

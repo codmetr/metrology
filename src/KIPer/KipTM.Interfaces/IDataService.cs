@@ -35,6 +35,6 @@ namespace KipTM.Interfaces
         void SaveSettings();
         void LoadResults();
         void SaveResults();
-        void InitDevices();
+        void InitDevices(IFeaturesDescriptor faetures);
     }
 }

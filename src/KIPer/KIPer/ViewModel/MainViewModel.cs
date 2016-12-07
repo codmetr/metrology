@@ -80,7 +80,7 @@ namespace KipTM.ViewModel
             IEventAggregator eventAggregator, IDataService dataService, IMethodsService methodicService,
             IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive,
             IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
-            IReportFabrik reportFabric, IEnumerable<IService> services )
+            IReportFabrik reportFabric, IEnumerable<IService> services, IFeaturesDescriptor faetures)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace KipTM.ViewModel
             _archive = archive;
 
             _dataService.LoadResults();
-            _dataService.InitDevices();
+            _dataService.InitDevices(faetures);
             _resulMaker = resulMaker;
             _filler = filler;
             _reportFabric = reportFabric;

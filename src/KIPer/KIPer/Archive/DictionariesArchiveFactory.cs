@@ -8,15 +8,15 @@ namespace KipTM.Archive
         #region GetDefault
         public ArchiveBase GetDefault()
         {
-            return new ArchiveBase(GetDefaultData());
+            return new ArchiveBase(GetDefaultData(null));
         }
 
-        private List<ArchivedKeyValuePair> GetDefaultData()
+        private List<ArchivedKeyValuePair> GetDefaultData(IEnumerable<IDictionariesArchiveFactory> dics)
         {
             return new List<ArchivedKeyValuePair>
             {
-                new ArchivedKeyValuePair(DictionariesPool.DeviceTypesKey, GetDefaultForDeviceTypes()),
-                new ArchivedKeyValuePair(DictionariesPool.CheckTypesKey, GetDefaultForCheckTypes()),
+                new ArchivedKeyValuePair(DictionariesPool.DeviceTypesKey, GetDefaultForDeviceTypes(dics)),
+                new ArchivedKeyValuePair(DictionariesPool.CheckTypesKey, GetDefaultForCheckTypes(dics)),
                 new ArchivedKeyValuePair(DictionariesPool.UsersKey, GetDefaultForUsers()),
             };
         }
@@ -31,23 +31,34 @@ namespace KipTM.Archive
             };
         }
 
-        private object GetDefaultForCheckTypes()
+        private object GetDefaultForCheckTypes(IEnumerable<IDictionariesArchiveFactory> dics)
         {
-            return new List<ArchivedKeyValuePair>
+            var result = new List<ArchivedKeyValuePair>();
+            foreach (var archiveFactory in dics)
             {
-                new ArchivedKeyValuePair(ADTSModel.Key, new List<string>()
-                {
-                    Calibration.Key,
-                }),
-            };
+                result.AddRange(archiveFactory.GetDefaultForCheckTypes());
+            }
+            //{
+            //    new ArchivedKeyValuePair(ADTSModel.Key, new List<string>()
+            //    {
+            //        Calibration.Key,
+            //    }),
+            //};
+            return result;
         }
 
-        private object GetDefaultForDeviceTypes()
+        private object GetDefaultForDeviceTypes(IEnumerable<IDictionariesArchiveFactory> dics)
         {
-            return new List<string>()
+            var result = new List<string>();
+            foreach (var archiveFactory in dics)
             {
-                ADTSModel.Key,
-            };
+                result.AddRange(archiveFactory.GetDefaultForDeviceTypes());
+            }
+            //return new List<string>()
+            //{
+            //    ADTSModel.Key,
+            //};
+            return result;
         }
         #endregion
     }

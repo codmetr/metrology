@@ -87,6 +87,7 @@ namespace KipTM.ViewModel
 
             SimpleIoc.Default.Register<IEventAggregator, EventAggregator.EventAggregator>();
             SimpleIoc.Default.Register<IArchive, ArchiveXML>();
+            SimpleIoc.Default.Register<IFeaturesDescriptor>(null/*TODO: добавить подгрузку всех возможностей*/);
             SimpleIoc.Default.Register<IMainSettings>(
                 () => ServiceLocator.Current.GetInstance<IArchive>()
                         .Load(MainSettings.SettingsFileName, ServiceLocator.Current.GetInstance < MainSettingsFactory >().GetDefault()));

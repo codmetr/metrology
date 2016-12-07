@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using CheckFrame.Model;
 using CheckFrame.Model.Channels;
 using IEEE488;
+using KipTM.Interfaces;
 using KipTM.Interfaces.Checks;
 using KipTM.Model.Channels;
 using KipTM.Model.Devices;
@@ -36,23 +37,23 @@ namespace KipTM.Model
 
         private IDictionary<Type, IDeviceFactory> _devicesFabrics;
 
-        private IDictionary<string, Func<object, ITransportIEEE488>> _channelsFabrics;
+        private IDictionary<string, Func<object, object>> _channelsFabrics;
 
 
-        public DeviceManager(IEnumerable<KeyValuePair<Type, IDeviceModelFactory>> models, IEnumerable<KeyValuePair<Type, IDeviceFactory>> devices, Logger logger = null)
+        public DeviceManager(IFeaturesDescriptor faetures, Logger logger = null)
         {
             _logger = logger;
 
             _loops = new Loops();
 
-            _modelFabrics = models.ToDictionary(el => el.Key, el => el.Value);
+            _modelFabrics = faetures.Models.ToDictionary(el => el.Key, el => el.Value);
             //_modelFabrics = new Dictionary<Type, Func<object>>()
             //{
             //    {typeof(ADTSModel), () => new ADTSModel(ADTSModel.Model, _loops, this)},
             //    {typeof(PACE1000Model), () => new PACE1000Model(PACE1000Model.Model, _loops, this)},
             //};
 
-            _devicesFabrics = devices.ToDictionary(el => el.Key, el => el.Value);
+            _devicesFabrics = faetures.Devices.ToDictionary(el => el.Key, el => el.Value);
             //_devicesFabrics = new Dictionary<Type, Func<object, object>>()
             //{
             //    {
@@ -82,28 +83,36 @@ namespace KipTM.Model
             //    },
             //};
 
-            _channelsFabrics = new Dictionary<string, Func<object, ITransportIEEE488>>()
-            {
-                {VisaChannelDescriptor.KeyType, opt =>
-                    {
-                        var visaSettings = opt as VisaSettings;
-                        if (visaSettings != null)
-                        {
-                            var transport = new VisaIEEE488();
-                            transport.Open(visaSettings.AddressFull);
-                            return transport;
-                        }
-                        throw new Exception(string.Format("Can not generate transport for key \"{0}\" with options [{0}]", VisaChannelDescriptor.KeyType, opt));
-                    }},
-                {FakeChannelDescriptor.KeyType, opt => new FakeTransport()}
-            };
-            _loops.AddLocker(VisaChannelDescriptor.KeyType, new object());
-            _loops.AddLocker(FakeChannelDescriptor.KeyType, new object());
+            _channelsFabrics = faetures.ChannelsFabrics.ToDictionary(el => el.Key, el => el.Value);
+            //_channelsFabrics = new Dictionary<string, Func<object, object>>()
+            //{
+            //    {VisaChannelDescriptor.KeyType, opt =>
+            //        {
+            //            var visaSettings = opt as VisaSettings;
+            //            if (visaSettings != null)
+            //            {
+            //                var transport = new VisaIEEE488();
+            //                transport.Open(visaSettings.AddressFull);
+            //                return transport;
+            //            }
+            //            throw new Exception(string.Format("Can not generate transport for key \"{0}\" with options [{0}]",
+            //                VisaChannelDescriptor.KeyType, opt));
+            //        }},
+            //    {FakeChannelDescriptor.KeyType, opt => new FakeTransport()}
+            //};
 
-            _ethalonChannels = new Dictionary<string, Func<ITransportChannelType, IEthalonChannel>>()
+            foreach (var fabric in faetures.ChannelsFabrics)
             {
-                {PACE1000Model.Key, (transportDescriptor)=> new PACEEthalonChannel(GetModel<PACE1000Model>())}
-            };
+                _loops.AddLocker(fabric.Key, new object());
+            }
+            //_loops.AddLocker(VisaChannelDescriptor.KeyType, new object());
+            //_loops.AddLocker(FakeChannelDescriptor.KeyType, new object());
+
+            _ethalonChannels = faetures.EthalonChannels.ToDictionary(el => el.Key, el => el.Value);
+            //_ethalonChannels = new Dictionary<string, Func<ITransportChannelType, IEthalonChannel>>()
+            //{
+            //    {PACE1000Model.Key, (transportDescriptor)=> new PACEEthalonChannel(GetModel<PACE1000Model>())}
+            //};
         }
 
         #region IDeviceManager

@@ -63,7 +63,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Channels\IDeviceFactory.cs" />
     <Compile Include="Checks\CheckConfig.cs" />
     <Compile Include="Checks\CheckConfigData.cs" />
     <Compile Include="Devices\DeviceFactoryAttribute.cs" />
@@ -71,8 +70,6 @@
     <Compile Include="Checks\ICheckViewModelFactory.cs" />
     <Compile Include="Checks\ViewModelFactoryAttribute.cs" />
     <Compile Include="Checks\ViewModel\ICheckFabrik.cs" />
-    <Compile Include="Devices\IDeviceFactory.cs" />
-    <Compile Include="Devices\IDeviceModelFactory.cs" />
     <Compile Include="Devices\UnitDescriptor.cs" />
     <Compile Include="EventAggregator\EventAggregator.cs" />
     <Compile Include="EventAggregator\EventSubscriber.cs" />

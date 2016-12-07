@@ -8,9 +8,13 @@ using System.Xml;
 using System.Xml.Serialization;
 using ArchiveData.DTO;
 using CheckFrame.Model;
+using IEEE488;
 using KipTM.Interfaces;
+using KipTM.Interfaces.Checks;
+using KipTM.Model.Channels;
 using KipTM.Settings;
 using KipTM.Model.Devices;
+using KipTM.Model.TransportChannels;
 using PACESeries;
 using SQLiteArchive;
 
@@ -49,13 +53,14 @@ namespace KipTM.Model
             _resultsArchive = new ResultsArchive();
         }
 
-        public void InitDevices()
+        public void InitDevices(IFeaturesDescriptor faetures)
         {
-            _deviceTypes.Add(new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer));
+            _deviceTypes.AddRange(faetures.DeviceTypes);
+            _ethalonTypes.AddRange(faetures.EthalonTypes);
+            //_deviceTypes.Add(new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer));
+            //_ethalonTypes.Add(new DeviceTypeDescriptor(PACE1000Model.Model, PACE1000Model.DeviceCommonType, PACE1000Model.DeviceManufacturer));
 
-            _ethalonTypes.Add(new DeviceTypeDescriptor(PACE1000Model.Model, PACE1000Model.DeviceCommonType, PACE1000Model.DeviceManufacturer));
-
-            _deviceManager = new DeviceManager(NLog.LogManager.GetLogger("DeviceManager"));
+            _deviceManager = new DeviceManager(faetures, NLog.LogManager.GetLogger("DeviceManager"));
         }
 
         /// <summary>
