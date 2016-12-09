@@ -127,7 +127,7 @@ namespace KipTM.Model
             if (!_modelFabrics.ContainsKey(typeof(T)))
                 throw new IndexOutOfRangeException(string.Format("For type [{0}] not found fabric", typeof(T)));
 
-            return (T)_modelFabrics[typeof(T)]();
+            return (T)_modelFabrics[typeof(T)].GetModel(_loops, this);
         }
 
         public T GetDevice<T>(ITransportChannelType transportDescription)
@@ -140,7 +140,7 @@ namespace KipTM.Model
 
             var chann = _channelsFabrics[transportDescription.Key](transportDescription.Settings);
 
-            return (T)_devicesFabrics[typeof (T)](chann);
+            return (T)_devicesFabrics[typeof (T)].GetDevice(chann);
         }
 
         #endregion

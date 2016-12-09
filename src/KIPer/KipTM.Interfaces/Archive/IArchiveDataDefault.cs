@@ -4,7 +4,7 @@ using KipTM.Archive.DataTypes;
 namespace KipTM.Interfaces.Archive
 {
     /// <summary>
-    /// Фабрика значений по умодлчанию для набора данных архива
+    /// Фабрика значений по умолчанию для набора данных архива
     /// </summary>
     public interface IArchiveDataDefault
     {

@@ -48,9 +48,9 @@ namespace KipTM.Design
             throw new NotImplementedException();
         }
 
-        public void InitDevices()
+        public void InitDevices(IFeaturesDescriptor faetures)
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
