@@ -60,10 +60,13 @@ namespace KipTM.ViewModel
 
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
             unityContainer.RegisterType<IArchive, ArchiveXML>();
+            unityContainer.RegisterInstance<IFeaturesDescriptor>(null/*TODO: добавить подгрузку всех возможностей*/);
             unityContainer.RegisterInstance<IMainSettings>(
                 unityContainer.Resolve<IArchive>()
                     .Load(MainSettings.SettingsFileName, unityContainer.Resolve<MainSettingsFactory>().GetDefault()));
-            unityContainer.RegisterInstance<IPropertiesLibrary>(new PropertiesLibrary(unityContainer.ResolveAll<IArchiveDataDefault>()));
+            unityContainer.RegisterInstance<IPropertiesLibrary>(new PropertiesLibrary(
+                unityContainer.ResolveAll<IArchiveDataDefault>(),
+                unityContainer.ResolveAll<IFeaturesDescriptor>()));
             unityContainer.RegisterInstance<IMarkerFabrik<IParameterResultViewModel>>(
                 MarkerFabrik<IParameterResultViewModel>.Locator);
             unityContainer.RegisterInstance<IFillerFabrik<IParameterResultViewModel>>(
@@ -87,10 +90,10 @@ namespace KipTM.ViewModel
 
             SimpleIoc.Default.Register<IEventAggregator, EventAggregator.EventAggregator>();
             SimpleIoc.Default.Register<IArchive, ArchiveXML>();
-            SimpleIoc.Default.Register<IFeaturesDescriptor>(null/*TODO: добавить подгрузку всех возможностей*/);
             SimpleIoc.Default.Register<IMainSettings>(
                 () => ServiceLocator.Current.GetInstance<IArchive>()
-                        .Load(MainSettings.SettingsFileName, ServiceLocator.Current.GetInstance < MainSettingsFactory >().GetDefault()));
+                        .Load(MainSettings.SettingsFileName,
+                        ServiceLocator.Current.GetInstance < MainSettingsFactory >().GetDefault()));
             SimpleIoc.Default.Register<IPropertiesLibrary, PropertiesLibrary>();
             SimpleIoc.Default.Register<IMarkerFabrik<IParameterResultViewModel>>(
                 () => MarkerFabrik<IParameterResultViewModel>.Locator, false);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ArchiveData.DTO;
+using KipTM.Archive.DataTypes;
 using KipTM.Interfaces.Checks;
 using KipTM.Model.Channels;
 using KipTM.Model.TransportChannels;
@@ -36,5 +37,10 @@ namespace KipTM.Interfaces
         /// Фабрики каналов эталонов
         /// </summary>
         IEnumerable<KeyValuePair<string, Func<ITransportChannelType, IEthalonChannel>>> EthalonChannels { get; }
+        /// <summary>
+        /// Получить набор поддерживаемых типов проверок по типам устройств
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ArchivedKeyValuePair> GetDefaultForCheckTypes();
     }
 }

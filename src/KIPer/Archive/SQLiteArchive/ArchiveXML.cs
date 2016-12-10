@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -61,6 +57,7 @@ namespace SQLiteArchive
         /// </summary>
         /// <typeparam name="T">entity Type</typeparam>
         /// <param name="key">key entity</param>
+        /// <param name="feautures"></param>
         /// <param name="def">default value entity</param>
         /// <returns>value entity</returns>
         public T Load<T>(string key, T def = default (T))

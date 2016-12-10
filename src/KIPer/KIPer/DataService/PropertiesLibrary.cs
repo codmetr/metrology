@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using KipTM.Archive;
+using KipTM.Interfaces;
 using KipTM.Interfaces.Archive;
 
 namespace KipTM.Model
@@ -21,7 +22,7 @@ namespace KipTM.Model
         private readonly DictionariesPool _dictionariesPool;
 
 
-        public PropertiesLibrary(IEnumerable<IArchiveDataDefault> defaultFactories)
+        public PropertiesLibrary(IEnumerable<IArchiveDataDefault> defaultFactories, IEnumerable<IFeaturesDescriptor> features)
         {
             var def = new ArchiveBase(defaultFactories.SelectMany(el => el.GetDefaultData()).ToList());
             _propertyPool = new DataPool(ArchiveBase.LoadFromFile(PathProperties, def));
