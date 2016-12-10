@@ -58,6 +58,7 @@ namespace KipTM.ViewModel
         private DeviceTypeCollectionViewModel _etalonTypes;
         private Workflow.Workflow _workflow;
         private List<IWorkflowStep> _steps;
+        private CustomConfigFactory _customFactory;
 
         private string _helpMessage;
         private bool _isError;
@@ -80,7 +81,7 @@ namespace KipTM.ViewModel
             IEventAggregator eventAggregator, IDataService dataService, IMethodsService methodicService,
             IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive,
             IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
-            IReportFabrik reportFabric, IEnumerable<IService> services, IFeaturesDescriptor faetures)
+            IReportFabrik reportFabric, IEnumerable<IService> services, IFeaturesDescriptor faetures, IEnumerable<KeyValuePair<Type, ICustomConfigFactory>> customFatories)
         {
             try
             {
@@ -96,7 +97,7 @@ namespace KipTM.ViewModel
             _settings = settings;
             _propertiesLibrary = propertiesLibrary;
             _archive = archive;
-
+            _customFactory = new CustomConfigFactory(customFatories.ToDictionary(el=>el.Key, el=>el.Value));
             _dataService.LoadResults();
             _dataService.InitDevices(faetures);
             _resulMaker = resulMaker;
@@ -132,9 +133,8 @@ namespace KipTM.ViewModel
                     _propertiesLibrary.DictionariesPool, result);
                 var channelTargetDevice = new SelectChannelViewModel();
                 var channelEthalonDevice = new SelectChannelViewModel();
-                var configViewModelFabrik = new CustomConfigFabrik();
                 var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice,
-                    configViewModelFabrik);
+                    _customFactory);
 
                 _eventAggregator.Subscribe(this);
 

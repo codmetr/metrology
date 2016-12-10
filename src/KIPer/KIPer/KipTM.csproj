@@ -128,7 +128,6 @@
     <Compile Include="Archive\DataTypes\SimplyPair.cs" />
     <Compile Include="Archive\DictionariesArchive.cs" />
     <Compile Include="Archive\PropertyArchive.cs" />
-    <Compile Include="Checks\ViewModel\Config\ICustomConfigFabrik.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="DataService\PropertiesLibrary.cs" />
     <Compile Include="DataService\DeviceManager.cs" />
@@ -195,7 +194,6 @@
     <Compile Include="Workflow\View\WorkflowView.xaml.cs">
       <DependentUpon>WorkflowView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Converters\DoubleToTimespanConverter.cs" />
     <Compile Include="Devices\View\DeviceTypesView.xaml.cs">
       <DependentUpon>DeviceTypesView.xaml</DependentUpon>
     </Compile>

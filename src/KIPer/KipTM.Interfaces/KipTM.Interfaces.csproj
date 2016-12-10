@@ -59,12 +59,15 @@
     <Compile Include="Channels\UserChannel.cs" />
     <Compile Include="Channels\UserQueryType.cs" />
     <Compile Include="Checks\CheckStepConfig.cs" />
+    <Compile Include="Checks\CustomSettingsAttribute.cs" />
     <Compile Include="Checks\EventArgs\EventArgEnd.cs" />
     <Compile Include="Checks\EventArgs\EventArgError.cs" />
     <Compile Include="Checks\EventArgs\EventArgProgress.cs" />
     <Compile Include="Checks\EventArgs\EventArgStepResult.cs" />
     <Compile Include="Checks\EventArgs\EventArgTestStepResult.cs" />
     <Compile Include="Checks\ICheckMethod.cs" />
+    <Compile Include="Checks\ICustomConfigFabrik.cs" />
+    <Compile Include="Checks\ICustomSettingsViewModel.cs" />
     <Compile Include="Checks\IMethodViewModel.cs" />
     <Compile Include="Checks\ISubscriber.cs" />
     <Compile Include="Checks\Steps\ISettedEthalonChannel.cs" />

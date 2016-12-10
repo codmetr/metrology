@@ -17,7 +17,7 @@ namespace KipTM.ViewModel.Checks.Config
     public class CheckConfigViewModel : ViewModelBase
     {
         private readonly CheckConfig _model;
-        private readonly CustomConfigFabrik _customConfigFabrik;
+        private readonly CustomConfigFactory _customConfigFabrik;
         private SelectChannelViewModel _checkDeviceChanel;
         private SelectChannelViewModel _ethalonChanel;
         private ICustomSettingsViewModel _customSetiings;
@@ -27,7 +27,7 @@ namespace KipTM.ViewModel.Checks.Config
         /// <summary>
         /// Initializes a new instance of the CheckConfigViewModel class.
         /// </summary>
-        public CheckConfigViewModel(CheckConfig model, SelectChannelViewModel checkDeviceChanel, SelectChannelViewModel ethalonChanel, CustomConfigFabrik customConfigFabrik)
+        public CheckConfigViewModel(CheckConfig model, SelectChannelViewModel checkDeviceChanel, SelectChannelViewModel ethalonChanel, CustomConfigFactory customConfigFabrik)
         {
             _model = model;
             _customConfigFabrik = customConfigFabrik;

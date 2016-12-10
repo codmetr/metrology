@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="ArchiveDefaultFactory.cs" />
     <Compile Include="Checks\ADTSViewModelFactory.cs" />
+    <Compile Include="Checks\ViewModel\CustomConfigFabrik.cs" />
     <Compile Include="Devices\ADTSModelFactory.cs" />
     <Compile Include="Devices\ADTSFactory.cs" />
     <Compile Include="Devices\PACE1000Factory.cs" />
