@@ -5,6 +5,7 @@ using KipTM.Model.Devices;
 
 namespace KipTM.Archive
 {
+    /*TODO вспомнить как это использовать
     public class PropertyArchive : ArchiveBase
     {
 
@@ -47,5 +48,5 @@ namespace KipTM.Archive
             return data;
         }
         #endregion
-    }
+    }*/
 }
