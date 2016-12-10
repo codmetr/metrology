@@ -27,7 +27,9 @@ namespace KipTM.Model
             var def = new ArchiveBase(defaultFactories.SelectMany(el => el.GetDefaultData()).ToList());
             _propertyPool = new DataPool(ArchiveBase.LoadFromFile(PathProperties, def));
             //_propertyPool = new DataPool(ArchiveBase.LoadFromFile(PathProperties, PropertyArchive.GetDefault()));
-            _dictionariesArchive = ArchiveBase.LoadFromFile(PathDictionaries, DictionariesArchive.GetDefault());
+
+            var devices = features.SelectMany(el => el.GetDefaultForCheckTypes()).ToList();
+            _dictionariesArchive = ArchiveBase.LoadFromFile(PathDictionaries, DictionariesArchive.GetDefault(devices));
             _dictionariesPool = DictionariesPool.Load(_dictionariesArchive);
             //_checksArchive = ArchiveBase.LoadFromFile(PathArchive, new ArchiveBase());
             //_checksPool = ChecksPool.Load(_checksArchive);

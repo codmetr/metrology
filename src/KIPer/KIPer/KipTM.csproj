@@ -217,9 +217,6 @@
     <Compile Include="Services\SelectChannelView.xaml.cs">
       <DependentUpon>SelectChannelView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\PACE1000View.xaml.cs">
-      <DependentUpon>PACE1000View.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Services\ServicesView.xaml.cs">
       <DependentUpon>ServicesView.xaml</DependentUpon>
     </Compile>
@@ -327,14 +324,6 @@
     <Page Include="Services\SelectChannelView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Services\PACE1000View.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Services\PACE5000ViewStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Services\ServicesView.xaml">
       <SubType>Designer</SubType>
