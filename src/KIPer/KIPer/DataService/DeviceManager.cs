@@ -84,6 +84,7 @@ namespace KipTM.Model
             //};
 
             _channelsFabrics = faetures.ChannelsFabrics.ToDictionary(el => el.Key, el => el.Value);
+            if()
             //_channelsFabrics = new Dictionary<string, Func<object, object>>()
             //{
             //    {VisaChannelDescriptor.KeyType, opt =>

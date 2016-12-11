@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ADTS;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
@@ -12,6 +13,7 @@ using KipTM.Interfaces.Checks;
 using KipTM.Model.Channels;
 using KipTM.Model.TransportChannels;
 using KipTM.ViewModel.Checks;
+using PACESeries;
 
 namespace ADTSChecks
 {
@@ -32,8 +34,14 @@ namespace ADTSChecks
                 {typeof(ADTSModel), new ADTSModelFactory()},
                 {typeof(PACE1000Model), new PACE1000ModelFactory()},
             };
+            Devices = new List<KeyValuePair<Type, IDeviceFactory>>()
+            {
+                new KeyValuePair<Type, IDeviceFactory>(typeof(ADTSDriver), new ADTSFactory()),
+                new KeyValuePair<Type, IDeviceFactory>(typeof(PACE1000Driver), new PACE1000Factory()),
+            };
+            ChannelsFabrics = new List<KeyValuePair<string, Func<object, object>>>();
             /*TODO
-             * Devices = 
+             * 
              * ChannelsFabrics = 
              * EthalonChannels = 
              */
