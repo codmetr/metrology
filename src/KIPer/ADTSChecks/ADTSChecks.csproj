@@ -158,6 +158,10 @@
       <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
       <Name>Tools</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VisaChannel\VisaChannel.csproj">
+      <Project>{6068887a-ba48-4951-9d5d-7c7063688cdb}</Project>
+      <Name>VisaChannel</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

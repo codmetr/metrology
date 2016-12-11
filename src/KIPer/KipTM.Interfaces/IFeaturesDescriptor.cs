@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ArchiveData.DTO;
 using KipTM.Archive.DataTypes;
+using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks;
 using KipTM.Model.Channels;
 using KipTM.Model.TransportChannels;
@@ -32,7 +33,7 @@ namespace KipTM.Interfaces
         /// <summary>
         /// Фабрики каналов проверяемых устройств
         /// </summary>
-        IEnumerable<KeyValuePair<string, Func<object, object>>> ChannelsFabrics { get; }
+        IEnumerable<KeyValuePair<string, IChannelFactory>> ChannelsFactories { get; }
         /// <summary>
         /// Фабрики каналов эталонов
         /// </summary>

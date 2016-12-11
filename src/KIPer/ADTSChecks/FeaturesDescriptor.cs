@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ADTS;
+using ADTSChecks.Model.Channels;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
 using KipTM.Archive.DataTypes;
 using KipTM.Interfaces;
+using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks;
 using KipTM.Model.Channels;
 using KipTM.Model.TransportChannels;
@@ -39,20 +41,53 @@ namespace ADTSChecks
                 new KeyValuePair<Type, IDeviceFactory>(typeof(ADTSDriver), new ADTSFactory()),
                 new KeyValuePair<Type, IDeviceFactory>(typeof(PACE1000Driver), new PACE1000Factory()),
             };
-            ChannelsFabrics = new List<KeyValuePair<string, Func<object, object>>>();
+            var channelsFactories = new List<KeyValuePair<string, IChannelFactory>>();
+            var factoriesVisa = new VisaChannel.ChannelsFactory();
+            channelsFactories.AddRange(factoriesVisa.GetChannels());
+            ChannelsFactories = channelsFactories;
+
+            EthalonChannels = new List<KeyValuePair<string, Func<ITransportChannelType, IEthalonChannel>>>()
+            {
+                {PACE1000Model.Key, (transportDescriptor)=> {
+                    var model = new PACE1000ModelFactory().GetModel()
+                    return new PACEEthalonChannel(<PACE1000Model>(}));
+                }
+            };
             /*TODO
              * 
              * ChannelsFabrics = 
              * EthalonChannels = 
              */
         }
+        
+        /// <summary>
+        /// Описатель поддерживаемых типов устройств
+        /// </summary>
         public IEnumerable<DeviceTypeDescriptor> DeviceTypes { get; private set; }
+        /// <summary>
+        /// Описатель поддерживаемых типов эталонов
+        /// </summary>
         public IEnumerable<DeviceTypeDescriptor> EthalonTypes { get; private set; }
+        /// <summary>
+        /// Фабрики моделей для типов устройств
+        /// </summary>
         public IEnumerable<KeyValuePair<Type, IDeviceModelFactory>> Models { get; private set; }
+        /// <summary>
+        /// Фабрики драйверов устройств
+        /// </summary>
         public IEnumerable<KeyValuePair<Type, IDeviceFactory>> Devices { get; private set; }
-        public IEnumerable<KeyValuePair<string, Func<object, object>>> ChannelsFabrics { get; private set; }
+        /// <summary>
+        /// Фабрики каналов проверяемых устройств
+        /// </summary>
+        public IEnumerable<KeyValuePair<string, IChannelFactory>> ChannelsFactories { get; private set; }
+        /// <summary>
+        /// Фабрики каналов эталонов
+        /// </summary>
         public IEnumerable<KeyValuePair<string, Func<ITransportChannelType, IEthalonChannel>>> EthalonChannels { get; private set;}
-
+        /// <summary>
+        /// Получить набор поддерживаемых типов проверок по типам устройств
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<ArchivedKeyValuePair> GetDefaultForCheckTypes()
         {
             return new List<ArchivedKeyValuePair>

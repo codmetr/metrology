@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChannelsFactory.cs" />
+    <Compile Include="VisaFakeFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransportChannels\Fake\FakeChannelDescriptor.cs" />
     <Compile Include="TransportChannels\Visa\VisaChannelDescriptor.cs" />
@@ -46,6 +48,7 @@
     <Compile Include="TransportChannels\Visa\VisaSettingsView.xaml.cs">
       <DependentUpon>VisaSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VisaFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="TransportChannels\Visa\VisaSettingsView.xaml">
@@ -54,6 +57,14 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ADTS\ADTS.csproj">
+      <Project>{E032255A-AD56-44CD-8525-87293538E958}</Project>
+      <Name>ADTS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IEEE488Transport\IEEE488.csproj">
+      <Project>{3FEC76C3-B933-4461-AA8D-85360D3F41C4}</Project>
+      <Name>IEEE488</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
       <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
       <Name>KipTM.Interfaces</Name>

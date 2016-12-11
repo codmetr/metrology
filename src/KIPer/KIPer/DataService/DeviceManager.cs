@@ -10,6 +10,7 @@ using CheckFrame.Model;
 using CheckFrame.Model.Channels;
 using IEEE488;
 using KipTM.Interfaces;
+using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks;
 using KipTM.Model.Channels;
 using KipTM.Model.Devices;
@@ -37,7 +38,7 @@ namespace KipTM.Model
 
         private IDictionary<Type, IDeviceFactory> _devicesFabrics;
 
-        private IDictionary<string, Func<object, object>> _channelsFabrics;
+        private IDictionary<string, IChannelFactory> _channelsFabrics;
 
 
         public DeviceManager(IFeaturesDescriptor faetures, Logger logger = null)
@@ -83,8 +84,7 @@ namespace KipTM.Model
             //    },
             //};
 
-            _channelsFabrics = faetures.ChannelsFabrics.ToDictionary(el => el.Key, el => el.Value);
-            if()
+            _channelsFabrics = faetures.ChannelsFactories.ToDictionary(el => el.Key, el => el.Value);
             //_channelsFabrics = new Dictionary<string, Func<object, object>>()
             //{
             //    {VisaChannelDescriptor.KeyType, opt =>
@@ -102,7 +102,7 @@ namespace KipTM.Model
             //    {FakeChannelDescriptor.KeyType, opt => new FakeTransport()}
             //};
 
-            foreach (var fabric in faetures.ChannelsFabrics)
+            foreach (var fabric in faetures.ChannelsFactories)
             {
                 _loops.AddLocker(fabric.Key, new object());
             }

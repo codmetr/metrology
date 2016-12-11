@@ -22,5 +22,10 @@ namespace KipTM.Model.TransportChannels
         }
 
         public string AddressFull { get; private set; }
+
+        public override string ToString()
+        {
+            return string.Format("Visa:{0}", AddressFull);
+        }
     }
 }

@@ -85,7 +85,6 @@ namespace KipTM.ViewModel
 
             #endregion
 
-
             #region old config
 
             SimpleIoc.Default.Register<IEventAggregator, EventAggregator.EventAggregator>();
