@@ -28,7 +28,7 @@ namespace KipTM.Model
 
         private readonly ILoops _loops = new Loops();
 
-        private readonly IDictionary<string, Func<ITransportChannelType, IEthalonChannel>> _ethalonChannels;
+        private readonly IDictionary<string, IEthalonCannelFactory> _ethalonChannels;
 
         private readonly IDictionary<string, Tuple<ITransportIEEE488, SerialPort>> _ports = new Dictionary<string, Tuple<ITransportIEEE488, SerialPort>>();
 
@@ -118,17 +118,23 @@ namespace KipTM.Model
 
         #region IDeviceManager
 
-        public IEthalonChannel GetEthalonChannel(string deviceKey, ITransportChannelType settings)
+        public IEthalonChannel GetEthalonChannel(string deviceKey)
         {
-            return _ethalonChannels[deviceKey](settings);
+            var model = GetModel(_ethalonChannels[deviceKey].ModelType);
+            return _ethalonChannels[deviceKey].GetChanel(model);
         }
 
         public T GetModel<T>()
         {
-            if (!_modelFabrics.ContainsKey(typeof(T)))
-                throw new IndexOutOfRangeException(string.Format("For type [{0}] not found fabric", typeof(T)));
+            return (T)GetModel(typeof(T));
+        }
 
-            return (T)_modelFabrics[typeof(T)].GetModel(_loops, this);
+        private object GetModel(Type modelType)
+        {
+            if (!_modelFabrics.ContainsKey(modelType))
+                throw new IndexOutOfRangeException(string.Format("For type [{0}] not found fabric", modelType));
+
+            return _modelFabrics[modelType].GetModel(_loops, this);
         }
 
         public T GetDevice<T>(ITransportChannelType transportDescription)
@@ -139,7 +145,7 @@ namespace KipTM.Model
             if (!_channelsFabrics.ContainsKey(transportDescription.Key))
                 throw new IndexOutOfRangeException(string.Format("For channel [{0}] not found fabric", transportDescription.Key));
 
-            var chann = _channelsFabrics[transportDescription.Key](transportDescription.Settings);
+            var chann = _channelsFabrics[transportDescription.Key].GetDriver(transportDescription.Settings);
 
             return (T)_devicesFabrics[typeof (T)].GetDevice(chann);
         }

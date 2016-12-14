@@ -71,7 +71,7 @@ namespace KipTM.ViewModel.Checks
             if (checkConfig.EthalonTypeKey == UserEthalonChannel.Key)
                 method.SetEthalonChannel(null, null);
             else
-                method.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonTypeKey, ethalonChanel), ethalonChanel);
+                method.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonTypeKey), ethalonChanel);
 
             if (method is Calibration)
             {

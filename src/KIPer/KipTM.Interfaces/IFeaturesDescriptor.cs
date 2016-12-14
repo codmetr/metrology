@@ -37,7 +37,7 @@ namespace KipTM.Interfaces
         /// <summary>
         /// Фабрики каналов эталонов
         /// </summary>
-        IEnumerable<KeyValuePair<string, Func<ITransportChannelType, IEthalonChannel>>> EthalonChannels { get; }
+        IEnumerable<KeyValuePair<string, IEthalonCannelFactory>> EthalonChannels { get; }
         /// <summary>
         /// Получить набор поддерживаемых типов проверок по типам устройств
         /// </summary>

@@ -126,7 +126,7 @@ namespace ADTSChecks.Checks.ViewModel
             _ethalonTypeKey = ethalonTypeKey;
             _ethalonChannelType = settings;
             State.IsUserChannel = _ethalonTypeKey == null;
-            EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType);
+            EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey);
         }
 
         /// <summary>
@@ -313,7 +313,7 @@ namespace ADTSChecks.Checks.ViewModel
             }
             // Задаем эталон
             if (_ethalonTypeKey != null && _ethalonChannelType != null)
-                Method.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey, _ethalonChannelType), _ethalonChannelType);
+                Method.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey), _ethalonChannelType);
             else
                 Method.SetEthalonChannel(_userEchalonChannel, null);
             // Запускаем

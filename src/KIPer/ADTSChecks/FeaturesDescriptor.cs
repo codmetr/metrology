@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ADTS;
+using ADTSChecks.Channels;
 using ADTSChecks.Model.Channels;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
@@ -46,18 +47,10 @@ namespace ADTSChecks
             channelsFactories.AddRange(factoriesVisa.GetChannels());
             ChannelsFactories = channelsFactories;
 
-            EthalonChannels = new List<KeyValuePair<string, Func<ITransportChannelType, IEthalonChannel>>>()
+            EthalonChannels = new List<KeyValuePair<string, IEthalonCannelFactory>>()
             {
-                {PACE1000Model.Key, (transportDescriptor)=> {
-                    var model = new PACE1000ModelFactory().GetModel()
-                    return new PACEEthalonChannel(<PACE1000Model>(}));
-                }
+                new KeyValuePair<string, IEthalonCannelFactory>(PACE1000Model.Key, new PACEEthalonChannelFactory())
             };
-            /*TODO
-             * 
-             * ChannelsFabrics = 
-             * EthalonChannels = 
-             */
         }
         
         /// <summary>
@@ -83,7 +76,7 @@ namespace ADTSChecks
         /// <summary>
         /// Фабрики каналов эталонов
         /// </summary>
-        public IEnumerable<KeyValuePair<string, Func<ITransportChannelType, IEthalonChannel>>> EthalonChannels { get; private set;}
+        public IEnumerable<KeyValuePair<string, IEthalonCannelFactory>> EthalonChannels { get; private set; }
         /// <summary>
         /// Получить набор поддерживаемых типов проверок по типам устройств
         /// </summary>
