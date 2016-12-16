@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ADTS;
 using ADTSChecks.Channels;
-using ADTSChecks.Model.Channels;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
@@ -13,8 +9,6 @@ using KipTM.Archive.DataTypes;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks;
-using KipTM.Model.Channels;
-using KipTM.Model.TransportChannels;
 using KipTM.ViewModel.Checks;
 using PACESeries;
 

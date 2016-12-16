@@ -8,7 +8,7 @@ namespace KipTM.View.Checks
     /// <summary>
     /// Interaction logic for ADTSConfigView.xaml
     /// </summary>
-    [View(typeof(CheckConfigViewModel))]
+    [View(typeof(AdtsCheckConfVm))]
     public partial class ADTSConfigView : UserControl
     {
         public ADTSConfigView()

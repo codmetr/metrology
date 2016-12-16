@@ -14,7 +14,7 @@ namespace ADTSChecks.Checks.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class CheckConfigViewModel : ViewModelBase, ICustomSettingsViewModel
+    public class AdtsCheckConfVm : ViewModelBase, ICustomSettingsViewModel
     {
         private ADTSParameters _customConf;
         private ObservableCollection<ADTSPoint> _points;
@@ -29,7 +29,7 @@ namespace ADTSChecks.Checks.ViewModel
         /// <summary>
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
         /// </summary>
-        public CheckConfigViewModel(ADTSParameters customConf)
+        public AdtsCheckConfVm(ADTSParameters customConf)
         {
             _customConf = customConf;
             _points = new ObservableCollection<ADTSPoint>(_customConf.Points);

@@ -10,7 +10,7 @@ namespace KipTM.Checks.ViewModel.Config
         public ICustomSettingsViewModel GetCustomSettings(object customSettings)
         {
             if (customSettings is ADTSParameters)
-                return new ADTSChecks.Checks.ViewModel.CheckConfigViewModel(customSettings as ADTSParameters);
+                return new ADTSChecks.Checks.ViewModel.AdtsCheckConfVm(customSettings as ADTSParameters);
             return null;
         }
     }

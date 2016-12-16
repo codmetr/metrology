@@ -148,9 +148,6 @@
     </Compile>
     <Compile Include="Settings\MainSettingsFactory.cs" />
     <Compile Include="Settings\MainSettings.cs" />
-    <Compile Include="TransportChannels\Fake\FakeChannelDescriptor.cs" />
-    <Compile Include="TransportChannels\Visa\VisaChannelDescriptor.cs" />
-    <Compile Include="TransportChannels\Visa\VisaSettings.cs" />
     <Compile Include="Checks\ViewModel\Config\CustomConfigFabrik.cs" />
     <Compile Include="Report\ViewModel\IReportViewModel.cs" />
     <Compile Include="Report\ViewModel\ReportViewModel.cs" />
@@ -223,9 +220,6 @@
     </Compile>
     <Compile Include="Archive\View\ResultView.xaml.cs">
       <DependentUpon>ResultView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TransportChannels\Visa\VisaSettingsView.xaml.cs">
-      <DependentUpon>VisaSettingsView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -335,10 +329,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TransportChannels\Visa\VisaSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -428,6 +418,10 @@
     <ProjectReference Include="..\Tools\Tools.csproj">
       <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
       <Name>Tools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisaChannel\VisaChannel.csproj">
+      <Project>{82E6C917-C316-4664-B858-401F8C08514F}</Project>
+      <Name>VisaChannel</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

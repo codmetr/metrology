@@ -103,7 +103,7 @@
     <Compile Include="Checks\ViewModel\CheckStateViewModel.cs" />
     <Compile Include="Checks\ViewModel\TestViewModel.cs" />
     <Compile Include="Channels\ViewModel\PACEEchalonChannelViewModel.cs" />
-    <Compile Include="Checks\ViewModel\CheckConfigViewModel.cs" />
+    <Compile Include="Checks\ViewModel\AdtsCheckConfVm.cs" />
     <Compile Include="Checks\ViewModel\DoubleBindingRule.cs" />
     <Compile Include="Result\ResultFiller\ADTS\ADTSCheckPointFiller.cs" />
     <Compile Include="Result\ResultFiller\ADTS\ADTSTestPointFiller.cs" />
@@ -160,7 +160,7 @@
       <Name>Tools</Name>
     </ProjectReference>
     <ProjectReference Include="..\VisaChannel\VisaChannel.csproj">
-      <Project>{6068887a-ba48-4951-9d5d-7c7063688cdb}</Project>
+      <Project>{82e6c917-c316-4664-b858-401f8c08514f}</Project>
       <Name>VisaChannel</Name>
     </ProjectReference>
   </ItemGroup>

@@ -3,12 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:checks="clr-namespace:KipTM.ViewModel.Checks;assembly=ADTSChecks"
-             xmlns:checks3="clr-namespace:ADTSChecks.Model.Checks;assembly=ADTSChecks"
              xmlns:data="clr-namespace:ADTSChecks.Checks.Data;assembly=ADTSChecks"
-             xmlns:viewModel="clr-namespace:ADTSChecks.Checks.ViewModel;assembly=ADTSChecks"
+             xmlns:vm="clr-namespace:ADTSChecks.Checks.ViewModel;assembly=ADTSChecks"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{d:DesignInstance viewModel:CheckConfigViewModel}">
+             d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{d:DesignInstance vm:AdtsCheckConfVm}">
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="5"/>
@@ -154,7 +152,7 @@
                         <TextBox.Text>
                             <Binding Path="NewPressure" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
-                                    <viewModel:DoubleBindingRule/>
+                                    <vm:DoubleBindingRule/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
@@ -166,7 +164,7 @@
                     <TextBox Width="70" >
                         <Binding Path="NewTolerance" NotifyOnValidationError="True" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
-                                <viewModel:DoubleBindingRule/>
+                                <vm:DoubleBindingRule/>
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox>
