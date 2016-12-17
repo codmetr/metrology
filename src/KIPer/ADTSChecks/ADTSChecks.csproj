@@ -101,7 +101,7 @@
     <Compile Include="Checks\ViewModel\ADTSBaseViewModel.cs" />
     <Compile Include="Checks\Calibration\CalibrationViewModel.cs" />
     <Compile Include="Checks\ViewModel\CheckStateViewModel.cs" />
-    <Compile Include="Checks\ViewModel\TestViewModel.cs" />
+    <Compile Include="Checks\Test\TestViewModel.cs" />
     <Compile Include="Channels\ViewModel\PACEEchalonChannelViewModel.cs" />
     <Compile Include="Checks\ViewModel\AdtsCheckConfVm.cs" />
     <Compile Include="Checks\ViewModel\DoubleBindingRule.cs" />

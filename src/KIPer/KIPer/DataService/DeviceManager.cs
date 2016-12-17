@@ -32,20 +32,20 @@ namespace KipTM.Model
         private IDictionary<string, IChannelFactory> _channelsFabrics;
 
 
-        public DeviceManager(IFeaturesDescriptor faetures, Logger logger = null)
+        public DeviceManager(IFeaturesDescriptor features, Logger logger = null)
         {
             _logger = logger;
 
             _loops = new Loops();
 
-            _modelFabrics = faetures.Models.ToDictionary(el => el.Key, el => el.Value);
+            _modelFabrics = features.Models.ToDictionary(el => el.Key, el => el.Value);
             //_modelFabrics = new Dictionary<Type, Func<object>>()
             //{
             //    {typeof(ADTSModel), () => new ADTSModel(ADTSModel.Model, _loops, this)},
             //    {typeof(PACE1000Model), () => new PACE1000Model(PACE1000Model.Model, _loops, this)},
             //};
 
-            _devicesFabrics = faetures.Devices.ToDictionary(el => el.Key, el => el.Value);
+            _devicesFabrics = features.Devices.ToDictionary(el => el.Key, el => el.Value);
             //_devicesFabrics = new Dictionary<Type, Func<object, object>>()
             //{
             //    {
@@ -75,7 +75,7 @@ namespace KipTM.Model
             //    },
             //};
 
-            _channelsFabrics = faetures.ChannelsFactories.ToDictionary(el => el.Key, el => el.Value);
+            _channelsFabrics = features.ChannelsFactories.ToDictionary(el => el.Key, el => el.Value);
             //_channelsFabrics = new Dictionary<string, Func<object, object>>()
             //{
             //    {VisaChannelDescriptor.KeyType, opt =>
@@ -93,14 +93,14 @@ namespace KipTM.Model
             //    {FakeChannelDescriptor.KeyType, opt => new FakeTransport()}
             //};
 
-            foreach (var fabric in faetures.ChannelsFactories)
+            foreach (var fabric in features.ChannelsFactories)
             {
                 _loops.AddLocker(fabric.Key, new object());
             }
             //_loops.AddLocker(VisaChannelDescriptor.KeyType, new object());
             //_loops.AddLocker(FakeChannelDescriptor.KeyType, new object());
 
-            _ethalonChannels = faetures.EthalonChannels.ToDictionary(el => el.Key, el => el.Value);
+            _ethalonChannels = features.EthalonChannels.ToDictionary(el => el.Key, el => el.Value);
             //_ethalonChannels = new Dictionary<string, Func<ITransportChannelType, IEthalonChannel>>()
             //{
             //    {PACE1000Model.Key, (transportDescriptor)=> new PACEEthalonChannel(GetModel<PACE1000Model>())}
