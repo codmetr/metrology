@@ -9,13 +9,16 @@
   DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
 */
 
+using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
 using CheckFrame.ViewModel.Archive;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using KipTM.Archive;
+using KipTM.Checks.ViewModel.Config;
 using KipTM.Interfaces;
+using KipTM.Interfaces.Checks;
 using KipTM.Settings;
 using KipTM.ViewModel.ResultFiller;
 using MarkerService;
@@ -31,6 +34,7 @@ using KipTM.Interfaces.Archive;
 using Microsoft.Practices.Unity;
 using ReportService;
 using SQLiteArchive;
+using Tools;
 using UnityServiceLocator = KipTM.IOC.UnityServiceLocator;
 
 namespace KipTM.ViewModel
@@ -58,9 +62,24 @@ namespace KipTM.ViewModel
 
             #region new config
 
+            var cconfFactories = unityContainer.ResolveAll<ICustomConfigFactory>();
+
+            var factoryDic = new Dictionary<Type, ICustomConfigFactory>();
+            foreach (var factory in cconfFactories)
+            {
+                var atrs = factory.GetType().GetAttributes(typeof (CustomSettingsAttribute)).OfType<CustomSettingsAttribute>();
+                foreach (var atr in atrs)
+                {
+                    if(!factoryDic.ContainsKey(atr.ArgumentType))
+                        factoryDic.Add(atr.ArgumentType, factory);
+                }
+            }
+
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
             unityContainer.RegisterType<IArchive, ArchiveXML>();
-            unityContainer.RegisterInstance<IFeaturesDescriptor>(null/*TODO: добавить подгрузку всех возможностей*/);
+            unityContainer.RegisterInstance<IEnumerable<IDeviceSettingsFactory>>(unityContainer.ResolveAll<IDeviceSettingsFactory>());
+            unityContainer.RegisterInstance<IEnumerable<IEthalonSettingsFactory>>(unityContainer.ResolveAll<IEthalonSettingsFactory>());
+            unityContainer.RegisterInstance<IEnumerable<IDeviceTypeSettingsFactory>>(unityContainer.ResolveAll<IDeviceTypeSettingsFactory>());
             unityContainer.RegisterInstance<IMainSettings>(
                 unityContainer.Resolve<IArchive>()
                     .Load(MainSettings.SettingsFileName, unityContainer.Resolve<MainSettingsFactory>().GetDefault()));
@@ -80,6 +99,10 @@ namespace KipTM.ViewModel
             {
                 unityContainer.RegisterType<IDataService, DataService>();
             }
+            unityContainer.RegisterInstance<IEnumerable<IMethodFactory>>(unityContainer.ResolveAll<IMethodFactory>());
+            unityContainer.RegisterInstance<IEnumerable<IService>>(unityContainer.ResolveAll<IService>());
+            unityContainer.RegisterInstance<IDictionary<Type, ICustomConfigFactory>>(factoryDic);
+            unityContainer.RegisterInstance<IEnumerable<IFeaturesDescriptor>>(unityContainer.ResolveAll<IFeaturesDescriptor>());
             unityContainer.RegisterType<IMethodsService, MethodsService>();
             unityContainer.RegisterType<MainViewModel>();
 

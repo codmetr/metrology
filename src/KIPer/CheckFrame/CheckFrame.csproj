@@ -84,6 +84,7 @@
     <Compile Include="Checks\Steps\IStoppedOnPoint.cs" />
     <Compile Include="Checks\Steps\IToBaseStep.cs" />
     <Compile Include="Checks\Steps\TestStep.cs" />
+    <Compile Include="FeatureDescriptorsCombiner.cs" />
     <Compile Include="Services\ViewModel\FillReport\FillReportViewModel.cs" />
     <Compile Include="Services\ViewModel\FillReport\FormulaAbsError.cs" />
     <Compile Include="Services\ViewModel\FillReport\FormulaComplexError.cs" />

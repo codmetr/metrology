@@ -6,11 +6,11 @@ namespace KipTM.Checks.ViewModel.Config
 {
     public class CustomConfigFactory : ICustomConfigFactory
     {
-        private Dictionary<Type, ICustomConfigFactory> _factories;
+        private IDictionary<Type, ICustomConfigFactory> _factories;
 
-        public CustomConfigFactory(Dictionary<Type, ICustomConfigFactory> factories)
+        public CustomConfigFactory(IDictionary<Type, ICustomConfigFactory> factories)
         {
-            _factories = new Dictionary<Type, ICustomConfigFactory>(factories);
+            _factories = factories;
         }
 
         public ICustomSettingsViewModel GetCustomSettings(object customSettings)

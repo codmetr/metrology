@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using ArchiveData.DTO;
+using CheckFrame;
 using CheckFrame.ViewModel.Archive;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -81,7 +82,7 @@ namespace KipTM.ViewModel
             IEventAggregator eventAggregator, IDataService dataService, IMethodsService methodicService,
             IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive,
             IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
-            IReportFabrik reportFabric, IEnumerable<IService> services, IFeaturesDescriptor faetures, IEnumerable<KeyValuePair<Type, ICustomConfigFactory>> customFatories)
+            IReportFabrik reportFabric, IEnumerable<IService> services, IEnumerable<IFeaturesDescriptor> faetures, IDictionary<Type, ICustomConfigFactory> customFatories)
         {
             try
             {
@@ -97,9 +98,9 @@ namespace KipTM.ViewModel
             _settings = settings;
             _propertiesLibrary = propertiesLibrary;
             _archive = archive;
-            _customFactory = new CustomConfigFactory(customFatories.ToDictionary(el=>el.Key, el=>el.Value));
+            _customFactory = new CustomConfigFactory(customFatories);
             _dataService.LoadResults();
-            _dataService.InitDevices(faetures);
+            _dataService.InitDevices(new FeatureDescriptorsCombiner(faetures));
             _resulMaker = resulMaker;
             _filler = filler;
             _reportFabric = reportFabric;

@@ -458,7 +458,11 @@ COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.dll" "$(TargetDir)Re
 COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.pdb" "$(TargetDir)Reports\ReportAdts.pdb"
 mkdir "$(TargetDir)Libs"
 COPY "$(SolutionDir)ADTSChecks\bin\Debug\ADTSChecks.dll" "$(TargetDir)Libs\ADTSChecks.dll"
-COPY "$(SolutionDir)ADTSView\bin\Debug\ADTSView.dll" "$(TargetDir)Libs\ADTSView.dll"</PostBuildEvent>
+COPY "$(SolutionDir)ADTSView\bin\Debug\ADTSView.dll" "$(TargetDir)Libs\ADTSView.dll"
+COPY "$(SolutionDir)VisaChannel\bin\Debug\VisaChannel.dll" "$(TargetDir)Libs\VisaChannel.dll"
+COPY "$(SolutionDir)ADTS\bin\Debug\ADTS.dll" "$(TargetDir)Libs\ADTS.dll"
+COPY "$(SolutionDir)ADTSData\bin\Debug\ADTSData.dll" "$(TargetDir)Libs\ADTSData.dll"
+COPY "$(SolutionDir)IEEE488Transport\bin\Debug\IEEE488.dll" "$(TargetDir)Libs\IEEE488.dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
