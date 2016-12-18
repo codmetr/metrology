@@ -80,7 +80,7 @@ namespace KipTM.ViewModel
                 }
             }
 
-            unityContainer.RegisterTypes(pluginsTypes);
+            //unityContainer.RegisterTypes(pluginsTypes);
             if (ViewModelBase.IsInDesignModeStatic)
             {
                 unityContainer.RegisterType<IDataService, DesignDataService>();
@@ -89,26 +89,48 @@ namespace KipTM.ViewModel
             {
                 unityContainer.RegisterType<IDataService, Model.DataService>();
             }
+
+            foreach (var type in pluginsTypes)
+            {
+                if (typeof(IDeviceSettingsFactory).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof(IDeviceSettingsFactory), type);
+                if (typeof(IEthalonSettingsFactory).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof(IEthalonSettingsFactory), type);
+                if (typeof(IDeviceTypeSettingsFactory).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof(IDeviceTypeSettingsFactory), type);
+                if (typeof(IMethodFactory).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof(IMethodFactory), type);
+                if (typeof(IService).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof(IService), type);
+                if (typeof(IFeaturesDescriptor).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof(IFeaturesDescriptor), type);
+                if (typeof(IArchiveDataDefault).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof(IArchiveDataDefault), type);
+                //if (typeof(IReportFabrik).IsSubclassOf(type))
+                //    unityContainer.RegisterType(typeof(IReportFabrik), type);
+            }
+
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
             unityContainer.RegisterType<IArchive, ArchiveXML>();
-            unityContainer.RegisterInstance<IEnumerable<IDeviceSettingsFactory>>(unityContainer.ResolveAll<IDeviceSettingsFactory>());
-            unityContainer.RegisterInstance<IEnumerable<IEthalonSettingsFactory>>(unityContainer.ResolveAll<IEthalonSettingsFactory>());
-            unityContainer.RegisterInstance<IEnumerable<IDeviceTypeSettingsFactory>>(unityContainer.ResolveAll<IDeviceTypeSettingsFactory>());
-            unityContainer.RegisterInstance<IMainSettings>(
-                unityContainer.Resolve<IArchive>()
+            unityContainer.RegisterInstance<IEnumerable<IDeviceSettingsFactory>>(unityContainer.ResolveAll<IDeviceSettingsFactory>().ToList());
+            unityContainer.RegisterInstance<IEnumerable<IEthalonSettingsFactory>>(unityContainer.ResolveAll<IEthalonSettingsFactory>().ToList());
+            unityContainer.RegisterInstance<IEnumerable<IDeviceTypeSettingsFactory>>(unityContainer.ResolveAll<IDeviceTypeSettingsFactory>().ToList());
+            unityContainer.RegisterInstance<IEnumerable<IMethodFactory>>(unityContainer.ResolveAll<IMethodFactory>().ToList());
+            unityContainer.RegisterInstance<IEnumerable<IService>>(unityContainer.ResolveAll<IService>().ToList());
+            unityContainer.RegisterInstance<IEnumerable<IFeaturesDescriptor>>(unityContainer.ResolveAll<IFeaturesDescriptor>().ToList());
+            unityContainer.RegisterInstance<IEnumerable<IArchiveDataDefault>>(unityContainer.ResolveAll<IArchiveDataDefault>().ToList());
+            unityContainer.RegisterInstance<IMainSettings>(unityContainer.Resolve<IArchive>()
                     .Load(MainSettings.SettingsFileName, unityContainer.Resolve<MainSettingsFactory>().GetDefault()));
-            unityContainer.RegisterInstance<IPropertiesLibrary>(new PropertiesLibrary(
-                unityContainer.ResolveAll<IArchiveDataDefault>(),
-                unityContainer.ResolveAll<IFeaturesDescriptor>()));
+            unityContainer.RegisterType<IPropertiesLibrary, PropertiesLibrary>();
+            //unityContainer.RegisterInstance<IPropertiesLibrary>(new PropertiesLibrary(
+            //    unityContainer.ResolveAll<IArchiveDataDefault>(),
+            //    unityContainer.ResolveAll<IFeaturesDescriptor>()));
             unityContainer.RegisterInstance<IMarkerFabrik<IParameterResultViewModel>>(
                 MarkerFabrik<IParameterResultViewModel>.Locator);
             unityContainer.RegisterInstance<IFillerFabrik<IParameterResultViewModel>>(
                 FillerFabrik<IParameterResultViewModel>.Locator);
             unityContainer.RegisterInstance<IReportFabrik>(ReportFabrik.Locator);
-            unityContainer.RegisterInstance<IEnumerable<IMethodFactory>>(unityContainer.ResolveAll<IMethodFactory>());
-            unityContainer.RegisterInstance<IEnumerable<IService>>(unityContainer.ResolveAll<IService>());
             unityContainer.RegisterInstance<IDictionary<Type, ICustomConfigFactory>>(factoryDic);
-            unityContainer.RegisterInstance<IEnumerable<IFeaturesDescriptor>>(unityContainer.ResolveAll<IFeaturesDescriptor>());
             unityContainer.RegisterType<IMethodsService, MethodsService>();
             unityContainer.RegisterType<MainViewModel>();
 
