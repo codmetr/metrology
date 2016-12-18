@@ -53,7 +53,12 @@ namespace KipTM.ViewModel
         {
             var path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Libs");
             var referencedPaths = Directory.GetFiles(path, "*.dll").ToList();
-            referencedPaths.ForEach(p => AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(p)));
+            var assemblies = new List<Assembly>();
+            referencedPaths.ForEach(p => assemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(p))));
+
+            var pluginsTypes =
+                assemblies.SelectMany(
+                    el => el.GetExportedTypes());
 
             UnityContainer unityContainer = new UnityContainer();
 
@@ -75,6 +80,7 @@ namespace KipTM.ViewModel
                 }
             }
 
+            unityContainer.RegisterTypes(pluginsTypes);
             if (ViewModelBase.IsInDesignModeStatic)
             {
                 unityContainer.RegisterType<IDataService, DesignDataService>();
