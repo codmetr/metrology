@@ -82,7 +82,8 @@ namespace KipTM.ViewModel
             IEventAggregator eventAggregator, IDataService dataService, IMethodsService methodicService,
             IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive,
             IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
-            IReportFabrik reportFabric, IEnumerable<IService> services, IEnumerable<IFeaturesDescriptor> faetures, IDictionary<Type, ICustomConfigFactory> customFatories)
+            IReportFabrik reportFabric, IEnumerable<IService> services, IEnumerable<IFeaturesDescriptor> faetures,
+            IDictionary<Type, ICustomConfigFactory> customFatories)
         {
             try
             {
@@ -105,11 +106,11 @@ namespace KipTM.ViewModel
             _filler = filler;
             _reportFabric = reportFabric;
             _services = new ServiceViewModel(services);
-                //new List<IService>()
-                //                                 {
-                //                                     new Pace1000ViewModel(_dataService.DeviceManager),
-                //                                     new ADTSViewModel(_dataService.DeviceManager.GetModel<ADTSModel>())
-                //                                 });
+            //new List<IService>()
+            //  {
+            //      new Pace1000ViewModel(_dataService.DeviceManager),
+            //      new ADTSViewModel(_dataService.DeviceManager.GetModel<ADTSModel>())
+            //  });
         }
 
         /// <summary>

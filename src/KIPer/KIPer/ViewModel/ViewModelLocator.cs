@@ -75,6 +75,14 @@ namespace KipTM.ViewModel
                 }
             }
 
+            if (ViewModelBase.IsInDesignModeStatic)
+            {
+                unityContainer.RegisterType<IDataService, DesignDataService>();
+            }
+            else
+            {
+                unityContainer.RegisterType<IDataService, Model.DataService>();
+            }
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
             unityContainer.RegisterType<IArchive, ArchiveXML>();
             unityContainer.RegisterInstance<IEnumerable<IDeviceSettingsFactory>>(unityContainer.ResolveAll<IDeviceSettingsFactory>());
@@ -91,14 +99,6 @@ namespace KipTM.ViewModel
             unityContainer.RegisterInstance<IFillerFabrik<IParameterResultViewModel>>(
                 FillerFabrik<IParameterResultViewModel>.Locator);
             unityContainer.RegisterInstance<IReportFabrik>(ReportFabrik.Locator);
-            if (ViewModelBase.IsInDesignModeStatic)
-            {
-                unityContainer.RegisterType<IDataService, DesignDataService>();
-            }
-            else
-            {
-                unityContainer.RegisterType<IDataService, DataService>();
-            }
             unityContainer.RegisterInstance<IEnumerable<IMethodFactory>>(unityContainer.ResolveAll<IMethodFactory>());
             unityContainer.RegisterInstance<IEnumerable<IService>>(unityContainer.ResolveAll<IService>());
             unityContainer.RegisterInstance<IDictionary<Type, ICustomConfigFactory>>(factoryDic);
@@ -109,7 +109,7 @@ namespace KipTM.ViewModel
             #endregion
 
             #region old config
-
+            /*
             SimpleIoc.Default.Register<IEventAggregator, EventAggregator.EventAggregator>();
             SimpleIoc.Default.Register<IArchive, ArchiveXML>();
             SimpleIoc.Default.Register<IMainSettings>(
@@ -128,10 +128,10 @@ namespace KipTM.ViewModel
             }
             else
             {
-                SimpleIoc.Default.Register<IDataService, DataService>();
+                SimpleIoc.Default.Register<IDataService, Model.DataService>();
             }
             SimpleIoc.Default.Register<IMethodsService, MethodsService>();
-
+            */
             #endregion
 
             SimpleIoc.Default.Register<MainViewModel>();

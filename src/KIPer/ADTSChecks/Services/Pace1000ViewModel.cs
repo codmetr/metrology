@@ -40,6 +40,7 @@ namespace KipTM.ViewModel
         public Pace1000ViewModel(IDeviceManager deviceManager)
         {
             _deviceManager = deviceManager;
+            _model = _deviceManager.GetModel<PACE1000Model>();
             _avalableUnits = new[]
             {
                 new UnitDescriptor<PressureUnits>(PressureUnits.MBar,_pressureUnitToString(PressureUnits.MBar)),

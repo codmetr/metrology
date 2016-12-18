@@ -14,7 +14,7 @@ using PACESeries;
 
 namespace ADTSChecks
 {
-    class FeaturesDescriptor : IFeaturesDescriptor
+    public class FeaturesDescriptor : IFeaturesDescriptor
     {
         public FeaturesDescriptor()
         {
