@@ -128,6 +128,7 @@
     <Compile Include="Archive\DataTypes\SimplyPair.cs" />
     <Compile Include="Archive\DictionariesArchive.cs" />
     <Compile Include="Archive\PropertyArchive.cs" />
+    <Compile Include="DataService\DeviceCacheKey.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="DataService\PropertiesLibrary.cs" />
     <Compile Include="DataService\DeviceManager.cs" />

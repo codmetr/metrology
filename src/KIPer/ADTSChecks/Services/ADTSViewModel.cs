@@ -7,6 +7,7 @@ using ADTS;
 using ADTSChecks.Model.Devices;
 using GalaSoft.MvvmLight;
 using KipTM.Interfaces;
+using KipTM.Model;
 using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
 using Tools.View;
@@ -45,9 +46,10 @@ namespace ADTSChecks.ViewModel.Services
         /// <summary>
         /// Initializes a new instance of the ADTSViewModel class.
         /// </summary>
-        public ADTSViewModel(ADTSModel model)
+        public ADTSViewModel(IDeviceManager deviceManager)
         {
-            _model = model;
+
+            _model = deviceManager.GetModel<ADTSModel>();
             _avalableUnits = new[]
             {
                 new UnitDescriptor<PressureUnits>(PressureUnits.MBar, PressureUnits.MBar.ToStr()),

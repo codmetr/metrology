@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using IEEE488;
+using KipTM.DataService;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks;
@@ -30,6 +31,16 @@ namespace KipTM.Model
         private IDictionary<Type, IDeviceFactory> _devicesFabrics;
 
         private IDictionary<string, IChannelFactory> _channelsFabrics;
+
+        /// <summary>
+        /// Cache devices
+        /// </summary>
+        private IDictionary<DeviceCacheKey, object> _devicesCache = new Dictionary<DeviceCacheKey, object>();
+
+        /// <summary>
+        /// Cache models
+        /// </summary>
+        private IDictionary<Type, object> _modelsCache = new Dictionary<Type, object>();
 
 
         public DeviceManager(IFeaturesDescriptor features, Logger logger = null)
@@ -125,7 +136,10 @@ namespace KipTM.Model
             if (!_modelFabrics.ContainsKey(modelType))
                 throw new IndexOutOfRangeException(string.Format("For type [{0}] not found fabric", modelType));
 
-            return _modelFabrics[modelType].GetModel(_loops, this);
+            if (!_modelsCache.ContainsKey(modelType))
+                _modelsCache[modelType] = _modelFabrics[modelType].GetModel(_loops, this);
+
+            return _modelsCache[modelType];
         }
 
         public T GetDevice<T>(ITransportChannelType transportDescription)
@@ -135,10 +149,14 @@ namespace KipTM.Model
 
             if (!_channelsFabrics.ContainsKey(transportDescription.Key))
                 throw new IndexOutOfRangeException(string.Format("For channel [{0}] not found fabric", transportDescription.Key));
+            var key = new DeviceCacheKey(typeof (T), transportDescription);
+            if (!_devicesCache.ContainsKey(key))
+            {
+                var chann = _channelsFabrics[transportDescription.Key].GetDriver(transportDescription.Settings);
+                _devicesCache.Add(key, _devicesFabrics[typeof(T)].GetDevice(chann));
+            }
 
-            var chann = _channelsFabrics[transportDescription.Key].GetDriver(transportDescription.Settings);
-
-            return (T)_devicesFabrics[typeof (T)].GetDevice(chann);
+            return (T)_devicesCache[key];
         }
 
         #endregion
