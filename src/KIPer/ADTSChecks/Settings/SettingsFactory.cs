@@ -8,7 +8,7 @@ using KipTM.Settings;
 
 namespace ADTSChecks.Settings
 {
-    class SettingsFactory : IDeviceSettingsFactory, IEthalonSettingsFactory, IDeviceTypeSettingsFactory
+    public class SettingsFactory : IDeviceSettingsFactory, IEthalonSettingsFactory, IDeviceTypeSettingsFactory
     {
         IEnumerable<DeviceTypeSettings> IDeviceTypeSettingsFactory.GetDefault()
         {

@@ -89,11 +89,17 @@ namespace KipTM.ViewModel
             {
                 unityContainer.RegisterType<IDataService, Model.DataService>();
             }
-
+            var devSettings = new List<IDeviceSettingsFactory>();
+            var ethalonSettings = new List<IEthalonSettingsFactory>();
+            var devTypeSettings = new List<IDeviceTypeSettingsFactory>();
+            var methods = new List<IMethodFactory>();
+            var services = new List<IService>();
+            var features = new List<IFeaturesDescriptor>();
+            var archives = new List<IArchiveDataDefault>();
             foreach (var type in pluginsTypes)
             {
-                if (typeof(IDeviceSettingsFactory).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IDeviceSettingsFactory), type);
+                if (typeof (IDeviceSettingsFactory).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof (IDeviceSettingsFactory), type);
                 if (typeof(IEthalonSettingsFactory).IsAssignableFrom(type))
                     unityContainer.RegisterType(typeof(IEthalonSettingsFactory), type);
                 if (typeof(IDeviceTypeSettingsFactory).IsAssignableFrom(type))
@@ -112,13 +118,21 @@ namespace KipTM.ViewModel
 
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
             unityContainer.RegisterType<IArchive, ArchiveXML>();
-            unityContainer.RegisterInstance<IEnumerable<IDeviceSettingsFactory>>(unityContainer.ResolveAll<IDeviceSettingsFactory>().ToList());
-            unityContainer.RegisterInstance<IEnumerable<IEthalonSettingsFactory>>(unityContainer.ResolveAll<IEthalonSettingsFactory>().ToList());
-            unityContainer.RegisterInstance<IEnumerable<IDeviceTypeSettingsFactory>>(unityContainer.ResolveAll<IDeviceTypeSettingsFactory>().ToList());
-            unityContainer.RegisterInstance<IEnumerable<IMethodFactory>>(unityContainer.ResolveAll<IMethodFactory>().ToList());
-            unityContainer.RegisterInstance<IEnumerable<IService>>(unityContainer.ResolveAll<IService>().ToList());
-            unityContainer.RegisterInstance<IEnumerable<IFeaturesDescriptor>>(unityContainer.ResolveAll<IFeaturesDescriptor>().ToList());
-            unityContainer.RegisterInstance<IEnumerable<IArchiveDataDefault>>(unityContainer.ResolveAll<IArchiveDataDefault>().ToList());
+            unityContainer.RegisterInstance<IEnumerable<IDeviceSettingsFactory>>(unityContainer.ResolveAll <IDeviceSettingsFactory>());
+            unityContainer.RegisterInstance<IEnumerable<IEthalonSettingsFactory>>(unityContainer.ResolveAll<IEthalonSettingsFactory>());
+            unityContainer.RegisterInstance<IEnumerable<IDeviceTypeSettingsFactory>>(unityContainer.ResolveAll<IDeviceTypeSettingsFactory>());
+            unityContainer.RegisterInstance<IEnumerable<IMethodFactory>>(unityContainer.ResolveAll<IMethodFactory>());
+            unityContainer.RegisterInstance<IEnumerable<IService>>(unityContainer.ResolveAll<IService>());
+            unityContainer.RegisterInstance<IEnumerable<IFeaturesDescriptor>>(unityContainer.ResolveAll<IFeaturesDescriptor>());
+            unityContainer.RegisterInstance<IEnumerable<IArchiveDataDefault>>(unityContainer.ResolveAll<IArchiveDataDefault>());
+
+            //unityContainer.RegisterInstance<IEnumerable<IDeviceSettingsFactory>>(devSettings);
+            //unityContainer.RegisterInstance<IEnumerable<IEthalonSettingsFactory>>(ethalonSettings);
+            //unityContainer.RegisterInstance<IEnumerable<IDeviceTypeSettingsFactory>>(devTypeSettings);
+            //unityContainer.RegisterInstance<IEnumerable<IMethodFactory>>(methods);
+            //unityContainer.RegisterInstance<IEnumerable<IService>>(services);
+            //unityContainer.RegisterInstance<IEnumerable<IFeaturesDescriptor>>(features);
+            //unityContainer.RegisterInstance<IEnumerable<IArchiveDataDefault>>(archives);
             unityContainer.RegisterInstance<IMainSettings>(unityContainer.Resolve<IArchive>()
                     .Load(MainSettings.SettingsFileName, unityContainer.Resolve<MainSettingsFactory>().GetDefault()));
             unityContainer.RegisterType<IPropertiesLibrary, PropertiesLibrary>();
