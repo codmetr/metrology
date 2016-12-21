@@ -454,9 +454,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "$(TargetDir)Reports"
+    <PostBuildEvent>rmdir "$(TargetDir)Reports" /S /Q
+mkdir "$(TargetDir)Reports"
 COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.dll" "$(TargetDir)Reports\ReportAdts.dll"
 COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.pdb" "$(TargetDir)Reports\ReportAdts.pdb"
+rmdir "$(TargetDir)Libs" /S /Q
 mkdir "$(TargetDir)Libs"
 COPY "$(SolutionDir)ADTSChecks\bin\Debug\ADTSChecks.dll" "$(TargetDir)Libs\ADTSChecks.dll"
 COPY "$(SolutionDir)ADTSView\bin\Debug\ADTSView.dll" "$(TargetDir)Libs\ADTSView.dll"
