@@ -99,19 +99,19 @@ namespace KipTM.ViewModel
             foreach (var type in pluginsTypes)
             {
                 if (typeof (IDeviceSettingsFactory).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof (IDeviceSettingsFactory), type);
+                    unityContainer.RegisterType( typeof (IDeviceSettingsFactory), type, type.Name);
                 if (typeof(IEthalonSettingsFactory).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IEthalonSettingsFactory), type);
+                    unityContainer.RegisterType(typeof(IEthalonSettingsFactory), type, type.Name);
                 if (typeof(IDeviceTypeSettingsFactory).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IDeviceTypeSettingsFactory), type);
+                    unityContainer.RegisterType(typeof(IDeviceTypeSettingsFactory), type, type.Name);
                 if (typeof(IMethodFactory).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IMethodFactory), type);
+                    unityContainer.RegisterType(typeof(IMethodFactory), type, type.Name);
                 if (typeof(IService).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IService), type);
+                    unityContainer.RegisterType(typeof(IService), type, type.Name);
                 if (typeof(IFeaturesDescriptor).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IFeaturesDescriptor), type);
+                    unityContainer.RegisterType(typeof(IFeaturesDescriptor), type, type.Name);
                 if (typeof(IArchiveDataDefault).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IArchiveDataDefault), type);
+                    unityContainer.RegisterType(typeof(IArchiveDataDefault), type, type.Name);
                 //if (typeof(IReportFabrik).IsSubclassOf(type))
                 //    unityContainer.RegisterType(typeof(IReportFabrik), type);
             }
