@@ -454,17 +454,27 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rmdir "$(TargetDir)Reports" /S /Q
+    <PostBuildEvent>echo refresh Reports:
+rmdir "$(TargetDir)Reports" /S /Q
 mkdir "$(TargetDir)Reports"
+echo copy ReportAdts.dll
 COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.dll" "$(TargetDir)Reports\ReportAdts.dll"
+echo copy ReportAdts.pdb
 COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.pdb" "$(TargetDir)Reports\ReportAdts.pdb"
+echo refresh Reports:
 rmdir "$(TargetDir)Libs" /S /Q
 mkdir "$(TargetDir)Libs"
+echo copy ADTSChecks.dll
 COPY "$(SolutionDir)ADTSChecks\bin\Debug\ADTSChecks.dll" "$(TargetDir)Libs\ADTSChecks.dll"
+echo copy ADTSView.dll
 COPY "$(SolutionDir)ADTSView\bin\Debug\ADTSView.dll" "$(TargetDir)Libs\ADTSView.dll"
+echo copy VisaChannel.dll
 COPY "$(SolutionDir)VisaChannel\bin\Debug\VisaChannel.dll" "$(TargetDir)Libs\VisaChannel.dll"
+echo copy ADTS.dll
 COPY "$(SolutionDir)ADTS\bin\Debug\ADTS.dll" "$(TargetDir)Libs\ADTS.dll"
+echo copy ADTSData.dll
 COPY "$(SolutionDir)ADTSData\bin\Debug\ADTSData.dll" "$(TargetDir)Libs\ADTSData.dll"
+echo copy IEEE488.dll
 COPY "$(SolutionDir)IEEE488Transport\bin\Debug\IEEE488.dll" "$(TargetDir)Libs\IEEE488.dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

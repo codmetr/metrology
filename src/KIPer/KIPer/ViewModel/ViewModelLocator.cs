@@ -65,7 +65,7 @@ namespace KipTM.ViewModel
             //ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             ServiceLocator.SetLocatorProvider(() => new UnityServiceLocator(unityContainer));
 
-            #region new config
+            //#region new config
 
             var cconfFactories = unityContainer.ResolveAll<ICustomConfigFactory>();
 
@@ -89,13 +89,6 @@ namespace KipTM.ViewModel
             {
                 unityContainer.RegisterType<IDataService, Model.DataService>();
             }
-            var devSettings = new List<IDeviceSettingsFactory>();
-            var ethalonSettings = new List<IEthalonSettingsFactory>();
-            var devTypeSettings = new List<IDeviceTypeSettingsFactory>();
-            var methods = new List<IMethodFactory>();
-            var services = new List<IService>();
-            var features = new List<IFeaturesDescriptor>();
-            var archives = new List<IArchiveDataDefault>();
             foreach (var type in pluginsTypes)
             {
                 if (typeof (IDeviceSettingsFactory).IsAssignableFrom(type))
@@ -126,13 +119,6 @@ namespace KipTM.ViewModel
             unityContainer.RegisterInstance<IEnumerable<IFeaturesDescriptor>>(unityContainer.ResolveAll<IFeaturesDescriptor>());
             unityContainer.RegisterInstance<IEnumerable<IArchiveDataDefault>>(unityContainer.ResolveAll<IArchiveDataDefault>());
 
-            //unityContainer.RegisterInstance<IEnumerable<IDeviceSettingsFactory>>(devSettings);
-            //unityContainer.RegisterInstance<IEnumerable<IEthalonSettingsFactory>>(ethalonSettings);
-            //unityContainer.RegisterInstance<IEnumerable<IDeviceTypeSettingsFactory>>(devTypeSettings);
-            //unityContainer.RegisterInstance<IEnumerable<IMethodFactory>>(methods);
-            //unityContainer.RegisterInstance<IEnumerable<IService>>(services);
-            //unityContainer.RegisterInstance<IEnumerable<IFeaturesDescriptor>>(features);
-            //unityContainer.RegisterInstance<IEnumerable<IArchiveDataDefault>>(archives);
             unityContainer.RegisterInstance<IMainSettings>(unityContainer.Resolve<IArchive>()
                     .Load(MainSettings.SettingsFileName, unityContainer.Resolve<MainSettingsFactory>().GetDefault()));
             unityContainer.RegisterType<IPropertiesLibrary, PropertiesLibrary>();
@@ -148,7 +134,7 @@ namespace KipTM.ViewModel
             unityContainer.RegisterType<IMethodsService, MethodsService>();
             unityContainer.RegisterType<MainViewModel>();
 
-            #endregion
+            //#endregion
 
             #region old config
             /*
