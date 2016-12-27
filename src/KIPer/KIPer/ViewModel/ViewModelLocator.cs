@@ -28,6 +28,7 @@ using KipTM.Model;
 using System;
 using System.IO;
 using System.Linq;
+using CheckFrame;
 using KipTM.Design;
 using KipTM.EventAggregator;
 using KipTM.Interfaces.Archive;
@@ -67,19 +68,6 @@ namespace KipTM.ViewModel
 
             //#region new config
 
-            var cconfFactories = unityContainer.ResolveAll<ICustomConfigFactory>();
-
-            var factoryDic = new Dictionary<Type, ICustomConfigFactory>();
-            foreach (var factory in cconfFactories)
-            {
-                var atrs = factory.GetType().GetAttributes(typeof (CustomSettingsAttribute)).OfType<CustomSettingsAttribute>();
-                foreach (var atr in atrs)
-                {
-                    if(!factoryDic.ContainsKey(atr.ArgumentType))
-                        factoryDic.Add(atr.ArgumentType, factory);
-                }
-            }
-
             //unityContainer.RegisterTypes(pluginsTypes);
             if (ViewModelBase.IsInDesignModeStatic)
             {
@@ -105,19 +93,28 @@ namespace KipTM.ViewModel
                     unityContainer.RegisterType(typeof(IFeaturesDescriptor), type, type.Name);
                 if (typeof(IArchiveDataDefault).IsAssignableFrom(type))
                     unityContainer.RegisterType(typeof(IArchiveDataDefault), type, type.Name);
+                if (typeof(ICustomConfigFactory).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof(ICustomConfigFactory), type, type.Name);
                 //if (typeof(IReportFabrik).IsSubclassOf(type))
                 //    unityContainer.RegisterType(typeof(IReportFabrik), type);
             }
 
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
             unityContainer.RegisterType<IArchive, ArchiveXML>();
-            unityContainer.RegisterInstance<IEnumerable<IDeviceSettingsFactory>>(unityContainer.ResolveAll <IDeviceSettingsFactory>());
-            unityContainer.RegisterInstance<IEnumerable<IEthalonSettingsFactory>>(unityContainer.ResolveAll<IEthalonSettingsFactory>());
-            unityContainer.RegisterInstance<IEnumerable<IDeviceTypeSettingsFactory>>(unityContainer.ResolveAll<IDeviceTypeSettingsFactory>());
-            unityContainer.RegisterInstance<IEnumerable<IMethodFactory>>(unityContainer.ResolveAll<IMethodFactory>());
-            unityContainer.RegisterInstance<IEnumerable<IService>>(unityContainer.ResolveAll<IService>());
-            unityContainer.RegisterInstance<IEnumerable<IFeaturesDescriptor>>(unityContainer.ResolveAll<IFeaturesDescriptor>());
-            unityContainer.RegisterInstance<IEnumerable<IArchiveDataDefault>>(unityContainer.ResolveAll<IArchiveDataDefault>());
+            unityContainer.RegisterInstance(unityContainer.ResolveAll<IFeaturesDescriptor>());
+            unityContainer.RegisterInstance<FeatureDescriptorsCombiner>(
+                unityContainer.Resolve<FeatureDescriptorsCombiner>());
+            unityContainer.RegisterType<IDeviceManager, DeviceManager>();
+
+            var test = unityContainer.Resolve<IDeviceManager>();
+
+            unityContainer.RegisterInstance(unityContainer.ResolveAll<IDeviceSettingsFactory>());
+            unityContainer.RegisterInstance(unityContainer.ResolveAll<IEthalonSettingsFactory>());
+            unityContainer.RegisterInstance(unityContainer.ResolveAll<IDeviceTypeSettingsFactory>());
+            unityContainer.RegisterInstance(unityContainer.ResolveAll<IMethodFactory>());
+            unityContainer.RegisterInstance(unityContainer.ResolveAll<IService>());
+            unityContainer.RegisterInstance(unityContainer.ResolveAll<IArchiveDataDefault>());
+
 
             unityContainer.RegisterInstance<IMainSettings>(unityContainer.Resolve<IArchive>()
                     .Load(MainSettings.SettingsFileName, unityContainer.Resolve<MainSettingsFactory>().GetDefault()));
@@ -130,7 +127,25 @@ namespace KipTM.ViewModel
             unityContainer.RegisterInstance<IFillerFabrik<IParameterResultViewModel>>(
                 FillerFabrik<IParameterResultViewModel>.Locator);
             unityContainer.RegisterInstance<IReportFabrik>(ReportFabrik.Locator);
+
+            #region CustomConfigFactories
+
+            var cconfFactories = unityContainer.ResolveAll<ICustomConfigFactory>();
+            var factoryDic = new Dictionary<Type, ICustomConfigFactory>();
+            foreach (var factory in cconfFactories)
+            {
+                var atrs =
+                    factory.GetType().GetAttributes(typeof (CustomSettingsAttribute)).OfType<CustomSettingsAttribute>();
+                foreach (var atr in atrs)
+                {
+                    if (!factoryDic.ContainsKey(atr.ArgumentType))
+                        factoryDic.Add(atr.ArgumentType, factory);
+                }
+            }
             unityContainer.RegisterInstance<IDictionary<Type, ICustomConfigFactory>>(factoryDic);
+
+            #endregion
+
             unityContainer.RegisterType<IMethodsService, MethodsService>();
             unityContainer.RegisterType<MainViewModel>();
 

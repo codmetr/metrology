@@ -46,6 +46,7 @@ namespace KipTM.ViewModel
 
         private readonly NLog.Logger _logger = null;
         private readonly IDataService _dataService;
+        private IDeviceManager _deviceManager;
         private IMethodsService _methodicService;
         private IMainSettings _settings;
         private IPropertiesLibrary _propertiesLibrary;
@@ -82,8 +83,8 @@ namespace KipTM.ViewModel
             IEventAggregator eventAggregator, IDataService dataService, IMethodsService methodicService,
             IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive,
             IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
-            IReportFabrik reportFabric, IEnumerable<IService> services, IEnumerable<IFeaturesDescriptor> faetures,
-            IDictionary<Type, ICustomConfigFactory> customFatories)
+            IReportFabrik reportFabric, IEnumerable<IService> services, FeatureDescriptorsCombiner features,
+            IDictionary<Type, ICustomConfigFactory> customFatories, IDeviceManager deviceManager)
         {
             try
             {
@@ -95,13 +96,14 @@ namespace KipTM.ViewModel
             }
             _eventAggregator = eventAggregator;
             _dataService = dataService;
+            _deviceManager = deviceManager;
             _methodicService = methodicService;
             _settings = settings;
             _propertiesLibrary = propertiesLibrary;
             _archive = archive;
             _customFactory = new CustomConfigFactory(customFatories);
             _dataService.LoadResults();
-            _dataService.InitDevices(new FeatureDescriptorsCombiner(faetures));
+            _dataService.InitDevices(features.DeviceTypes, features.EthalonTypes);
             _resulMaker = resulMaker;
             _filler = filler;
             _reportFabric = reportFabric;
@@ -129,7 +131,7 @@ namespace KipTM.ViewModel
                 _deviceTypes = new DeviceTypeCollectionViewModel();
                 _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
-                var checkFabrik = new CheckFabrik(_dataService.DeviceManager, _propertiesLibrary.PropertyPool);
+                var checkFabrik = new CheckFabrik(_deviceManager, _propertiesLibrary.PropertyPool);
                 var result = new TestResult();
                 var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool,
                     _propertiesLibrary.DictionariesPool, result);
@@ -375,6 +377,10 @@ namespace KipTM.ViewModel
                 if(dispStep!=null)
                     dispStep.Dispose();
             }
+            var disp = _deviceManager as IDisposable;
+            if (disp != null)
+                disp.Dispose();
+
         }
 
         private void SetHelpMessage(string msg)

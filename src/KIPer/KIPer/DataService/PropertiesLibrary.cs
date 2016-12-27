@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CheckFrame;
 using KipTM.Archive;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Archive;
@@ -22,13 +23,14 @@ namespace KipTM.Model
         private readonly DictionariesPool _dictionariesPool;
 
 
-        public PropertiesLibrary(IEnumerable<IArchiveDataDefault> defaultFactories, IEnumerable<IFeaturesDescriptor> features)
+        public PropertiesLibrary(IEnumerable<IArchiveDataDefault> defaultFactories, FeatureDescriptorsCombiner features)
         {
             var def = new ArchiveBase(defaultFactories.SelectMany(el => el.GetDefaultData()).ToList());
             _propertyPool = new DataPool(ArchiveBase.LoadFromFile(PathProperties, def));
             //_propertyPool = new DataPool(ArchiveBase.LoadFromFile(PathProperties, PropertyArchive.GetDefault()));
 
-            var devices = features.SelectMany(el => el.GetDefaultForCheckTypes()).ToList();
+            //var devices = features.SelectMany(el => el.GetDefaultForCheckTypes()).ToList();
+            var devices = features.GetDefaultForCheckTypes().ToList();
             _dictionariesArchive = ArchiveBase.LoadFromFile(PathDictionaries, DictionariesArchive.GetDefault(devices));
             _dictionariesPool = DictionariesPool.Load(_dictionariesArchive);
             //_checksArchive = ArchiveBase.LoadFromFile(PathArchive, new ArchiveBase());

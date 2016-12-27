@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
+using CheckFrame;
 using IEEE488;
 using KipTM.DataService;
 using KipTM.Interfaces;
@@ -43,9 +44,9 @@ namespace KipTM.Model
         private IDictionary<Type, object> _modelsCache = new Dictionary<Type, object>();
 
 
-        public DeviceManager(IFeaturesDescriptor features, Logger logger = null)
+        public DeviceManager(FeatureDescriptorsCombiner features)
         {
-            _logger = logger;
+            _logger = NLog.LogManager.GetLogger("DeviceManager");
 
             _loops = new Loops();
 

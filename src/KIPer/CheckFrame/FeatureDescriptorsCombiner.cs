@@ -11,9 +11,9 @@ using KipTM.Interfaces.Checks;
 
 namespace CheckFrame
 {
-    public class FeatureDescriptorsCombiner : IFeaturesDescriptor
+    public class FeatureDescriptorsCombiner// : IFeaturesDescriptor
     {
-        private IEnumerable<IFeaturesDescriptor> _features;
+        private readonly IEnumerable<IFeaturesDescriptor> _features;
 
         public FeatureDescriptorsCombiner(IEnumerable<IFeaturesDescriptor> features)
         {
@@ -36,5 +36,6 @@ namespace CheckFrame
         {
             return _features.SelectMany(el => el.GetDefaultForCheckTypes());
         }
+        public IEnumerable<IFeaturesDescriptor> Features { get { return _features; } }
     }
 }

@@ -461,7 +461,7 @@ echo copy ReportAdts.dll
 COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.dll" "$(TargetDir)Reports\ReportAdts.dll"
 echo copy ReportAdts.pdb
 COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.pdb" "$(TargetDir)Reports\ReportAdts.pdb"
-echo refresh Reports:
+echo refresh Libs:
 rmdir "$(TargetDir)Libs" /S /Q
 mkdir "$(TargetDir)Libs"
 echo copy ADTSChecks.dll

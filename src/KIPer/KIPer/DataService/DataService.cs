@@ -27,7 +27,7 @@ namespace KipTM.Model
 
         readonly IMainSettings _settings;
         private readonly IArchive _archive;
-        private IDeviceManager _deviceManager;
+        //private IDeviceManager _deviceManager;
         private ResultsArchive _resultsArchive;
         /// <summary>
         /// Список типов поддерживаемых устройств
@@ -53,23 +53,23 @@ namespace KipTM.Model
             _resultsArchive = new ResultsArchive();
         }
 
-        public void InitDevices(IFeaturesDescriptor faetures)
+        public void InitDevices(IEnumerable<DeviceTypeDescriptor> deviceTypes, IEnumerable<DeviceTypeDescriptor> ethalonTypes)
         {
-            _deviceTypes.AddRange(faetures.DeviceTypes);
-            _ethalonTypes.AddRange(faetures.EthalonTypes);
+            _deviceTypes.AddRange(deviceTypes);
+            _ethalonTypes.AddRange(ethalonTypes);
             //_deviceTypes.Add(new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer));
             //_ethalonTypes.Add(new DeviceTypeDescriptor(PACE1000Model.Model, PACE1000Model.DeviceCommonType, PACE1000Model.DeviceManufacturer));
 
-            _deviceManager = new DeviceManager(faetures, NLog.LogManager.GetLogger("DeviceManager"));
+            //_deviceManager = new DeviceManager(faetures, NLog.LogManager.GetLogger("DeviceManager"));
         }
 
         /// <summary>
         /// Пул сконфигурируемых устройств
         /// </summary>
-        public IDeviceManager DeviceManager
-        {
-            get { return _deviceManager; }
-        }
+        //public IDeviceManager DeviceManager
+        //{
+        //    get { return _deviceManager; }
+        //}
 
         /// <summary>
         /// Список типов поддерживаемых устройств
@@ -130,9 +130,9 @@ namespace KipTM.Model
 
         public void Dispose()
         {
-            var disp = _deviceManager as IDisposable;
-            if (disp != null) 
-                disp.Dispose();
+            //var disp = _deviceManager as IDisposable;
+            //if (disp != null) 
+            //    disp.Dispose();
         }
     }
 }

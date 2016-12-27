@@ -15,7 +15,7 @@ namespace KipTM.Interfaces
         /// <summary>
         /// Пул сконфигурируемых устройств
         /// </summary>
-        IDeviceManager DeviceManager { get; }
+        //IDeviceManager DeviceManager { get; }
         /// <summary>
         /// Список типов поддерживаемых устройств
         /// </summary>
@@ -35,6 +35,6 @@ namespace KipTM.Interfaces
         void SaveSettings();
         void LoadResults();
         void SaveResults();
-        void InitDevices(IFeaturesDescriptor faetures);
+        void InitDevices(IEnumerable<DeviceTypeDescriptor> deviceTypes, IEnumerable<DeviceTypeDescriptor> ethalonTypes);
     }
 }
