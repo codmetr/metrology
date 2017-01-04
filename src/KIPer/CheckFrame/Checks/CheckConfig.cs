@@ -53,6 +53,7 @@ namespace KipTM.Checks
         /// <param name="result"></param>
         public CheckConfig(IMainSettings settings, IMethodsService method, IPropertyPool propertyPool, DictionariesPool dictionaries, TestResult result)
         {
+            _data = new CheckConfigData();
             _result = result;
             _method = method;
             _propertyPool = propertyPool;

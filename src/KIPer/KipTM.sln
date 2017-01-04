@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KipTM", "KIPer\KipTM.csproj", "{0D103F16-F896-4E97-9D92-AEDC7AB12F9D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E4EA5262-7701-442C-BA02-0E65FC725B95} = {E4EA5262-7701-442C-BA02-0E65FC725B95}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Drivers", "Drivers", "{9DCFA936-EB09-4076-8CEA-90AC31DB4EDC}"
 EndProject
@@ -62,6 +65,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Channels", "Channels", "{64FAE99F-D7A7-48FA-832C-7976AEA77CEB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisaChannel", "VisaChannel\VisaChannel.csproj", "{82E6C917-C316-4664-B858-401F8C08514F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisaChannelView", "VisaChannelView\VisaChannelView.csproj", "{E4EA5262-7701-442C-BA02-0E65FC725B95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfCommonStyles", "WpfCommonStyles\WpfCommonStyles.csproj", "{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -400,6 +407,36 @@ Global
 		{82E6C917-C316-4664-B858-401F8C08514F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{82E6C917-C316-4664-B858-401F8C08514F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{82E6C917-C316-4664-B858-401F8C08514F}.Release|x86.ActiveCfg = Release|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Emilation|Any CPU.ActiveCfg = Release|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Emilation|Any CPU.Build.0 = Release|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Emilation|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Emilation|Mixed Platforms.Build.0 = Release|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Emilation|x86.ActiveCfg = Release|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E4EA5262-7701-442C-BA02-0E65FC725B95}.Release|x86.ActiveCfg = Release|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Emilation|Any CPU.ActiveCfg = Release|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Emilation|Any CPU.Build.0 = Release|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Emilation|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Emilation|Mixed Platforms.Build.0 = Release|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Emilation|x86.ActiveCfg = Release|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4EB0E1A6-D266-4F92-97A2-53EFE2AD51F0}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -421,5 +458,6 @@ Global
 		{81B358FE-6B31-49FF-AB34-45CB960E57B6} = {64C7006B-47AF-4700-B733-6319BB185242}
 		{FBDCD95E-3006-4D82-B232-24CED8AA05F8} = {FFD5C3FD-0B65-4ABC-9CED-76C333C3A535}
 		{82E6C917-C316-4664-B858-401F8C08514F} = {64FAE99F-D7A7-48FA-832C-7976AEA77CEB}
+		{E4EA5262-7701-442C-BA02-0E65FC725B95} = {64FAE99F-D7A7-48FA-832C-7976AEA77CEB}
 	EndGlobalSection
 EndGlobal

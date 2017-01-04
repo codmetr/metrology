@@ -1,0 +1,43 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--фон главного окна-->
+    <SolidColorBrush x:Key="MineWindowBrush" Color="#FF005100"/>
+    <!--фон невыделенного элемента ListBox-->
+    <SolidColorBrush x:Key="NoSelectedBrush" Color="Wheat"/>
+    <!--цвет бордюра невыделенного элемента ListBox-->
+    <SolidColorBrush x:Key="SelectedBorderBrush" Color="DarkOliveGreen"/>
+    <!--фон заголовка выделенного элемента ListBox-->
+    <SolidColorBrush x:Key="SelectedTitleBrush" Color="#FFAAA7A3"/>
+    <!--фон пояснений выделенного элемента ListBox-->
+    <SolidColorBrush x:Key="SelectedNoteBrush" Color="#FF002B76"/>
+    <!--цвет шрифта пояснений выделенного элемента ListBox-->
+    <SolidColorBrush x:Key="SelectedNoteForegroundBrush" Color="BurlyWood"/>
+    <!--цвет бордюра пояснения выделенного элемента ListBox-->
+    <SolidColorBrush x:Key="SelectedNoteBorderBrush" Color="#FF224901"/>
+    <!--цвет бордюра кнопки основного меню-->
+    <SolidColorBrush x:Key="ButtonTabBorderBrush" Color="Black"/>
+    <!--цвет фона кнопки основного меню-->
+    <SolidColorBrush x:Key="ButtonTabBrush" Color="Gray"/>
+    <!--цвет шрифта кнопки основного меню-->
+    <SolidColorBrush x:Key="ButtonTabForegroundBrush" Color="White"/>
+
+
+    <!--цвет бордюра области подсказок-->
+    <SolidColorBrush x:Key="HelpBorderBrush" Color="CadetBlue"/>
+    <!--цвет фона области подсказок-->
+    <SolidColorBrush x:Key="HelpBrush" Color="LightGreen"/>
+
+    <!--цвет бордюра основной области-->
+    <SolidColorBrush x:Key="ActualTabBorderBrush" Color="Gray"/>
+    <!--цвет фона основной области-->
+    <SolidColorBrush x:Key="ActualTabBrush" Color="#FFC1C1C1"/>
+
+    <!--цвет текста в элементе не выделяемой коллекции-->
+    <SolidColorBrush x:Key="ItemedTextBoxForegroundBrush" Color="DarkBlue"/>
+    <!--цвет бордюра в элементе не выделяемой коллекции-->
+    <SolidColorBrush x:Key="ItemedTextBoxBorderBrush" Color="DarkBlue"/>
+    <!--цвет фона в элементе не выделяемой коллекции-->
+    <SolidColorBrush x:Key="ItemedTextBoxBrush" Color="DarkGray"/>
+
+</ResourceDictionary>

@@ -5,7 +5,7 @@ using ArchiveData.DTO.Params;
 
 namespace KipTM.Archive.DataTypes
 {
-    public class CheckData
+    public class CheckData //todo choose one implimentation (with in KipTM project)
     {
         public CheckData(CheckKey key)
         {

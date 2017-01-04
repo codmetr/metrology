@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using ADTSChecks.Checks.Data;
 using ADTSChecks.Model.Channels;
 using ADTSChecks.Model.Checks;
+using ADTSChecks.Model.Devices;
 using ADTSChecks.ViewModel.Services;
 using ADTSData;
 using ArchiveData.DTO;
@@ -86,7 +87,7 @@ namespace ADTSChecks.Checks.ViewModel
             _stateViewModel = new CheckStateViewModel();
             _stateViewModel.TitleSteps = "Щаги";
             _stateViewModel.TitleBtnNext = "Старт";
-            _stateViewModel.ADTS = _deviceManager.GetModel<ADTSViewModel>();//new ADTSViewModel(Method.GetADTS());
+            _stateViewModel.ADTS = new ADTSViewModel(_deviceManager);//new ADTSViewModel(Method.GetADTS());
             _stateViewModel.Steps = Method.Steps.Select(el => new StepViewModel(el.Step, el.Enabled));
             _stateViewModel.ResultsLog = new ObservableCollection<EventArgTestStepResult>();
         }

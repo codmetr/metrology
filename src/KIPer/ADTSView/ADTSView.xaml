@@ -5,14 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:pressureElementControls="clr-namespace:PressureElementControls;assembly=PressureElementControls"
              xmlns:services="clr-namespace:ADTSChecks.ViewModel.Services;assembly=ADTSChecks"
+             xmlns:res="clr-namespace:WpfCommonStyles;assembly=WpfCommonStyles"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="400" d:DataContext="{d:DesignInstance services:ADTSViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
-            <!--<ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Skins/SimpleElements.xaml"/>
-            </ResourceDictionary.MergedDictionaries>-->
-
             <Style TargetType="pressureElementControls:DiscretInputHorisontalControl">
                 <Setter Property="Height" Value="25"/>
                 <Setter Property="Width" Value="150"/>
@@ -43,7 +40,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource TitleStyle}">Давление PS:</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="0" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}">Давление PS:</TextBlock>
                 <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Pressure}" Style="{StaticResource ValueStyle}"/>
                 <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding PressureUnit}" Style="{StaticResource ValueStyle}"/>
                 <Button Grid.Column="3" Grid.Row="0" Command="{Binding UpdatePressure}" VerticalAlignment="Center">Перечитать</Button>

@@ -470,6 +470,8 @@ echo copy ADTSView.dll
 COPY "$(SolutionDir)ADTSView\bin\Debug\ADTSView.dll" "$(TargetDir)Libs\ADTSView.dll"
 echo copy VisaChannel.dll
 COPY "$(SolutionDir)VisaChannel\bin\Debug\VisaChannel.dll" "$(TargetDir)Libs\VisaChannel.dll"
+echo copy VisaChannelView.dll
+COPY "$(SolutionDir)VisaChannelView\bin\Debug\VisaChannelView.dll" "$(TargetDir)Libs\VisaChannelView.dll"
 echo copy ADTS.dll
 COPY "$(SolutionDir)ADTS\bin\Debug\ADTS.dll" "$(TargetDir)Libs\ADTS.dll"
 echo copy ADTSData.dll

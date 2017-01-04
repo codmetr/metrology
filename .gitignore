@@ -70,3 +70,7 @@ src/KIPer/CheckFrame/bin/
 src/KIPer/packages/
 src/KIPer/VisaChannel/obj/
 src/KIPer/VisaChannel/bin/
+src/KIPer/WpfCommonStyles/obj/
+src/KIPer/VisaChannelView/obj/
+src/KIPer/VisaChannelView/bin/
+src/KIPer/WpfCommonStyles/bin/

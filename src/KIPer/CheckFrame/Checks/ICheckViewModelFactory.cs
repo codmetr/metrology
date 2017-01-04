@@ -5,7 +5,9 @@ using System.Text;
 using ArchiveData.DTO;
 using CheckFrame.Checks;
 using CheckFrame.ViewModel.Checks.Channels;
+using KipTM.Archive;
 using KipTM.Checks;
+using KipTM.Model;
 using KipTM.Model.TransportChannels;
 
 namespace KipTM.Interfaces.Checks
@@ -13,6 +15,16 @@ namespace KipTM.Interfaces.Checks
 
     public interface ICheckViewModelFactory
     {
+        /// <summary>
+        /// Сконфигурировать набор драйверов устройств
+        /// </summary>
+        ICheckViewModelFactory SetDeviceManager(IDeviceManager deviceManager);
+
+        /// <summary>
+        /// Сконфигурировать пул свойств
+        /// </summary>
+        ICheckViewModelFactory SetPropertyPool(IPropertyPool propertyPool);
+
         /// <summary>
         /// 
         /// </summary>

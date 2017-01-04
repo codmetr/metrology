@@ -30,11 +30,15 @@ namespace KipTM.ViewModel.Checks
         private readonly IPropertyPool _propertyPool;
         private IDictionary<Type, ICheckViewModelFactory> _fatories;
 
-        public CheckFabrik(IDeviceManager deviceManager, IPropertyPool propertyPool)
+        public CheckFabrik(IDeviceManager deviceManager, IPropertyPool propertyPool, IEnumerable<ICheckViewModelFactory> factories)
         {
             _deviceManager = deviceManager;
             _propertyPool = propertyPool;
-            Load();
+            Load(factories);
+            foreach (var factory in _fatories.Values)
+            {
+                factory.SetDeviceManager(_deviceManager).SetPropertyPool(_propertyPool);
+            }
         }
 
         /// <summary>
@@ -45,9 +49,11 @@ namespace KipTM.ViewModel.Checks
             TestResult resultBox, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
         {
             IMethodViewModel result = null;
+            var targetType = method.GetType();
+            var key = _fatories.Keys.FirstOrDefault(el => el == targetType || el.IsAssignableFrom(targetType));
 
-            if (_fatories.ContainsKey(method.GetType()))
-                result = _fatories[method.GetType()].GetViewModel(method, checkConfig, customConfig, resultBox,
+            if (key !=null)
+                result = _fatories[key].GetViewModel(method, checkConfig, customConfig, resultBox,
                     checkDeviceChanel, ethalonChanel);
             
             return result;
@@ -58,9 +64,17 @@ namespace KipTM.ViewModel.Checks
         /// <summary>
         /// Загрузить все доступные фабрики презенторов
         /// </summary>
-        public void Load()
+        private void Load()
         {
             _fatories = GetFactories().ToDictionary(el => el.Item1, el => el.Item2);
+        }
+
+        /// <summary>
+        /// Загрузить все доступные фабрики презенторов
+        /// </summary>
+        private void Load(IEnumerable<ICheckViewModelFactory> factories)
+        {
+            _fatories = GetFactories(factories).ToDictionary(el => el.Item1, el => el.Item2);
         }
 
         /// <summary>
@@ -76,6 +90,22 @@ namespace KipTM.ViewModel.Checks
                     yield return new Tuple<Type, ICheckViewModelFactory>(type.Item2, type.Item1.CreateInstance(type.Item2.FullName, true, BindingFlags.Default, null,
                         new[] { (object)_deviceManager, (object)_propertyPool }, CultureInfo.InvariantCulture,
                         new object[0]) as ICheckViewModelFactory);
+            }
+        }
+
+        /// <summary>
+        /// Получить список фабрик 
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<Tuple<Type, ICheckViewModelFactory>> GetFactories(IEnumerable<ICheckViewModelFactory> factories)
+        {
+            foreach (ICheckViewModelFactory item in factories)
+            {
+                ViewModelFactoryAttribute attr = item.GetType().GetCustomAttributes<ViewModelFactoryAttribute>().FirstOrDefault();
+                if(attr==null)
+                    continue;
+
+                yield return new Tuple<Type, ICheckViewModelFactory>(attr.ModelType, item);
             }
         }
 

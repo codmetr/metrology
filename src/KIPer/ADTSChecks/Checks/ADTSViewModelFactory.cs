@@ -26,17 +26,35 @@ namespace KipTM.ViewModel.Checks
     [ViewModelFactoryAttribute(typeof(CheckBase))]
     public class ADTSViewModelFactory : ICheckViewModelFactory
     {
-        private readonly IDeviceManager _deviceManager;
-        private readonly IPropertyPool _propertyPool;
+        private IDeviceManager _deviceManager;
+        private IPropertyPool _propertyPool;
 
-        public ADTSViewModelFactory(IDeviceManager deviceManager, IPropertyPool propertyPool)
+        //public ADTSViewModelFactory(IDeviceManager deviceManager, IPropertyPool propertyPool)
+        //{
+        //    _deviceManager = deviceManager;
+        //    _propertyPool = propertyPool;
+        //}
+
+        /// <summary>
+        /// Сконфигурировать набор драйверов устройств
+        /// </summary>
+        public ICheckViewModelFactory SetDeviceManager(IDeviceManager deviceManager)
         {
             _deviceManager = deviceManager;
-            _propertyPool = propertyPool;
+            return this;
         }
 
         /// <summary>
-        /// 
+        /// Сконфигурировать пул свойств
+        /// </summary>
+        public ICheckViewModelFactory SetPropertyPool(IPropertyPool propertyPool)
+        {
+            _propertyPool = propertyPool;
+            return this;
+        }
+
+        /// <summary>
+        /// Получить визуальную модель проверки
         /// </summary>
         /// <param name="method"></param>
         /// <param name="checkConfig"></param>
@@ -48,6 +66,12 @@ namespace KipTM.ViewModel.Checks
         public IMethodViewModel GetViewModel(object method, CheckConfigData checkConfig, object customSettings,
             TestResult resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
         {
+            if(_deviceManager == null)
+                throw new NullReferenceException("Not defined _deviceManager");
+
+            if (_propertyPool == null)
+                throw new NullReferenceException("Not defined _propertyPool");
+
             return ConfigAdtsMethod(method as CheckBase, checkConfig, customSettings as ADTSParameters,
                 resultSet, checkDeviceChanel, ethalonChanel);
         }

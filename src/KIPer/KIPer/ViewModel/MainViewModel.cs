@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -10,6 +11,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Checks;
 using KipTM.Interfaces;
+using KipTM.Interfaces.Checks;
 using KipTM.Model;
 using KipTM.Settings;
 using KipTM.View;
@@ -67,6 +69,7 @@ namespace KipTM.ViewModel
         private object _selectedAction;
         private IMarkerFabrik<IParameterResultViewModel> _resulMaker;
         private IFillerFabrik<IParameterResultViewModel> _filler;
+        private IEnumerable<ICheckViewModelFactory> _factories;
         private IReportFabrik _reportFabric;
         private bool _isActiveCheck;
         private bool _isActiveService;
@@ -84,7 +87,7 @@ namespace KipTM.ViewModel
             IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive,
             IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
             IReportFabrik reportFabric, IEnumerable<IService> services, FeatureDescriptorsCombiner features,
-            IDictionary<Type, ICustomConfigFactory> customFatories, IDeviceManager deviceManager)
+            IDictionary<Type, ICustomConfigFactory> customFatories, IDeviceManager deviceManager, IEnumerable<ICheckViewModelFactory> factories)
         {
             try
             {
@@ -98,6 +101,7 @@ namespace KipTM.ViewModel
             _dataService = dataService;
             _deviceManager = deviceManager;
             _methodicService = methodicService;
+            _factories = factories;
             _settings = settings;
             _propertiesLibrary = propertiesLibrary;
             _archive = archive;
@@ -131,7 +135,7 @@ namespace KipTM.ViewModel
                 _deviceTypes = new DeviceTypeCollectionViewModel();
                 _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
-                var checkFabrik = new CheckFabrik(_deviceManager, _propertiesLibrary.PropertyPool);
+                var checkFabrik = new CheckFabrik(_deviceManager, _propertiesLibrary.PropertyPool, _factories);
                 var result = new TestResult();
                 var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool,
                     _propertiesLibrary.DictionariesPool, result);
@@ -164,6 +168,29 @@ namespace KipTM.ViewModel
 
         #endregion
 
+        #region Разрушение
+
+        public override void Cleanup()
+        {
+            _eventAggregator.Unsubscribe(this);
+            base.Cleanup();
+            if(_steps!=null)
+                foreach (var step in _steps)
+                {
+                    var dispStep = step.ViewModel as IDisposable;
+                    if (dispStep != null)
+                        dispStep.Dispose();
+                }
+            var disp = _deviceManager as IDisposable;
+            if (disp != null)
+                disp.Dispose();
+
+        }
+
+        #endregion
+
+        #region Свойства
+        
         /// <summary>
         /// Поясняющее сообщение 
         /// </summary>
@@ -233,7 +260,8 @@ namespace KipTM.ViewModel
                         var view = mainView as Window;
                         if (view == null)
                             return;
-                        ViewViewmodelMatcher.AddMatch(view.Resources, ViewAttribute.CheckView, ViewAttribute.CheckViewModelCashOnly);
+                        ViewViewmodelMatcher.AddMatch(view.Resources, ViewAttribute.CheckView,
+                            ViewAttribute.CheckViewModelCashOnly);
                     });
             }
         }
@@ -242,7 +270,9 @@ namespace KipTM.ViewModel
         /// Закрытие окна
         /// </summary>
         public ICommand Close
-        {   get{return new RelayCommand(() =>{Application.Current.MainWindow.Close();});}}
+        {
+            get { return new RelayCommand(() => { Application.Current.MainWindow.Close(); }); }
+        }
 
         /// <summary>
         /// Закрытие окна
@@ -256,7 +286,7 @@ namespace KipTM.ViewModel
                     {
                         var strUrl = url as string;
                         if (strUrl != null)
-                            System.Diagnostics.Process.Start(strUrl);
+                            Process.Start(strUrl);
                     });
             }
         }
@@ -287,7 +317,7 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = _tests;//todo установить выбор соответсвующего ViewModel
+                    SelectedAction = _tests; //todo установить выбор соответсвующего ViewModel
                     SetHelpMessage("Архив Проверок: список пойденных поверок");
                 });
             }
@@ -302,7 +332,7 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = _deviceTypes;//todo установить выбор соответсвующего ViewModel
+                    SelectedAction = _deviceTypes; //todo установить выбор соответсвующего ViewModel
                     SetHelpMessage("Список поддерживаемых типов проверяемых приборов");
                 });
             }
@@ -317,7 +347,7 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = _etalonTypes;//todo установить выбор соответсвующего ViewModel
+                    SelectedAction = _etalonTypes; //todo установить выбор соответсвующего ViewModel
                     SetHelpMessage("Список поддерживаемых типов эталонных приборов");
                 });
             }
@@ -332,7 +362,8 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = "Здесь будут элементы управления настройками приложения";//todo установить выбор соответсвующего ViewModel
+                    SelectedAction = "Здесь будут элементы управления настройками приложения";
+                        //todo установить выбор соответсвующего ViewModel
                     SetHelpMessage("Настройки приложения");
                 });
             }
@@ -359,35 +390,28 @@ namespace KipTM.ViewModel
             }
         }
 
-        public IArchivesViewModel Tests { get { return _tests; } }
-
-        public DeviceTypeCollectionViewModel DeviceTypes { get { return _deviceTypes; } }
-
-        public DeviceTypeCollectionViewModel EtalonTypes { get { return _etalonTypes; } }
-
-        public Workflow.Workflow Checks { get { return _workflow; } }
-
-        public override void Cleanup()
+        public IArchivesViewModel Tests
         {
-            _eventAggregator.Unsubscribe(this);
-            base.Cleanup();
-            foreach (var step in _steps)
-            {
-                var dispStep = step.ViewModel as IDisposable;
-                if(dispStep!=null)
-                    dispStep.Dispose();
-            }
-            var disp = _deviceManager as IDisposable;
-            if (disp != null)
-                disp.Dispose();
-
+            get { return _tests; }
         }
 
-        private void SetHelpMessage(string msg)
+        public DeviceTypeCollectionViewModel DeviceTypes
         {
-            HelpMessage = msg;
-            IsError = false;
+            get { return _deviceTypes; }
         }
+
+        public DeviceTypeCollectionViewModel EtalonTypes
+        {
+            get { return _etalonTypes; }
+        }
+
+        public Workflow.Workflow Checks
+        {
+            get { return _workflow; }
+        }
+
+        #endregion
+
         #region Events
 
         public void OnEvent(EventCheckState message)
@@ -408,6 +432,12 @@ namespace KipTM.ViewModel
         }
 
         #endregion
+
+        private void SetHelpMessage(string msg)
+        {
+            HelpMessage = msg;
+            IsError = false;
+        }
 
         ////public override void Cleanup()
         ////{

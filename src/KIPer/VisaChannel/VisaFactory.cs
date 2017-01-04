@@ -5,6 +5,7 @@ using System.Text;
 using IEEE488;
 using KipTM.Interfaces.Channels;
 using KipTM.Model.TransportChannels;
+using VisaChannel.TransportChannels.Visa;
 
 namespace VisaChannel
 {

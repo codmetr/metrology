@@ -12,6 +12,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
+using CheckFrame.Checks;
 using CheckFrame.ViewModel.Archive;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
@@ -95,6 +96,8 @@ namespace KipTM.ViewModel
                     unityContainer.RegisterType(typeof(IArchiveDataDefault), type, type.Name);
                 if (typeof(ICustomConfigFactory).IsAssignableFrom(type))
                     unityContainer.RegisterType(typeof(ICustomConfigFactory), type, type.Name);
+                if (typeof(ICheckViewModelFactory).IsAssignableFrom(type) && type.GetAttributes(typeof(ViewModelFactoryAttribute)).Any())
+                    unityContainer.RegisterType(typeof(ICheckViewModelFactory), type, type.Name);
                 //if (typeof(IReportFabrik).IsSubclassOf(type))
                 //    unityContainer.RegisterType(typeof(IReportFabrik), type);
             }
@@ -106,14 +109,13 @@ namespace KipTM.ViewModel
                 unityContainer.Resolve<FeatureDescriptorsCombiner>());
             unityContainer.RegisterType<IDeviceManager, DeviceManager>();
 
-            var test = unityContainer.Resolve<IDeviceManager>();
-
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IDeviceSettingsFactory>());
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IEthalonSettingsFactory>());
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IDeviceTypeSettingsFactory>());
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IMethodFactory>());
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IService>());
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IArchiveDataDefault>());
+            unityContainer.RegisterInstance(unityContainer.ResolveAll<ICheckViewModelFactory>());
 
 
             unityContainer.RegisterInstance<IMainSettings>(unityContainer.Resolve<IArchive>()
@@ -148,34 +150,6 @@ namespace KipTM.ViewModel
 
             unityContainer.RegisterType<IMethodsService, MethodsService>();
             unityContainer.RegisterType<MainViewModel>();
-
-            //#endregion
-
-            #region old config
-            /*
-            SimpleIoc.Default.Register<IEventAggregator, EventAggregator.EventAggregator>();
-            SimpleIoc.Default.Register<IArchive, ArchiveXML>();
-            SimpleIoc.Default.Register<IMainSettings>(
-                () => ServiceLocator.Current.GetInstance<IArchive>()
-                        .Load(MainSettings.SettingsFileName,
-                        ServiceLocator.Current.GetInstance < MainSettingsFactory >().GetDefault()));
-            SimpleIoc.Default.Register<IPropertiesLibrary, PropertiesLibrary>();
-            SimpleIoc.Default.Register<IMarkerFabrik<IParameterResultViewModel>>(
-                () => MarkerFabrik<IParameterResultViewModel>.Locator, false);
-            SimpleIoc.Default.Register<IFillerFabrik<IParameterResultViewModel>>(
-                () => FillerFabrik<IParameterResultViewModel>.Locator, false);
-            SimpleIoc.Default.Register<IReportFabrik>(() => ReportFabrik.Locator, true);
-            if (ViewModelBase.IsInDesignModeStatic)
-            {
-                SimpleIoc.Default.Register<IDataService, DesignDataService>();
-            }
-            else
-            {
-                SimpleIoc.Default.Register<IDataService, Model.DataService>();
-            }
-            SimpleIoc.Default.Register<IMethodsService, MethodsService>();
-            */
-            #endregion
 
             SimpleIoc.Default.Register<MainViewModel>();
 

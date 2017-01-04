@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using KipTM.Archive.DataTypes;
 
 namespace KipTM.Archive
 {
@@ -39,8 +40,8 @@ namespace KipTM.Archive
             var tempElement = archive.Data.First(el => el.Key == DeviceTypesKey);
             if (tempElement != null)
             {
-                if (tempElement.Value is List<string>)
-                    res.DeviceTypes = tempElement.Value as List<string>;
+                if (tempElement.Value is IEnumerable<object>)
+                    res.DeviceTypes = (tempElement.Value as IEnumerable<object>).Select(el => (string)el).ToList();
             }
 
             // Заполнение справочкника типов поддерживаемых проверок для типа устройства

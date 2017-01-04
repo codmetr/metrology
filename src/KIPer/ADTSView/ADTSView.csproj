@@ -172,6 +172,10 @@
       <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
       <Name>Tools</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WpfCommonStyles\WpfCommonStyles.csproj">
+      <Project>{4eb0e1a6-d266-4f92-97a2-53efe2ad51f0}</Project>
+      <Name>WpfCommonStyles</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
