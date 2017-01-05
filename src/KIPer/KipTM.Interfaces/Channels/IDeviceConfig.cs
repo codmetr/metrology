@@ -3,7 +3,7 @@
     /// <summary>
     /// Фабрика драйверов каналов
     /// </summary>
-    public interface IChannelFactory
+    public interface IDeviceConfig
     {
         /// <summary>
         /// Получить канал устройства

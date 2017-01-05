@@ -27,14 +27,10 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the SelectChannelViewModel class.
         /// </summary>
-        public SelectChannelViewModel()
+        public SelectChannelViewModel(IEnumerable<ITransportChannelType> channels)
         {
-            SelectedChannel = new VisaChannelDescriptor();
-            _channels = new[]
-            {
-                SelectedChannel,
-                new FakeChannelDescriptor(),
-            };
+            _channels = channels;
+            SelectedChannel = _channels.FirstOrDefault();
         }
 
         public IEnumerable<ITransportChannelType> Channels

@@ -11,8 +11,10 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Checks;
 using KipTM.Interfaces;
+using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks;
 using KipTM.Model;
+using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 using KipTM.View;
 using KipTM.ViewModel.Checks;
@@ -70,6 +72,7 @@ namespace KipTM.ViewModel
         private IMarkerFabrik<IParameterResultViewModel> _resulMaker;
         private IFillerFabrik<IParameterResultViewModel> _filler;
         private IEnumerable<ICheckViewModelFactory> _factories;
+        private IEnumerable<IChannelsFactory> _channelFactories;
         private IReportFabrik _reportFabric;
         private bool _isActiveCheck;
         private bool _isActiveService;
@@ -87,7 +90,8 @@ namespace KipTM.ViewModel
             IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive,
             IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
             IReportFabrik reportFabric, IEnumerable<IService> services, FeatureDescriptorsCombiner features,
-            IDictionary<Type, ICustomConfigFactory> customFatories, IDeviceManager deviceManager, IEnumerable<ICheckViewModelFactory> factories)
+            IDictionary<Type, ICustomConfigFactory> customFatories, IDeviceManager deviceManager,
+            IEnumerable<ICheckViewModelFactory> factories)
         {
             try
             {
@@ -111,7 +115,9 @@ namespace KipTM.ViewModel
             _resulMaker = resulMaker;
             _filler = filler;
             _reportFabric = reportFabric;
-            _services = new ServiceViewModel(services);
+            _channelFactories = features.ChannelFactories;
+            _services = new ServiceViewModel(services, new SelectChannelViewModel(_channelFactories.SelectMany(el=>el.GetChannels())));
+
             //new List<IService>()
             //  {
             //      new Pace1000ViewModel(_dataService.DeviceManager),
@@ -135,12 +141,13 @@ namespace KipTM.ViewModel
                 _deviceTypes = new DeviceTypeCollectionViewModel();
                 _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
+                var channelTargetDevice = new SelectChannelViewModel(_channelFactories.SelectMany(el=>el.GetChannels()));
+                var channelEthalonDevice = new SelectChannelViewModel(_channelFactories.SelectMany(el => el.GetChannels()));
+
                 var checkFabrik = new CheckFabrik(_deviceManager, _propertiesLibrary.PropertyPool, _factories);
                 var result = new TestResult();
                 var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool,
                     _propertiesLibrary.DictionariesPool, result);
-                var channelTargetDevice = new SelectChannelViewModel();
-                var channelEthalonDevice = new SelectChannelViewModel();
                 var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice,
                     _customFactory);
 

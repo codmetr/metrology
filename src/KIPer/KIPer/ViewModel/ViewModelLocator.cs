@@ -107,7 +107,8 @@ namespace KipTM.ViewModel
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IFeaturesDescriptor>());
             unityContainer.RegisterInstance<FeatureDescriptorsCombiner>(
                 unityContainer.Resolve<FeatureDescriptorsCombiner>());
-            unityContainer.RegisterType<IDeviceManager, DeviceManager>();
+            unityContainer.RegisterInstance<IDeviceManager>(
+                new DeviceManager(unityContainer.Resolve<FeatureDescriptorsCombiner>()));
 
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IDeviceSettingsFactory>());
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IEthalonSettingsFactory>());
@@ -150,6 +151,7 @@ namespace KipTM.ViewModel
 
             unityContainer.RegisterType<IMethodsService, MethodsService>();
             unityContainer.RegisterType<MainViewModel>();
+            unityContainer.RegisterInstance<MainViewModel>(unityContainer.Resolve<MainViewModel>());
 
             SimpleIoc.Default.Register<MainViewModel>();
 

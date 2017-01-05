@@ -388,14 +388,6 @@
       <Project>{3d3db0eb-5b92-4d8f-8547-82ff7184c59a}</Project>
       <Name>PACESeries</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Drivers\VisaDriver\VisaDriver.csproj">
-      <Project>{cbea7a6c-2ea6-4329-99ee-4290a9801a0a}</Project>
-      <Name>VisaDriver</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IEEE488Transport\IEEE488.csproj">
-      <Project>{3fec76c3-b933-4461-aa8d-85360d3f41c4}</Project>
-      <Name>IEEE488</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
       <Project>{B8DBF9E3-03D3-457D-B889-D45E1C5131E4}</Project>
       <Name>KipTM.Interfaces</Name>
@@ -420,9 +412,9 @@
       <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
       <Name>Tools</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VisaChannel\VisaChannel.csproj">
-      <Project>{82E6C917-C316-4664-B858-401F8C08514F}</Project>
-      <Name>VisaChannel</Name>
+    <ProjectReference Include="..\WpfCommonStyles\WpfCommonStyles.csproj">
+      <Project>{4eb0e1a6-d266-4f92-97a2-53efe2ad51f0}</Project>
+      <Name>WpfCommonStyles</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

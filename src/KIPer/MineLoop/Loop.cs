@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -31,9 +33,9 @@ namespace MainLoop
         /// </summary>
         public Loops()
         {
-            _lockers = new Dictionary<string, LoopDescriptor>();
-            _cancelThreadCollection = new Dictionary<string, CancellationTokenSource>();
-            _threads = new Dictionary<string, Thread>();
+            _lockers = new ConcurrentDictionary<string, LoopDescriptor>();
+            _cancelThreadCollection = new ConcurrentDictionary<string, CancellationTokenSource>();
+            _threads = new ConcurrentDictionary<string, Thread>();
         }
 
         /// <summary>
@@ -44,8 +46,11 @@ namespace MainLoop
         /// <param name="initAction">метод инициализации локера (если он необходим)</param>
         public void AddLocker(string key, object locker, Action<object> initAction)
         {
+            if (_lockers.ContainsKey(key))
+                return;
+
             var cancel = new CancellationTokenSource();
-            var parameter = new LoopDescriptor(locker, cancel.Token, initAction);
+            var parameter = new LoopDescriptor(locker, cancel.Token, initAction, key);
             _lockers.Add(key, parameter);
             _cancelThreadCollection.Add(key, cancel);
             var thread = new Thread(WorkLoop);
@@ -108,6 +113,7 @@ namespace MainLoop
                     continue;
                 }
                 Thread.Sleep(def.Waiting);
+                var str = def.Note;
             }
         }
 
@@ -154,9 +160,10 @@ namespace MainLoop
         /// </summary>
         public void Dispose()
         {
-            foreach (var cancellationTokenSource in _cancelThreadCollection.Values)
+            foreach (var cancellationTokenSource in _cancelThreadCollection)
             {
-                cancellationTokenSource.Cancel();
+                Debug.Write(string.Format("\ncancel loop by key: {0}\n", cancellationTokenSource.Key));
+                cancellationTokenSource.Value.Cancel();
             }
         }
 

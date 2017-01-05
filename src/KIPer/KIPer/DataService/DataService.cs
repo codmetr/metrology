@@ -8,7 +8,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using ArchiveData.DTO;
 using CheckFrame.Model;
-using IEEE488;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Checks;
 using KipTM.Model.Channels;

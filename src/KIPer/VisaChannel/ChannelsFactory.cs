@@ -9,9 +9,9 @@ using KipTM.Model.TransportChannels;
 
 namespace VisaChannel
 {
-    public class ChannelsFactory
+    public class ChannelsFactory : IChannelsFactory
     {
-        public IEnumerable<ITransportChannelType> GetChannelTypes()
+        public IEnumerable<ITransportChannelType> GetChannels()
         {
             var channels = new ITransportChannelType[]
             {
@@ -21,9 +21,9 @@ namespace VisaChannel
             return channels;
         }
 
-        public Dictionary<string, IChannelFactory> GetChannels()
+        public Dictionary<string, IDeviceConfig> GetDevicesConfig()
         {
-            var channels = new Dictionary<string, IChannelFactory>()
+            var channels = new Dictionary<string, IDeviceConfig>()
             {
                 {VisaChannelDescriptor.KeyType, new VisaFactory()},
                 {FakeChannelDescriptor.KeyType, new VisaFakeFactory()},

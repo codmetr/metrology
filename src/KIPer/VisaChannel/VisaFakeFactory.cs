@@ -10,7 +10,7 @@ namespace VisaChannel
     /// <summary>
     /// фабрика заглушки для канала VISA
     /// </summary>
-    class VisaFakeFactory : IChannelFactory
+    class VisaFakeFactory : IDeviceConfig
     {
         /// <summary>
         /// Заглушка для канала VISA

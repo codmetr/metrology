@@ -36,10 +36,11 @@ namespace ADTSChecks
                 new KeyValuePair<Type, IDeviceFactory>(typeof(ADTSDriver), new ADTSFactory()),
                 new KeyValuePair<Type, IDeviceFactory>(typeof(PACE1000Driver), new PACE1000Factory()),
             };
-            var channelsFactories = new List<KeyValuePair<string, IChannelFactory>>();
+            var channelsFactories = new List<KeyValuePair<string, IDeviceConfig>>();
             var factoriesVisa = new VisaChannel.ChannelsFactory();
-            channelsFactories.AddRange(factoriesVisa.GetChannels());
-            ChannelsFactories = channelsFactories;
+            channelsFactories.AddRange(factoriesVisa.GetDevicesConfig());
+            ChannelFactories = factoriesVisa;
+            DeviceConfigs = channelsFactories;
 
             EthalonChannels = new List<KeyValuePair<string, IEthalonCannelFactory>>()
             {
@@ -56,6 +57,10 @@ namespace ADTSChecks
         /// </summary>
         public IEnumerable<DeviceTypeDescriptor> EthalonTypes { get; private set; }
         /// <summary>
+        /// Фабрика каналов
+        /// </summary>
+        public IChannelsFactory ChannelFactories { get; private set; }
+        /// <summary>
         /// Фабрики моделей для типов устройств
         /// </summary>
         public IEnumerable<KeyValuePair<Type, IDeviceModelFactory>> Models { get; private set; }
@@ -66,7 +71,7 @@ namespace ADTSChecks
         /// <summary>
         /// Фабрики каналов проверяемых устройств
         /// </summary>
-        public IEnumerable<KeyValuePair<string, IChannelFactory>> ChannelsFactories { get; private set; }
+        public IEnumerable<KeyValuePair<string, IDeviceConfig>> DeviceConfigs { get; private set; }
         /// <summary>
         /// Фабрики каналов эталонов
         /// </summary>

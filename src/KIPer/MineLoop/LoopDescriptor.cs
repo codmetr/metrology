@@ -12,6 +12,7 @@ namespace MainLoop
         private readonly object locker;
         private readonly Action<object> _initAction;
         private bool _isNeedInit = false;
+        private string _note;
 
         private readonly TimeSpan waiting;
 
@@ -34,13 +35,14 @@ namespace MainLoop
             unimportantActions = new Queue<Action<object>>();
         }
 
-        public LoopDescriptor(object locker, CancellationToken cancel, Action<object> initAction = null)
+        public LoopDescriptor(object locker, CancellationToken cancel, Action<object> initAction = null, string note = null)
             : this()
         {
             _initAction = initAction;
             this.locker = locker;
             this._cancel = cancel;
             _isNeedInit = _initAction != null;
+            _note = note;
         }
 
         public LoopDescriptor(object locker, CancellationToken cancel, Action<object> initAction, TimeSpan waiting)
@@ -54,6 +56,11 @@ namespace MainLoop
         /// For locker need call Init action
         /// </summary>
         public bool IsNeedInit { get { return _isNeedInit; } }
+
+        /// <summary>
+        /// Node
+        /// </summary>
+        public string Note{get { return _note; }}
 
         /// <summary>
         /// Init locker

@@ -23,12 +23,12 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the ServiceViewModel class.
         /// </summary>
-        public ServiceViewModel(IEnumerable<IService> services)
+        public ServiceViewModel(IEnumerable<IService> services, SelectChannelViewModel channel)
         {
             Services = services;
             SelectedService = Services.FirstOrDefault();
             _showedService = null;
-            Channel = new SelectChannelViewModel();
+            Channel = channel;
             ShowedService = null;
             IsCanConnect = true;
             IsCanNotConnect = false;

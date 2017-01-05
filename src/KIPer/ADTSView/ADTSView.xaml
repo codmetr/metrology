@@ -15,7 +15,8 @@
                 <Setter Property="Width" Value="150"/>
                 <Setter Property="Margin" Value="3"/>
             </Style>
-
+            <Style TargetType="TextBlock" x:Key="ValueStyle"></Style>
+             
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
         </ResourceDictionary>
@@ -41,16 +42,17 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}">Давление PS:</TextBlock>
-                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Pressure}" Style="{StaticResource ValueStyle}"/>
-                <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding PressureUnit}" Style="{StaticResource ValueStyle}"/>
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Pressure}" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=ValueStyle}}"/>
+                <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding PressureUnit}" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=ValueStyle}}"/>
                 <Button Grid.Column="3" Grid.Row="0" Command="{Binding UpdatePressure}" VerticalAlignment="Center">Перечитать</Button>
 
-                <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource TitleStyle}">Давление PT:</TextBlock>
-                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Pitot}" Style="{StaticResource ValueStyle}"/>
-                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding PressureUnit}" Style="{StaticResource ValueStyle}"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}">Давление PT:</TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Pitot}" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=ValueStyle}}"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding PressureUnit}" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=ValueStyle}}"/>
                 <Button Grid.Column="3" Grid.Row="1" Command="{Binding UpdatePitot}" VerticalAlignment="Center">Перечитать</Button>
 
-                <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource TitleStyle}" VerticalAlignment="Center" TextWrapping="Wrap">Ед. измерения:</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="2" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}"
+                           VerticalAlignment="Center" TextWrapping="Wrap">Ед. измерения:</TextBlock>
                 <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Margin="3" HorizontalAlignment="Stretch"
                               ItemsSource="{Binding AvalableUnits}"
                               SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -62,8 +64,9 @@
                 </ComboBox>
                 <Button Grid.Column="3" Grid.Row="2" Command="{Binding UpdatePressureUnit}" VerticalAlignment="Center">Перечитать</Button>
 
-                <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource TitleStyle}">Состояние:</TextBlock>
-                <TextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Text="{Binding StateADTS}" Style="{StaticResource ValueStyle}"/>
+                <TextBlock Grid.Column="0" Grid.Row="3" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}">Состояние:</TextBlock>
+                <TextBlock Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Text="{Binding StateADTS}"
+                           Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=ValueStyle}}"/>
 
                 <UniformGrid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4">
                     <DockPanel HorizontalAlignment="Stretch">
@@ -121,7 +124,8 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource TitleStyle}" VerticalAlignment="Center" TextWrapping="Wrap">Ед. измерения:</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="0" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}"
+                           VerticalAlignment="Center" TextWrapping="Wrap">Ед. измерения:</TextBlock>
                 <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Margin="3" HorizontalAlignment="Stretch"
                               ItemsSource="{Binding AvalableUnits}"
                               SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -133,24 +137,32 @@
                 </ComboBox>
                 <Button Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" Command="{Binding SetPressureUnit}">Установить</Button>
 
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="PS цель:" Style="{StaticResource TitleStyle}"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding PressureAim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SettedValueStyle}"/>
-                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding PressureUnit}" Style="{StaticResource ValueStyle}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="PS цель:" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding PressureAim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=SettedValueStyle}}"/>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding PressureUnit}"
+                           Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=ValueStyle}}"/>
                 <Button Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" Command="{Binding SetPressureAim}">Установить</Button>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="PT цель:" Style="{StaticResource TitleStyle}"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding PitotAim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SettedValueStyle}"/>
-                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding PressureUnit}" Style="{StaticResource ValueStyle}"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="PT цель:" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding PitotAim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=SettedValueStyle}}"/>
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding PressureUnit}"
+                           Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=ValueStyle}}"/>
                 <Button Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" Command="{Binding SetPitotAim}">Установить</Button>
 
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Rate PS цель:" Style="{StaticResource TitleStyle}"/>
-                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding PressureRateAim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SettedValueStyle}"/>
-                <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding PressureUnit}" Style="{StaticResource ValueStyle}"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Rate PS цель:" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding PressureRateAim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=SettedValueStyle}}"/>
+                <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding PressureUnit}"
+                           Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=ValueStyle}}"/>
                 <Button Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" Command="{Binding SetPressureRate}">Установить</Button>
 
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="Rate PS цель:" Style="{StaticResource TitleStyle}"/>
-                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding PitotRateAim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SettedValueStyle}"/>
-                <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding PressureUnit}" Style="{StaticResource ValueStyle}"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Rate PS цель:" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding PitotRateAim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=SettedValueStyle}}"/>
+                <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding PressureUnit}"
+                           Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=ValueStyle}}"/>
                 <Button Grid.Row="4" Grid.Column="3" VerticalAlignment="Center" Command="{Binding SetPitotRate}">Установить</Button>
 
                 <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Command="{Binding SetControl}" VerticalAlignment="Center">В режим контроль</Button>

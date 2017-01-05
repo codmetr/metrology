@@ -20,17 +20,19 @@ namespace CheckFrame
             _features = features;
             DeviceTypes = _features.SelectMany(el => el.DeviceTypes);
             EthalonTypes = _features.SelectMany(el => el.EthalonTypes);
+            ChannelFactories = _features.Select(el => el.ChannelFactories);
             Models = _features.SelectMany(el => el.Models);
             Devices = _features.SelectMany(el => el.Devices);
-            ChannelsFactories = _features.SelectMany(el => el.ChannelsFactories);
+            DeviceConfigs = _features.SelectMany(el => el.DeviceConfigs);
             EthalonChannels = _features.SelectMany(el => el.EthalonChannels);
         }
 
         public IEnumerable<DeviceTypeDescriptor> DeviceTypes { get; private set; }
         public IEnumerable<DeviceTypeDescriptor> EthalonTypes { get; private set; }
+        public IEnumerable<IChannelsFactory> ChannelFactories { get; private set;  }
         public IEnumerable<KeyValuePair<Type, IDeviceModelFactory>> Models { get; private set; }
         public IEnumerable<KeyValuePair<Type, IDeviceFactory>> Devices { get; private set; }
-        public IEnumerable<KeyValuePair<string, IChannelFactory>> ChannelsFactories { get; private set; }
+        public IEnumerable<KeyValuePair<string, IDeviceConfig>> DeviceConfigs { get; private set; }
         public IEnumerable<KeyValuePair<string, IEthalonCannelFactory>> EthalonChannels { get; private set; }
         public IEnumerable<ArchivedKeyValuePair> GetDefaultForCheckTypes()
         {

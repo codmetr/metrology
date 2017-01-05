@@ -54,7 +54,8 @@
     <Compile Include="Archive\IDictionariesArchiveFactory.cs" />
     <Compile Include="Archive\IDictionaryDataDefault.cs" />
     <Compile Include="Archive\IPropertyPool.cs" />
-    <Compile Include="Channels\IChannelFactory.cs" />
+    <Compile Include="Channels\IChannelsFactory.cs" />
+    <Compile Include="Channels\IDeviceConfig.cs" />
     <Compile Include="Channels\IEthalonCannelFactory.cs" />
     <Compile Include="Channels\IEthalonChannel.cs" />
     <Compile Include="Channels\IUserChannel.cs" />

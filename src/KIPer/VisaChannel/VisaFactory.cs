@@ -12,7 +12,7 @@ namespace VisaChannel
     /// <summary>
     /// фабрика драйвера VISA
     /// </summary>
-    class VisaFactory : IChannelFactory
+    class VisaFactory : IDeviceConfig
     {
         /// <summary>
         /// Получить драйвер VISA

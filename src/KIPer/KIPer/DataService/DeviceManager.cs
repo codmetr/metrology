@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO.Ports;
 using System.Linq;
 using CheckFrame;
-using IEEE488;
 using KipTM.DataService;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
@@ -23,15 +21,11 @@ namespace KipTM.Model
 
         private readonly IDictionary<string, IEthalonCannelFactory> _ethalonChannels;
 
-        private readonly IDictionary<string, Tuple<ITransportIEEE488, SerialPort>> _ports = new Dictionary<string, Tuple<ITransportIEEE488, SerialPort>>();
-
-        private readonly IDictionary<ITransportChannelType, object> _devicesOnPorts = new Dictionary<ITransportChannelType, object>();
-
         private IDictionary<Type, IDeviceModelFactory> _modelFabrics;
 
         private IDictionary<Type, IDeviceFactory> _devicesFabrics;
 
-        private IDictionary<string, IChannelFactory> _channelsFabrics;
+        private IDictionary<string, IDeviceConfig> _channelsFabrics;
 
         /// <summary>
         /// Cache devices
@@ -87,7 +81,7 @@ namespace KipTM.Model
             //    },
             //};
 
-            _channelsFabrics = features.ChannelsFactories.ToDictionary(el => el.Key, el => el.Value);
+            _channelsFabrics = features.DeviceConfigs.ToDictionary(el => el.Key, el => el.Value);
             //_channelsFabrics = new Dictionary<string, Func<object, object>>()
             //{
             //    {VisaChannelDescriptor.KeyType, opt =>
@@ -105,7 +99,7 @@ namespace KipTM.Model
             //    {FakeChannelDescriptor.KeyType, opt => new FakeTransport()}
             //};
 
-            foreach (var fabric in features.ChannelsFactories)
+            foreach (var fabric in features.DeviceConfigs)
             {
                 _loops.AddLocker(fabric.Key, new object());
             }

@@ -23,6 +23,10 @@ namespace KipTM.Interfaces
         /// </summary>
         IEnumerable<DeviceTypeDescriptor> EthalonTypes { get; }
         /// <summary>
+        /// Фабрика каналов
+        /// </summary>
+        IChannelsFactory ChannelFactories { get; }
+        /// <summary>
         /// Фабрики моделей для типов устройств
         /// </summary>
         IEnumerable<KeyValuePair<Type, IDeviceModelFactory>> Models { get; }
@@ -31,9 +35,9 @@ namespace KipTM.Interfaces
         /// </summary>
         IEnumerable<KeyValuePair<Type, IDeviceFactory>> Devices { get; }
         /// <summary>
-        /// Фабрики каналов проверяемых устройств
+        /// Фабрики настройки каналов проверяемых устройств
         /// </summary>
-        IEnumerable<KeyValuePair<string, IChannelFactory>> ChannelsFactories { get; }
+        IEnumerable<KeyValuePair<string, IDeviceConfig>> DeviceConfigs { get; }
         /// <summary>
         /// Фабрики каналов эталонов
         /// </summary>
