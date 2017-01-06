@@ -98,6 +98,8 @@ namespace KipTM.ViewModel
                     unityContainer.RegisterType(typeof(ICustomConfigFactory), type, type.Name);
                 if (typeof(ICheckViewModelFactory).IsAssignableFrom(type) && type.GetAttributes(typeof(ViewModelFactoryAttribute)).Any())
                     unityContainer.RegisterType(typeof(ICheckViewModelFactory), type, type.Name);
+                if (typeof(IReporter).IsAssignableFrom(type) && type.GetAttributes(typeof(ReportAttribute)).Any())
+                    unityContainer.RegisterType(typeof(IReporter), type, type.Name);
                 //if (typeof(IReportFabrik).IsSubclassOf(type))
                 //    unityContainer.RegisterType(typeof(IReportFabrik), type);
             }
@@ -129,7 +131,7 @@ namespace KipTM.ViewModel
                 MarkerFabrik<IParameterResultViewModel>.Locator);
             unityContainer.RegisterInstance<IFillerFabrik<IParameterResultViewModel>>(
                 FillerFabrik<IParameterResultViewModel>.Locator);
-            unityContainer.RegisterInstance<IReportFabrik>(ReportFabrik.Locator);
+            unityContainer.RegisterInstance<IReportFabrik>(new ReportFabrik(unityContainer.ResolveAll<IReporter>()));
 
             #region CustomConfigFactories
 

@@ -13,7 +13,7 @@ namespace ADTSChecks.Model.Checks
 {
     public class Test : CheckBase
     {
-        public const string Key = "Поверка ADTS";
+        public const string Key = KeysDic.Test;
 
         public const string KeyPropertyPoints = "Points";
         public const string KeyPropertyRate = "Rate";

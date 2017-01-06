@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
 using ADTSChecks.Model.Devices;
+using ADTSData;
 using ArchiveData.DTO.Params;
 using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks.Steps;
@@ -18,9 +19,9 @@ namespace ADTSChecks.Model.Checks
 {
     public abstract class CheckBase : ICheckMethod
     {
-        public const string KeySettingsPS = "ADTSCalibrationPs";
-        public const string KeySettingsPT = "ADTSCalibrationPt";
-        public const string KeySettingsPSPT = "ADTSCalibrationPsPt";
+        public const string KeySettingsPS = KeysDic.KeySettingsPS;
+        public const string KeySettingsPT = KeysDic.KeySettingsPT;
+        public const string KeySettingsPSPT = KeysDic.KeySettingsPSPT;
 
         protected string MethodName = "ADTS";
 

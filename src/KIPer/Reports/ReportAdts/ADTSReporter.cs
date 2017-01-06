@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using ADTSChecks.Model.Checks;
-using ADTSChecks.Model.Devices;
 using ADTSData;
 using CrystalDecisions.CrystalReports.Engine;
 using ReportService;
@@ -13,7 +11,7 @@ using ArchiveData.DTO;
 namespace ReportAdts
 {
     //[Report(typeof(ADTSTestMethod))]
-    [Report(Test.Key)]
+    [Report(KeysDic.Test)]
     public class ADTSReporter: IReporter
     {
         public ReportClass GetReport(AdtsCommonReportData commonData, IEnumerable<AdtsReportData> staticData, IEnumerable<AdtsReportData> dinamicData)
@@ -50,7 +48,7 @@ namespace ReportAdts
             var dinamicResults = new List<AdtsReportData>();
 
 
-            foreach (var stepResult in result.Results.Where(res => res.ChannelKey == CheckBase.KeySettingsPS))
+            foreach (var stepResult in result.Results.Where(res => res.ChannelKey == KeysDic.KeySettingsPS))
             {
                 var res = stepResult.Result as AdtsPointResult;
                 if (res==null)
@@ -58,7 +56,7 @@ namespace ReportAdts
                 staticResults.Add(dataToReport(res));
             }
 
-            foreach (var stepResult in result.Results.Where(res => res.ChannelKey == CheckBase.KeySettingsPT))
+            foreach (var stepResult in result.Results.Where(res => res.ChannelKey == KeysDic.KeySettingsPT))
             {
                 var res = stepResult.Result as AdtsPointResult;
                 if (res==null)
@@ -83,14 +81,14 @@ namespace ReportAdts
 
         private string getRangeFromType(DeviceTypeDescriptor type)
         {
-            return type.Model == ADTSModel.Model
+            return type.Model == KeysDic.ADTSModelKey
                 ? "Ps (35…1128) mbar;\nPt  (35…3500) mbar"
-                : type.Model == PACE1000Model.Model ? "1300mbar, 3500 mbar" : "";
+                : type.Model == KeysDic.PACE1000ModelKey ? "1300mbar, 3500 mbar" : "";
         }
 
         private string getErrorFromType(DeviceTypeDescriptor type)
         {
-            return type.Model == PACE1000Model.Model ? "± 0,005% ВПИ" : "";
+            return type.Model == KeysDic.PACE1000ModelKey ? "± 0,005% ВПИ" : "";
         }
     }
 }

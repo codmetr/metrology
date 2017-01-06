@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ADTSData;
 using CheckFrame.Model;
 using KipTM.Model;
 using KipTM.Model.TransportChannels;
@@ -37,7 +38,7 @@ namespace ADTSChecks.Model.Devices
         }
 
         public static string Key { get { return "PACE1000"; } }
-        public static string Model { get { return "PACE1000"; } }
+        public static string Model { get { return KeysDic.PACE1000ModelKey; } }
         public static string DeviceCommonType { get { return "Калибратор давления"; } }
         public static string DeviceManufacturer { get { return "GE Druk"; } }
         public static IEnumerable<string> TypesEtalonParameters = new[] { "давление", "авиационная высота", "авиационная скорость" };

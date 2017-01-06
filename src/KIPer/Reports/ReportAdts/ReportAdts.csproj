@@ -69,10 +69,6 @@
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ADTSChecks\ADTSChecks.csproj">
-      <Project>{ef16e7b3-223e-4f66-9685-a6ccb3973c28}</Project>
-      <Name>ADTSChecks</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\ADTSData\ADTSData.csproj">
       <Project>{b00215bc-0620-414b-83ab-6b88a152e0c2}</Project>
       <Name>ADTSData</Name>
@@ -80,14 +76,6 @@
     <ProjectReference Include="..\..\ArchiveData\ArchiveData.csproj">
       <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
       <Name>ArchiveData</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\CheckFrame\CheckFrame.csproj">
-      <Project>{81B358FE-6B31-49FF-AB34-45CB960E57B6}</Project>
-      <Name>CheckFrame</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\KipTM.Interfaces\KipTM.Interfaces.csproj">
-      <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
-      <Name>KipTM.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\ReportService\ReportService.csproj">
       <Project>{71e2479c-c370-44bd-b6e0-48aa88101e7b}</Project>

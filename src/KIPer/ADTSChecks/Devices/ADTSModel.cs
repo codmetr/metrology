@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
+using ADTSData;
 using CheckFrame.Model;
 using KipTM.Model;
 using KipTM.Model.TransportChannels;
@@ -47,7 +48,7 @@ namespace ADTSChecks.Model.Devices
         #endregion
 
         public static string Key { get { return "ADTS"; } }
-        public static string Model { get { return "ADTS405"; } }
+        public static string Model { get { return KeysDic.ADTSModelKey; } }
         public static string DeviceCommonType { get { return "Калибратор давления"; } }
         public static string DeviceManufacturer { get { return "GE Druk"; } }
         public static IEnumerable<string> TypesEtalonParameters = new[]

@@ -14,20 +14,28 @@ namespace ReportService
     {
         private static ReportFabrik _instance = null;
         private Container _container;
+        private IEnumerable<IReporter> _reporters; 
 
         private ReportFabrik()
         {
             Configure();
         }
-        
+
+        public ReportFabrik(IEnumerable<IReporter> reporters)
+        {
+            _reporters = reporters;
+        }
+
         public ReportFabrik Configure()
         {
             _container = new Container();
             _container.Configure(x => x.Scan(scaner =>
             {
-                scaner.AssembliesFromPath("Reports");
+                scaner.AssembliesFromPath("Libs");
                 scaner.AddAllTypesOf<IReporter>();
             }));
+            _reporters = _container.GetAllInstances<IReporter>()
+                .Where(el => el.GetType().GetAttributes(typeof (ReportAttribute)).Any());
             return this;
         }
 
@@ -54,7 +62,7 @@ namespace ReportService
 
         private IEnumerable<IReporter> GetReporters()
         {
-            return _container.GetAllInstances<IReporter>().Where(el => el.GetType().GetAttributes(typeof(ReportAttribute)).Any());
+            return _reporters;
         }
 
         #region Implementation of IReportFabrik
