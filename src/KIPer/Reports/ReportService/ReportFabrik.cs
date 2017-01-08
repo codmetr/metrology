@@ -8,39 +8,28 @@ using Tools;
 namespace ReportService
 {
     /// <summary>
-    /// Получение списка 
+    /// Консолидированная фабрика отчетов
     /// </summary>
     public class ReportFabrik : IReportFabrik
     {
-        private static ReportFabrik _instance = null;
-        private Container _container;
-        private IEnumerable<IReporter> _reporters; 
+        private readonly IEnumerable<IReporter> _reporters; 
 
-        private ReportFabrik()
-        {
-            Configure();
-        }
-
+        /// <summary>
+        /// Консолидированная фабрика отчетов
+        /// </summary>
+        /// <param name="reporters">Набор поддерживаемых типов отчетов</param>
         public ReportFabrik(IEnumerable<IReporter> reporters)
         {
             _reporters = reporters;
         }
 
-        public ReportFabrik Configure()
-        {
-            _container = new Container();
-            _container.Configure(x => x.Scan(scaner =>
-            {
-                scaner.AssembliesFromPath("Libs");
-                scaner.AddAllTypesOf<IReporter>();
-            }));
-            _reporters = _container.GetAllInstances<IReporter>()
-                .Where(el => el.GetType().GetAttributes(typeof (ReportAttribute)).Any());
-            return this;
-        }
+        #region Implementation of IReportFabrik
 
-        public static ReportFabrik Locator{get { return _instance ?? (_instance = (new ReportFabrik()).Configure()); }}
-
+        /// <summary>
+        /// Получить отчет по типу проверки
+        /// </summary>
+        /// <param name="result">результат проверки</param>
+        /// <returns>Data source для отчета</returns>
         public object GetReporter(TestResult result)
         {
             var reporters = GetReporters();
@@ -60,18 +49,11 @@ namespace ReportService
             return null;
         }
 
+        #endregion
+
         private IEnumerable<IReporter> GetReporters()
         {
             return _reporters;
         }
-
-        #region Implementation of IReportFabrik
-
-        public IReporter GetCustomReporter(Type targetT, TestResult result)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
     }
 }

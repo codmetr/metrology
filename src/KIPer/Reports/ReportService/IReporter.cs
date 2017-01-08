@@ -6,6 +6,9 @@ using ArchiveData.DTO;
 
 namespace ReportService
 {
+    /// <summary>
+    /// Генератор data source для конкретного типа проверки
+    /// </summary>
     public interface IReporter
     {
         object GetReport(TestResult result);
