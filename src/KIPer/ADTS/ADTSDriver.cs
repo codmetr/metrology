@@ -37,7 +37,7 @@ namespace ADTS
         public bool CalibrationAbort()
         {
             var cmd = _parser.GetCommandCalibrationAbort();
-            return _transport.Send(cmd);
+            return Send(cmd);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace ADTS
         public bool StartCalibration(CalibChannel channel)
         {
             var cmd = _parser.GetCommandCalibrationStart(channel);
-            return _transport.Send(cmd);
+            return Send(cmd);
         }
 
         /// <summary>
@@ -62,9 +62,9 @@ namespace ADTS
         {
             date = null;
             var cmd = _parser.GetCommandGetSystemDate();
-            if (!_transport.Send(cmd))
+            if (!Send(cmd))
                 return false;
-            var answer = _transport.Receive();
+            var answer = Receive();
             return _parser.ParseGetSystemDate(answer, out date);
         }
 
@@ -76,7 +76,7 @@ namespace ADTS
         public bool GoToGround()
         {
             var cmd = _parser.GetCommandGoToGround();
-            return _transport.Send(cmd);
+            return Send(cmd);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace ADTS
         public bool SetState(State state)
         {
             var cmd = _parser.GetCommandSetState(state);
-            return _transport.Send(cmd);
+            return Send(cmd);
         }
 
         /// <summary>
@@ -101,9 +101,9 @@ namespace ADTS
         {
             state = null;
             var cmd = _parser.GetCommandGetState();
-            if (!_transport.Send(cmd))
+            if (!Send(cmd))
                 return false;
-            var answer = _transport.Receive();
+            var answer = Receive();
             return _parser.ParseGetState(answer, out state);
         }
 
@@ -116,7 +116,7 @@ namespace ADTS
         public bool SetUnits(PressureUnits unit)
         {
             var cmd = _parser.GetCommandSetPressureUnit(unit);
-            return _transport.Send(cmd);
+            return Send(cmd);
         }
 
         /// <summary>
@@ -129,9 +129,9 @@ namespace ADTS
         {
             unit = null;
             var cmd = _parser.GetCommandGetPressureUnit();
-            if (!_transport.Send(cmd))
+            if (!Send(cmd))
                 return false;
-            var answer = _transport.Receive();
+            var answer = Receive();
             return _parser.ParseGetPressureUnit(answer, out unit);
         }
 
@@ -145,7 +145,7 @@ namespace ADTS
         public bool SetRate(Parameters param, double rate)
         {
             var cmd = _parser.GetCommandSetParameterRate(param, rate);
-            return _transport.Send(cmd);
+            return Send(cmd);
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace ADTS
         public bool SetAim(Parameters param, double aim)
         {
             var cmd = _parser.GetCommandSetParameterAim(param, aim);
-            return _transport.Send(cmd);
+            return Send(cmd);
         }
 
         /// <summary>
@@ -172,9 +172,9 @@ namespace ADTS
         {
             value = null;
             var cmd = _parser.GetCommandMeasurePress(param);
-            if (!_transport.Send(cmd))
+            if (!Send(cmd))
                 return false;
-            var answer = _transport.Receive();
+            var answer = Receive();
             return _parser.ParseMeasurePress(answer, out value);
         }
 
@@ -188,9 +188,9 @@ namespace ADTS
         {
             status = null;
             var cmd = _parser.GetCommandGetStatus();
-            if(!_transport.Send(cmd))
+            if(!Send(cmd))
                 return false;
-            var answer = _transport.Receive();
+            var answer = Receive();
             return _parser.ParseGetStatus(answer, out status);
         }
 
@@ -203,7 +203,7 @@ namespace ADTS
         public bool SetCalibrationValue(double value)
         {
             var cmd = _parser.GetCommandCalibrationSetValue(value);
-            return _transport.Send(cmd);
+            return Send(cmd);
         }
 
         /// <summary>
@@ -218,9 +218,9 @@ namespace ADTS
             slope = null;
             zero = null;
             var cmd = _parser.GetCommandGetCalibrationResult();
-            if (!_transport.Send(cmd))
+            if (!Send(cmd))
                 return false;
-            var answer = _transport.Receive();
+            var answer = Receive();
             return _parser.ParseKeyGetCalibrationResult(answer, out slope, out zero);
         }
 
@@ -233,8 +233,31 @@ namespace ADTS
         public bool SetCalibrationAccept(bool accept)
         {
             var cmd = _parser.GetCommandMainCalibrationAccept(accept);
-            return _transport.Send(cmd);
+            return Send(cmd);
         }
+
+        #region Service
+
+        /// <summary>
+        /// Обертка команды посылки сообщения
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        private bool Send(string msg)
+        {
+            return _transport.Send(msg);
+        }
+
+        /// <summary>
+        /// Обертка команды чтения ответа
+        /// </summary>
+        /// <returns></returns>
+        private string Receive()
+        {
+            return _transport.Receive();
+        }
+
+        #endregion
 
         public void Dispose()
         {

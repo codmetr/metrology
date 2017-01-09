@@ -55,9 +55,9 @@ namespace PACESeries
         {
             var idn = string.Empty;
             var cmd = _parser.GetCommandGetIdentificator();
-            if (!_transport.Send(cmd))
+            if (!Send(cmd))
                 return null;
-            var answer = _transport.Receive();
+            var answer = Receive();
             if (!_parser.ParseGetIdentificator(answer, out idn))
                 return string.Empty;
             return idn;
@@ -69,8 +69,8 @@ namespace PACESeries
         /// <returns>Значение давления</returns>
         public double GetPressure()
         {
-            _transport.Send(_parser.GetCommandGetPressure());
-            string m_strReturn = _transport.Receive();
+            Send(_parser.GetCommandGetPressure());
+            string m_strReturn = Receive();
 
             if (m_strReturn != null)
             {
@@ -95,14 +95,14 @@ namespace PACESeries
             int min;
             int sec;
 
-            _transport.Send(_parser.GetCommandGetDate());
-            string m_strDate = _transport.Receive();
+            Send(_parser.GetCommandGetDate());
+            string m_strDate = Receive();
 
             if (!_parser.ParseGetDate(m_strDate, out year, out month, out day))
                 return null;
 
-            _transport.Send(_parser.GetCommandGetTime());
-            string m_strTime = _transport.Receive();
+            Send(_parser.GetCommandGetTime());
+            string m_strTime = Receive();
 
             if (!_parser.ParseGetTime(m_strTime, out hour, out min, out sec))
                 return null;
@@ -116,8 +116,8 @@ namespace PACESeries
         /// <returns>Диапазон давления</returns>
         public string GetPressureRange()
         {
-            _transport.Send(_parser.GetCommandGetPressureRange());
-            string m_strReturn = _transport.Receive();
+            Send(_parser.GetCommandGetPressureRange());
+            string m_strReturn = Receive();
             string result;
             if (!_parser.ParseGetPressureRange(m_strReturn, out result))
                 return null;
@@ -131,8 +131,8 @@ namespace PACESeries
         /// <returns>Список поддерживаемых диапазонов</returns>
         public IEnumerable<string> GetAllPressureRanges()
         {
-            _transport.Send(_parser.GetCommandGetAllRanges());
-            string m_strReturn = _transport.Receive();
+            Send(_parser.GetCommandGetAllRanges());
+            string m_strReturn = Receive();
             IEnumerable<string> result;
             if (!_parser.ParseGetAllRanges(m_strReturn, out result))
                 return null;
@@ -147,7 +147,7 @@ namespace PACESeries
         /// <returns></returns>
         public bool SetPressureRange(string range)
         {
-            _transport.Send(_parser.GetCommandSetPressureRange(range));
+            Send(_parser.GetCommandSetPressureRange(range));
             if (GetPressureRange() == range)
                 return true;
             return false;
@@ -160,8 +160,8 @@ namespace PACESeries
         public PressureUnits? GetPressureUnit()
         {
             PressureUnits? result;
-            _transport.Send(_parser.GetCommandGetPressureUnit());
-            string m_strReturn = _transport.Receive();
+            Send(_parser.GetCommandGetPressureUnit());
+            string m_strReturn = Receive();
 
             if (!_parser.ParseGetPressureUnit(m_strReturn, out result))
                 return null;
@@ -176,7 +176,7 @@ namespace PACESeries
         /// <returns>Удалось установить единицы давления</returns>
         public bool SetPressureUnit(PressureUnits unit)
         {
-            _transport.Send(_parser.GetCommandSetPressureUnit(unit));
+            Send(_parser.GetCommandSetPressureUnit(unit));
             var resUnit = GetPressureUnit();
             return resUnit != null && resUnit == unit;
         }
@@ -186,7 +186,7 @@ namespace PACESeries
         /// </summary>
         public void SetLocalLockOutMode()
         {
-            _transport.Send(_parser.GetCommandSetLocalLockOutMode());
+            Send(_parser.GetCommandSetLocalLockOutMode());
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace PACESeries
         /// </summary>
         public void SetOffLocalLockOutMode()
         {
-            _transport.Send(_parser.GetCommandSetOffLocalLockOutMode());
+            Send(_parser.GetCommandSetOffLocalLockOutMode());
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace PACESeries
         /// </summary>
         public void SetLocal()
         {
-            _transport.Send(_parser.GetCommandSetLocal());
+            Send(_parser.GetCommandSetLocal());
         }
 
         /// <summary>
@@ -210,8 +210,34 @@ namespace PACESeries
         /// </summary>
         public void SetRemote()
         {
-            _transport.Send(_parser.GetCommandSetRemote());
+            Send(_parser.GetCommandSetRemote());
         }
+
+        #region Service
+
+        /// <summary>
+        /// Обертка команды посылки сообщения
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        private bool Send(string msg)
+        {
+            return _transport.Send(msg);
+        }
+
+        /// <summary>
+        /// Обертка команды чтения ответа
+        /// </summary>
+        /// <returns></returns>
+        private string Receive()
+        {
+            return _transport.Receive();
+        }
+
+        #endregion
+
+
+        #region IDisposable
 
         /// <summary>
         /// Зарыть подключение
@@ -220,5 +246,8 @@ namespace PACESeries
         {
             _transport.Close(_address);
         }
+
+        #endregion
+
     }
 }
