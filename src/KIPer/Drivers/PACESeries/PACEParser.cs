@@ -11,6 +11,21 @@ namespace PACESeries
     /// </summary>
     public class PACEParser
     {
+        /*
+         * :CALibration - calibration commands.
+         * :DIAGnostic - instrument generated condition data.
+         * INPut - switch input of the control module.
+         * :INSTrument - instrument specific commands.
+         * :OUTPut - controls the output pressure and logical outputs.
+         * :SENSe - directs the instrument to measure selected parameters.
+         * :SOURce - the commands that control the pressure outputs.
+         * :STATus - instrument state.
+         * :SYSTem - errors and SCPI version.
+         * :UNIT - sets the units for the instrument.
+         * Common SCPI commands - three letter commands, prefixed by *.
+         * Instrument control commands - three letter commands, prefixed by :.
+         */
+
         #region Keys
         internal const string KeyGetIdentificator = "*IDN?";
         internal const string KeySetOffLocalLockOut = ":GTL";
