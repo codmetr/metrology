@@ -37,7 +37,10 @@ namespace KipTM.Model
         /// </summary>
         private IDictionary<Type, object> _modelsCache = new Dictionary<Type, object>();
 
-
+        /// <summary>
+        /// Device pool, make model, driver and channel
+        /// </summary>
+        /// <param name="features"></param>
         public DeviceManager(FeatureDescriptorsCombiner features)
         {
             _logger = NLog.LogManager.GetLogger("DeviceManager");
@@ -45,72 +48,17 @@ namespace KipTM.Model
             _loops = new Loops();
 
             _modelFabrics = features.Models.ToDictionary(el => el.Key, el => el.Value);
-            //_modelFabrics = new Dictionary<Type, Func<object>>()
-            //{
-            //    {typeof(ADTSModel), () => new ADTSModel(ADTSModel.Model, _loops, this)},
-            //    {typeof(PACE1000Model), () => new PACE1000Model(PACE1000Model.Model, _loops, this)},
-            //};
 
             _devicesFabrics = features.Devices.ToDictionary(el => el.Key, el => el.Value);
-            //_devicesFabrics = new Dictionary<Type, Func<object, object>>()
-            //{
-            //    {
-            //        typeof(ADTSDriver),
-            //        options =>
-            //            {
-            //                var param = options as ITransportIEEE488;
-            //                if (param == null)
-            //                    throw new TargetParameterCountException(string.Format(
-            //                        "option mast be type: {0}; now type: {1}",
-            //                        typeof (ITransportIEEE488), options.GetType()));
-            //                return new ADTSDriver(param);
-            //            }
-            //    },
-            //
-            //    {
-            //        typeof(PACE1000Driver),
-            //        options =>
-            //            {
-            //                var param = options as ITransportIEEE488;
-            //                if (param == null)
-            //                    throw new TargetParameterCountException(string.Format(
-            //                        "option mast be type: {0}; now type: {1}",
-            //                        typeof (ITransportIEEE488), options.GetType()));
-            //                return new PACE1000Driver(param);
-            //            }
-            //    },
-            //};
 
             _channelsFabrics = features.DeviceConfigs.ToDictionary(el => el.Key, el => el.Value);
-            //_channelsFabrics = new Dictionary<string, Func<object, object>>()
-            //{
-            //    {VisaChannelDescriptor.KeyType, opt =>
-            //        {
-            //            var visaSettings = opt as VisaSettings;
-            //            if (visaSettings != null)
-            //            {
-            //                var transport = new VisaIEEE488();
-            //                transport.Open(visaSettings.AddressFull);
-            //                return transport;
-            //            }
-            //            throw new Exception(string.Format("Can not generate transport for key \"{0}\" with options [{0}]",
-            //                VisaChannelDescriptor.KeyType, opt));
-            //        }},
-            //    {FakeChannelDescriptor.KeyType, opt => new FakeTransport()}
-            //};
 
             foreach (var fabric in features.DeviceConfigs)
             {
                 _loops.AddLocker(fabric.Key, new object());
             }
-            //_loops.AddLocker(VisaChannelDescriptor.KeyType, new object());
-            //_loops.AddLocker(FakeChannelDescriptor.KeyType, new object());
 
             _ethalonChannels = features.EthalonChannels.ToDictionary(el => el.Key, el => el.Value);
-            //_ethalonChannels = new Dictionary<string, Func<ITransportChannelType, IEthalonChannel>>()
-            //{
-            //    {PACE1000Model.Key, (transportDescriptor)=> new PACEEthalonChannel(GetModel<PACE1000Model>())}
-            //};
         }
 
         #region IDeviceManager

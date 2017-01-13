@@ -44,6 +44,9 @@ namespace PACESeries
         internal const string KeyGetPressureRangeByChannelFormat = ":SENS{0}:PRES:RANG?";
         internal const string KeyGetAvailableRange = ":INST:CAT:ALL?";
         internal const string KeyGetAvailableRangeByChannelFormat = ":INST:CAT{0}:ALL?";
+        internal const string KeySetOutputStateFormat = ":OUTP:SET{0} <state>";
+        internal const string KeyGetOutputStateFormat = ":OUTP:SET{0}?";
+        
         #endregion
 
         #region GetIdentificator "*IDN?"
@@ -346,6 +349,70 @@ namespace PACESeries
             value = null;
             var answer = ParseAnswer(message);
             value = answer;
+            return true;
+        }
+        #endregion
+
+        #region GetCommandSetOutputState ":OUTP:SET <state>"
+
+        /// <summary>
+        /// Получить команду "Установить состояние выхода по каналу"
+        /// </summary>
+        /// <param name="state">Состояние</param>
+        /// <returns>Команда</returns>
+        public string GetCommandSetOutputState(bool state)
+        {
+            string unitstr = null;
+            return CompilCommand(string.Format(KeySetOutputStateFormat, ""),
+                new Dictionary<string, string>() {{"<state>", state ? "ON" : "OFF"}});
+        }
+
+        /// <summary>
+        /// Получить команду "Установить состояние выхода по каналу"
+        /// </summary>
+        /// <param name="channel">Канал</param>
+        /// <param name="state">Состояние</param>
+        /// <returns>Команда</returns>
+        public string GetCommandSetOutputState(int channel, bool state)
+        {
+            string unitstr = null;
+            return CompilCommand(string.Format(KeySetOutputStateFormat, channel),
+                new Dictionary<string, string>() {{"<state>", state ? "ON" : "OFF"}});
+        }
+
+        #endregion
+
+        #region GetPressure ":OUTP:SET?"
+        /// <summary>
+        /// Получить команду "Состояние выхода"
+        /// </summary>
+        /// <returns>Команда</returns>
+        public string GetCommandGetOutputState()
+        {
+            return string.Format(KeyGetOutputStateFormat, "");
+        }
+
+        /// <summary>
+        /// Получить команду "Состояние выхода по каналу"
+        /// </summary>
+        /// <param name="channel">Канал</param>
+        /// <returns>Команда</returns>
+        public string GetCommandGetOutputState(int channel)
+        {
+            return string.Format(KeyGetPressureByChannelFormat, channel);
+        }
+
+        /// <summary>
+        /// Разобрать результат команды "Состояние выхода"
+        /// </summary>
+        /// <param name="message">Ответ</param>
+        /// <param name="value">Состояние выхода</param>
+        /// <returns>Удалось разобрать</returns>
+        public bool ParseGetOutputState(string message, out bool? value)
+        {
+            value = null;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.Boolean } });
+            value = (bool)answer["value"];
             return true;
         }
         #endregion
