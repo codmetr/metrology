@@ -46,6 +46,8 @@ namespace PACESeries
         internal const string KeyGetAvailableRangeByChannelFormat = ":INST:CAT{0}:ALL?";
         internal const string KeySetOutputStateFormat = ":OUTP:SET{0} <state>";
         internal const string KeyGetOutputStateFormat = ":OUTP:SET{0}?";
+        internal const string KeySetOutputLogicalFormat = ":OUTP:LOG{0} <state>";
+        internal const string KeyGetOutputLogicalFormat = ":OUTP:LOG{0}?";
         
         #endregion
 
@@ -353,7 +355,7 @@ namespace PACESeries
         }
         #endregion
 
-        #region GetCommandSetOutputState ":OUTP:SET <state>"
+        #region SetOutputState ":OUTP:SET <state>"
 
         /// <summary>
         /// Получить команду "Установить состояние выхода по каналу"
@@ -382,7 +384,7 @@ namespace PACESeries
 
         #endregion
 
-        #region GetPressure ":OUTP:SET?"
+        #region GetOutputState ":OUTP:SET?"
         /// <summary>
         /// Получить команду "Состояние выхода"
         /// </summary>
@@ -409,6 +411,70 @@ namespace PACESeries
         /// <param name="value">Состояние выхода</param>
         /// <returns>Удалось разобрать</returns>
         public bool ParseGetOutputState(string message, out bool? value)
+        {
+            value = null;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.Boolean } });
+            value = (bool)answer["value"];
+            return true;
+        }
+        #endregion
+
+        #region SetLogicState ":OUTP:LOG <state>"
+
+        /// <summary>
+        /// Получить команду "Установить состояние реле по каналу по умолчанию"
+        /// </summary>
+        /// <param name="state">Состояние</param>
+        /// <returns>Команда</returns>
+        public string GetCommandSetLogicState(bool state)
+        {
+            return CompilCommand(string.Format(KeySetOutputLogicalFormat, ""),
+                new Dictionary<string, string>() {{"<state>", state ? "ON" : "OFF"}});
+        }
+
+        /// <summary>
+        /// Получить команду "Установить состояние реле по каналу"
+        /// </summary>
+        /// <param name="channel">Канал</param>
+        /// <param name="state">Состояние</param>
+        /// <returns>Команда</returns>
+        public string GetCommandSetLogicState(int channel, bool state)
+        {
+            return CompilCommand(string.Format(KeySetOutputLogicalFormat, channel),
+                new Dictionary<string, string>() {{"<state>", state ? "ON" : "OFF"}});
+        }
+        #endregion
+
+        #region GetLogicState ":OUTP:LOG?"
+
+        /// <summary>
+        /// Получить команду "Получить состояние реле по каналу по умолчанию"
+        /// </summary>
+        /// <param name="state">Состояние</param>
+        /// <returns>Команда</returns>
+        public string GetCommandGetLogicState(bool state)
+        {
+            return string.Format(KeyGetOutputLogicalFormat, "");
+        }
+
+        /// <summary>
+        /// Получить команду "Получить состояние реле по каналу"
+        /// </summary>
+        /// <param name="channel">Канал</param>
+        /// <param name="state">Состояние</param>
+        /// <returns>Команда</returns>
+        public string GetCommandGetLogicState(int channel, bool state)
+        {
+            return string.Format(KeyGetOutputLogicalFormat, channel);
+        }
+
+        /// <summary>
+        /// Разобрать результат команды "Получить состояние реле по каналу"
+        /// </summary>
+        /// <param name="message">Ответ</param>
+        /// <param name="value">Состояние выхода</param>
+        /// <returns>Удалось разобрать</returns>
+        public bool ParseGetLogicState(string message, out bool? value)
         {
             value = null;
             var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.Boolean } });
