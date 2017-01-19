@@ -179,7 +179,7 @@
     <Compile Include="Services\ViewModel\ServiceViewModel.cs" />
     <Compile Include="Archive\ViewModel\ArchivesViewModel.cs" />
     <Compile Include="Archive\ViewModel\TestResultViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="ViewModelLocator.cs" />
     <Compile Include="Archive\View\ParamResCollectionView.xaml.cs">
       <DependentUpon>ParamResCollectionView.xaml</DependentUpon>
     </Compile>

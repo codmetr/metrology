@@ -12,7 +12,9 @@ using KipTM.Model.TransportChannels;
 
 namespace KipTM.Interfaces.Checks
 {
-
+    /// <summary>
+    /// Формирователь визуальной модели для метода проверки
+    /// </summary>
     public interface ICheckViewModelFactory
     {
         /// <summary>
