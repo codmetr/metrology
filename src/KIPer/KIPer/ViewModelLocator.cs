@@ -146,6 +146,7 @@ namespace KipTM.ViewModel
 
             #endregion
 
+            // Устоновка Singletone MethodsService
             unityContainer.RegisterType<IMethodsService, MethodsService>();
             unityContainer.RegisterType<MainViewModel>();
             unityContainer.RegisterInstance<MainViewModel>(unityContainer.Resolve<MainViewModel>());

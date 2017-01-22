@@ -71,7 +71,7 @@ namespace KipTM.ViewModel
         private object _selectedAction;
         private IMarkerFabrik<IParameterResultViewModel> _resulMaker;
         private IFillerFabrik<IParameterResultViewModel> _filler;
-        private IEnumerable<ICheckViewModelFactory> _factories;
+        private IEnumerable<ICheckViewModelFactory> _factoriesViewModels;
         private IEnumerable<IChannelsFactory> _channelFactories;
         private IReportFabrik _reportFabric;
         private bool _isActiveCheck;
@@ -85,13 +85,27 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
+        /// <param name="eventAggregator">Сборщик событий</param>
+        /// <param name="dataService">Источник данных</param>
+        /// <param name="methodicService">Источник методик</param>
+        /// <param name="settings">Настройки</param>
+        /// <param name="propertiesLibrary">Свойства</param>
+        /// <param name="archive">Архив</param>
+        /// <param name="resulMaker">Источник результатов</param>
+        /// <param name="filler">Заполнение результата</param>
+        /// <param name="reportFabric">Фабрика отчетов</param>
+        /// <param name="services">Сервисы</param>
+        /// <param name="features">Забор возмодностей модулей</param>
+        /// <param name="customFatories">Фабрики специализированных настроек</param>
+        /// <param name="deviceManager">Пулл устройств</param>
+        /// <param name="factoriesViewModels">Преобразователи в визуальные модели</param>
         public MainViewModel(
             IEventAggregator eventAggregator, IDataService dataService, IMethodsService methodicService,
             IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive,
             IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
             IReportFabrik reportFabric, IEnumerable<IService> services, FeatureDescriptorsCombiner features,
             IDictionary<Type, ICustomConfigFactory> customFatories, IDeviceManager deviceManager,
-            IEnumerable<ICheckViewModelFactory> factories)
+            IEnumerable<ICheckViewModelFactory> factoriesViewModels)
         {
             try
             {
@@ -105,7 +119,7 @@ namespace KipTM.ViewModel
             _dataService = dataService;
             _deviceManager = deviceManager;
             _methodicService = methodicService;
-            _factories = factories;
+            _factoriesViewModels = factoriesViewModels;
             _settings = settings;
             _propertiesLibrary = propertiesLibrary;
             _archive = archive;
@@ -117,16 +131,10 @@ namespace KipTM.ViewModel
             _reportFabric = reportFabric;
             _channelFactories = features.ChannelFactories;
             _services = new ServiceViewModel(services, new SelectChannelViewModel(_channelFactories.SelectMany(el=>el.GetChannels())));
-
-            //new List<IService>()
-            //  {
-            //      new Pace1000ViewModel(_dataService.DeviceManager),
-            //      new ADTSViewModel(_dataService.DeviceManager.GetModel<ADTSModel>())
-            //  });
         }
 
         /// <summary>
-        /// загрузка всех состояний
+        /// Загрузка всех состояний
         /// </summary>
         public void Load()
         {
@@ -144,7 +152,7 @@ namespace KipTM.ViewModel
                 var channelTargetDevice = new SelectChannelViewModel(_channelFactories.SelectMany(el=>el.GetChannels()));
                 var channelEthalonDevice = new SelectChannelViewModel(_channelFactories.SelectMany(el => el.GetChannels()));
 
-                var checkFabrik = new CheckFabrik(_deviceManager, _propertiesLibrary.PropertyPool, _factories);
+                var checkFabrik = new CheckFabrik(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels);
                 var result = new TestResult();
                 var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool,
                     _propertiesLibrary.DictionariesPool, result);
@@ -377,7 +385,7 @@ namespace KipTM.ViewModel
         }
 
         /// <summary>
-        /// Выбрана вкладка Настройки
+        /// Выбрана вкладка Сервис
         /// </summary>
         public ICommand SelectService
         {
@@ -402,16 +410,9 @@ namespace KipTM.ViewModel
             get { return _tests; }
         }
 
-        public DeviceTypeCollectionViewModel DeviceTypes
-        {
-            get { return _deviceTypes; }
-        }
-
-        public DeviceTypeCollectionViewModel EtalonTypes
-        {
-            get { return _etalonTypes; }
-        }
-
+        /// <summary>
+        /// Проверки
+        /// </summary>
         public Workflow.Workflow Checks
         {
             get { return _workflow; }
@@ -419,7 +420,7 @@ namespace KipTM.ViewModel
 
         #endregion
 
-        #region Events
+        #region События(Events)
 
         public void OnEvent(EventCheckState message)
         {
@@ -440,16 +441,18 @@ namespace KipTM.ViewModel
 
         #endregion
 
+        #region Вспомогательные методы
+
+        /// <summary>
+        /// Установить подсказку
+        /// </summary>
+        /// <param name="msg"></param>
         private void SetHelpMessage(string msg)
         {
             HelpMessage = msg;
             IsError = false;
         }
 
-        ////public override void Cleanup()
-        ////{
-        ////    // Clean up if needed
-        ////    base.Cleanup();
-        ////}
+        #endregion
     }
 }
