@@ -76,3 +76,5 @@ src/KIPer/VisaChannelView/bin/
 src/KIPer/WpfCommonStyles/bin/
 src/KIPer/DPI620Genii/obj/
 src/KIPer/PACEChecks/obj/
+src/KIPer/DPI620Genii/bin/
+src/KIPer/PACEChecks/bin/
