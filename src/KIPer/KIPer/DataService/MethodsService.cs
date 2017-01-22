@@ -11,7 +11,7 @@ namespace KipTM.Model
 
         public MethodsService(IEnumerable<IMethodFactory> factories )
         {
-            _methods = factories.Select(el => el.GetDefault()).ToDictionary(el => el.Item1, el => el.Item2);
+            _methods = factories.Select(el => el.GetMethod()).ToDictionary(el => el.Item1, el => el.Item2);
             //_methods = new Dictionary<string, Dictionary<string, ICheckMethod>>();
             //var adtsCheck = new Calibration(NLog.LogManager.GetLogger("ADTSCheckMethod"));
             //var adtsTest = new Test(NLog.LogManager.GetLogger("ADTSTestMethod"));

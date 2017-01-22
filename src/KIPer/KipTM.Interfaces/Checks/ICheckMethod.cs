@@ -5,6 +5,9 @@ using KipTM.Archive;
 
 namespace KipTM.Model.Checks
 {
+    /// <summary>
+    /// Методика проверки
+    /// </summary>
     public interface ICheckMethod
     {
         /// <summary>

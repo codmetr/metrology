@@ -10,6 +10,10 @@ namespace ADTSChecks.Settings
 {
     public class SettingsFactory : IDeviceSettingsFactory, IEthalonSettingsFactory, IDeviceTypeSettingsFactory
     {
+        /// <summary>
+        /// Типы проверяемых устройств и их измерительные каналы
+        /// </summary>
+        /// <returns>Набор описателей устройств</returns>
         IEnumerable<DeviceTypeSettings> IDeviceTypeSettingsFactory.GetDefault()
         {
             return new List<DeviceTypeSettings>()
@@ -29,13 +33,16 @@ namespace ADTSChecks.Settings
                     Model = PACE1000Model.Model,
                     DeviceCommonType = PACE1000Model.DeviceCommonType,
                     DeviceManufacturer = PACE1000Model.DeviceManufacturer,
-                    TypesEtalonParameters = new List<string>(ADTSModel.TypesEtalonParameters),
+                    TypesEtalonParameters = new List<string>(PACE1000Model.TypesEtalonParameters),
                     //AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key, UserEchalonChannel.Key},
                 },
-
             };
         }
 
+        /// <summary>
+        /// Настройки подключения объекта по умолчанию
+        /// </summary>
+        /// <returns></returns>
         DeviceSettings IDeviceSettingsFactory.GetDefault()
         {
             return new DeviceSettings()
@@ -51,6 +58,10 @@ namespace ADTSChecks.Settings
             };
         }
 
+        /// <summary>
+        /// Настройки подключения эталона по умолчанию
+        /// </summary>
+        /// <returns></returns>
         DeviceSettings IEthalonSettingsFactory.GetDefault()
         {
             return new DeviceSettings()

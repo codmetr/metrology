@@ -11,6 +11,11 @@ namespace ReportService
     /// </summary>
     public interface IReporter
     {
+        /// <summary>
+        /// Получить отчет по результатам
+        /// </summary>
+        /// <param name="result">Результаты</param>
+        /// <returns>Модель отчета</returns>
         object GetReport(TestResult result);
     }
 }

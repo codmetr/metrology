@@ -10,9 +10,18 @@ using KipTM.Model.Checks;
 
 namespace ADTSChecks
 {
+    /// <summary>
+    /// Фабрика методик
+    /// </summary>
     public class MethodFactory : IMethodFactory
     {
-        public Tuple<string, Dictionary<string, ICheckMethod>> GetDefault()
+        /// <summary>
+        /// Получить набор методик для конкретного типа оборудования
+        /// </summary>
+        /// <returns>
+        /// Tuple("ключ устройства", Dictionary("ключ методики", "методика"))
+        /// </returns>
+        public Tuple<string, Dictionary<string, ICheckMethod>> GetMethod()
         {
             var adtsCheck = new Calibration(NLog.LogManager.GetLogger("ADTSCheckMethod"));
             var adtsTest = new Test(NLog.LogManager.GetLogger("ADTSTestMethod"));

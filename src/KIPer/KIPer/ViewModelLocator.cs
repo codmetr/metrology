@@ -100,8 +100,6 @@ namespace KipTM.ViewModel
                     unityContainer.RegisterType(typeof(ICheckViewModelFactory), type, type.Name);
                 if (typeof(IReporter).IsAssignableFrom(type) && type.GetAttributes(typeof(ReportAttribute)).Any())
                     unityContainer.RegisterType(typeof(IReporter), type, type.Name);
-                //if (typeof(IReportFabrik).IsSubclassOf(type))
-                //    unityContainer.RegisterType(typeof(IReportFabrik), type);
             }
 
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
@@ -124,9 +122,6 @@ namespace KipTM.ViewModel
             unityContainer.RegisterInstance<IMainSettings>(unityContainer.Resolve<IArchive>()
                     .Load(MainSettings.SettingsFileName, unityContainer.Resolve<MainSettingsFactory>().GetDefault()));
             unityContainer.RegisterType<IPropertiesLibrary, PropertiesLibrary>();
-            //unityContainer.RegisterInstance<IPropertiesLibrary>(new PropertiesLibrary(
-            //    unityContainer.ResolveAll<IArchiveDataDefault>(),
-            //    unityContainer.ResolveAll<IFeaturesDescriptor>()));
             unityContainer.RegisterInstance<IMarkerFabrik<IParameterResultViewModel>>(
                 MarkerFabrik<IParameterResultViewModel>.Locator);
             unityContainer.RegisterInstance<IFillerFabrik<IParameterResultViewModel>>(

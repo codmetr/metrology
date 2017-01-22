@@ -79,10 +79,19 @@ namespace KipTM.Settings
         //    return res;
         //}
 
+        /// <summary>
+        /// Последние сконфигурированные наборы поддерживаемых для проверки устройств
+        /// </summary>
         public List<DeviceTypeSettings> Devices { get; set; }
-
+        
+        /// <summary>
+        /// Последние сконфигурированные эталоны
+        /// </summary>
         public List<DeviceSettings> LastEtalons { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public List<DeviceSettings> LastDevices { get; set; }
 
         public List<ComPortSettings> Ports { get; set; }

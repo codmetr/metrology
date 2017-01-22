@@ -3,6 +3,9 @@ using KipTM.Model.Checks;
 
 namespace KipTM.Model
 {
+    /// <summary>
+    /// Пулл методик
+    /// </summary>
     public interface IMethodsService
     {
         /// <summary>

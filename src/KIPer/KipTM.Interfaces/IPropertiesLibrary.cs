@@ -2,6 +2,9 @@ using KipTM.Archive;
 
 namespace KipTM.Model
 {
+    /// <summary>
+    /// Пулл свойств
+    /// </summary>
     public interface IPropertiesLibrary
     {
         /// <summary>
