@@ -313,7 +313,7 @@ namespace KipTM.ViewModel
         {
             get
             {
-                return new RelayCommand(() =>
+                return new RelayCommand<string>((string opt) =>
                 {
                     IsActiveCheck = true;
                     IsActiveService = false;
