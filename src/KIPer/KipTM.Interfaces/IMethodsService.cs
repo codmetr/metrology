@@ -11,6 +11,6 @@ namespace KipTM.Model
         /// <summary>
         /// Набор поддерживаемых методик для конкретного типа устройств
         /// </summary>
-        IDictionary<string, ICheckMethod> MethodsForType(string DeviceKey);
+        IDictionary<string, ICheckMethod> MethodsForType(string deviceKey);
     }
 }
