@@ -22,7 +22,7 @@ namespace ADTSChecks
         /// </summary>
         private Dictionary<string, Func<ICheckMethod>> createMetods = new Dictionary<string, Func<ICheckMethod>>()
         {
-                {Test.Key, ()=> new Calibration(NLog.LogManager.GetLogger("ADTSCheckMethod")},
+                {Test.Key, ()=> new Calibration(NLog.LogManager.GetLogger("ADTSCheckMethod"))},
                 {Calibration.Key, ()=> new Test(NLog.LogManager.GetLogger("ADTSTestMethod"))},
         }; 
 

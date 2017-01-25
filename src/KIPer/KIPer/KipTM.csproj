@@ -154,6 +154,7 @@
     <Compile Include="Report\ViewModel\ReportViewModel.cs" />
     <Compile Include="Checks\ViewModel\Config\CheckConfigViewModel.cs" />
     <Compile Include="Checks\ViewModel\CheckFabrik.cs" />
+    <Compile Include="ViewModel\OneBtnDescripto.cs" />
     <Compile Include="Workflow\States\CheckState.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />
     <Compile Include="Workflow\States\Events\EventCheckState.cs" />

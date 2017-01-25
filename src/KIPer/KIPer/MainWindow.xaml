@@ -59,12 +59,21 @@
                 </ribbon:RibbonApplicationMenu>
             </ribbon:Ribbon.ApplicationMenu>
             <ribbon:RibbonTab Header="ПОВЕРКА СИ">
-                <ribbon:RibbonGroup x:Name="GroupCheck" Header="Давление">
-                    <ribbon:RibbonButton 
+                <ribbon:RibbonGroup x:Name="GroupCheck" Header="Давление" ItemsSource="{Binding CheckBtns}">
+                    <ribbon:RibbonGroup.ItemTemplate>
+                        <DataTemplate>
+                            <ribbon:RibbonButton 
+                                Label="ADTS" Command="{Binding BtnCmd}" CommandParameter="{Binding Key}"
+                                LargeImageSource="{Binding LagreImage}"
+                                SmallImageSource="{Binding SmallImage}">
+                            </ribbon:RibbonButton>
+                        </DataTemplate>
+                    </ribbon:RibbonGroup.ItemTemplate>
+                    <!--<ribbon:RibbonButton 
                         Label="ADTS" Command="{Binding SelectChecks}" CommandParameter="ADTSCheck"
                         LargeImageSource="Content/adts405.jpg"
                         SmallImageSource="Content/adts405.jpg">
-                    </ribbon:RibbonButton>
+                    </ribbon:RibbonButton>-->
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
             <ribbon:RibbonTab Header="СЕРВИС">

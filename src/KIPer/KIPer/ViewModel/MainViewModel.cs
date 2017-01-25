@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using ArchiveData.DTO;
 using CheckFrame;
 using CheckFrame.ViewModel.Archive;
@@ -77,6 +80,7 @@ namespace KipTM.ViewModel
         private bool _isActiveCheck;
         private bool _isActiveService;
         private bool _isActiveSwitchServices = true;
+        private IEnumerable<OneBtnDescripto> _checkBtns;
 
         #endregion
 
@@ -131,6 +135,14 @@ namespace KipTM.ViewModel
             _reportFabric = reportFabric;
             _channelFactories = features.ChannelFactories;
             _services = new ServiceViewModel(services, new SelectChannelViewModel(_channelFactories.SelectMany(el=>el.GetChannels())));
+            var checkBtns = new List<OneBtnDescripto>();
+            foreach (var keyCheck in _methodicService.GetKeys())
+            {
+                checkBtns.Add(new OneBtnDescripto(keyCheck, _methodicService.GetTitle(keyCheck),
+                    BitmapToImage(_methodicService.GetBigImage(keyCheck)),
+                    BitmapToImage(_methodicService.GetSmallImage(keyCheck)), SelectChecks));
+            }
+            _checkBtns = checkBtns;
         }
 
         /// <summary>
@@ -205,7 +217,16 @@ namespace KipTM.ViewModel
         #endregion
 
         #region Свойства
-        
+
+        /// <summary>
+        /// Набор кнопок проверок
+        /// </summary>
+        public IEnumerable<OneBtnDescripto> CheckBtns
+        {
+            get { return _checkBtns; }
+            set { Set(ref _checkBtns, value); }
+        }
+
         /// <summary>
         /// Поясняющее сообщение 
         /// </summary>
@@ -451,6 +472,21 @@ namespace KipTM.ViewModel
         {
             HelpMessage = msg;
             IsError = false;
+        }
+
+
+        private static BitmapImage BitmapToImage(Bitmap bitm)
+        {
+            var img = new BitmapImage();
+            MemoryStream ms = new MemoryStream();
+            bitm.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            ms.Seek(0, SeekOrigin.Begin);
+            image.StreamSource = ms;
+            image.EndInit();
+
+            return image;
         }
 
         #endregion

@@ -18,15 +18,6 @@ namespace KipTM.Model
         {
             _methods = factories.ToDictionary(el => el.GetKey(), el => el.GetMethods());
             _factories = factories.ToDictionary(el => el.GetKey(), el => el);
-            //_methods = new Dictionary<string, Dictionary<string, ICheckMethod>>();
-            //var adtsCheck = new Calibration(NLog.LogManager.GetLogger("ADTSCheckMethod"));
-            //var adtsTest = new Test(NLog.LogManager.GetLogger("ADTSTestMethod"));
-            //_methods.Add(ADTSModel.Key,new Dictionary<string, ICheckMethod>()
-            //{
-            //    {Test.Key, adtsTest},
-            //    {Calibration.Key, adtsCheck},
-            //}); 
-
         }
 
         /// <summary>
@@ -61,7 +52,7 @@ namespace KipTM.Model
         /// </summary>
         /// <param name="key">ключ</param>
         /// <returns></returns>
-        public Bitmap GetLargeImage(string key)
+        public Bitmap GetBigImage(string key)
         {
             return _factories[key].GetBigImage();
         }
