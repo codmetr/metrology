@@ -164,7 +164,7 @@ namespace KipTM.ViewModel
                 var channelTargetDevice = new SelectChannelViewModel(_channelFactories.SelectMany(el=>el.GetChannels()));
                 var channelEthalonDevice = new SelectChannelViewModel(_channelFactories.SelectMany(el => el.GetChannels()));
 
-                var checkFabrik = new CheckFabrik(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels);
+                var checkFabrik = new CheckFabrik(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels, _eventAggregator);
                 var result = new TestResult();
                 var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool,
                     _propertiesLibrary.DictionariesPool, result);

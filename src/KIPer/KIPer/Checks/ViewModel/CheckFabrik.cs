@@ -12,6 +12,7 @@ using CheckFrame.Model.Channels;
 using CheckFrame.ViewModel.Checks.Channels;
 using KipTM.Archive;
 using KipTM.Checks;
+using KipTM.EventAggregator;
 using KipTM.Interfaces.Checks;
 using KipTM.Model;
 using KipTM.Model.Channels;
@@ -29,11 +30,14 @@ namespace KipTM.ViewModel.Checks
         private readonly IDeviceManager _deviceManager;
         private readonly IPropertyPool _propertyPool;
         private IDictionary<Type, ICheckViewModelFactory> _fatories;
+        private readonly IEventAggregator _eventAggregator;
 
-        public CheckFabrik(IDeviceManager deviceManager, IPropertyPool propertyPool, IEnumerable<ICheckViewModelFactory> factories)
+
+        public CheckFabrik(IDeviceManager deviceManager, IPropertyPool propertyPool, IEnumerable<ICheckViewModelFactory> factories, IEventAggregator eventAggregator)
         {
             _deviceManager = deviceManager;
             _propertyPool = propertyPool;
+            _eventAggregator = eventAggregator;
             Load(factories);
             foreach (var factory in _fatories.Values)
             {
@@ -52,10 +56,14 @@ namespace KipTM.ViewModel.Checks
             var targetType = method.GetType();
             var key = _fatories.Keys.FirstOrDefault(el => el == targetType || el.IsAssignableFrom(targetType));
 
-            if (key !=null)
+            if (key != null)
+            {
                 result = _fatories[key].GetViewModel(method, checkConfig, customConfig, resultBox,
                     checkDeviceChanel, ethalonChanel);
-            
+                if (result!=null)
+                    result.SetAggregator(_eventAggregator);
+            }
+
             return result;
         }
 

@@ -87,7 +87,7 @@ namespace ADTSChecks.Checks.ViewModel
             _stateViewModel = new CheckStateViewModel();
             _stateViewModel.TitleSteps = "Щаги";
             _stateViewModel.TitleBtnNext = "Старт";
-            _stateViewModel.ADTS = new ADTSViewModel(_deviceManager);//new ADTSViewModel(Method.GetADTS());
+            _stateViewModel.ADTS = new ADTSViewModel(_deviceManager) { IsControlMode = false };//new ADTSViewModel(Method.GetADTS());
             _stateViewModel.Steps = Method.Steps.Select(el => new StepViewModel(el.Step, el.Enabled));
             _stateViewModel.ResultsLog = new ObservableCollection<EventArgTestStepResult>();
         }
@@ -304,12 +304,12 @@ namespace ADTSChecks.Checks.ViewModel
             {
                 State.ADTS.Start(_connection);
             }
-            catch //todo поймать ошибку подключения
+            catch(Exception ex) //todo поймать ошибку подключения
             {
                 if(_agregator!=null)
                     _agregator.Post(new ErrorMessageEventArg("Не удалось подключить АДТС"));
                 // В базовое состояние
-                ToStart();
+                ToStart(true);
                 return;
             }
             // Задаем эталон
@@ -386,11 +386,13 @@ namespace ADTSChecks.Checks.ViewModel
         /// <summary>
         /// В исходное состояние
         /// </summary>
-        private void ToStart()
+        /// <param name="withoutDevices">Выполнить останов без устройств</param>
+        private void ToStart(bool withoutDevices = false)
         {
             State.TitleBtnNext = "Старт";
 
-            Method.Stop();
+            if (!withoutDevices)
+                Method.Stop();
 
             if (_userChannel.QueryType == UserQueryType.GetAccept)
             {

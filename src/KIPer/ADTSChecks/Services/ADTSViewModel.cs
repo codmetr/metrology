@@ -42,6 +42,7 @@ namespace ADTSChecks.ViewModel.Services
         private double _pitotAim;
         private double _pitotRateAim;
         private double _pressureRateAim;
+        private bool _isControlMode = true;
 
         /// <summary>
         /// Initializes a new instance of the ADTSViewModel class.
@@ -66,8 +67,15 @@ namespace ADTSChecks.ViewModel.Services
             SelectedUnit = _avalableUnits.First();
         }
 
+        /// <summary>
+        /// Заголовок
+        /// </summary>
         public string Title { get { return ADTSModel.Model; } }
 
+        /// <summary>
+        /// Запуск автоопроса
+        /// </summary>
+        /// <param name="channel"></param>
         public void Start(ITransportChannelType channel)
         {
             _model.StopAutoUpdate();
@@ -78,6 +86,9 @@ namespace ADTSChecks.ViewModel.Services
             AttachEvents(_model);
         }
 
+        /// <summary>
+        /// Остановить автоопроса
+        /// </summary>
         public void Stop()
         {
             if (_model != null)
@@ -89,28 +100,69 @@ namespace ADTSChecks.ViewModel.Services
             _cancellation = new CancellationTokenSource();
         }
 
+        /// <summary>
+        /// Обновить значение давления по каналу Ps
+        /// </summary>
         public ICommand UpdatePressure { get { return new CommandWrapper(_uptetePressure); } }
 
+        /// <summary>
+        /// Обновить значение давления по каналу Pt
+        /// </summary>
         public ICommand UpdatePitot { get { return new CommandWrapper(_updatePitot); } }
 
+        /// <summary>
+        /// Обновить диницы измерения давления
+        /// </summary>
         public ICommand UpdatePressureUnit { get { return new CommandWrapper(_updatePressureUnit); } }
 
+        /// <summary>
+        /// Установить единицы давления
+        /// </summary>
         public ICommand SetPressureUnit { get { return new CommandWrapper(() => _setPressureUnit(_selectedUnit.Unit)); } }
 
+        /// <summary>
+        /// Перейти в режим измерения
+        /// </summary>
         public ICommand SetMeasuring { get { return new CommandWrapper(_setMeasuring); } }
 
+        /// <summary>
+        /// Перейти в режим установки давления
+        /// </summary>
         public ICommand SetControl { get { return new CommandWrapper(_setControl); } }
 
+        /// <summary>
+        /// Стравить давление до атмосферного
+        /// </summary>
         public ICommand SetGround { get { return new CommandWrapper(_goToGround); } }
 
+        /// <summary>
+        /// Установить целевое давление по каналу Ps
+        /// </summary>
         public ICommand SetPressureAim { get { return new CommandWrapper(_setPressureAim); } }
 
+        /// <summary>
+        /// Установить целевое давление по каналу Pt
+        /// </summary>
         public ICommand SetPitotAim { get { return new CommandWrapper(_setPitotAim); } }
 
+        /// <summary>
+        /// Установить скорость установки давления по каналу Ps
+        /// </summary>
         public ICommand SetPressureRate { get { return new CommandWrapper(_setPressureRate); } }
 
+        /// <summary>
+        /// Установить скорость установки давления по каналу Pt
+        /// </summary>
         public ICommand SetPitotRate { get { return new CommandWrapper(_setPitotRate); } }
 
+        /// <summary>
+        /// Показать возможности управления оборудованием
+        /// </summary>
+        public bool IsControlMode
+        {
+            get { return _isControlMode; }
+            set { Set(ref _isControlMode, value); }
+        }
 
         #region State
         /// <summary>

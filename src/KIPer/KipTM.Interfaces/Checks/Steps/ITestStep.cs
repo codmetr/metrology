@@ -9,10 +9,21 @@ namespace KipTM.Model.Checks
 {
     public interface ITestStep
     {
+        /// <summary>
+        /// Название шага
+        /// </summary>
         string Name { get;}
 
+        /// <summary>
+        /// Запустить шаг
+        /// </summary>
+        /// <param name="whEnd"></param>
         void Start(EventWaitHandle whEnd);
 
+        /// <summary>
+        /// Остановить шаг
+        /// </summary>
+        /// <returns></returns>
         bool Stop();
 
         /// <summary>
@@ -31,7 +42,7 @@ namespace KipTM.Model.Checks
         event EventHandler<EventArgProgress> ProgressChanged;
 
         /// <summary>
-        /// Получены какие-то результаты шага
+        /// Получена ошибка
         /// </summary>
         event EventHandler<EventArgError> Error;
 

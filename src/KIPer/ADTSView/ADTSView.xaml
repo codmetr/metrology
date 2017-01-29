@@ -22,11 +22,18 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="Состояние ADTS" Grid.Column="0" Grid.Row="0">
+        <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Top" Background="White">
+            <Image Source="Content/adts405.jpg" Height="100" Width="100"/>
+        </Border>
+        <GroupBox Header="Состояние ADTS" Grid.Column="1" Grid.Row="0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1.5*"/>
@@ -100,7 +107,8 @@
                 </UniformGrid>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Управление ADTS" Grid.Column="0" Grid.Row="1">
+        <GroupBox Header="Управление ADTS" Grid.Column="1" Grid.Row="1"
+                  Visibility="{Binding IsControlMode, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
