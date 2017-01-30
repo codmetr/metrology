@@ -126,7 +126,20 @@ namespace ADTSChecks.Model.Checks
                 if(!step.Enabled)
                     continue;
                 PrepareStartStep(step.Step);
-                Task.Factory.StartNew(() => step.Step.Start(whStep), cancel);
+                string error = string.Empty;
+                Task.Factory.StartNew(() =>
+                {
+                    try
+                    {
+                        step.Step.Start(whStep);
+                    }
+                    catch (Exception ex)
+                    {
+                        step.Step.Stop();
+                        error = ex.Message;
+                        whStep.Set();
+                    }
+                }, cancel);
                 while (!whStep.WaitOne(waitPeriod))
                 {
                     if (cancel.IsCancellationRequested)
@@ -134,6 +147,14 @@ namespace ADTSChecks.Model.Checks
                         testStep.Step.Stop();
                         break;
                     }
+                }
+                if (error != string.Empty)
+                {
+                    OnError(new EventArgError()
+                    {
+                        ErrorString = string.Format("На шаге \"{0}\" возникла ошибка: {1}", step.Step.Name, error)
+                    });
+                    break;
                 }
                 AfterEndStep(testStep.Step);
                 if (cancel.IsCancellationRequested)

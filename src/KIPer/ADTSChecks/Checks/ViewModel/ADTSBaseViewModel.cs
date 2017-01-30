@@ -313,8 +313,22 @@ namespace ADTSChecks.Checks.ViewModel
                 return;
             }
             // Задаем эталон
+
             if (_ethalonTypeKey != null && _ethalonChannelType != null)
-                Method.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey), _ethalonChannelType);
+            {
+                try
+                {
+                    Method.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey), _ethalonChannelType);
+                }
+                catch (Exception ex) //todo поймать ошибку подключения
+                {
+                    if (_agregator != null)
+                        _agregator.Post(new ErrorMessageEventArg("Не удалось подключить эталонный канал"));
+                    // В базовое состояние
+                    ToStart();
+                    return;
+                }
+            }
             else
                 Method.SetEthalonChannel(_userEchalonChannel, null);
             // Запускаем

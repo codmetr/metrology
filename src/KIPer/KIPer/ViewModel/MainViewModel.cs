@@ -450,7 +450,7 @@ namespace KipTM.ViewModel
 
         public void OnEvent(ErrorMessageEventArg message)
         {
-            HelpMessage = message.Error;
+            HelpMessage = string.Format("[{0}] {1}", DateTime.Now.ToString("hh:mm:ss"), message.Error);
             IsError = true;
         }
 

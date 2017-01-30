@@ -53,8 +53,9 @@ namespace MainLoop
             var parameter = new LoopDescriptor(locker, cancel.Token, initAction, key);
             _lockers.Add(key, parameter);
             _cancelThreadCollection.Add(key, cancel);
-            var thread = new Thread(WorkLoop);
+            var thread = new Thread(WorkLoop) {Name = string.Format("query loop by [{0}]", key)};
             thread.Start(parameter);
+
             _threads.Add(key, thread);
         }
 

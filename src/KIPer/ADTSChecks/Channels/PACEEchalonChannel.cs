@@ -132,6 +132,7 @@ namespace ADTSChecks.Model.Channels
 
         private void UpdateState()
         {
+            //todo: make eroor reaction from model
             _paseModel.UpdatePressure();
             _paseModel.UpdateUnit();
         }
