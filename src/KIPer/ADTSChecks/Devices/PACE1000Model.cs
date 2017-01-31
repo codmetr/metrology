@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ADTSChecks.Devices;
 using ADTSData;
 using CheckFrame.Model;
 using KipTM.Model;
@@ -108,6 +109,16 @@ namespace ADTSChecks.Model.Devices
             _loops.StartMiddleAction(_loopKey, (mb) => _updateUnit(_cancellation.Token));
         }
 
+        /// <summary>
+        /// Обновить значение единиц измерения
+        /// </summary>
+        /// <param name="wh">Событие синхронизации</param>
+        /// <returns>Контейнер результата</returns>
+        public QueryResult UpdateUnit(EventWaitHandle wh)
+        {
+            return AsyncWrapper(() => _updateUnit(_cancellation.Token), wh);
+        }
+
         public event EventHandler PressureUnitChanged;
 
         protected virtual void OnPressureUnitChanged()
@@ -130,18 +141,22 @@ namespace ADTSChecks.Model.Devices
             }
         }
 
-        public void UpdatePressure()
+        /// <summary>
+        /// Обновить значение давления
+        /// </summary>
+        public bool UpdatePressure()
         {
-            _loops.StartMiddleAction(_loopKey, (mb) => _updatePressure(_cancellation.Token));
+            return AsyncWrapper(() => _loops.StartMiddleAction(_loopKey, (mb) => _updatePressure(_cancellation.Token))).IsSuccess;
         }
 
-        public void UpdatePressure(EventWaitHandle wh)
+        /// <summary>
+        /// Обновить значение давления
+        /// </summary>
+        /// <param name="wh">Событие синхронизации</param>
+        /// <returns>Контейнер результата</returns>
+        public QueryResult UpdatePressure(EventWaitHandle wh)
         {
-            _loops.StartMiddleAction(_loopKey, (mb) =>
-            {
-                _updatePressure(_cancellation.Token);
-                wh.Set();
-            });
+            return AsyncWrapper(() => _loops.StartMiddleAction(_loopKey, (mb) => _updatePressure(_cancellation.Token)), wh);
         }
 
         public event EventHandler PressureChanged;
@@ -213,6 +228,47 @@ namespace ADTSChecks.Model.Devices
             var unit = _driver.GetPressureUnit();
             if (unit != null)
                 PressureUnit = unit.Value;
+        }
+
+        /// <summary>
+        /// Синхронизирующая обертка
+        /// </summary>
+        /// <param name="act"></param>
+        /// <param name="wh"></param>
+        /// <returns></returns>
+        private QueryResult AsyncWrapper(Action act, EventWaitHandle wh)
+        {
+            var result = new QueryResult();
+            _loops.StartMiddleAction(_loopKey, (mb) =>
+            {
+                try
+                {
+                    act();
+                    result.IsSuccess = true;
+                }
+                catch (Exception e)
+                {
+                    result.IsSuccess = false;
+                    result.ErrorNote = e.Message;
+                    result.Arg = e;
+                }
+                wh.Set();
+            });
+            return result;
+        }
+
+        /// <summary>
+        /// Синхронизирующая обертка
+        /// </summary>
+        /// <param name="act"></param>
+        /// <param name="wh"></param>
+        /// <returns></returns>
+        private QueryResult AsyncWrapper(Action act)
+        {
+            var wh = new ManualResetEvent(false);
+            var res = AsyncWrapper(act, wh);
+            wh.WaitOne();
+            return res;
         }
         #endregion
     }

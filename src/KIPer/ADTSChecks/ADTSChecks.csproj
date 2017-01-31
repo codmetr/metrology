@@ -76,6 +76,7 @@
     <Compile Include="Devices\ADTSFactory.cs" />
     <Compile Include="Devices\PACE1000Factory.cs" />
     <Compile Include="Devices\PACE1000ModelFactory.cs" />
+    <Compile Include="Devices\QueryResult.cs" />
     <Compile Include="FeaturesDescriptor.cs" />
     <Compile Include="IViewModelFabrik.cs" />
     <Compile Include="Channels\PACEEchalonChannel.cs" />

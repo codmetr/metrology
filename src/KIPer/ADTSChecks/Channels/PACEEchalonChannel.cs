@@ -5,6 +5,7 @@ using ADTSChecks.Model.Devices;
 using CheckFrame.Model.Channels;
 using KipTM.Model.Channels;
 using KipTM.Model.TransportChannels;
+using Tools;
 
 namespace ADTSChecks.Model.Channels
 {
@@ -17,6 +18,7 @@ namespace ADTSChecks.Model.Channels
         private bool _isAutoupdate = false;
         private TimeSpan _autoupdatePeriod = TimeSpan.FromMilliseconds(500);
         private bool _isActive;
+        private bool _isConnected;
 
         public PACEEthalonChannel(PACE1000Model paseModel)
         {
@@ -35,8 +37,7 @@ namespace ADTSChecks.Model.Channels
             IsActive = true;
             _isAutoupdate = true;
             _paseModel.Start(transport);
-            AutoUpdate();
-            return true;
+            return AutoUpdate();
         }
 
         /// <summary>
@@ -96,9 +97,27 @@ namespace ADTSChecks.Model.Channels
                 OnActiveStateChange();
             }
         }
+
+        /// <summary>
+        /// Активность канала
+        /// </summary>
+        public bool IsConnected
+        {
+            get { return _isConnected; }
+            set
+            {
+                if (value == _isConnected)
+                    return;
+                _isConnected = value;
+                OnActiveStateChange();
+            }
+        }
         #endregion
 
         #region Events
+        /// <summary>
+        /// Измеение активности канала
+        /// </summary>
         public event EventHandler ActiveStateChange;
 
         protected virtual void OnActiveStateChange()
@@ -107,6 +126,20 @@ namespace ADTSChecks.Model.Channels
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Изменение состояния подключения канала
+        /// </summary>
+        public event EventHandler ConnectedStateChange;
+
+        protected virtual void OnConnectedStateChange()
+        {
+            EventHandler handler = ConnectedStateChange;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Состояние обновлено
+        /// </summary>
         public event EventHandler StateUpdated;
 
         protected virtual void OnStateUpdated()
@@ -118,16 +151,30 @@ namespace ADTSChecks.Model.Channels
 
         #region Service
 
-        private void AutoUpdate()
+        /// <summary>
+        /// Автообновление
+        /// </summary>
+        /// <param name="wh"></param>
+        /// <returns></returns>
+        private bool AutoUpdate(EventWaitHandle wh = null)
         {
             if (!_isAutoupdate)
-                return;
+                return true;
             UpdateState();
             Task.Run(() =>
             {
                 Thread.Sleep(_autoupdatePeriod);
                 AutoUpdate();
             });
+        }
+
+        private void UpdateState(EventWaitHandle wh)
+        {
+            var whPresure = new ManualResetEvent(false);
+            var whPresureUnit = new ManualResetEvent(false);
+            //todo: make eroor reaction from model
+            _paseModel.UpdatePressure(whPresure);
+            _paseModel.UpdateUnit(whPresureUnit);
         }
 
         private void UpdateState()
