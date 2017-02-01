@@ -81,40 +81,48 @@ namespace MainLoop
             while (!def.IsCancel)
             {
                 var important = def.GetImportant();
-                if (important != null)
+                if (important != null && important.RealAction != null)
                 {
-                    lock (def.Locker)
-                    {
-                        if(def.IsNeedInit)
-                            def.Init();
-                        important(def.Locker);
-                    }
+                    DoWorkItem(important, def);
                     continue;
                 }
                 var middle = def.GetMiddle();
-                if (middle != null)
+                if (middle != null && middle.RealAction != null)
                 {
-                    lock (def.Locker)
-                    {
-                        if(def.IsNeedInit)
-                            def.Init();
-                        middle(def.Locker);
-                    }
+                    DoWorkItem(middle, def);
                     continue;
                 }
                 var unimportant = def.GetUnimportant();
-                if (unimportant != null)
+                if (unimportant != null && unimportant.RealAction != null)
                 {
-                    lock (def.Locker)
-                    {
-                        if(def.IsNeedInit)
-                            def.Init();
-                        unimportant(def.Locker);
-                    }
+                    DoWorkItem(unimportant, def);
                     continue;
                 }
                 Thread.Sleep(def.Waiting);
                 var str = def.Note;
+            }
+        }
+
+        /// <summary>
+        /// Locked execute action
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="def"></param>
+        private void DoWorkItem(ActionItem<object> action, LoopDescriptor def)
+        {
+            lock (def.Locker)
+            {
+                if (def.IsNeedInit)
+                    def.Init();
+                try
+                {
+                    action.RealAction(def.Locker);
+                }
+                finally
+                {
+                    if (action.WhComplete != null)
+                        action.WhComplete.Set();
+                }
             }
         }
 
@@ -125,9 +133,20 @@ namespace MainLoop
         /// <param name="action">действие</param>
         public void StartImportantAction(string key, Action<object> action)
         {
+            StartImportantAction(key, action, null);
+        }
+
+        /// <summary>
+        /// Добавить действие в очередь важных действий
+        /// </summary>
+        /// <param name="key">Ключ локера</param>
+        /// <param name="action">действие</param>
+        /// <param name="wh">Событие ожиданя</param>
+        public void StartImportantAction(string key, Action<object> action, EventWaitHandle wh)
+        {
             if(!_threads.ContainsKey(key))
                 throw new InvalidProgramException(string.Format("key({0}) not found", key));
-            _lockers[key].AddImportant(action);
+            _lockers[key].AddImportant(action, wh);
         }
 
         /// <summary>
@@ -136,6 +155,17 @@ namespace MainLoop
         /// <param name="key">Ключ локера</param>
         /// <param name="action">действие</param>
         public void StartMiddleAction(string key, Action<object> action)
+        {
+            StartMiddleAction(key, action, null);
+        }
+
+        /// <summary>
+        /// Добавить действие в очередь действий средней важности
+        /// </summary>
+        /// <param name="key">Ключ локера</param>
+        /// <param name="action">действие</param>
+        /// <param name="wh">Событие ожиданя</param>
+        public void StartMiddleAction(string key, Action<object> action, EventWaitHandle wh)
         {
             if(!_threads.ContainsKey(key))
                 throw new InvalidProgramException(string.Format("key({0}) not found", key));
@@ -148,6 +178,17 @@ namespace MainLoop
         /// <param name="key">Ключ локера</param>
         /// <param name="action">действие</param>
         public void StartUnimportantAction(string key, Action<object> action)
+        {
+            StartUnimportantAction(key, action, null);
+        }
+
+        /// <summary>
+        /// Добавить действие в очередь неважных действий
+        /// </summary>
+        /// <param name="key">Ключ локера</param>
+        /// <param name="action">действие</param>
+        /// <param name="wh">Событие ожиданя</param>
+        public void StartUnimportantAction(string key, Action<object> action, EventWaitHandle wh)
         {
             if(!_threads.ContainsKey(key))
                 throw new InvalidProgramException(string.Format("key({0}) not found", key));

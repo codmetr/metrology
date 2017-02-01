@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel1="clr-namespace:KipTM.ViewModel;assembly=ADTSChecks"
              xmlns:converters="clr-namespace:KipTM.View.Converters;assembly=CheckFrame"
+             xmlns:res="clr-namespace:WpfCommonStyles;assembly=WpfCommonStyles"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel1:Pace1000ViewModel}"
              d:DesignHeight="200" d:DesignWidth="500">
     <UserControl.Resources>
@@ -14,7 +15,7 @@
             </ResourceDictionary.MergedDictionaries>-->
             <Style TargetType="TextBlock" x:Key="TitleStyle">
                 <Setter Property="Margin" Value="3"/>
-                <Setter Property="Width" Value="50"/>
+                <Setter Property="Width" Value="100"/>
             </Style>
             <Style TargetType="TextBlock" x:Key="ValueStyle">
                 <Setter Property="Margin" Value="3"/>
@@ -62,12 +63,13 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource TitleStyle}">Давление:</TextBlock>
-                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Pressure}" Style="{StaticResource ValueStyle}"/>
-                    <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Unit}" Style="{StaticResource ValueStyle}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}">Давление:</TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Pressure}" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=ValueStyle}}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Unit}" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=ValueStyle}}"/>
                     <Button Grid.Column="3" Grid.Row="0" Command="{Binding UpdatePressureAndUnits}" VerticalAlignment="Center">Перечитать</Button>
 
-                    <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource TitleStyle}" VerticalAlignment="Center" TextWrapping="Wrap">Ед. измерения:</TextBlock>
+                    <TextBlock Grid.Column="0" Grid.Row="1" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}"
+                               VerticalAlignment="Center" TextWrapping="Wrap">Ед. измерения:</TextBlock>
                     <ComboBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Margin="3" HorizontalAlignment="Stretch"
                               ItemsSource="{Binding AvalableUnits}"
                               SelectedItem="{Binding SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">

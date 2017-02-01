@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionItem.cs" />
     <Compile Include="ILoops.cs" />
     <Compile Include="Loop.cs" />
     <Compile Include="LoopDescriptor.cs" />

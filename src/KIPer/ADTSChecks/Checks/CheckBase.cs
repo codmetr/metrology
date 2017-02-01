@@ -10,9 +10,11 @@ using ArchiveData.DTO.Params;
 using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks.Steps;
 using KipTM.Archive;
+using KipTM.EventAggregator;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.TransportChannels;
+using KipTM.ViewModel.Events;
 using NLog;
 
 namespace ADTSChecks.Model.Checks
@@ -29,6 +31,7 @@ namespace ADTSChecks.Model.Checks
         protected CancellationTokenSource _cancelSource;
         protected readonly NLog.Logger _logger;
 
+        private IEventAggregator _agregator;
         protected CalibChannel _calibChan;
         protected IEthalonChannel _ethalonChannel;
         protected IUserChannel _userChannel;
@@ -117,8 +120,19 @@ namespace ADTSChecks.Model.Checks
             var cancel = _cancelSource.Token;
             var whStep = new ManualResetEvent(false);
             var waitPeriod = TimeSpan.FromMilliseconds(10);
-            if (!_ethalonChannel.Activate(EthalonChannelType))
-                throw new Exception(string.Format("Can not Activate ethalon channel: {0}", _ethalonChannel));
+
+            try
+            {
+                if (!_ethalonChannel.Activate(EthalonChannelType))
+                    throw new Exception(string.Format("Can not Activate ethalon channel: {0}", _ethalonChannel));
+            }
+            catch (Exception e)
+            {
+                if(_agregator != null)
+                    _agregator.Post(new ErrorMessageEventArg("Не удалось подключить эталонный канал"));
+                OnEndMethod(null);
+                return false;
+            }
             foreach (var testStep in Steps)
             {
                 whStep.Reset();
@@ -215,6 +229,15 @@ namespace ADTSChecks.Model.Checks
                         throw new ArgumentOutOfRangeException();
                 }
             }
+        }
+
+        /// <summary>
+        /// Задать агрегатор событий
+        /// </summary>
+        /// <param name="agregator">агрегатор событий</param>
+        public void SetAggregator(IEventAggregator agregator)
+        {
+            _agregator = agregator;
         }
 
         /// <summary>

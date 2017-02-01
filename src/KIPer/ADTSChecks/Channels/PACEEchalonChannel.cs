@@ -99,7 +99,7 @@ namespace ADTSChecks.Model.Channels
         }
 
         /// <summary>
-        /// Активность канала
+        /// Наличие связи
         /// </summary>
         public bool IsConnected
         {
@@ -109,7 +109,7 @@ namespace ADTSChecks.Model.Channels
                 if (value == _isConnected)
                     return;
                 _isConnected = value;
-                OnActiveStateChange();
+                OnConnectedStateChange();
             }
         }
         #endregion
@@ -127,7 +127,7 @@ namespace ADTSChecks.Model.Channels
         }
 
         /// <summary>
-        /// Изменение состояния подключения канала
+        /// Изменение состояния наличия связи
         /// </summary>
         public event EventHandler ConnectedStateChange;
 
@@ -160,12 +160,13 @@ namespace ADTSChecks.Model.Channels
         {
             if (!_isAutoupdate)
                 return true;
-            UpdateState();
+            IsConnected = UpdateState();
             Task.Run(() =>
             {
                 Thread.Sleep(_autoupdatePeriod);
                 AutoUpdate();
             });
+            return IsConnected;
         }
 
         private void UpdateState(EventWaitHandle wh)
@@ -175,13 +176,22 @@ namespace ADTSChecks.Model.Channels
             //todo: make eroor reaction from model
             _paseModel.UpdatePressure(whPresure);
             _paseModel.UpdateUnit(whPresureUnit);
+
+            Task.Run(() =>
+            {
+                WaitHandle.WaitAll(new WaitHandle[] {whPresure, whPresureUnit});
+                if (wh != null)
+                    wh.Set();
+            });
         }
 
-        private void UpdateState()
+        private bool UpdateState()
         {
+            
             //todo: make eroor reaction from model
-            _paseModel.UpdatePressure();
-            _paseModel.UpdateUnit();
+            var result = _paseModel.UpdatePressure();
+            result = result && _paseModel.UpdateUnit();
+            return result;
         }
 
         void _paseModel_PressureUnitChanged(object sender, EventArgs e)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace MainLoop
 {
@@ -27,6 +28,14 @@ namespace MainLoop
         void StartImportantAction(string key, Action<object> action);
 
         /// <summary>
+        /// Добавить действие в очередь важных действий
+        /// </summary>
+        /// <param name="key">Ключ локера</param>
+        /// <param name="action">действие</param>
+        /// <param name="wh">Событие ожиданя</param>
+        void StartImportantAction(string key, Action<object> action, EventWaitHandle wh);
+
+        /// <summary>
         /// Добавить действие в очередь действий средней важности
         /// </summary>
         /// <param name="key">Ключ локера</param>
@@ -34,10 +43,26 @@ namespace MainLoop
         void StartMiddleAction(string key, Action<object> action);
 
         /// <summary>
+        /// Добавить действие в очередь действий средней важности
+        /// </summary>
+        /// <param name="key">Ключ локера</param>
+        /// <param name="action">действие</param>
+        /// <param name="wh">Событие ожиданя</param>
+        void StartMiddleAction(string key, Action<object> action, EventWaitHandle wh);
+
+        /// <summary>
         /// Добавить действие в очередь неважных действий
         /// </summary>
         /// <param name="key">Ключ локера</param>
         /// <param name="action">действие</param>
         void StartUnimportantAction(string key, Action<object> action);
+
+        /// <summary>
+        /// Добавить действие в очередь неважных действий
+        /// </summary>
+        /// <param name="key">Ключ локера</param>
+        /// <param name="action">действие</param>
+        /// <param name="wh">Событие ожиданя</param>
+        void StartUnimportantAction(string key, Action<object> action, EventWaitHandle wh);
     }
 }

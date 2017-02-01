@@ -104,9 +104,9 @@ namespace ADTSChecks.Model.Devices
             });
         }
 
-        public void UpdateUnit()
+        public bool UpdateUnit()
         {
-            _loops.StartMiddleAction(_loopKey, (mb) => _updateUnit(_cancellation.Token));
+            return SyncWrapper(() => _loops.StartMiddleAction(_loopKey, (mb) => _updateUnit(_cancellation.Token))).IsSuccess;
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace ADTSChecks.Model.Devices
         /// <returns>Контейнер результата</returns>
         public QueryResult UpdateUnit(EventWaitHandle wh)
         {
-            return AsyncWrapper(() => _updateUnit(_cancellation.Token), wh);
+            return SyncWrapper(() => _loops.StartMiddleAction(_loopKey, (mb) => _updateUnit(_cancellation.Token), wh));
         }
 
         public event EventHandler PressureUnitChanged;
@@ -146,7 +146,7 @@ namespace ADTSChecks.Model.Devices
         /// </summary>
         public bool UpdatePressure()
         {
-            return AsyncWrapper(() => _loops.StartMiddleAction(_loopKey, (mb) => _updatePressure(_cancellation.Token))).IsSuccess;
+            return SyncWrapper(() => _loops.StartMiddleAction(_loopKey, (mb) => _updatePressure(_cancellation.Token))).IsSuccess;
         }
 
         /// <summary>
@@ -263,7 +263,7 @@ namespace ADTSChecks.Model.Devices
         /// <param name="act"></param>
         /// <param name="wh"></param>
         /// <returns></returns>
-        private QueryResult AsyncWrapper(Action act)
+        private QueryResult SyncWrapper(Action act)
         {
             var wh = new ManualResetEvent(false);
             var res = AsyncWrapper(act, wh);

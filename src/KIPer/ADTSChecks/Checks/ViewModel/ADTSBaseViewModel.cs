@@ -97,6 +97,8 @@ namespace ADTSChecks.Checks.ViewModel
         public void SetAggregator(IEventAggregator agregator)
         {
             _agregator = agregator;
+            if (Method != null)
+                Method.SetAggregator(agregator);
         }
 
         /// <summary>

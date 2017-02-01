@@ -16,9 +16,9 @@ namespace MainLoop
 
         private readonly TimeSpan waiting;
 
-        private readonly Queue<Action<object>> importantActions;
-        private readonly Queue<Action<object>> middleActions;
-        private readonly Queue<Action<object>> unimportantActions;
+        private readonly Queue<ActionItem<object>> importantActions;
+        private readonly Queue<ActionItem<object>> middleActions;
+        private readonly Queue<ActionItem<object>> unimportantActions;
 
         private int _importantCount = 0;
         private int _middleCount = 0;
@@ -30,9 +30,9 @@ namespace MainLoop
         {
             _initAction = null;
             waiting = TimeSpan.FromMilliseconds(10);
-            importantActions = new Queue<Action<object>>();
-            middleActions = new Queue<Action<object>>();
-            unimportantActions = new Queue<Action<object>>();
+            importantActions = new Queue<ActionItem<object>>();
+            middleActions = new Queue<ActionItem<object>>();
+            unimportantActions = new Queue<ActionItem<object>>();
         }
 
         public LoopDescriptor(object locker, CancellationToken cancel, Action<object> initAction = null, string note = null)
@@ -83,7 +83,20 @@ namespace MainLoop
         {
             lock (importantActions)
             {
-                importantActions.Enqueue(action);
+                importantActions.Enqueue(new ActionItem<object>(action));
+                _importantCount++;
+            }
+        }
+
+        /// <summary>
+        /// Add important action with locker
+        /// </summary>
+        /// <param name="action"></param>
+        public void AddImportant(Action<object> action, EventWaitHandle wh)
+        {
+            lock (importantActions)
+            {
+                importantActions.Enqueue(new ActionItem<object>(action, wh));
                 _importantCount++;
             }
         }
@@ -96,7 +109,20 @@ namespace MainLoop
         {
             lock (middleActions)
             {
-                middleActions.Enqueue(action);
+                middleActions.Enqueue(new ActionItem<object>(action));
+                _middleCount++;
+            }
+        }
+
+        /// <summary>
+        /// Add middle action with locker
+        /// </summary>
+        /// <param name="action"></param>
+        public void AddMiddle(Action<object> action, EventWaitHandle wh)
+        {
+            lock (middleActions)
+            {
+                middleActions.Enqueue(new ActionItem<object>(action, wh));
                 _middleCount++;
             }
         }
@@ -109,7 +135,20 @@ namespace MainLoop
         {
             lock (unimportantActions)
             {
-                unimportantActions.Enqueue(action);
+                unimportantActions.Enqueue(new ActionItem<object>(action));
+                _unimportantCount++;
+            }
+        }
+
+        /// <summary>
+        /// Add unimportant action with locker
+        /// </summary>
+        /// <param name="action"></param>
+        public void AddUnimportant(Action<object> action, EventWaitHandle wh)
+        {
+            lock (unimportantActions)
+            {
+                unimportantActions.Enqueue(new ActionItem<object>(action, wh));
                 _unimportantCount++;
             }
         }
@@ -118,11 +157,11 @@ namespace MainLoop
         /// Get next important action from pool
         /// </summary>
         /// <returns>important action</returns>
-        public Action<object> GetImportant()
+        public ActionItem<object> GetImportant()
         {
             if (_importantCount <= 0)
                 return null;
-            Action<object> result;
+            ActionItem<object> result;
             lock (importantActions)
             {
                 result = importantActions.Dequeue();
@@ -135,11 +174,11 @@ namespace MainLoop
         /// Get next middle action from pool
         /// </summary>
         /// <returns>middle action</returns>
-        public Action<object> GetMiddle()
+        public ActionItem<object> GetMiddle()
         {
             if (_middleCount <= 0)
                 return null;
-            Action<object> result;
+            ActionItem<object> result;
             lock (middleActions)
             {
                 result = middleActions.Dequeue();
@@ -152,11 +191,11 @@ namespace MainLoop
         /// Get next unimportant action from pool
         /// </summary>
         /// <returns>unimportant action</returns>
-        public Action<object> GetUnimportant()
+        public ActionItem<object> GetUnimportant()
         {
             if (_unimportantCount <= 0)
                 return null;
-            Action<object> result;
+            ActionItem<object> result;
             lock (unimportantActions)
             {
                 result = unimportantActions.Dequeue();
