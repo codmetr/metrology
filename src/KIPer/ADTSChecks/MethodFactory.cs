@@ -14,7 +14,7 @@ namespace ADTSChecks
     /// <summary>
     /// Фабрика методик
     /// </summary>
-    public class MethodFactory : IMethodFactory
+    public class ADTSMethodFactory : IMethodFactory
     {
         private Dictionary<string, ICheckMethod> _methods;
         /// <summary>
@@ -26,7 +26,7 @@ namespace ADTSChecks
                 {Calibration.Key, ()=> new Test(NLog.LogManager.GetLogger("ADTSTestMethod"))},
         }; 
 
-        public MethodFactory()
+        public ADTSMethodFactory()
         {
             _methods = createMetods.ToDictionary(el => el.Key, el => el.Value());
         }

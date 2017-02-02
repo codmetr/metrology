@@ -135,6 +135,7 @@ namespace KipTM.ViewModel
             _reportFabric = reportFabric;
             _channelFactories = features.ChannelFactories;
             _services = new ServiceViewModel(services, new SelectChannelViewModel(_channelFactories.SelectMany(el=>el.GetChannels())));
+
             var checkBtns = new List<OneBtnDescripto>();
             foreach (var keyCheck in _methodicService.GetKeys())
             {

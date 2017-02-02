@@ -5,6 +5,7 @@ using ADTSChecks.Checks.Data;
 using ADTSChecks.Model.Steps.ADTSCalibration;
 using ADTSData;
 using ArchiveData.DTO.Params;
+using CheckFrame.Channels;
 using KipTM.Archive;
 using KipTM.Model.Checks;
 using Tools;
@@ -42,11 +43,16 @@ namespace ADTSChecks.Model.Checks
             return FillSteps(customConf as ADTSParameters);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="propertyes"></param>
+        /// <returns></returns>
         public override object GetCustomConfig(IPropertyPool propertyes)
         {
             //var propertyes = propertyPool.ByKey(ChannelKey);
             var points = propertyes.GetProperty<List<ADTSPoint>>(Calibration.KeyPoints);
-            var channel = propertyes.GetProperty<CalibChannel>(Calibration.KeyChannel);
+            var channel = propertyes.GetProperty <ChannelDescriptor> (Calibration.KeyChannel);
             var rate = propertyes.GetProperty<double>(Calibration.KeyRate);
             var unit = propertyes.GetProperty<PressureUnits>(Calibration.KeyUnit);
             return new ADTSParameters(channel, points, rate, unit);

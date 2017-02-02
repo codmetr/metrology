@@ -65,6 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Channels\ChannelDescriptor.cs" />
+    <Compile Include="Channels\ChannelOrder.cs" />
+    <Compile Include="Channels\ChannelTypes.cs" />
     <Compile Include="Checks\CheckConfig.cs" />
     <Compile Include="Checks\CheckConfigData.cs" />
     <Compile Include="Devices\DeviceFactoryAttribute.cs" />

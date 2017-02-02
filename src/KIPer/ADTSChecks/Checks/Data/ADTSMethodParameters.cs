@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using ADTS;
 using ADTSChecks.Model.Checks;
+using CheckFrame.Channels;
 
 namespace ADTSChecks.Checks.Data
 {
     public class ADTSParameters
     {
-        private readonly CalibChannel _calibChannel;
+        private readonly ChannelDescriptor _calibChannel;
         private readonly List<ADTSPoint> _points;
         private readonly double _rate;
         private readonly PressureUnits _unit;
 
-        public ADTSParameters(CalibChannel calibChannel, IEnumerable<ADTSPoint> points, double rate, PressureUnits unit)
+        public ADTSParameters(ChannelDescriptor calibChannel, IEnumerable<ADTSPoint> points, double rate, PressureUnits unit)
         {
             _calibChannel = calibChannel;
             _points = new List<ADTSPoint>(points);
@@ -19,7 +20,7 @@ namespace ADTSChecks.Checks.Data
             _unit = unit;
         }
 
-        public CalibChannel CalibChannel
+        public ChannelDescriptor CalibChannel
         {
             get { return _calibChannel; }
         }

@@ -3,6 +3,7 @@ using ADTS;
 using ADTSChecks.Checks.Data;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
+using CheckFrame.Channels;
 using CheckFrame.Model.Channels;
 using KipTM.Archive;
 using KipTM.Archive.DataTypes;
@@ -34,7 +35,16 @@ namespace ADTSChecks
         {
             return new List<ArchivedKeyValuePair>()
             {
-                new ArchivedKeyValuePair(Calibration.KeyChannel, CalibChannel.PS),
+                new ArchivedKeyValuePair(Calibration.KeyChannel,
+                    new ChannelDescriptor()
+                    {
+                        Name = "Ps",
+                        Max = 1355.0,
+                        Order = ChannelOrder.Source,
+                        TypeChannel = ChannelType.Pressure,
+                        Min = 3.0,
+                        Error = 0.01
+                    }),
                 new ArchivedKeyValuePair(Calibration.KeyPoints, GetDefaultForADTSCheckPSPoints()),
                 new ArchivedKeyValuePair(Calibration.KeyRate, 50.0),
                 new ArchivedKeyValuePair(Calibration.KeyUnit, PressureUnits.MBar),
@@ -46,7 +56,16 @@ namespace ADTSChecks
         {
             return new List<ArchivedKeyValuePair>()
             {
-                new ArchivedKeyValuePair(Calibration.KeyChannel, CalibChannel.PT),
+                new ArchivedKeyValuePair(Calibration.KeyChannel, 
+                    new ChannelDescriptor()
+                    {
+                        Name = "Pt",
+                        Max = 2700.0,
+                        Order = ChannelOrder.Source,
+                        TypeChannel = ChannelType.Pressure,
+                        Min = 3.0,
+                        Error = 0.01
+                    }),
                 new ArchivedKeyValuePair(Calibration.KeyPoints, GetDefaultForADTSCheckPTPoints()),
                 new ArchivedKeyValuePair(Calibration.KeyRate, 50.0),
                 new ArchivedKeyValuePair(Calibration.KeyUnit, PressureUnits.MBar),

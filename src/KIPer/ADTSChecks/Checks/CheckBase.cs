@@ -7,6 +7,7 @@ using ADTS;
 using ADTSChecks.Model.Devices;
 using ADTSData;
 using ArchiveData.DTO.Params;
+using CheckFrame.Channels;
 using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks.Steps;
 using KipTM.Archive;
@@ -32,7 +33,7 @@ namespace ADTSChecks.Model.Checks
         protected readonly NLog.Logger _logger;
 
         private IEventAggregator _agregator;
-        protected CalibChannel _calibChan;
+        protected ChannelDescriptor _calibChan;
         protected IEthalonChannel _ethalonChannel;
         protected IUserChannel _userChannel;
 

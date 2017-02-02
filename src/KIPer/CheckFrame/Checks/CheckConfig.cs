@@ -26,7 +26,13 @@ namespace KipTM.Checks
         private IDictionary<string, DeviceTypeDescriptor> _avalableEthalonTypes;
         private IEnumerable<string> _channels;
 
+        /// <summary>
+        /// Контейнер с результатом
+        /// </summary>
         private TestResult _result;
+        /// <summary>
+        /// Конфигурация
+        /// </summary>
         private CheckConfigData _data;
 
         #endregion
