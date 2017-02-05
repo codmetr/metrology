@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ArchiveData.DTO;
 using CheckFrame.ViewModel.Checks;
 using GalaSoft.MvvmLight;
 using KipTM.Checks;
@@ -69,7 +70,7 @@ namespace KipTM.ViewModel.Checks.Config
         /// <summary>
         /// Каналы устройства
         /// </summary>
-        public IEnumerable<string> Channels { get { return _model.Channels; } }
+        public IEnumerable<ChannelDescriptor> Channels { get { return _model.Channels; } }
 
         /// <summary>
         /// Дострупные для выбранного типа устройства методики
@@ -220,9 +221,9 @@ namespace KipTM.ViewModel.Checks.Config
         }
 
         /// <summary>
-        /// Выбранный канал
+        /// Выбранный Измерительный канал
         /// </summary>
-        public string SelectedChannel
+        public ChannelDescriptor SelectedChannel
         {
             get { return _model.SelectedChannel; }
             set

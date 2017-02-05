@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using ADTS;
 using ADTSChecks.Checks.Data;
+using ADTSChecks.Model.Devices;
 using ADTSChecks.Model.Steps.ADTSTest;
 using ADTSData;
+using ArchiveData.DTO;
 using ArchiveData.DTO.Params;
 using KipTM.Archive;
 using KipTM.Model.Checks;
@@ -46,7 +48,7 @@ namespace ADTSChecks.Model.Checks
         {
             //var propertyes = propertyPool.ByKey(ChannelKey);
             var points = propertyes.GetProperty<List<ADTSPoint>>(KeyPropertyPoints);
-            var channel = propertyes.GetProperty<CalibChannel>(KeyPropertyChannel);
+            var channel = propertyes.GetProperty<ChannelDescriptor>(KeyPropertyChannel);
             var rate = propertyes.GetProperty<double>(KeyPropertyRate);
             _unit = propertyes.GetProperty<PressureUnits>(KeyPropertyUnit);
             return new ADTSParameters(channel, points, rate, _unit);
@@ -74,9 +76,9 @@ namespace ADTSChecks.Model.Checks
 
             // добавление шагов прохождения точек
             Parameters param;
-            if (_calibChan == CalibChannel.PS)
+            if (_calibChan.Name == ADTSModel.Ps)
                 param = Parameters.PS;
-            else if (_calibChan == CalibChannel.PT)
+            else if (_calibChan.Name == ADTSModel.Pt)
                 param = Parameters.PT;
             else param = Parameters.PS;
 

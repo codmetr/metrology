@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using ADTS;
 using ADTSChecks.Checks.Data;
+using ADTSChecks.Model.Devices;
 using ADTSChecks.Model.Steps.ADTSCalibration;
 using ADTSData;
+using ArchiveData.DTO;
 using ArchiveData.DTO.Params;
-using CheckFrame.Channels;
+using CheckFrame.Archive;
 using KipTM.Archive;
 using KipTM.Model.Checks;
 using Tools;
@@ -20,7 +22,6 @@ namespace ADTSChecks.Model.Checks
         public const string KeyPoints = "Points";
         public const string KeyRate = "Rate";
         public const string KeyUnit = "Unit";
-        public const string KeyChannel = "Channel";
 
         private AdtsTestResults _result;
         private AdtsPointResult _resultPoint;
@@ -52,7 +53,7 @@ namespace ADTSChecks.Model.Checks
         {
             //var propertyes = propertyPool.ByKey(ChannelKey);
             var points = propertyes.GetProperty<List<ADTSPoint>>(Calibration.KeyPoints);
-            var channel = propertyes.GetProperty <ChannelDescriptor> (Calibration.KeyChannel);
+            var channel = propertyes.GetProperty<ChannelDescriptor>(BasicKeys.KeyChannel);
             var rate = propertyes.GetProperty<double>(Calibration.KeyRate);
             var unit = propertyes.GetProperty<PressureUnits>(Calibration.KeyUnit);
             return new ADTSParameters(channel, points, rate, unit);
@@ -71,13 +72,17 @@ namespace ADTSChecks.Model.Checks
             var steps = new List<CheckStepConfig>();
 
             // добавление шага инициализации
-            CheckStepConfig step = new CheckStepConfig(new InitStep("Инициализация калибровки", _adts, _calibChan, _logger), true);
+            var step = new CheckStepConfig(new InitStep("Инициализация калибровки", _adts, _calibChan, _logger), true);
             steps.Add(step);
             AttachStep(step.Step);
 
-            // добавление шага прохождения точек
-            Parameters param = _calibChan == CalibChannel.PS ? Parameters.PS
-                : _calibChan == CalibChannel.PT ? Parameters.PT : Parameters.PS;
+            // добавление шагов прохождения точек
+            Parameters param;
+            if (_calibChan.Name == ADTSModel.Ps)
+                param = Parameters.PS;
+            else if (_calibChan.Name == ADTSModel.Pt)
+                param = Parameters.PT;
+            else param = Parameters.PS;
             foreach (var point in parameters.Points)
             {
                 step = new CheckStepConfig( new DoPointStep(string.Format("Калибровка точки {0}", point.Pressure),

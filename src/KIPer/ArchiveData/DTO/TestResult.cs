@@ -60,7 +60,7 @@ namespace ArchiveData.DTO
         /// <summary>
         /// Канал устройства
         /// </summary>
-        public string Channel { get; set; }
+        public ChannelDescriptor Channel { get; set; }
 
         /// <summary>
         /// Целевое устройство

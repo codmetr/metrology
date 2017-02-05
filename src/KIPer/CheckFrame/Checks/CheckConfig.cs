@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using ArchiveData.DTO;
+using CheckFrame.Archive;
 using CheckFrame.Checks;
 using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks;
@@ -24,7 +25,8 @@ namespace KipTM.Checks
 
         private IDictionary<string, DeviceTypeDescriptor> _avalableDeviceTypes;
         private IDictionary<string, DeviceTypeDescriptor> _avalableEthalonTypes;
-        private IEnumerable<string> _channels;
+        private IEnumerable<ChannelDescriptor> _channels;
+        private IDictionary<ChannelDescriptor, string> _channelKeys;
 
         /// <summary>
         /// Контейнер с результатом
@@ -89,6 +91,8 @@ namespace KipTM.Checks
                     new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
             }
             _avalableDeviceTypes = avalableDeviceTypes;
+
+            // Выбираем первый тип устройства
             _data.CheckTypeKey = DeviceTypes.First();
             _data.TargetType = avalableDeviceTypes[_data.CheckTypeKey];
 
@@ -96,7 +100,21 @@ namespace KipTM.Checks
             {
                 _result.TargetDevice = new DeviceDescriptor(_data.TargetType);
                 _checks = _method.MethodsForType(_data.TargetTypeKey);
-                Channels = _propertyPool.ByKey(_data.TargetTypeKey).GetAllKeys();
+                var channels = new List<ChannelDescriptor>();
+                var channelsKeys = new Dictionary<ChannelDescriptor, string>();
+                // пулл выбранного типа устройства
+                var channelsPool = _propertyPool.ByKey(_data.TargetTypeKey);
+                foreach (var chKey in channelsPool.GetAllKeys())
+                {// перебор каналов выбранного типа устройства
+                    var oneChannel = channelsPool.ByKey(chKey).GetProperty<ChannelDescriptor>(BasicKeys.KeyChannel);
+                    if(oneChannel == null)
+                        continue;
+                    channels.Add(oneChannel);
+                    channelsKeys.Add(oneChannel, chKey);
+                }
+                Channels = channels;
+                _channelKeys = channelsKeys;
+                // выбираем первый тип канала
                 _result.Channel = Channels.First();
                 SelectedMethodKey = CheckTypes.First();
             }
@@ -110,7 +128,8 @@ namespace KipTM.Checks
         {
             var avalableEthalonTypes = new Dictionary<string, DeviceTypeDescriptor>();
             _data.EthalonTypeKey = null;
-            var ethalons = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(SelectedChannel).GetProperty<List<string>>(CommonPropertyKeys.KeyEthalons);
+            var channelKey = _channelKeys[SelectedChannel];
+            var ethalons = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(channelKey).GetProperty<List<string>>(CommonPropertyKeys.KeyEthalons);
             foreach (var deviceEthalon in ethalons)
             {
                 var setDevice = settings.Devices.FirstOrDefault(el => el.Key == deviceEthalon);
@@ -153,7 +172,7 @@ namespace KipTM.Checks
         /// <summary>
         /// Каналы устройства
         /// </summary>
-        public IEnumerable<string> Channels
+        public IEnumerable<ChannelDescriptor> Channels
         {
             get { return _channels; }
             set { _channels = value; }
@@ -225,7 +244,8 @@ namespace KipTM.Checks
                 {
                     SelectedMethodKey = _checks.First().Key;
                 }
-                var properties = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(SelectedChannel);
+                var channelKey = _channelKeys[SelectedChannel];
+                var properties = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(channelKey);
                 CustomSettings = _checks[_data.CheckTypeKey].GetCustomConfig(properties);
             }
         }
@@ -307,7 +327,8 @@ namespace KipTM.Checks
             {
                 _selectedCheckType = value;
                 _result.CheckType = _data.CheckTypeKey;
-                var properties = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(SelectedChannel);
+                var channelKey = _channelKeys[SelectedChannel];
+                var properties = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(channelKey);
                 CustomSettings = SelectedMethod.GetCustomConfig(properties);
                 SelectedMethod.Init(CustomSettings); //todo maybe move out
                 OnSelectedCheckTypeChanged();
@@ -317,7 +338,7 @@ namespace KipTM.Checks
         /// <summary>
         /// Выбранный канал
         /// </summary>
-        public string SelectedChannel
+        public ChannelDescriptor SelectedChannel
         {
             get { return _result.Channel; }
             set
@@ -325,7 +346,8 @@ namespace KipTM.Checks
                 if (value == _result.Channel)
                     return;
                 _result.Channel = value;
-                var properties = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(value);
+                var channelKey = _channelKeys[value];
+                var properties = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(channelKey);
                 CustomSettings = SelectedMethod.GetCustomConfig(properties);
                 SelectedMethod.Init(CustomSettings); //todo maybe move out
                 OnSelectedChannelChanged();

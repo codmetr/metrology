@@ -8,7 +8,7 @@ using ArchiveData.DTO;
 namespace CheckFrame.Checks
 {
     /// <summary>
-    /// Конфигурация
+    /// Конфигурация 
     /// </summary>
     public class CheckConfigData
     {

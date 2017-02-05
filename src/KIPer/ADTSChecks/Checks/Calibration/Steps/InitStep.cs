@@ -2,6 +2,7 @@
 using System.Threading;
 using ADTS;
 using ADTSChecks.Model.Devices;
+using ArchiveData.DTO;
 using ArchiveData.DTO.Params;
 using CheckFrame.Model.Checks.Steps;
 using KipTM.Model.Checks;
@@ -16,11 +17,11 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
         public const string KeyCalibDate = "CalibDate";
 
         private readonly ADTSModel _adts;
-        private readonly CalibChannel _calibChan;
+        private readonly ChannelDescriptor _calibChan;
         private readonly NLog.Logger _logger;
         private CancellationTokenSource _cancellationTokenSource;
 
-        public InitStep(string name, ADTSModel adts, CalibChannel calibChan, Logger logger)
+        public InitStep(string name, ADTSModel adts, ChannelDescriptor calibChan, Logger logger)
         {
             Name = name;
             _adts = adts;
@@ -41,9 +42,9 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
-            _logger.With(l => l.Trace(string.Format("Start ADTS calibration by channel {0}", _calibChan)));
+            _logger.With(l => l.Trace(string.Format("Start ADTS calibration by channel {0}", _calibChan.Name)));
             OnProgressChanged(new EventArgProgress(0, "Запуск калибровки"));
-            if (!_adts.StartCalibration(_calibChan, out calibDate, cancel))
+            if (!_adts.StartCalibration(_calibChan.Name, out calibDate, cancel))
             {
                 _logger.With(l => l.Trace(string.Format("[ERROR] start clibration")));
                 //OnError(new EventArgError() { Error = ADTSCheckError.ErrorStartCalibration });

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using ADTS;
 using ADTSChecks.Model.Devices;
 using ADTSData;
+using ArchiveData.DTO;
 using ArchiveData.DTO.Params;
-using CheckFrame.Channels;
 using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks.Steps;
 using KipTM.Archive;
@@ -216,20 +216,7 @@ namespace ADTSChecks.Model.Checks
         /// </summary>
         public string ChannelKey
         {
-            get
-            {
-                switch (_calibChan)
-                {
-                    case CalibChannel.PT:
-                        return KeySettingsPT;
-                    case CalibChannel.PS:
-                        return KeySettingsPS;
-                    case CalibChannel.PTPS:
-                        return KeySettingsPSPT;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
+            get { return _calibChan.Name; }
         }
 
         /// <summary>

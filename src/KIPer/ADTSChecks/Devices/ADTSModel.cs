@@ -14,6 +14,15 @@ namespace ADTSChecks.Model.Devices
 {
     public class ADTSModel
     {
+        /// <summary>
+        /// Маркер канала Ps
+        /// </summary>
+        public const string Ps = "ADTS.Ps";
+        /// <summary>
+        /// Маркер канала Pt
+        /// </summary>
+        public const string Pt = "ADTS.Pt";
+
         #region Local members
 
         private IDeviceManager _deviceManager;
@@ -152,11 +161,11 @@ namespace ADTSChecks.Model.Devices
         /// <summary>
         /// Запуск процесса калибровки
         /// </summary>
-        /// <param name="channel"></param>
+        /// <param name="channel">Одно из изначений ключей канала: <see cref="ADTSModel.Ps"/> или <see cref="ADTSModel.Pt"/></param>
         /// <param name="date"></param>
         /// <param name="cancel"></param>
         /// <returns></returns>
-        public bool StartCalibration(CalibChannel channel, out DateTime? date, CancellationToken cancel)
+        public bool StartCalibration(string channel, out DateTime? date, CancellationToken cancel)
         {
             bool result = false;
             date = null;
@@ -164,6 +173,9 @@ namespace ADTSChecks.Model.Devices
             DateTime? dateValue = null;
             if (cancel.IsCancellationRequested)
                 return false;
+            var calibChannel = CalibChannel.PS;
+            if (channel == ADTSModel.Pt)
+                calibChannel = CalibChannel.PT;
             _loops.StartMiddleAction(_loopKey, (transport) =>
             {
                 if (!_adts.GetDate(out dateValue) || cancel.IsCancellationRequested)
@@ -178,7 +190,7 @@ namespace ADTSChecks.Model.Devices
                     return;
                 }
 
-                if (!_adts.StartCalibration(channel) || cancel.IsCancellationRequested)
+                if (!_adts.StartCalibration(calibChannel) || cancel.IsCancellationRequested)
                 {
                     isCommpete.Set();
                     return;

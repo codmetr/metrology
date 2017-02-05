@@ -28,7 +28,7 @@ namespace ADTSData.RepoParsers
             result.Temperature = node["Temperature"].Value;
             result.Humidity = node["Humidity"].Value;
             result.Client = node["Client"].Value;
-            result.Channel = node["Channel"].Value;
+            result.Channel = RepoFabrik.Get<ChannelDescriptor>().Load(node["Channel"]);
             result.TargetDevice = RepoFabrik.Get<DeviceDescriptor>().Load(node["TargetDevice"]);
             result.Etalon = node["Etalon"].Childs.Select(RepoFabrik.Get<DeviceDescriptor>().Load).ToList();
             result.Results = node["Results"].Childs.Select(RepoFabrik.Get<TestStepResult>().Load).ToList();
@@ -38,7 +38,7 @@ namespace ADTSData.RepoParsers
         }
 
         /// <summary>
-        /// Сохранение результата в дерева репозитория
+        /// Сохранение результата в дерево репозитория
         /// </summary>
         /// <param name="root"></param>
         /// <param name="entity"></param>
@@ -54,7 +54,7 @@ namespace ADTSData.RepoParsers
             root["Temperature"] = new TreeEntity(root.Id) { Value = entity.Temperature };
             root["Humidity"] = new TreeEntity(root.Id) { Value = entity.Humidity };
             root["Client"] = new TreeEntity(root.Id) { Value = entity.Client };
-            root["Channel"] = new TreeEntity(root.Id) { Value = entity.Channel };
+            root["Channel"] = RepoFabrik.Get<ChannelDescriptor>().Save(entity.Channel);
             root["TargetDevice"] = RepoFabrik.Get<DeviceDescriptor>().Save(entity.TargetDevice);
             root["Etalon"] =
                 new TreeEntity(root.Id).AddRange(
@@ -82,7 +82,11 @@ namespace ADTSData.RepoParsers
             node.Values["Temperature"] = entity.Temperature;
             node.Values["Humidity"] = entity.Humidity;
             node.Values["Client"] = entity.Client;
-            node.Values["Channel"] = entity.Channel;
+            if (node.Childs.Any(el => el.Key == "Channel"))
+                RepoFabrik.Get<ChannelDescriptor>().Update(node["Channel"], entity.Channel);
+            else
+                node["Channel"] = RepoFabrik.Get<ChannelDescriptor>().Save(entity.Channel);
+
             if (node.Childs.Any(el => el.Key == "TargetDevice"))
                 RepoFabrik.Get<DeviceDescriptor>().Update(node["TargetDevice"], entity.TargetDevice);
             else

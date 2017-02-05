@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ADTS;
 using ADTSChecks.Model.Checks;
-using CheckFrame.Channels;
+using ArchiveData.DTO;
 
 namespace ADTSChecks.Checks.Data
 {

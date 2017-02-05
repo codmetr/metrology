@@ -128,6 +128,9 @@
     <Compile Include="Archive\DataTypes\SimplyPair.cs" />
     <Compile Include="Archive\DictionariesArchive.cs" />
     <Compile Include="Archive\PropertyArchive.cs" />
+    <Compile Include="Checks\View\ChannelDescriptorView.xaml.cs">
+      <DependentUpon>ChannelDescriptorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataService\DeviceCacheKey.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="DataService\PropertiesLibrary.cs" />
@@ -223,6 +226,10 @@
     <Compile Include="Archive\View\ResultView.xaml.cs">
       <DependentUpon>ResultView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Checks\View\ChannelDescriptorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
