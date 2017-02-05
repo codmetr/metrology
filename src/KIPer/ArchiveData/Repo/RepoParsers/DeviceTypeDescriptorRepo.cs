@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ADTSData.Keys;
+﻿using ADTSData.Keys;
 using ArchiveData.DTO;
-using ArchiveData.Repo;
 
-namespace ADTSData.RepoParsers
+namespace ArchiveData.Repo.RepoParsers
 {
     public class DeviceTypeDescriptorRepo : IRepo<DeviceTypeDescriptor>
     {

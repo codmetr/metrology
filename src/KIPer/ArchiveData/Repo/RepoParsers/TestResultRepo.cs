@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using ADTSData.Keys;
 using ArchiveData.DTO;
-using ArchiveData.Repo;
 
-namespace ADTSData.RepoParsers
+namespace ArchiveData.Repo.RepoParsers
 {
     public class TestResultRepo : IRepo<TestResult>
     {
