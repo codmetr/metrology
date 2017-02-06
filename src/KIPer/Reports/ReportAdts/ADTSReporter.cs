@@ -12,7 +12,7 @@ namespace ReportAdts
 {
     //[Report(typeof(ADTSTestMethod))]
     [Report(KeysDic.Test)]
-    public class ADTSReporter: IReporter
+    public class AdtsReporter: IReporter
     {
         public ReportClass GetReport(AdtsCommonReportData commonData, IEnumerable<AdtsReportData> staticData, IEnumerable<AdtsReportData> dinamicData)
         {

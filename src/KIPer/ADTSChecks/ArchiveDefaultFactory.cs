@@ -37,7 +37,7 @@ namespace ADTSChecks
         {
             return new List<ArchivedKeyValuePair>()
             {
-                new ArchivedKeyValuePair(BasicKeys.KeyChannel, new ChannelDescriptor(()=>Resources.ChannelPs)
+                new ArchivedKeyValuePair(BasicKeys.KeyChannel, new ChannelDescriptor()
                     {
                         Name = ADTSModel.Ps,
                         Max = 1355.0,
@@ -45,7 +45,7 @@ namespace ADTSChecks
                         TypeChannel = ChannelType.Pressure,
                         Min = 3.0,
                         Error = 0.01,
-                    }),
+                    }.SetLocalizedNameFunc(()=>Resources.ChannelPs)),
                 new ArchivedKeyValuePair(Calibration.KeyPoints, GetDefaultForADTSCheckPSPoints()),
                 new ArchivedKeyValuePair(Calibration.KeyRate, 50.0),
                 new ArchivedKeyValuePair(Calibration.KeyUnit, PressureUnits.MBar),
@@ -58,7 +58,7 @@ namespace ADTSChecks
             return new List<ArchivedKeyValuePair>()
             {
                 new ArchivedKeyValuePair(BasicKeys.KeyChannel, 
-                    new ChannelDescriptor(()=>Resources.ChannelPt)
+                    new ChannelDescriptor()
                     {
                         Name = ADTSModel.Pt,
                         Max = 2700.0,
@@ -66,7 +66,7 @@ namespace ADTSChecks
                         TypeChannel = ChannelType.Pressure,
                         Min = 3.0,
                         Error = 0.01,
-                    }),
+                    }.SetLocalizedNameFunc(()=>Resources.ChannelPt)),
                 new ArchivedKeyValuePair(Calibration.KeyPoints, GetDefaultForADTSCheckPTPoints()),
                 new ArchivedKeyValuePair(Calibration.KeyRate, 50.0),
                 new ArchivedKeyValuePair(Calibration.KeyUnit, PressureUnits.MBar),

@@ -23,12 +23,12 @@ namespace ArchiveData.DTO
         /// Описатель измерительного канала
         /// </summary>
         /// <param name="getLocalizedName">Механизм получения локализованного имени</param>
-        public ChannelDescriptor(Func<string> getLocalizedName)
-            :this()
-        {
-            // todo: придумать механизм устаноки способа локализации после загрузки из БД (десериализаци с помощью IRepo<>)
-            _getLocalizedName = getLocalizedName;
-        }
+        //public ChannelDescriptor(Func<string> getLocalizedName)
+        //    :this()
+        //{
+        //    // todo: придумать механизм устаноки способа локализации после загрузки из БД (десериализаци с помощью IRepo<>)
+        //    _getLocalizedName = getLocalizedName;
+        //}
 
         /// <summary>
         /// Название канала

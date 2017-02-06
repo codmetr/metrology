@@ -99,7 +99,7 @@ namespace KipTM.ViewModel
                 if (typeof(ICheckViewModelFactory).IsAssignableFrom(type) && type.GetAttributes(typeof(ViewModelFactoryAttribute)).Any())
                     unityContainer.RegisterType(typeof(ICheckViewModelFactory), type, type.Name);
                 if (typeof(IReporter).IsAssignableFrom(type) && type.GetAttributes(typeof(ReportAttribute)).Any())
-                    unityContainer.RegisterType(typeof(IReporter), type, type.Name);
+                        unityContainer.RegisterType(typeof(IReporter), type, type.Name);
             }
 
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();

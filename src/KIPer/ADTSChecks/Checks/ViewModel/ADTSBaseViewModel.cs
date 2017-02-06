@@ -65,7 +65,7 @@ namespace ADTSChecks.Checks.ViewModel
             Method = method;
             _propertyPool = propertyPool;
             // Базовая инициализация
-            var adts = _propertyPool.ByKey(method.ChannelKey);
+            //var adts = _propertyPool.ByKey(method.ChannelKey);
             Method.Init(customConfig);
             AttachEvent(method);
 
