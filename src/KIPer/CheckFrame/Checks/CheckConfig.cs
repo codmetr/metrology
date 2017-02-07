@@ -23,9 +23,24 @@ namespace KipTM.Checks
         private readonly IPropertyPool _propertyPool;
         private ICheckMethod _selectedCheckType;
 
+        /// <summary>
+        /// Доступные типы объектов конроля и их описатели
+        /// </summary>
         private IDictionary<string, DeviceTypeDescriptor> _avalableDeviceTypes;
+        /// <summary>
+        /// Дступные типы эталонов
+        /// </summary>
         private IDictionary<string, DeviceTypeDescriptor> _avalableEthalonTypes;
+        /// <summary>
+        /// Доступные измерительные каналы
+        /// </summary>
         private IEnumerable<ChannelDescriptor> _channels;
+        /// <summary>
+        /// Ключи измерительных каналов
+        /// </summary>
+        /// <remarks>
+        /// Необходимы для получения описателя по ключу выбираемому пользователем
+        /// </remarks>
         private IDictionary<ChannelDescriptor, string> _channelKeys;
 
         /// <summary>
@@ -116,7 +131,7 @@ namespace KipTM.Checks
                 _channelKeys = channelsKeys;
                 // выбираем первый тип канала
                 _result.Channel = Channels.First();
-                SelectedMethodKey = CheckTypes.First();
+                SelectedMethodKey = Methods.First();
             }
         }
 
@@ -124,6 +139,10 @@ namespace KipTM.Checks
         /// Загрузить набор допустимых эталонов
         /// </summary>
         /// <param name="settings"></param>
+        /// <remarks>
+        /// 1) Выбрать устройства, имеющие измерительные каналы такого же типа что и проверяемый
+        /// 2) Выбрать подходящие по диапазону и точности каналы
+        /// </remarks>
         private void LoadAvalableEthalons(IMainSettings settings)
         {
             var avalableEthalonTypes = new Dictionary<string, DeviceTypeDescriptor>();
@@ -170,7 +189,7 @@ namespace KipTM.Checks
         public IEnumerable<string> DeviceTypes { get { return _avalableDeviceTypes.Keys; } }
 
         /// <summary>
-        /// Каналы устройства
+        /// Измерительные каналы устройства
         /// </summary>
         public IEnumerable<ChannelDescriptor> Channels
         {
@@ -181,13 +200,13 @@ namespace KipTM.Checks
         /// <summary>
         /// Дострупные для выбранного типа устройства методики
         /// </summary>
-        public IEnumerable<string> CheckTypes
+        public IEnumerable<string> Methods
         {
             get { return _checks.Keys; }
         }
 
         /// <summary>
-        /// Доступные типы устройства
+        /// Доступные типы эталонов
         /// </summary>
         public IEnumerable<string> EthalonTypes { get { return _avalableEthalonTypes.Keys; } }
 
@@ -331,12 +350,12 @@ namespace KipTM.Checks
                 var properties = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(channelKey);
                 CustomSettings = SelectedMethod.GetCustomConfig(properties);
                 SelectedMethod.Init(CustomSettings); //todo maybe move out
-                OnSelectedCheckTypeChanged();
+                OnSelectedMethodChanged();
             }
         }
 
         /// <summary>
-        /// Выбранный канал
+        /// Выбранный измерительный канал
         /// </summary>
         public ChannelDescriptor SelectedChannel
         {
@@ -466,11 +485,11 @@ namespace KipTM.Checks
 
         #region Events
 
-        public event EventHandler SelectedCheckTypeChanged;
+        public event EventHandler SelectedMethodChanged;
 
-        protected virtual void OnSelectedCheckTypeChanged()
+        protected virtual void OnSelectedMethodChanged()
         {
-            EventHandler handler = SelectedCheckTypeChanged;
+            EventHandler handler = SelectedMethodChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 

@@ -34,7 +34,7 @@ namespace KipTM.ViewModel.Checks.Config
             _customConfigFabrik = customConfigFabrik;
             CustomSetiings = _customConfigFabrik.GetCustomSettings(_model.CustomSettings);
             _model.SelectedChannelChanged += _model_SelectedChannelChanged;
-            _model.SelectedCheckTypeChanged += _model_SelectedCheckTypeChanged;
+            _model.SelectedMethodChanged += ModelSelectedMethodChanged;
             _model.SelectedEthalonTypeChanged += _model_SelectedEthalonTypeChanged;
             _checkDeviceChanel = checkDeviceChanel;
             _checkDeviceChanel.ChannelTypeChanget += _checkDeviceChanel_ChannelTypeChanget;
@@ -42,24 +42,63 @@ namespace KipTM.ViewModel.Checks.Config
             _ethalonChanel.ChannelTypeChanget += _ethalonChanel_ChannelTypeChanget;
         }
 
-        void _model_SelectedEthalonTypeChanged(object sender, EventArgs e)
+        #region Обработка событий изменения конфигурации
+
+        /// <summary>
+        /// Изменение конфигурации канала связи с эталоном
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void _ethalonChanel_ChannelTypeChanget(object sender, EventArgs e)
+        {
+            OnEthalonDeviseChannelChanged();
+        }
+
+        /// <summary>
+        /// Изменение конфигурации канала связи с объектом контроля
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void _checkDeviceChanel_ChannelTypeChanget(object sender, EventArgs e)
+        {
+            OnCheckedDeviseChannelChanged();
+        }
+
+        /// <summary>
+        /// Изменение типа эталонного канала
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _model_SelectedEthalonTypeChanged(object sender, EventArgs e)
         {
             RaisePropertyChanged("SelectedEthalonType");
             RaisePropertyChanged("IsAnalogEthalon");
             RaisePropertyChanged("IsNoAnalogEthalon");
         }
 
-        void _model_SelectedCheckTypeChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Измененеие типа методики
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ModelSelectedMethodChanged(object sender, EventArgs e)
         {
             RaisePropertyChanged("SelectedCheckType");
             RaisePropertyChanged("SelectedChannel");
             RaisePropertyChanged("CheckDeviceChanel");
         }
 
-        void _model_SelectedChannelChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Изменение измерительного канала связи с эталоном
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _model_SelectedChannelChanged(object sender, EventArgs e)
         {
             RaisePropertyChanged("SelectedChannel");
         }
+
+        #endregion
 
         #region Перечисления
         /// <summary>
@@ -77,7 +116,7 @@ namespace KipTM.ViewModel.Checks.Config
         /// </summary>
         public IEnumerable<string> CheckTypes
         {
-            get { return _model.CheckTypes; }
+            get { return _model.Methods; }
         }
 
         /// <summary>
@@ -369,18 +408,6 @@ namespace KipTM.ViewModel.Checks.Config
             EventHandler handler = EthalonDeviseChannelChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
-
-        void _ethalonChanel_ChannelTypeChanget(object sender, EventArgs e)
-        {
-            OnEthalonDeviseChannelChanged();
-        }
-
-        void _checkDeviceChanel_ChannelTypeChanget(object sender, EventArgs e)
-        {
-            OnCheckedDeviseChannelChanged();
-        }
-
-
         #endregion
 
         #region Настройка конкретного типа проверки конкретного устройства
@@ -409,14 +436,19 @@ namespace KipTM.ViewModel.Checks.Config
 
         #endregion
 
+        #region Разрушение, отчистка ресурсов
+
         public override void Cleanup()
         {
             _checkDeviceChanel.ChannelTypeChanget -= _checkDeviceChanel_ChannelTypeChanget;
             _ethalonChanel.ChannelTypeChanget -= _ethalonChanel_ChannelTypeChanget;
             _model.SelectedChannelChanged -= _model_SelectedChannelChanged;
-            _model.SelectedCheckTypeChanged -= _model_SelectedCheckTypeChanged;
+            _model.SelectedMethodChanged -= ModelSelectedMethodChanged;
             _model.SelectedEthalonTypeChanged -= _model_SelectedEthalonTypeChanged;
             base.Cleanup();
         }
+
+        #endregion
+
     }
 }

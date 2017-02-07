@@ -12,6 +12,9 @@ namespace CheckFrame.Checks
     /// </summary>
     public class CheckConfigData
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public string CheckTypeKey;
         public string TargetTypeKey;
         public DeviceTypeDescriptor TargetType;

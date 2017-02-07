@@ -53,8 +53,13 @@ namespace KipTM.ViewModel
             return SelectedChannel;
         }
 
+        /// <summary>
+        /// Тип канала связи
+        /// </summary>
         public event EventHandler ChannelTypeChanget;
-
+        /// <summary>
+        /// Выбор типа канала связи
+        /// </summary>
         protected virtual void OnChannelTypeChanget()
         {
             EventHandler handler = ChannelTypeChanget;
