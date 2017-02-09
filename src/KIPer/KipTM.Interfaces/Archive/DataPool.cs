@@ -67,7 +67,7 @@ namespace KipTM.Archive
         /// Дополнить архив значением
         /// </summary>
         /// <typeparam name="T">Тип устанавливаемого параметра</typeparam>
-        /// <param name="key">Ключь параметра</param>
+        /// <param name="key">Ключ параметра</param>
         /// <param name="value">Значение параметра</param>
         public void AddOrUpdateProperty<T>(string key, T value)
         {

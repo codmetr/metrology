@@ -23,7 +23,7 @@ namespace ArchiveData.DTO
         public DateTime Timestamp { get; set; }
 
         /// <summary>
-        /// Ключь типа проверяемого устройства
+        /// Ключ типа проверяемого устройства
         /// </summary>
         public string TargetDeviceKey { get; set; }
 

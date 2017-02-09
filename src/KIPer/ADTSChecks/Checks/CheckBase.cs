@@ -212,7 +212,7 @@ namespace ADTSChecks.Model.Checks
         #endregion
 
         /// <summary>
-        /// Ключь канала
+        /// Ключ канала
         /// </summary>
         public string ChannelKey
         {

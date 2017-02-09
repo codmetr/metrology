@@ -17,7 +17,7 @@ namespace ADTSChecks
     {
         #region GetDefault
         /// <summary>
-        /// Ключь: "тип объекта контроля" 
+        /// Ключ: "тип объекта контроля" 
         /// </summary>
         /// <returns></returns>
         public List<ArchivedKeyValuePair> GetDefaultData()

@@ -13,11 +13,11 @@ namespace CheckFrame.Checks
     public class CheckConfigData
     {
         /// <summary>
-        /// Ключь типа методики проверки
+        /// Ключ типа методики проверки
         /// </summary>
         public string CheckTypeKey;
         /// <summary>
-        /// Ключь типа проверяемого устройства
+        /// Ключ типа проверяемого устройства
         /// </summary>
         public string TargetTypeKey;
         /// <summary>
@@ -25,7 +25,7 @@ namespace CheckFrame.Checks
         /// </summary>
         public DeviceTypeDescriptor TargetType;
         /// <summary>
-        /// Ключь типа эталона
+        /// Ключ типа эталона
         /// </summary>
         public string EthalonTypeKey;
         /// <summary>
