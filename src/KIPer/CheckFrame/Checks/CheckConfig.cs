@@ -107,7 +107,7 @@ namespace KipTM.Checks
 
             if (_data.TargetTypeKey == null)
                 return;
-
+            //Заполняем по выбранному устройству набор методик, каналов и т.п.
             ConfigMethodForDevice(_data.TargetType, _data.TargetTypeKey);
         }
 
@@ -121,13 +121,62 @@ namespace KipTM.Checks
         /// </remarks>
         private void LoadAvalableEthalons(IMainSettings settings)
         {
+            var selectedChannel = SelectedChannel;
+
             var avalableEthalonTypes = new Dictionary<string, DeviceTypeDescriptor>();
+            foreach (var dev in _avalableDeviceTypes)
+            {
+                var channels = GetChannels(dev.Key);
+                foreach (var channel in channels)
+                {
+                    //проверка типа измерительного канала
+                    if (selectedChannel.TypeChannel != channel.Key.TypeChannel)
+                        continue;
+                    //проверка нарпавленности измерительного канала
+                    if (selectedChannel.Order == channel.Key.Order)
+                        continue;
+                    //проверка диапазона измерительного канала
+                    if (selectedChannel.Min < channel.Key.Min || selectedChannel.Max > channel.Key.Max)
+                        continue;
+
+                    //проверка допуска измерительного канала
+                    if (selectedChannel.Error < channel.Key.Error)
+                        continue;
+
+                    //получение настроек
+                    var setDevice = GetSettingsDevice(settings, channel.Value);
+                    if (setDevice == null)
+                    {
+                        avalableEthalonTypes.Add(channel.Value, null);
+                        continue;
+                    }
+
+                    avalableEthalonTypes.Add(channel.Value, new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
+                }
+            }
+            avalableEthalonTypes.Add(UserEthalonChannel.Key,
+                            new DeviceTypeDescriptor("Аналоговый прибор", "Приборы без аппаратного интерфейса", ""));
+
+            _avalableEthalonTypes = avalableEthalonTypes;
+            _data.EthalonTypeKey = _avalableEthalonTypes.FirstOrDefault().Key;
+            if (_data.EthalonTypeKey == UserEthalonChannel.Key)
+            {
+                _data.EthalonType = new DeviceTypeDescriptor("", "", "");
+            }
+            else
+            {
+                _data.EthalonType = _avalableEthalonTypes.FirstOrDefault().Value;
+            }
+            _data.Ethalon = new DeviceDescriptor(_data.EthalonType);
+
+
+            /*
             _data.EthalonTypeKey = null;
             var channelKey = _channelKeys[SelectedChannel];
             var ethalons = _propertyPool.ByKey(_data.TargetTypeKey).ByKey(channelKey).GetProperty<List<string>>(CommonPropertyKeys.KeyEthalons);
             foreach (var deviceEthalon in ethalons)
             {
-                var setDevice = settings.Devices.FirstOrDefault(el => el.Key == deviceEthalon);
+                var setDevice = GetSettingsDevice(settings, deviceEthalon);
                 if (_data.EthalonTypeKey == null)
                 {
                     _data.EthalonTypeKey = deviceEthalon;
@@ -154,7 +203,7 @@ namespace KipTM.Checks
                     ethalonDevType = SelectedEthalonType;
                 Ethalon = new DeviceDescriptor(ethalonDevType);
                 _result.Etalon = new List<DeviceDescriptor>() { Ethalon };
-            }
+            }*/
         }
 
         /// <summary>
@@ -166,7 +215,23 @@ namespace KipTM.Checks
         {
             _result.TargetDevice = new DeviceDescriptor(targetType);
             _checks = _method.MethodsForType(targetTypeKey);
-            var channels = new List<ChannelDescriptor>();
+            // заполняем набор измерительных каналов
+            var channelKeys = GetChannels(targetTypeKey);
+            Channels = channelKeys.Keys;
+            _channelKeys = channelKeys;
+            // выбираем первый тип канала
+            _result.Channel = Channels.First();
+            // выбираем первую методику
+            SelectedMethodKey = Methods.First();
+        }
+
+        /// <summary>
+        /// Получить коллекцию опистелей измерительных каналов устройства
+        /// </summary>
+        /// <param name="targetTypeKey">Ключ типа устройства</param>
+        /// <returns>Справочник описателей каналов и их ключей</returns>
+        private Dictionary<ChannelDescriptor, string> GetChannels(string targetTypeKey)
+        {
             var channelKeys = new Dictionary<ChannelDescriptor, string>();
             // свойства выбранного типа устройства
             var channelsPool = _propertyPool.ByKey(targetTypeKey);
@@ -177,15 +242,9 @@ namespace KipTM.Checks
                 if (oneChannel == null)
                     continue;
 
-                channels.Add(oneChannel);
                 channelKeys.Add(oneChannel, chKey);
             }
-            Channels = channels;
-            _channelKeys = channelKeys;
-            // выбираем первый тип канала
-            _result.Channel = Channels.First();
-            // выбираем первую методику
-            SelectedMethodKey = Methods.First();
+            return channelKeys;
         }
 
         /// <summary>
@@ -199,7 +258,7 @@ namespace KipTM.Checks
             var avalableDeviceTypes = new Dictionary<string, DeviceTypeDescriptor>();
             foreach (var deviceType in dictionaries.DeviceTypes)
             {
-                var setDevice = settings.Devices.First(el => el.Key == deviceType);
+                var setDevice = GetSettingsDevice(settings, deviceType);
                 if (setDevice == null)
                     continue;
                 avalableDeviceTypes.Add(deviceType,
@@ -207,6 +266,18 @@ namespace KipTM.Checks
             }
             return avalableDeviceTypes;
         }
+
+        /// <summary>
+        /// Получить настройки устройства
+        /// </summary>
+        /// <param name="settings">контейнер настроек</param>
+        /// <param name="deviceType">Ключь типа устройства</param>
+        /// <returns></returns>
+        private static DeviceTypeSettings GetSettingsDevice(IMainSettings settings, string deviceType)
+        {
+            return settings.Devices.First(el => el.Key == deviceType);
+        }
+
         #endregion
 
         #region Перечисления
