@@ -28,7 +28,7 @@ namespace KipTM.Checks
         /// </summary>
         private IDictionary<string, DeviceTypeDescriptor> _avalableDeviceTypes;
         /// <summary>
-        /// Дступные типы эталонов
+        /// Доступные типы устройств эталонов
         /// </summary>
         private IDictionary<string, DeviceTypeDescriptor> _avalableEthalonTypes;
         /// <summary>
@@ -92,47 +92,23 @@ namespace KipTM.Checks
         /// <param name="dictionaries"></param>
         private void LoadAvalableCheckDevices(IMainSettings settings, DictionariesPool dictionaries)
         {
-            // заполнение списка поддерживаемых устройств и выбор первого элемента
-            var avalableDeviceTypes = new Dictionary<string, DeviceTypeDescriptor>();
+            // заполнение списка поддерживаемых устройств
             _data.TargetTypeKey = null;
-            foreach (var deviceType in dictionaries.DeviceTypes)
-            {
-                var setDevice = settings.Devices.First(el => el.Key == deviceType);
-                if (setDevice == null)
-                    continue;
-                if (_data.TargetTypeKey == null)
-                    _data.TargetTypeKey = deviceType;
-                avalableDeviceTypes.Add(deviceType,
-                    new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
-            }
+            var avalableDeviceTypes = GetAllAvailableDeviceTypes(settings, dictionaries);
+
+            if (avalableDeviceTypes == null)
+                throw new NullReferenceException(string.Format("Не удалось получить список доступных типов устройств"));
+
             _avalableDeviceTypes = avalableDeviceTypes;
 
-            // Выбираем первый тип устройства
-            _data.CheckTypeKey = DeviceTypes.First();
-            _data.TargetType = avalableDeviceTypes[_data.CheckTypeKey];
+            // Выбираем первый тип устройства объекта контроля
+            _data.TargetTypeKey = avalableDeviceTypes.Keys.FirstOrDefault();
+            _data.TargetType = _avalableDeviceTypes[_data.TargetTypeKey];
 
-            if (_data.TargetTypeKey != null)
-            {
-                _result.TargetDevice = new DeviceDescriptor(_data.TargetType);
-                _checks = _method.MethodsForType(_data.TargetTypeKey);
-                var channels = new List<ChannelDescriptor>();
-                var channelsKeys = new Dictionary<ChannelDescriptor, string>();
-                // пулл выбранного типа устройства
-                var channelsPool = _propertyPool.ByKey(_data.TargetTypeKey);
-                foreach (var chKey in channelsPool.GetAllKeys())
-                {// перебор каналов выбранного типа устройства
-                    var oneChannel = channelsPool.ByKey(chKey).GetProperty<ChannelDescriptor>(BasicKeys.KeyChannel);
-                    if(oneChannel == null)
-                        continue;
-                    channels.Add(oneChannel);
-                    channelsKeys.Add(oneChannel, chKey);
-                }
-                Channels = channels;
-                _channelKeys = channelsKeys;
-                // выбираем первый тип канала
-                _result.Channel = Channels.First();
-                SelectedMethodKey = Methods.First();
-            }
+            if (_data.TargetTypeKey == null)
+                return;
+
+            ConfigMethodForDevice(_data.TargetType, _data.TargetTypeKey);
         }
 
         /// <summary>
@@ -179,6 +155,57 @@ namespace KipTM.Checks
                 Ethalon = new DeviceDescriptor(ethalonDevType);
                 _result.Etalon = new List<DeviceDescriptor>() { Ethalon };
             }
+        }
+
+        /// <summary>
+        /// Сконфигурировать методику и каналы по заданному типу устройств
+        /// </summary>
+        /// <param name="targetType">Описатель типа объекта контроля</param>
+        /// <param name="targetTypeKey">Ключ описателя типа объекта контроля</param>
+        private void ConfigMethodForDevice(DeviceTypeDescriptor targetType, string targetTypeKey)
+        {
+            _result.TargetDevice = new DeviceDescriptor(targetType);
+            _checks = _method.MethodsForType(targetTypeKey);
+            var channels = new List<ChannelDescriptor>();
+            var channelKeys = new Dictionary<ChannelDescriptor, string>();
+            // свойства выбранного типа устройства
+            var channelsPool = _propertyPool.ByKey(targetTypeKey);
+            foreach (var chKey in channelsPool.GetAllKeys())
+            {
+                // перебор каналов выбранного типа устройства
+                var oneChannel = channelsPool.ByKey(chKey).GetProperty<ChannelDescriptor>(BasicKeys.KeyChannel);
+                if (oneChannel == null)
+                    continue;
+
+                channels.Add(oneChannel);
+                channelKeys.Add(oneChannel, chKey);
+            }
+            Channels = channels;
+            _channelKeys = channelKeys;
+            // выбираем первый тип канала
+            _result.Channel = Channels.First();
+            // выбираем первую методику
+            SelectedMethodKey = Methods.First();
+        }
+
+        /// <summary>
+        /// Получить список доступных типов устройств (объектов контроля)
+        /// </summary>
+        /// <param name="settings">Настройки</param>
+        /// <param name="dictionaries">Справочник функционала</param>
+        /// <returns></returns>
+        private Dictionary<string, DeviceTypeDescriptor> GetAllAvailableDeviceTypes(IMainSettings settings, DictionariesPool dictionaries)
+        {
+            var avalableDeviceTypes = new Dictionary<string, DeviceTypeDescriptor>();
+            foreach (var deviceType in dictionaries.DeviceTypes)
+            {
+                var setDevice = settings.Devices.First(el => el.Key == deviceType);
+                if (setDevice == null)
+                    continue;
+                avalableDeviceTypes.Add(deviceType,
+                    new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
+            }
+            return avalableDeviceTypes;
         }
         #endregion
 
@@ -355,7 +382,7 @@ namespace KipTM.Checks
         }
 
         /// <summary>
-        /// Выбранный измерительный канал
+        /// Выбранный измерительный канал объекта контроля
         /// </summary>
         public ChannelDescriptor SelectedChannel
         {

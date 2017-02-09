@@ -16,6 +16,10 @@ namespace ADTSChecks
     public class ArchiveDefaultFactory : IArchiveDataDefault
     {
         #region GetDefault
+        /// <summary>
+        /// Ключь: "тип объекта контроля" 
+        /// </summary>
+        /// <returns></returns>
         public List<ArchivedKeyValuePair> GetDefaultData()
         {
             return new List<ArchivedKeyValuePair>

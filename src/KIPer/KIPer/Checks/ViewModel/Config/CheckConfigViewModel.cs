@@ -449,6 +449,5 @@ namespace KipTM.ViewModel.Checks.Config
         }
 
         #endregion
-
     }
 }

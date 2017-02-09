@@ -4,6 +4,9 @@ using KipTM.Archive.DataTypes;
 
 namespace KipTM.Archive
 {
+    /// <summary>
+    /// Справочник
+    /// </summary>
     public class DictionariesPool
     {
         public static string DeviceTypesKey { get { return "DeviceTypes"; } }
