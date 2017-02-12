@@ -42,19 +42,14 @@ namespace ArchiveData.DTO.Params
             {
                 case ParameterType.RealValue:
                     return string.Format("[{0} мБар] значение:", Point);
-                    break;
                 case ParameterType.Error:
                     return string.Format("[{0} мБар] ошибка:", Point);
-                    break;
                 case ParameterType.IsCorrect:
                     return string.Format("[{0} мБар] результат:", Point);
-                    break;
                 case ParameterType.Tolerance:
                     return string.Format("[{0} мБар] допуск:", Point);
-                    break;
                 case ParameterType.Metadata:
                     return string.Format("Информация:", Point);
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
