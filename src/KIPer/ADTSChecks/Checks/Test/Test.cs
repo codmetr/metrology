@@ -15,7 +15,7 @@ namespace ADTSChecks.Model.Checks
 {
     public class Test : CheckBase
     {
-        public const string Key = KeysDic.Test;
+        public const string key = KeysDic.Test;
 
         public const string KeyPropertyPoints = "Points";
         public const string KeyPropertyRate = "Rate";
@@ -29,7 +29,7 @@ namespace ADTSChecks.Model.Checks
         public Test(NLog.Logger logger)
             : base(logger)
         {
-            base.Key = Test.Key;
+            base.Key = Test.key;
             MethodName = "Поверка ADTS";
             _result = new AdtsTestResults();
             _resultPoint = new AdtsPointResult();

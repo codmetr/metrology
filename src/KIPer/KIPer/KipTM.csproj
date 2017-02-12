@@ -122,13 +122,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Archive\ChecksPool.cs" />
     <Compile Include="Archive\CommonPropertyKeys.cs" />
     <Compile Include="Archive\ArchiveDataAdts.cs" />
     <Compile Include="Archive\DictionariesArchiveFactory.cs" />
-    <Compile Include="Archive\DataTypes\CheckData.cs" />
-    <Compile Include="Archive\DataTypes\CheckKey.cs" />
-    <Compile Include="Archive\DataTypes\CheckMetadata.cs" />
     <Compile Include="Archive\DataTypes\SimplyPair.cs" />
     <Compile Include="Archive\DictionariesArchive.cs" />
     <Compile Include="Archive\PropertyArchive.cs" />
@@ -174,7 +170,6 @@
     <Compile Include="Devices\FunctionDescriptor.cs" />
     <Compile Include="Archive\ViewModel\IDeviceViewModel.cs" />
     <Compile Include="Devices\ViewModel\IDeviceTypesViewModel.cs" />
-    <Compile Include="Devices\IFunctionDescriptor.cs" />
     <Compile Include="Devices\ViewModel\IMethodicViewModel.cs" />
     <Compile Include="Archive\ViewModel\IArchivesViewModel.cs" />
     <Compile Include="Archive\ViewModel\ITestResultViewModel.cs" />

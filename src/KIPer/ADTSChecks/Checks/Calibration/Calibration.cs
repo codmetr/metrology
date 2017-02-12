@@ -17,7 +17,7 @@ namespace ADTSChecks.Model.Checks
     public class Calibration : CheckBase
     {
         //public static string Key = "Калибровка ADTS";
-        public const string Key = "Калибровка ADTS";
+        public const string key = "Калибровка ADTS";
 
         public const string KeyPoints = "Points";
         public const string KeyRate = "Rate";
@@ -29,7 +29,7 @@ namespace ADTSChecks.Model.Checks
         public Calibration(NLog.Logger logger)
             : base(logger)
         {
-            base.Key = Calibration.Key;
+            base.Key = Calibration.key;
             MethodName = "Калибровка ADTS";
             _result = new AdtsTestResults();
             _resultPoint = new AdtsPointResult();

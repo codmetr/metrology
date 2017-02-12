@@ -12,7 +12,7 @@ namespace VisaDriver
         private Ivi.Visa.Interop.ResourceManager rm;
         private Ivi.Visa.Interop.FormattedIO488 ioArbFG;
         private Ivi.Visa.Interop.IMessage msg;
-
+        private Exception _lastException;
         /// <summary>
         /// Канал Visa
         /// </summary>
@@ -49,26 +49,31 @@ namespace VisaDriver
             catch (ArgumentException e)
             {
                 this.ioArbFG.IO = null;
+                _lastException = e;
                 throw;
             }
             catch (InvalidCastException e)
             {
                 this.ioArbFG.IO = null;
+                _lastException = e;
                 throw;
             }
             catch (COMException e)
             {
                 this.ioArbFG.IO = null;
+                _lastException = e;
                 throw;
             }
             catch (Win32Exception e)
             {
                 this.ioArbFG.IO = null;
+                _lastException = e;
                 throw;
             }
             catch (Exception e)
             {
                 this.ioArbFG.IO = null;
+                _lastException = e;
                 throw;
             }
         }
@@ -80,7 +85,7 @@ namespace VisaDriver
         /// <returns>true - Удалось подключиться</returns>
         public bool SetAddress(string address)
         {
-            if (this.ioArbFG.IO!=null)
+            if (this.ioArbFG.IO != null)
                 this.ioArbFG.IO.Close();
             try
             {

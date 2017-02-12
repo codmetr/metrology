@@ -443,7 +443,6 @@ namespace ADTS
             {
                 case PressureUnits.None:
                     throw new Exception(string.Format("can not set pressure unit PressureUnits.None"));
-                    break;
                 case PressureUnits.MBar:
                     unitstr = "MBAR";
                     break;

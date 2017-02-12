@@ -9,7 +9,7 @@ using MarkerService.Filler;
 
 namespace ADTSChecks.ViewModel.ResultFiller.ADTS
 {
-    [FillerKey(Calibration.Key, DoPointStep.KeyStep)]
+    [FillerKey(Calibration.key, DoPointStep.KeyStep)]
     public class ADTSCheckPointFiller : IFiller<IParameterResultViewModel>
     {
         public IParameterResultViewModel FillMarker<T>(T result)

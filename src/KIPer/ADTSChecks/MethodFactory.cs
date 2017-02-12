@@ -22,8 +22,8 @@ namespace ADTSChecks
         /// </summary>
         private Dictionary<string, Func<ICheckMethod>> createMetods = new Dictionary<string, Func<ICheckMethod>>()
         {
-                {Test.Key, ()=> new Calibration(NLog.LogManager.GetLogger("ADTSCheckMethod"))},
-                {Calibration.Key, ()=> new Test(NLog.LogManager.GetLogger("ADTSTestMethod"))},
+                {Test.key, ()=> new Calibration(NLog.LogManager.GetLogger("ADTSCheckMethod"))},
+                {Calibration.key, ()=> new Test(NLog.LogManager.GetLogger("ADTSTestMethod"))},
         }; 
 
         public ADTSMethodFactory()
