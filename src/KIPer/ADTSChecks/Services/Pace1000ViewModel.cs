@@ -200,46 +200,32 @@ namespace KipTM.ViewModel
                     break;
                 case PressureUnits.MBar:
                     return "мБар";
-                    break;
                 case PressureUnits.Bar:
                     return "бар";
-                    break;
                 case PressureUnits.inH2O4:
                     return "дюйм вод.ст. 4С";
-                    break;
                 case PressureUnits.inH2O:
                     return "дюйм вод.ст. 20С";
-                    break;
                 case PressureUnits.inHg:
                     return "дюйм рт.ст.";
-                    break;
                 case PressureUnits.mmHg:
                     return "мм рт.ст.";
-                    break;
                 case PressureUnits.Pa:
                     return "Па";
-                    break;
                 case PressureUnits.hPa:
                     return "гПа";
-                    break;
                 case PressureUnits.kPa:
                     return "кПа";
-                    break;
                 case PressureUnits.psi:
                     return "фтс/дюйм";
-                    break;
                 case PressureUnits.inH2O60F:
                     return "дюйм вод.ст. 60F";
-                    break;
                 case PressureUnits.KgCm2:
                     return "кгс/см";
-                    break;
                 case PressureUnits.ATM:
                     return "атм";
-                    break;
                 case PressureUnits.mmH2O4:
                     return "мм вод.ст. 4С";
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException("unit");
             }
