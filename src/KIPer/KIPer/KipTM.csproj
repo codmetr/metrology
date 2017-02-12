@@ -78,13 +78,17 @@
       <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Windows.Shell, Version=3.5.41019.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Windows.Shell">
+      <HintPath>..\Lib\Microsoft.Windows.Shell.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\Lib\NLog.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ribboncontrolslibrary, Version=3.5.41019.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="RibbonControlsLibrary">
+      <HintPath>..\Lib\RibbonControlsLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\Lib\StructureMap.dll</HintPath>
     </Reference>
