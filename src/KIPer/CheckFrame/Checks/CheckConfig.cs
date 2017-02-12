@@ -194,7 +194,7 @@ namespace KipTM.Checks
                 var channels = GetChannels(dev.Key);
                 foreach (var channel in channels)
                 {
-                    if (!CheckEthalonChannel(selectedChannel, channel))
+                    if (!CheckEthalonChannel(selectedChannel, channel.Key))
                         continue;
 
                     //получение настроек

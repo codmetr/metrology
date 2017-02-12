@@ -48,7 +48,7 @@ namespace KipTM.Design
             throw new NotImplementedException();
         }
 
-        public void InitDevices(IEnumerable<DeviceTypeDescriptor> deviceTypes, IEnumerable<DeviceTypeDescriptor> ethalonTypes)
+        public void FillDeviceList(IEnumerable<DeviceTypeDescriptor> deviceTypes, IEnumerable<DeviceTypeDescriptor> ethalonTypes)
         {
             throw new NotImplementedException();
         }

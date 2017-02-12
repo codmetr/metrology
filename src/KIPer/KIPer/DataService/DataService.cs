@@ -52,7 +52,7 @@ namespace KipTM.Model
             _resultsArchive = new ResultsArchive();
         }
 
-        public void InitDevices(IEnumerable<DeviceTypeDescriptor> deviceTypes, IEnumerable<DeviceTypeDescriptor> ethalonTypes)
+        public void FillDeviceList(IEnumerable<DeviceTypeDescriptor> deviceTypes, IEnumerable<DeviceTypeDescriptor> ethalonTypes)
         {
             _deviceTypes.AddRange(deviceTypes);
             _ethalonTypes.AddRange(ethalonTypes);

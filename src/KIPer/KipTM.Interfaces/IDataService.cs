@@ -32,9 +32,27 @@ namespace KipTM.Interfaces
         /// Настройки
         /// </summary>
         IMainSettings Settings { get; }
+
+        /// <summary>
+        /// Сохранить текущие настройки
+        /// </summary>
         void SaveSettings();
+
+        /// <summary>
+        /// Загрузить настройки
+        /// </summary>
         void LoadResults();
+
+        /// <summary>
+        /// Сохранить текущие результаты
+        /// </summary>
         void SaveResults();
-        void InitDevices(IEnumerable<DeviceTypeDescriptor> deviceTypes, IEnumerable<DeviceTypeDescriptor> ethalonTypes);
+
+        /// <summary>
+        /// Задать список типов устройств и эталонов
+        /// </summary>
+        /// <param name="deviceTypes"></param>
+        /// <param name="ethalonTypes"></param>
+        void FillDeviceList(IEnumerable<DeviceTypeDescriptor> deviceTypes, IEnumerable<DeviceTypeDescriptor> ethalonTypes);
     }
 }

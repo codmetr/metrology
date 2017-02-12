@@ -129,7 +129,7 @@ namespace KipTM.ViewModel
             _archive = archive;
             _customFactory = new CustomConfigFactory(customFatories);
             _dataService.LoadResults();
-            _dataService.InitDevices(features.DeviceTypes, features.EthalonTypes);
+            _dataService.FillDeviceList(features.DeviceTypes, features.EthalonTypes);
             _resulMaker = resulMaker;
             _filler = filler;
             _reportFabric = reportFabric;
