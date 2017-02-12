@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using ArchiveData.DTO;
 using KipTM.Model.Channels;
 using KipTM.Model.TransportChannels;
 
@@ -8,6 +9,7 @@ namespace CheckFrame.Model.Channels
     public class UserEthalonChannel : IEthalonChannel
     {
         public static string Key = "Пользовательский канал";
+        private static DeviceTypeDescriptor _typeDescriptor = new DeviceTypeDescriptor("", "", "");
 
         private readonly IUserChannel _userChannel;
         private readonly TimeSpan _waitPeriod;
@@ -18,6 +20,7 @@ namespace CheckFrame.Model.Channels
             _waitPeriod = waitPeriod;
         }
 
+        public static DeviceTypeDescriptor TypeDescriptor { get {return _typeDescriptor;} }
 
         public bool Activate(ITransportChannelType transport)
         {
