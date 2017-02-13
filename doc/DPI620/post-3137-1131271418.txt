@@ -1,0 +1,498 @@
+// Generated .IDL/C++ pseudo source equivalent of Win32 type library ..\DPI615.dll
+[
+  uuid({34305E11-72A9-11D3-BAFD-0090275D5324}),
+  version(1.0),
+  helpstring("DPI615 Library")
+]
+library DPI615Lib
+{
+    // Forward references and typedefs
+    interface ICalibratorInfo;
+    interface ICalibratorUpload;
+    interface ICalibratorDownload;
+
+    [
+      uuid({FF5EFD4D-7B15-11D1-B326-00001CBE02AA}),
+      helpstring("Druck DPI 615")
+    ]
+    coclass Druck615
+    {
+        [default] interface ICalibratorInfo;
+        interface ICalibratorUpload;
+        interface ICalibratorDownload;
+    };
+
+    [
+      odl,
+      uuid({FF5EFD41-7B15-11D1-B326-00001CBE02AA}),
+      version(1.0),
+      helpstring("ICalibratorInfo Interface")
+    ]
+    interface ICalibratorInfo : IUnknown
+    {
+        HRESULT _stdcall DriverProperties([out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall Open(
+                        [in] int nPortNumber, 
+                        [out] long* plSessionId, 
+                        [out] long* plCapabilities, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall Close(
+                        [in] long lSessionId, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall Properties(
+                        [in] long lSessionId, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall GetId(
+                        [in] long lSessionId, 
+                        [out] LPWSTR* pszwCalManufacturer, 
+                        [out] LPWSTR* pszwCalModel, 
+                        [out] LPWSTR* pszwCalSerialNum, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall GetCalDates(
+                        [in] long lSessionId, 
+                        [out] _SYSTEMTIME* pLastCalDate, 
+                        [out] _SYSTEMTIME* pNextCalDueDate, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall SetDateAndTime(
+                        [in] long lSessionId, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall SetTempStandard(
+                        [in] long lSessionId, 
+                        [in] int nTemperatureStd, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall GetTestResultsCount(
+                        [in] long lSessionId, 
+                        [out] int* pnCount, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall ClearMemory(
+                        [in] long lSessionId, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall ValidateTag(
+                        [in] tagFCICOMMDEF* pCommDef, 
+                        [in] tagFCIDEVIN* pInputDef, 
+                        [in] tagFCIDEVOUT* pOutputDef, 
+                        [in] tagFCIDEVRELATION* pRelationDef, 
+                        [in] tagFCITEST* pTestDef, 
+                        [out] tagFCISTATUS* pStatus);
+    };
+
+    typedef enum
+    {
+        FCI_OK = 0,
+        FCI_FAILED = 1,
+        FCI_COMM_ERROR = 2,
+        FCI_REVISION_ERROR = 3,
+        FCI_CANCELED = 4,
+        FCI_NOT_SUPPORTED = 5,
+        FCI_ALREADY_OPEN = 6,
+        FCI_WRONG_SESSION = 7,
+        FCI_WRONG_CALIBRATOR = 8,
+        FCI_ERR_IN_RANGE = 9,
+        FCI_ERR_IN_UNITS = 10,
+        FCI_ERR_IN_TYPE = 11,
+        FCI_ERR_IN_MANUAL = 12,
+        FCI_ERR_OUT_RANGE = 13,
+        FCI_ERR_OUT_UNITS = 14,
+        FCI_ERR_OUT_TYPE = 15,
+        FCI_ERR_OUT_MANUAL = 16,
+        FCI_ERR_INOUT = 17,
+        FCI_ERR_RELATION = 18,
+        FCI_ERR_PROBE = 19,
+        FCI_ERR_CJC = 20,
+        FCI_ERR_ENUM = 21,
+        FCI_ERR_RESOURCE = 22,
+        FCI_ERR_TESTPOINT = 23,
+        FCI_ERR_TESTTYPE = 24,
+        FCI_ERR_POWER = 25,
+        FCI_ERR_TAG = 26,
+        FCI_MEM_FULL = 27,
+        FCI_MEM_EMPTY = 28,
+        FCI_MEM_HAS_DATA = 29,
+        FCI_END_OF_UPLOAD = 30,
+        FCI_ERR_DOWNLOAD = 31,
+        FCI_ERR_TAGLENGTH = 32,
+        FCI_ERR_SNLENGTH = 33,
+        FCI_ERR_MAXPOINTS = 34,
+        FCI_END = 35
+    } tagFCISTATUS;
+
+    typedef struct 
+    {
+        unsigned short wYear;
+        unsigned short wMonth;
+        unsigned short wDayOfWeek;
+        unsigned short wDay;
+        unsigned short wHour;
+        unsigned short wMinute;
+        unsigned short wSecond;
+        unsigned short wMilliseconds;
+    } _SYSTEMTIME;
+
+    typedef struct 
+    {
+        tagFCICOMMTYPE CommType;
+        __MIDL___MIDL_itf_DPI615_0252_0001 __MIDL_0012;
+    } tagFCICOMMDEF;
+
+    typedef enum
+    {
+        FCI_COMMTYPE_NONE = 1,
+        FCI_COMMTYPE_HART = 2
+    } tagFCICOMMTYPE;
+
+    typedef union 
+    {
+        tagFCI_COMMDEF_HART HartData;
+    } __MIDL___MIDL_itf_DPI615_0252_0001;
+
+    typedef struct 
+    {
+        unsigned char cBlockId;
+        unsigned char cURev;
+        unsigned char cPollAddr;
+        unsigned char acUid[5];
+        unsigned char acTag[6];
+        unsigned char acDescriptor[12];
+        unsigned char acDate[3];
+        unsigned char acMessage[24];
+    } tagFCI_COMMDEF_HART;
+
+    typedef struct 
+    {
+        tagFCIBLOCKTYPE DevType;
+        __MIDL___MIDL_itf_DPI615_0252_0002 __MIDL_0013;
+    } tagFCIDEVIN;
+
+    typedef enum
+    {
+        FCI_BLKTYPE_GENERIC = 1,
+        FCI_BLKTYPE_TEMP_RTD = 2,
+        FCI_BLKTYPE_TEMP_TC = 3,
+        FCI_BLKTYPE_FREQUENCY = 4,
+        FCI_BLKTYPE_PRESSURE = 5,
+        FCI_BLKTYPE_TEMP_MEASRTD = 6,
+        FCI_BLKTYPE_TEMP_MEASTC = 7,
+        FCI_BLKTYPE_HART = 8,
+        FCI_BLKTYPE_SWITCH = 9,
+        FCI_BLKTYPE_DIFFTEMP = 10
+    } tagFCIBLOCKTYPE;
+
+    typedef union 
+    {
+        tagFCI_BLKDEF_PRESSURE PressureData;
+        tagFCI_BLKDEF_RTD TempRtdData;
+        tagFCI_BLKDEF_TC TempTcData;
+        tagFCI_BLKDEF_RTD TempMeasRtdData;
+        tagFCI_BLKDEF_TC TempMeasTcData;
+        tagFCI_BLKDEF_FREQUENCY FrequencyData;
+        tagFCI_BLKDEF_HART HartData;
+        tagFCI_BLKDEF_DIFFTEMP DiffTempData;
+        tagFCI_BLKDEF_GENERIC GenericData;
+    } __MIDL___MIDL_itf_DPI615_0252_0002;
+
+    typedef struct 
+    {
+        single rURV;
+        single rLRV;
+        single rSettling;
+        unsigned short wUnits;
+        unsigned short wPressureType;
+    } tagFCI_BLKDEF_PRESSURE;
+
+    typedef struct 
+    {
+        single rURV;
+        single rLRV;
+        single rSettling;
+        unsigned short wUnits;
+        unsigned short wProbeType;
+        unsigned short wNumWires;
+        unsigned short wRESERVED;
+    } tagFCI_BLKDEF_RTD;
+
+    typedef struct 
+    {
+        single rURV;
+        single rLRV;
+        single rSettling;
+        single rManualCJC;
+        unsigned short wUnits;
+        unsigned short wProbeType;
+        unsigned short wCJC;
+        unsigned short wProbeConnect;
+    } tagFCI_BLKDEF_TC;
+
+    typedef struct 
+    {
+        single rURV;
+        single rLRV;
+        single rSettling;
+        single rAmplitude;
+        unsigned short wUnits;
+        unsigned short wWaveForm;
+    } tagFCI_BLKDEF_FREQUENCY;
+
+    typedef struct 
+    {
+        single rUSL;
+        single rLSL;
+        single rSettling;
+        unsigned short wUnits;
+    } tagFCI_BLKDEF_HART;
+
+    typedef struct 
+    {
+        single rURV;
+        single rLRV;
+        single rSettling;
+        unsigned short wUnits;
+        unsigned short wDeviceVariable1;
+        unsigned short wDeviceVariable2;
+    } tagFCI_BLKDEF_DIFFTEMP;
+
+    typedef struct 
+    {
+        single rURV;
+        single rLRV;
+        single rSettling;
+        unsigned short wUnits;
+    } tagFCI_BLKDEF_GENERIC;
+
+    typedef struct 
+    {
+        tagFCIBLOCKTYPE DevType;
+        __MIDL___MIDL_itf_DPI615_0252_0003 __MIDL_0014;
+    } tagFCIDEVOUT;
+
+    typedef union 
+    {
+        tagFCI_BLKDEF_PRESSURE PressureData;
+        tagFCI_BLKDEF_RTD TempMeasRtdData;
+        tagFCI_BLKDEF_TC TempMeasTcData;
+        tagFCI_BLKDEF_FREQUENCY FrequencyData;
+        tagFCI_BLKDEF_HART HartData;
+        tagFCI_BLKDEF_SWITCH Switch;
+        tagFCI_BLKDEF_GENERIC GenericData;
+    } __MIDL___MIDL_itf_DPI615_0252_0003;
+
+    typedef struct 
+    {
+        unsigned short wContactType;
+        unsigned short wForm;
+        unsigned short wTripDirection;
+        single rWetContactVoltage;
+    } tagFCI_BLKDEF_SWITCH;
+
+    typedef struct 
+    {
+        tagFCIRELATIONTYPE RelType;
+        __MIDL___MIDL_itf_DPI615_0252_0004 __MIDL_0016;
+    } tagFCIDEVRELATION;
+
+    typedef enum
+    {
+        FCI_RELTYPE_LINEAR = 0,
+        FCI_RELTYPE_SQRT = 1,
+        FCI_RELTYPE_TABLE = 4,
+        FCI_RELTYPE_SWITCH = 230
+    } tagFCIRELATIONTYPE;
+
+    typedef union 
+    {
+        tagFCI_RELDEF_SQRT SqrtData;
+        tagFCI_RELDEF_TABLE TableData;
+    } __MIDL___MIDL_itf_DPI615_0252_0004;
+
+    typedef struct 
+    {
+        single rBreakPoint;
+    } tagFCI_RELDEF_SQRT;
+
+    typedef struct 
+    {
+        unsigned short wNumPoints;
+        unsigned short wInterpolate;
+        single rInput[30];
+        single rOutput[30];
+    } tagFCI_RELDEF_TABLE;
+
+    typedef struct 
+    {
+        tagFCITESTTTYPE TestType;
+        __MIDL___MIDL_itf_DPI615_0252_0005 __MIDL_0018;
+    } tagFCITEST;
+
+    typedef enum
+    {
+        FCI_TYPE_PROPORTIONAL = 1,
+        FCI_TYPE_SWITCH = 2
+    } tagFCITESTTTYPE;
+
+    typedef union 
+    {
+        tagFCI_TEST_PROPORTIONAL Test;
+        tagFCI_TEST_SWITCH SwitchTest;
+    } __MIDL___MIDL_itf_DPI615_0252_0005;
+
+    typedef struct 
+    {
+        unsigned short wRESERVED;
+        unsigned short wPowerSource;
+        unsigned short wCalSourceInput;
+        unsigned short wCalReadInput;
+        unsigned short wCalMeasureOutput;
+        unsigned short wNumTestPoints;
+        single arTestPoint[21];
+        single rTestPointTolerance;
+        single rAdjustmentLimit;
+        single rMaxErrorLimit;
+    } tagFCI_TEST_PROPORTIONAL;
+
+    typedef struct 
+    {
+        single rTripSetPoint;
+        single rTripTolerance;
+        single rResetDeadband;
+        single rDeadbandTolerance;
+        single rRampTime;
+        long bTestReset;
+    } tagFCI_TEST_SWITCH;
+
+    [
+      odl,
+      uuid({FF5EFD43-7B15-11D1-B326-00001CBE02AA}),
+      version(1.0),
+      helpstring("ICalibratorUpload Interface")
+    ]
+    interface ICalibratorUpload : IUnknown
+    {
+        HRESULT _stdcall StartUploading(
+                        [in] long lSessionId, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall UploadNextTag(
+                        [in] long lSessionId, 
+                        [out] LPWSTR* pszwLocationInCalibrator, 
+                        [out] LPWSTR* pszwDeviceTag, 
+                        [out] LPWSTR* pszwDeviceSerialNum, 
+                        [out] LPWSTR* pszwTechnician, 
+                        [out] LPWSTR* pszwServiceNote, 
+                        [out] int* pnTemperatureStd, 
+                        [out] tagFCICOMMDEF* pCommDef, 
+                        [out] tagFCIRESULT* pAsFound, 
+                        [out] tagFCIRESULT* pAsLeft, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall FinishUploading(
+                        [in] long lSessionId, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall AbortUpload(
+                        [in] long lSessionId, 
+                        [out] tagFCISTATUS* pStatus);
+    };
+
+    typedef struct 
+    {
+        tagFCITESTTTYPE ResultType;
+        __MIDL___MIDL_itf_DPI615_0252_0006 __MIDL_0020;
+    } tagFCIRESULT;
+
+    typedef union 
+    {
+        tagFCI_RESULT_PROPORTIONAL Results;
+        tagFCI_RESULT_SWITCH SwitchResults;
+    } __MIDL___MIDL_itf_DPI615_0252_0006;
+
+    typedef struct 
+    {
+        double dInputLowerRangeValue;
+        double dInputUpperRangeValue;
+        int nInputRangeUnits;
+        double dOutputLowerRangeValue;
+        double dOutputUpperRangeValue;
+        int nOutputRangeUnits;
+        int nRelationship;
+        int nNumberOfTestPoints;
+        double adInput[21];
+        double adOutput[21];
+        LPWSTR szwAuxEquipManufacturer;
+        LPWSTR szwAuxEquipModel;
+        LPWSTR szwAuxEquipSerialNum;
+        double dAmbientTemperature;
+        int nAmbientTemperatureUnits;
+        _SYSTEMTIME TestDate;
+    } tagFCI_RESULT_PROPORTIONAL;
+
+    typedef struct 
+    {
+        unsigned short wUnits;
+        single rTripPoint;
+        single rResetPoint;
+        unsigned short bResetTested;
+        _SYSTEMTIME TestDate;
+    } tagFCI_RESULT_SWITCH;
+
+    [
+      odl,
+      uuid({FF5EFD42-7B15-11D1-B326-00001CBE02AA}),
+      version(1.0),
+      helpstring("ICalibratorDownload Interface")
+    ]
+    interface ICalibratorDownload : IUnknown
+    {
+        HRESULT _stdcall StartDownloading(
+                        [in] long lSessionId, 
+                        [in] LPWSTR szSessionName, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall DownloadTag(
+                        [in] long lSessionId, 
+                        [in] LPWSTR szwDeviceTag, 
+                        [in] LPWSTR szwDeviceSerialNum, 
+                        [in] tagFCICOMMDEF* pCommDef, 
+                        [in] tagFCIDEVIN* pInputDef, 
+                        [in] tagFCIDEVOUT* pOutputDef, 
+                        [in] tagFCIDEVRELATION* pRelationDef, 
+                        [in] tagFCITEST* pTestDef, 
+                        [in] LPWSTR szwSetupInstructions, 
+                        [in] LPWSTR szwCleanupInstructions, 
+                        [out] LPWSTR* pszwLocationInCalibrator, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall FinishDownloading(
+                        [in] long lSessionId, 
+                        [out] tagFCISTATUS* pStatus);
+        HRESULT _stdcall AbortDownload(
+                        [in] long lSessionId, 
+                        [out] tagFCISTATUS* pStatus);
+    };
+
+    [
+      uuid({0D4F7E13-549C-4E0E-B6CF-3224924DF9F1}),
+      helpstring("Druck DPI 325")
+    ]
+    coclass Druck325
+    {
+        [default] interface ICalibratorInfo;
+        interface ICalibratorUpload;
+        interface ICalibratorDownload;
+    };
+
+    [
+      uuid({88BBD882-D3B4-4E02-BB23-7B005425E363}),
+      helpstring("Druck DPI 335")
+    ]
+    coclass Druck335
+    {
+        [default] interface ICalibratorInfo;
+        interface ICalibratorUpload;
+        interface ICalibratorDownload;
+    };
+
+    [
+      uuid({FF5EFD4E-7B15-11D1-B326-00001CBE02AA}),
+      helpstring("Rosemount P330")
+    ]
+    coclass RosemountP330
+    {
+        [default] interface ICalibratorInfo;
+        interface ICalibratorUpload;
+        interface ICalibratorDownload;
+    };
+};
