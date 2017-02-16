@@ -21,7 +21,7 @@ namespace KipTM.View.Checks
     /// <summary>
     /// Interaction logic for PACE1000View.xaml
     /// </summary>
-    [View(typeof(PaceEchalonChannelViewModel))]
+    [View(typeof(PaceEthalonChannelViewModel))]
     public partial class PACE1000EthalonChannelView : UserControl
     {
         public PACE1000EthalonChannelView()

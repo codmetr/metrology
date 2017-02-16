@@ -79,7 +79,7 @@
     <Compile Include="Devices\QueryResult.cs" />
     <Compile Include="FeaturesDescriptor.cs" />
     <Compile Include="IViewModelFabrik.cs" />
-    <Compile Include="Channels\PACEEchalonChannel.cs" />
+    <Compile Include="Channels\PACEEthalonChannel.cs" />
     <Compile Include="Checks\Calibration\Calibration.cs" />
     <Compile Include="Checks\CheckBase.cs" />
     <Compile Include="Checks\Data\ADTSMethodParameters.cs" />
@@ -102,24 +102,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\Pace1000ViewModel.cs" />
+    <Compile Include="Result\Services\Pace1000ViewModel.cs" />
     <Compile Include="Settings\SettingsFactory.cs" />
     <Compile Include="ViewModelFabrik.cs" />
     <Compile Include="Checks\ViewModel\ADTSBaseViewModel.cs" />
     <Compile Include="Checks\Calibration\CalibrationViewModel.cs" />
     <Compile Include="Checks\ViewModel\CheckStateViewModel.cs" />
     <Compile Include="Checks\Test\TestViewModel.cs" />
-    <Compile Include="Channels\ViewModel\PACEEchalonChannelViewModel.cs" />
+    <Compile Include="Channels\ViewModel\PaceEthalonChannelViewModel.cs" />
     <Compile Include="Checks\ViewModel\AdtsCheckConfVm.cs" />
     <Compile Include="Checks\ViewModel\DoubleBindingRule.cs" />
-    <Compile Include="Result\ResultFiller\ADTS\ADTSCheckPointFiller.cs" />
-    <Compile Include="Result\ResultFiller\ADTS\ADTSTestPointFiller.cs" />
-    <Compile Include="Result\ResultFiller\ADTS\FillerKey.cs" />
-    <Compile Include="Result\ResultMarker\ADTS\ADTSCheckFabrik.cs" />
-    <Compile Include="Result\ResultMarker\ADTS\ADTSCheckPointStepFabrik.cs" />
-    <Compile Include="Result\ResultMarker\ADTS\ADTSTestFabrik.cs" />
-    <Compile Include="Result\ResultMarker\ADTS\ADTSTestPointStepFabrik.cs" />
-    <Compile Include="Services\ADTSViewModel.cs" />
+    <Compile Include="Result\ResultFiller\ADTSCheckPointFiller.cs" />
+    <Compile Include="Result\ResultFiller\ADTSTestPointFiller.cs" />
+    <Compile Include="Result\ResultFiller\FillerKey.cs" />
+    <Compile Include="Result\ResultMarker\ADTSCheckFabrik.cs" />
+    <Compile Include="Result\ResultMarker\ADTSCheckPointStepFabrik.cs" />
+    <Compile Include="Result\ResultMarker\ADTSTestFabrik.cs" />
+    <Compile Include="Result\ResultMarker\ADTSTestPointStepFabrik.cs" />
+    <Compile Include="Result\Services\ADTSViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ADTSData\ADTSData.csproj">
@@ -157,6 +157,10 @@
     <ProjectReference Include="..\MineLoop\MainLoop.csproj">
       <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
       <Name>MainLoop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PACEData\PACEData.csproj">
+      <Project>{bd216c8b-921b-4499-85f3-9ba9a014029e}</Project>
+      <Name>PACEData</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tools.View\Tools.View.csproj">
       <Project>{69AB619C-5B3A-4EE7-9318-73D92E75F812}</Project>

@@ -556,7 +556,7 @@ namespace ADTSChecks.Checks.ViewModel
         {
             if (model is PACEEthalonChannel)
             {
-                return new PaceEchalonChannelViewModel(model as PACEEthalonChannel);
+                return new PaceEthalonChannelViewModel(model as PACEEthalonChannel);
             }
             return null;
         }

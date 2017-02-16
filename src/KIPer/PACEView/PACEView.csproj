@@ -47,6 +47,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PACE1000EthalonChannelView.xaml.cs">
+      <DependentUpon>PACE1000EthalonChannelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PACE1000View.xaml.cs">
+      <DependentUpon>PACE1000View.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -69,6 +75,42 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="PACE1000EthalonChannelView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PACE1000View.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PACE5000ViewStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
+      <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
+      <Name>KipTM.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PACEChecks\PACEChecks.csproj">
+      <Project>{d15379fe-8bfc-4daf-b730-8fee929db5bb}</Project>
+      <Name>PACEChecks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools.View\Tools.View.csproj">
+      <Project>{69ab619c-5b3a-4ee7-9318-73d92e75f812}</Project>
+      <Name>Tools.View</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools\Tools.csproj">
+      <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
+      <Name>Tools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfCommonStyles\WpfCommonStyles.csproj">
+      <Project>{4eb0e1a6-d266-4f92-97a2-53efe2ad51f0}</Project>
+      <Name>WpfCommonStyles</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

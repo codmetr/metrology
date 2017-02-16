@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PACEChecks</RootNamespace>
     <AssemblyName>PACEChecks</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,11 +30,32 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.2.0.37226, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,15 +63,60 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Channels\PACEEchalonChannel.cs" />
+    <Compile Include="Channels\PACEEthalonChannelFactory.cs" />
+    <Compile Include="Channels\ViewModel\PACEEchalonChannelViewModel.cs" />
     <Compile Include="CheckPACE.cs" />
+    <Compile Include="Devices\PACE1000Factory.cs" />
+    <Compile Include="Devices\PACE1000Model.cs" />
+    <Compile Include="Devices\PACE1000ModelFactory.cs" />
+    <Compile Include="Services\Pace1000ViewModel.cs" />
     <Compile Include="PACEMethodFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CheckFrame\CheckFrame.csproj">
+      <Project>{81b358fe-6b31-49ff-ab34-45cb960e57b6}</Project>
+      <Name>CheckFrame</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Drivers\PACESeries\PACESeries.csproj">
+      <Project>{3d3db0eb-5b92-4d8f-8547-82ff7184c59a}</Project>
+      <Name>PACESeries</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IEEE488Transport\IEEE488.csproj">
+      <Project>{3fec76c3-b933-4461-aa8d-85360d3f41c4}</Project>
+      <Name>IEEE488</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
       <Project>{B8DBF9E3-03D3-457D-B889-D45E1C5131E4}</Project>
       <Name>KipTM.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MarkerService\MarkerService.csproj">
+      <Project>{fbdcd95e-3006-4d82-b232-24ced8aa05f8}</Project>
+      <Name>MarkerService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MineLoop\MainLoop.csproj">
+      <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
+      <Name>MainLoop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools.View\Tools.View.csproj">
+      <Project>{69ab619c-5b3a-4ee7-9318-73d92e75f812}</Project>
+      <Name>Tools.View</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools\Tools.csproj">
+      <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
+      <Name>Tools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisaChannel\VisaChannel.csproj">
+      <Project>{82e6c917-c316-4664-b858-401f8c08514f}</Project>
+      <Name>VisaChannel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\pace1000.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

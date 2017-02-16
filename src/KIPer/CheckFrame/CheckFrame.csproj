@@ -103,7 +103,6 @@
     <Compile Include="Archive\ViewModel\ParameterViewModel.cs" />
     <Compile Include="Checks\ViewModel\StepState.cs" />
     <Compile Include="Checks\ViewModel\StepViewModel.cs" />
-    <Compile Include="View\Converters\DoubleToTimespanConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
