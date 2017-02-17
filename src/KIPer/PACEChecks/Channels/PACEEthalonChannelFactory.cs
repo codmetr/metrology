@@ -1,6 +1,7 @@
 ﻿using System;
 using KipTM.Interfaces.Channels;
 using KipTM.Model.Channels;
+using PACEChecks.Channels.ViewModel;
 using PACEChecks.Devices;
 
 namespace PACEChecks.Channels
@@ -18,6 +19,20 @@ namespace PACEChecks.Channels
         public IEthalonChannel GetChanel(object model)
         {
             return new PACEEthalonChannel(model as PACE1000Model);
+        }
+
+        /// <summary>
+        /// Получить визуальную модель заданного эталонного канала полученного из <see cref="GetChanel"/>
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <returns></returns>
+        public object GetChanelViewModel(IEthalonChannel channel)
+        {
+            if (channel is PACEEthalonChannel)
+            {
+                return new PaceEthalonChannelViewModel(channel as PACEEthalonChannel);
+            }
+            return null;
         }
 
         /// <summary>

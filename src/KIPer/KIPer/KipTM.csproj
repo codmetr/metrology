@@ -456,22 +456,34 @@
     <PostBuildEvent>echo refresh Libs:
 rmdir "$(TargetDir)Libs" /S /Q
 mkdir "$(TargetDir)Libs"
+
+echo ----VISA_GPIB----
+echo copy IEEE488.dll
+COPY "$(SolutionDir)IEEE488Transport\bin\Debug\IEEE488.dll" "$(TargetDir)Libs\IEEE488.dll"
+echo copy VisaChannel.dll
+COPY "$(SolutionDir)VisaChannel\bin\Debug\VisaChannel.dll" "$(TargetDir)Libs\VisaChannel.dll"
+echo copy VisaChannelView.dll
+COPY "$(SolutionDir)VisaChannelView\bin\Debug\VisaChannelView.dll" "$(TargetDir)Libs\VisaChannelView.dll"
+
+echo ----ADTS----
 echo copy ReportAdts.dll
 COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.dll" "$(TargetDir)Libs\ReportAdts.dll"
 echo copy ADTSChecks.dll
 COPY "$(SolutionDir)ADTSChecks\bin\Debug\ADTSChecks.dll" "$(TargetDir)Libs\ADTSChecks.dll"
 echo copy ADTSView.dll
 COPY "$(SolutionDir)ADTSView\bin\Debug\ADTSView.dll" "$(TargetDir)Libs\ADTSView.dll"
-echo copy VisaChannel.dll
-COPY "$(SolutionDir)VisaChannel\bin\Debug\VisaChannel.dll" "$(TargetDir)Libs\VisaChannel.dll"
-echo copy VisaChannelView.dll
-COPY "$(SolutionDir)VisaChannelView\bin\Debug\VisaChannelView.dll" "$(TargetDir)Libs\VisaChannelView.dll"
 echo copy ADTS.dll
 COPY "$(SolutionDir)ADTS\bin\Debug\ADTS.dll" "$(TargetDir)Libs\ADTS.dll"
 echo copy ADTSData.dll
 COPY "$(SolutionDir)ADTSData\bin\Debug\ADTSData.dll" "$(TargetDir)Libs\ADTSData.dll"
-echo copy IEEE488.dll
-COPY "$(SolutionDir)IEEE488Transport\bin\Debug\IEEE488.dll" "$(TargetDir)Libs\IEEE488.dll"</PostBuildEvent>
+
+echo ----PACE----
+echo copy PACEChecks.dll
+COPY "$(SolutionDir)PACEChecks\bin\Debug\PACEChecks.dll" "$(TargetDir)Libs\PACEChecks.dll"
+echo copy PACEView.dll
+COPY "$(SolutionDir)PACEView\bin\Debug\PACEView.dll" "$(TargetDir)Libs\PACEView.dll"
+echo copy PACEData.dll
+COPY "$(SolutionDir)PACEData\bin\Debug\PACEData.dll" "$(TargetDir)Libs\PACEData.dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

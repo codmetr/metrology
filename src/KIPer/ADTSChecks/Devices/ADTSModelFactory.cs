@@ -6,7 +6,7 @@ using MainLoop;
 
 namespace KipTM.ViewModel.Checks
 {
-    [DeviceModelFactoryAttribute(typeof(ADTSModel))]
+    [DeviceModelFactory(typeof(ADTSModel))]
     public class ADTSModelFactory : IDeviceModelFactory
     {
         public object GetModel(ILoops loops, IDeviceManager deviceManager)

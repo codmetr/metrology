@@ -79,10 +79,6 @@ namespace PACEChecks
         {
             return new List<ArchivedKeyValuePair>
             {
-                new ArchivedKeyValuePair(ADTSModel.Key, new List<string>()
-                {
-                    Calibration.key,
-                }),
             };
         }
     }

@@ -8,7 +8,7 @@ using KipTM.Settings;
 
 namespace ADTSChecks.Settings
 {
-    public class SettingsFactory : IDeviceSettingsFactory, IEthalonSettingsFactory, IDeviceTypeSettingsFactory
+    public class SettingsFactoryAdts : IDeviceSettingsFactory, /*IEthalonSettingsFactory,*/ IDeviceTypeSettingsFactory
     {
         /// <summary>
         /// Типы проверяемых устройств и их измерительные каналы
@@ -24,17 +24,6 @@ namespace ADTSChecks.Settings
                     Model = ADTSModel.Model,
                     DeviceCommonType = ADTSModel.DeviceCommonType,
                     DeviceManufacturer = ADTSModel.DeviceManufacturer,
-                    TypesEtalonParameters = new List<string>(ADTSModel.TypesEtalonParameters),
-                    //AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key, UserEchalonChannel.Key},
-                },
-                new DeviceTypeSettings()
-                {
-                    Key = PACE1000Model.Key,
-                    Model = PACE1000Model.Model,
-                    DeviceCommonType = PACE1000Model.DeviceCommonType,
-                    DeviceManufacturer = PACE1000Model.DeviceManufacturer,
-                    TypesEtalonParameters = new List<string>(PACE1000Model.TypesEtalonParameters),
-                    //AvilableEthalonTypes = new List<string>(){KipTM.Model.Devices.PACE5000Model.Key, UserEchalonChannel.Key},
                 },
             };
         }
@@ -58,23 +47,23 @@ namespace ADTSChecks.Settings
             };
         }
 
-        /// <summary>
-        /// Настройки подключения эталона по умолчанию
-        /// </summary>
-        /// <returns></returns>
-        DeviceSettings IEthalonSettingsFactory.GetDefault()
-        {
-            return new DeviceSettings()
-            {
-                Address = "0",
-                Name = PACE1000Model.Key,
-                Model = PACE1000Model.Model,
-                DeviceCommonType = PACE1000Model.DeviceCommonType,
-                DeviceManufacturer = PACE1000Model.DeviceManufacturer,
-                TypesEtalonParameters = new List<string>(PACE1000Model.TypesEtalonParameters),
-                SerialNumber = "123",
-                NamePort = "COM1"
-            };
-        }
+        ///// <summary>
+        ///// Настройки подключения эталона по умолчанию
+        ///// </summary>
+        ///// <returns></returns>
+        //DeviceSettings IEthalonSettingsFactory.GetDefault()
+        //{
+        //    return new DeviceSettings()
+        //    {
+        //        Address = "0",
+        //        Name = PACE1000Model.Key,
+        //        Model = PACE1000Model.Model,
+        //        DeviceCommonType = PACE1000Model.DeviceCommonType,
+        //        DeviceManufacturer = PACE1000Model.DeviceManufacturer,
+        //        TypesEtalonParameters = new List<string>(PACE1000Model.TypesEtalonParameters),
+        //        SerialNumber = "123",
+        //        NamePort = "COM1"
+        //    };
+        //}
     }
 }

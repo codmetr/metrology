@@ -16,6 +16,13 @@ namespace KipTM.Interfaces.Channels
         IEthalonChannel GetChanel(object model);
 
         /// <summary>
+        /// Получить визуальную модель заданного эталонного канала полученного из <see cref="GetChanel"/>
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <returns></returns>
+        object GetChanelViewModel(IEthalonChannel channel);
+
+        /// <summary>
         /// Тип необходимой модели
         /// </summary>
         Type ModelType { get;}

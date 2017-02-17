@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ADTSChecks.Checks.Data;
-using ADTSChecks.Model.Channels;
 using ADTSChecks.Model.Checks;
-using ADTSChecks.Model.Devices;
 using ADTSChecks.ViewModel.Services;
 using ADTSData;
 using ArchiveData.DTO;
@@ -23,7 +21,6 @@ using KipTM.Model;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.TransportChannels;
-using KipTM.ViewModel.Channels;
 using KipTM.ViewModel.Events;
 using Tools.View;
 
@@ -255,7 +252,7 @@ namespace ADTSChecks.Checks.ViewModel
             set
             {
                 Set(ref _ethalonChannel, value);
-                State.EthalonChannelViewModel = GetViewModelForChannel(_ethalonChannel);
+                State.EthalonChannelViewModel = _deviceManager.GetEthalonChannelViewModel(_ethalonTypeKey, _ethalonChannel as IEthalonChannel);
             }
         }
 
@@ -550,15 +547,6 @@ namespace ADTSChecks.Checks.ViewModel
             model.ResultUpdated -= ResultUpdated;
             model.EndMethod -= EndMethod;
             model.PauseAvailableChanged -= model_PauseAvailableChanged;
-        }
-
-        object GetViewModelForChannel(object model) //TODO обеспечить получение визуальной модели по реальной модели
-        {
-            if (model is PACEEthalonChannel)
-            {
-                return new PaceEthalonChannelViewModel(model as PACEEthalonChannel);
-            }
-            return null;
         }
 
         public override void Cleanup()

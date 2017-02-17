@@ -62,11 +62,26 @@ namespace KipTM.Model
         }
 
         #region IDeviceManager
-
+        /// <summary>
+        /// Получить канал по типу
+        /// </summary>
+        /// <param name="deviceKey"></param>
+        /// <returns></returns>
         public IEthalonChannel GetEthalonChannel(string deviceKey)
         {
             var model = GetModel(_ethalonChannels[deviceKey].ModelType);
             return _ethalonChannels[deviceKey].GetChanel(model);
+        }
+
+        /// <summary>
+        /// Получить визуальную модель для канала
+        /// </summary>
+        /// <param name="deviceKey">Ключь типа канала</param>
+        /// <param name="channel">Канал</param>
+        /// <returns></returns>
+        public object GetEthalonChannelViewModel(string deviceKey, IEthalonChannel channel)
+        {
+            return _ethalonChannels[deviceKey].GetChanelViewModel(channel);
         }
 
         public T GetModel<T>()

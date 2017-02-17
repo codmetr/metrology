@@ -80,3 +80,5 @@ src/KIPer/DPI620Genii/bin/
 src/KIPer/PACEChecks/bin/
 src/KIPer/PACEView/obj/
 src/KIPer/PACEData/obj/
+src/KIPer/PACEView/bin/
+src/KIPer/PACEData/bin/

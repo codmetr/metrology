@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using KipTM.Model;
 using KipTM.Model.TransportChannels;
 using MainLoop;
+using PACEData;
 using PACESeries;
 
 namespace PACEChecks.Devices

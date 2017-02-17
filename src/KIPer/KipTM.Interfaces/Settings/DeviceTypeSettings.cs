@@ -28,10 +28,10 @@ namespace KipTM.Settings
         /// </summary>
         public string DeviceManufacturer;
 
-        /// <summary>
-        /// Типы параметров
-        /// </summary>
-        public List<string> TypesEtalonParameters;
+        ///// <summary>
+        ///// Типы параметров
+        ///// </summary>
+        //public List<string> TypesEtalonParameters;
 
 
         //public List<string> AvilableEthalonTypes;

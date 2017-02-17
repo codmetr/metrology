@@ -69,17 +69,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveDefaultFactory.cs" />
-    <Compile Include="Channels\PACEEthalonChannelFactory.cs" />
     <Compile Include="Checks\ADTSViewModelFactory.cs" />
     <Compile Include="Checks\ViewModel\CustomConfigFabrik.cs" />
     <Compile Include="Devices\ADTSModelFactory.cs" />
     <Compile Include="Devices\ADTSFactory.cs" />
-    <Compile Include="Devices\PACE1000Factory.cs" />
-    <Compile Include="Devices\PACE1000ModelFactory.cs" />
-    <Compile Include="Devices\QueryResult.cs" />
     <Compile Include="FeaturesDescriptor.cs" />
     <Compile Include="IViewModelFabrik.cs" />
-    <Compile Include="Channels\PACEEthalonChannel.cs" />
     <Compile Include="Checks\Calibration\Calibration.cs" />
     <Compile Include="Checks\CheckBase.cs" />
     <Compile Include="Checks\Data\ADTSMethodParameters.cs" />
@@ -87,7 +82,6 @@
     <Compile Include="Checks\Data\AdtsPointService.cs" />
     <Compile Include="Checks\Test\Test.cs" />
     <Compile Include="Devices\ADTSModel.cs" />
-    <Compile Include="Devices\PACE1000Model.cs" />
     <Compile Include="Checks\Calibration\Steps\DoPointStep.cs" />
     <Compile Include="Checks\Calibration\Steps\FinishStep.cs" />
     <Compile Include="Checks\Calibration\Steps\InitStep.cs" />
@@ -102,14 +96,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Result\Services\Pace1000ViewModel.cs" />
-    <Compile Include="Settings\SettingsFactory.cs" />
+    <Compile Include="Settings\SettingsFactoryAdts.cs" />
     <Compile Include="ViewModelFabrik.cs" />
     <Compile Include="Checks\ViewModel\ADTSBaseViewModel.cs" />
     <Compile Include="Checks\Calibration\CalibrationViewModel.cs" />
     <Compile Include="Checks\ViewModel\CheckStateViewModel.cs" />
     <Compile Include="Checks\Test\TestViewModel.cs" />
-    <Compile Include="Channels\ViewModel\PaceEthalonChannelViewModel.cs" />
     <Compile Include="Checks\ViewModel\AdtsCheckConfVm.cs" />
     <Compile Include="Checks\ViewModel\DoubleBindingRule.cs" />
     <Compile Include="Result\ResultFiller\ADTSCheckPointFiller.cs" />
@@ -119,7 +111,7 @@
     <Compile Include="Result\ResultMarker\ADTSCheckPointStepFabrik.cs" />
     <Compile Include="Result\ResultMarker\ADTSTestFabrik.cs" />
     <Compile Include="Result\ResultMarker\ADTSTestPointStepFabrik.cs" />
-    <Compile Include="Result\Services\ADTSViewModel.cs" />
+    <Compile Include="Services\ADTSViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ADTSData\ADTSData.csproj">

@@ -53,7 +53,7 @@ namespace ADTSChecks
                 new ArchivedKeyValuePair(Calibration.KeyPoints, GetDefaultForADTSCheckPSPoints()),
                 new ArchivedKeyValuePair(Calibration.KeyRate, 50.0),
                 new ArchivedKeyValuePair(Calibration.KeyUnit, PressureUnits.MBar),
-                new ArchivedKeyValuePair(CommonPropertyKeys.KeyEthalons, GetDefaultForADTSEthalonTypes()),
+//                new ArchivedKeyValuePair(CommonPropertyKeys.KeyEthalons, GetDefaultForADTSEthalonTypes()),
             };
         }
 
@@ -74,7 +74,7 @@ namespace ADTSChecks
                 new ArchivedKeyValuePair(Calibration.KeyPoints, GetDefaultForADTSCheckPTPoints()),
                 new ArchivedKeyValuePair(Calibration.KeyRate, 50.0),
                 new ArchivedKeyValuePair(Calibration.KeyUnit, PressureUnits.MBar),
-                new ArchivedKeyValuePair(CommonPropertyKeys.KeyEthalons, GetDefaultForADTSEthalonTypes()),
+//                new ArchivedKeyValuePair(CommonPropertyKeys.KeyEthalons, GetDefaultForADTSEthalonTypes()),
             };
         }
 
@@ -115,15 +115,15 @@ namespace ADTSChecks
             return points;
         }
 
-        public static List<string> GetDefaultForADTSEthalonTypes()
-        {
-            var ethalons = new List<string>()
-            {
-                UserEthalonChannel.Key,
-                PACE1000Model.Key,
-            };
-            return ethalons;
-        }
+//        public static List<string> GetDefaultForADTSEthalonTypes()
+//        {
+//            var ethalons = new List<string>()
+//            {
+//                UserEthalonChannel.Key,
+//                PACE1000Model.Key,
+//            };
+//            return ethalons;
+//        }
         #endregion
     }
 }

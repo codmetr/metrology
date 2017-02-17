@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ADTS;
-using ADTSChecks.Channels;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
@@ -24,7 +23,7 @@ namespace ADTSChecks
             };
             EthalonTypes = new List<DeviceTypeDescriptor>()
             {
-                new DeviceTypeDescriptor(PACE1000Model.Model, PACE1000Model.DeviceCommonType, PACE1000Model.DeviceManufacturer)
+//                new DeviceTypeDescriptor(PACE1000Model.Model, PACE1000Model.DeviceCommonType, PACE1000Model.DeviceManufacturer)
             };
             Models = new Dictionary<Type, IDeviceModelFactory>()
             {
