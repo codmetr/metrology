@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using ADTS;
-using ADTSChecks.Channels;
-using ADTSChecks.Model.Checks;
-using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
 using KipTM.Archive.DataTypes;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks;
-using KipTM.ViewModel.Checks;
+using PACEChecks.Channels;
+using PACEChecks.Devices;
 using PACESeries;
 
-namespace ADTSChecks
+namespace PACEChecks
 {
-    public class FeaturesDescriptorAdts : IFeaturesDescriptor
+    public class FeaturesDescriptorPace : IFeaturesDescriptor
     {
-        public FeaturesDescriptorAdts()
+        public FeaturesDescriptorPace()
         {
             DeviceTypes = new List<DeviceTypeDescriptor>()
             {
-                new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer)
+                //todo добавить устройство, когда будет методика проверки
             };
             EthalonTypes = new List<DeviceTypeDescriptor>()
             {
@@ -28,13 +25,11 @@ namespace ADTSChecks
             };
             Models = new Dictionary<Type, IDeviceModelFactory>()
             {
-                {typeof(ADTSModel), new ADTSModelFactory()},
-//                {typeof(PACE1000Model), new PACE1000ModelFactory()},
+                {typeof(PACE1000Model), new PACE1000ModelFactory()},
             };
             Devices = new List<KeyValuePair<Type, IDeviceFactory>>()
             {
-                new KeyValuePair<Type, IDeviceFactory>(typeof(ADTSDriver), new ADTSFactory()),
-//                new KeyValuePair<Type, IDeviceFactory>(typeof(PACE1000Driver), new PACE1000Factory()),
+                new KeyValuePair<Type, IDeviceFactory>(typeof(PACE1000Driver), new PACE1000Factory()),
             };
             var channelsFactories = new List<KeyValuePair<string, IDeviceConfig>>();
             var factoriesVisa = new VisaChannel.ChannelsFactory();
@@ -44,7 +39,7 @@ namespace ADTSChecks
 
             EthalonChannels = new List<KeyValuePair<string, IEthalonCannelFactory>>()
             {
-//                new KeyValuePair<string, IEthalonCannelFactory>(PACE1000Model.Key, new PACEEthalonChannelFactory())
+                new KeyValuePair<string, IEthalonCannelFactory>(PACE1000Model.Key, new PACEEthalonChannelFactory())
             };
         }
         

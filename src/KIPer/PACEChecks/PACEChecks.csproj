@@ -70,11 +70,16 @@
     <Compile Include="Devices\PACE1000Factory.cs" />
     <Compile Include="Devices\PACE1000Model.cs" />
     <Compile Include="Devices\PACE1000ModelFactory.cs" />
+    <Compile Include="FeaturesDescriptor.cs" />
     <Compile Include="Services\Pace1000ViewModel.cs" />
     <Compile Include="PACEMethodFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
+      <Project>{26676346-C100-4CC9-869F-80175B33DF76}</Project>
+      <Name>ArchiveData</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CheckFrame\CheckFrame.csproj">
       <Project>{81b358fe-6b31-49ff-ab34-45cb960e57b6}</Project>
       <Name>CheckFrame</Name>

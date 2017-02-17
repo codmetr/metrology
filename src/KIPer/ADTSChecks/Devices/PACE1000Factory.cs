@@ -6,7 +6,7 @@ using PACESeries;
 
 namespace KipTM.ViewModel.Checks
 {
-    [DeviceFactoryAttribute(typeof(PACE1000Driver))]
+    [DeviceFactory(typeof(PACE1000Driver))]
     public class PACE1000Factory : IDeviceFactory
     {
         public object GetDevice(object options)
