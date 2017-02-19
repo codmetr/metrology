@@ -17,7 +17,11 @@ namespace KipTM.Archive
             return new List<ArchivedKeyValuePair>
             {
                 new ArchivedKeyValuePair(DictionariesPool.DeviceTypesKey, devices.Select(el=>el.Key)),
-                new ArchivedKeyValuePair(DictionariesPool.CheckTypesKey, devices),
+                new ArchivedKeyValuePair(DictionariesPool.CheckTypesKey, devices.Where(el =>
+                {
+                    var checks = el.Value as List<string>;
+                    return checks == null ? false : checks.Count > 0;
+                }).ToList()),
                 new ArchivedKeyValuePair(DictionariesPool.UsersKey, GetDefaultForUsers()),
             };
         }

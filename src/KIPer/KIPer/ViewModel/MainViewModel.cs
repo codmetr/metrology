@@ -75,7 +75,7 @@ namespace KipTM.ViewModel
         private IMarkerFabrik<IParameterResultViewModel> _resulMaker;
         private IFillerFabrik<IParameterResultViewModel> _filler;
         private IEnumerable<ICheckViewModelFactory> _factoriesViewModels;
-        private IEnumerable<IChannelsFactory> _channelFactories;
+        private IChannelsFactory _channelFactory;
         private IReportFabrik _reportFabric;
         private bool _isActiveCheck;
         private bool _isActiveService;
@@ -133,8 +133,8 @@ namespace KipTM.ViewModel
             _resulMaker = resulMaker;
             _filler = filler;
             _reportFabric = reportFabric;
-            _channelFactories = features.ChannelFactories;
-            _services = new ServiceViewModel(services, new SelectChannelViewModel(_channelFactories.SelectMany(el=>el.GetChannels())));
+            _channelFactory = features.ChannelFactories;
+            _services = new ServiceViewModel(services, new SelectChannelViewModel(_channelFactory.GetChannels()));
 
             var checkBtns = new List<OneBtnDescripto>();
             foreach (var keyCheck in _methodicService.GetKeys())
@@ -162,8 +162,8 @@ namespace KipTM.ViewModel
                 _deviceTypes = new DeviceTypeCollectionViewModel();
                 _deviceTypes.LoadTypes(_dataService.DeviceTypes);
 
-                var channelTargetDevice = new SelectChannelViewModel(_channelFactories.SelectMany(el=>el.GetChannels()));
-                var channelEthalonDevice = new SelectChannelViewModel(_channelFactories.SelectMany(el => el.GetChannels()));
+                var channelTargetDevice = new SelectChannelViewModel(_channelFactory.GetChannels());
+                var channelEthalonDevice = new SelectChannelViewModel(_channelFactory.GetChannels());
 
                 var checkFabrik = new CheckFabrik(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels, _eventAggregator);
                 var result = new TestResult();

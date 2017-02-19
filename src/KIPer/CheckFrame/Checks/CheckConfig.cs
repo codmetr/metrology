@@ -24,6 +24,11 @@ namespace KipTM.Checks
         private ICheckMethod _selectedCheckType;
 
         /// <summary>
+        /// Все доступные типы устройств и их описатели
+        /// </summary>
+        private IDictionary<string, DeviceTypeDescriptor> _allDeviceTypes;
+
+        /// <summary>
         /// Доступные типы объектов конроля и их описатели
         /// </summary>
         private IDictionary<string, DeviceTypeDescriptor> _avalableDeviceTypes;
@@ -95,14 +100,15 @@ namespace KipTM.Checks
             // заполнение списка поддерживаемых устройств
             _data.TargetTypeKey = null;
             var avalableDeviceTypes = GetAllAvailableDeviceTypes(settings, dictionaries);
-
+            _allDeviceTypes = avalableDeviceTypes;
+            avalableDeviceTypes = avalableDeviceTypes.Where(el => _method.GetKeys().Contains(el.Key)).ToDictionary(el=>el.Key, el=>el.Value);
             if (avalableDeviceTypes == null)
                 throw new NullReferenceException(string.Format("Не удалось получить список доступных типов устройств"));
 
             _avalableDeviceTypes = avalableDeviceTypes;
 
             // Выбираем первый тип устройства объекта контроля
-            _data.TargetTypeKey = avalableDeviceTypes.Keys.FirstOrDefault();
+            _data.TargetTypeKey = _avalableDeviceTypes.Keys.FirstOrDefault();
             _data.TargetType = _avalableDeviceTypes[_data.TargetTypeKey];
 
             if (_data.TargetTypeKey == null)
@@ -148,7 +154,7 @@ namespace KipTM.Checks
         private Dictionary<string, DeviceTypeDescriptor> GetAvailableEthalons(string targetDevKey, ChannelDescriptor selectedChannel)//IMainSettings settings, 
         {
             var avalableEthalonTypes = new Dictionary<string, DeviceTypeDescriptor>();
-            foreach (var dev in _avalableDeviceTypes)
+            foreach (var dev in _allDeviceTypes)
             {
                 //исключить проверяемое устройство
                 if (dev.Key == targetDevKey)
@@ -283,7 +289,7 @@ namespace KipTM.Checks
         /// <returns></returns>
         private static DeviceTypeSettings GetSettingsDevice(IMainSettings settings, string deviceType)
         {
-            return settings.Devices.First(el => el.Key == deviceType);
+            return settings.Devices.FirstOrDefault(el => el.Key == deviceType);
         }
 
         #endregion

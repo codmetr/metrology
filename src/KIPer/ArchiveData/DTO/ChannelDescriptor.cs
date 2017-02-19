@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace ArchiveData.DTO
 {
     /// <summary>
     /// Описатель измерительного канала
     /// </summary>
+    [DebuggerDisplay("{Name}: [{Max}, {Min}], {Error})")]
     public class ChannelDescriptor
     {
         private Func<string> _getLocalizedName;

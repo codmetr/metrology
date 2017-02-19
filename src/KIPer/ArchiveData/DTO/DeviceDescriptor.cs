@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace ArchiveData.DTO
 {
     /// <summary>
     /// Базовый описатель устройства
     /// </summary>
+    [DebuggerDisplay("{DeviceType.Model}: {SerialNumber})")]
     public class DeviceDescriptor
     {
         public DeviceDescriptor(DeviceTypeDescriptor deviceType)

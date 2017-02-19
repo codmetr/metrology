@@ -1,8 +1,11 @@
-﻿namespace ArchiveData.DTO
+﻿using System.Diagnostics;
+
+namespace ArchiveData.DTO
 {
     /// <summary>
     /// Базовый описатель типа устройства
     /// </summary>
+    [DebuggerDisplay("{DeviceCommonType}: {Model}({DeviceManufacturer})")]
     public class DeviceTypeDescriptor : IDeviceTypeDescriptor
     {
         public DeviceTypeDescriptor(string model, string deviceCommonType, string deviceManufacturer)

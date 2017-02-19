@@ -13,7 +13,10 @@ using KipTM.Interfaces.Archive;
 
 namespace ADTSChecks
 {
-    public class ArchiveDefaultFactory : IArchiveDataDefault
+    /// <summary>
+    /// Фабрика значений по умолчанию для ADTS
+    /// </summary>
+    public class ArchiveDefaultFactoryAdts : IArchiveDataDefault
     {
         #region GetDefault
         /// <summary>
@@ -28,6 +31,10 @@ namespace ADTSChecks
             };
         }
 
+        /// <summary>
+        /// Ключ: "тип измерительного канала" 
+        /// </summary>
+        /// <returns></returns>
         public static List<ArchivedKeyValuePair> GetDefaultForADTS()
         {
             return new List<ArchivedKeyValuePair>
@@ -37,6 +44,10 @@ namespace ADTSChecks
             };
         }
 
+        /// <summary>
+        /// Ключ: "тип характеристики канала"
+        /// </summary>
+        /// <returns></returns>
         private static List<ArchivedKeyValuePair> GetDefaultForADTSCheckPS()
         {
             return new List<ArchivedKeyValuePair>()
@@ -53,10 +64,13 @@ namespace ADTSChecks
                 new ArchivedKeyValuePair(Calibration.KeyPoints, GetDefaultForADTSCheckPSPoints()),
                 new ArchivedKeyValuePair(Calibration.KeyRate, 50.0),
                 new ArchivedKeyValuePair(Calibration.KeyUnit, PressureUnits.MBar),
-//                new ArchivedKeyValuePair(CommonPropertyKeys.KeyEthalons, GetDefaultForADTSEthalonTypes()),
             };
         }
 
+        /// <summary>
+        /// Ключ: "тип характеристики канала"
+        /// </summary>
+        /// <returns></returns>
         private static List<ArchivedKeyValuePair> GetDefaultForADTSCheckPT()
         {
             return new List<ArchivedKeyValuePair>()
@@ -74,10 +88,13 @@ namespace ADTSChecks
                 new ArchivedKeyValuePair(Calibration.KeyPoints, GetDefaultForADTSCheckPTPoints()),
                 new ArchivedKeyValuePair(Calibration.KeyRate, 50.0),
                 new ArchivedKeyValuePair(Calibration.KeyUnit, PressureUnits.MBar),
-//                new ArchivedKeyValuePair(CommonPropertyKeys.KeyEthalons, GetDefaultForADTSEthalonTypes()),
             };
         }
 
+        /// <summary>
+        /// Набор точек проверки канала PS по умолчанию
+        /// </summary>
+        /// <returns></returns>
         private static List<ADTSPoint> GetDefaultForADTSCheckPSPoints()
         {
             var points = new List<ADTSPoint>()
@@ -94,6 +111,10 @@ namespace ADTSChecks
             return points;
         }
 
+        /// <summary>
+        /// Набор точек проверки канала PS по умолчанию
+        /// </summary>
+        /// <returns></returns>
         private static List<ADTSPoint> GetDefaultForADTSCheckPTPoints()
         {
             var points = new List<ADTSPoint>()
@@ -114,16 +135,6 @@ namespace ADTSChecks
             };
             return points;
         }
-
-//        public static List<string> GetDefaultForADTSEthalonTypes()
-//        {
-//            var ethalons = new List<string>()
-//            {
-//                UserEthalonChannel.Key,
-//                PACE1000Model.Key,
-//            };
-//            return ethalons;
-//        }
         #endregion
     }
 }

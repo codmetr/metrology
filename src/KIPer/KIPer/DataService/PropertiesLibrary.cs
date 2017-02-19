@@ -31,7 +31,8 @@ namespace KipTM.Model
 
             //var devices = features.SelectMany(el => el.GetDefaultForCheckTypes()).ToList();
             var devices = features.GetDefaultForCheckTypes().ToList();
-            _dictionariesArchive = ArchiveBase.LoadFromFile(PathDictionaries, DictionariesArchive.GetDefault(devices));
+            //_dictionariesArchive = ArchiveBase.LoadFromFile(PathDictionaries, DictionariesArchive.GetDefault(devices));
+            _dictionariesArchive = DictionariesArchive.GetDefault(devices);
             _dictionariesPool = DictionariesPool.Load(_dictionariesArchive);
             //_checksArchive = ArchiveBase.LoadFromFile(PathArchive, new ArchiveBase());
             //_checksPool = ChecksPool.Load(_checksArchive);

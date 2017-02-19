@@ -137,6 +137,7 @@
     <Compile Include="DataService\DeviceManager.cs" />
     <Compile Include="DataService\DataService.cs" />
     <Compile Include="DataService\MethodsService.cs" />
+    <Compile Include="IOC\IOCConfig.cs" />
     <Compile Include="IOC\UnityServiceLocator.cs" />
     <Compile Include="Services\FillReportView.xaml.cs">
       <DependentUpon>FillReportView.xaml</DependentUpon>

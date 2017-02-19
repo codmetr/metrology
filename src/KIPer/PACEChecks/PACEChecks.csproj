@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchiveDefaultFactoryPace.cs" />
     <Compile Include="Channels\PACEEchalonChannel.cs" />
     <Compile Include="Channels\PACEEthalonChannelFactory.cs" />
     <Compile Include="Channels\ViewModel\PACEEchalonChannelViewModel.cs" />
@@ -71,7 +72,12 @@
     <Compile Include="Devices\PACE1000Model.cs" />
     <Compile Include="Devices\PACE1000ModelFactory.cs" />
     <Compile Include="Devices\QueryResult.cs" />
-    <Compile Include="FeaturesDescriptor.cs" />
+    <Compile Include="FeaturesDescriptorPace.cs" />
+    <Compile Include="Properties\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\Pace1000ViewModel.cs" />
     <Compile Include="PACEMethodFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -128,6 +134,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

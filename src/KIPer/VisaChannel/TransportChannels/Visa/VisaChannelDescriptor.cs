@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using VisaChannel.TransportChannels.Visa;
 
 namespace KipTM.Model.TransportChannels
 {
+    [DebuggerDisplay("{Key}({Name})")]
     public class VisaChannelDescriptor: ITransportChannelType
     {
         public static string KeyType = "Visa";
