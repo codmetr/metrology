@@ -130,10 +130,6 @@
       <Project>{81b358fe-6b31-49ff-ab34-45cb960e57b6}</Project>
       <Name>CheckFrame</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Drivers\PACESeries\PACESeries.csproj">
-      <Project>{3d3db0eb-5b92-4d8f-8547-82ff7184c59a}</Project>
-      <Name>PACESeries</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IEEE488Transport\IEEE488.csproj">
       <Project>{3fec76c3-b933-4461-aa8d-85360d3f41c4}</Project>
       <Name>IEEE488</Name>
@@ -149,10 +145,6 @@
     <ProjectReference Include="..\MineLoop\MainLoop.csproj">
       <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
       <Name>MainLoop</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PACEData\PACEData.csproj">
-      <Project>{bd216c8b-921b-4499-85f3-9ba9a014029e}</Project>
-      <Name>PACEData</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tools.View\Tools.View.csproj">
       <Project>{69AB619C-5B3A-4EE7-9318-73D92E75F812}</Project>
@@ -171,6 +163,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -179,7 +172,6 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Content\adts405.jpg" />
-    <Content Include="Content\pace1000.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

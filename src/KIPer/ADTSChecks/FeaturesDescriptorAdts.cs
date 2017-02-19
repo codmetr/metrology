@@ -9,7 +9,6 @@ using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks;
 using KipTM.ViewModel.Checks;
-using PACESeries;
 
 namespace ADTSChecks
 {
@@ -23,17 +22,14 @@ namespace ADTSChecks
             };
             EthalonTypes = new List<DeviceTypeDescriptor>()
             {
-//                new DeviceTypeDescriptor(PACE1000Model.Model, PACE1000Model.DeviceCommonType, PACE1000Model.DeviceManufacturer)
             };
             Models = new Dictionary<Type, IDeviceModelFactory>()
             {
                 {typeof(ADTSModel), new ADTSModelFactory()},
-//                {typeof(PACE1000Model), new PACE1000ModelFactory()},
             };
             Devices = new List<KeyValuePair<Type, IDeviceFactory>>()
             {
                 new KeyValuePair<Type, IDeviceFactory>(typeof(ADTSDriver), new ADTSFactory()),
-//                new KeyValuePair<Type, IDeviceFactory>(typeof(PACE1000Driver), new PACE1000Factory()),
             };
             var factoriesVisa = new VisaChannel.ChannelsFactory();
             ChannelFactories = factoriesVisa;
@@ -44,7 +40,6 @@ namespace ADTSChecks
 
             EthalonChannels = new List<KeyValuePair<string, IEthalonCannelFactory>>()
             {
-//                new KeyValuePair<string, IEthalonCannelFactory>(PACE1000Model.Key, new PACEEthalonChannelFactory())
             };
         }
         

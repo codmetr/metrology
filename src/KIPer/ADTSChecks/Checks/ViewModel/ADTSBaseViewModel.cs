@@ -117,7 +117,7 @@ namespace ADTSChecks.Checks.ViewModel
             if (string.IsNullOrEmpty(ethalonTypeKey) || ethalonTypeKey == UserEthalonChannel.Key || settings == null)
             {
                 Method.SetEthalonChannel(_userEchalonChannel, null);
-                _ethalonTypeKey = null;
+                _ethalonTypeKey = UserEthalonChannel.Key;
                 _ethalonChannelType = null;
                 State.IsUserChannel = true;
                 EthalonChannel = _userEchalonChannel;
@@ -125,7 +125,7 @@ namespace ADTSChecks.Checks.ViewModel
             }
             _ethalonTypeKey = ethalonTypeKey;
             _ethalonChannelType = settings;
-            State.IsUserChannel = _ethalonTypeKey == null;
+            State.IsUserChannel = _ethalonTypeKey == null || _ethalonTypeKey == UserEthalonChannel.Key;
             EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey);
         }
 
@@ -252,7 +252,10 @@ namespace ADTSChecks.Checks.ViewModel
             set
             {
                 Set(ref _ethalonChannel, value);
-                State.EthalonChannelViewModel = _deviceManager.GetEthalonChannelViewModel(_ethalonTypeKey, _ethalonChannel as IEthalonChannel);
+                if (_ethalonTypeKey == UserEthalonChannel.Key)
+                    State.EthalonChannelViewModel = null;
+                else
+                    State.EthalonChannelViewModel = _deviceManager.GetEthalonChannelViewModel(_ethalonTypeKey, _ethalonChannel as IEthalonChannel);
             }
         }
 

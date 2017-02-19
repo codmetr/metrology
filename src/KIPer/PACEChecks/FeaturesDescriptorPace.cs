@@ -40,7 +40,7 @@ namespace PACEChecks
 
             EthalonChannels = new List<KeyValuePair<string, IEthalonCannelFactory>>()
             {
-                new KeyValuePair<string, IEthalonCannelFactory>(PACE1000Model.Key, new PACEEthalonChannelFactory())
+                new KeyValuePair<string, IEthalonCannelFactory>(PACEData.KeysDic.PACE1000Pressure, new PACEEthalonChannelFactory())
             };
         }
         
