@@ -1,0 +1,46 @@
+﻿ABOR Abort LIM Limit
+ADDR Address LLO Local lock out
+AVER Average LOG Logical
+ALT Altitude LPAS Low pass (filter)
+AMPL Amplitude MAV Message available in output queue
+ATOD Analog to Digital MEAS Measure
+BAR Barometer MSS Summary bit after SRQ
+BRID Bridge NEGC Negative Calibration
+CAL Calibration OFFS Offset
+CAT Catalogue OPC Operational condition
+CDIS Cdisable (calibration disable) OPER Operation
+CEN Cenable (calibration enable) OPT Option
+CLS Clear OSB Summary bit from standard operations status register
+COMM Communicate OVER Overshoot
+COMP Compensate OUTP Output
+COND Condition PAR Parity
+CONF Configuration PASS Password
+CONT Controller PERC Percent
+CONV Convert POIN Points
+CORR Correction PRES Preset
+COUN Count PRES Pressure
+DEF Define QUE Queue
+DIAG Diagnostic QUES Questionable 
+DIOD Diode RANG Range
+DISP Display REF Reference
+EAV Error in error queue RES Resolution
+EFF Effort RES RESet
+ENAB Enable SAMP Sample
+EOI End of input SENS Sense
+ERR Error SEPT Set-point
+ESB Summary bit from standard event SER Serial
+ESE Event status enable SOUR Source
+ESR Event status register SPE Speed
+EVEN Event SRE Service request enable
+FILT Filter SRQ Service request
+FREQ Frequency STAR Start
+FULL Fullscale STB Status register query
+GTL Go to local STAT State
+HEAD Head SYST System
+IDN Identification TIM Time to set-point
+IMM Immediate UNIT Unit of pressure
+INL In limit VAL Value
+INP Input VALV Valve
+INST Instrument VERS Version
+ISOL Isolation VOL Volume
+LEV Leve
