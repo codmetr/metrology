@@ -44,11 +44,32 @@ namespace PACESeries
         internal const string KeyGetPressureRangeByChannelFormat = ":SENS{0}:PRES:RANG?";
         internal const string KeyGetAvailableRange = ":INST:CAT:ALL?";
         internal const string KeyGetAvailableRangeByChannelFormat = ":INST:CAT{0}:ALL?";
-        internal const string KeySetOutputStateFormat = ":OUTP:SET{0} <state>";
-        internal const string KeyGetOutputStateFormat = ":OUTP:SET{0}?";
+        internal const string KeySetOutputStateFormat = ":OUTP:STAT{0} <state>";
+        internal const string KeyGetOutputStateFormat = ":OUTP:STAT{0}?";
         internal const string KeySetOutputLogicalFormat = ":OUTP:LOG{0} <state>";
         internal const string KeyGetOutputLogicalFormat = ":OUTP:LOG{0}?";
-        
+
+        internal const string KeyGetNumCalibrPoints = ":CAL:PRES:POIN?";
+        internal const string KeyGetNumCalibrPointsFormat = ":CAL{0}:PRES:POIN?";
+        internal const string KeySetAcceptsCalibValues = ":CAL:PRES:ACC";
+        internal const string KeySetAcceptsCalibValuesFormat = ":CAL{0}:PRES:ACC";
+        internal const string KeySetAbortsCalibValues = ":CAL:PRES:ABOR";
+        internal const string KeySetEnabCalibValueEntered = ":CAL:PRES:VAL";
+        internal const string KeySetEnabCalibValueEnteredFormat = ":CAL{0}:PRES:VAL{1}";
+        internal const string KeyGetCalibPointsValue = ":CAL:PRES:VAL?";
+        internal const string KeyGetCalibPointsValueFormat = ":CAL{0}:PRES:VAL{1}?";
+
+        // not applyed
+        internal const string KeySetOpensClosesZeroValveFormat = ":CAL:PRES:ZERO:VALV {0}";
+        internal const string KeyGetOpensClosesZeroValve = ":CAL:PRES:ZERO:VALV?";
+        internal const string KeySetPressureZeroingFormat = ":CAL:PRES:ZERO:AUTO {0}";
+        internal const string KeyGetPressureZeroing = ":CAL:PRES:ZERO:AUTO?";
+        internal const string KeySetsTimedZeroInHours = ":CAL:PRES:ZERO:TIME";
+        internal const string KeyGetTimedZeroInHours = ":CAL:PRES:ZERO:TIME?";
+        internal const string KeySetsTimedZeroOnOff = ":CAL:PRES:ZERO:TIME:STAT";
+        internal const string KeyGetsTimedZeroOnOff = ":CAL:PRES:ZERO:TIME:STAT?";
+
+
         #endregion
 
         #region GetIdentificator "*IDN?"
@@ -355,7 +376,7 @@ namespace PACESeries
         }
         #endregion
 
-        #region SetOutputState ":OUTP:SET <state>"
+        #region SetOutputState ":OUTP:STAT <state>"
 
         /// <summary>
         /// Получить команду "Установить состояние выхода по каналу"
@@ -384,7 +405,7 @@ namespace PACESeries
 
         #endregion
 
-        #region GetOutputState ":OUTP:SET?"
+        #region GetOutputState ":OUTP:STAT?"
         /// <summary>
         /// Получить команду "Состояние выхода"
         /// </summary>
@@ -482,7 +503,138 @@ namespace PACESeries
             return true;
         }
         #endregion
-        
+
+        #region Gets the number of calibration points ":CAL:PRES:POIN?"
+        /// <summary>
+        /// Получить команду "Получение поличества точек калибровки"
+        /// </summary>
+        /// <returns>Команда</returns>
+        public string GetCommandGetNumCalibrPoints()
+        {
+            return KeyGetNumCalibrPoints;
+        }
+
+        /// <summary>
+        /// Получить команду "Получение поличества точек калибровки"
+        /// </summary>
+        /// <param name="channel">Канал</param>
+        /// <returns>Команда</returns>
+        public string GetCommandGetNumCalibrPoints(int channel)
+        {
+            return string.Format(KeyGetNumCalibrPointsFormat, channel);
+        }
+
+        /// <summary>
+        /// Разобрать результат команды "Получение поличества точек калибровки"
+        /// </summary>
+        /// <param name="message">Ответ</param>
+        /// <param name="value">Список ограничений</param>
+        /// <returns>Удалось разобрать</returns>
+        public bool ParseGetNumCalibrPoints(string message, out int? value)
+        {
+            value = null;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { {"num", PeremeterTypes.Integer} });
+            value = (int)answer["num"];
+            return true;
+        }
+        #endregion
+
+        #region Accepts calibration values ":CAL:PRES:ACC"
+        /// <summary>
+        /// Получить команду "Подтверждение результата калибровки"
+        /// </summary>
+        /// <returns>Команда</returns>
+        public string GetCommandAcceptsCalibValues()
+        {
+            return KeySetAcceptsCalibValues;
+        }
+
+        /// <summary>
+        /// Получить команду "Подтверждение результата калибровки"
+        /// </summary>
+        /// <param name="channel">Канал</param>
+        /// <returns>Команда</returns>
+        public string GetCommandAcceptsCalibValues(int channel)
+        {
+            return string.Format(KeySetAcceptsCalibValuesFormat, channel);
+        }
+        #endregion
+
+        #region Aborts calibration values ":CAL:PRES:ABOR"
+        /// <summary>
+        /// Получить команду "Отмена результата калибровки"
+        /// </summary>
+        /// <returns>Команда</returns>
+        public string GetCommandAbortsCalibValues()
+        {
+            return KeySetAbortsCalibValues;
+        }
+        #endregion
+
+        #region Enables calibration value to be entered ":CAL:PRES:VAL"
+        /// <summary>
+        /// Получить команду "Внести результат калибровки точки"
+        /// </summary>
+        /// <returns>Команда</returns>
+        public string GetCommandEnableCalibValueEntered()
+        {
+            return KeySetEnabCalibValueEntered;
+        }
+
+        /// <summary>
+        /// Получить команду "Внести результат калибровки точки"
+        /// </summary>
+        /// <param name="channel">Канал</param>
+        /// <param name="point">Точка калибровки
+        /// 1 - lower pressure
+        /// 2 - middle pressure
+        /// 3 - higher pressure</param>
+        /// <returns>Команда</returns>
+        public string GetCommandEnableCalibValueEntered(int channel, int point)
+        {
+            return string.Format(KeySetEnabCalibValueEnteredFormat, channel, point);
+        }
+        #endregion
+
+        #region Queries calibration point y value of module x ":CAL:PRES:VAL?"
+        /// <summary>
+        /// Получить команду "Запросить результат калибровки точки"
+        /// </summary>
+        /// <returns>Команда</returns>
+        public string GetCommandGetCalibPointsValue()
+        {
+            return KeyGetCalibPointsValue;
+        }
+
+        /// <summary>
+        /// Получить команду "Запросить результат калибровки точки"
+        /// </summary>
+        /// <param name="channel">Канал</param>
+        /// <param name="point">Точка калибровки
+        /// 1 - lower pressure
+        /// 2 - middle pressure
+        /// 3 - higher pressure</param>
+        /// <returns>Команда</returns>
+        public string GetCommandGetCalibPointsValue(int channel, int point)
+        {
+            return string.Format(KeyGetCalibPointsValueFormat, channel, point);
+        }
+
+        /// <summary>
+        /// Разобрать результат команды "Запросить результат калибровки точки"
+        /// </summary>
+        /// <param name="message">Ответ</param>
+        /// <param name="value">Результат калибровки точки</param>
+        /// <returns>Удалось разобрать</returns>
+        public bool ParseGetCalibPointsValue(string message, out int? value)
+        {
+            value = null;
+            var answer = ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.Integer } });
+            value = (int)answer["value"];
+            return true;
+        }
+        #endregion
+
         #region Protocol parser
         /// <summary>
         /// Сбор команды

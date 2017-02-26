@@ -48,6 +48,7 @@
     <Compile Include="Enums\PeremeterTypes.cs" />
     <Compile Include="Enums\PressureUnits.cs" />
     <Compile Include="Enums\TemperatureUnits.cs" />
+    <Compile Include="PACEParserV2.cs" />
     <Compile Include="PACEParser.cs" />
     <Compile Include="PACE1000Driver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
