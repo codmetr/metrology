@@ -9,8 +9,12 @@ namespace PACESeries.Semantic
     {
         [CodeDescriptorAttribue("ABOR", "Abort")]
         ABOR,
+        [CodeDescriptorAttribue("ACC", "Accept")]
+        ACC,
         [CodeDescriptorAttribue("ADDR", "Address")]
         ADDR,
+        [CodeDescriptorAttribue("ALL", "All")]
+        ALL,
         [CodeDescriptorAttribue("ALT", "Altitude")]
         ALT,
         [CodeDescriptorAttribue("AMPL", "Amplitude")]
@@ -49,6 +53,8 @@ namespace PACESeries.Semantic
         CORR,
         [CodeDescriptorAttribue("COUN", "Count")]
         COUN,
+        [CodeDescriptorAttribue("DATE", "Date")]
+        DATE,
         [CodeDescriptorAttribue("DEF", "Define")]
         DEF,
         [CodeDescriptorAttribue("DIAG", "Diagnostic")]
@@ -103,6 +109,8 @@ namespace PACESeries.Semantic
         LIM,
         [CodeDescriptorAttribue("LLO", "Local lock out")]
         LLO,
+        [CodeDescriptorAttribue("LOC", "Local mode")]
+        LOC,
         [CodeDescriptorAttribue("LOG", "Logical")]
         LOG,
         [CodeDescriptorAttribue("LPAS", "Low pass (filter)")]
@@ -149,6 +157,8 @@ namespace PACESeries.Semantic
         RANG,
         [CodeDescriptorAttribue("REF", "Reference")]
         REF,
+        [CodeDescriptorAttribue("REM", "Remote mode")]
+        REM,
         [CodeDescriptorAttribue("RES", "Resolution")]
         RESolution,
         [CodeDescriptorAttribue("RES", "RESet")]
@@ -177,8 +187,8 @@ namespace PACESeries.Semantic
         STB,
         [CodeDescriptorAttribue("SYST", "System")]
         SYST,
-        [CodeDescriptorAttribue("TIM", "Time to set-point")]
-        TIM,
+        [CodeDescriptorAttribue("TIME", "Time to set-point")]
+        TIME,
         [CodeDescriptorAttribue("TST", "Queries the self-test status", "*")]
         TST,
         [CodeDescriptorAttribue("UNIT", "Unit of pressure")]
