@@ -12,7 +12,10 @@ using CheckFrame;
 using CheckFrame.ViewModel.Archive;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using KipTM.Archive;
+using KipTM.Archive.ViewModel;
 using KipTM.Checks;
+using KipTM.Checks.ViewModel;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks;
@@ -81,6 +84,7 @@ namespace KipTM.ViewModel
         private bool _isActiveService;
         private bool _isActiveSwitchServices = true;
         private IEnumerable<OneBtnDescripto> _checkBtns;
+        private IDataAccessor _accessor;
 
         #endregion
 
@@ -135,7 +139,7 @@ namespace KipTM.ViewModel
             _reportFabric = reportFabric;
             _channelFactory = features.ChannelFactories;
             _services = new ServiceViewModel(services, new SelectChannelViewModel(_channelFactory.GetChannels()));
-
+            _accessor = new DataAccessor();
             var checkBtns = new List<OneBtnDescripto>();
             foreach (var keyCheck in _methodicService.GetKeys())
             {
@@ -165,23 +169,22 @@ namespace KipTM.ViewModel
                 var channelTargetDevice = new SelectChannelViewModel(_channelFactory.GetChannels());
                 var channelEthalonDevice = new SelectChannelViewModel(_channelFactory.GetChannels());
 
-                var checkFabrik = new CheckFabrik(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels, _eventAggregator);
                 var result = new TestResult();
                 var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool,
                     _propertiesLibrary.DictionariesPool, result);
                 var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice,
                     _customFactory);
-
+                var resFactory = new TestResultViewModelFactory(result, checkConfig, _resulMaker, _propertiesLibrary,
+                    _filler, _accessor);
+                var checkPool = new CheckFactoryPool(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels, _eventAggregator);
+                var checkFabrik = new CheckFabrik(checkPool, checkConfig, result, channelTargetDevice, channelEthalonDevice, _eventAggregator);
                 _eventAggregator.Subscribe(this);
 
                 _steps = new List<IWorkflowStep>()
                 {
                     new ConfigCheckState(checkConfigViewModel),
-                    new CheckState(() => checkFabrik.GetViewModelFor(checkConfig.SelectedMethod, checkConfig.Data, checkConfig.CustomSettings, result,
-                        channelTargetDevice.SelectedChannel, channelEthalonDevice.SelectedChannel), _eventAggregator),
-                    new ResultState(() => new TestResultViewModel(result,
-                        _resulMaker.GetMarkers(checkConfig.SelectedMethod.GetType(), checkConfig.SelectedMethod), _filler,
-                        (res) =>{/*TODO make save*/})),
+                    new CheckState(checkFabrik, _eventAggregator),
+                    new ResultState(resFactory),
                     new ReportState(() => new ReportViewModel(_reportFabric, result)),
                 };
                 _workflow = new Workflow.Workflow(_steps);

@@ -9,6 +9,10 @@ using KipTM.Model.Devices;
 using KipTM.ViewModel.ResultFiller;
 using MarkerService.Filler;
 using System.Windows.Input;
+using KipTM.Archive;
+using KipTM.Checks;
+using KipTM.Model;
+using MarkerService;
 using Tools.View;
 
 namespace KipTM.ViewModel
@@ -27,13 +31,14 @@ namespace KipTM.ViewModel
         private ObservableCollection<IParameterResultViewModel> _parameters;
         private string _testType;
         private ObservableCollection<IDeviceViewModel> _etalons;
-        private Action<TestResult> _save;
+        private IDataAccessor _save;
 
         private readonly TestResult _result;
+
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
         /// </summary>
-        public TestResultViewModel(TestResult result, IEnumerable<IParameterResultViewModel> expectedResuls, IFillerFabrik<IParameterResultViewModel> _filler, Action<TestResult> save)
+        public TestResultViewModel(TestResult result, IEnumerable<IParameterResultViewModel> expectedResuls, IFillerFabrik<IParameterResultViewModel> _filler, IDataAccessor accessor)
         {
             _result = result;
             if (IsInDesignMode)
@@ -100,7 +105,7 @@ namespace KipTM.ViewModel
                     }
                 }
                 Parameters = new ObservableCollection<IParameterResultViewModel>(results);
-                _save = save;
+                _save = accessor;
             }
         }
 
@@ -162,7 +167,7 @@ namespace KipTM.ViewModel
 
         private void DoSave()
         {
-            _save(_result);
+            _save.Save(_result);
         }
     }
 }

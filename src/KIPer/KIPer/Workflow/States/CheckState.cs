@@ -1,6 +1,7 @@
 ﻿using System;
 using CheckFrame.ViewModel.Checks.Channels;
 using KipTM.EventAggregator;
+using KipTM.ViewModel.Checks;
 using KipTM.ViewModel.Workflow;
 using KipTM.Workflow.States.Events;
 
@@ -9,10 +10,10 @@ namespace KipTM.Workflow.States
     public class CheckState : IWorkflowStep
     {
         private IMethodViewModel _check;
-        private readonly Func<IMethodViewModel> _checkFabric;
+        private readonly CheckFabrik _checkFabric;
         private readonly IEventAggregator _eventAggregator;
 
-        public CheckState(Func<IMethodViewModel> checkFabric, IEventAggregator eventAggregator)
+        public CheckState(CheckFabrik checkFabric, IEventAggregator eventAggregator)
         {
             _checkFabric = checkFabric;
             _eventAggregator = eventAggregator;
@@ -38,7 +39,7 @@ namespace KipTM.Workflow.States
 
         public void StateIn()
         {
-            _check = _checkFabric();
+            _check = _checkFabric.GetViewModelFor();
             if(_check != null)
                 AttachEvents(_check);
         }

@@ -1,13 +1,14 @@
 ﻿using System;
+using KipTM.Archive.ViewModel;
 
 namespace KipTM.ViewModel.Workflow.States
 {
     class ResultState : IWorkflowStep
     {
         private TestResultViewModel _result;
-        private readonly Func<TestResultViewModel> _checkFabric;
+        private readonly TestResultViewModelFactory _checkFabric;
 
-        public ResultState(Func<TestResultViewModel> checkFabric)
+        public ResultState(TestResultViewModelFactory checkFabric)
         {
             _checkFabric = checkFabric;
         }
@@ -16,7 +17,7 @@ namespace KipTM.ViewModel.Workflow.States
         public event EventHandler<WorkflowStepChangeEvent> BackAvailabilityChanged;
         public void StateIn()
         {
-             _result = _checkFabric();
+             _result = _checkFabric.GetTestResult();
         }
 
         public void StateOut()

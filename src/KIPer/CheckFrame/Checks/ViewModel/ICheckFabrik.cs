@@ -18,8 +18,7 @@ namespace KipTM.ViewModel.Checks
         /// Получить презентор типа проверки
         /// </summary>
         /// <returns></returns>
-        IMethodViewModel GetViewModelFor(object method, CheckConfigData checkConfig, object customConfig,
-            TestResult resultBox, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel);
+        IMethodViewModel GetViewModelFor();
         
     }
 }

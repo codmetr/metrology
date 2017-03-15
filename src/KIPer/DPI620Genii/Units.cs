@@ -6,11 +6,11 @@ using System.Text;
 namespace DPI620Genii
 {
 
-    internal enum UserUnit
+    public enum UserUnit
     {
     }
 
-    internal enum VUnit
+    public enum VUnit
     {
         mV,
         mV_AC,
@@ -18,13 +18,13 @@ namespace DPI620Genii
         V_AC,
     }
 
-    internal enum RUnit
+    public enum RUnit
     {
         kOhm,
         ohm
     }
 
-    internal enum FUnit
+    public enum FUnit
     {
         CPH,
         CPM,
@@ -32,7 +32,7 @@ namespace DPI620Genii
         kHertz,
     }
 
-    internal enum PUnit
+    public enum PUnit
     {
         atm,
         bar,
@@ -73,7 +73,7 @@ namespace DPI620Genii
         Torr,
     }
 
-    internal enum TUnit
+    public enum TUnit
     {
         C,
         F,
