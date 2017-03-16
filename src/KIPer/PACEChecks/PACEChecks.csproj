@@ -67,7 +67,7 @@
     <Compile Include="Channels\PACEEchalonChannel.cs" />
     <Compile Include="Channels\PACEEthalonChannelFactory.cs" />
     <Compile Include="Channels\ViewModel\PACEEchalonChannelViewModel.cs" />
-    <Compile Include="CheckPACE.cs" />
+    <Compile Include="Checks\CheckPACE.cs" />
     <Compile Include="Devices\PACE1000Factory.cs" />
     <Compile Include="Devices\PACE1000Model.cs" />
     <Compile Include="Devices\PACE1000ModelFactory.cs" />
@@ -140,6 +140,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Checks\Test\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
