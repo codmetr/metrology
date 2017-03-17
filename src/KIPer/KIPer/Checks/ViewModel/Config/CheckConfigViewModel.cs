@@ -18,7 +18,7 @@ namespace KipTM.ViewModel.Checks.Config
     public class CheckConfigViewModel : ViewModelBase
     {
         private readonly CheckConfig _model;
-        private readonly CustomConfigFactory _customConfigFabrik;
+        private readonly CustomConfigFactory _customConfigFactory;
         private SelectChannelViewModel _checkDeviceChanel;
         private SelectChannelViewModel _ethalonChanel;
         private ICustomSettingsViewModel _customSetiings;
@@ -28,11 +28,11 @@ namespace KipTM.ViewModel.Checks.Config
         /// <summary>
         /// Initializes a new instance of the CheckConfigViewModel class.
         /// </summary>
-        public CheckConfigViewModel(CheckConfig model, SelectChannelViewModel checkDeviceChanel, SelectChannelViewModel ethalonChanel, CustomConfigFactory customConfigFabrik)
+        public CheckConfigViewModel(CheckConfig model, SelectChannelViewModel checkDeviceChanel, SelectChannelViewModel ethalonChanel, CustomConfigFactory customConfigFactory)
         {
             _model = model;
-            _customConfigFabrik = customConfigFabrik;
-            CustomSetiings = _customConfigFabrik.GetCustomSettings(_model.CustomSettings);
+            _customConfigFactory = customConfigFactory;
+            CustomSetiings = _customConfigFactory.GetCustomSettings(_model.CustomSettings);
             _model.SelectedChannelChanged += _model_SelectedChannelChanged;
             _model.SelectedMethodChanged += ModelSelectedMethodChanged;
             _model.SelectedEthalonTypeChanged += _model_SelectedEthalonTypeChanged;
@@ -192,7 +192,7 @@ namespace KipTM.ViewModel.Checks.Config
                 if (_model.SelectedDeviceTypeKey == value)
                     return;
                 _model.SelectedDeviceTypeKey = value;
-                CustomSetiings = _customConfigFabrik.GetCustomSettings(_model.CustomSettings);
+                CustomSetiings = _customConfigFactory.GetCustomSettings(_model.CustomSettings);
                 RaisePropertyChanged();
                 RaisePropertyChanged("Manufacturer");
             }
@@ -254,7 +254,7 @@ namespace KipTM.ViewModel.Checks.Config
             set
             {
                 _model.SelectedMethodKey = value;
-                CustomSetiings = _customConfigFabrik.GetCustomSettings(_model.CustomSettings);
+                CustomSetiings = _customConfigFactory.GetCustomSettings(_model.CustomSettings);
                 RaisePropertyChanged();
             }
         }
@@ -268,7 +268,7 @@ namespace KipTM.ViewModel.Checks.Config
             set
             {
                 _model.SelectedChannel = value;
-                CustomSetiings = _customConfigFabrik.GetCustomSettings(_model.CustomSettings);
+                CustomSetiings = _customConfigFactory.GetCustomSettings(_model.CustomSettings);
                 RaisePropertyChanged();
             }
         }

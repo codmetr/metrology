@@ -10,7 +10,7 @@ namespace ReportService
     /// <summary>
     /// Консолидированная фабрика отчетов
     /// </summary>
-    public class ReportFabrik : IReportFabrik
+    public class ReportFactory : IReportFactory
     {
         private readonly IEnumerable<IReporter> _reporters; 
 
@@ -18,12 +18,12 @@ namespace ReportService
         /// Консолидированная фабрика отчетов
         /// </summary>
         /// <param name="reporters">Набор поддерживаемых типов отчетов</param>
-        public ReportFabrik(IEnumerable<IReporter> reporters)
+        public ReportFactory(IEnumerable<IReporter> reporters)
         {
             _reporters = reporters;
         }
 
-        #region Implementation of IReportFabrik
+        #region Implementation of IReportFactory
 
         /// <summary>
         /// Получить отчет по типу проверки

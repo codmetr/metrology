@@ -22,7 +22,7 @@ namespace ADTSData.RepoParsers
                 ChannelKey = node["ChannelKey"].Value,
                 CheckKey = node["CheckKey"].Value,
                 StepKey = node["StepKey"].Value,
-                Result = RepoFabrik.Get<AdtsPointResult>().Load(node["Result"])
+                Result = RepoFactory.Get<AdtsPointResult>().Load(node["Result"])
             };
         }
 
@@ -37,7 +37,7 @@ namespace ADTSData.RepoParsers
             result["ChannelKey"] = TreeEntity.Make(result.Id, entity.ChannelKey);
             result["CheckKey"] = TreeEntity.Make(result.Id, entity.CheckKey);
             result["StepKey"] = TreeEntity.Make(result.Id, entity.StepKey);
-            result["Result"] = RepoFabrik.Get<AdtsPointResult>().Save(entity.Result as AdtsPointResult);
+            result["Result"] = RepoFactory.Get<AdtsPointResult>().Save(entity.Result as AdtsPointResult);
             return result;
         }
 
@@ -54,9 +54,9 @@ namespace ADTSData.RepoParsers
             node.Values["StepKey"] = entity.StepKey;
 
             if (node.Childs.Any(el => el.Key == "Result"))
-                RepoFabrik.Get<AdtsPointResult>().Update(node["Result"], entity.Result as AdtsPointResult);
+                RepoFactory.Get<AdtsPointResult>().Update(node["Result"], entity.Result as AdtsPointResult);
             else
-                node["Result"] = RepoFabrik.Get<AdtsPointResult>().Save(entity.Result as AdtsPointResult);
+                node["Result"] = RepoFactory.Get<AdtsPointResult>().Save(entity.Result as AdtsPointResult);
             return node;
         }
 

@@ -157,11 +157,11 @@
     </Compile>
     <Compile Include="Settings\MainSettingsFactory.cs" />
     <Compile Include="Settings\MainSettings.cs" />
-    <Compile Include="Checks\ViewModel\Config\CustomConfigFabrik.cs" />
+    <Compile Include="Checks\ViewModel\Config\CustomConfigFactory.cs" />
     <Compile Include="Report\ViewModel\IReportViewModel.cs" />
     <Compile Include="Report\ViewModel\ReportViewModel.cs" />
     <Compile Include="Checks\ViewModel\Config\CheckConfigViewModel.cs" />
-    <Compile Include="Checks\ViewModel\CheckFabrik.cs" />
+    <Compile Include="Checks\ViewModel\CheckFactory.cs" />
     <Compile Include="ViewModel\OneBtnDescripto.cs" />
     <Compile Include="Workflow\States\CheckState.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />

@@ -6,11 +6,11 @@ namespace KipTM.ViewModel.Workflow.States
     class ReportState : IWorkflowStep, IDisposable
     {
         private IReportViewModel _report;
-        private readonly Func<IReportViewModel> _reportFabric;
+        private readonly Func<IReportViewModel> _reportFactory;
 
-        public ReportState(Func<IReportViewModel> reportFabric)
+        public ReportState(Func<IReportViewModel> reportFactory)
         {
-            _reportFabric = reportFabric;
+            _reportFactory = reportFactory;
         }
 
 
@@ -21,7 +21,7 @@ namespace KipTM.ViewModel.Workflow.States
             var reportDispose = _report as IDisposable;
             if (reportDispose != null)
                 reportDispose.Dispose();
-            _report = _reportFabric();
+            _report = _reportFactory();
         }
 
         public void StateOut()

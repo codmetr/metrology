@@ -72,7 +72,7 @@
     <Compile Include="Devices\DeviceModelFactoryAttribute.cs" />
     <Compile Include="Checks\ICheckViewModelFactory.cs" />
     <Compile Include="Checks\ViewModelFactoryAttribute.cs" />
-    <Compile Include="Checks\ViewModel\ICheckFabrik.cs" />
+    <Compile Include="Checks\ViewModel\ICheckFactory.cs" />
     <Compile Include="Devices\UnitDescriptor.cs" />
     <Compile Include="EventAggregator\EventAggregator.cs" />
     <Compile Include="EventAggregator\EventSubscriber.cs" />

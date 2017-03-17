@@ -75,11 +75,11 @@ namespace KipTM.ViewModel
         private string _helpMessage;
         private bool _isError;
         private object _selectedAction;
-        private IMarkerFabrik<IParameterResultViewModel> _resulMaker;
-        private IFillerFabrik<IParameterResultViewModel> _filler;
+        private IMarkerFactory<IParameterResultViewModel> _resultMaker;
+        private IFillerFactory<IParameterResultViewModel> _filler;
         private IEnumerable<ICheckViewModelFactory> _factoriesViewModels;
         private IChannelsFactory _channelFactory;
-        private IReportFabrik _reportFabric;
+        private IReportFactory _reportFactory;
         private bool _isActiveCheck;
         private bool _isActiveService;
         private bool _isActiveSwitchServices = true;
@@ -101,7 +101,7 @@ namespace KipTM.ViewModel
         /// <param name="archive">Архив</param>
         /// <param name="resulMaker">Источник результатов</param>
         /// <param name="filler">Заполнение результата</param>
-        /// <param name="reportFabric">Фабрика отчетов</param>
+        /// <param name="reportFactory">Фабрика отчетов</param>
         /// <param name="services">Сервисы</param>
         /// <param name="features">Забор возмодностей модулей</param>
         /// <param name="customFatories">Фабрики специализированных настроек</param>
@@ -110,10 +110,10 @@ namespace KipTM.ViewModel
         public MainViewModel(
             IEventAggregator eventAggregator, IDataService dataService, IMethodsService methodicService,
             IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive,
-            IMarkerFabrik<IParameterResultViewModel> resulMaker, IFillerFabrik<IParameterResultViewModel> filler,
-            IReportFabrik reportFabric, IEnumerable<IService> services, FeatureDescriptorsCombiner features,
+            IMarkerFactory<IParameterResultViewModel> resulMaker, IFillerFactory<IParameterResultViewModel> filler,
+            IReportFactory reportFactory, IEnumerable<IService> services, FeatureDescriptorsCombiner features,
             IDictionary<Type, ICustomConfigFactory> customFatories, IDeviceManager deviceManager,
-            IEnumerable<ICheckViewModelFactory> factoriesViewModels)
+            IEnumerable<ICheckViewModelFactory> factoriesViewModels, IMarkerFactory<IParameterResultViewModel> resultMaker)
         {
             try
             {
@@ -128,15 +128,15 @@ namespace KipTM.ViewModel
             _deviceManager = deviceManager;
             _methodicService = methodicService;
             _factoriesViewModels = factoriesViewModels;
+            _resultMaker = resultMaker;
             _settings = settings;
             _propertiesLibrary = propertiesLibrary;
             _archive = archive;
             _customFactory = new CustomConfigFactory(customFatories);
             _dataService.LoadResults();
             _dataService.FillDeviceList(features.DeviceTypes, features.EthalonTypes);
-            _resulMaker = resulMaker;
             _filler = filler;
-            _reportFabric = reportFabric;
+            _reportFactory = reportFactory;
             _channelFactory = features.ChannelFactories;
             _services = new ServiceViewModel(services, new SelectChannelViewModel(_channelFactory.GetChannels()));
             _accessor = new DataAccessor();
@@ -174,18 +174,18 @@ namespace KipTM.ViewModel
                     _propertiesLibrary.DictionariesPool, result);
                 var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice,
                     _customFactory);
-                var resFactory = new TestResultViewModelFactory(result, checkConfig, _resulMaker, _propertiesLibrary,
+                var resFactory = new TestResultViewModelFactory(result, checkConfig, _resultMaker, _propertiesLibrary,
                     _filler, _accessor);
                 var checkPool = new CheckFactoryPool(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels, _eventAggregator);
-                var checkFabrik = new CheckFabrik(checkPool, checkConfig, result, channelTargetDevice, channelEthalonDevice, _eventAggregator);
+                var checkFactory = new CheckFactory(checkPool, checkConfig, result, channelTargetDevice, channelEthalonDevice, _eventAggregator);
                 _eventAggregator.Subscribe(this);
 
                 _steps = new List<IWorkflowStep>()
                 {
                     new ConfigCheckState(checkConfigViewModel),
-                    new CheckState(checkFabrik, _eventAggregator),
+                    new CheckState(checkFactory, _eventAggregator),
                     new ResultState(resFactory),
-                    new ReportState(() => new ReportViewModel(_reportFabric, result)),
+                    new ReportState(() => new ReportViewModel(_reportFactory, result)),
                 };
                 _workflow = new Workflow.Workflow(_steps);
 

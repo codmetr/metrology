@@ -70,11 +70,11 @@
   <ItemGroup>
     <Compile Include="ArchiveDefaultFactoryAdts.cs" />
     <Compile Include="Checks\ADTSViewModelFactory.cs" />
-    <Compile Include="Checks\ViewModel\CustomConfigFabrik.cs" />
+    <Compile Include="Checks\ViewModel\CustomConfigFactory.cs" />
     <Compile Include="Devices\ADTSModelFactory.cs" />
     <Compile Include="Devices\ADTSFactory.cs" />
     <Compile Include="FeaturesDescriptorAdts.cs" />
-    <Compile Include="IViewModelFabrik.cs" />
+    <Compile Include="IViewModelFactory.cs" />
     <Compile Include="Checks\Calibration\Calibration.cs" />
     <Compile Include="Checks\CheckBase.cs" />
     <Compile Include="Checks\Data\ADTSMethodParameters.cs" />
@@ -97,7 +97,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Settings\SettingsFactoryAdts.cs" />
-    <Compile Include="ViewModelFabrik.cs" />
+    <Compile Include="ViewModelFactory.cs" />
     <Compile Include="Checks\ViewModel\ADTSBaseViewModel.cs" />
     <Compile Include="Checks\Calibration\CalibrationViewModel.cs" />
     <Compile Include="Checks\ViewModel\CheckStateViewModel.cs" />
@@ -107,10 +107,10 @@
     <Compile Include="Result\ResultFiller\ADTSCheckPointFiller.cs" />
     <Compile Include="Result\ResultFiller\ADTSTestPointFiller.cs" />
     <Compile Include="Result\ResultFiller\FillerKey.cs" />
-    <Compile Include="Result\ResultMarker\ADTSCheckFabrik.cs" />
-    <Compile Include="Result\ResultMarker\ADTSCheckPointStepFabrik.cs" />
-    <Compile Include="Result\ResultMarker\ADTSTestFabrik.cs" />
-    <Compile Include="Result\ResultMarker\ADTSTestPointStepFabrik.cs" />
+    <Compile Include="Result\ResultMarker\ADTSCheckFactory.cs" />
+    <Compile Include="Result\ResultMarker\ADTSCheckPointStepFactory.cs" />
+    <Compile Include="Result\ResultMarker\ADTSTestFactory.cs" />
+    <Compile Include="Result\ResultMarker\ADTSTestPointStepFactory.cs" />
     <Compile Include="Services\ADTSViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -11,8 +11,8 @@ namespace MarkerService
         /// Получить маркер для заданного объекта
         /// </summary>
         /// <param name="target">заданный объект</param>
-        /// <param name="markerFabric"></param>
+        /// <param name="markerFactory"></param>
         /// <returns>маркер</returns>
-        IEnumerable<T> Make(object target, IMarkerFabrik<T> markerFabric);
+        IEnumerable<T> Make(object target, IMarkerFactory<T> markerFactory);
     }
 }

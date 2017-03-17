@@ -6,18 +6,18 @@ namespace KipTM.ViewModel.Workflow.States
     class ResultState : IWorkflowStep
     {
         private TestResultViewModel _result;
-        private readonly TestResultViewModelFactory _checkFabric;
+        private readonly TestResultViewModelFactory _checkFactory;
 
-        public ResultState(TestResultViewModelFactory checkFabric)
+        public ResultState(TestResultViewModelFactory checkFactory)
         {
-            _checkFabric = checkFabric;
+            _checkFactory = checkFactory;
         }
 
         public event EventHandler<WorkflowStepChangeEvent> NextAvailabilityChanged;
         public event EventHandler<WorkflowStepChangeEvent> BackAvailabilityChanged;
         public void StateIn()
         {
-             _result = _checkFabric.GetTestResult();
+             _result = _checkFactory.GetTestResult();
         }
 
         public void StateOut()

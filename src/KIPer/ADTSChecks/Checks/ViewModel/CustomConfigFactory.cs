@@ -5,7 +5,7 @@ using KipTM.Interfaces.Checks;
 namespace KipTM.Checks.ViewModel.Config
 {
     [CustomSettings(typeof(ADTSParameters))]
-    public class CustomConfigFabrik : ICustomConfigFactory
+    public class CustomConfigFactory : ICustomConfigFactory
     {
         public ICustomSettingsViewModel GetCustomSettings(object customSettings)
         {

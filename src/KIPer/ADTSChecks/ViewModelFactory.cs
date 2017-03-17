@@ -14,7 +14,7 @@ using KipTM.Model.TransportChannels;
 
 namespace ADTSChecks
 {
-    public class ViewModelFabrik : ADTSChecks.IViewModelFabrik
+    public class ViewModelFactory : ADTSChecks.IViewModelFactory
     {
         /// <summary>
         /// получить презентор типа проверки

@@ -10,12 +10,12 @@ namespace KipTM.Workflow.States
     public class CheckState : IWorkflowStep
     {
         private IMethodViewModel _check;
-        private readonly CheckFabrik _checkFabric;
+        private readonly CheckFactory _checkFactory;
         private readonly IEventAggregator _eventAggregator;
 
-        public CheckState(CheckFabrik checkFabric, IEventAggregator eventAggregator)
+        public CheckState(CheckFactory checkFactory, IEventAggregator eventAggregator)
         {
-            _checkFabric = checkFabric;
+            _checkFactory = checkFactory;
             _eventAggregator = eventAggregator;
         }
 
@@ -39,7 +39,7 @@ namespace KipTM.Workflow.States
 
         public void StateIn()
         {
-            _check = _checkFabric.GetViewModelFor();
+            _check = _checkFactory.GetViewModelFor();
             if(_check != null)
                 AttachEvents(_check);
         }

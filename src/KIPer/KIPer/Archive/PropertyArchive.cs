@@ -23,13 +23,13 @@ namespace KipTM.Archive
             return new ArchiveBase(GetDefaultData());
         }
 
-        private static readonly IEnumerable<IArchiveDataDefault> _listDataFabrik = null;
+        private static readonly IEnumerable<IArchiveDataDefault> _listDataFactory = null;
         static PropertyArchive()
         {
-            _listDataFabrik = GetFabriks();
+            _listDataFactory = GetFactories();
         }
 
-        private static IEnumerable<IArchiveDataDefault> GetFabriks()
+        private static IEnumerable<IArchiveDataDefault> GetFactories()
         {
             //TODO заполнение из IOC
             var adtsDefault = new ArchiveDataAdts();
@@ -40,7 +40,7 @@ namespace KipTM.Archive
         {
 
             var data = new List<ArchivedKeyValuePair>();
-            foreach (var dataDefault in _listDataFabrik)
+            foreach (var dataDefault in _listDataFactory)
             {
                 data.AddRange(dataDefault.GetDefaultData());
             }

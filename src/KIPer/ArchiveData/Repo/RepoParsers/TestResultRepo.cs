@@ -25,10 +25,10 @@ namespace ArchiveData.Repo.RepoParsers
             result.Temperature = node["Temperature"].Value;
             result.Humidity = node["Humidity"].Value;
             result.Client = node["Client"].Value;
-            result.Channel = RepoFabrik.Get<ChannelDescriptor>().Load(node["Channel"]);
-            result.TargetDevice = RepoFabrik.Get<DeviceDescriptor>().Load(node["TargetDevice"]);
-            result.Etalon = node["Etalon"].Childs.Select(RepoFabrik.Get<DeviceDescriptor>().Load).ToList();
-            result.Results = node["Results"].Childs.Select(RepoFabrik.Get<TestStepResult>().Load).ToList();
+            result.Channel = RepoFactory.Get<ChannelDescriptor>().Load(node["Channel"]);
+            result.TargetDevice = RepoFactory.Get<DeviceDescriptor>().Load(node["TargetDevice"]);
+            result.Etalon = node["Etalon"].Childs.Select(RepoFactory.Get<DeviceDescriptor>().Load).ToList();
+            result.Results = node["Results"].Childs.Select(RepoFactory.Get<TestStepResult>().Load).ToList();
 
             return result;
 
@@ -51,14 +51,14 @@ namespace ArchiveData.Repo.RepoParsers
             root["Temperature"] = new TreeEntity(root.Id) { Value = entity.Temperature };
             root["Humidity"] = new TreeEntity(root.Id) { Value = entity.Humidity };
             root["Client"] = new TreeEntity(root.Id) { Value = entity.Client };
-            root["Channel"] = RepoFabrik.Get<ChannelDescriptor>().Save(entity.Channel);
-            root["TargetDevice"] = RepoFabrik.Get<DeviceDescriptor>().Save(entity.TargetDevice);
+            root["Channel"] = RepoFactory.Get<ChannelDescriptor>().Save(entity.Channel);
+            root["TargetDevice"] = RepoFactory.Get<DeviceDescriptor>().Save(entity.TargetDevice);
             root["Etalon"] =
                 new TreeEntity(root.Id).AddRange(
-                    entity.Etalon.Select(el => RepoFabrik.Get<DeviceDescriptor>().Save(el).SetKey(el.GetKey())));
+                    entity.Etalon.Select(el => RepoFactory.Get<DeviceDescriptor>().Save(el).SetKey(el.GetKey())));
             root["Results"] =
                 new TreeEntity(root.Id).AddRange(
-                    entity.Results.Select(el => RepoFabrik.Get<TestStepResult>().Save(el).SetKey(el.GetKey())));
+                    entity.Results.Select(el => RepoFactory.Get<TestStepResult>().Save(el).SetKey(el.GetKey())));
             root.Key = entity.GetKey();
             return root;
         }
@@ -80,14 +80,14 @@ namespace ArchiveData.Repo.RepoParsers
             node.Values["Humidity"] = entity.Humidity;
             node.Values["Client"] = entity.Client;
             if (node.Childs.Any(el => el.Key == "Channel"))
-                RepoFabrik.Get<ChannelDescriptor>().Update(node["Channel"], entity.Channel);
+                RepoFactory.Get<ChannelDescriptor>().Update(node["Channel"], entity.Channel);
             else
-                node["Channel"] = RepoFabrik.Get<ChannelDescriptor>().Save(entity.Channel);
+                node["Channel"] = RepoFactory.Get<ChannelDescriptor>().Save(entity.Channel);
 
             if (node.Childs.Any(el => el.Key == "TargetDevice"))
-                RepoFabrik.Get<DeviceDescriptor>().Update(node["TargetDevice"], entity.TargetDevice);
+                RepoFactory.Get<DeviceDescriptor>().Update(node["TargetDevice"], entity.TargetDevice);
             else
-                node["TargetDevice"] = RepoFabrik.Get<DeviceDescriptor>().Save(entity.TargetDevice);
+                node["TargetDevice"] = RepoFactory.Get<DeviceDescriptor>().Save(entity.TargetDevice);
 
             if (node.Childs.Any(el => el.Key == "Etalon"))
             {
@@ -96,7 +96,7 @@ namespace ArchiveData.Repo.RepoParsers
                 {
                     if (forDelete.All(el => el.Key != deviceDescriptor.GetKey()))
                         continue;
-                    var item = RepoFabrik.Get<DeviceDescriptor>()
+                    var item = RepoFactory.Get<DeviceDescriptor>()
                         .Update(node["Etalon"][deviceDescriptor.GetKey()], deviceDescriptor);
                     forDelete.Remove(item);
                 }
@@ -105,7 +105,7 @@ namespace ArchiveData.Repo.RepoParsers
             else
                 node["Etalon"] =
                     new TreeEntity(node.Id).AddRange(
-                        entity.Etalon.Select(el => RepoFabrik.Get<DeviceDescriptor>().Save(el).SetKey(el.GetKey())));
+                        entity.Etalon.Select(el => RepoFactory.Get<DeviceDescriptor>().Save(el).SetKey(el.GetKey())));
 
             if (node.Childs.Any(el => el.Key == "Results"))
             {
@@ -114,7 +114,7 @@ namespace ArchiveData.Repo.RepoParsers
                 {
                     if (forDelete.All(el => el.Key != res.GetKey()))
                         continue;
-                    var item = RepoFabrik.Get<TestStepResult>().Update(node["Etalon"][res.GetKey()], res);
+                    var item = RepoFactory.Get<TestStepResult>().Update(node["Etalon"][res.GetKey()], res);
                     forDelete.Remove(item);
                 }
                 node["Results"].RemoveRange(forDelete);
@@ -122,7 +122,7 @@ namespace ArchiveData.Repo.RepoParsers
             else
                 node["Results"] =
                     new TreeEntity(node.Id).AddRange(
-                        entity.Results.Select(el => RepoFabrik.Get<TestStepResult>().Save(el).SetKey(el.GetKey())));
+                        entity.Results.Select(el => RepoFactory.Get<TestStepResult>().Save(el).SetKey(el.GetKey())));
 
             return node;
         }

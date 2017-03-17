@@ -6,7 +6,7 @@ namespace ReportService
     /// <summary>
     /// Консолидированная фабрика отчетов
     /// </summary>
-    public interface IReportFabrik
+    public interface IReportFactory
     {
         /// <summary>
         /// Получить отчет по типу проверки

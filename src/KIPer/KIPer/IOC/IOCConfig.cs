@@ -87,11 +87,11 @@ namespace KipTM.IOC
             unityContainer.RegisterInstance<IMainSettings>(unityContainer.Resolve<IArchive>()
                     .Load(MainSettings.SettingsFileName, unityContainer.Resolve<MainSettingsFactory>().GetDefault()));
             unityContainer.RegisterType<IPropertiesLibrary, PropertiesLibrary>();
-            unityContainer.RegisterInstance<IMarkerFabrik<IParameterResultViewModel>>(
-                MarkerFabrik<IParameterResultViewModel>.Locator);
-            unityContainer.RegisterInstance<IFillerFabrik<IParameterResultViewModel>>(
-                FillerFabrik<IParameterResultViewModel>.Locator);
-            unityContainer.RegisterInstance<IReportFabrik>(new ReportFabrik(unityContainer.ResolveAll<IReporter>()));
+            unityContainer.RegisterInstance<IMarkerFactory<IParameterResultViewModel>>(
+                MarkerFactory<IParameterResultViewModel>.Locator);
+            unityContainer.RegisterInstance<IFillerFactory<IParameterResultViewModel>>(
+                FillerFactory<IParameterResultViewModel>.Locator);
+            unityContainer.RegisterInstance<IReportFactory>(new ReportFactory(unityContainer.ResolveAll<IReporter>()));
 
             #region CustomConfigFactories
 

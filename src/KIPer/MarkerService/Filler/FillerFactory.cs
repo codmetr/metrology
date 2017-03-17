@@ -9,21 +9,21 @@ using Tools;
 
 namespace KipTM.ViewModel.ResultFiller
 {
-    public class FillerFabrik<T> : IFillerFabrik<T>
+    public class FillerFactory<T> : IFillerFactory<T>
     {
-        public static FillerFabrik<T> _fillersSolver = null;
+        public static FillerFactory<T> _fillersSolver = null;
 
         private readonly Dictionary<object, IFiller<T>> _fillers =
             new Dictionary<object, IFiller<T>>();
 
-        private FillerFabrik()
+        private FillerFactory()
         {}
 
         #region Config
         /// <summary>
         /// Построить справочник заполнятелей из всех типов всех сборок
         /// </summary>
-        private FillerFabrik<T> Config()
+        private FillerFactory<T> Config()
         {
             foreach (var assemblyType in TypeScaner.GetAllTypes())
             {// для каждой сборки
@@ -60,11 +60,11 @@ namespace KipTM.ViewModel.ResultFiller
         }
         #endregion
 
-        public static IFillerFabrik<T> Locator
+        public static IFillerFactory<T> Locator
         {
             get
             {
-                return _fillersSolver ?? (_fillersSolver = (new FillerFabrik<T>()).Config());
+                return _fillersSolver ?? (_fillersSolver = (new FillerFactory<T>()).Config());
             }
         }
 

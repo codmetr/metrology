@@ -63,7 +63,7 @@
     <Compile Include="Repo\Keys\TestResultKey.cs" />
     <Compile Include="Repo\Keys\TestStepResultKey.cs" />
     <Compile Include="Repo\MaxId.cs" />
-    <Compile Include="Repo\RepoFabrik.cs" />
+    <Compile Include="Repo\RepoFactory.cs" />
     <Compile Include="Repo\TreeRepo.cs" />
     <Compile Include="Repo\ValueWrapper.cs" />
   </ItemGroup>

@@ -6,7 +6,7 @@ namespace ArchiveData.Repo
     /// <summary>
     /// Локатор по работе с репозиторием
     /// </summary>
-    public class RepoFabrik
+    public class RepoFactory
     {
         private static readonly Dictionary<Type, object> RepoDic = new Dictionary<Type, object>();
 

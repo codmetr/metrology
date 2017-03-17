@@ -12,7 +12,7 @@ using KipTM.Model.TransportChannels;
 
 namespace ADTSChecks
 {
-    interface IViewModelFabrik
+    interface IViewModelFactory
     {
         /// <summary>
         /// 

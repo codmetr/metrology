@@ -70,7 +70,7 @@
     <Compile Include="Checks\EventArgs\EventArgStepResult.cs" />
     <Compile Include="Checks\EventArgs\EventArgTestStepResult.cs" />
     <Compile Include="Checks\ICheckMethod.cs" />
-    <Compile Include="Checks\ICustomConfigFabrik.cs" />
+    <Compile Include="Checks\ICustomConfigFactory.cs" />
     <Compile Include="Checks\ICustomSettingsViewModel.cs" />
     <Compile Include="Checks\IMethodViewModel.cs" />
     <Compile Include="Checks\ISubscriber.cs" />

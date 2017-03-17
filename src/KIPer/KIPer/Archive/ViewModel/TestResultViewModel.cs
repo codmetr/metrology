@@ -38,7 +38,7 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
         /// </summary>
-        public TestResultViewModel(TestResult result, IEnumerable<IParameterResultViewModel> expectedResuls, IFillerFabrik<IParameterResultViewModel> _filler, IDataAccessor accessor)
+        public TestResultViewModel(TestResult result, IEnumerable<IParameterResultViewModel> expectedResuls, IFillerFactory<IParameterResultViewModel> _filler, IDataAccessor accessor)
         {
             _result = result;
             if (IsInDesignMode)

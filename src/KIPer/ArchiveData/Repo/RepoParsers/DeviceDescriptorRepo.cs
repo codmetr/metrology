@@ -17,7 +17,7 @@ namespace ArchiveData.Repo.RepoParsers
         {
             return new DeviceDescriptor()
             {
-                DeviceType = RepoFabrik.Get<DeviceTypeDescriptor>().Load(node["DeviceType"]),
+                DeviceType = RepoFactory.Get<DeviceTypeDescriptor>().Load(node["DeviceType"]),
                 PreviousCheckTime = DateTime.Parse(node["PreviousCheckTime"].Value),
                 SerialNumber = node["SerialNumber"].Value,
             };
@@ -33,7 +33,7 @@ namespace ArchiveData.Repo.RepoParsers
             var result = new TreeEntity();
             result["PreviousCheckTime"] = TreeEntity.Make(result.Id, entity.PreviousCheckTime.ToString(CultureInfo.InvariantCulture));
             result["SerialNumber"] = TreeEntity.Make(result.Id, entity.SerialNumber);
-            result["DeviceType"] = RepoFabrik.Get<DeviceTypeDescriptor>().Save(entity.DeviceType);
+            result["DeviceType"] = RepoFactory.Get<DeviceTypeDescriptor>().Save(entity.DeviceType);
             result.Key = entity.GetKey();
             return result;
         }
@@ -49,9 +49,9 @@ namespace ArchiveData.Repo.RepoParsers
             node.Values["PreviousCheckTime"] = entity.PreviousCheckTime.ToString(CultureInfo.InvariantCulture);
             node.Values["SerialNumber"] = entity.SerialNumber;
             if (node.Childs.Any(el => el.Key == "DeviceType"))
-                RepoFabrik.Get<DeviceTypeDescriptor>().Update(node["DeviceType"], entity.DeviceType);
+                RepoFactory.Get<DeviceTypeDescriptor>().Update(node["DeviceType"], entity.DeviceType);
             else
-                node["DeviceType"] = RepoFabrik.Get<DeviceTypeDescriptor>().Save(entity.DeviceType);
+                node["DeviceType"] = RepoFactory.Get<DeviceTypeDescriptor>().Save(entity.DeviceType);
             return node;
         }
     }

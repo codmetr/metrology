@@ -12,19 +12,19 @@ namespace ADTSChecks.ViewModel.ResultMarker.ADTS
     /// Генератор представления для точек проверки ADTS
     /// </summary>
     [Marker(typeof(Calibration))]
-    public class ADTSCheckFabrik : IMarker<IParameterResultViewModel>
+    public class ADTSCheckFactory : IMarker<IParameterResultViewModel>
     {
         /// <summary>
         /// Получить описатель результата для заданного объекта
         /// </summary>
         /// <param name="target">заданный объект</param>
         /// <returns>описатель результата</returns>
-        public IEnumerable<IParameterResultViewModel> Make(object target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
+        public IEnumerable<IParameterResultViewModel> Make(object target, IMarkerFactory<IParameterResultViewModel> markerFactory)
         {
             if (target == null) throw new ArgumentNullException("target");
             if (!(target is Calibration)) throw new NoExpectedTypeParameterException(typeof(Calibration), target.GetType());
 
-            return Make((Calibration)target, markerFabric);
+            return Make((Calibration)target, markerFactory);
         }
 
         /// <summary>
@@ -32,9 +32,9 @@ namespace ADTSChecks.ViewModel.ResultMarker.ADTS
         /// </summary>
         /// <param name="target">заданный типизированный объект</param>
         /// <returns>описатель результата</returns>
-        private IEnumerable<IParameterResultViewModel> Make(Calibration target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
+        private IEnumerable<IParameterResultViewModel> Make(Calibration target, IMarkerFactory<IParameterResultViewModel> markerFactory)
         {
-            var result = target.Steps.Where(el=>el.Enabled).SelectMany(el => markerFabric.GetMarkers(el.Step.GetType(), el.Step)).ToList();
+            var result = target.Steps.Where(el=>el.Enabled).SelectMany(el => markerFactory.GetMarkers(el.Step.GetType(), el.Step)).ToList();
             return result;
         }
 
@@ -43,19 +43,19 @@ namespace ADTSChecks.ViewModel.ResultMarker.ADTS
     ///// Генератор представления для точек проверки ADTS
     ///// </summary>
     //[Marker(typeof(ADTSCheckMethod))]
-    //public class ADTSCheckFabrik : IMarker<IParameterResultViewModel>
+    //public class ADTSCheckFactory : IMarker<IParameterResultViewModel>
     //{
     //    /// <summary>
     //    /// Получить описатель результата для заданного объекта
     //    /// </summary>
     //    /// <param name="target">заданный объект</param>
     //    /// <returns>описатель результата</returns>
-    //    public IEnumerable<IParameterResultViewModel> Make(object target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
+    //    public IEnumerable<IParameterResultViewModel> Make(object target, IMarkerFactory<IParameterResultViewModel> markerFactory)
     //    {
     //        if (target == null) throw new ArgumentNullException("target");
     //        if (!(target is ADTSCheckMethod)) throw new NoExpectedTypeParameterException(typeof(ADTSCheckMethod), target.GetType());
 
-    //        return Make((ADTSCheckMethod)target, markerFabric);
+    //        return Make((ADTSCheckMethod)target, markerFactory);
     //    }
 
     //    /// <summary>
@@ -63,9 +63,9 @@ namespace ADTSChecks.ViewModel.ResultMarker.ADTS
     //    /// </summary>
     //    /// <param name="target">заданный типизированный объект</param>
     //    /// <returns>описатель результата</returns>
-    //    private IEnumerable<IParameterResultViewModel> Make(ADTSCheckMethod target, IMarkerFabrik<IParameterResultViewModel> markerFabric)
+    //    private IEnumerable<IParameterResultViewModel> Make(ADTSCheckMethod target, IMarkerFactory<IParameterResultViewModel> markerFactory)
     //    {
-    //        var result = target.Steps.Where(el=>el.Enabled).SelectMany(el => markerFabric.GetMarkers(el.Step.GetType(), el.Step)).ToList();
+    //        var result = target.Steps.Where(el=>el.Enabled).SelectMany(el => markerFactory.GetMarkers(el.Step.GetType(), el.Step)).ToList();
     //        return result;
     //    }
 

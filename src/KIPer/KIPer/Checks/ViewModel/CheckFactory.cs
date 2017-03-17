@@ -26,7 +26,7 @@ using ITransportChannelType = KipTM.Model.TransportChannels.ITransportChannelTyp
 
 namespace KipTM.ViewModel.Checks
 {
-    public class CheckFabrik : ICheckFabrik
+    public class CheckFactory : ICheckFactory
     {
         private CheckFactoryPool _checkPool;
         private CheckConfig _checkConfig;
@@ -36,7 +36,7 @@ namespace KipTM.ViewModel.Checks
         private IEventAggregator _eventAggregator;
 
 
-        public CheckFabrik(CheckFactoryPool checkPool, CheckConfig checkConfig, TestResult result, SelectChannelViewModel chTargetDev, SelectChannelViewModel chEthalonDev, IEventAggregator eventAggregator)
+        public CheckFactory(CheckFactoryPool checkPool, CheckConfig checkConfig, TestResult result, SelectChannelViewModel chTargetDev, SelectChannelViewModel chEthalonDev, IEventAggregator eventAggregator)
         {
             _checkPool = checkPool;
             _checkConfig = checkConfig;

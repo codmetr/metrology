@@ -6,18 +6,18 @@ using Tools;
 
 namespace MarkerService
 {
-    public class MarkerFabrik<T> : IMarkerFabrik<T>
+    public class MarkerFactory<T> : IMarkerFactory<T>
     {
-        private static IMarkerFabrik<T> _markerSolver = null;
+        private static IMarkerFactory<T> _markerSolver = null;
         private readonly Dictionary<Type, IMarker<T>> _markers = new Dictionary<Type, IMarker<T>>();
 
-        private MarkerFabrik(){}
+        private MarkerFactory(){}
 
         #region Config
         /// <summary>
         /// Построить справочник маркеров из всех типов всех сборок
         /// </summary>
-        private MarkerFabrik<T> Config()
+        private MarkerFactory<T> Config()
         {
             foreach (var assemblyType in TypeScaner.GetAllTypes())
             {// для каждой сборки
@@ -54,11 +54,11 @@ namespace MarkerService
         }
         #endregion
 
-        public static IMarkerFabrik<T> Locator
+        public static IMarkerFactory<T> Locator
         {
             get
             {
-                return _markerSolver ?? (_markerSolver = (new MarkerFabrik<T>()).Config());
+                return _markerSolver ?? (_markerSolver = (new MarkerFactory<T>()).Config());
             }
         }
 

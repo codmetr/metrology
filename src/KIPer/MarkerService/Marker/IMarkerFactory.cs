@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MarkerService
 {
-    public interface IMarkerFabrik<T>
+    public interface IMarkerFactory<T>
     {
         /// <summary>
         /// Получить маркер результата заданного элемента

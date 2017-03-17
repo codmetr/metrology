@@ -21,11 +21,11 @@ namespace KipTM.Model
 
         private readonly IDictionary<string, IEthalonCannelFactory> _ethalonChannels;
 
-        private IDictionary<Type, IDeviceModelFactory> _modelFabrics;
+        private IDictionary<Type, IDeviceModelFactory> _modelFactories;
 
-        private IDictionary<Type, IDeviceFactory> _devicesFabrics;
+        private IDictionary<Type, IDeviceFactory> _devicesFactories;
 
-        private IDictionary<string, IDeviceConfig> _channelsFabrics;
+        private IDictionary<string, IDeviceConfig> _channelsFactories;
 
         /// <summary>
         /// Cache devices
@@ -47,15 +47,15 @@ namespace KipTM.Model
 
             _loops = new Loops();
 
-            _modelFabrics = features.Models.ToDictionary(el => el.Key, el => el.Value);
+            _modelFactories = features.Models.ToDictionary(el => el.Key, el => el.Value);
 
-            _devicesFabrics = features.Devices.ToDictionary(el => el.Key, el => el.Value);
+            _devicesFactories = features.Devices.ToDictionary(el => el.Key, el => el.Value);
 
-            _channelsFabrics = features.DeviceConfigs.ToDictionary(el => el.Key, el => el.Value);
+            _channelsFactories = features.DeviceConfigs.ToDictionary(el => el.Key, el => el.Value);
 
-            foreach (var fabric in features.DeviceConfigs)
+            foreach (var feature in features.DeviceConfigs)
             {
-                _loops.AddLocker(fabric.Key, new object());
+                _loops.AddLocker(feature.Key, new object());
             }
 
             _ethalonChannels = features.EthalonChannels.ToDictionary(el => el.Key, el => el.Value);
@@ -91,27 +91,27 @@ namespace KipTM.Model
 
         private object GetModel(Type modelType)
         {
-            if (!_modelFabrics.ContainsKey(modelType))
-                throw new IndexOutOfRangeException(string.Format("For type [{0}] not found fabric", modelType));
+            if (!_modelFactories.ContainsKey(modelType))
+                throw new IndexOutOfRangeException(string.Format("For type [{0}] not found factory", modelType));
 
             if (!_modelsCache.ContainsKey(modelType))
-                _modelsCache[modelType] = _modelFabrics[modelType].GetModel(_loops, this);
+                _modelsCache[modelType] = _modelFactories[modelType].GetModel(_loops, this);
 
             return _modelsCache[modelType];
         }
 
         public T GetDevice<T>(ITransportChannelType transportDescription)
         {
-            if(!_devicesFabrics.ContainsKey(typeof(T)))
-                throw new IndexOutOfRangeException(string.Format("For type [{0}] not found fabric", typeof(T)));
+            if(!_devicesFactories.ContainsKey(typeof(T)))
+                throw new IndexOutOfRangeException(string.Format("For type [{0}] not found factory", typeof(T)));
 
-            if (!_channelsFabrics.ContainsKey(transportDescription.Key))
-                throw new IndexOutOfRangeException(string.Format("For channel [{0}] not found fabric", transportDescription.Key));
+            if (!_channelsFactories.ContainsKey(transportDescription.Key))
+                throw new IndexOutOfRangeException(string.Format("For channel [{0}] not found factory", transportDescription.Key));
             var key = new DeviceCacheKey(typeof (T), transportDescription);
             if (!_devicesCache.ContainsKey(key))
             {
-                var chann = _channelsFabrics[transportDescription.Key].GetDriver(transportDescription.Settings);
-                _devicesCache.Add(key, _devicesFabrics[typeof(T)].GetDevice(chann));
+                var chann = _channelsFactories[transportDescription.Key].GetDriver(transportDescription.Settings);
+                _devicesCache.Add(key, _devicesFactories[typeof(T)].GetDevice(chann));
             }
 
             return (T)_devicesCache[key];
