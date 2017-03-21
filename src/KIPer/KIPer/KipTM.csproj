@@ -143,6 +143,12 @@
     <Compile Include="DataService\MethodsService.cs" />
     <Compile Include="IOC\IOCConfig.cs" />
     <Compile Include="IOC\UnityServiceLocator.cs" />
+    <Compile Include="Manuals\ViewModel\BookViewModel.cs" />
+    <Compile Include="Manuals\ViewModel\DocsViewModel.cs" />
+    <Compile Include="Manuals\View\DocsView.xaml.cs">
+      <DependentUpon>DocsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Manuals\View\WebBrowserUtility.cs" />
     <Compile Include="Services\FillReportView.xaml.cs">
       <DependentUpon>FillReportView.xaml</DependentUpon>
     </Compile>
@@ -246,6 +252,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Manuals\View\DocsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Services\FillReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -366,6 +376,30 @@
       <DependentUpon>ReportHost.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
+    <None Include="Manuals\DPI\DPI620_Genii_Help_KRU0541_ru.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Manuals\DPI\dpi620_genii_quick_start_manual_k0542_rev_2.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Manuals\DPI\dpi_620_genii_brochure_russian.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Manuals\DPI\GE_DPI620_Manual_K0449.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Manuals\PACE\pace5000_pace6000_user_manual_k0443_ru.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Manuals\PACE\pace5000_pace6000_safety_instructions_k0447_rev_a.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Manuals\PACE\pace5000_pace6000_user_manual_k0443_en.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Manuals\PACE\pace_scpi_manual_k0472_rev_a5.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -455,6 +489,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Content\Website.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\books.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -37,6 +37,7 @@ using SQLiteArchive;
 using Tools;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.EventAggregator;
+using KipTM.Manuals.ViewModel;
 using KipTM.ViewModel.Events;
 using KipTM.Workflow.States.Events;
 using Tools.View;
@@ -85,7 +86,7 @@ namespace KipTM.ViewModel
         private bool _isActiveSwitchServices = true;
         private IEnumerable<OneBtnDescripto> _checkBtns;
         private IDataAccessor _accessor;
-
+        private DocsViewModel _lib;
         #endregion
 
         #region Инициализация загрузка
@@ -148,6 +149,13 @@ namespace KipTM.ViewModel
                     BitmapToImage(_methodicService.GetSmallImage(keyCheck)), SelectChecks));
             }
             _checkBtns = checkBtns;
+            var books = new List<BookViewModel>();
+            var basePath = Path.Combine(Path.GetFullPath(Environment.CurrentDirectory), "Manuals");
+            var path = Path.Combine(basePath, @"PACE\pace5000_pace6000_user_manual_k0443_ru.pdf");
+            books.Add(new BookViewModel() { Title = "PACE Руководство пользователя(RU)", Path = path});
+            path = Path.Combine(basePath, @"PACE\pace5000_pace6000_user_manual_k0443_en.pdf");
+            books.Add(new BookViewModel() { Title = "PACE Руководство пользователя(EN)", Path = path });
+            _lib = new DocsViewModel(books);
         }
 
         /// <summary>
@@ -347,6 +355,23 @@ namespace KipTM.ViewModel
                 });
             }
         }
+
+
+        /// <summary>
+        /// Выбрана вкладка Документация
+        /// </summary>
+        public ICommand SelectLib
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    SelectedAction = _lib;
+                    SetHelpMessage("Документация: список доступной документации по приборам");
+                });
+            }
+        }
+
 
         /// <summary>
         /// Выбрана вкладка Архив

@@ -69,11 +69,6 @@
                             </ribbon:RibbonButton>
                         </DataTemplate>
                     </ribbon:RibbonGroup.ItemTemplate>
-                    <!--<ribbon:RibbonButton 
-                        Label="ADTS" Command="{Binding SelectChecks}" CommandParameter="ADTSCheck"
-                        LargeImageSource="Content/adts405.jpg"
-                        SmallImageSource="Content/adts405.jpg">
-                    </ribbon:RibbonButton>-->
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
             <ribbon:RibbonTab Header="СЕРВИС">
@@ -87,6 +82,15 @@
                         Label="PACE 1000" Command="{Binding SelectService}" CommandParameter="PACE1000"
                         LargeImageSource="Content/pace1000.jpg"
                         SmallImageSource="Content/pace1000.jpg">
+                    </ribbon:RibbonButton>
+                </ribbon:RibbonGroup>
+            </ribbon:RibbonTab>
+            <ribbon:RibbonTab Header="ДОКУМЕНТАЦИЯ">
+                <ribbon:RibbonGroup x:Name="GroupDocs" Header="Прямое управление">
+                    <ribbon:RibbonButton 
+                        Label="Документация" Command="{Binding SelectLib}"
+                        LargeImageSource="Content/books.png"
+                        SmallImageSource="Content/books.jpg">
                     </ribbon:RibbonButton>
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>

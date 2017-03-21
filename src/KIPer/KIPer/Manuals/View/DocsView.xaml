@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="KipTM.Manuals.View.DocsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModel="clr-namespace:KipTM.Manuals.ViewModel"
+             xmlns:view="clr-namespace:KipTM.Manuals.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModel:DocsViewModel}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MaxWidth="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Expander Grid.Column="0" IsExpanded="True" ExpandDirection="Right">
+            <ListBox x:Name="BooksControl" HorizontalAlignment="Stretch" Width="130"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ItemsSource="{Binding Books, UpdateSourceTrigger=PropertyChanged}"
+                     SelectedItem="{Binding SelectedBook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="viewModel:BookViewModel">
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Top">Название:</TextBlock>
+                            <TextBlock DockPanel.Dock="Bottom" Text="{Binding Title}" TextWrapping="Wrap" FontStyle="Italic" FontWeight="Bold"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Expander>
+        <WebBrowser Grid.Column="1" view:WebBrowserUtility.BindableSource="{Binding SelectedBook.Path}"/>
+    </Grid>
+</UserControl>
