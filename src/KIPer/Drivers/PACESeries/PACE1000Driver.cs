@@ -12,7 +12,8 @@ namespace PACESeries
     /// </summary>
     public class PACE1000Driver:IDisposable
     {
-        private readonly PACEParser _parser;
+        private readonly PACEParserV2 _parser;
+        //private readonly PACEParser _parser;
         private readonly ITransportIEEE488 _transport;
         private readonly int _address;
 
@@ -25,7 +26,8 @@ namespace PACESeries
         {
             _transport = transport;
             _address = address;
-            _parser = new PACEParser();
+            _parser = new PACEParserV2();
+            //_parser = new PACEParser();
         }
 
         /// <summary>
@@ -70,12 +72,12 @@ namespace PACESeries
         public double GetPressure()
         {
             Send(_parser.GetCommandGetPressure());
-            string m_strReturn = Receive();
+            string strReturn = Receive();
 
-            if (m_strReturn != null)
+            if (strReturn != null)
             {
                 double? value;
-                if (!_parser.ParseGetPressure(m_strReturn, out value))
+                if (!_parser.ParseGetPressure(strReturn, out value))
                     return double.NaN;
                 if (value != null) return value.Value;
             }
@@ -96,15 +98,15 @@ namespace PACESeries
             int sec;
 
             Send(_parser.GetCommandGetDate());
-            string m_strDate = Receive();
+            string strDate = Receive();
 
-            if (!_parser.ParseGetDate(m_strDate, out year, out month, out day))
+            if (!_parser.ParseGetDate(strDate, out year, out month, out day))
                 return null;
 
             Send(_parser.GetCommandGetTime());
-            string m_strTime = Receive();
+            string strTime = Receive();
 
-            if (!_parser.ParseGetTime(m_strTime, out hour, out min, out sec))
+            if (!_parser.ParseGetTime(strTime, out hour, out min, out sec))
                 return null;
 
             return new DateTime(year + 2000, month, day, hour, min, sec);
@@ -117,9 +119,9 @@ namespace PACESeries
         public string GetPressureRange()
         {
             Send(_parser.GetCommandGetPressureRange());
-            string m_strReturn = Receive();
+            string strReturn = Receive();
             string result;
-            if (!_parser.ParseGetPressureRange(m_strReturn, out result))
+            if (!_parser.ParseGetPressureRange(strReturn, out result))
                 return null;
 
             return result;
@@ -213,6 +215,8 @@ namespace PACESeries
             Send(_parser.GetCommandSetRemote());
         }
 
+        public void 
+
         #region Service
 
         /// <summary>
@@ -235,7 +239,6 @@ namespace PACESeries
         }
 
         #endregion
-
 
         #region IDisposable
 

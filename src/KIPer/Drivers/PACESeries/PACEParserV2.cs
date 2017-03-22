@@ -85,7 +85,6 @@ namespace PACESeries
         }
         #endregion
 
-
         #region GetDate ":SYST:TIME?"
         /// <summary>
         /// Получить команду "Запрос текущего времени"
@@ -471,7 +470,7 @@ namespace PACESeries
 
         #region Gets the number of calibration points ":CAL:PRES:POIN?"
         /// <summary>
-        /// Получить команду "Получение поличества точек калибровки"
+        /// Получить команду "Получение количества точек калибровки"
         /// </summary>
         /// <returns>Команда</returns>
         public string GetCommandGetNumCalibrPoints()

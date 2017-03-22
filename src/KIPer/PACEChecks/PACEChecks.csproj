@@ -67,6 +67,8 @@
     <Compile Include="Channels\PACEEchalonChannel.cs" />
     <Compile Include="Channels\PACEEthalonChannelFactory.cs" />
     <Compile Include="Channels\ViewModel\PACEEchalonChannelViewModel.cs" />
+    <Compile Include="Checks\Calibration\Calibration.cs" />
+    <Compile Include="Checks\Calibration\Steps\InitStep.cs" />
     <Compile Include="Checks\CheckPACE.cs" />
     <Compile Include="Devices\PACE1000Factory.cs" />
     <Compile Include="Devices\PACE1000Model.cs" />
@@ -141,9 +143,7 @@
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Checks\Test\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
