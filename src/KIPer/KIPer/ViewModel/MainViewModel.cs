@@ -62,16 +62,19 @@ namespace KipTM.ViewModel
         private IMainSettings _settings;
         private IPropertiesLibrary _propertiesLibrary;
         private IArchive _archive;
-
-        private readonly ServiceViewModel _services;
         private readonly IEventAggregator _eventAggregator;
-
         private IArchivesViewModel _tests;
         private DeviceTypeCollectionViewModel _deviceTypes;
         private DeviceTypeCollectionViewModel _etalonTypes;
         private Workflow.Workflow _workflow;
         private List<IWorkflowStep> _steps;
         private CustomConfigFactory _customFactory;
+
+        private readonly ServiceViewModel _services;
+        private DocsViewModel _lib;
+        private IEnumerable<OneBtnDescripto> _checkBtns;
+
+
 
         private string _helpMessage;
         private bool _isError;
@@ -84,9 +87,7 @@ namespace KipTM.ViewModel
         private bool _isActiveCheck;
         private bool _isActiveService;
         private bool _isActiveSwitchServices = true;
-        private IEnumerable<OneBtnDescripto> _checkBtns;
         private IDataAccessor _accessor;
-        private DocsViewModel _lib;
         #endregion
 
         #region Инициализация загрузка
@@ -382,7 +383,7 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = _tests; //todo установить выбор соответсвующего ViewModel
+                    SelectedAction = Tests; //todo установить выбор соответсвующего ViewModel
                     SetHelpMessage("Архив Проверок: список пойденных поверок");
                 });
             }
