@@ -540,9 +540,9 @@ namespace PACESeries
         /// Получить команду "Внести результат калибровки точки"
         /// </summary>
         /// <returns>Команда</returns>
-        public string GetCommandEnableCalibValueEntered()
+        public string GetCommandSetCalibValueEntered(double val)
         {
-            return new LexNode<Codes>(Codes.CAL).Add(Codes.PRESsure).Add(Codes.VAL).Set();
+            return new LexNode<Codes>(Codes.CAL).Add(Codes.PRESsure).Add(Codes.VAL).Set(val.ToString("f2"));
         }
 
         /// <summary>
@@ -554,9 +554,9 @@ namespace PACESeries
         /// 2 - middle pressure
         /// 3 - higher pressure</param>
         /// <returns>Команда</returns>
-        public string GetCommandEnableCalibValueEntered(int channel, int point)
+        public string GetCommandSetCalibValueEntered(int channel, int point, double val)
         {
-            return new LexNode<Codes>(Codes.CAL).Add(channel).Add(Codes.PRESsure).Add(Codes.VAL).Add(point).Set();
+            return new LexNode<Codes>(Codes.CAL).Add(channel).Add(Codes.PRESsure).Add(Codes.VAL).Add(point).Set(val.ToString("f2"));
         }
         #endregion
 
@@ -590,11 +590,11 @@ namespace PACESeries
         /// <param name="message">Ответ</param>
         /// <param name="value">Результат калибровки точки</param>
         /// <returns>Удалось разобрать</returns>
-        public bool ParseGetCalibPointsValue(string message, out int? value)
+        public bool ParseGetCalibPointsValue(string message, out double? value)
         {
             value = null;
-            var answer = PaceSemanticRule.ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.Integer } });
-            value = (int)answer["value"];
+            var answer = PaceSemanticRule.ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.Real } });
+            value = (double)answer["value"];
             return true;
         }
         #endregion

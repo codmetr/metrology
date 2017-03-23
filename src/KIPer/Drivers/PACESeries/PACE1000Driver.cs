@@ -215,7 +215,59 @@ namespace PACESeries
             Send(_parser.GetCommandSetRemote());
         }
 
-        public void 
+        /// <summary>
+        /// Получить количество точек калибровки PACE
+        /// </summary>
+        /// <returns></returns>
+        public int? GetCountCalibrationPoints()
+        {
+            Send(_parser.GetCommandGetNumCalibrPoints());
+            string strReturn = Receive();
+            int? result;
+            if (!_parser.ParseGetNumCalibrPoints(strReturn, out result))
+                return null;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить количество точек калибровки PACE по каналу
+        /// </summary>
+        /// <returns></returns>
+        public int? GetCountCalibrationPoints(int channel)
+        {
+            Send(_parser.GetCommandGetNumCalibrPoints(channel));
+            string strReturn = Receive();
+            int? result;
+            if (!_parser.ParseGetNumCalibrPoints(strReturn, out result))
+                return null;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить значение точки калибровки PACE по каналу
+        /// </summary>
+        /// <returns></returns>
+        public double? GetCalibrationPointValue(int channel, int index)
+        {
+            Send(_parser.GetCommandGetCalibPointsValue(channel, index));
+            string strReturn = Receive();
+            double? result;
+            if (!_parser.ParseGetCalibPointsValue(strReturn, out result))
+                return null;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Установить значение точки калибровки PACE по каналу
+        /// </summary>
+        /// <returns></returns>
+        public void SetCalibrationPointValue(int channel, int index, double val)
+        {
+            Send(_parser.GetCommandSetCalibValueEntered(channel, index, val));
+        }
 
         #region Service
 
