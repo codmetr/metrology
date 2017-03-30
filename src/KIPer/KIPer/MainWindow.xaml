@@ -90,7 +90,7 @@
                     <ribbon:RibbonButton 
                         Label="Документация" Command="{Binding SelectLib}"
                         LargeImageSource="Content/books.png"
-                        SmallImageSource="Content/books.jpg">
+                        SmallImageSource="Content/books.png">
                     </ribbon:RibbonButton>
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
