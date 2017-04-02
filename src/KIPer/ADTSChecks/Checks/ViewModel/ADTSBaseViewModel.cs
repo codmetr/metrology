@@ -500,7 +500,7 @@ namespace ADTSChecks.Checks.ViewModel
                     var res = stepResult.Result as AdtsPointResult;
                     if (res == null)
                         continue;
-                    if (Math.Abs(res.Point - newRes.Point) < 0.001f &&
+                    if (Math.Abs(res.Point - newRes.Point) < double.Epsilon &&
                         stepResult.CheckKey == Method.Key &&
                         stepResult.ChannelKey == Method.ChannelKey)
                     {
