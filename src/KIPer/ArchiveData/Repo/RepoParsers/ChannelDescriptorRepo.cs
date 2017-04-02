@@ -4,10 +4,13 @@ using ArchiveData.DTO;
 
 namespace ArchiveData.Repo.RepoParsers
 {
+    /// <summary>
+    /// Схема загрузки, сохранения и обновления описателя измерительного канала
+    /// </summary>
     public class ChannelDescriptorRepo : IRepo<ChannelDescriptor>
     {
         /// <summary>
-        /// Загрузка резльтата из дерева репозитория
+        /// Загрузка результата из дерева репозитория
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>

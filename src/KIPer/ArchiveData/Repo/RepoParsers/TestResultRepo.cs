@@ -37,7 +37,6 @@ namespace ArchiveData.Repo.RepoParsers
         /// <summary>
         /// Сохранение результата в дерево репозитория
         /// </summary>
-        /// <param name="root"></param>
         /// <param name="entity"></param>
         public ITreeEntity Save(TestResult entity)
         {

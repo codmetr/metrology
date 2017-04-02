@@ -65,6 +65,7 @@
     <Compile Include="Repo\MaxId.cs" />
     <Compile Include="Repo\RepoFactory.cs" />
     <Compile Include="Repo\TreeRepo.cs" />
+    <Compile Include="Repo\UnyRepo.cs" />
     <Compile Include="Repo\ValueWrapper.cs" />
   </ItemGroup>
   <ItemGroup />

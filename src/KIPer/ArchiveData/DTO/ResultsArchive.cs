@@ -5,6 +5,9 @@ namespace ArchiveData.DTO
 {
     public class ResultsArchive
     {
+        /// <summary>
+        /// Репозиторий результатов проверки
+        /// </summary>
         public ResultsArchive()
         {
             Results = new List<TestResult>();
