@@ -42,6 +42,15 @@ namespace ArchiveData.Repo
 
         public class Node
         {
+            /// <summary>
+            /// 
+            /// </summary>
+            public Node Parrent { get; set; }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            public List<Node> Cilds { get; set; } 
         }
     }
 }
