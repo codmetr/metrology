@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -14,7 +15,13 @@ namespace Test.Archive
         public void TestMethod1()
         {
             var res = 555;
-            var data = new CheckSimple() {TestResult = new TestSimple() {Result = new ResultSimple() {PointRes = res } }};
+            var res2 = 132;
+            var resItems = new List<int>() { 5, 6, 7 };
+            var resItems2 = new List<int>() { 8, 9, 10 };
+            var resData = new List<ResultSimple>() {
+                new ResultSimple() { PointRes = res, Points = resItems,},
+                new ResultSimple() { PointRes = res2, Points = resItems2,}};
+            var data = new CheckSimple() {TestResult = new TestSimple() {Result = resData } };
 
             var descriptor = new ItemDescriptor();
             var rootName = "root";
@@ -29,7 +36,10 @@ namespace Test.Archive
             Assert.IsTrue(parsed is CheckSimple);
             var parsedTyped = parsed as CheckSimple;
             Assert.IsTrue(parsedTyped !=null);
-            Assert.AreEqual(parsedTyped.TestResult.Result.PointRes, res);
+            Assert.AreEqual(parsedTyped.TestResult.Result[0].PointRes, res);
+            CollectionAssert.AreEqual(parsedTyped.TestResult.Result[0].Points, resItems);
+            Assert.AreEqual(parsedTyped.TestResult.Result[1].PointRes, res2);
+            CollectionAssert.AreEqual(parsedTyped.TestResult.Result[1].Points, resItems2);
         }
     }
 
@@ -46,7 +56,7 @@ namespace Test.Archive
     /// </summary>
     public class TestSimple
     {
-        public ResultSimple Result { get; set; } = new ResultSimple();
+        public List<ResultSimple> Result { get; set; } = new List<ResultSimple>();
     }
 
     /// <summary>
@@ -55,6 +65,8 @@ namespace Test.Archive
     public class ResultSimple
     {
         public int PointRes { get; set; } = 777;
+
+        public List<int> Points { get; set; } = new List<int> {1,2,3};
     }
 
     /// <summary>
@@ -87,11 +99,38 @@ namespace Test.Archive
             {
                 var propValue = property.GetValue(item, null);
                 if (IsSimple(property.PropertyType))
-                {
+                { // добавление элемента простого типа
                     node.Childs.Add(new Node() { Name = descriptor.GetKey(property), Value = propValue, Parrent = node});
-                    return node;
+                    continue;
                 }
 
+                if (IsList(property.PropertyType))
+                { // добавление коллекции
+                    IList propItems = propValue as IList;
+                    var typeItem = property.PropertyType.GetGenericArguments()[0];
+                    foreach (var subItem in propItems)
+                    {
+                        if (IsSimple(typeItem))
+                        { // добавление элемента коллекции сложного типа
+                            node.Childs.Add(new Node()
+                            {
+                                Name = descriptor.GetKey(property),
+                                Value = subItem,
+                                Parrent = node
+                            });
+                        }
+                        else
+                        { // добавление элемента коллекции сложного типа
+                            var itemNode = new Node() {Name = descriptor.GetKey(property), Parrent = node};
+                            Convert(subItem, itemNode, descriptor);
+                            node.Childs.Add(itemNode);
+                        }
+
+                    }
+                    continue;
+                }
+
+                // добавление элемента сложного типа
                 var newNode = new Node() { Name = descriptor.GetKey(property), Parrent = node};
                 Convert(propValue, newNode, descriptor);
                 node.Childs.Add(newNode);
@@ -121,13 +160,36 @@ namespace Test.Archive
                     if (item == null)
                         continue;
                     if (IsSimple(property.PropertyType))
-                    {
+                    {// разбор простых типов
                         property.SetValue(res, item.Value, null);
                         continue;
                     }
 
-                    object itemTarget;
+                    if (IsList(property.PropertyType))
+                    {// разбор коллекции
+                        var propNodes = root.Childs.Where(node => node.Name == key);
 
+                        var typeItem = property.PropertyType.GetGenericArguments()[0];
+
+                        var listType = typeof (List<>).MakeGenericType(typeItem);
+                        var paramListValue = (IList)Activator.CreateInstance(listType);
+                        foreach (var propNode in propNodes)
+                        {
+                            if(IsSimple(typeItem))
+                                paramListValue.Add(propNode.Value); //наполнение коллекции простых типов
+                            else
+                            {
+                                object itemElement;
+                                if (!TryParse(propNode, out itemElement, typeItem, descriptor))
+                                    continue;
+                                paramListValue.Add(itemElement); //наполнение коллекции сложных типов
+                            }
+                        }
+                        property.SetValue(res, paramListValue, null);
+                        continue;
+                    }
+
+                    object itemTarget; // разбор сложного типа
                     if (!TryParse(item, out itemTarget, property.PropertyType, descriptor))
                         continue;
 
@@ -147,6 +209,11 @@ namespace Test.Archive
         private static bool IsSimple(Type type)
         {
             return type == typeof (int);
+        }
+
+        private static bool IsList(Type type)
+        {
+            return typeof(IList).IsAssignableFrom(type);
         }
     }
 
