@@ -48,7 +48,13 @@ namespace Test.Archive
     /// </summary>
     public class CheckSimple
     {
-        public TestSimple TestResult { get; set; } = new TestSimple();
+        private TestSimple _testResult = new TestSimple();
+
+        public TestSimple TestResult
+        {
+            get { return _testResult; }
+            set { _testResult = value; }
+        }
     }
 
     /// <summary>
@@ -56,7 +62,13 @@ namespace Test.Archive
     /// </summary>
     public class TestSimple
     {
-        public List<ResultSimple> Result { get; set; } = new List<ResultSimple>();
+        private List<ResultSimple> _result = new List<ResultSimple>();
+
+        public List<ResultSimple> Result
+        {
+            get { return _result; }
+            set { _result = value; }
+        }
     }
 
     /// <summary>
@@ -64,9 +76,20 @@ namespace Test.Archive
     /// </summary>
     public class ResultSimple
     {
-        public int PointRes { get; set; } = 777;
+        private int _pointRes = 777;
+        private List<int> _points = new List<int> { 1, 2, 3 };
 
-        public List<int> Points { get; set; } = new List<int> {1,2,3};
+        public int PointRes
+        {
+            get { return _pointRes; }
+            set { _pointRes = value; }
+        }
+
+        public List<int> Points
+        {
+            get { return _points; }
+            set { _points = value; }
+        }
     }
 
     /// <summary>
@@ -221,6 +244,7 @@ namespace Test.Archive
     public class Node
     {
         private static int _maxId = 0;
+        private List<Node> _childs = new List<Node>();
 
         public static int GetNewId()
         {
@@ -244,7 +268,13 @@ namespace Test.Archive
 
         public Node Parrent { get; set; }
 
-        public List<Node> Childs { get; set; } = new List<Node>();
+        public List<Node> Childs
+        {
+            get { return _childs; }
+            set { _childs = value; }
+        }
+
+    ;
 
         public object Value { get; set; }
 
