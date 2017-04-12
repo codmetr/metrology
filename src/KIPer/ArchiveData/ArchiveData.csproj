@@ -67,6 +67,7 @@
     <Compile Include="Repo\TreeRepo.cs" />
     <Compile Include="Repo\UnyRepo.cs" />
     <Compile Include="Repo\ValueWrapper.cs" />
+    <Compile Include="TreeParser.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
