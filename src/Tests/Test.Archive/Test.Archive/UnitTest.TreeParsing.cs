@@ -19,10 +19,7 @@ namespace Test.Archive
             var res2 = 132;
             var resItems = new List<int>() { 5, 6, 7 };
             var resItems2 = new List<int>() { 8, 9, 10 };
-            var resData = new List<ResultSimple>() {
-                new ResultSimple() { PointRes = res, Points = resItems,},
-                new ResultSimple() { PointRes = res2, Points = resItems2,}};
-            var data = new CheckSimple() {TestResult = new TestSimple() {Result = resData } };
+            var data = TestData.GetTestData(res, resItems, res2, resItems2);
 
             var descriptor = new ItemDescriptor();
             var rootName = "root";
@@ -32,10 +29,10 @@ namespace Test.Archive
             Assert.AreEqual(resNode, res);
 
             object parsed;
-            var resParsing = TreeParser.TryParse(tree, out parsed, typeof (CheckSimple), descriptor);
+            var resParsing = TreeParser.TryParse(tree, out parsed, typeof (TestData.CheckSimple), descriptor);
             Assert.IsTrue(resParsing);
-            Assert.IsTrue(parsed is CheckSimple);
-            var parsedTyped = parsed as CheckSimple;
+            Assert.IsTrue(parsed is TestData.CheckSimple);
+            var parsedTyped = parsed as TestData.CheckSimple;
             Assert.IsTrue(parsedTyped !=null);
             Assert.AreEqual(parsedTyped.TestResult.Result[0].PointRes, res);
             CollectionAssert.AreEqual(parsedTyped.TestResult.Result[0].Points, resItems);
@@ -44,52 +41,4 @@ namespace Test.Archive
         }
     }
 
-    /// <summary>
-    /// Тестовый класс - корень/сессия/проверка
-    /// </summary>
-    public class CheckSimple
-    {
-        private TestSimple _testResult = new TestSimple();
-
-        public TestSimple TestResult
-        {
-            get { return _testResult; }
-            set { _testResult = value; }
-        }
-    }
-
-    /// <summary>
-    /// Тестовый класс - тест/тех.карта
-    /// </summary>
-    public class TestSimple
-    {
-        private List<ResultSimple> _result = new List<ResultSimple>();
-
-        public List<ResultSimple> Result
-        {
-            get { return _result; }
-            set { _result = value; }
-        }
-    }
-
-    /// <summary>
-    /// Тестовый класс - результат
-    /// </summary>
-    public class ResultSimple
-    {
-        private int _pointRes = 777;
-        private List<int> _points = new List<int> { 1, 2, 3 };
-
-        public int PointRes
-        {
-            get { return _pointRes; }
-            set { _pointRes = value; }
-        }
-
-        public List<int> Points
-        {
-            get { return _points; }
-            set { _points = value; }
-        }
-    }
 }

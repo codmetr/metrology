@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\InsertOrUpdate.cs" />
     <Compile Include="Commands\CreateNodesTable.cs" />
     <Compile Include="DataSource.cs" />
     <Compile Include="Db\Database.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="IItemDescriptor.cs" />
     <Compile Include="ItemDescriptor.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="NodeLiner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TreeParser.cs" />
   </ItemGroup>

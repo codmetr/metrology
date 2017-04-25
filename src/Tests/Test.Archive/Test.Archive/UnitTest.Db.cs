@@ -63,7 +63,19 @@ namespace Test.Archive
         [TestMethod]
         public void TestMethod1()
         {
+            var res = 555;
+            var res2 = 132;
+            var resItems = new List<int>() { 5, 6, 7 };
+            var resItems2 = new List<int>() { 8, 9, 10 };
+            var data = TestData.GetTestData(res, resItems, res2, resItems2);
+
+            var descriptor = new ItemDescriptor();
+            var rootName = "root";
+            var tree = TreeParser.Convert(data, new Node() { Name = rootName }, descriptor);
+
             var db = new DataSource();
+            var nodes = NodeLiner.GetNodesFrom(tree);
+            db.Nodes.AddRange(nodes);
             db.Save();
         }
     }

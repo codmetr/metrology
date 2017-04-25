@@ -27,7 +27,7 @@ namespace SimpleDb.Db
 
                         return result;
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         transaction.Rollback();
                         throw;

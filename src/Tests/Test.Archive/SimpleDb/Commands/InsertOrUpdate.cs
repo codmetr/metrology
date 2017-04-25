@@ -7,8 +7,29 @@ using SimpleDb.Db;
 
 namespace SimpleDb.Commands
 {
-    public class CreateNodesTable:ICommand
+    public class InsertOrUpdate : ICommand
     {
+        private int _id;
+        private int _parrentId;
+        private string _name;
+        private string _val;
+
+        public InsertOrUpdate(int id, int parrentId, string name, string val)
+        {
+            _id = id;
+            _parrentId = parrentId;
+            _name = name;
+            _val = val;
+        }
+
+        public InsertOrUpdate(IEnumerable<InsertOrUpdate> items)
+        {
+            _id = id;
+            _parrentId = parrentId;
+            _name = name;
+            _val = val;
+        }
+
         public void Execute(IDbContext context)
         {
             const string sql = @"CREATE TABLE IF NOT EXISTS [Nodes] 

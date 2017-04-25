@@ -141,7 +141,6 @@ namespace SimpleDb
             return true;
         }
 
-
         private static bool IsSimple(Type type)
         {
             return type == typeof(int);
