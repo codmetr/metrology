@@ -7,7 +7,7 @@ using SimpleDb.Db;
 
 namespace SimpleDb.Commands
 {
-    public class CreateNodesTable:ICommand
+    public class CreateIfNotExistTable:ICommand
     {
         public void Execute(IDbContext context)
         {
@@ -15,8 +15,8 @@ namespace SimpleDb.Commands
                         (
                             [Id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                             [ParrentId] integer NOT NULL,
-                            [Name] char(255) NOT NULL UNIQUE,
-                            [Val] char(255) NOT NULL UNIQUE
+                            [Name] char(255),
+                            [Val] char(255)
                         );";
 
             context.Transaction(ts => ts.Connection.Execute(sql));

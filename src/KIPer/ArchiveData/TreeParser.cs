@@ -65,7 +65,6 @@ namespace ArchiveData
                             Convert(subItem, itemNode, descriptor);
                             node.Childs.Add(itemNode);
                         }
-
                     }
                     continue;
                 }

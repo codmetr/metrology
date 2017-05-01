@@ -59,8 +59,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\ClearTable.cs" />
+    <Compile Include="Commands\Remove.cs" />
+    <Compile Include="Commands\Load.cs" />
     <Compile Include="Commands\InsertOrUpdate.cs" />
-    <Compile Include="Commands\CreateNodesTable.cs" />
+    <Compile Include="Commands\CreateIfNotExistTable.cs" />
     <Compile Include="DataSource.cs" />
     <Compile Include="Db\Database.cs" />
     <Compile Include="Db\Entity.cs" />

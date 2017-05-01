@@ -25,7 +25,7 @@ namespace SimpleDb
 
             if (IsSimple(itemType))
             {
-                node.Value = item;
+                node.Val = item;
                 return node;
             }
 
@@ -36,7 +36,7 @@ namespace SimpleDb
                 var propValue = property.GetValue(item, null);
                 if (IsSimple(property.PropertyType))
                 { // добавление элемента простого типа
-                    node.Childs.Add(new Node() { Name = descriptor.GetKey(property), Value = propValue, Parrent = node });
+                    node.Childs.Add(new Node() { Name = descriptor.GetKey(property), Val = propValue, Parrent = node });
                     continue;
                 }
 
@@ -51,7 +51,7 @@ namespace SimpleDb
                             node.Childs.Add(new Node()
                             {
                                 Name = descriptor.GetKey(property),
-                                Value = subItem,
+                                Val = subItem,
                                 Parrent = node
                             });
                         }
@@ -97,7 +97,7 @@ namespace SimpleDb
                         continue;
                     if (IsSimple(property.PropertyType))
                     {// разбор простых типов
-                        property.SetValue(res, item.Value, null);
+                        property.SetValue(res, item.Val, null);
                         continue;
                     }
 
@@ -112,7 +112,7 @@ namespace SimpleDb
                         foreach (var propNode in propNodes)
                         {
                             if (IsSimple(typeItem))
-                                paramListValue.Add(propNode.Value); //наполнение коллекции простых типов
+                                paramListValue.Add(propNode.Val); //наполнение коллекции простых типов
                             else
                             {
                                 object itemElement;

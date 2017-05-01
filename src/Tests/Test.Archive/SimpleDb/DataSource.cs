@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using SimpleDb.Commands;
@@ -17,13 +18,34 @@ namespace SimpleDb
             _dbName = dbName;
         }
 
-        public List<Node> Nodes;
+        public List<Node> Nodes = new List<Node>();
+
+        public void Load()
+        {
+            if(!File.Exists(_dbName))
+                return;
+            var db = new Database(new SqLiteDbContext($"Data Source={_dbName};"));
+            var load = new Load();
+            db.Execute(load);
+            Nodes.Clear();
+            Nodes.AddRange(load.Nodes);
+        }
+
 
         public void Save()
         {
             var db = new Database(new SqLiteDbContext($"Data Source={_dbName};"));
-            db.Execute(new CreateNodesTable());
-            db.Execute(new CreateNodesTable());
+            db.Execute(new CreateIfNotExistTable());
+            foreach (var node in Nodes)
+            {
+                db.Execute(new InsertOrUpdate(node));
+            }
+        }
+
+        public void Clear()
+        {
+            var db = new Database(new SqLiteDbContext($"Data Source={_dbName};"));
+            db.Execute(new ClearTable());
         }
     }
 }

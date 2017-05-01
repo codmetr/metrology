@@ -75,8 +75,23 @@ namespace Test.Archive
 
             var db = new DataSource();
             var nodes = NodeLiner.GetNodesFrom(tree);
+
+            db.Clear();
             db.Nodes.AddRange(nodes);
             db.Save();
+            db.Load();
+
+            var newTree = NodeLiner.GetNodesFrom(db.Nodes);
+            object parsed;
+            var resParsing = TreeParser.TryParse(newTree, out parsed, typeof(TestData.CheckSimple), descriptor);
+            Assert.IsTrue(resParsing);
+            Assert.IsTrue(parsed is TestData.CheckSimple);
+            var parsedTyped = parsed as TestData.CheckSimple;
+            Assert.IsTrue(parsedTyped != null);
+            Assert.AreEqual(parsedTyped.TestResult.Result[0].PointRes, res);
+            CollectionAssert.AreEqual(parsedTyped.TestResult.Result[0].Points, resItems);
+            Assert.AreEqual(parsedTyped.TestResult.Result[1].PointRes, res2);
+            CollectionAssert.AreEqual(parsedTyped.TestResult.Result[1].Points, resItems2);
         }
     }
 }

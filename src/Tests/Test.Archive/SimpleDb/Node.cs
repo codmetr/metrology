@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SimpleDb.Db;
 
 namespace SimpleDb
 {
-    [DebuggerDisplay("{Name}:{Value}")]
-    public class Node
+    [DebuggerDisplay("{Name}:{Val}")]
+    public class Node:Entity
     {
         private static int _maxId = 0;
         private List<Node> _childs = new List<Node>();
@@ -28,9 +29,11 @@ namespace SimpleDb
 
         public string Name { get; set; }
 
-        public int Id { get; set; }
+        //public int Id { get; set; }
 
         public Node Parrent { get; set; }
+
+        public int ParrentId { get; set; }
 
         public List<Node> Childs
         {
@@ -38,7 +41,7 @@ namespace SimpleDb
             set { _childs = value; }
         }
 
-        public object Value { get; set; }
+        public object Val { get; set; }
 
         public Node this[string key]
         {

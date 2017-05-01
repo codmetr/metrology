@@ -4,14 +4,14 @@ namespace SimpleDb.Db
 {
     public abstract class Entity
     {
+        private bool _isNew = true;
+
         [Write(false)]
-	    public bool IsNew
-	    {
-			get
-			{
-				return Id == 0;
-			}
-	    }
+        public bool IsNew
+        {
+            get { return _isNew; }
+            set { _isNew = value; }
+        }
 
         public long Id { get; set; }
     }

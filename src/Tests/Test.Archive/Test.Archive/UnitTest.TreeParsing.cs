@@ -25,7 +25,7 @@ namespace Test.Archive
             var rootName = "root";
             var tree = TreeParser.Convert(data, new Node() { Name = rootName}, descriptor);
 
-            var resNode = tree["TestResult"]["Result"]["PointRes"].Value;
+            var resNode = tree["TestResult"]["Result"]["PointRes"].Val;
             Assert.AreEqual(resNode, res);
 
             object parsed;

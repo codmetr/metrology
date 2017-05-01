@@ -9,38 +9,28 @@ namespace SimpleDb.Commands
 {
     public class InsertOrUpdate : ICommand
     {
-        private int _id;
-        private int _parrentId;
-        private string _name;
-        private string _val;
+        private readonly Node _node;
 
-        public InsertOrUpdate(int id, int parrentId, string name, string val)
+        public InsertOrUpdate(Node node)
         {
-            _id = id;
-            _parrentId = parrentId;
-            _name = name;
-            _val = val;
-        }
-
-        public InsertOrUpdate(IEnumerable<InsertOrUpdate> items)
-        {
-            _id = id;
-            _parrentId = parrentId;
-            _name = name;
-            _val = val;
+            _node = node;
         }
 
         public void Execute(IDbContext context)
         {
-            const string sql = @"CREATE TABLE IF NOT EXISTS [Nodes] 
-                        (
-                            [Id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                            [ParrentId] integer NOT NULL,
-                            [Name] char(255) NOT NULL UNIQUE,
-                            [Val] char(255) NOT NULL UNIQUE
-                        );";
+            const string sqlInsert = @"INSERT INTO [Nodes]
+                                        (Id, ParrentId, Name, Val)
+                                        VALUES
+                                        (@Id, @ParrentId, @Name, @Val)";
 
-            context.Transaction(ts => ts.Connection.Execute(sql));
+            const string sqlUpdate = @"UPDATE [Nodes] Set  
+                                       [ParrentId] = @ParrentId,
+                                       [Name] = @Name,
+                                       [Val] = @Val
+                                       WHERE Id =@Id";
+            var sql = _node.IsNew ? sqlInsert : sqlUpdate;
+            context.Transaction(ts => ts.Connection.Execute(sql, _node));
+            _node.IsNew = true;
         }
     }
 }
