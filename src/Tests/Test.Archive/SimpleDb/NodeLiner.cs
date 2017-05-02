@@ -38,7 +38,7 @@ namespace SimpleDb
             var rootId = nodeSet.Min(el => el.Id);
             var root = nodeDict[rootId];
             foreach (var node in nodeSet)
-                if(nodeDict.ContainsKey(node.ParrentId))
+                if(nodeDict.ContainsKey(node.ParrentId) && node.Id != root.Id)
                     nodeDict[node.ParrentId].Childs.Add(node);
 
             return root;

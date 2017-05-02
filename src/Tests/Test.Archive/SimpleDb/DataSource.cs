@@ -44,6 +44,8 @@ namespace SimpleDb
 
         public void Clear()
         {
+            if (!File.Exists(_dbName))
+                return;
             var db = new Database(new SqLiteDbContext($"Data Source={_dbName};"));
             db.Execute(new ClearTable());
         }

@@ -11,7 +11,7 @@ namespace SimpleDb.Commands
     {
         public void Execute(IDbContext context)
         {
-            const string sql = @"DELETE [Nodes]";
+            const string sql = @"DELETE FROM [Nodes]";
             context.Transaction(ts => ts.Connection.Execute(sql));
         }
     }

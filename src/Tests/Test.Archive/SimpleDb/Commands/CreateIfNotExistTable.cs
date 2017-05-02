@@ -16,7 +16,8 @@ namespace SimpleDb.Commands
                             [Id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                             [ParrentId] integer NOT NULL,
                             [Name] char(255),
-                            [Val] char(255)
+                            [Val] char(255),
+                            [TypeVal] integer
                         );";
 
             context.Transaction(ts => ts.Connection.Execute(sql));

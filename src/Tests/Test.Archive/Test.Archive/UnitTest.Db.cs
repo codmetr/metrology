@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimpleDb;
@@ -68,6 +69,13 @@ namespace Test.Archive
             var resItems = new List<int>() { 5, 6, 7 };
             var resItems2 = new List<int>() { 8, 9, 10 };
             var data = TestData.GetTestData(res, resItems, res2, resItems2);
+            var bigRes = new TestData.ResultSimple();
+            data.TestResult.Result.Add(bigRes);
+            var count = 100;
+            for (int i = 0; i < count; i++)
+            {
+                bigRes.Points.Add(i);
+            }
 
             var descriptor = new ItemDescriptor();
             var rootName = "root";
@@ -75,11 +83,18 @@ namespace Test.Archive
 
             var db = new DataSource();
             var nodes = NodeLiner.GetNodesFrom(tree);
-
+            var sw = new Stopwatch();
             db.Clear();
             db.Nodes.AddRange(nodes);
+            sw.Start();
             db.Save();
+            sw.Stop();
+            Debug.WriteLine("Save: {0}", sw.Elapsed);
+            sw.Reset();
+            sw.Start();
             db.Load();
+            sw.Stop();
+            Debug.WriteLine("Load: {0}", sw.Elapsed);
 
             var newTree = NodeLiner.GetNodesFrom(db.Nodes);
             object parsed;

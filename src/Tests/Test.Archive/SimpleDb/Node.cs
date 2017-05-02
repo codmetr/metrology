@@ -10,6 +10,7 @@ namespace SimpleDb
     {
         private static int _maxId = 0;
         private List<Node> _childs = new List<Node>();
+        private Node _parrent;
 
         public static int GetNewId()
         {
@@ -31,9 +32,17 @@ namespace SimpleDb
 
         //public int Id { get; set; }
 
-        public Node Parrent { get; set; }
+        public Node Parrent
+        {
+            get { return _parrent; }
+            set
+            {
+                _parrent = value;
+                ParrentId = _parrent.Id;
+            }
+        }
 
-        public int ParrentId { get; set; }
+        public long ParrentId { get; set; }
 
         public List<Node> Childs
         {
@@ -42,6 +51,8 @@ namespace SimpleDb
         }
 
         public object Val { get; set; }
+
+        public int TypeVal { get; set; }
 
         public Node this[string key]
         {

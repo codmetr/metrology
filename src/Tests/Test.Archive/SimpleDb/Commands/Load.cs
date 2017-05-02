@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Dapper;
@@ -20,6 +21,12 @@ namespace SimpleDb.Commands
             context.Transaction(ts => _nodes.AddRange(ts.Connection.Query<Node>(sql).Select(el =>
             {
                 el.IsNew = false;
+                if(el.Val!=null)
+                    el.Val = TreeParser.ParceValue(el.Val.ToString(), el.TypeVal);
+                else
+                {
+                    Debug.WriteLine(el.Name);
+                }
                 return el;
             }).ToList()));
         }

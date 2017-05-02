@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 
 namespace SimpleDb
@@ -36,7 +38,13 @@ namespace SimpleDb
                 var propValue = property.GetValue(item, null);
                 if (IsSimple(property.PropertyType))
                 { // добавление элемента простого типа
-                    node.Childs.Add(new Node() { Name = descriptor.GetKey(property), Val = propValue, Parrent = node });
+                    node.Childs.Add(new Node()
+                    {
+                        Name = descriptor.GetKey(property),
+                        Val = propValue,
+                        Parrent = node,
+                        TypeVal = (int) GetTypeValue(property.PropertyType),
+                    });
                     continue;
                 }
 
@@ -52,7 +60,8 @@ namespace SimpleDb
                             {
                                 Name = descriptor.GetKey(property),
                                 Val = subItem,
-                                Parrent = node
+                                Parrent = node,
+                                TypeVal = (int)GetTypeValue(typeItem),
                             });
                         }
                         else
@@ -132,8 +141,9 @@ namespace SimpleDb
                     property.SetValue(res, itemTarget, null);
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                Debug.WriteLine(ex.Message);
                 res = null;
                 return false;
             }
@@ -149,6 +159,120 @@ namespace SimpleDb
         private static bool IsList(Type type)
         {
             return typeof(IList).IsAssignableFrom(type);
+        }
+
+        public static readonly Dictionary<Type, DbType> TypeMap = new Dictionary<Type, DbType>
+        {
+            [typeof(byte)] = DbType.Byte,
+            [typeof(sbyte)] = DbType.SByte,
+            [typeof(short)] = DbType.Int16,
+            [typeof(ushort)] = DbType.UInt16,
+            [typeof(int)] = DbType.Int32,
+            [typeof(uint)] = DbType.UInt32,
+            [typeof(long)] = DbType.Int64,
+            [typeof(ulong)] = DbType.UInt64,
+            [typeof(float)] = DbType.Single,
+            [typeof(double)] = DbType.Double,
+            [typeof(decimal)] = DbType.Decimal,
+            [typeof(bool)] = DbType.Boolean,
+            [typeof(string)] = DbType.String,
+            [typeof(char)] = DbType.StringFixedLength,
+            [typeof(Guid)] = DbType.Guid,
+            [typeof(DateTime)] = DbType.DateTime,
+            [typeof(DateTimeOffset)] = DbType.DateTimeOffset,
+            [typeof(TimeSpan)] = DbType.Time,
+            //[typeof(byte[])] = DbType.Binary,
+            //[typeof(byte?)] = DbType.Byte,
+            //[typeof(sbyte?)] = DbType.SByte,
+            //[typeof(short?)] = DbType.Int16,
+            //[typeof(ushort?)] = DbType.UInt16,
+            //[typeof(int?)] = DbType.Int32,
+            //[typeof(uint?)] = DbType.UInt32,
+            //[typeof(long?)] = DbType.Int64,
+            //[typeof(ulong?)] = DbType.UInt64,
+            //[typeof(float?)] = DbType.Single,
+            //[typeof(double?)] = DbType.Double,
+            //[typeof(decimal?)] = DbType.Decimal,
+            //[typeof(bool?)] = DbType.Boolean,
+            //[typeof(char?)] = DbType.StringFixedLength,
+            //[typeof(Guid?)] = DbType.Guid,
+            //[typeof(DateTime?)] = DbType.DateTime,
+            //[typeof(DateTimeOffset?)] = DbType.DateTimeOffset,
+            //[typeof(TimeSpan?)] = DbType.Time,
+            //[typeof(object)] = DbType.Object
+        };
+
+        private static DbType GetTypeValue(Type val)
+        {
+            if(!TypeMap.ContainsKey(val))
+                throw new KeyNotFoundException(string.Format("For type {0} not founf DbType", val));
+            return TypeMap[val];
+        }
+
+        public static object ParceValue(string val, int typeVal)
+        {
+            var t = (DbType) typeVal;
+            object res = val;
+
+            switch (t)
+            {
+                case DbType.Byte:
+                    res = byte.Parse(val);
+                    break;
+                case DbType.Boolean:
+                    res = bool.Parse(val);
+                    break;
+                case DbType.DateTime:
+                    res = DateTime.Parse(val);
+                    break;
+                case DbType.Decimal:
+                    res = decimal.Parse(val);
+                    break;
+                case DbType.Double:
+                    res = double.Parse(val);
+                    break;
+                case DbType.Guid:
+                    res = Guid.Parse(val);
+                    break;
+                case DbType.Int16:
+                    res = short.Parse(val);
+                    break;
+                case DbType.Int32:
+                    res = int.Parse(val);
+                    break;
+                case DbType.Int64:
+                    res = long.Parse(val);
+                    break;
+                case DbType.SByte:
+                    res = sbyte.Parse(val);
+                    break;
+                case DbType.Single:
+                    res = float.Parse(val);
+                    break;
+                case DbType.String:
+                    break;
+                case DbType.Time:
+                    res = TimeSpan.Parse(val);
+                    break;
+                case DbType.UInt16:
+                    res = ushort.Parse(val);
+                    break;
+                case DbType.UInt32:
+                    res = uint.Parse(val);
+                    break;
+                case DbType.UInt64:
+                    res = ulong.Parse(val);
+                    break;
+                case DbType.StringFixedLength:
+                    res = val[0];
+                    break;
+                case DbType.DateTimeOffset:
+                    res = DateTimeOffset.Parse(val);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            return res;
         }
     }
 }
