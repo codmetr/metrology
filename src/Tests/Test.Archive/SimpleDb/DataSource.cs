@@ -36,10 +36,7 @@ namespace SimpleDb
         {
             var db = new Database(new SqLiteDbContext($"Data Source={_dbName};"));
             db.Execute(new CreateIfNotExistTable());
-            foreach (var node in Nodes)
-            {
-                db.Execute(new InsertOrUpdate(node));
-            }
+            db.Execute(new InsertOrUpdate(Nodes));
         }
 
         public void Clear()

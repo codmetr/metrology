@@ -38,17 +38,17 @@ namespace SimpleDb.Commands
 
         private static string GetInsertOrUpdateSql(Node node)
         {
-            const string sqlInsert = @"INSERT INTO [Nodes]
-                                        (Id, ParrentId, Name, Val, TypeVal)
-                                        VALUES
-                                        ('{0}', '{1}', '{2}', {3}, '{4}')";
+            const string sqlInsert = @"INSERT INTO [Nodes]"+
+                                        " (Id, ParrentId, Name, Val, TypeVal)" +
+                                        " VALUES" +
+                                        " ('{0}', '{1}', '{2}', {3}, '{4}');";
 
-            const string sqlUpdate = @"UPDATE [Nodes] Set  
-                                       [ParrentId] = '{1}',
-                                       [Name] = '{2}',
-                                       [Val] = {3},
-                                       [TypeVal] = '{4}'
-                                       WHERE Id ='{0}'";
+            const string sqlUpdate = @"UPDATE [Nodes] Set" +
+                                        " [ParrentId] = '{1}'," +
+                                        " [Name] = '{2}'," +
+                                        " [Val] = {3}," +
+                                        " [TypeVal] = '{4}'" +
+                                        " WHERE Id ='{0}' ;";
             var sql = node.IsNew ? sqlInsert : sqlUpdate;
             return string.Format(sql, node.Id, node.ParrentId, node.Name, node.Val==null?"NULL":string.Format("'{0}'",node.Val), node.TypeVal);
         }
