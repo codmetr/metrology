@@ -2,12 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -31,7 +28,9 @@ namespace SQLiteArchive
         /// <param name="entity">value entity</param>
         public void Save<T>(string key, T entity)
         {
-            var path = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonDocuments), string.Format(_archiveFileFormat, key));
+            var path = Path.Combine(System.Environment.GetFolderPath(
+                System.Environment.SpecialFolder.CommonDocuments),
+                string.Format(_archiveFileFormat, key));
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -88,27 +87,6 @@ namespace SQLiteArchive
                 result = (T)xmlSerializer.Deserialize(reader);
             }
             return result;
-        }
-
-
-        public void Test()
-        {
-            SQLiteConnection conn = new SQLiteConnection("Data Source=filename.db; Version=3;");
-            try
-            {
-                conn.Open();
-            }
-            catch (SQLiteException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            if (conn.State == ConnectionState.Open)
-            {
-                // ******
-            }
-
-            conn.Dispose();
         }
 
         /// <summary>
