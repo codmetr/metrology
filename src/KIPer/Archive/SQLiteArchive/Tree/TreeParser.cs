@@ -5,7 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 
-namespace SimpleDb
+namespace SQLiteArchive.Tree
 {
     /// <summary>
     /// Парсер
@@ -42,7 +42,7 @@ namespace SimpleDb
                     {
                         Name = descriptor.GetKey(property),
                         Val = propValue,
-                        Parrent = node,
+                        Parent = node,
                         TypeVal = (int) GetTypeValue(property.PropertyType),
                     });
                     continue;
@@ -60,13 +60,13 @@ namespace SimpleDb
                             {
                                 Name = descriptor.GetKey(property),
                                 Val = subItem,
-                                Parrent = node,
+                                Parent = node,
                                 TypeVal = (int)GetTypeValue(typeItem),
                             });
                         }
                         else
                         { // добавление элемента коллекции сложного типа
-                            var itemNode = new Node() { Name = descriptor.GetKey(property), Parrent = node };
+                            var itemNode = new Node() { Name = descriptor.GetKey(property), Parent = node };
                             Convert(subItem, itemNode, descriptor);
                             node.Childs.Add(itemNode);
                         }
@@ -76,7 +76,7 @@ namespace SimpleDb
                 }
 
                 // добавление элемента сложного типа
-                var newNode = new Node() { Name = descriptor.GetKey(property), Parrent = node };
+                var newNode = new Node() { Name = descriptor.GetKey(property), Parent = node };
                 Convert(propValue, newNode, descriptor);
                 node.Childs.Add(newNode);
             }

@@ -56,19 +56,7 @@ namespace KipTM.Model
         {
             _deviceTypes.AddRange(deviceTypes);
             _ethalonTypes.AddRange(ethalonTypes);
-            //_deviceTypes.Add(new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer));
-            //_ethalonTypes.Add(new DeviceTypeDescriptor(PACE1000Model.Model, PACE1000Model.DeviceCommonType, PACE1000Model.DeviceManufacturer));
-
-            //_deviceManager = new DeviceManager(faetures, NLog.LogManager.GetLogger("DeviceManager"));
         }
-
-        /// <summary>
-        /// Пул сконфигурируемых устройств
-        /// </summary>
-        //public IDeviceManager DeviceManager
-        //{
-        //    get { return _deviceManager; }
-        //}
 
         /// <summary>
         /// Список типов поддерживаемых устройств
@@ -129,9 +117,7 @@ namespace KipTM.Model
 
         public void Dispose()
         {
-            //var disp = _deviceManager as IDisposable;
-            //if (disp != null) 
-            //    disp.Dispose();
+
         }
     }
 }

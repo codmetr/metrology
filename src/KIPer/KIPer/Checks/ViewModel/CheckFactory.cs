@@ -28,7 +28,7 @@ namespace KipTM.ViewModel.Checks
 {
     public class CheckFactory : ICheckFactory
     {
-        private CheckFactoryPool _checkPool;
+        private NewCheckPool _newCheckPool;
         private CheckConfig _checkConfig;
         private TestResult _result;
         private SelectChannelViewModel _chTargetDev;
@@ -36,9 +36,9 @@ namespace KipTM.ViewModel.Checks
         private IEventAggregator _eventAggregator;
 
 
-        public CheckFactory(CheckFactoryPool checkPool, CheckConfig checkConfig, TestResult result, SelectChannelViewModel chTargetDev, SelectChannelViewModel chEthalonDev, IEventAggregator eventAggregator)
+        public CheckFactory(NewCheckPool newCheckPool, CheckConfig checkConfig, TestResult result, SelectChannelViewModel chTargetDev, SelectChannelViewModel chEthalonDev, IEventAggregator eventAggregator)
         {
-            _checkPool = checkPool;
+            _newCheckPool = newCheckPool;
             _checkConfig = checkConfig;
             _result = result;
             _chTargetDev = chTargetDev;
@@ -54,7 +54,7 @@ namespace KipTM.ViewModel.Checks
         {
             IMethodViewModel result = null;
             var targetType = _checkConfig.SelectedMethod.GetType();
-            var factory = _checkPool.GetFactory(targetType);
+            var factory = _newCheckPool.GetFactory(targetType);
 
             if (factory != null)
             {

@@ -28,8 +28,6 @@ namespace KipTM.ViewModel.Workflow
         /// </summary>
         private bool _nextAvailableByStep = true;
 
-        private bool _nextAvailable;
-        private bool _backAvailable;
         private IWorkflowStep _currentState;
 
         public Workflow(List<IWorkflowStep> states)

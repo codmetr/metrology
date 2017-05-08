@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 
-namespace SimpleDb.Db
+namespace SQLiteArchive.Db
 {
     public interface IDbContext
     {

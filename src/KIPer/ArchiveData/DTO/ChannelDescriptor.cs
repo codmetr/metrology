@@ -88,6 +88,7 @@ namespace ArchiveData.DTO
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex.ToString());
                 name = Name;
             }
             return name;

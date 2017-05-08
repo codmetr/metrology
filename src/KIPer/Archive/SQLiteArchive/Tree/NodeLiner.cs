@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace SimpleDb
+namespace SQLiteArchive.Tree
 {
     public static class NodeLiner
     {
@@ -35,8 +35,8 @@ namespace SimpleDb
             var rootId = nodeSet.Min(el => el.Id);
             var root = nodeDict[rootId];
             foreach (var node in nodeSet)
-                if(nodeDict.ContainsKey(node.ParrentId) && node.Id != root.Id)
-                    nodeDict[node.ParrentId].Childs.Add(node);
+                if(nodeDict.ContainsKey(node.ParentId) && node.Id != root.Id)
+                    nodeDict[node.ParentId].Childs.Add(node);
 
             return root;
         }

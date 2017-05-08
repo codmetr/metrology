@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using ADTS;
+using ADTSChecks.Checks.Data;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO.Params;
 using CheckFrame.Model.Channels;
@@ -20,8 +21,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
 
         private readonly ADTSModel _adts;
         private readonly Parameters _param;
-        private readonly double _point;
-        private readonly double _tolerance;
+        private readonly ADTSPoint _point;
         private readonly double _rate;
         private readonly PressureUnits _unit;
         private IEthalonChannel _ethalonChannel;
@@ -35,13 +35,12 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         #endregion
 
         public DoPointStep(string name, ADTSModel adts,
-            Parameters param, double point, double tolerance, double rate, PressureUnits unit,
+            Parameters param, ADTSPoint point, double rate, PressureUnits unit,
             IEthalonChannel ethalonChannel, IUserChannel userChannel, Logger logger)
         {
             Name = name;
             _adts = adts;
             _param = param;
-            _tolerance = tolerance;
             _point = point;
             _rate = rate;
             _unit = unit;
@@ -60,7 +59,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         {
             TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
             var cancel = _cancellationTokenSource.Token;
-            var point = _point;
+            var point = _point.Pressure;
 
             OnStarted();
             // Установка единиц измерений
@@ -104,8 +103,8 @@ namespace ADTSChecks.Model.Steps.ADTSTest
                 // Установка текущего зкачения как ключевого
                 _adts.StopWaitStatus(wh);
                 point = _param == Parameters.PT
-                    ? _adts.Pitot.GetValueOrDefault(_point)
-                    : _adts.Pressure.GetValueOrDefault(_point);
+                    ? _adts.Pitot.GetValueOrDefault(point)
+                    : _adts.Pressure.GetValueOrDefault(point);
                 _adts.SetParameter(_param, point, cancel);
             }
 
@@ -128,14 +127,14 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             wh.WaitOne(TimeSpan.FromSeconds(30));
 
             // Расчитать погрешность и зафиксировать реультата
-            bool correctPoint = Math.Abs(Math.Abs(point) - Math.Abs(realValue)) <= _tolerance;
+            bool correctPoint = Math.Abs(Math.Abs(point) - Math.Abs(realValue)) <= _point.Tolerance;
             _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
             OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.RealValue),
                     new ParameterResult(DateTime.Now, realValue)));
             OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.Error),
                     new ParameterResult(DateTime.Now, Math.Abs(point) - Math.Abs(realValue))));
             OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.Tolerance),
-                    new ParameterResult(DateTime.Now, _tolerance)));
+                    new ParameterResult(DateTime.Now, _point.Tolerance)));
             OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.IsCorrect),
                     new ParameterResult(DateTime.Now, correctPoint)));
             if (cancel.IsCancellationRequested)
@@ -254,12 +253,12 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         /// <summary>
         /// Ключевая точка
         /// </summary>
-        public double Point { get { return _point; } }
+        public double Point { get { return _point.Pressure; } }
 
         /// <summary>
         /// Допуск на ключевой точке
         /// </summary>
-        public double Tolerance { get { return _tolerance; } }
+        public double Tolerance { get { return _point.Tolerance; } }
         #endregion
 
         #region Serveice

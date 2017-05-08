@@ -59,12 +59,17 @@
     <Compile Include="Archive.cs" />
     <Compile Include="ArchiveXML.cs" />
     <Compile Include="Commands\ClearTable.cs" />
+    <Compile Include="Commands\CreateNewRepair.cs" />
     <Compile Include="Commands\CreateIfNotExistTable.cs" />
-    <Compile Include="Commands\InsertOrUpdate.cs" />
-    <Compile Include="Commands\Load.cs" />
+    <Compile Include="Commands\InsertOrUpdateMetadata.cs" />
+    <Compile Include="Commands\InsertOrUpdateParameter.cs" />
+    <Compile Include="Commands\InsertOrUpdateResult.cs" />
+    <Compile Include="Commands\LoadAllRapairs.cs" />
+    <Compile Include="Commands\LoadMetadatas.cs" />
+    <Compile Include="Commands\LoadParameters.cs" />
+    <Compile Include="Commands\LoadResults.cs" />
     <Compile Include="Commands\Remove.cs" />
     <Compile Include="DataRow.cs" />
-    <Compile Include="DataSource.cs" />
     <Compile Include="Db\Database.cs" />
     <Compile Include="Db\Entity.cs" />
     <Compile Include="Db\ICommand.cs" />
@@ -72,16 +77,19 @@
     <Compile Include="Db\IDbContext.cs" />
     <Compile Include="Db\IQuery.cs" />
     <Compile Include="Db\SqLiteDbContext.cs" />
-    <Compile Include="IArchiveCustomized.cs" />
+    <Compile Include="IObjectiveArchive.cs" />
     <Compile Include="IArchive.cs" />
-    <Compile Include="IItemDescriptor.cs" />
+    <Compile Include="DTO\Metadata.cs" />
+    <Compile Include="DTO\Repair.cs" />
+    <Compile Include="Tree\IItemDescriptor.cs" />
     <Compile Include="IRepository.cs" />
-    <Compile Include="ItemDescriptor.cs" />
-    <Compile Include="Node.cs" />
-    <Compile Include="NodeLiner.cs" />
+    <Compile Include="Tree\ItemDescriptor.cs" />
+    <Compile Include="Tree\Node.cs" />
+    <Compile Include="Tree\NodeLiner.cs" />
+    <Compile Include="ObjectiveArchive.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqliteRepo.cs" />
-    <Compile Include="TreeParser.cs" />
+    <Compile Include="Tree\TreeParser.cs" />
     <Compile Include="TypeHelperEx.cs" />
   </ItemGroup>
   <ItemGroup>

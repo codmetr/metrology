@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Data.SQLite;
-namespace SimpleDb.Db
+using System.Diagnostics;
+
+namespace SQLiteArchive.Db
 {
     public class SqLiteDbContext : IDbContext
     {
@@ -29,6 +31,7 @@ namespace SimpleDb.Db
                     }
                     catch (Exception ex)
                     {
+                        Debug.WriteLine(ex.ToString());
                         transaction.Rollback();
                         throw;
                     }

@@ -10,9 +10,6 @@ namespace KipTM.Model
     {
         private readonly Dictionary<string, Dictionary<string, ICheckMethod>> _methods;
         private readonly Dictionary<string, IMethodFactory> _factories;
-        private readonly Dictionary<string, Bitmap> _largeImmages;
-        private readonly Dictionary<string, Bitmap> _smallImmages;
-        private readonly Dictionary<string, string> _names;
 
         public MethodsService(IEnumerable<IMethodFactory> factories )
         {

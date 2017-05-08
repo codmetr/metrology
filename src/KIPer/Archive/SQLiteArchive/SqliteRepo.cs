@@ -13,6 +13,11 @@ namespace SQLiteArchive
     {
         private string path;
 
+        public SqliteRepo(string path)
+        {
+            this.path = path;
+        }
+
         private IEnumerable<DataRow> GetAllRows()
         {
             if (!File.Exists(path))

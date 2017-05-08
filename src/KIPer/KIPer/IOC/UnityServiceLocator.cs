@@ -8,6 +8,9 @@ using Microsoft.Practices.Unity;
 
 namespace KipTM.IOC
 {
+    /// <summary>
+    /// Обертка для локатра сервисов, используемого в корне компановки
+    /// </summary>
     public class UnityServiceLocator : IServiceLocator
     {
         private readonly IUnityContainer _unityContainer;

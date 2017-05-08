@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using SimpleDb.Db;
+using SQLiteArchive.Db;
 
-namespace SimpleDb
+namespace SQLiteArchive.Tree
 {
-    [DebuggerDisplay("ID:{Id} PId:{ParrentId} {Name}:{Val}")]
+    [DebuggerDisplay("ID:{Id} PId:{ParentId} {Name}:{Val}")]
     public class Node:Entity
     {
         private static int _maxId = 0;
         private List<Node> _childs = new List<Node>();
-        private Node _parrent;
+        private Node _parent;
 
         /// <summary>
         /// Метод получени нового GUID
@@ -40,20 +40,20 @@ namespace SimpleDb
         /// <summary>
         /// Родитель
         /// </summary>
-        public Node Parrent
+        public Node Parent
         {
-            get { return _parrent; }
+            get { return _parent; }
             set
             {
-                _parrent = value;
-                ParrentId = _parrent.Id;
+                _parent = value;
+                ParentId = _parent.Id;
             }
         }
 
         /// <summary>
         /// Идентификатор родителя 
         /// </summary>
-        public long ParrentId { get; set; }
+        public long ParentId { get; set; }
 
         /// <summary>
         /// Дети

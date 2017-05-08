@@ -131,7 +131,7 @@
     <Compile Include="Archive\IDataAccessor.cs" />
     <Compile Include="Archive\PropertyArchive.cs" />
     <Compile Include="Archive\ViewModel\TestResultViewModelFactory.cs" />
-    <Compile Include="Checks\ViewModel\CheckPool.cs" />
+    <Compile Include="Checks\ViewModel\NewCheckPool.cs" />
     <Compile Include="Checks\View\ChannelDescriptorView.xaml.cs">
       <DependentUpon>ChannelDescriptorView.xaml</DependentUpon>
     </Compile>
@@ -492,6 +492,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Content\books.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\Archive.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

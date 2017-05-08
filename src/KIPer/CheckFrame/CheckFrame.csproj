@@ -93,7 +93,7 @@
     <Compile Include="Services\ViewModel\FillReport\FormulaDifError.cs" />
     <Compile Include="Services\ViewModel\FillReport\IFormulaDescriptor.cs" />
     <Compile Include="Services\ViewModel\FillReport\ParameterRow.cs" />
-    <Compile Include="Services\ViewModel\FillReport\ParametersSet.cs" />
+    <Compile Include="Services\ViewModel\FillReport\ParameterGroup.cs" />
     <Compile Include="Services\ViewModel\FillReport\TemplateReportData.cs" />
     <Compile Include="Services\ViewModel\ParameterValuePair.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

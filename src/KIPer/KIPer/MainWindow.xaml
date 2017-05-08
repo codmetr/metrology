@@ -7,7 +7,7 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:ribbon="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon"
         mc:Ignorable="d ignore"
-        Height="730" Width="840"
+        d:DesignHeight="730" d:DesignWidth="840"
         Title="КипТМ" Icon="Content/icon.png"
         x:Name="MainViewWindow">
     <ribbon:RibbonWindow.Resources>
@@ -71,6 +71,15 @@
                     </ribbon:RibbonGroup.ItemTemplate>
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
+            <ribbon:RibbonTab Header="АРХИВ">
+                <ribbon:RibbonGroup x:Name="GroupArchive" Header="Архив">
+                    <ribbon:RibbonButton 
+                        Label="История" Command="{Binding SelectArchive}"
+                        LargeImageSource="Content/Archive.png"
+                        SmallImageSource="Content/Archive.png">
+                    </ribbon:RibbonButton>
+                 </ribbon:RibbonGroup>
+            </ribbon:RibbonTab>
             <ribbon:RibbonTab Header="СЕРВИС">
                 <ribbon:RibbonGroup x:Name="GroupDeviceService" Header="Прямое управление">
                     <ribbon:RibbonButton 
@@ -86,7 +95,7 @@
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
             <ribbon:RibbonTab Header="ДОКУМЕНТАЦИЯ">
-                <ribbon:RibbonGroup x:Name="GroupDocs" Header="Прямое управление">
+                <ribbon:RibbonGroup x:Name="GroupDocs" Header="Документация">
                     <ribbon:RibbonButton 
                         Label="Документация" Command="{Binding SelectLib}"
                         LargeImageSource="Content/books.png"

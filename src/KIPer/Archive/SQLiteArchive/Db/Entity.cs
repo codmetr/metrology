@@ -1,6 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 
-namespace SimpleDb.Db
+namespace SQLiteArchive.Db
 {
     public abstract class Entity
     {

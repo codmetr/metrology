@@ -101,7 +101,6 @@ namespace KipTM.ViewModel
         /// <param name="settings">Настройки</param>
         /// <param name="propertiesLibrary">Свойства</param>
         /// <param name="archive">Архив</param>
-        /// <param name="resulMaker">Источник результатов</param>
         /// <param name="filler">Заполнение результата</param>
         /// <param name="reportFactory">Фабрика отчетов</param>
         /// <param name="services">Сервисы</param>
@@ -111,8 +110,7 @@ namespace KipTM.ViewModel
         /// <param name="factoriesViewModels">Преобразователи в визуальные модели</param>
         public MainViewModel(
             IEventAggregator eventAggregator, IDataService dataService, IMethodsService methodicService,
-            IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive,
-            IMarkerFactory<IParameterResultViewModel> resulMaker, IFillerFactory<IParameterResultViewModel> filler,
+            IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive, IFillerFactory<IParameterResultViewModel> filler,
             IReportFactory reportFactory, IEnumerable<IService> services, FeatureDescriptorsCombiner features,
             IDictionary<Type, ICustomConfigFactory> customFatories, IDeviceManager deviceManager,
             IEnumerable<ICheckViewModelFactory> factoriesViewModels, IMarkerFactory<IParameterResultViewModel> resultMaker)
@@ -185,7 +183,7 @@ namespace KipTM.ViewModel
                     _customFactory);
                 var resFactory = new TestResultViewModelFactory(result, checkConfig, _resultMaker, _propertiesLibrary,
                     _filler, _accessor);
-                var checkPool = new CheckFactoryPool(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels, _eventAggregator);
+                var checkPool = new NewCheckPool(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels);
                 var checkFactory = new CheckFactory(checkPool, checkConfig, result, channelTargetDevice, channelEthalonDevice, _eventAggregator);
                 _eventAggregator.Subscribe(this);
 

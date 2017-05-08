@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Dapper;
-using SimpleDb.Db;
+﻿using Dapper;
+using SQLiteArchive.Db;
 
-namespace SimpleDb.Commands
+namespace SQLiteArchive.Commands
 {
     public class ClearTable:ICommand
     {

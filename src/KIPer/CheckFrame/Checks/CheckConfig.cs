@@ -14,6 +14,9 @@ using KipTM.Settings;
 
 namespace KipTM.Checks
 {
+    /// <summary>
+    /// Конфигурация проверки
+    /// </summary>
     public class CheckConfig
     {
         #region Внутренние переменные
@@ -33,7 +36,7 @@ namespace KipTM.Checks
         /// </summary>
         private IDictionary<string, DeviceTypeDescriptor> _avalableDeviceTypes;
         /// <summary>
-        /// Доступные типы устройств эталонов
+        /// Доступные типы эталоннных устройств
         /// </summary>
         private IDictionary<string, DeviceTypeDescriptor> _avalableEthalonTypes;
         /// <summary>
@@ -70,9 +73,9 @@ namespace KipTM.Checks
 
         #endregion
 
-        #region Конструкторы и инициализация
+        #region Конструктор
         /// <summary>
-        /// 
+        /// Конфигурация проверки
         /// </summary>
         /// <param name="settings"></param>
         /// <param name="method"></param>
@@ -89,6 +92,9 @@ namespace KipTM.Checks
             LoadAvalableCheckDevices(settings, dictionaries);
             LoadAvalableEthalons();
         }
+        #endregion
+
+        #region Инициализация
 
         /// <summary>
         /// Загрузить набор доступных проверяемых устройств
@@ -101,7 +107,9 @@ namespace KipTM.Checks
             _data.TargetTypeKey = null;
             var avalableDeviceTypes = GetAllAvailableDeviceTypes(settings, dictionaries);
             _allDeviceTypes = avalableDeviceTypes;
-            avalableDeviceTypes = avalableDeviceTypes.Where(el => _method.GetKeys().Contains(el.Key)).ToDictionary(el=>el.Key, el=>el.Value);
+            avalableDeviceTypes =
+                avalableDeviceTypes.Where(el => _method.GetKeys().Contains(el.Key))
+                    .ToDictionary(el => el.Key, el => el.Value);
             if (avalableDeviceTypes == null)
                 throw new NullReferenceException(string.Format("Не удалось получить список доступных типов устройств"));
 
@@ -151,7 +159,8 @@ namespace KipTM.Checks
         /// <param name="targetDevKey">ключ типа проверяемого устройства</param>
         /// <param name="selectedChannel">выбраный канал</param>
         /// <returns></returns>
-        private Dictionary<string, DeviceTypeDescriptor> GetAvailableEthalons(string targetDevKey, ChannelDescriptor selectedChannel)//IMainSettings settings, 
+        private Dictionary<string, DeviceTypeDescriptor> GetAvailableEthalons(string targetDevKey,
+            ChannelDescriptor selectedChannel) //IMainSettings settings, 
         {
             var avalableEthalonTypes = new Dictionary<string, DeviceTypeDescriptor>();
             foreach (var dev in _allDeviceTypes)
@@ -267,7 +276,8 @@ namespace KipTM.Checks
         /// <param name="settings">Настройки</param>
         /// <param name="dictionaries">Справочник функционала</param>
         /// <returns></returns>
-        private Dictionary<string, DeviceTypeDescriptor> GetAllAvailableDeviceTypes(IMainSettings settings, DictionariesPool dictionaries)
+        private Dictionary<string, DeviceTypeDescriptor> GetAllAvailableDeviceTypes(IMainSettings settings,
+            DictionariesPool dictionaries)
         {
             var avalableDeviceTypes = new Dictionary<string, DeviceTypeDescriptor>();
             foreach (var deviceType in dictionaries.DeviceTypes)

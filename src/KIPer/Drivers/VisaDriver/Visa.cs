@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using Ivi.Visa.Interop;
@@ -97,6 +98,7 @@ namespace VisaDriver
             }
             catch (SystemException ex)
             {
+                Debug.WriteLine(ex.ToString());
                 this.ioArbFG.IO = null;
                 throw;
             }

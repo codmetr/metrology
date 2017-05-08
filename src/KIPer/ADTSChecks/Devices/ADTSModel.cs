@@ -43,7 +43,6 @@ namespace ADTSChecks.Model.Devices
         private DateTime? _pitotTime;
         private double? _pitot;
 
-        private DateTime? _pressureUnitTime;
         private PressureUnits? _pressureUnit;
 
         private DateTime? _stateTime;

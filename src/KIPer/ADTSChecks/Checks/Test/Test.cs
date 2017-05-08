@@ -84,8 +84,8 @@ namespace ADTSChecks.Model.Checks
 
             foreach (var point in parameters.Points)
             {
-                step = new CheckStepConfig(new DoPointStep(string.Format("Поверка точки {0} {1}", point.Pressure, _unit.ToStr()), _adts, param, point.Pressure,
-                        point.Tolerance, parameters.Rate, parameters.Unit, _ethalonChannel, _userChannel, _logger), false, point.IsAvailable);
+                step = new CheckStepConfig(new DoPointStep(string.Format("Поверка точки {0} {1}", point.Pressure, _unit.ToStr()), _adts, param, point,
+                    parameters.Rate, parameters.Unit, _ethalonChannel, _userChannel, _logger), false, point.IsAvailable);
                 AttachStep(step.Step);
                 steps.Add(step);
             }

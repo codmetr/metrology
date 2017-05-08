@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace SimpleDb
+namespace SQLiteArchive.Tree
 {
     /// <summary>
     /// Правила получения ключей для полей:

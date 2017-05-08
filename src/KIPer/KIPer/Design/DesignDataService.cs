@@ -13,7 +13,7 @@ namespace KipTM.Design
 {
     public class DesignDataService : IDataService
     {
-        private IDeviceManager _deviceManager;
+        private IDeviceManager _deviceManager = null;
 
         public IDeviceManager DeviceManager
         {

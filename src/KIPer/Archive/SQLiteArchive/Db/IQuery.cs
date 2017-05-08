@@ -1,4 +1,4 @@
-﻿namespace SimpleDb.Db
+﻿namespace SQLiteArchive.Db
 {
     public interface IQuery<out T>
     {

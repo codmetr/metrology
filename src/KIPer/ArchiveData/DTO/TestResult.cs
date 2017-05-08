@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace ArchiveData.DTO
 {
+    /// <summary>
+    /// Контейнер результата одной проверки
+    /// </summary>
     public class TestResult
     {
         public TestResult()

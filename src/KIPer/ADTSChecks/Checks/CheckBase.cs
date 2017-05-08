@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -127,9 +128,10 @@ namespace ADTSChecks.Model.Checks
                 if (!_ethalonChannel.Activate(EthalonChannelType))
                     throw new Exception(string.Format("Can not Activate ethalon channel: {0}", _ethalonChannel));
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                if(_agregator != null)
+                Debug.WriteLine(ex.ToString());
+                if (_agregator != null)
                     _agregator.Post(new ErrorMessageEventArg("Не удалось подключить эталонный канал"));
                 OnEndMethod(null);
                 return false;

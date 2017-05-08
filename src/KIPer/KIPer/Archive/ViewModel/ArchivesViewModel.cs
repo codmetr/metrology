@@ -14,8 +14,6 @@ namespace KipTM.ViewModel
     /// </summary>
     public class ArchivesViewModel : ViewModelBase, IArchivesViewModel
     {
-        private string _meashuredParameter;
-
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
         /// </summary>

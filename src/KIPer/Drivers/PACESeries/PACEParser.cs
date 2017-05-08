@@ -386,7 +386,6 @@ namespace PACESeries
         /// <returns>Команда</returns>
         public string GetCommandSetOutputState(bool state)
         {
-            string unitstr = null;
             return PaceSemanticRule.CompilCommand(string.Format(KeySetOutputStateFormat, ""),
                 new Dictionary<string, string>() {{"<state>", state ? "ON" : "OFF"}});
         }
@@ -399,7 +398,6 @@ namespace PACESeries
         /// <returns>Команда</returns>
         public string GetCommandSetOutputState(int channel, bool state)
         {
-            string unitstr = null;
             return PaceSemanticRule.CompilCommand(string.Format(KeySetOutputStateFormat, channel),
                 new Dictionary<string, string>() {{"<state>", state ? "ON" : "OFF"}});
         }

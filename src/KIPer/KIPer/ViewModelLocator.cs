@@ -9,36 +9,11 @@
   DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
 */
 
-using System.Collections.Generic;
-using System.Reflection;
-using System.Windows;
-using CheckFrame.Checks;
-using CheckFrame.ViewModel.Archive;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Ioc;
-using KipTM.Archive;
-using KipTM.Checks.ViewModel.Config;
 using KipTM.Interfaces;
-using KipTM.Interfaces.Checks;
-using KipTM.Settings;
-using KipTM.ViewModel.ResultFiller;
-using MarkerService;
-using MarkerService.Filler;
 using Microsoft.Practices.ServiceLocation;
-using KipTM.Model;
 using System;
-using System.IO;
-using System.Linq;
-using CheckFrame;
-using KipTM.Design;
-using KipTM.EventAggregator;
-using KipTM.Interfaces.Archive;
 using KipTM.IOC;
 using Microsoft.Practices.Unity;
-using ReportService;
-using SQLiteArchive;
-using Tools;
-using UnityServiceLocator = KipTM.IOC.UnityServiceLocator;
 
 namespace KipTM.ViewModel
 {
@@ -57,7 +32,7 @@ namespace KipTM.ViewModel
 
             unityContainer = IOCConfig.Config(unityContainer);
 
-            ServiceLocator.SetLocatorProvider(() => new UnityServiceLocator(unityContainer));
+            ServiceLocator.SetLocatorProvider(() => new KipTM.IOC.UnityServiceLocator(unityContainer));
 
             //SimpleIoc.Default.Register<MainViewModel>();
         }

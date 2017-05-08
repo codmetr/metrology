@@ -8,9 +8,20 @@ using System.Text;
 
 namespace SQLiteArchive
 {
+    /// <summary>
+    /// Методы расширения для поиска типов всех элементов
+    /// </summary>
     public static class TypeHelperEx
     {
-        public static List<Type> FillNoSerialisedTypes(this List<Type> types, object targetObject, Type targetType)
+        /// <summary>
+        /// Дополнить список набором не учтенных сериализуемых типов вложенных элементов переданного объекта
+        /// </summary>
+        /// <param name="types">Имеющийся список типов</param>
+        /// <param name="targetObject">Анализирумый объект</param>
+        /// <param name="targetType">Целевой тип</param>
+        /// <remarks>Сам объект передается на случай, если есть поле типа <see cref="object"/></remarks>
+        /// <returns>Дополненный список <paramref name="types"/></returns>
+        public static List<Type> AddSerializedTypes(this List<Type> types, object targetObject, Type targetType)
         {
             if (!targetType.IsSerializable)
             {
@@ -22,19 +33,26 @@ namespace SQLiteArchive
                 var prop = proptype.GetValue(targetObject, null);
                 if (proptype.PropertyType == typeof(object))
                 {
-                    types = types.FillNoSerialisedTypes(prop, prop.GetType());
+                    types = types.AddSerializedTypes(prop, prop.GetType());
                     continue;
                 }
                 else
                 {
-                    types = types.FillNoSerialisedTypes(prop, proptype.PropertyType);
+                    types = types.AddSerializedTypes(prop, proptype.PropertyType);
                     continue;
                 }
             }
             return types;
         }
 
-        public static List<Type> FillNoObjectTypes(this List<Type> types, Type targetType)
+        /// <summary>
+        /// Дополнить список набором типов свойств переданного типа (рекурсивно)
+        /// </summary>
+        /// <param name="types">Имеющийся список типов</param>
+        /// <param name="targetType">Целевой тип</param>
+        /// <remarks>В случае если поле типа <see cref="object"/>, оно игнорируется</remarks>
+        /// <returns>Дополненный список <paramref name="types"/></returns>
+        public static List<Type> AddTypes(this List<Type> types, Type targetType)
         {
             if (types.Contains(targetType))
                 return types;
@@ -48,17 +66,35 @@ namespace SQLiteArchive
             }
             foreach (var propertyInfo in targetType.GetProperties())
             {
-                types = types.FillNoObjectTypes(propertyInfo.PropertyType);
+                types = types.AddTypes(propertyInfo.PropertyType);
             }
             return types;
         }
 
-        public static List<Type> FillNoObjectTypes(this List<Type> types, object targetObject, Type targetType)
+        /// <summary>
+        /// Дополнить список набором типов вложенных элементов переданного объекта, с исключением проанализированных типов
+        /// </summary>
+        /// <param name="types">Имеющийся список типов</param>
+        /// <param name="targetObject">Анализирумый объект</param>
+        /// <param name="targetType">Целевой тип</param>
+        /// <remarks>Сам объект передается на случай, если есть поле типа <see cref="object"/></remarks>
+        /// <returns>Дополненный список <paramref name="types"/></returns>
+        public static List<Type> AddTypes(this List<Type> types, object targetObject, Type targetType)
         {
-            return FillNoObjectTypesExcludeParrent(types, new List<Type>(), targetObject, targetType);
+            return AddTypesExcludeParrent(types, new List<Type>(), targetObject, targetType);
         }
 
-        public static List<Type> FillNoObjectTypesExcludeParrent(List<Type> types, List<Type> parentTypes, object targetObject, Type targetType)
+        /// <summary>
+        /// Дополнить список набором не учтенных типов вложенных элементов переданного объекта,
+        /// с исключением проанализированных типов.
+        /// </summary>
+        /// <param name="types">Имеющийся список типов</param>
+        /// <param name="parentTypes">Список проанализированных ранее типов</param>
+        /// <param name="targetObject">Анализирумый объект</param>
+        /// <param name="targetType">Целевой тип</param>
+        /// <remarks>Сам объект передается на случай, если есть поле типа <see cref="object"/></remarks>
+        /// <returns>Дополненный список <paramref name="types"/></returns>
+        public static List<Type> AddTypesExcludeParrent(List<Type> types, List<Type> parentTypes, object targetObject, Type targetType)
         {
             // for exclude stacOverflow
             if (parentTypes.Contains(targetType))
@@ -77,7 +113,7 @@ namespace SQLiteArchive
                 if (targetType != typeof (object))
                     // if real type is object
                     return types;
-                return FillNoObjectTypesExcludeParrent(types, parentTypes, targetObject, targetType);
+                return AddTypesExcludeParrent(types, parentTypes, targetObject, targetType);
             }
             parentTypes.Add(targetType);
             foreach (var proptype in targetType.GetProperties())
@@ -85,37 +121,53 @@ namespace SQLiteArchive
                 var indexes = proptype.GetIndexParameters();
                 if (indexes.Any())
                 {
-                    types = FillNoInListTypesPropertyIndex(types, parentTypes, targetObject, proptype);
+                    types = AddTypesPropertyIndex(types, parentTypes, targetObject, proptype);
                     continue;
                 }
-                types = FillNoInListTypesProperty(types, parentTypes, targetObject, proptype);
+                types = AddTypesProperty(types, parentTypes, targetObject, proptype);
             }
             parentTypes.Remove(targetType);
             return types;
         }
 
-        private static List<Type> FillNoInListTypesProperty(List<Type> types, List<Type> parentTypes, object targetObject, PropertyInfo proptype)
+        /// <summary>
+        /// Дополнить список типами из свойства
+        /// </summary>
+        /// <param name="types">Имеющийся список типов</param>
+        /// <param name="parentTypes">Список проанализированных ранее типов</param>
+        /// <param name="targetObject">Анализирумый объект</param>
+        /// <param name="proptype">тип свойства</param>
+        /// <returns></returns>
+        private static List<Type> AddTypesProperty(List<Type> types, List<Type> parentTypes, object targetObject, PropertyInfo proptype)
         {
             var propVal = targetObject == null ? null : proptype.GetValue(targetObject, null);
             if (proptype.PropertyType != typeof(object))
-                types = FillNoObjectTypesExcludeParrent(types, parentTypes, propVal, proptype.PropertyType);
+                types = AddTypesExcludeParrent(types, parentTypes, propVal, proptype.PropertyType);
             else if (propVal != null)
-                types = FillNoObjectTypesExcludeParrent(types, parentTypes, propVal, propVal.GetType());
+                types = AddTypesExcludeParrent(types, parentTypes, propVal, propVal.GetType());
 
             return types;
         }
 
-        private static List<Type> FillNoInListTypesPropertyIndex(List<Type> types, List<Type> parentTypes, object targetObject, PropertyInfo proptype)
+        /// <summary>
+        /// Дополнить список типами из индексного свойства
+        /// </summary>
+        /// <param name="types">Имеющийся список типов</param>
+        /// <param name="parentTypes">Список проанализированных ранее типов</param>
+        /// <param name="targetObject">Анализирумый объект</param>
+        /// <param name="proptype">тип свойства</param>
+        /// <returns></returns>
+        private static List<Type> AddTypesPropertyIndex(List<Type> types, List<Type> parentTypes, object targetObject, PropertyInfo proptype)
         {
             // fill index types
             var indexesTypes = proptype.GetIndexParameters();
             foreach (var parameterInfo in indexesTypes)
             {
-                types = FillNoObjectTypesExcludeParrent(types, parentTypes, null, parameterInfo.ParameterType);
+                types = AddTypesExcludeParrent(types, parentTypes, null, parameterInfo.ParameterType);
             }
 
             // fill proerty type
-            types = FillNoObjectTypesExcludeParrent(types, parentTypes, null, proptype.PropertyType);
+            types = AddTypesExcludeParrent(types, parentTypes, null, proptype.PropertyType);
             if (targetObject == null)
                 return types;
 
@@ -124,7 +176,7 @@ namespace SQLiteArchive
             {
                 foreach (object val in enumerable)
                     // fill elements types
-                    types = FillNoObjectTypesExcludeParrent(types, parentTypes, val, val.GetType());
+                    types = AddTypesExcludeParrent(types, parentTypes, val, val.GetType());
             }
             return types;
         }

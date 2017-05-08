@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Dapper;
-using SimpleDb.Db;
+﻿using Dapper;
+using SQLiteArchive.Db;
+using SQLiteArchive.Tree;
 
-namespace SimpleDb.Commands
+namespace SQLiteArchive.Commands
 {
     public class Remove : ICommand
     {

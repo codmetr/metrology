@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -308,7 +309,8 @@ namespace ADTSChecks.Checks.ViewModel
             }
             catch(Exception ex) //todo поймать ошибку подключения
             {
-                if(_agregator!=null)
+                Debug.WriteLine(ex.ToString());
+                if (_agregator!=null)
                     _agregator.Post(new ErrorMessageEventArg("Не удалось подключить АДТС"));
                 // В базовое состояние
                 ToStart(true);
@@ -324,6 +326,7 @@ namespace ADTSChecks.Checks.ViewModel
                 }
                 catch (Exception ex) //todo поймать ошибку подключения
                 {
+                    Debug.WriteLine(ex.ToString());
                     if (_agregator != null)
                         _agregator.Post(new ErrorMessageEventArg("Не удалось подключить эталонный канал"));
                     // В базовое состояние

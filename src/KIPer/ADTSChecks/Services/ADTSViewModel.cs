@@ -23,7 +23,6 @@ namespace ADTSChecks.ViewModel.Services
     public class ADTSViewModel : ViewModelBase, IService
     {
         private ADTSModel _model;
-        private string _statusAdts;
         private string _stateAdts;
         private string _pressure;
         private string _pitot;

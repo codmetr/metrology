@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CheckFrame.Services.ViewModel.FillReport;
 using GalaSoft.MvvmLight;
 
 namespace KipTM.Services.ViewModel.FillReport

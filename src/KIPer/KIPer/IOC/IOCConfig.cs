@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using CheckFrame;
 using CheckFrame.Checks;
 using CheckFrame.ViewModel.Archive;
@@ -32,7 +30,6 @@ namespace KipTM.IOC
     {
         public static UnityContainer Config(UnityContainer unityContainer)
         {
-            var pluginsTypes = GetPluginsTypes();
 
             //unityContainer.RegisterTypes(pluginsTypes);
             if (ViewModelBase.IsInDesignModeStatic)
@@ -43,29 +40,8 @@ namespace KipTM.IOC
             {
                 unityContainer.RegisterType<IDataService, Model.DataService>();
             }
-            foreach (var type in pluginsTypes)
-            {
-                if (typeof(IDeviceSettingsFactory).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IDeviceSettingsFactory), type, type.Name);
-                if (typeof(IEthalonSettingsFactory).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IEthalonSettingsFactory), type, type.Name);
-                if (typeof(IDeviceTypeSettingsFactory).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IDeviceTypeSettingsFactory), type, type.Name);
-                if (typeof(IMethodFactory).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IMethodFactory), type, type.Name);
-                if (typeof(IService).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IService), type, type.Name);
-                if (typeof(IFeaturesDescriptor).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IFeaturesDescriptor), type, type.Name);
-                if (typeof(IArchiveDataDefault).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(IArchiveDataDefault), type, type.Name);
-                if (typeof(ICustomConfigFactory).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof(ICustomConfigFactory), type, type.Name);
-                if (typeof(ICheckViewModelFactory).IsAssignableFrom(type) && type.GetAttributes(typeof(ViewModelFactoryAttribute)).Any())
-                    unityContainer.RegisterType(typeof(ICheckViewModelFactory), type, type.Name);
-                if (typeof(IReporter).IsAssignableFrom(type) && type.GetAttributes(typeof(ReportAttribute)).Any())
-                    unityContainer.RegisterType(typeof(IReporter), type, type.Name);
-            }
+
+            RegustrPlugins(unityContainer);
 
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
             unityContainer.RegisterType<IArchive, ArchiveXML>();
@@ -113,10 +89,38 @@ namespace KipTM.IOC
 
             // Устоновка Singletone MethodsService
             unityContainer.RegisterType<IMethodsService, MethodsService>();
-            unityContainer.RegisterType<MainViewModel>();
-            unityContainer.RegisterInstance<MainViewModel>(unityContainer.Resolve<MainViewModel>());
+            unityContainer.RegisterType<MainViewModel>(new ContainerControlledLifetimeManager());
 
             return unityContainer;
+        }
+
+        private static void RegustrPlugins(UnityContainer unityContainer)
+        {
+            var pluginsTypes = GetPluginsTypes();
+            foreach (var type in pluginsTypes)
+            {
+                if (typeof (IDeviceSettingsFactory).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof (IDeviceSettingsFactory), type, type.Name);
+                if (typeof (IEthalonSettingsFactory).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof (IEthalonSettingsFactory), type, type.Name);
+                if (typeof (IDeviceTypeSettingsFactory).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof (IDeviceTypeSettingsFactory), type, type.Name);
+                if (typeof (IMethodFactory).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof (IMethodFactory), type, type.Name);
+                if (typeof (IService).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof (IService), type, type.Name);
+                if (typeof (IFeaturesDescriptor).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof (IFeaturesDescriptor), type, type.Name);
+                if (typeof (IArchiveDataDefault).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof (IArchiveDataDefault), type, type.Name);
+                if (typeof (ICustomConfigFactory).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof (ICustomConfigFactory), type, type.Name);
+                if (typeof (ICheckViewModelFactory).IsAssignableFrom(type) &&
+                    type.GetAttributes(typeof (ViewModelFactoryAttribute)).Any())
+                    unityContainer.RegisterType(typeof (ICheckViewModelFactory), type, type.Name);
+                if (typeof (IReporter).IsAssignableFrom(type) && type.GetAttributes(typeof (ReportAttribute)).Any())
+                    unityContainer.RegisterType(typeof (IReporter), type, type.Name);
+            }
         }
 
         private static IEnumerable<Type> GetPluginsTypes()
@@ -126,9 +130,7 @@ namespace KipTM.IOC
             var assemblies = new List<Assembly>();
             referencedPaths.ForEach(p => assemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(p))));
 
-            var pluginsTypes =
-                assemblies.SelectMany(
-                    el => el.GetExportedTypes());
+            var pluginsTypes = assemblies.SelectMany(el => el.GetExportedTypes());
             return pluginsTypes;
         }
     }
