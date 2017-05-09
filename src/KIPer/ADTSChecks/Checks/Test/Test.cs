@@ -62,6 +62,7 @@ namespace ADTSChecks.Model.Checks
         {
             _logger.With(l => l.Trace("Init ADTSTestMethodic"));
 
+            _parameters = parameters;
             _calibChan = parameters.CalibChannel;
 
             //if (_userChannel == null)

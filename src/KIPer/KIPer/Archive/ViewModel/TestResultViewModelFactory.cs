@@ -37,7 +37,7 @@ namespace KipTM.Archive.ViewModel
         public TestResultViewModel GetTestResult()
         {
             return new TestResultViewModel(_result,
-                _resulMaker.GetMarkers(_checkConf.SelectedMethod.GetType(), _checkConf.SelectedMethod), _filler, _accessor);
+                _resulMaker.GetMarkers(_checkConf.CustomSettings.GetType(), _checkConf.CustomSettings), _filler, _accessor);
         }
 
     }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
+using ADTSChecks.Checks.Data;
 using ADTSChecks.Model.Devices;
 using ADTSData;
 using ArchiveData.DTO;
@@ -28,6 +29,11 @@ namespace ADTSChecks.Model.Checks
         public const string KeySettingsPSPT = KeysDic.KeySettingsPSPT;
 
         protected string MethodName = "ADTS";
+
+        /// <summary>
+        /// Параметры проведения проверки
+        /// </summary>
+        protected ADTSParameters _parameters;
 
         protected ADTSModel _adts;
         protected CancellationTokenSource _cancelSource;

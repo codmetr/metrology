@@ -85,7 +85,7 @@ namespace ADTSChecks.Model.Checks
             else param = Parameters.PS;
             foreach (var point in parameters.Points)
             {
-                step = new CheckStepConfig( new DoPointStep(string.Format("Калибровка точки {0}", point.Pressure),
+                step = new CheckStepConfig( new DoPointStep(string.Format("Калибровка точки {0} {1}", point.Pressure, parameters.Unit.ToStr()),
                     _adts, param, point, parameters.Rate, parameters.Unit, _ethalonChannel,
                     _userChannel, _logger), false, point.IsAvailable);
 
