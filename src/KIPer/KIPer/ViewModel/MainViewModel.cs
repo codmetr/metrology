@@ -61,7 +61,7 @@ namespace KipTM.ViewModel
         private IMethodsService _methodicService;
         private IMainSettings _settings;
         private IPropertiesLibrary _propertiesLibrary;
-        private IArchive _archive;
+        private IObjectiveArchive _archive;
         private readonly IEventAggregator _eventAggregator;
         private IArchivesViewModel _tests;
         private DeviceTypeCollectionViewModel _deviceTypes;
@@ -110,7 +110,7 @@ namespace KipTM.ViewModel
         /// <param name="factoriesViewModels">Преобразователи в визуальные модели</param>
         public MainViewModel(
             IEventAggregator eventAggregator, IDataService dataService, IMethodsService methodicService,
-            IMainSettings settings, IPropertiesLibrary propertiesLibrary, IArchive archive, IFillerFactory<IParameterResultViewModel> filler,
+            IMainSettings settings, IPropertiesLibrary propertiesLibrary, IObjectiveArchive archive, IFillerFactory<IParameterResultViewModel> filler,
             IReportFactory reportFactory, IEnumerable<IService> services, FeatureDescriptorsCombiner features,
             IDictionary<Type, ICustomConfigFactory> customFatories, IDeviceManager deviceManager,
             IEnumerable<ICheckViewModelFactory> factoriesViewModels, IMarkerFactory<IParameterResultViewModel> resultMaker)
@@ -177,13 +177,10 @@ namespace KipTM.ViewModel
                 var channelEthalonDevice = new SelectChannelViewModel(_channelFactory.GetChannels());
 
                 var result = new TestResult();
-                var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool,
-                    _propertiesLibrary.DictionariesPool, result);
-                var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice,
-                    _customFactory);
-                var resFactory = new TestResultViewModelFactory(result, checkConfig, _resultMaker, _propertiesLibrary,
-                    _filler, _accessor);
-                var checkPool = new NewCheckPool(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels);
+                var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, result);
+                var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice, _customFactory);
+                var resFactory = new TestResultViewModelFactory(result, checkConfig, _resultMaker, _filler, _archive);
+                var checkPool = new CheckPool(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels);
                 var checkFactory = new CheckFactory(checkPool, checkConfig, result, channelTargetDevice, channelEthalonDevice, _eventAggregator);
                 _eventAggregator.Subscribe(this);
 

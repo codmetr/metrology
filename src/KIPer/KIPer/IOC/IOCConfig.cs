@@ -30,6 +30,7 @@ namespace KipTM.IOC
     {
         public static UnityContainer Config(UnityContainer unityContainer)
         {
+            string dbName = Properties.Settings.Default.DbName;
 
             //unityContainer.RegisterTypes(pluginsTypes);
             if (ViewModelBase.IsInDesignModeStatic)
@@ -45,6 +46,7 @@ namespace KipTM.IOC
 
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
             unityContainer.RegisterType<IArchive, ArchiveXML>();
+            unityContainer.RegisterInstance<IObjectiveArchive>(new ObjectiveArchive(dbName));
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IFeaturesDescriptor>());
             unityContainer.RegisterInstance<FeatureDescriptorsCombiner>(
                 unityContainer.Resolve<FeatureDescriptorsCombiner>());

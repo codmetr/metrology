@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Archive\ArchiveBase.cs" />
-    <Compile Include="Archive\ChecksPool.cs" />
+    <Compile Include="Archive\ChecksStorage.cs" />
     <Compile Include="Archive\CommonPropertyKeys.cs" />
     <Compile Include="Archive\DataPool.cs" />
     <Compile Include="Archive\DataTypes\ArchivedKeyValuePair.cs" />

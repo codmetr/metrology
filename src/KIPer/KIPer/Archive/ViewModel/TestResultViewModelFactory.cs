@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using ArchiveData.DTO;
 using CheckFrame.ViewModel.Archive;
 using KipTM.Checks;
-using KipTM.Model;
 using KipTM.ViewModel;
 using MarkerService;
 using MarkerService.Filler;
+using SQLiteArchive;
 
 namespace KipTM.Archive.ViewModel
 {
@@ -18,26 +18,39 @@ namespace KipTM.Archive.ViewModel
         private TestResult _result;
         private CheckConfig _checkConf;
         private IMarkerFactory<IParameterResultViewModel> _resulMaker;
-        private IPropertiesLibrary _properties;
         private IFillerFactory<IParameterResultViewModel> _filler;
-        private IDataAccessor _accessor;
+        private IObjectiveArchive _archive;
+
 
         public TestResultViewModelFactory(TestResult result, CheckConfig checkConf,
-            IMarkerFactory<IParameterResultViewModel> resulMaker, IPropertiesLibrary properties,
-            IFillerFactory<IParameterResultViewModel> filler, IDataAccessor accessor)
+            IMarkerFactory<IParameterResultViewModel> resulMaker,
+            IFillerFactory<IParameterResultViewModel> filler, IObjectiveArchive archive)
         {
             _result = result;
             _checkConf = checkConf;
             _resulMaker = resulMaker;
-            _properties = properties;
             _filler = filler;
-            _accessor = accessor;
+            _archive = archive;
         }
 
         public TestResultViewModel GetTestResult()
         {
-            return new TestResultViewModel(_result,
-                _resulMaker.GetMarkers(_checkConf.CustomSettings.GetType(), _checkConf.CustomSettings), _filler, _accessor);
+            var markers = _resulMaker.GetMarkers(_checkConf.CustomSettings.GetType(), _checkConf.CustomSettings);
+            var parameters = new List<IParameterResultViewModel>(markers);
+            foreach (var stepResult in _result.Results)
+            {
+                var filledResult = _filler.FillMarker(stepResult.Result.GetType(), new Tuple<string, string>(stepResult.CheckKey, stepResult.StepKey), stepResult.Result);
+                if (filledResult == null)
+                    continue;
+                var index = parameters.FindIndex((el) => el.PointMeasuring == filledResult.PointMeasuring);
+                if (index >= 0)
+                {
+                    parameters.RemoveAt(index);
+                    parameters.Insert(index, filledResult);
+                }
+            }
+            var accessor = new DataAccessor(_result, _checkConf.Data, _checkConf.CustomSettings, _archive);
+            return new TestResultViewModel(_result, parameters, accessor);
         }
 
     }

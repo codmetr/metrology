@@ -38,7 +38,7 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
         /// </summary>
-        public TestResultViewModel(TestResult result, IEnumerable<IParameterResultViewModel> expectedResuls, IFillerFactory<IParameterResultViewModel> _filler, IDataAccessor accessor)
+        public TestResultViewModel(TestResult result, IEnumerable<IParameterResultViewModel> parameters, IDataAccessor accessor)
         {
             _result = result;
             if (IsInDesignMode)
@@ -59,7 +59,7 @@ namespace KipTM.ViewModel
                     {
                         NameParameter = "Давление",
                         Unit = "мБар",
-                        PointMeashuring = "1000",
+                        PointMeasuring = "1000",
                         Tolerance = "0.1",
                         Error = "0.01"
                     },
@@ -67,7 +67,7 @@ namespace KipTM.ViewModel
                     {
                         NameParameter = "Давление",
                         Unit = "мБар",
-                        PointMeashuring = "1100",
+                        PointMeasuring = "1100",
                         Tolerance = "0.1",
                         Error = "0.01"
                     },
@@ -75,7 +75,7 @@ namespace KipTM.ViewModel
                     {
                         NameParameter = "Давление",
                         Unit = "мБар",
-                        PointMeashuring = "1200",
+                        PointMeasuring = "1200",
                         Tolerance = "0.1",
                         Error = "0.01"
                     },
@@ -89,22 +89,7 @@ namespace KipTM.ViewModel
                 _time = _result.Timestamp;
                 _device = new DeviceViewModel(_result.TargetDevice);
                 _etalons = new ObservableCollection<IDeviceViewModel>(_result.Etalon.Select(el => new DeviceViewModel(el)));
-                //Parameters = new ObservableCollection<IParameterResultViewModel>(_result.Results.Select(el=>new ParameterResultViewModel(){NameParameter = el.StepKey, PointMeashuring = el.Result.ToString()}));
-
-                var results = new List<IParameterResultViewModel>(expectedResuls);
-                foreach (var stepResult in result.Results)
-                {
-                    var filledResult = _filler.FillMarker(stepResult.Result.GetType(), new Tuple<string, string>(stepResult.CheckKey, stepResult.StepKey), stepResult.Result);
-                    if (filledResult == null)
-                        continue;
-                    var index = results.FindIndex((el) => el.PointMeashuring == filledResult.PointMeashuring);
-                    if (index >= 0)
-                    {
-                        results.RemoveAt(index);
-                        results.Insert(index, filledResult);
-                    }
-                }
-                Parameters = new ObservableCollection<IParameterResultViewModel>(results);
+                Parameters = new ObservableCollection<IParameterResultViewModel>(parameters);
                 _save = accessor;
             }
         }
@@ -167,7 +152,7 @@ namespace KipTM.ViewModel
 
         private void DoSave()
         {
-            _save.Save(_result);
+            _save.Save();
         }
     }
 }

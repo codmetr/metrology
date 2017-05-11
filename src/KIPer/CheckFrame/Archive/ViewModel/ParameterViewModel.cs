@@ -5,7 +5,7 @@ namespace CheckFrame.ViewModel.Archive
     public class ParameterViewModel : ViewModelBase, IParameterViewModel
     {
         private string _unit;
-        private string _pointMeashuring;
+        private string _pointMeasuring;
         private string _tolerance;
         private string _nameParameter;
 
@@ -30,10 +30,10 @@ namespace CheckFrame.ViewModel.Archive
         /// <summary>
         /// Проверяемая величина параметра
         /// </summary>
-        public string PointMeashuring
+        public string PointMeasuring
         {
-            get { return _pointMeashuring; }
-            set { Set(ref _pointMeashuring, value); }
+            get { return _pointMeasuring; }
+            set { Set(ref _pointMeasuring, value); }
         }
 
         /// <summary>

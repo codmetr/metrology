@@ -8,11 +8,22 @@ namespace ArchiveData.DTO
     /// </summary>
     public class TestResult
     {
+        private int? _resultId = null;
+
         public TestResult()
         {
             Etalon = new List<DeviceDescriptor>();
             Results = new List<TestStepResult>();
             Timestamp = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Идентификатор результата (если результат не сохранен - null)
+        /// </summary>
+        public int? ResultId
+        {
+            get { return _resultId; }
+            set { _resultId = value; }
         }
 
         /// <summary>

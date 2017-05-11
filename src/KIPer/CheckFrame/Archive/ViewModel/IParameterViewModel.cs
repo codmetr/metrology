@@ -18,7 +18,7 @@
         /// <summary>
         /// Проверяемая величина параметра
         /// </summary>
-        string PointMeashuring { get; set; }
+        string PointMeasuring { get; set; }
 
         /// <summary>
         /// Допуск параметра на заданной точке

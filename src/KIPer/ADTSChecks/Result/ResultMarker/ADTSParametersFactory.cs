@@ -54,7 +54,7 @@ namespace ADTSChecks.ViewModel.ResultMarker.ADTS
             {
                 NameParameter = string.Format("Поверка точки {0} {1}", target.Pressure, unit),
                 Error = String.Empty,
-                PointMeashuring = string.Format("{0} {1}", target.Pressure.ToString("F2"), unit),
+                PointMeasuring = string.Format("{0} {1}", target.Pressure.ToString("F2"), unit),
                 Tolerance = string.Format("±{0} {1}", target.Tolerance.ToString("F2"), unit),
                 Unit = String.Empty,
             };

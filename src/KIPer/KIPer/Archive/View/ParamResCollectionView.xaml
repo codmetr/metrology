@@ -22,7 +22,7 @@
                         <TextBlock Text="{Binding NameParameter}" Style="{StaticResource ItemedValueTextBoxStyle}" TextDecorations="Underline"/>
                         <TextBlock Text=":" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                         <TextBlock>Проверяемая точка:</TextBlock>
-                        <TextBlock Text="{Binding PointMeashuring}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                        <TextBlock Text="{Binding PointMeasuring}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                         <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                         <TextBlock>Допуск:</TextBlock>
                         <TextBlock Text="{Binding Tolerance}" Style="{StaticResource ItemedValueTextBoxStyle}"/>

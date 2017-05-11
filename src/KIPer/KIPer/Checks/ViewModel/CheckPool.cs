@@ -14,14 +14,14 @@ using Tools;
 
 namespace KipTM.Checks.ViewModel
 {
-    public class NewCheckPool
+    public class CheckPool
     {
         private readonly IDeviceManager _deviceManager;
         private readonly IPropertyPool _propertyPool;
         private IDictionary<Type, ICheckViewModelFactory> _fatories;
 
 
-        public NewCheckPool(IDeviceManager deviceManager, IPropertyPool propertyPool, IEnumerable<ICheckViewModelFactory> factories)
+        public CheckPool(IDeviceManager deviceManager, IPropertyPool propertyPool, IEnumerable<ICheckViewModelFactory> factories)
         {
             _deviceManager = deviceManager;
             _propertyPool = propertyPool;

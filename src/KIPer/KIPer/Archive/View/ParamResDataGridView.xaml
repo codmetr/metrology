@@ -26,7 +26,7 @@
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate DataType="archive:IParameterResultViewModel">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Text="{Binding PointMeashuring}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
+                            <TextBlock Text="{Binding PointMeasuring}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                             <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                         </StackPanel>
                     </DataTemplate>

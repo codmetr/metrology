@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ArchiveData.DTO;
+using CheckFrame.Checks;
 
 namespace KipTM.Archive
 {
     public interface IDataAccessor
     {
-        void Save(TestResult result);
+        void Save();
     }
 }
