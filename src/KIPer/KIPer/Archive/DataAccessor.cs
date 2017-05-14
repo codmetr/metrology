@@ -29,6 +29,7 @@ namespace KipTM.Archive
             if (_result.ResultId == null)
                 _result.ResultId = _archive.CreateNewRepair(DateTime.Now);
             _archive.SaveResult(_result.ResultId.Value, _result);
+            _archive.SaveParameters(_result.ResultId.Value, _customConfig);
         }
     }
 }
