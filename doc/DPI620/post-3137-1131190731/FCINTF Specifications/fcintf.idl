@@ -1,0 +1,655 @@
+/***************************************************************************
+ * SourceSafe Header
+ *
+ * $Workfile: fcintf.idl $
+ * $Revision: 39 $
+ * $Date: 3/25/99 11:21a $
+ *
+ ***************************************************************************/
+
+/***************************************************************************
+ * Copyright 1998-1999, Southwest Research Institute.
+ * Release Version 1.0b
+ ***************************************************************************/
+
+/***************************************************************************
+ * File Description:
+ *  This is the Interface Description Language (IDL) file that defines the
+ * Field Calibrator Interface (FCI) for a COM object that controls the
+ * exchange of information with an intelligent field calibrator.
+ * From a practical standpoint, this set of interfaces should only be
+ * implemented in an INPROC server (DLL).
+ *
+ * Each component built to this specification should also register itself
+ * as part of the "FieldCalibrators" component category
+ *
+ * The first part of this file contains the data structures and definitions
+ * required to exchange information.
+ * The second part of the file contains the COM Interface definitions.
+ *
+ * The build line for this file must be:
+ *    MIDL /ms_ext /c_ext /app_config /h ..\include\fcintf.h /iid ..\include\fciguids.c fcintf.idl
+ *
+ * The principal outputs from this are: fcintf.h, fciguids.c
+ ***************************************************************************/
+
+import "oaidl.idl";
+
+/***************************************************************************
+ * GUID and strings for the "FieldCalibrators" component category.
+ ***************************************************************************/
+
+cpp_quote( "DEFINE_GUID( CATID_FieldCalibrators, 0xff5efd40, 0x7b15, 0x11d1, 0xb3, 0x26, 0x00, 0x00, 0x1c, 0xbe, 0x02, 0xaa);" )
+cpp_quote( "#define CATIDFIELDCAL  {0xff5efd40, 0x7b15, 0x11d1, 0xb3, 0x26, 0x00, 0x00, 0x1c, 0xbe, 0x02, 0xaa}" )
+cpp_quote( "#define OLEFCICATEGORY L\"Field Calibrators\"")
+
+/***************************************************************************
+ * Status Codes
+ * All calibrator functions return a standard HRESULT that indicates whether
+ * the function call succeeded from a COM standpoint.
+ * Function specific status is placed in the pStatus variable associated with
+ * each function.  The possible values are enumerated here.
+ ***************************************************************************/
+
+typedef enum tagFCISTATUS
+{
+    FCI_OK               =  0, // No error.
+    FCI_FAILED           =  1, // The function failed for an unspecified reason.
+    FCI_COMM_ERROR       =  2, // Unable to communicate with the calibrator.
+    FCI_REVISION_ERROR   =  3, // The calibrator driver revision is incompatible
+                               //  with this calibrator.
+    FCI_CANCELED         =  4, // The operation was canceled.
+    FCI_NOT_SUPPORTED    =  5, // This calibrator does not support this function.
+    FCI_ALREADY_OPEN     =  6, // There is already a calibrator open.
+    FCI_WRONG_SESSION    =  7, // The session identifier is incorrect.
+    FCI_WRONG_CALIBRATOR =  8, // The calibrator currently attached is not the one associated
+                               //  with this session.
+    FCI_ERR_IN_RANGE     =  9, // The input range is not supported by this calibrator.
+    FCI_ERR_IN_UNITS     = 10, // The input engineering unit is not supported by this calibrator.
+    FCI_ERR_IN_TYPE      = 11, // The input type is not supported by this calibrator.
+    FCI_ERR_IN_MANUAL    = 12, // This calibrator does not support manual entry for input.
+    FCI_ERR_OUT_RANGE    = 13, // The output range is not supported by this calibrator.
+    FCI_ERR_OUT_UNITS    = 14, // The output engineering unit is not supported by this calibrator.
+    FCI_ERR_OUT_TYPE     = 15, // The input type is not supported by this calibrator.
+    FCI_ERR_OUT_MANUAL   = 16, // This calibrator does not support manual entry for output.
+    FCI_ERR_INOUT        = 17, // Invalid combination of input and output types for this calibrator.
+    FCI_ERR_RELATION     = 18, // The input to output relation is not supported by this calibrator.
+    FCI_ERR_PROBE        = 19, // The temperature probe is not supported by this calibrator.
+    FCI_ERR_CJC          = 20, // The cold junction compensation type is not supported.
+    FCI_ERR_ENUM         = 21, // A given enumeration is not a valid value.
+    FCI_ERR_RESOURCE     = 22, // Driver was unable to load a required resource.
+    FCI_ERR_TESTPOINT    = 23, // Error in one or more test points.
+                               // Out of range, not stable, or not valid.
+    FCI_ERR_TESTTYPE     = 24, // The test type does not match the instrument or is not supported.
+    FCI_ERR_POWER        = 25, // The loop power configuration is inconsistent or not supported.
+    FCI_ERR_TAG          = 26, // A tag is required for this operation.
+    FCI_MEM_FULL         = 27, // The calibrator memory is full.
+    FCI_MEM_EMPTY        = 28,
+    FCI_MEM_HAS_DATA     = 29, // The calibrator memory contains test data.
+    FCI_END_OF_UPLOAD    = 30, // End of upload list has been reached.
+    FCI_ERR_DOWNLOAD     = 31, // Error encountered when trying to finalize download.
+    FCI_ERR_TAGLENGTH    = 32, // The tag length sent exceeds the length supported by this driver.
+    FCI_ERR_SNLENGTH     = 33, // The serial number is longer than the max supported by this driver.
+    FCI_ERR_MAXPOINTS    = 34, // There are more AF or AL points than can be uploaded in a packet.
+    FCI_END
+} FCISTATUS;
+
+/***************************************************************************
+ * Calibrator Capabilities
+ * These are bitfield definitions returned in the lCapabilities parameter.
+ * If a bit is set, then the calibrator can support the associated activity.
+ ***************************************************************************/
+
+cpp_quote("#define FCI_CAP_ID          0x01L") // Read calibrator manufact, model, & serial
+cpp_quote("#define FCI_CAP_CALINFO     0x02L") // Read calibrator last cal and next cal due
+cpp_quote("#define FCI_CAP_DATESET     0x04L") // Set the calibrator date & time
+cpp_quote("#define FCI_CAP_TEMPSTD     0x08L") // Set the calibrator temperature standard
+cpp_quote("#define FCI_CAP_MEMCLEAR    0x10L") // Clear calibrator memory
+cpp_quote("#define FCI_CAP_DOWNLOAD    0x20L") // Download test setups to the calibrator
+cpp_quote("#define FCI_CAP_DLSETUP     0x40L") // Send text prompt to show before test
+cpp_quote("#define FCI_CAP_DLCLEANUP   0x80L") // Send text prompt to show after test
+cpp_quote("#define FCI_CAP_TECHNAME   0x100L") // Supplies technician name with results
+cpp_quote("#define FCI_CAP_UPLOAD     0x200L") // Upload test data from the calibrator
+
+/***************************************************************************
+ * Definitions for various discreet values.
+ ***************************************************************************/
+
+cpp_quote("#define FCI_MAX_TEST_POINTS  21")
+
+// Temperature standard indicators
+cpp_quote("#define STD_IPTS68           1")
+cpp_quote("#define STD_ITS90            2")
+
+// Contact definitions for switches
+cpp_quote("#define CONTACT_TYPE_WET     0")
+cpp_quote("#define CONTACT_TYPE_DRY     1")
+
+cpp_quote("#define CONTACT_FORM_NO      0")
+cpp_quote("#define CONTACT_FORM_NC      1")
+cpp_quote("#define CONTACT_FORM_C       2")
+
+cpp_quote("#define CONTACT_TRIP_INC     0")
+cpp_quote("#define CONTACT_TRIP_DEC     1")
+
+//Manual entry vs calibrator readings for testing
+cpp_quote("#define BY_USER              1")
+cpp_quote("#define BY_CALIBRATOR        2")
+
+//Power for device under test
+cpp_quote("#define PWR_EXTERNAL         1")
+cpp_quote("#define PWR_CALIBRATOR       2")
+cpp_quote("#define PWR_CALIBRATOR_HIV   3")
+
+//Float value to represent invalid floating point number.
+//This number is equivalent to FLT_MAX
+cpp_quote("#define INVALID_FLOAT        3.402823466e+38F")
+
+
+////////////////////////////////////////////////////////////////////////////
+/***************************************************************************
+ * This first major section provides a method of defining an instrument for
+ * a calibrator.
+ * Each instrument definition is composed of the following blocks.
+ *   Communication - defines any comm capabilities
+ *   Input         - defines the sensor input to the instrument
+ *   Output        - defines the output generated by the instrument
+ *   Relation      - defines the expected relation between input and output.
+ ***************************************************************************/
+////////////////////////////////////////////////////////////////////////////
+
+
+/***************************************************************************
+ * Communication Block Definitions
+ ***************************************************************************/
+/*
+ * Communication block types
+ */
+typedef enum tagFCICOMMTYPE
+{
+    FCI_COMMTYPE_NONE = 1,   // No digital communication
+    FCI_COMMTYPE_HART = 2    // Uses HART protocol
+} FCICOMMTYPE;
+
+/*
+ * Communication block structures
+ */
+typedef struct tagFCI_COMMDEF_HART
+{
+     BYTE cBlockId;           // The transmitter variable associated with this block.
+                              // ASCII P, S, T, Q.  Or 0 - 79 Decimal if not mapped to
+                              // analog output.
+     BYTE cURev;              // HART Universal Revision
+     BYTE cPollAddr;          // Poll Address
+                              // The following arrays are in HART message format,
+                              //   they are not NULL terminated strings.
+     BYTE acUid[5];           // Five Byte Unique Identifier. Set to 0 for URev = 4
+                              //   This is the mfid, devid, and uid from HART cmd 0 or 11
+                              // The next three are from command 13,
+     BYTE acTag[6];           //   The packed ASCII tag field in the instrument.
+     BYTE acDescriptor[12];   //   The packed ASCII descriptor field
+     BYTE acDate[3];          //   The date field
+                              // From command 12,
+     BYTE acMessage[24];      //   The packed ASCII message field
+} FCI_COMMDEF_HART;
+
+
+typedef struct tagFCICOMMDEF
+{
+     FCICOMMTYPE CommType;
+
+     [switch_type( FCICOMMTYPE ), switch_is( CommType )]
+     union
+     {
+          [case(FCI_COMMTYPE_HART)] FCI_COMMDEF_HART HartData;
+          [default];
+     };
+} FCICOMMDEF;
+
+
+/***************************************************************************
+ * Instrument Input/Output block types defined
+ * Instrument Input  = sourced or generated by the calibrator.
+ * Instrument Output = measured by the calibrator.
+ ***************************************************************************/
+
+/* I/O Block Types */
+typedef enum tagFCIBLOCKTYPE
+{                                   // Blocks may be used for (relative to device under test)
+     FCI_BLKTYPE_GENERIC      = 1,  // input or output
+     FCI_BLKTYPE_TEMP_RTD     = 2,  // input: calibrator simulates an RTD
+     FCI_BLKTYPE_TEMP_TC      = 3,  // input: calibrator simulates a thermocouple (TC)
+     FCI_BLKTYPE_FREQUENCY    = 4,  // input or output
+     FCI_BLKTYPE_PRESSURE     = 5,  // input or output
+     FCI_BLKTYPE_TEMP_MEASRTD = 6,  // input or output: use calibrator to measure temperature
+     FCI_BLKTYPE_TEMP_MEASTC  = 7,  // input or output: use calibrator to measure temperature
+     FCI_BLKTYPE_HART         = 8,  // input or output: set or measured via HART commands
+     FCI_BLKTYPE_SWITCH       = 9,  // output
+     FCI_BLKTYPE_DIFFTEMP     = 10  // differential temperature
+} FCIBLOCKTYPE;
+
+typedef struct tagFCI_BLKDEF_PRESSURE
+{
+     FLOAT     rURV;          // Upper range value
+     FLOAT     rLRV;          // Lower range value
+     FLOAT     rSettling;     // Settling time (how many seconds to wait for stable reading)
+     WORD      wUnits;        // Unit Code. See HART table 2.
+     WORD      wPressureType; // Type of pressure measurement. See HART table 19.
+}FCI_BLKDEF_PRESSURE;
+
+typedef struct tagFCI_BLKDEF_RTD
+{
+     FLOAT     rURV;          // Upper range value
+     FLOAT     rLRV;          // Lower range value
+     FLOAT     rSettling;     // Settling time (how many seconds to wait for stable reading)
+     WORD      wUnits;        // Unit Code. See HART table 2.
+     WORD      wProbeType;    // Temperature probe type.  See HART table 16.
+     WORD      wNumWires;     // Number of wires used by the RTD. Legal values are 2, 3, or 4.
+     WORD      wRESERVED;
+}FCI_BLKDEF_RTD;
+
+typedef struct tagFCI_BLKDEF_TC
+{
+     FLOAT     rURV;          // Upper range value
+     FLOAT     rLRV;          // Lower range value
+     FLOAT     rSettling;     // Settling time (how many seconds to wait for stable reading)
+     FLOAT     rManualCJC;    // Value for manual cold junction compensation (NAN if not used)
+                              //    Must be in same units as rURV and rLRV.
+     WORD      wUnits;        // Unit Code. See HART table 2.
+     WORD      wProbeType;    // Temperature probe type.  See HART table 16.
+     WORD      wCJC;          // Cold Junction Compensation Type. See HART table 18.
+     WORD      wProbeConnect; // How probe is connected.  See HART table 17.
+}FCI_BLKDEF_TC;
+
+typedef struct tagFCI_BLKDEF_FREQUENCY
+{
+     FLOAT     rURV;          // Upper range value
+     FLOAT     rLRV;          // Lower range value
+     FLOAT     rSettling;     // Settling time (how many seconds to wait for stable reading)
+     FLOAT     rAmplitude;    // Expected amplitude in volts (peak to peak)
+     WORD      wUnits;        // Unit Code. See HART table 2.
+     WORD      wWaveForm;     // Expected waveform. See HART table 20.
+}FCI_BLKDEF_FREQUENCY;
+
+typedef struct tagFCI_BLKDEF_GENERIC
+{
+     FLOAT     rURV;          // Upper range value
+     FLOAT     rLRV;          // Lower range value
+     FLOAT     rSettling;     // Settling time (how many seconds to wait for stable reading)
+     WORD      wUnits;        // Unit Code. See HART table 2.
+}FCI_BLKDEF_GENERIC;
+
+typedef struct tagFCI_BLKDEF_SWITCH
+{
+     WORD      wContactType;       // 0=Wet(voltage present), 1=Dry(contacts only)
+     WORD      wForm;              // 0=Normally Open(NO), 1=Normally Closed(NC), 2=Form C
+     WORD      wTripDirection;     // 0=Trip on Increase, 1=Trip on Decrease
+     FLOAT     rWetContactVoltage; // expected contact voltage in Volts for wet contact type.
+}FCI_BLKDEF_SWITCH;
+
+/* useful only if calibrator has HART ability */
+typedef struct tagFCI_BLKDEF_HART
+{
+     FLOAT     rUSL;          // Upper sensor limit
+     FLOAT     rLSL;          // Lower sensor limit
+     FLOAT     rSettling;     // Settling time (how many seconds to wait for stable reading)
+     WORD      wUnits;        // Unit code.  See HART table 2.
+}FCI_BLKDEF_HART;
+
+/* useful only if calibrator can communicate with the instrument */
+typedef struct tagFCI_BLKDEF_DIFFTEMP    //Differential Temperature
+{
+     FLOAT     rURV;             // Upper range value
+     FLOAT     rLRV;             // Lower range value
+     FLOAT     rSettling;        // Settling time (how many seconds to wait for stable reading)
+     WORD      wUnits;           // Unit Code. See HART table 2.
+     WORD      wDeviceVariable1; // Diff Temp = DeviceVariable1 - DeviceVariable2
+     WORD      wDeviceVariable2; //
+}FCI_BLKDEF_DIFFTEMP;
+
+/***************************************************************************
+ * Instrument Input Block Definition (Calibrator Generated, or Sourced)
+ ***************************************************************************/
+
+typedef struct tagFCIDEVIN
+{
+     FCIBLOCKTYPE DevType;
+
+     [switch_type( FCIBLOCKTYPE ), switch_is( DevType )]
+     union
+     {
+          [case(FCI_BLKTYPE_PRESSURE)]     FCI_BLKDEF_PRESSURE  PressureData;
+          [case(FCI_BLKTYPE_TEMP_RTD)]     FCI_BLKDEF_RTD       TempRtdData;
+          [case(FCI_BLKTYPE_TEMP_TC)]      FCI_BLKDEF_TC        TempTcData;
+          [case(FCI_BLKTYPE_TEMP_MEASRTD)] FCI_BLKDEF_RTD       TempMeasRtdData;
+          [case(FCI_BLKTYPE_TEMP_MEASTC)]  FCI_BLKDEF_TC        TempMeasTcData;
+          [case(FCI_BLKTYPE_FREQUENCY)]    FCI_BLKDEF_FREQUENCY FrequencyData;
+          [case(FCI_BLKTYPE_HART)]         FCI_BLKDEF_HART      HartData;
+          [case(FCI_BLKTYPE_DIFFTEMP)]     FCI_BLKDEF_DIFFTEMP  DiffTempData;
+          [default]                        FCI_BLKDEF_GENERIC   GenericData;
+     };
+} FCIDEVIN;
+
+
+/***************************************************************************
+ * Instrument Output Block Definition (Calibrator Measurement)
+ ***************************************************************************/
+
+typedef struct tagFCIDEVOUT
+{
+     FCIBLOCKTYPE DevType;
+
+     [switch_type( FCIBLOCKTYPE ), switch_is( DevType )]
+     union
+     {
+          [case(FCI_BLKTYPE_PRESSURE)]     FCI_BLKDEF_PRESSURE  PressureData;
+          [case(FCI_BLKTYPE_TEMP_MEASRTD)] FCI_BLKDEF_RTD       TempMeasRtdData;
+          [case(FCI_BLKTYPE_TEMP_MEASTC)]  FCI_BLKDEF_TC        TempMeasTcData;
+          [case(FCI_BLKTYPE_FREQUENCY)]    FCI_BLKDEF_FREQUENCY FrequencyData;
+          [case(FCI_BLKTYPE_HART)]         FCI_BLKDEF_HART      HartData;
+          [case(FCI_BLKTYPE_SWITCH)]       FCI_BLKDEF_SWITCH    Switch;
+          [default]                        FCI_BLKDEF_GENERIC   GenericData;
+     };
+} FCIDEVOUT;
+
+/***************************************************************************
+ * Instrument Relation Block Definition
+ ***************************************************************************/
+
+/* These are a subset of HART Table 3 */
+typedef enum tagFCIRELATIONTYPE
+{
+     FCI_RELTYPE_LINEAR = 0,
+     FCI_RELTYPE_SQRT   = 1,
+     FCI_RELTYPE_TABLE  = 4,   // break point table
+     FCI_RELTYPE_SWITCH = 230
+} FCIRELATIONTYPE;
+
+typedef struct tagFCI_RELDEF_SQRT
+{
+     FLOAT     rBreakPoint;   // Transition point from sqrt to linear, %input.
+} FCI_RELDEF_SQRT;
+
+typedef struct tagFCI_RELDEF_TABLE
+{
+     WORD      wNumPoints;    // Number of valid points in the table.  Max of 30.
+     WORD      wInterpolate;  // 1 = linear, 2 = spline
+     FLOAT     rInput[30];    // Array of input points. Pct of input span.
+     FLOAT     rOutput[30];   // Array of corresponding output points. Pct output span.
+} FCI_RELDEF_TABLE;
+
+typedef struct tagFCIDEVRELATION
+{
+     FCIRELATIONTYPE RelType;
+
+     [switch_type( FCIRELATIONTYPE ), switch_is( RelType )]
+     union
+     {
+          [case(FCI_RELTYPE_SQRT)]      FCI_RELDEF_SQRT    SqrtData;
+          [case(FCI_RELTYPE_TABLE)]     FCI_RELDEF_TABLE   TableData;
+          [default];
+     };
+} FCIDEVRELATION;
+
+////////////////////////////////////////////////////////////////////////////
+/***************************************************************************
+ * This second major section provides a means of sending a test
+ * procedure for an instrument to a calibrator, and for reading the test
+ * results from the calibrator.
+ ***************************************************************************/
+////////////////////////////////////////////////////////////////////////////
+
+/***************************************************************************
+ * Test Definitions for proportional and switch instruments
+ ***************************************************************************/
+
+typedef enum tagFCITESTTTYPE
+{
+     FCI_TYPE_PROPORTIONAL = 1,
+     FCI_TYPE_SWITCH       = 2
+} FCITESTTYPE;
+
+typedef struct tagFCI_TEST_PROPORTIONAL
+{
+     WORD  wReserved;           // DUT = Device Under Test, i.e. the Instrument.
+     WORD  wPowerSource;        // For DUT. PWR_EXTERNAL, PWR_CALIBRATOR, PWR_CALIBRATOR_HIV
+     WORD  wCalSourceInput;     // Input to DUT generated: BY_USER, BY_CALIBRATOR
+     WORD  wCalReadInput;       // Input to DUT measured: BY_USER, BY_CALIBRATOR
+     WORD  wCalMeasureOutput;   // Output from DUT measured: BY_USER, BY_CALIBRATOR
+     WORD  wNumTestPoints;      // Number of points to use when testing
+     FLOAT arTestPoint[21];     // All point values are percent of input span
+     FLOAT rTestPointTolerance; // % of span allowed off of test point
+     FLOAT rAdjustmentLimit;    // If adjusted, errors must fall below this limit
+     FLOAT rMaxErrorLimit;      // Max allowed error (fail if >) in percent of range
+} FCI_TEST_PROPORTIONAL;
+
+/*
+ * Unless otherwise noted, all of the values in this structure are expressed
+ * in the Engineering Units specified by the input block.
+ * It is expected that the calibrator will start at the input block rLRV
+ * and ramp its output toward the rURV over the rRampTime indicated.
+ * After a trip is detected, if bTestReset is true, then the calibrator should
+ * reverse the direction of the sensor input and record the reset point.
+ */
+typedef struct tagFCI_TEST_SWITCH
+{
+     FLOAT     rTripSetPoint;      // Expected trip point in Eng. units of the input.
+     FLOAT     rTripTolerance;     // +/- allowed deviation in Eng units from trip
+     FLOAT     rResetDeadband;     // expected difference between the trip and reset points.
+     FLOAT     rDeadbandTolerance; // +/- deviation allowed in the deadband value
+     FLOAT     rRampTime;          // in seconds.
+     BOOL      bTestReset;         // set to TRUE to test both Trip and Reset points.
+} FCI_TEST_SWITCH;
+
+typedef struct tagFCITEST
+{
+     FCITESTTYPE TestType;
+
+     [switch_type( FCITESTTYPE ), switch_is( TestType )]
+     union
+     {
+          [case(FCI_TYPE_PROPORTIONAL)]      FCI_TEST_PROPORTIONAL    Test;
+          [case(FCI_TYPE_SWITCH)]            FCI_TEST_SWITCH          SwitchTest;
+          [default];
+     };
+} FCITEST;
+
+/***************************************************************************
+ * Test Results for proportional and switch instruments.
+ ***************************************************************************/
+
+typedef struct tagFCI_RESULT_PROPORTIONAL
+{
+     double    dInputLowerRangeValue;         // Input and output are from the DUT perspective.
+     double    dInputUpperRangeValue;         // Input is TO the instrument FROM Calibrator.
+     int       nInputRangeUnits;
+     double    dOutputLowerRangeValue;        // Output is FROM the instrument TO Calibrator.
+     double    dOutputUpperRangeValue;
+     int       nOutputRangeUnits;
+     int       nRelationship;                 // Transfer Function - relation of input to output
+     int       nNumberOfTestPoints;           // Actual number of test points used
+     double    adInput[21];                   // Test Point Input (Engineering Units)
+     double    adOutput[21];                  // Associated Output (Engineering Units)
+     [string] LPWSTR szwAuxEquipManufacturer; // Auxilliary equipment used in test.
+     [string] LPWSTR szwAuxEquipModel;        // May be null if not used.
+     [string] LPWSTR szwAuxEquipSerialNum;
+     double    dAmbientTemperature;           // Set to INVALID_FLOAT if calibrator can't supply.
+     int       nAmbientTemperatureUnits;      // Set to unknown if calibrator can't supply.
+     SYSTEMTIME TestDate;                     // Date and time of test
+} FCI_RESULT_PROPORTIONAL;
+
+
+/*
+ * In the switch result structure, use INVALID_FLOAT in either rTrip or rResetPoint to indicate
+ * that the point failed (did not change state within the test parameters).
+ */
+typedef struct tagFCI_RESULT_SWITCH
+{
+    WORD       wUnits;             // Unit code associated with the switch
+    float      rTripPoint;         // Engineering unit value where switch transitions.
+    float      rResetPoint;        // Engineering unit value where switch resets.
+    WORD       bResetTested;       // Set to true if the reset point was tested.
+    SYSTEMTIME TestDate;           // Date and time of test
+}FCI_RESULT_SWITCH;
+
+typedef struct tagFCIRESULT
+{
+     FCITESTTYPE ResultType;
+
+     [switch_type( FCITESTTYPE ), switch_is( ResultType )]
+     union
+     {
+          [case(FCI_TYPE_PROPORTIONAL)]      FCI_RESULT_PROPORTIONAL    Results;
+          [case(FCI_TYPE_SWITCH)]            FCI_RESULT_SWITCH          SwitchResults;
+          [default];
+     };
+} FCIRESULT;
+
+////////////////////////////////////////////////////////////////////////////
+/***************************************************************************
+ * This final section defines the actual COM Interfaces
+ ***************************************************************************/
+////////////////////////////////////////////////////////////////////////////
+
+/***************************************************************************
+ * Interface ICalibratorInfo
+ *   Primarily used to get information about the calibrator and to provide
+ *   housekeeping functions.
+ ***************************************************************************/
+
+[
+     object,
+     uuid(ff5efd41-7b15-11d1-b326-00001cbe02aa),
+     version(1.0),
+     helpstring("ICalibratorInfo Interface"),
+     pointer_default(unique)
+]
+interface ICalibratorInfo : IUnknown
+{
+     HRESULT DriverProperties( [out]  FCISTATUS   *pStatus );
+
+     HRESULT Open(             [in]   int         nPortNumber,
+                               [out]  long        *plSessionId,
+                               [out]  long        *plCapabilities,
+                               [out]  FCISTATUS   *pStatus );
+
+     HRESULT Close(            [in]   long        lSessionId,
+                               [out]  FCISTATUS   *pStatus );
+
+     HRESULT Properties(       [in]   long        lSessionId,
+                               [out]  FCISTATUS   *pStatus );
+
+     HRESULT GetId(             [in]  long        lSessionId,
+                       [out, string]  LPWSTR      *pszwCalManufacturer,
+                       [out, string]  LPWSTR      *pszwCalModel,
+                       [out, string]  LPWSTR      *pszwCalSerialNum,
+                               [out]  FCISTATUS   *pStatus );
+
+     HRESULT GetCalDates(      [in]   long        lSessionId,
+                               [out]  SYSTEMTIME  *pLastCalDate,
+                               [out]  SYSTEMTIME  *pNextCalDueDate,
+                               [out]  FCISTATUS   *pStatus );
+
+     HRESULT SetDateAndTime(   [in]   long        lSessionId,
+                               [out]  FCISTATUS   *pStatus );
+
+     HRESULT SetTempStandard(   [in]  long        lSessionId,
+                                [in]  int         nTemperatureStd, // IPTS_68, ITS_90
+                               [out]  FCISTATUS   *pStatus );
+
+     HRESULT GetTestResultsCount( [in]  long        lSessionId,
+                                 [out]  int         *pnCount,
+                                 [out]  FCISTATUS   *pStatus );
+
+     HRESULT ClearMemory(      [in]   long        lSessionId,
+                               [out]  FCISTATUS   *pStatus );
+
+     HRESULT ValidateTag(      [in]   FCICOMMDEF     *pCommDef,
+                               [in]   FCIDEVIN       *pInputDef,
+                               [in]   FCIDEVOUT      *pOutputDef,
+                               [in]   FCIDEVRELATION *pRelationDef,
+                               [in]   FCITEST        *pTestDef,
+                               [out]  FCISTATUS      *pStatus );
+};
+
+/***************************************************************************
+ * Interface ICalibratorDownload
+ *   Used to send instrument and test definitions to a calibrator.
+ ***************************************************************************/
+
+[
+     object,
+     uuid(ff5efd42-7b15-11d1-b326-00001cbe02aa),
+     version(1.0),
+     helpstring("ICalibratorDownload Interface"),
+     pointer_default(unique)
+]
+interface ICalibratorDownload : IUnknown
+{
+     HRESULT StartDownloading(  [in]          long        lSessionId,
+                                [in, string]  LPCWSTR     szSessionName,  // an id for this session
+                                [out]         FCISTATUS   *pStatus );
+
+     HRESULT DownloadTag( [in]          long           lSessionId,
+                          [in, string]  LPCWSTR        szwDeviceTag,
+                          [in, string]  LPCWSTR        szwDeviceSerialNum,
+                          [in]          FCICOMMDEF     *pCommDef,
+                          [in]          FCIDEVIN       *pInputDef,
+                          [in]          FCIDEVOUT      *pOutputDef,
+                          [in]          FCIDEVRELATION *pRelationDef,
+                          [in]          FCITEST        *pTestDef,
+                          [in, string]  LPCWSTR        szwSetupInstructions,
+                          [in, string]  LPCWSTR        szwCleanupInstructions,
+                          [out, string] LPWSTR         *pszwLocationInCalibrator,
+                          [out]         FCISTATUS      *pStatus );
+
+     HRESULT FinishDownloading( [in]   long        lSessionId,
+                                [out]  FCISTATUS   *pStatus );
+
+     HRESULT AbortDownload(     [in]   long        lSessionId,
+                                [out]  FCISTATUS   *pStatus );
+};
+
+/***************************************************************************
+ * Interface ICalibratorUpload
+ *   Used to retrieve test results from a calibrator.
+ * If the calibrator cannot supply the information in a given block
+ * (e.g, pCommDef, pAsFound, pAsLeft),
+ * then the Type variable in the block will be set to 0.
+ * If a string cannot be supplied (pszDeviceTag, pszDeviceSerialNum, pszTechnician,
+ * pszServiceNote), then the pointer will be set to NULL, and the client does not
+ * have to call CoTaskMemFree.
+ ***************************************************************************/
+
+[
+     object,
+     uuid(ff5efd43-7b15-11d1-b326-00001cbe02aa),
+     version(1.0),
+     helpstring("ICalibratorUpload Interface"),
+     pointer_default(unique)
+]
+interface ICalibratorUpload : IUnknown
+{
+     HRESULT StartUploading(  [in]   long        lSessionId,
+                              [out]  FCISTATUS   *pStatus );
+
+     HRESULT UploadNextTag( [in] long        lSessionId,
+                   [out, string] LPWSTR      *pszwLocationInCalibrator,
+                   [out, string] LPWSTR      *pszwDeviceTag,
+                   [out, string] LPWSTR      *pszwDeviceSerialNum,
+                   [out, string] LPWSTR      *pszwTechnician,
+                   [out, string] LPWSTR      *pszwServiceNote,
+                           [out] int         *pnTemperatureStd, // IPTS_68 or ITS_90
+                           [out] FCICOMMDEF  *pCommDef,
+                           [out] FCIRESULT   *pAsFound,
+                           [out] FCIRESULT   *pAsLeft,
+                           [out] FCISTATUS   *pStatus );
+
+     HRESULT FinishUploading( [in]   long        lSessionId,
+                              [out]  FCISTATUS   *pStatus );
+
+     HRESULT AbortUpload(     [in]   long        lSessionId,
+                              [out]  FCISTATUS   *pStatus );
+};
+
+
