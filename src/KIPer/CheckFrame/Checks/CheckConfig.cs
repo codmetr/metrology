@@ -8,6 +8,8 @@ using CheckFrame.Checks;
 using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks;
 using KipTM.Archive;
+using KipTM.Interfaces;
+using KipTM.Interfaces.Checks;
 using KipTM.Model;
 using KipTM.Model.Checks;
 using KipTM.Settings;
@@ -108,7 +110,7 @@ namespace KipTM.Checks
             var avalableDeviceTypes = GetAllAvailableDeviceTypes(settings, dictionaries);
             _allDeviceTypes = avalableDeviceTypes;
             avalableDeviceTypes =
-                avalableDeviceTypes.Where(el => _method.GetKeys().Contains(el.Key))
+                avalableDeviceTypes.Where(el => _method.GetDescriptors().Any(elDescr=>el.Key == elDescr.Key))
                     .ToDictionary(el => el.Key, el => el.Value);
             if (avalableDeviceTypes == null)
                 throw new NullReferenceException(string.Format("Не удалось получить список доступных типов устройств"));

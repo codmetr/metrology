@@ -7,30 +7,48 @@ using Tools.View;
 
 namespace KipTM.ViewModel.Workflow
 {
-    public class Workflow:INotifyPropertyChanged
+    public class LineWorkflow : INotifyPropertyChanged, IWorkflow, IDisposable
     {
+        #region Fields
+
+        /// <summary>
+        /// Шаги
+        /// </summary>
         private readonly List<IWorkflowStep> _states;
+
+        /// <summary>
+        /// Индекс текущего шага
+        /// </summary>
         private int _index;
+
         /// <summary>
         /// Значение доступности следующего шага исходя из текущего индекса
         /// </summary>
         private bool _nextAvailableByIndex;
+
         /// <summary>
         /// Значение доступности следующего шага исходя из состояния текущего шага
         /// </summary>
         private bool _backAvailableByStep = true;
+
         /// <summary>
         /// Значение доступности предыдущего шага исходя из текущего индекса
         /// </summary>
         private bool _backAvailableByIndex;
+
         /// <summary>
         /// Значение доступности предыдущего шага исходя из состояния текущего шага
         /// </summary>
         private bool _nextAvailableByStep = true;
 
+        /// <summary>
+        /// Текущий шаг
+        /// </summary>
         private IWorkflowStep _currentState;
 
-        public Workflow(List<IWorkflowStep> states)
+        #endregion
+
+        public LineWorkflow(List<IWorkflowStep> states)
         {
             _states = states;
             if(_states==null)
@@ -48,6 +66,7 @@ namespace KipTM.ViewModel.Workflow
             OnPropertyChanged("BackAvailable");
         }
 
+        #region Implimentation IWorkflow
 
         public IWorkflowStep CurrentState
         {
@@ -80,9 +99,19 @@ namespace KipTM.ViewModel.Workflow
         }
 
 
-        public ICommand Next { get { return new CommandWrapper(_next); } }
+        public ICommand Next
+        {
+            get { return new CommandWrapper(_next); }
+        }
 
-        public ICommand Back { get { return new CommandWrapper(_back); } }
+        public ICommand Back
+        {
+            get { return new CommandWrapper(_back); }
+        }
+
+        #endregion
+
+        #region Service
 
         private void _next()
         {
@@ -90,7 +119,8 @@ namespace KipTM.ViewModel.Workflow
                 return;
             if (_index >= _states.Count - 1)
             {
-                throw new IndexOutOfRangeException(string.Format("On next index {0} over count {1}", _index, _states.Count));
+                throw new IndexOutOfRangeException(string.Format("On next index {0} over count {1}", _index,
+                    _states.Count));
             }
             _index++;
             CurrentState = _states[_index];
@@ -117,13 +147,13 @@ namespace KipTM.ViewModel.Workflow
             OnPropertyChanged("BackAvailable");
         }
 
-        public void Attach(IWorkflowStep step)
+        private void Attach(IWorkflowStep step)
         {
             step.NextAvailabilityChanged += step_NextAvailabilityChanged;
             step.BackAvailabilityChanged += step_BackAvailabilityChanged;
         }
 
-        public void Detach(IWorkflowStep step)
+        private void Detach(IWorkflowStep step)
         {
             step.NextAvailabilityChanged -= step_NextAvailabilityChanged;
             step.BackAvailabilityChanged -= step_BackAvailabilityChanged;
@@ -141,6 +171,8 @@ namespace KipTM.ViewModel.Workflow
             OnPropertyChanged("BackAvailable");
         }
 
+        #endregion
+
         #region INotifiPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -150,5 +182,16 @@ namespace KipTM.ViewModel.Workflow
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
+
+        public void Dispose()
+        {
+            if (_states != null)
+                foreach (var step in _states)
+                {
+                    var dispStep = step.ViewModel as IDisposable;
+                    if (dispStep != null)
+                        dispStep.Dispose();
+                }
+        }
     }
 }

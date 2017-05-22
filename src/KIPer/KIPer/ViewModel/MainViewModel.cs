@@ -58,36 +58,24 @@ namespace KipTM.ViewModel
         private readonly NLog.Logger _logger = null;
         private readonly IDataService _dataService;
         private IDeviceManager _deviceManager;
-        private IMethodsService _methodicService;
-        private IMainSettings _settings;
-        private IPropertiesLibrary _propertiesLibrary;
-        private IObjectiveArchive _archive;
         private readonly IEventAggregator _eventAggregator;
         private IArchivesViewModel _tests;
-        private DeviceTypeCollectionViewModel _deviceTypes;
         private DeviceTypeCollectionViewModel _etalonTypes;
-        private Workflow.Workflow _workflow;
+        private IWorkflow _workflow;
         private List<IWorkflowStep> _steps;
-        private CustomConfigFactory _customFactory;
-
+        
         private readonly ServiceViewModel _services;
         private DocsViewModel _lib;
         private IEnumerable<OneBtnDescripto> _checkBtns;
+
+        private CheckWorkflowFactory _checkFactory;
 
 
 
         private string _helpMessage;
         private bool _isError;
         private object _selectedAction;
-        private IMarkerFactory<IParameterResultViewModel> _resultMaker;
-        private IFillerFactory<IParameterResultViewModel> _filler;
-        private IEnumerable<ICheckViewModelFactory> _factoriesViewModels;
-        private IChannelsFactory _channelFactory;
-        private IReportFactory _reportFactory;
-        private bool _isActiveCheck;
-        private bool _isActiveService;
         private bool _isActiveSwitchServices = true;
-        private IDataAccessor _accessor;
         #endregion
 
         #region Инициализация загрузка
@@ -97,23 +85,13 @@ namespace KipTM.ViewModel
         /// </summary>
         /// <param name="eventAggregator">Сборщик событий</param>
         /// <param name="dataService">Источник данных</param>
-        /// <param name="methodicService">Источник методик</param>
-        /// <param name="settings">Настройки</param>
-        /// <param name="propertiesLibrary">Свойства</param>
-        /// <param name="archive">Архив</param>
-        /// <param name="filler">Заполнение результата</param>
-        /// <param name="reportFactory">Фабрика отчетов</param>
         /// <param name="services">Сервисы</param>
         /// <param name="features">Забор возмодностей модулей</param>
-        /// <param name="customFatories">Фабрики специализированных настроек</param>
         /// <param name="deviceManager">Пулл устройств</param>
-        /// <param name="factoriesViewModels">Преобразователи в визуальные модели</param>
-        public MainViewModel(
-            IEventAggregator eventAggregator, IDataService dataService, IMethodsService methodicService,
-            IMainSettings settings, IPropertiesLibrary propertiesLibrary, IObjectiveArchive archive, IFillerFactory<IParameterResultViewModel> filler,
-            IReportFactory reportFactory, IEnumerable<IService> services, FeatureDescriptorsCombiner features,
-            IDictionary<Type, ICustomConfigFactory> customFatories, IDeviceManager deviceManager,
-            IEnumerable<ICheckViewModelFactory> factoriesViewModels, IMarkerFactory<IParameterResultViewModel> resultMaker)
+        /// <param name="lib"></param>
+        /// <param name="checkFactory"></param>
+        public MainViewModel(IEventAggregator eventAggregator, IDataService dataService, IEnumerable<IService> services,
+            FeatureDescriptorsCombiner features, IDeviceManager deviceManager, DocsViewModel lib, CheckWorkflowFactory checkFactory)
         {
             try
             {
@@ -123,38 +101,31 @@ namespace KipTM.ViewModel
             {
                 _logger = null;
             }
+
+            _services = new ServiceViewModel(services, new SelectChannelViewModel(features.ChannelFactories.GetChannels()));
+            _lib = lib;
+            _checkFactory = checkFactory;
+
             _eventAggregator = eventAggregator;
             _dataService = dataService;
             _deviceManager = deviceManager;
-            _methodicService = methodicService;
-            _factoriesViewModels = factoriesViewModels;
-            _resultMaker = resultMaker;
-            _settings = settings;
-            _propertiesLibrary = propertiesLibrary;
-            _archive = archive;
-            _customFactory = new CustomConfigFactory(customFatories);
             _dataService.LoadResults();
             _dataService.FillDeviceList(features.DeviceTypes, features.EthalonTypes);
-            _filler = filler;
-            _reportFactory = reportFactory;
-            _channelFactory = features.ChannelFactories;
-            _services = new ServiceViewModel(services, new SelectChannelViewModel(_channelFactory.GetChannels()));
-            _accessor = new DataAccessor();
+
             var checkBtns = new List<OneBtnDescripto>();
-            foreach (var keyCheck in _methodicService.GetKeys())
+            foreach (var keyCheck in _checkFactory.GetAvailableKeys())
             {
-                checkBtns.Add(new OneBtnDescripto(keyCheck, _methodicService.GetTitle(keyCheck),
-                    BitmapToImage(_methodicService.GetBigImage(keyCheck)),
-                    BitmapToImage(_methodicService.GetSmallImage(keyCheck)), SelectChecks));
+                checkBtns.Add(new OneBtnDescripto(keyCheck.Key, keyCheck.Title,
+                    BitmapToImage(keyCheck.BigImg),
+                    BitmapToImage(keyCheck.SmallImg), SelectChecks));
             }
             _checkBtns = checkBtns;
-            var books = new List<BookViewModel>();
-            var basePath = Path.Combine(Path.GetFullPath(Environment.CurrentDirectory), "Manuals");
-            var path = Path.Combine(basePath, @"PACE\pace5000_pace6000_user_manual_k0443_ru.pdf");
-            books.Add(new BookViewModel() { Title = "PACE Руководство пользователя(RU)", Path = path});
-            path = Path.Combine(basePath, @"PACE\pace5000_pace6000_user_manual_k0443_en.pdf");
-            books.Add(new BookViewModel() { Title = "PACE Руководство пользователя(EN)", Path = path });
-            _lib = new DocsViewModel(books);
+
+            _tests = new ArchivesViewModel();
+            _tests.LoadTests(_dataService.ResultsArchive);
+
+            _eventAggregator.Subscribe(this);
+            _workflow = _checkFactory.GetNew();
         }
 
         /// <summary>
@@ -164,35 +135,6 @@ namespace KipTM.ViewModel
         {
             try
             {
-                _tests = new ArchivesViewModel();
-                _tests.LoadTests(_dataService.ResultsArchive);
-
-                _etalonTypes = new DeviceTypeCollectionViewModel();
-                _etalonTypes.LoadTypes(_dataService.EtalonTypes);
-
-                _deviceTypes = new DeviceTypeCollectionViewModel();
-                _deviceTypes.LoadTypes(_dataService.DeviceTypes);
-
-                var channelTargetDevice = new SelectChannelViewModel(_channelFactory.GetChannels());
-                var channelEthalonDevice = new SelectChannelViewModel(_channelFactory.GetChannels());
-
-                var result = new TestResult();
-                var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, result);
-                var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice, _customFactory);
-                var resFactory = new TestResultViewModelFactory(result, checkConfig, _resultMaker, _filler, _archive);
-                var checkPool = new CheckPool(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels);
-                var checkFactory = new CheckFactory(checkPool, checkConfig, result, channelTargetDevice, channelEthalonDevice, _eventAggregator);
-                _eventAggregator.Subscribe(this);
-
-                _steps = new List<IWorkflowStep>()
-                {
-                    new ConfigCheckState(checkConfigViewModel),
-                    new CheckState(checkFactory, _eventAggregator),
-                    new ResultState(resFactory),
-                    new ReportState(() => new ReportViewModel(_reportFactory, result)),
-                };
-                _workflow = new Workflow.Workflow(_steps);
-
                 SelectChecks.Execute(null);
             }
             catch (Exception e)
@@ -209,13 +151,12 @@ namespace KipTM.ViewModel
         {
             _eventAggregator.Unsubscribe(this);
             base.Cleanup();
-            if(_steps!=null)
-                foreach (var step in _steps)
-                {
-                    var dispStep = step.ViewModel as IDisposable;
-                    if (dispStep != null)
-                        dispStep.Dispose();
-                }
+            if (_workflow != null)
+            {
+                var dispCheck = _workflow as IDisposable;
+                if(dispCheck!=null)
+                    dispCheck.Dispose();
+            }
             var disp = _deviceManager as IDisposable;
             if (disp != null)
                 disp.Dispose();
@@ -225,69 +166,6 @@ namespace KipTM.ViewModel
         #endregion
 
         #region Свойства
-
-        /// <summary>
-        /// Набор кнопок проверок
-        /// </summary>
-        public IEnumerable<OneBtnDescripto> CheckBtns
-        {
-            get { return _checkBtns; }
-            set { Set(ref _checkBtns, value); }
-        }
-
-        /// <summary>
-        /// Поясняющее сообщение 
-        /// </summary>
-        public string HelpMessage
-        {
-            get { return _helpMessage; }
-            set { Set(ref _helpMessage, value); }
-        }
-
-        /// <summary>
-        /// Сообшение - описание ошибки
-        /// </summary>
-        public bool IsError
-        {
-            get { return _isError; }
-            set { Set(ref _isError, value); }
-        }
-
-        /// <summary>
-        /// Выбранная вкладка
-        /// </summary>
-        public object SelectedAction
-        {
-            get { return _selectedAction; }
-            set { Set(ref _selectedAction, value); }
-        }
-
-        /// <summary>
-        /// Активна вкладка Проверки
-        /// </summary>
-        public bool IsActiveCheck
-        {
-            get { return _isActiveCheck; }
-            set { Set(ref _isActiveCheck, value); }
-        }
-
-        /// <summary>
-        /// Активна вкладка Проверки
-        /// </summary>
-        public bool IsActiveService
-        {
-            get { return _isActiveService; }
-            set { Set(ref _isActiveService, value); }
-        }
-
-        /// <summary>
-        /// Доступность переключения сервисов
-        /// </summary>
-        public bool IsActiveSwitchServices
-        {
-            get { return _isActiveSwitchServices; }
-            set { Set(ref _isActiveSwitchServices, value); }
-        }
 
         /// <summary>
         /// Действия при загрузке окна
@@ -308,6 +186,24 @@ namespace KipTM.ViewModel
                             ViewAttribute.CheckViewModelCashOnly);
                     });
             }
+        }
+
+        /// <summary>
+        /// Выбранная вкладка
+        /// </summary>
+        public object SelectedAction
+        {
+            get { return _selectedAction; }
+            set { Set(ref _selectedAction, value); }
+        }
+
+        /// <summary>
+        /// Набор кнопок проверок
+        /// </summary>
+        public IEnumerable<OneBtnDescripto> CheckBtns
+        {
+            get { return _checkBtns; }
+            set { Set(ref _checkBtns, value); }
         }
 
         /// <summary>
@@ -344,9 +240,7 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand<string>((string opt) =>
                 {
-                    IsActiveCheck = true;
-                    IsActiveService = false;
-                    SelectedAction = Checks;
+                    SelectedAction = _workflow;
                     SetHelpMessage("Выполнение поверки");
                 });
             }
@@ -378,38 +272,8 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = Tests; //todo установить выбор соответсвующего ViewModel
+                    SelectedAction = _tests; //todo установить выбор соответсвующего ViewModel
                     SetHelpMessage("Архив Проверок: список пойденных поверок");
-                });
-            }
-        }
-
-        /// <summary>
-        /// Выбрана вкладка Приборы
-        /// </summary>
-        public ICommand SelectTargetDevices
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    SelectedAction = _deviceTypes; //todo установить выбор соответсвующего ViewModel
-                    SetHelpMessage("Список поддерживаемых типов проверяемых приборов");
-                });
-            }
-        }
-
-        /// <summary>
-        /// Выбрана вкладка Эталоны
-        /// </summary>
-        public ICommand SelectEtalonDevices
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    SelectedAction = _etalonTypes; //todo установить выбор соответсвующего ViewModel
-                    SetHelpMessage("Список поддерживаемых типов эталонных приборов");
                 });
             }
         }
@@ -423,8 +287,7 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = "Здесь будут элементы управления настройками приложения";
-                        //todo установить выбор соответсвующего ViewModel
+                    SelectedAction = "Здесь будут элементы управления настройками приложения"; //todo установить выбор соответсвующего ViewModel
                     SetHelpMessage("Настройки приложения");
                 });
             }
@@ -442,8 +305,6 @@ namespace KipTM.ViewModel
                     var serveseKey = arg as string;
                     if (serveseKey == null)
                         return;
-                    IsActiveCheck = false;
-                    IsActiveService = true;
                     _services.SelectedService = _services.Services.FirstOrDefault(el => el.Title == serveseKey);
                     SelectedAction = _services;
                     SetHelpMessage("Сервисная вкладка для отладки различных механизмов");
@@ -451,17 +312,31 @@ namespace KipTM.ViewModel
             }
         }
 
-        public IArchivesViewModel Tests
+        /// <summary>
+        /// Поясняющее сообщение 
+        /// </summary>
+        public string HelpMessage
         {
-            get { return _tests; }
+            get { return _helpMessage; }
+            set { Set(ref _helpMessage, value); }
         }
 
         /// <summary>
-        /// Проверки
+        /// Сообшение - описание ошибки
         /// </summary>
-        public Workflow.Workflow Checks
+        public bool IsError
         {
-            get { return _workflow; }
+            get { return _isError; }
+            set { Set(ref _isError, value); }
+        }
+
+        /// <summary>
+        /// Доступность переключения сервисов
+        /// </summary>
+        public bool IsActiveSwitchServices
+        {
+            get { return _isActiveSwitchServices; }
+            set { Set(ref _isActiveSwitchServices, value); }
         }
 
         #endregion

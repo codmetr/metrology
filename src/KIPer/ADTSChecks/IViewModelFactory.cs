@@ -5,6 +5,7 @@ using CheckFrame.Model.Checks;
 using CheckFrame.Model.Channels;
 using ArchiveData.DTO;
 using KipTM.Archive;
+using KipTM.Interfaces.Checks;
 using KipTM.Model;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;

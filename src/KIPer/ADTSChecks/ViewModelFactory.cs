@@ -7,6 +7,7 @@ using CheckFrame.Model;
 using CheckFrame.Model.Channels;
 using CheckFrame.ViewModel.Checks.Channels;
 using KipTM.Archive;
+using KipTM.Interfaces.Checks;
 using KipTM.Model;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;

@@ -28,7 +28,7 @@ namespace KipTM.ViewModel
         /// <param name="tests"></param>
         public void LoadTests(ResultsArchive results)
         {
-            TestsCollection = new ObservableCollection<ITestResultViewModel>(results.Results.Select(el => new TestResultViewModel(el, null, null, null))); // TODO продумать получение готового результата
+            TestsCollection = new ObservableCollection<ITestResultViewModel>(results.Results.Select(el => new TestResultViewModel(el, null, null))); // TODO продумать получение готового результата
         }
 
         /// <summary>

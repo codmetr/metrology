@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KipTM.Archive;
+using KipTM.Interfaces.Checks;
 using KipTM.Model.Checks;
 
 namespace PACEChecks.Checks.Calibration

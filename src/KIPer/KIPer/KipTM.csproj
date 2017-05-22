@@ -144,7 +144,9 @@
     <Compile Include="IOC\IOCConfig.cs" />
     <Compile Include="IOC\UnityServiceLocator.cs" />
     <Compile Include="Manuals\ViewModel\BookViewModel.cs" />
+    <Compile Include="Manuals\ViewModel\DocsFactory.cs" />
     <Compile Include="Manuals\ViewModel\DocsViewModel.cs" />
+    <Compile Include="Manuals\ViewModel\IDocsFactory.cs" />
     <Compile Include="Manuals\View\DocsView.xaml.cs">
       <DependentUpon>DocsView.xaml</DependentUpon>
     </Compile>
@@ -169,7 +171,9 @@
     <Compile Include="Checks\ViewModel\Config\CheckConfigViewModel.cs" />
     <Compile Include="Checks\ViewModel\CheckFactory.cs" />
     <Compile Include="ViewModel\OneBtnDescripto.cs" />
+    <Compile Include="Workflow\IWorkflow.cs" />
     <Compile Include="Workflow\States\CheckState.cs" />
+    <Compile Include="Workflow\States\CheckWorkflowFactory.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />
     <Compile Include="Workflow\States\Events\EventCheckState.cs" />
     <Compile Include="Workflow\States\ResultState.cs" />
@@ -187,7 +191,7 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="Devices\ViewModel\MethodicViewModel.cs" />
     <Compile Include="Workflow\IWorkflowStep.cs" />
-    <Compile Include="Workflow\Workflow.cs" />
+    <Compile Include="Workflow\LineWorkflow.cs" />
     <Compile Include="Workflow\WorkflowStepChangeEvent.cs" />
     <Compile Include="Services\ViewModel\SelectChannelViewModel.cs" />
     <Compile Include="Services\ViewModel\ServiceViewModel.cs" />

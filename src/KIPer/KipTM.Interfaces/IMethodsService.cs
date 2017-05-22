@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using KipTM.Interfaces.Checks;
 using KipTM.Model.Checks;
 
-namespace KipTM.Model
+namespace KipTM.Interfaces
 {
     /// <summary>
     /// Пулл методик
@@ -15,30 +16,9 @@ namespace KipTM.Model
         IDictionary<string, ICheckMethod> MethodsForType(string deviceKey);
 
         /// <summary>
-        /// Получить набор ключей
+        /// Получить описатели устройств
         /// </summary>
         /// <returns></returns>
-        IEnumerable<string> GetKeys();
-
-        /// <summary>
-        /// Получить заголовок
-        /// </summary>
-        /// <param name="key">ключ</param>
-        /// <returns></returns>
-        string GetTitle(string key);
-
-        /// <summary>
-        /// Получить заголовок
-        /// </summary>
-        /// <param name="key">ключ</param>
-        /// <returns></returns>
-        Bitmap GetBigImage(string key);
-
-        /// <summary>
-        /// Получить заголовок
-        /// </summary>
-        /// <param name="key">ключ</param>
-        /// <returns></returns>
-        Bitmap GetSmallImage(string key);
+        IEnumerable<DeviceViewDescriptor> GetDescriptors();
     }
 }

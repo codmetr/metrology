@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using KipTM.Model.Checks;
+using KipTM.Interfaces.Checks;
 
 namespace KipTM.Interfaces
 {

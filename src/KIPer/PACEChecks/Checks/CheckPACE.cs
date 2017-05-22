@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using KipTM.Archive;
+using KipTM.Interfaces.Checks;
 using KipTM.Model.Checks;
 
 namespace PACEChecks

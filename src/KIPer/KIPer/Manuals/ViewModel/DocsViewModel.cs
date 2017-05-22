@@ -14,9 +14,9 @@ namespace KipTM.Manuals.ViewModel
         private ObservableCollection<BookViewModel> _books;
         private BookViewModel _selectedBook;
 
-        public DocsViewModel(IEnumerable<BookViewModel> books)
+        public DocsViewModel(IDocsFactory docsFactory)
         {
-            _books = new ObservableCollection<BookViewModel>(books);
+            _books = new ObservableCollection<BookViewModel>(docsFactory.Load());
             SelectedBook = _books.FirstOrDefault();
         }
 

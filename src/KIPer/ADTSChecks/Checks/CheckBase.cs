@@ -14,6 +14,7 @@ using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks.Steps;
 using KipTM.Archive;
 using KipTM.EventAggregator;
+using KipTM.Interfaces.Checks;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.TransportChannels;

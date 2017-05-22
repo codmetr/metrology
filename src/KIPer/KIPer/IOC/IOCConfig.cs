@@ -13,10 +13,12 @@ using KipTM.EventAggregator;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Archive;
 using KipTM.Interfaces.Checks;
+using KipTM.Manuals.ViewModel;
 using KipTM.Model;
 using KipTM.Settings;
 using KipTM.ViewModel;
 using KipTM.ViewModel.ResultFiller;
+using KipTM.Workflow.States;
 using MarkerService;
 using MarkerService.Filler;
 using Microsoft.Practices.Unity;
@@ -46,6 +48,7 @@ namespace KipTM.IOC
 
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
             unityContainer.RegisterType<IArchive, ArchiveXML>();
+            unityContainer.RegisterType<IDocsFactory, DocsFactory>();
             unityContainer.RegisterInstance<IObjectiveArchive>(new ObjectiveArchive(dbName));
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IFeaturesDescriptor>());
             unityContainer.RegisterInstance<FeatureDescriptorsCombiner>(
@@ -89,6 +92,8 @@ namespace KipTM.IOC
 
             #endregion
 
+            // Устоновка Singletone CheckWorkflowFactory
+            unityContainer.RegisterType<CheckWorkflowFactory>(new ContainerControlledLifetimeManager());
             // Устоновка Singletone MethodsService
             unityContainer.RegisterType<IMethodsService, MethodsService>();
             unityContainer.RegisterType<MainViewModel>(new ContainerControlledLifetimeManager());

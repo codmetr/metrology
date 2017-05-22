@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using KipTM.Archive;
+using KipTM.Model.Checks;
 
-namespace KipTM.Model.Checks
+namespace KipTM.Interfaces.Checks
 {
     /// <summary>
     /// Методика проверки

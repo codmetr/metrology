@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
 using KipTM.Interfaces;
+using KipTM.Interfaces.Checks;
 using KipTM.Model.Checks;
 
 namespace ADTSChecks

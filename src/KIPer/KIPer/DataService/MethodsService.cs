@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using KipTM.DataService;
 using KipTM.Interfaces;
+using KipTM.Interfaces.Checks;
 using KipTM.Model.Checks;
 
 namespace KipTM.Model
@@ -26,42 +28,22 @@ namespace KipTM.Model
         }
 
         /// <summary>
-        /// Получить набор ключей
+        /// Получить описатели устройств
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> GetKeys()
+        public IEnumerable<DeviceViewDescriptor> GetDescriptors()
         {
-            return _methods.Keys;
-        }
-
-        /// <summary>
-        /// Получить заголовок
-        /// </summary>
-        /// <param name="key">ключ</param>
-        /// <returns></returns>
-        public string GetTitle(string key)
-        {
-            return _factories[key].GetName();
-        }
-
-        /// <summary>
-        /// Получить заголовок
-        /// </summary>
-        /// <param name="key">ключ</param>
-        /// <returns></returns>
-        public Bitmap GetBigImage(string key)
-        {
-            return _factories[key].GetBigImage();
-        }
-
-        /// <summary>
-        /// Получить заголовок
-        /// </summary>
-        /// <param name="key">ключ</param>
-        /// <returns></returns>
-        public Bitmap GetSmallImage(string key)
-        {
-            return _factories[key].GetSmallImage();
+            return _methods.Keys.Select(key =>
+            {
+                var factory = _factories[key];
+                return new DeviceViewDescriptor()
+                {
+                    Key = key,
+                    Title = factory.GetName(),
+                    SmallImg = factory.GetSmallImage(),
+                    BigImg = factory.GetBigImage()
+                };
+            });
         }
     }
 }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:workflow="clr-namespace:KipTM.ViewModel.Workflow"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance workflow:Workflow}">
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance workflow:LineWorkflow}">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <Style TargetType="Button" x:Key="NextBackStyle">
