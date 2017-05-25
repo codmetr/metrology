@@ -57,18 +57,16 @@ namespace KipTM.ViewModel
 
         private readonly NLog.Logger _logger = null;
         private readonly IDataService _dataService;
-        private IDeviceManager _deviceManager;
+        private readonly IDeviceManager _deviceManager;
         private readonly IEventAggregator _eventAggregator;
-        private IArchivesViewModel _tests;
-        private DeviceTypeCollectionViewModel _etalonTypes;
+        private readonly IArchivesViewModel _testResults;
         private IWorkflow _workflow;
-        private List<IWorkflowStep> _steps;
         
         private readonly ServiceViewModel _services;
-        private DocsViewModel _lib;
+        private readonly DocsViewModel _lib;
         private IEnumerable<OneBtnDescripto> _checkBtns;
 
-        private CheckWorkflowFactory _checkFactory;
+        private readonly CheckWorkflowFactory _checkFactory;
 
 
 
@@ -121,8 +119,8 @@ namespace KipTM.ViewModel
             }
             _checkBtns = checkBtns;
 
-            _tests = new ArchivesViewModel();
-            _tests.LoadTests(_dataService.ResultsArchive);
+            _testResults = new ArchivesViewModel();
+            _testResults.LoadTests(_dataService.ResultsArchive);
 
             _eventAggregator.Subscribe(this);
             _workflow = _checkFactory.GetNew();
@@ -272,7 +270,7 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = _tests; //todo установить выбор соответсвующего ViewModel
+                    SelectedAction = _testResults; //todo установить выбор соответсвующего ViewModel
                     SetHelpMessage("Архив Проверок: список пойденных поверок");
                 });
             }

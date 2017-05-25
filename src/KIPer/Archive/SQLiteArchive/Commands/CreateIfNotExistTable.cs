@@ -14,7 +14,7 @@ namespace SQLiteArchive.Commands
             const string sql =
                 // Список идентификаторов проверок
                 @"CREATE TABLE IF NOT EXISTS [Repairs](
-                    [RepairId] DECIMAL PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+                    [RepairId] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
                     [Timestamp] DATETIME NOT NULL);" +
                 // Результаты проверерки, сохраненные как Adjacency List
                 @"CREATE TABLE IF NOT EXISTS [Results](

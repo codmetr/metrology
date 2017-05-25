@@ -126,7 +126,6 @@
     <Compile Include="Archive\ArchiveDataAdts.cs" />
     <Compile Include="Archive\DataAccessor.cs" />
     <Compile Include="Archive\DictionariesArchiveFactory.cs" />
-    <Compile Include="Archive\DataTypes\SimplyPair.cs" />
     <Compile Include="Archive\DictionariesArchive.cs" />
     <Compile Include="Archive\IDataAccessor.cs" />
     <Compile Include="Archive\PropertyArchive.cs" />

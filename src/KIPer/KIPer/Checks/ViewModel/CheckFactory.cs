@@ -1,28 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using ArchiveData.DTO;
-using CheckFrame.Checks;
-using CheckFrame.Model;
-using CheckFrame.Model.Channels;
+﻿using ArchiveData.DTO;
 using CheckFrame.ViewModel.Checks.Channels;
-using KipTM.Archive;
 using KipTM.Checks;
 using KipTM.Checks.ViewModel;
 using KipTM.EventAggregator;
-using KipTM.Interfaces.Checks;
-using KipTM.Model;
-using KipTM.Model.Channels;
-using KipTM.Model.Checks;
-using KipTM.Model.Devices;
-using KipTM.Model.TransportChannels;
-using ReportService;
-using Tools;
-using ITransportChannelType = KipTM.Model.TransportChannels.ITransportChannelType;
 
 namespace KipTM.ViewModel.Checks
 {
