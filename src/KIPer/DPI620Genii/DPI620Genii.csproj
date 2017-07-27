@@ -41,6 +41,8 @@
   <ItemGroup>
     <Compile Include="ChannelDescriptor.cs" />
     <Compile Include="ChannelOrder.cs" />
+    <Compile Include="DPI620DriverCom.cs" />
+    <Compile Include="DPI620DriverUsb.cs" />
     <Compile Include="DPI620Genii.cs" />
     <Compile Include="IDpi620Genii.cs" />
     <Compile Include="ParamId.cs" />
