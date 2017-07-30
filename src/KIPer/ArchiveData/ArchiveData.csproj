@@ -53,22 +53,6 @@
     <Compile Include="DTO\TestResult.cs" />
     <Compile Include="DTO\TestStepResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repo\RepoParsers\ChannelDescriptorRepo.cs" />
-    <Compile Include="Repo\RepoParsers\DeviceDescriptorRepo.cs" />
-    <Compile Include="Repo\RepoParsers\DeviceTypeDescriptorRepo.cs" />
-    <Compile Include="Repo\RepoParsers\TestResultRepo.cs" />
-    <Compile Include="Repo\IRepo.cs" />
-    <Compile Include="Repo\ITreeEntity.cs" />
-    <Compile Include="Repo\Keys\DeviceDescriptorKey.cs" />
-    <Compile Include="Repo\Keys\DeviceTypeDescriptorKey.cs" />
-    <Compile Include="Repo\Keys\TestResultKey.cs" />
-    <Compile Include="Repo\Keys\TestStepResultKey.cs" />
-    <Compile Include="Repo\MaxId.cs" />
-    <Compile Include="Repo\RepoFactory.cs" />
-    <Compile Include="Repo\TreeRepo.cs" />
-    <Compile Include="Repo\UnyRepo.cs" />
-    <Compile Include="Repo\ValueWrapper.cs" />
-    <Compile Include="TreeParser.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

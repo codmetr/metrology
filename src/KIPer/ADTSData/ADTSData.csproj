@@ -44,8 +44,6 @@
     <Compile Include="IAdtsTestResults.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepoParsers\AdtsPointResultRepo.cs" />
-    <Compile Include="RepoParsers\TestStepResultRepo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
