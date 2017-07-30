@@ -13,10 +13,6 @@ namespace KipTM.Interfaces
     public interface IDataService
     {
         /// <summary>
-        /// Пул сконфигурируемых устройств
-        /// </summary>
-        //IDeviceManager DeviceManager { get; }
-        /// <summary>
         /// Список типов поддерживаемых устройств
         /// </summary>
         IEnumerable<IDeviceTypeDescriptor> DeviceTypes { get; }

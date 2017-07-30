@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
 
 namespace Tools.View
@@ -23,7 +24,10 @@ namespace Tools.View
             return _act != null || _actWithParam != null;
         }
 
+#pragma warning disable 0067
+        //[SuppressMessage("Microsoft.Performance", "CA067:TheEventIsNeverUsed", Justification = "CanExecuteChanged need for implimentation ICommand")]
         public event EventHandler CanExecuteChanged;
+#pragma warning restore 0067
 
         public void Execute(object parameter)
         {

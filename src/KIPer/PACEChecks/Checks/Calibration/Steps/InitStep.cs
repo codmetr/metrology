@@ -13,7 +13,7 @@ namespace PACEChecks.Checks.Calibration.Steps
     {
         public const string KeyStep = "InitStep";
 
-        private PACE1000Model _pace1000;
+        //private PACE1000Model _pace1000;
 
 
         public override void Start(EventWaitHandle whEnd)

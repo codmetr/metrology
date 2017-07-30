@@ -41,7 +41,6 @@
   <ItemGroup>
     <Compile Include="AdtsPointResult.cs" />
     <Compile Include="AdtsResults.cs" />
-    <Compile Include="AdtsRepo.cs" />
     <Compile Include="IAdtsTestResults.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

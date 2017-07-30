@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using SQLiteArchive.Db;
 
 namespace SQLiteArchive.Tree
 {
-    [DebuggerDisplay("ID:{Id} PId:{ParentId} {Name}:{Val}")]
-    public class Node:Entity
+    [DebuggerDisplay("ID:{Id} PId:{ParrentId} {Name}:{Val}")]
+    public class Node : EntityTree
     {
         private static int _maxId = 0;
         private List<Node> _childs = new List<Node>();
-        private Node _parent;
+        private Node _parrent;
 
         /// <summary>
         /// Метод получени нового GUID
@@ -19,6 +19,15 @@ namespace SQLiteArchive.Tree
         public static int GetNewId()
         {
             return _maxId++;
+        }
+
+        /// <summary>
+        /// Установка предыдущего максимального Id
+        /// </summary>
+        /// <returns></returns>
+        public static void SetMaxId(int maxId)
+        {
+            _maxId = maxId;
         }
 
         public Node()
@@ -40,20 +49,20 @@ namespace SQLiteArchive.Tree
         /// <summary>
         /// Родитель
         /// </summary>
-        public Node Parent
+        public Node Parrent
         {
-            get { return _parent; }
+            get { return _parrent; }
             set
             {
-                _parent = value;
-                ParentId = _parent.Id;
+                _parrent = value;
+                ParrentId = _parrent.Id;
             }
         }
 
         /// <summary>
         /// Идентификатор родителя 
         /// </summary>
-        public long ParentId { get; set; }
+        public long ParrentId { get; set; }
 
         /// <summary>
         /// Дети
@@ -74,6 +83,14 @@ namespace SQLiteArchive.Tree
         /// </summary>
         public int TypeVal { get; set; }
 
+        /// <summary>
+        /// Ссылка на значение сложного типа
+        /// </summary>
+        /// <remarks>
+        /// Существует, когда значение простого типа <see cref="Val"/> == null
+        /// </remarks>
+        public WeakReference RefValue { get; set; }
+
         public Node this[string key]
         {
             get
@@ -90,6 +107,33 @@ namespace SQLiteArchive.Tree
                     Childs.Remove(node);
                 Childs.Add(value);
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            var rVal = obj as Node;
+            if (rVal == null)
+                return false;
+            if (Id != rVal.Id)
+                return false;
+            if (Name != rVal.Name)
+                return false;
+            if (TypeVal != rVal.TypeVal)
+                return false;
+            if (Val != rVal.Val)
+                return false;
+            if (Val != rVal.Val)
+                return false;
+            //if (ParrentId != rVal.ParrentId)
+            //    return false;
+            if (Childs.Where((el, i) => rVal.Childs[i].Id!=el.Id).Any())
+                return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

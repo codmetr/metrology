@@ -39,6 +39,7 @@ using KipTM.Checks.ViewModel.Config;
 using KipTM.EventAggregator;
 using KipTM.Manuals.ViewModel;
 using KipTM.ViewModel.Events;
+using KipTM.Workflow;
 using KipTM.Workflow.States.Events;
 using Tools.View;
 using ViewViewmodelMatcher = Tools.ViewViewmodelMatcher;

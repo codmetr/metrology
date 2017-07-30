@@ -94,7 +94,10 @@ namespace DPI620Genii
                 Log(ex.ToString());
                 throw;
             }
-            catch (Exception e) { }
+            catch (Exception e)
+            {
+                Log(e.ToString());
+            }
             return 0.0D;
         }
 

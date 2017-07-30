@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 namespace SQLiteArchive.Tree
 {
     /// <summary>
     /// Парсер
     /// </summary>
-    public class TreeParser
+    public static class TreeParser
     {
         /// <summary>
         /// Преобразовать в дерево
@@ -18,8 +19,9 @@ namespace SQLiteArchive.Tree
         /// <param name="item"></param>
         /// <param name="root"></param>
         /// <param name="descriptor"></param>
+        /// <param name="repairId"></param>
         /// <returns></returns>
-        public static Node Convert(object item, Node root, IItemDescriptor descriptor)
+        public static Node Convert(object item, Node root, IItemDescriptor descriptor, long repairId)
         {
             Node node = root;
 
@@ -30,6 +32,10 @@ namespace SQLiteArchive.Tree
                 node.Val = item;
                 return node;
             }
+            else
+            {
+                root.RefValue = new WeakReference(item);
+            }
 
             var properties = itemType.GetProperties().Where(p => p.CanRead && p.CanWrite);
 
@@ -38,13 +44,7 @@ namespace SQLiteArchive.Tree
                 var propValue = property.GetValue(item, null);
                 if (IsSimple(property.PropertyType))
                 { // добавление элемента простого типа
-                    node.Childs.Add(new Node()
-                    {
-                        Name = descriptor.GetKey(property),
-                        Val = propValue,
-                        Parent = node,
-                        TypeVal = (int) GetTypeValue(property.PropertyType),
-                    });
+                    node.Childs.Add(SimpleToNode( descriptor,property,propValue,node,property.PropertyType, repairId));
                     continue;
                 }
 
@@ -52,36 +52,186 @@ namespace SQLiteArchive.Tree
                 { // добавление коллекции
                     IList propItems = propValue as IList;
                     var typeItem = property.PropertyType.GetGenericArguments()[0];
-                    foreach (var subItem in propItems)
+                    if (IsSimple(typeItem))
                     {
-                        if (IsSimple(typeItem))
-                        { // добавление элемента коллекции сложного типа
-                            node.Childs.Add(new Node()
-                            {
-                                Name = descriptor.GetKey(property),
-                                Val = subItem,
-                                Parent = node,
-                                TypeVal = (int)GetTypeValue(typeItem),
-                            });
+                        foreach (var subItem in propItems)
+                        {// добавление элемента коллекции простого типа
+                            node.Childs.Add(SimpleToNode(descriptor, property, subItem, node, typeItem, repairId));
                         }
-                        else
+                    }
+                    else
+                    {
+                        foreach (var subItem in propItems)
                         { // добавление элемента коллекции сложного типа
-                            var itemNode = new Node() { Name = descriptor.GetKey(property), Parent = node };
-                            Convert(subItem, itemNode, descriptor);
-                            node.Childs.Add(itemNode);
+                                var itemNode = new Node() { Name = descriptor.GetKey(property), Parrent = node, RepairId = repairId};
+                                Convert(subItem, itemNode, descriptor, repairId);
+                                node.Childs.Add(itemNode);
                         }
-
                     }
                     continue;
                 }
 
                 // добавление элемента сложного типа
-                var newNode = new Node() { Name = descriptor.GetKey(property), Parent = node };
-                Convert(propValue, newNode, descriptor);
+                if (propValue == null)
+                    continue;
+                var newNode = new Node() { Name = descriptor.GetKey(property), Parrent = node, RepairId = repairId };
+                Convert(propValue, newNode, descriptor, repairId);
                 node.Childs.Add(newNode);
             }
 
             return node;
+        }
+
+        /// <summary>
+        /// Обновить дерево в соответствие с измененным объектом
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="tree"></param>
+        /// <param name="descriptor"></param>
+        /// <param name="repairId"></param>
+        /// <param name="newNodes"></param>
+        /// <param name="lessNodes"></param>
+        /// <param name="changedNodes"></param>
+        /// <returns></returns>
+        public static bool UpdateTree(object data, Node tree, ItemDescriptor descriptor, int repairId,
+            List<Node> newNodes, List<Node> lessNodes, List<Node> changedNodes)
+        {
+            bool result = true;
+
+            Node node = tree;
+            var itemType = data.GetType();
+
+            if (IsSimple(itemType))
+            {
+                if (CompareSimple(node, data))
+                    return result;
+                lessNodes.Remove(node);
+                result = false;
+                changedNodes.Add(node);
+                return result;
+            }
+            else
+            {
+                lessNodes.Remove(node);
+            }
+
+            var properties = itemType.GetProperties().Where(p => p.CanRead && p.CanWrite);
+
+            foreach (var property in properties)
+            {
+                var propValue = property.GetValue(data, null);
+                var newPropName = descriptor.GetKey(property);
+                var oldPropNode = node.Childs.FirstOrDefault(el => el.Name == newPropName);
+                if (IsSimple(property.PropertyType))
+                { // анализ элемента простого типа
+                    if (oldPropNode == null)
+                    {
+                        result = false;
+                        var newSimplePropNode = SimpleToNode(descriptor, property, propValue, node, property.PropertyType,
+                            repairId);
+                        newNodes.Add(newSimplePropNode);
+                        node.Childs.Add(newSimplePropNode);
+                    }
+                    else if (CompareSimple(oldPropNode, propValue))
+                    {
+                        lessNodes.Remove(oldPropNode);
+                    }
+                    else
+                    {
+                        result = false;
+                        oldPropNode.Val = propValue;
+                        lessNodes.Remove(oldPropNode);
+                        changedNodes.Add(oldPropNode);
+                    }
+                    continue;
+                }
+
+                if (IsList(property.PropertyType))
+                { // анализ коллекции
+                    IList propItems = propValue as IList;
+                    var typeItem = property.PropertyType.GetGenericArguments()[0];
+                    var listItemsName = descriptor.GetKey(property);
+                    var oldList = node.Childs.Where(el => el.Name == listItemsName).ToList();
+                    if (oldList.Count != propItems.Count)
+                        result = false;
+                    if (IsSimple(typeItem))
+                    {
+                        foreach (var subItem in propItems)
+                        {// анализ элемента коллекции простого типа
+                            var oldListEl = oldList.FirstOrDefault(el => el.Val == subItem);
+                            if (oldListEl != null)
+                                continue;
+                            result = false;
+                            var newPropNode = SimpleToNode(descriptor, property, subItem, node, property.PropertyType,
+                                repairId);
+                            newNodes.Add(newPropNode);
+                            node.Childs.Add(newPropNode);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var subItem in propItems)
+                        { // анализ элемента коллекции сложного типа
+                            var oldItemNode = oldList.FirstOrDefault(el =>
+                            {
+                                if (el.RefValue == null)
+                                    return false;
+                                if (el.RefValue.Target == null && subItem != null)
+                                    return false;
+                                return subItem == el.RefValue.Target;
+                            });
+                            if (oldItemNode == null)
+                            {
+                                result = false;
+                                var itemNode = new Node()
+                                {
+                                    Name = descriptor.GetKey(property),
+                                    Parrent = node,
+                                    RepairId = repairId
+                                };
+                                Convert(subItem, itemNode, descriptor, repairId);
+                                node.Childs.Add(itemNode);
+                                newNodes.AddRange(NodeLiner.ToSetNodes(itemNode));
+                            }
+                            else
+                            {
+                                result &= UpdateTree(subItem, oldItemNode, descriptor, repairId, newNodes, lessNodes,
+                                    changedNodes);
+                            }
+                        }
+                    }
+                    continue;
+                }
+
+                // анализ элемента сложного типа
+                if (oldPropNode == null)
+                {
+                    if (propValue == null)
+                        continue;
+                    result = false;
+                    var propNode = new Node() { Name = newPropName, Parrent = node, RepairId = repairId };
+                    Convert(propValue, propNode, descriptor, repairId);
+                    node.Childs.Add(propNode);
+                    newNodes.AddRange(NodeLiner.ToSetNodes(propNode));
+                }
+                else
+                {
+                    result &= UpdateTree(propValue, oldPropNode, descriptor, repairId, newNodes, lessNodes, changedNodes);
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Разорвать ссылки для списка узлов
+        /// </summary>
+        /// <param name="deletedNodes"></param>
+        public static void DeleteLinksNodes(IEnumerable<Node> deletedNodes)
+        {
+            foreach (var deletedNode in deletedNodes)
+            {
+                deletedNode.Parrent.Childs.Remove(deletedNode);
+            }
         }
 
         /// <summary>
@@ -96,6 +246,21 @@ namespace SQLiteArchive.Tree
         {
             try
             {
+                object oldRes = null;
+                if (root.Val == null && root.RefValue !=null)
+                {
+                    oldRes = root.RefValue.Target;
+                }
+                else if (root.Val != null)
+                {
+                    oldRes = root.Val;
+                }
+                if (oldRes != null && targetType.IsAssignableFrom(oldRes.GetType()))
+                {
+                    res = oldRes;
+                    return true;
+                }
+
                 res = targetType.Assembly.CreateInstance(targetType.FullName);
                 var properties = targetType.GetProperties().Where(p => p.CanRead && p.CanWrite);
                 foreach (var property in properties)
@@ -106,7 +271,7 @@ namespace SQLiteArchive.Tree
                         continue;
                     if (IsSimple(property.PropertyType))
                     {// разбор простых типов
-                        property.SetValue(res, item.Val, null);
+                        property.SetValue(res, GetSimpleValue(item), null);
                         continue;
                     }
 
@@ -121,7 +286,7 @@ namespace SQLiteArchive.Tree
                         foreach (var propNode in propNodes)
                         {
                             if (IsSimple(typeItem))
-                                paramListValue.Add(propNode.Val); //наполнение коллекции простых типов
+                                paramListValue.Add(GetSimpleValue(propNode)); //наполнение коллекции простых типов
                             else
                             {
                                 object itemElement;
@@ -143,7 +308,7 @@ namespace SQLiteArchive.Tree
             }
             catch(Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.ToString());
                 res = null;
                 return false;
             }
@@ -151,9 +316,45 @@ namespace SQLiteArchive.Tree
             return true;
         }
 
+        private static bool CompareSimple(Node oldPropNode, object rlValue)
+        {
+            //if (oldPropNode.TypeVal == (int) DbType.DateTime)
+            //{
+            //    var rdata = (DateTime) rlValue;
+            //    var ldata = (DateTime) oldPropNode.Val;
+            //    return ldata == rdata;
+            //}
+            return oldPropNode.Val.Equals(rlValue);
+        }
+
+        private static Node SimpleToNode(IItemDescriptor descriptor, PropertyInfo property, object val, Node node, Type typeItem, long repairId)
+        {
+            var type = GetTypeValue(typeItem);
+            //if (type == DbType.DateTime)
+            //    val = ((DateTime) val).ToBinary();
+            return new Node()
+            {
+                Name = descriptor.GetKey(property),
+                Val = val,
+                Parrent = node,
+                TypeVal = (int)type,
+                RepairId = repairId,
+            };
+        }
+
+        private static object GetSimpleValue(Node item)
+        {
+            //if (item.TypeVal == (int)DbType.DateTime)
+            //    return DateTime.FromBinary((long)item.Val);
+            return item.Val;
+        }
+
         private static bool IsSimple(Type type)
         {
-            return type == typeof(int);
+            return type == typeof(int) ||
+                type == typeof(double) ||
+                type == typeof(bool) ||
+                type == typeof(DateTime);
         }
 
         private static bool IsList(Type type)
@@ -163,24 +364,24 @@ namespace SQLiteArchive.Tree
 
         public static readonly Dictionary<Type, DbType> TypeMap = new Dictionary<Type, DbType>
         {
-            [typeof(byte)] = DbType.Byte,
-            [typeof(sbyte)] = DbType.SByte,
-            [typeof(short)] = DbType.Int16,
-            [typeof(ushort)] = DbType.UInt16,
-            [typeof(int)] = DbType.Int32,
-            [typeof(uint)] = DbType.UInt32,
-            [typeof(long)] = DbType.Int64,
-            [typeof(ulong)] = DbType.UInt64,
-            [typeof(float)] = DbType.Single,
-            [typeof(double)] = DbType.Double,
-            [typeof(decimal)] = DbType.Decimal,
-            [typeof(bool)] = DbType.Boolean,
-            [typeof(string)] = DbType.String,
-            [typeof(char)] = DbType.StringFixedLength,
-            [typeof(Guid)] = DbType.Guid,
-            [typeof(DateTime)] = DbType.DateTime,
-            [typeof(DateTimeOffset)] = DbType.DateTimeOffset,
-            [typeof(TimeSpan)] = DbType.Time,
+            {typeof(byte), DbType.Byte},
+            {typeof(sbyte), DbType.SByte},
+            {typeof(short), DbType.Int16},
+            {typeof(ushort), DbType.UInt16},
+            {typeof(int), DbType.Int32},
+            {typeof(uint), DbType.UInt32},
+            {typeof(long), DbType.Int64},
+            {typeof(ulong), DbType.UInt64},
+            {typeof(float), DbType.Single},
+            {typeof(double), DbType.Double},
+            {typeof(decimal), DbType.Decimal},
+            {typeof(bool), DbType.Boolean},
+            {typeof(string), DbType.String},
+            {typeof(char), DbType.StringFixedLength},
+            {typeof(Guid), DbType.Guid},
+            {typeof(DateTime),  DbType.DateTime},
+            {typeof(DateTimeOffset), DbType.DateTimeOffset},
+            {typeof(TimeSpan), DbType.Time},
             //[typeof(byte[])] = DbType.Binary,
             //[typeof(byte?)] = DbType.Byte,
             //[typeof(sbyte?)] = DbType.SByte,
@@ -205,8 +406,16 @@ namespace SQLiteArchive.Tree
         private static DbType GetTypeValue(Type val)
         {
             if(!TypeMap.ContainsKey(val))
-                throw new KeyNotFoundException(string.Format("For type {0} not founf DbType", val));
+                throw new KeyNotFoundException(String.Format("For type {0} not found DbType", val));
             return TypeMap[val];
+        }
+
+
+        public static string ValueToString(Node node)
+        {
+            if (node.TypeVal == (int)DbType.DateTime)
+                return node.Val == null ? "NULL" : String.Format("'{0}'", ((DateTime)node.Val).ToBinary());
+            return node.Val == null ? "NULL" : String.Format("'{0}'", node.Val);
         }
 
         public static object ParceValue(string val, int typeVal)
@@ -217,37 +426,37 @@ namespace SQLiteArchive.Tree
             switch (t)
             {
                 case DbType.Byte:
-                    res = byte.Parse(val);
+                    res = Byte.Parse(val);
                     break;
                 case DbType.Boolean:
-                    res = bool.Parse(val);
+                    res = Boolean.Parse(val);
                     break;
                 case DbType.DateTime:
-                    res = DateTime.Parse(val);
+                    res = DateTime.FromBinary(Int64.Parse(val));
                     break;
                 case DbType.Decimal:
-                    res = decimal.Parse(val);
+                    res = Decimal.Parse(val);
                     break;
                 case DbType.Double:
-                    res = double.Parse(val);
+                    res = Double.Parse(val);
                     break;
                 case DbType.Guid:
                     res = Guid.Parse(val);
                     break;
                 case DbType.Int16:
-                    res = short.Parse(val);
+                    res = Int16.Parse(val);
                     break;
                 case DbType.Int32:
-                    res = int.Parse(val);
+                    res = Int32.Parse(val);
                     break;
                 case DbType.Int64:
-                    res = long.Parse(val);
+                    res = Int64.Parse(val);
                     break;
                 case DbType.SByte:
-                    res = sbyte.Parse(val);
+                    res = SByte.Parse(val);
                     break;
                 case DbType.Single:
-                    res = float.Parse(val);
+                    res = Single.Parse(val);
                     break;
                 case DbType.String:
                     break;
@@ -255,13 +464,13 @@ namespace SQLiteArchive.Tree
                     res = TimeSpan.Parse(val);
                     break;
                 case DbType.UInt16:
-                    res = ushort.Parse(val);
+                    res = UInt16.Parse(val);
                     break;
                 case DbType.UInt32:
-                    res = uint.Parse(val);
+                    res = UInt32.Parse(val);
                     break;
                 case DbType.UInt64:
-                    res = ulong.Parse(val);
+                    res = UInt64.Parse(val);
                     break;
                 case DbType.StringFixedLength:
                     res = val[0];
@@ -273,6 +482,14 @@ namespace SQLiteArchive.Tree
                     throw new ArgumentOutOfRangeException();
             }
             return res;
+        }
+
+        public class Converter<T>
+        {
+            T Convert(object data)
+            {
+                return (T)data;
+            }
         }
     }
 }

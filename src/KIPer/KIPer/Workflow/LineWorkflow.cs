@@ -5,8 +5,11 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Tools.View;
 
-namespace KipTM.ViewModel.Workflow
+namespace KipTM.Workflow
 {
+    /// <summary>
+    /// Механизм линейного перехода между состояниями
+    /// </summary>
     public class LineWorkflow : INotifyPropertyChanged, IWorkflow, IDisposable
     {
         #region Fields
@@ -47,7 +50,10 @@ namespace KipTM.ViewModel.Workflow
         private IWorkflowStep _currentState;
 
         #endregion
-
+        /// <summary>
+        /// Механизм линейного перехода между состояниями
+        /// </summary>
+        /// <param name="states">Набор доступных состояний</param>
         public LineWorkflow(List<IWorkflowStep> states)
         {
             _states = states;

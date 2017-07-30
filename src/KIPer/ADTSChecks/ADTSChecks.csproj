@@ -99,7 +99,7 @@
     <Compile Include="Result\ResultMarker\ADTSParametersFactory.cs" />
     <Compile Include="Settings\SettingsFactoryAdts.cs" />
     <Compile Include="ViewModelFactory.cs" />
-    <Compile Include="Checks\ViewModel\ADTSBaseViewModel.cs" />
+    <Compile Include="Checks\ViewModel\CheckBaseViewModel.cs" />
     <Compile Include="Checks\Calibration\CalibrationViewModel.cs" />
     <Compile Include="Checks\ViewModel\CheckStateViewModel.cs" />
     <Compile Include="Checks\Test\TestViewModel.cs" />

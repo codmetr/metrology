@@ -1,12 +1,20 @@
 ﻿using System;
 using KipTM.ViewModel.Checks.Config;
+using KipTM.Workflow;
 
 namespace KipTM.ViewModel.Workflow.States
 {
+    /// <summary>
+    /// Состояние конфигурации проверки
+    /// </summary>
     public class ConfigCheckState : IWorkflowStep
     {
         private CheckConfigViewModel _config;
 
+        /// <summary>
+        /// Состояние конфигурации проверки
+        /// </summary>
+        /// <param name="config"></param>
         public ConfigCheckState(CheckConfigViewModel config)
         {
             _config = config;

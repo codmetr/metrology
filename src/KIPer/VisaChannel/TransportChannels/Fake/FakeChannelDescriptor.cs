@@ -14,7 +14,7 @@ namespace KipTM.Model.TransportChannels
 
         public FakeChannelDescriptor()
         {
-            Name = "Канал пустышка";
+            Name = "Ручной канал";
             Key = KeyType;
         }
 

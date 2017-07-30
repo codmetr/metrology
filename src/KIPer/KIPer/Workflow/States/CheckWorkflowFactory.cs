@@ -29,24 +29,26 @@ using SQLiteArchive;
 
 namespace KipTM.Workflow.States
 {
+    /// <summary>
+    /// Фабрика конвейера состояний проверки
+    /// </summary>
     public class CheckWorkflowFactory
     {
         private readonly IMainSettings _settings;
         private readonly IChannelsFactory _channelFactory;
-        private IMethodsService _methodicService;
-        private IPropertiesLibrary _propertiesLibrary;
-        private IMarkerFactory<IParameterResultViewModel> _resultMaker;
-        private IFillerFactory<IParameterResultViewModel> _filler;
-        private IEnumerable<ICheckViewModelFactory> _factoriesViewModels;
-        private CustomConfigFactory _customFactory;
-        private IObjectiveArchive _archive;
+        private readonly IMethodsService _methodicService;
+        private readonly IPropertiesLibrary _propertiesLibrary;
+        private readonly IMarkerFactory<IParameterResultViewModel> _resultMaker;
+        private readonly IFillerFactory<IParameterResultViewModel> _filler;
+        private readonly IEnumerable<ICheckViewModelFactory> _factoriesViewModels;
+        private readonly CustomConfigFactory _customFactory;
+        private readonly IObjectiveArchive _archive;
         private readonly IEventAggregator _eventAggregator;
-        private IReportFactory _reportFactory;
-        private IDeviceManager _deviceManager;
-
+        private readonly IReportFactory _reportFactory;
+        private readonly IDeviceManager _deviceManager;
 
         /// <summary>
-        /// 
+        /// Фабрика конвейера состояний проверки
         /// </summary>
         /// <param name="eventAggregator">Сборщик событий</param>
         /// <param name="methodicService">Источник методик</param>
@@ -81,6 +83,10 @@ namespace KipTM.Workflow.States
             _deviceManager = deviceManager;
         }
 
+        /// <summary>
+        /// Создать новый конвейер состояний для запуска новой проверки
+        /// </summary>
+        /// <returns></returns>
         public IWorkflow GetNew()
         {
             var channelTargetDevice = new SelectChannelViewModel(_channelFactory.GetChannels());

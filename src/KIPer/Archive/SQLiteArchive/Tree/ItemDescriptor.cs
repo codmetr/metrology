@@ -1,15 +1,15 @@
-using System;
+п»їusing System;
 using System.Linq;
 using System.Reflection;
 
 namespace SQLiteArchive.Tree
 {
     /// <summary>
-    /// Правила получения ключей для полей:
-    /// Если есть атрибут KeyAttribute - по нему,
-    /// если нет - по имени свойства
+    /// РџСЂР°РІРёР»Р° РїРѕР»СѓС‡РµРЅРёСЏ РєР»СЋС‡РµР№ РґР»СЏ РїРѕР»РµР№:
+    /// Р•СЃР»Рё РµСЃС‚СЊ Р°С‚СЂРёР±СѓС‚ KeyAttribute - РїРѕ РЅРµРјСѓ,
+    /// РµСЃР»Рё РЅРµС‚ - РїРѕ РёРјРµРЅРё СЃРІРѕР№СЃС‚РІР°
     /// </summary>
-    public class ItemDescriptor : IItemDescriptor
+    public class ItemDescriptor : SQLiteArchive.Tree.IItemDescriptor
     {
         public class KeyAttribute : Attribute
         {

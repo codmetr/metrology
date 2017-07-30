@@ -18,10 +18,7 @@ using Tools.View;
 namespace KipTM.ViewModel
 {
     /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
+    /// Описатель результата проверок конкретного прибора
     /// </summary>
     public class TestResultViewModel : ViewModelBase, ITestResultViewModel
     {
@@ -36,7 +33,7 @@ namespace KipTM.ViewModel
         private readonly TestResult _result;
 
         /// <summary>
-        /// Initializes a new instance of the TestsViewModel class.
+        /// Описатель результата проверок конкретного прибора
         /// </summary>
         public TestResultViewModel(TestResult result, IEnumerable<IParameterResultViewModel> parameters, IDataAccessor accessor)
         {

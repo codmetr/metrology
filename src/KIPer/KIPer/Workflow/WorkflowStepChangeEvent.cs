@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KipTM.ViewModel.Workflow
+namespace KipTM.Workflow
 {
     /// <summary>
     /// Новое состояние доступности перехода

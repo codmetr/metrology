@@ -49,7 +49,7 @@ namespace SQLiteArchive.Commands
                                         " [TypeVal] = '{5}'" +
                                         " WHERE Id ='{1}' AND [RepairId] = '{0}' ;";
             var sql = node.IsNew ? sqlInsert : sqlUpdate;
-            return string.Format(sql, _repairId, node.Id, node.ParentId, node.Name, node.Val==null?"NULL":string.Format("'{0}'",node.Val), node.TypeVal);
+            return string.Format(sql, _repairId, node.Id, node.ParrentId, node.Name, node.Val==null?"NULL":string.Format("'{0}'",node.Val), node.TypeVal);
         }
     }
 }

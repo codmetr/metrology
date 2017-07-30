@@ -7,12 +7,20 @@ using KipTM.Workflow.States.Events;
 
 namespace KipTM.Workflow.States
 {
+    /// <summary>
+    /// Состояние выполнения проверки
+    /// </summary>
     public class CheckState : IWorkflowStep
     {
         private IMethodViewModel _check;
         private readonly CheckFactory _checkFactory;
         private readonly IEventAggregator _eventAggregator;
 
+        /// <summary>
+        /// Состояние выполнения проверки
+        /// </summary>
+        /// <param name="checkFactory"></param>
+        /// <param name="eventAggregator"></param>
         public CheckState(CheckFactory checkFactory, IEventAggregator eventAggregator)
         {
             _checkFactory = checkFactory;

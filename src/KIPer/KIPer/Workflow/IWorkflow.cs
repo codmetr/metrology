@@ -1,27 +1,30 @@
 ﻿using System.Windows.Input;
 
-namespace KipTM.ViewModel.Workflow
+namespace KipTM.Workflow
 {
+    /// <summary>
+    /// Механизм перехода между состояниями
+    /// </summary>
     public interface IWorkflow
     {
         /// <summary>
-        /// Перейти к предыдущему шагу
+        /// Перейти к предыдущему состоянию
         /// </summary>
         ICommand Back { get; }
         /// <summary>
-        /// Доступность следующего шага
+        /// Доступность следующего состояния
         /// </summary>
         bool BackAvailable { get; }
         /// <summary>
-        /// Текущий шаг
+        /// Текущиее состояние
         /// </summary>
         IWorkflowStep CurrentState { get; }
         /// <summary>
-        /// Перейти к следующему шагу
+        /// Перейти к следующему состоянию
         /// </summary>
         ICommand Next { get; }
         /// <summary>
-        /// Доступности предыдущего
+        /// Доступности предыдущего состояния
         /// </summary>
         bool NextAvailable { get; }
     }

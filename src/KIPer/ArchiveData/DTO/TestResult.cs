@@ -82,9 +82,19 @@ namespace ArchiveData.DTO
         public DeviceDescriptor TargetDevice { get; set; }
 
         /// <summary>
+        /// Целевое устройство
+        /// </summary>
+        public DeviceWithChannel TargetDevice1 { get; set; }
+
+        /// <summary>
         /// Набор использованных эталонов
         /// </summary>
         public List<DeviceDescriptor> Etalon { get; set; }
+
+        /// <summary>
+        /// Набор использованных эталонов
+        /// </summary>
+        public List<DeviceWithChannel> Etalons { get; set; }
 
         /// <summary>
         /// Результаты

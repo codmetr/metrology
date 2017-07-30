@@ -8,6 +8,9 @@ using SQLiteArchive.Tree;
 
 namespace SQLiteArchive
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ObjectiveArchive: IObjectiveArchive
     {
         private readonly string _dbName;
@@ -20,13 +23,13 @@ namespace SQLiteArchive
         public void Create()
         {
             var db = new Database(new SqLiteDbContext($"Data Source={_dbName};"));
-            db.Execute(new CreateIfNotExistTable());
+            db.Execute(new CreateTables());
         }
 
         public int CreateNewRepair(DateTime timestamp)
         {
             var db = new Database(new SqLiteDbContext($"Data Source={_dbName};"));
-            db.Execute(new CreateIfNotExistTable());
+            db.Execute(new CreateTables());
             return db.Query(new CreateNewRepair(timestamp));
         }
 
@@ -42,8 +45,8 @@ namespace SQLiteArchive
         {
             if (!File.Exists(_dbName))
                 return;
-            var treeNode = TreeParser.Convert(result, new Node(), new ItemDescriptor());
-            var nodes = NodeLiner.GetNodesFrom(treeNode);
+            var treeNode = TreeParser.Convert(result, new Node(), new ItemDescriptor(), repairId);
+            var nodes = NodeLiner.ToSetNodes(treeNode);
             var db = new Database(new SqLiteDbContext($"Data Source={_dbName};"));
             db.Execute(new InsertOrUpdateResult(nodes, repairId));
         }
@@ -54,7 +57,7 @@ namespace SQLiteArchive
                 throw new FileNotFoundException(string.Format("DB file \"{0}\"", _dbName));
             var db = new Database(new SqLiteDbContext($"Data Source={_dbName};"));
             var nodesLine = db.Query(new LoadParameters(repairId));
-            var root = NodeLiner.GetNodesFrom(nodesLine);
+            var root = NodeLiner.ToTree(nodesLine);
             object res;
             if (!TreeParser.TryParse(root, out res, typeof(T), new ItemDescriptor()))
                 throw new InvalidCastException(string.Format("Can not parce to type \"{0}\" from Nodes", typeof(T)));
@@ -65,8 +68,8 @@ namespace SQLiteArchive
         {
             if (!File.Exists(_dbName))
                 return;
-            var treeNode = TreeParser.Convert(parameters, new Node(), new ItemDescriptor());
-            var nodes = NodeLiner.GetNodesFrom(treeNode);
+            var treeNode = TreeParser.Convert(parameters, new Node(), new ItemDescriptor(), repairId);
+            var nodes = NodeLiner.ToSetNodes(treeNode);
             var db = new Database(new SqLiteDbContext($"Data Source={_dbName};"));
             db.Execute(new InsertOrUpdateParameter(nodes, repairId));
         }
@@ -77,7 +80,7 @@ namespace SQLiteArchive
                 throw new FileNotFoundException(string.Format("DB file \"{0}\"", _dbName));
             var db = new Database(new SqLiteDbContext($"Data Source={_dbName};"));
             var nodesLine = db.Query(new LoadResults(repairId));
-            var root = NodeLiner.GetNodesFrom(nodesLine);
+            var root = NodeLiner.ToTree(nodesLine);
             object res;
             if (!TreeParser.TryParse(root, out res, typeof (T), new ItemDescriptor()))
                 throw new InvalidCastException(string.Format("Can not parce to type \"{0}\" from Nodes", typeof(T)));

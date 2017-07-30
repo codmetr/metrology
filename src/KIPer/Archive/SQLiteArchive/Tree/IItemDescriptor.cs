@@ -1,9 +1,9 @@
-using System.Reflection;
+п»їusing System.Reflection;
 
 namespace SQLiteArchive.Tree
 {
     /// <summary>
-    /// Правила получения ключей для полей
+    /// РџСЂР°РІРёР»Р° РїРѕР»СѓС‡РµРЅРёСЏ РєР»СЋС‡РµР№ РґР»СЏ РїРѕР»РµР№
     /// </summary>
     public interface IItemDescriptor
     {

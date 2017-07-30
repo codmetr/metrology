@@ -35,10 +35,10 @@ namespace DPI620Genii
         private StreamReader _reader;
         public void Open(string portName)
         {
-            SerialPort serial = new SerialPort(portName);
-            serial.BaudRate = 19200;
-            _writer = new StreamWriter(serial.BaseStream, Encoding.UTF8);
-            _reader = new StreamReader(serial.BaseStream, Encoding.UTF8);
+            _serial = new SerialPort(portName);
+            _serial.BaudRate = 19200;
+            _writer = new StreamWriter(_serial.BaseStream, Encoding.UTF8);
+            _reader = new StreamReader(_serial.BaseStream, Encoding.UTF8);
 
             _writer.Write("#km=r\r\n");
         }
@@ -128,7 +128,10 @@ namespace DPI620Genii
                 Log(ex.ToString());
                 throw;
             }
-            catch (Exception e) { }
+            catch (Exception e)
+            {
+                Log(e.ToString());
+            }
             return 0.0D;
         }
 

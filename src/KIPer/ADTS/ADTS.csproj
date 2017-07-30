@@ -44,7 +44,6 @@
     <Compile Include="ADTSParser.cs" />
     <Compile Include="ADTSDriver.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="FakeAdtsState.cs" />
     <Compile Include="FakeTransport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service.cs" />

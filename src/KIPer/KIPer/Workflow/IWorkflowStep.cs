@@ -1,7 +1,10 @@
 ﻿using System;
 
-namespace KipTM.ViewModel.Workflow
+namespace KipTM.Workflow
 {
+    /// <summary>
+    /// Модель состояния
+    /// </summary>
     public interface IWorkflowStep
     {
         /// <summary>
@@ -15,7 +18,7 @@ namespace KipTM.ViewModel.Workflow
         event EventHandler<WorkflowStepChangeEvent> BackAvailabilityChanged;
 
         /// <summary>
-        /// Состояние актиаировано
+        /// Состояние активировано
         /// </summary>
         void StateIn();
 
@@ -24,6 +27,9 @@ namespace KipTM.ViewModel.Workflow
         /// </summary>
         void StateOut();
 
+        /// <summary>
+        /// Визуальная модель
+        /// </summary>
         object ViewModel { get; }
     }
 }

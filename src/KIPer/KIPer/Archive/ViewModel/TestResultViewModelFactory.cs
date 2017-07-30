@@ -13,6 +13,7 @@ using SQLiteArchive;
 
 namespace KipTM.Archive.ViewModel
 {
+
     public class TestResultViewModelFactory
     {
         private TestResult _result;
