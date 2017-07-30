@@ -1,28 +1,32 @@
 ﻿using ArchiveData.DTO;
 using CheckFrame.ViewModel.Checks.Channels;
-using KipTM.Checks;
-using KipTM.Checks.ViewModel;
 using KipTM.EventAggregator;
+using KipTM.ViewModel.Checks;
 
-namespace KipTM.ViewModel.Checks
+namespace KipTM.Checks.ViewModel
 {
+    /// <summary>
+    /// Фабрика визуальной модели для проверки
+    /// </summary>
     public class CheckFactory : ICheckFactory
     {
-        private CheckPool _checkPool;
-        private CheckConfig _checkConfig;
-        private TestResult _result;
-        private SelectChannelViewModel _chTargetDev;
-        private SelectChannelViewModel _chEthalonDev;
-        private IEventAggregator _eventAggregator;
+        private readonly CheckPool _checkPool;
+        private readonly CheckConfig _checkConfig;
+        private readonly TestResult _result;
+        private readonly IEventAggregator _eventAggregator;
 
-
-        public CheckFactory(CheckPool checkPool, CheckConfig checkConfig, TestResult result, SelectChannelViewModel chTargetDev, SelectChannelViewModel chEthalonDev, IEventAggregator eventAggregator)
+        /// <summary>
+        /// Фабрика визуальной модели для проверки
+        /// </summary>
+        /// <param name="checkPool"></param>
+        /// <param name="checkConfig"></param>
+        /// <param name="result"></param>
+        /// <param name="eventAggregator"></param>
+        public CheckFactory(CheckPool checkPool, CheckConfig checkConfig, TestResult result, IEventAggregator eventAggregator)
         {
             _checkPool = checkPool;
             _checkConfig = checkConfig;
             _result = result;
-            _chTargetDev = chTargetDev;
-            _chEthalonDev = chEthalonDev;
             _eventAggregator = eventAggregator;
         }
 
@@ -32,19 +36,19 @@ namespace KipTM.ViewModel.Checks
         /// <returns></returns>
         public IMethodViewModel GetViewModelFor()
         {
-            IMethodViewModel result = null;
+            IMethodViewModel check = null;
             var targetType = _checkConfig.SelectedMethod.GetType();
             var factory = _checkPool.GetFactory(targetType);
 
             if (factory != null)
             {
-                result = factory.GetViewModel(_checkConfig.SelectedMethod, _checkConfig.Data, _checkConfig.CustomSettings, _result,
-                    _chTargetDev.SelectedChannel, _chEthalonDev.SelectedChannel);
-                if (result!=null)
-                    result.SetAggregator(_eventAggregator);
+                check = factory.GetViewModel(_checkConfig.SelectedMethod, _checkConfig.Data, _checkConfig.CustomSettings, _result,
+                    _checkConfig.TargetTransportChannel, _checkConfig.EthalonTransportChannel);
+                if (check!=null)
+                    check.SetAggregator(_eventAggregator);
             }
 
-            return result;
+            return check;
         }
     }
 }

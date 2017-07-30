@@ -1,5 +1,6 @@
 ﻿using System;
 using CheckFrame.ViewModel.Checks.Channels;
+using KipTM.Checks.ViewModel;
 using KipTM.EventAggregator;
 using KipTM.ViewModel.Checks;
 using KipTM.ViewModel.Workflow;

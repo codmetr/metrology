@@ -97,7 +97,7 @@ namespace KipTM.Workflow.States
             var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice, _customFactory);
             var resFactory = new TestResultViewModelFactory(result, checkConfig, _resultMaker, _filler, _archive);
             var checkPool = new CheckPool(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels);
-            var checkFactory = new CheckFactory(checkPool, checkConfig, result, channelTargetDevice, channelEthalonDevice, _eventAggregator);
+            var checkFactory = new CheckFactory(checkPool, checkConfig, result, _eventAggregator);
 
             var steps = new List<IWorkflowStep>()
             {

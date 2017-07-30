@@ -12,7 +12,8 @@ namespace ArchiveData.DTO
 
         public TestResult()
         {
-            Etalon = new List<DeviceDescriptor>();
+            TargetDevice = new DeviceWithChannel();
+            Etalons = new List<DeviceWithChannel>();
             Results = new List<TestStepResult>();
             Timestamp = DateTime.Now;
         }
@@ -47,9 +48,14 @@ namespace ArchiveData.DTO
         public string User { get; set; }
 
         /// <summary>
-        /// Пометка к поверке
+        /// Заказчик
         /// </summary>
-        public string Note { get; set; }
+        public string Client { get; set; }
+
+        /// <summary>
+        /// Результат внешнего осмотра
+        /// </summary>
+        public string VisualInspection { get; set; }
 
         /// <summary>
         /// Атмосферное давление, гПа
@@ -57,7 +63,7 @@ namespace ArchiveData.DTO
         public string AtmospherePressure { get; set; }
 
         /// <summary>
-        /// Температура
+        /// Температура, C
         /// </summary>
         public string Temperature { get; set; }
 
@@ -67,29 +73,24 @@ namespace ArchiveData.DTO
         public string Humidity { get; set; }
 
         /// <summary>
-        /// Заказчик
+        /// Напряжение питания, В
         /// </summary>
-        public string Client { get; set; }
+        public string SourceVoltage { get; set; }
 
         /// <summary>
-        /// Канал устройства
+        /// Результат опробирования
         /// </summary>
-        public ChannelDescriptor Channel { get; set; }
+        public string Assaying { get; set; }
+
+        /// <summary>
+        /// Пометка к поверке
+        /// </summary>
+        public string Note { get; set; }
 
         /// <summary>
         /// Целевое устройство
         /// </summary>
-        public DeviceDescriptor TargetDevice { get; set; }
-
-        /// <summary>
-        /// Целевое устройство
-        /// </summary>
-        public DeviceWithChannel TargetDevice1 { get; set; }
-
-        /// <summary>
-        /// Набор использованных эталонов
-        /// </summary>
-        public List<DeviceDescriptor> Etalon { get; set; }
+        public DeviceWithChannel TargetDevice { get; set; }
 
         /// <summary>
         /// Набор использованных эталонов

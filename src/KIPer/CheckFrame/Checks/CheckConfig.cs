@@ -12,6 +12,7 @@ using KipTM.Interfaces;
 using KipTM.Interfaces.Checks;
 using KipTM.Model;
 using KipTM.Model.Checks;
+using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 
 namespace KipTM.Checks
@@ -157,7 +158,7 @@ namespace KipTM.Checks
         /// <summary>
         /// Получить набор подходящих каналов эталонов
         /// </summary>
-        /// <param name="settings">настройки</param>
+        // <param name="settings">настройки</param>
         /// <param name="targetDevKey">ключ типа проверяемого устройства</param>
         /// <param name="selectedChannel">выбраный канал</param>
         /// <returns></returns>
@@ -176,17 +177,6 @@ namespace KipTM.Checks
                 {
                     if (!CheckEthalonChannel(selectedChannel, channel.Key))
                         continue;
-
-                    //получение настроек
-                    //var setDevice = GetSettingsDevice(settings, channel.Value);
-                    //if (setDevice == null)
-                    //{
-                    //    avalableEthalonTypes.Add(channel.Value, null);
-                    //    continue;
-                    //}
-                    //
-                    //avalableEthalonTypes.Add(channel.Value,
-                    //    new DeviceTypeDescriptor(setDevice.Model, setDevice.DeviceCommonType, setDevice.DeviceManufacturer));
                     avalableEthalonTypes.Add(channel.Value, dev.Value);
                 }
             }
@@ -226,14 +216,14 @@ namespace KipTM.Checks
         /// <param name="targetTypeKey">Ключ описателя типа объекта контроля</param>
         private void ConfigMethodForDevice(DeviceTypeDescriptor targetType, string targetTypeKey)
         {
-            _result.TargetDevice = new DeviceDescriptor(targetType);
+            _result.TargetDevice.Device = new DeviceDescriptor(targetType);
             _checks = _method.MethodsForType(targetTypeKey);
             // заполняем набор измерительных каналов
             var channelKeys = GetChannels(targetTypeKey);
             Channels = channelKeys.Keys;
             _channelKeys = channelKeys;
             // выбираем первый тип канала
-            _result.Channel = Channels.First();
+            _result.TargetDevice.Channel = Channels.First();
             // выбираем первую методику
             SelectedMethodKey = Methods.First();
             UpdateCustomSettings(_data.TargetTypeKey, SelectedChannel);
@@ -411,7 +401,7 @@ namespace KipTM.Checks
         {
             get
             {
-                return _result.TargetDevice.DeviceType.DeviceManufacturer;
+                return _result.TargetDevice.Device.DeviceType.DeviceManufacturer;
             }
         }
 
@@ -429,8 +419,8 @@ namespace KipTM.Checks
         /// </summary>
         public string SerialNumber
         {
-            get { return _result.TargetDevice.SerialNumber; }
-            set { _result.TargetDevice.SerialNumber = value; }
+            get { return _result.TargetDevice.Device.SerialNumber; }
+            set { _result.TargetDevice.Device.SerialNumber = value; }
         }
 
         /// <summary>
@@ -438,8 +428,8 @@ namespace KipTM.Checks
         /// </summary>
         public DateTime PreviousCheckTime
         {
-            get { return _result.TargetDevice.PreviousCheckTime; }
-            set { _result.TargetDevice.PreviousCheckTime = value; }
+            get { return _result.TargetDevice.Device.PreviousCheckTime; }
+            set { _result.TargetDevice.Device.PreviousCheckTime = value; }
         }
 
         /// <summary>
@@ -465,8 +455,6 @@ namespace KipTM.Checks
             private set
             {
                 _selectedCheckType = value;
-                _result.CheckType = _data.CheckTypeKey;
-
                 UpdateCustomSettings(_data.TargetTypeKey, SelectedChannel);
                 OnSelectedMethodChanged();
             }
@@ -477,12 +465,12 @@ namespace KipTM.Checks
         /// </summary>
         public ChannelDescriptor SelectedChannel
         {
-            get { return _result.Channel; }
+            get { return _result.TargetDevice.Channel; }
             set
             {
-                if (value == _result.Channel)
+                if (value == _result.TargetDevice.Channel)
                     return;
-                _result.Channel = value;
+                _result.TargetDevice.Channel = value;
                 UpdateCustomSettings(_data.TargetTypeKey, SelectedChannel);
                 UpdateEthalonChannel(_data.TargetTypeKey, SelectedChannel);
                 OnSelectedChannelChanged();
@@ -500,6 +488,11 @@ namespace KipTM.Checks
             //TODO: Пререпроверить подходит ли этому каналу выбранный тип эталонного канала
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Канал подключения к проверяемому устройству
+        /// </summary>
+        public ITransportChannelType TargetTransportChannel { get; set; }
 
         #endregion
 
@@ -593,13 +586,18 @@ namespace KipTM.Checks
         }
 
         /// <summary>
-        /// 
+        /// Эталон
         /// </summary>
         public DeviceDescriptor Ethalon
         {
             get { return _data.Ethalon; }
             protected set { _data.Ethalon = value; }
         }
+
+        /// <summary>
+        /// Канал подключения к эталону
+        /// </summary>
+        public ITransportChannelType EthalonTransportChannel { get; set; }
 
         #endregion
 

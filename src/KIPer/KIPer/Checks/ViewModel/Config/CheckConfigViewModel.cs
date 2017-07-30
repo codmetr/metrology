@@ -37,8 +37,10 @@ namespace KipTM.ViewModel.Checks.Config
             _model.SelectedMethodChanged += ModelSelectedMethodChanged;
             _model.SelectedEthalonTypeChanged += _model_SelectedEthalonTypeChanged;
             _checkDeviceChanel = checkDeviceChanel;
+            _model.TargetTransportChannel = _checkDeviceChanel.SelectedChannel;
             _checkDeviceChanel.ChannelTypeChanget += _checkDeviceChanel_ChannelTypeChanget;
             _ethalonChanel = ethalonChanel;
+            _model.EthalonTransportChannel = _ethalonChanel.SelectedChannel;
             _ethalonChanel.ChannelTypeChanget += _ethalonChanel_ChannelTypeChanget;
         }
 
@@ -51,6 +53,7 @@ namespace KipTM.ViewModel.Checks.Config
         /// <param name="e"></param>
         void _ethalonChanel_ChannelTypeChanget(object sender, EventArgs e)
         {
+            _model.EthalonTransportChannel = _ethalonChanel.SelectedChannel;
             OnEthalonDeviseChannelChanged();
         }
 
@@ -61,6 +64,7 @@ namespace KipTM.ViewModel.Checks.Config
         /// <param name="e"></param>
         void _checkDeviceChanel_ChannelTypeChanget(object sender, EventArgs e)
         {
+            _model.TargetTransportChannel = _checkDeviceChanel.SelectedChannel;
             OnCheckedDeviseChannelChanged();
         }
 

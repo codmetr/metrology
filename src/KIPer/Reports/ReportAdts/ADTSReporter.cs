@@ -25,23 +25,23 @@ namespace ReportAdts
 
         public object GetReport(TestResult result)
         {
-            var ethalon = result.Etalon.FirstOrDefault();
+            var ethalon = result.Etalons.FirstOrDefault();
             var commonData = new AdtsCommonReportData()
             {
                 CheckDate = result.Timestamp.ToString("d"),
-                DeviceType = result.TargetDevice.DeviceType.Model,
-                ChannelRange = getRangeFromType(result.TargetDevice.DeviceType),
+                DeviceType = result.TargetDevice.Device.DeviceType.Model,
+                ChannelRange = getRangeFromType(result.TargetDevice.Device.DeviceType),
                 CheckMethod = "K199",//result.CheckType,
-                SerialNumber = result.TargetDevice.SerialNumber,
+                SerialNumber = result.TargetDevice.Device.SerialNumber,
                 AtmosphericPressure = result.AtmospherePressure,
                 Temperature = result.Temperature,
                 ReportNumber = "123"
             };
             if (ethalon != null)
             {
-                commonData.EthalonDeviceType = ethalon.DeviceType;
-                commonData.EthalonError = getErrorFromType(ethalon.DeviceType);
-                commonData.EthalonChannelRange = getRangeFromType(ethalon.DeviceType);
+                commonData.EthalonDeviceType = ethalon.Device.DeviceType;
+                commonData.EthalonError = getErrorFromType(ethalon.Device.DeviceType);
+                commonData.EthalonChannelRange = getRangeFromType(ethalon.Device.DeviceType);
             }
 
             var staticResults = new List<AdtsReportData>();

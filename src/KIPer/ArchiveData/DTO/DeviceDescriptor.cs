@@ -33,5 +33,10 @@ namespace ArchiveData.DTO
         /// Дата предыдущей поверки/калибровки
         /// </summary>
         public DateTime PreviousCheckTime { get; set; }
+
+        /// <summary>
+        /// Номер предыдущего сертификата о поверке/калибровке
+        /// </summary>
+        public string PreviousCertificateNum { get; set; }
     }
 }
