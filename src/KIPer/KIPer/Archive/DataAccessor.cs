@@ -9,6 +9,9 @@ using SQLiteArchive;
 
 namespace KipTM.Archive
 {
+    /// <summary>
+    /// IDataAccessor на основе 
+    /// </summary>
     public class DataAccessor:IDataAccessor
     {
         private IObjectiveArchive _archive;

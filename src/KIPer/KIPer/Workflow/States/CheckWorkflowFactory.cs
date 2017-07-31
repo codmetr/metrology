@@ -89,12 +89,9 @@ namespace KipTM.Workflow.States
         /// <returns></returns>
         public IWorkflow GetNew()
         {
-            var channelTargetDevice = new SelectChannelViewModel(_channelFactory.GetChannels());
-            var channelEthalonDevice = new SelectChannelViewModel(_channelFactory.GetChannels());
-
             var result = new TestResult();
             var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, result);
-            var checkConfigViewModel = new CheckConfigViewModel(checkConfig, channelTargetDevice, channelEthalonDevice, _customFactory);
+            var checkConfigViewModel = new CheckConfigViewModel(checkConfig, _channelFactory, _customFactory);
             var resFactory = new TestResultViewModelFactory(result, checkConfig, _resultMaker, _filler, _archive);
             var checkPool = new CheckPool(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels);
             var checkFactory = new CheckFactory(checkPool, checkConfig, result, _eventAggregator);

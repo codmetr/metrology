@@ -5,6 +5,7 @@ using CheckFrame.ViewModel.Checks;
 using GalaSoft.MvvmLight;
 using KipTM.Checks;
 using KipTM.Checks.ViewModel.Config;
+using KipTM.Interfaces.Channels;
 using KipTM.Model.TransportChannels;
 
 namespace KipTM.ViewModel.Checks.Config
@@ -28,7 +29,7 @@ namespace KipTM.ViewModel.Checks.Config
         /// <summary>
         /// Initializes a new instance of the CheckConfigViewModel class.
         /// </summary>
-        public CheckConfigViewModel(CheckConfig model, SelectChannelViewModel checkDeviceChanel, SelectChannelViewModel ethalonChanel, CustomConfigFactory customConfigFactory)
+        public CheckConfigViewModel(CheckConfig model, IChannelsFactory channelFactory, CustomConfigFactory customConfigFactory)
         {
             _model = model;
             _customConfigFactory = customConfigFactory;
@@ -36,10 +37,10 @@ namespace KipTM.ViewModel.Checks.Config
             _model.SelectedChannelChanged += _model_SelectedChannelChanged;
             _model.SelectedMethodChanged += ModelSelectedMethodChanged;
             _model.SelectedEthalonTypeChanged += _model_SelectedEthalonTypeChanged;
-            _checkDeviceChanel = checkDeviceChanel;
+            _checkDeviceChanel = new SelectChannelViewModel(channelFactory.GetChannels());
             _model.TargetTransportChannel = _checkDeviceChanel.SelectedChannel;
             _checkDeviceChanel.ChannelTypeChanget += _checkDeviceChanel_ChannelTypeChanget;
-            _ethalonChanel = ethalonChanel;
+            _ethalonChanel = new SelectChannelViewModel(channelFactory.GetChannels());
             _model.EthalonTransportChannel = _ethalonChanel.SelectedChannel;
             _ethalonChanel.ChannelTypeChanget += _ethalonChanel_ChannelTypeChanget;
         }
