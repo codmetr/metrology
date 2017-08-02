@@ -87,7 +87,7 @@ namespace KipTM.Workflow.States
         /// Создать новый конвейер состояний для запуска новой проверки
         /// </summary>
         /// <returns></returns>
-        public IWorkflow GetNew()
+        public IWorkflow GetNew(string devTypeKey)
         {
             var result = new TestResult();
             var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, result);

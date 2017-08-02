@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,8 +14,10 @@ namespace KipTM.ViewModel
     /// <summary>
     /// Набор свойств одной кнопки для Ribbon
     /// </summary>
-    public class OneBtnDescripto
+    public class OneBtnDescripto:INotifyPropertyChanged
     {
+        private bool _isSelected = false;
+
         /// <summary>
         /// Набор свойств одной кнопки для Ribbon
         /// </summary>
@@ -51,9 +55,26 @@ namespace KipTM.ViewModel
         /// </summary>
         public BitmapImage SmallImage { get; private set; }
 
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged();
+            }
+        }
+
         /// <summary>
         /// Команда
         /// </summary>
         public ICommand BtnCmd { get; private set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

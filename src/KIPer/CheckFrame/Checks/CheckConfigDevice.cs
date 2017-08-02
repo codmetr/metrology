@@ -76,13 +76,15 @@ namespace KipTM.Checks
         #endregion
 
         #region Конструктор
+
         /// <summary>
         /// Конфигурация проверки
         /// </summary>
-        /// <param name="settings"></param>
-        /// <param name="method"></param>
+        /// <param name="device"></param>
+        /// <param name="devTypeKey"></param>
+        /// <param name="methods"></param>
+        /// <param name="ethalons"></param>
         /// <param name="propertyPool"></param>
-        /// <param name="dictionaries"></param>
         /// <param name="result"></param>
         public CheckConfigDevice(DeviceTypeDescriptor device, string devTypeKey,
             IDictionary<string, ICheckMethod> methods, IDictionary<string, DeviceTypeDescriptor> ethalons,

@@ -6,6 +6,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:ribbon="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon"
+        xmlns:viewModel="clr-namespace:KipTM.ViewModel"
         mc:Ignorable="d ignore"
         d:DesignHeight="730" d:DesignWidth="840"
         Title="КипТМ" Icon="Content/icon.png"
@@ -15,6 +16,9 @@
             <!--<ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Skins/MainSkin.xaml" />
             </ResourceDictionary.MergedDictionaries>-->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ribbon:RibbonWindow.Resources>
 
@@ -62,7 +66,7 @@
                 <ribbon:RibbonGroup x:Name="GroupCheck" Header="Давление" ItemsSource="{Binding CheckBtns}">
                     <ribbon:RibbonGroup.ItemTemplate>
                         <DataTemplate>
-                            <ribbon:RibbonButton 
+                            <ribbon:RibbonButton IsEnabled="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBooleanConverter}}"
                                 Label="ADTS" Command="{Binding BtnCmd}" CommandParameter="{Binding Key}"
                                 LargeImageSource="{Binding LagreImage}"
                                 SmallImageSource="{Binding SmallImage}">

@@ -7,35 +7,13 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using ArchiveData.DTO;
 using CheckFrame;
-using CheckFrame.ViewModel.Archive;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using KipTM.Archive;
-using KipTM.Archive.ViewModel;
-using KipTM.Checks;
-using KipTM.Checks.ViewModel;
 using KipTM.Interfaces;
-using KipTM.Interfaces.Channels;
-using KipTM.Interfaces.Checks;
 using KipTM.Model;
-using KipTM.Model.TransportChannels;
-using KipTM.Settings;
-using KipTM.View;
-using KipTM.ViewModel.Checks;
-using KipTM.ViewModel.Checks.Config;
-using KipTM.ViewModel.DeviceTypes;
-using KipTM.ViewModel.Report;
-using KipTM.ViewModel.Workflow;
-using KipTM.ViewModel.Workflow.States;
 using KipTM.Workflow.States;
-using MarkerService;
-using MarkerService.Filler;
-using ReportService;
-using SQLiteArchive;
 using Tools;
-using KipTM.Checks.ViewModel.Config;
 using KipTM.EventAggregator;
 using KipTM.Manuals.ViewModel;
 using KipTM.ViewModel.Events;
@@ -61,7 +39,7 @@ namespace KipTM.ViewModel
         private readonly IDeviceManager _deviceManager;
         private readonly IEventAggregator _eventAggregator;
         private readonly IArchivesViewModel _testResults;
-        private IWorkflow _workflow;
+        private IDictionary<string, IWorkflow> _workflows;
         
         private readonly ServiceViewModel _services;
         private readonly DocsViewModel _lib;
@@ -111,20 +89,19 @@ namespace KipTM.ViewModel
             _dataService.LoadResults();
             _dataService.FillDeviceList(features.DeviceTypes, features.EthalonTypes);
 
+            _testResults = new ArchivesViewModel();
+            _testResults.LoadTests(_dataService.ResultsArchive);
+            _workflows = new Dictionary<string, IWorkflow>();
             var checkBtns = new List<OneBtnDescripto>();
             foreach (var keyCheck in _checkFactory.GetAvailableKeys())
             {
                 checkBtns.Add(new OneBtnDescripto(keyCheck.Key, keyCheck.Title,
                     BitmapToImage(keyCheck.BigImg),
                     BitmapToImage(keyCheck.SmallImg), SelectChecks));
+                _workflows.Add(keyCheck.Key, _checkFactory.GetNew(keyCheck.Key));
             }
             _checkBtns = checkBtns;
-
-            _testResults = new ArchivesViewModel();
-            _testResults.LoadTests(_dataService.ResultsArchive);
-
             _eventAggregator.Subscribe(this);
-            _workflow = _checkFactory.GetNew();
         }
 
         /// <summary>
@@ -134,7 +111,7 @@ namespace KipTM.ViewModel
         {
             try
             {
-                SelectChecks.Execute(null);
+                SelectChecks.Execute(_workflows.Keys.FirstOrDefault());
             }
             catch (Exception e)
             {
@@ -150,11 +127,17 @@ namespace KipTM.ViewModel
         {
             _eventAggregator.Unsubscribe(this);
             base.Cleanup();
-            if (_workflow != null)
+            if (_workflows != null)
             {
-                var dispCheck = _workflow as IDisposable;
-                if(dispCheck!=null)
-                    dispCheck.Dispose();
+                foreach (var workflow in _workflows.Values)
+                {
+                    if (workflow != null)
+                    {
+                        var dispCheck = workflow as IDisposable;
+                        if (dispCheck != null)
+                            dispCheck.Dispose();
+                    }
+                }
             }
             var disp = _deviceManager as IDisposable;
             if (disp != null)
@@ -239,7 +222,11 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand<string>((string opt) =>
                 {
-                    SelectedAction = _workflow;
+                    SelectedAction = _workflows[opt];
+                    foreach (var btnDescripto in CheckBtns)
+                    {
+                        btnDescripto.IsSelected = btnDescripto.Key == opt;
+                    }
                     SetHelpMessage("Выполнение поверки");
                 });
             }
