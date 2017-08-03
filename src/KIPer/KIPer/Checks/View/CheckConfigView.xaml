@@ -42,9 +42,7 @@
             <GroupBox Header="Поверяемое СИ">
                 <StackPanel>
                     <TextBlock>Тип СИ:</TextBlock>
-                    <ComboBox
-                        ItemsSource="{Binding DeviceTypes}"
-                        SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Text="{Binding SelectedDeviceType, Mode=OneWay}" IsReadOnly="True"/>
                     <TextBlock>Заказчик:</TextBlock>
                     <TextBox Text="{Binding Client, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock>Заводской номер:</TextBlock>

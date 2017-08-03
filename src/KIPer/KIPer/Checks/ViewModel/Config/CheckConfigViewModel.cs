@@ -18,7 +18,7 @@ namespace KipTM.ViewModel.Checks.Config
     /// </summary>
     public class CheckConfigViewModel : ViewModelBase
     {
-        private readonly CheckConfig _model;
+        private readonly CheckConfigDevice _model;
         private readonly CustomConfigFactory _customConfigFactory;
         private SelectChannelViewModel _checkDeviceChanel;
         private SelectChannelViewModel _ethalonChanel;
@@ -29,7 +29,7 @@ namespace KipTM.ViewModel.Checks.Config
         /// <summary>
         /// Initializes a new instance of the CheckConfigViewModel class.
         /// </summary>
-        public CheckConfigViewModel(CheckConfig model, IChannelsFactory channelFactory, CustomConfigFactory customConfigFactory)
+        public CheckConfigViewModel(CheckConfigDevice model, IChannelsFactory channelFactory, CustomConfigFactory customConfigFactory)
         {
             _model = model;
             _customConfigFactory = customConfigFactory;
@@ -106,10 +106,6 @@ namespace KipTM.ViewModel.Checks.Config
         #endregion
 
         #region Перечисления
-        /// <summary>
-        /// Доступные типы устройства
-        /// </summary>
-        public IEnumerable<string> DeviceTypes { get { return _model.DeviceTypes; } }
 
         /// <summary>
         /// Каналы устройства
@@ -191,16 +187,7 @@ namespace KipTM.ViewModel.Checks.Config
         /// </summary>
         public string SelectedDeviceType
         {
-            get { return _model.SelectedDeviceTypeKey; }
-            set
-            {
-                if (_model.SelectedDeviceTypeKey == value)
-                    return;
-                _model.SelectedDeviceTypeKey = value;
-                CustomSetiings = _customConfigFactory.GetCustomSettings(_model.CustomSettings);
-                RaisePropertyChanged();
-                RaisePropertyChanged("Manufacturer");
-            }
+            get { return _model.SelectedDeviceType.Model; }
         }
 
         /// <summary>

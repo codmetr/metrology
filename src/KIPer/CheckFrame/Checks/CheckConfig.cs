@@ -41,7 +41,7 @@ namespace KipTM.Checks
         /// <summary>
         /// Доступные типы эталоннных устройств
         /// </summary>
-        private IDictionary<string, DeviceTypeDescriptor> _avalableEthalonTypes;
+        public IDictionary<string, DeviceTypeDescriptor> _avalableEthalonTypes;
         /// <summary>
         /// Доступные измерительные каналы
         /// </summary>

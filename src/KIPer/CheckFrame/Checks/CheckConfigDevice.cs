@@ -87,15 +87,18 @@ namespace KipTM.Checks
         /// <param name="propertyPool"></param>
         /// <param name="result"></param>
         public CheckConfigDevice(DeviceTypeDescriptor device, string devTypeKey,
-            IDictionary<string, ICheckMethod> methods, IDictionary<string, DeviceTypeDescriptor> ethalons,
+            IDictionary<string, ICheckMethod> methods, IDictionary<string, DeviceTypeDescriptor> ethalons, object customSettings,
             IPropertyPool propertyPool, TestResult result)
         {
             _data = new CheckConfigData() {TargetType = device, TargetTypeKey = devTypeKey};
             _checks = methods;
             _selectedCheckType = _checks.Values.FirstOrDefault();
             _avalableEthalonTypes = ethalons;
+            Ethalon = new DeviceDescriptor(_avalableEthalonTypes.Values.FirstOrDefault());
             _result = result;
             _propertyPool = propertyPool;
+            SelectedChannel = Channels.FirstOrDefault();
+            UpdateCustomSettings(devTypeKey, SelectedChannel);
         }
         #endregion
 

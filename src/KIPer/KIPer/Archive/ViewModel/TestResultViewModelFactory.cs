@@ -17,13 +17,13 @@ namespace KipTM.Archive.ViewModel
     public class TestResultViewModelFactory
     {
         private TestResult _result;
-        private CheckConfig _checkConf;
+        private CheckConfigDevice _checkConf;
         private IMarkerFactory<IParameterResultViewModel> _resulMaker;
         private IFillerFactory<IParameterResultViewModel> _filler;
         private IObjectiveArchive _archive;
 
 
-        public TestResultViewModelFactory(TestResult result, CheckConfig checkConf,
+        public TestResultViewModelFactory(TestResult result, CheckConfigDevice checkConf,
             IMarkerFactory<IParameterResultViewModel> resulMaker,
             IFillerFactory<IParameterResultViewModel> filler, IObjectiveArchive archive)
         {
