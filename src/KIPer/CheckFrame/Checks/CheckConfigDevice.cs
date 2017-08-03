@@ -27,7 +27,7 @@ namespace KipTM.Checks
         /// <summary>
         /// Набор доступных типов проверок
         /// </summary>
-        private IDictionary<string, ICheckMethod> _checks;
+        private IDictionary<string, ICheckMethod> _methods;
         /// <summary>
         /// Набр дополнительных настроек
         /// </summary>
@@ -37,6 +37,10 @@ namespace KipTM.Checks
         /// </summary>
         private ICheckMethod _selectedCheckType;
 
+        /// <summary>
+        /// Все доступные типы устройств и их описатели
+        /// </summary>
+        private IDictionary<string, DeviceTypeDescriptor> _allDeviceTypes;
         /// <summary>
         /// Доступные типы эталоннных устройств
         /// </summary>
@@ -51,7 +55,7 @@ namespace KipTM.Checks
         /// <remarks>
         /// Необходимы для получения описателя по ключу выбираемому пользователем
         /// </remarks>
-        private IDictionary<ChannelDescriptor, string> _channelKeys;
+        private readonly IDictionary<ChannelDescriptor, IPropertyPool> _channelKeys;
 
         /// <summary>
         /// Контейнер с результатом
@@ -86,34 +90,27 @@ namespace KipTM.Checks
         /// <param name="ethalons"></param>
         /// <param name="propertyPool"></param>
         /// <param name="result"></param>
-        public CheckConfigDevice(DeviceTypeDescriptor device, string devTypeKey,
-            IDictionary<string, ICheckMethod> methods, IDictionary<string, DeviceTypeDescriptor> ethalons, object customSettings,
+        public CheckConfigDevice(CheckConfigData data, IDictionary<string, ICheckMethod> methods, IDictionary<string, DeviceTypeDescriptor> allDeviceTypes,
             IPropertyPool propertyPool, TestResult result)
         {
-            _data = new CheckConfigData() {TargetType = device, TargetTypeKey = devTypeKey};
-            _checks = methods;
-            _selectedCheckType = _checks.Values.FirstOrDefault();
-            _avalableEthalonTypes = ethalons;
-            Ethalon = new DeviceDescriptor(_avalableEthalonTypes.Values.FirstOrDefault());
+            _data = data;
+            _methods = methods;
+            _selectedCheckType = _methods.Values.FirstOrDefault();
+            _allDeviceTypes = allDeviceTypes;
             _result = result;
             _propertyPool = propertyPool;
-            SelectedChannel = Channels.FirstOrDefault();
-            UpdateCustomSettings(devTypeKey, SelectedChannel);
+            _channelKeys = GetChannels(_propertyPool, _data.TargetTypeKey);
+            _channels = _channelKeys.Keys;
+            _result.TargetDevice.Channel = _channels.FirstOrDefault();
+
+            _avalableEthalonTypes = GetAvailableEthalons(_data.TargetTypeKey, propertyPool, _result.TargetDevice.Channel, _allDeviceTypes);
+            _data.Ethalon = new DeviceDescriptor(_avalableEthalonTypes.Values.FirstOrDefault());
+            _result.TargetDevice.Device = new DeviceDescriptor(data.TargetType);
+            UpdateCustomMethodSettings(_result.TargetDevice.Channel);
         }
         #endregion
 
         #region Инициализация
-
-        /// <summary>
-        /// Обновить эсклюзивные настройки методики
-        /// </summary>
-        private void UpdateCustomSettings(string targetDevKey, ChannelDescriptor targetChannel)
-        {
-            var channelKey = _channelKeys[targetChannel];
-            var properties = _propertyPool.ByKey(targetDevKey).ByKey(channelKey);
-            CustomSettings = SelectedMethod.GetCustomConfig(properties);
-            SelectedMethod.Init(CustomSettings); //todo maybe move out
-        }
         #endregion
 
         #region Перечисления
@@ -131,7 +128,7 @@ namespace KipTM.Checks
         /// </summary>
         public IEnumerable<string> Methods
         {
-            get { return _checks.Keys; }
+            get { return _methods.Keys; }
         }
 
         /// <summary>
@@ -231,7 +228,7 @@ namespace KipTM.Checks
             {
                 _data.CheckTypeKey = value;
                 _result.CheckType = value;
-                SelectedMethod = _checks[_data.CheckTypeKey];
+                SelectedMethod = _methods[_data.CheckTypeKey];
             }
         }
 
@@ -244,7 +241,7 @@ namespace KipTM.Checks
             private set
             {
                 _selectedCheckType = value;
-                UpdateCustomSettings(_data.TargetTypeKey, SelectedChannel);
+                UpdateCustomMethodSettings(SelectedChannel);
                 OnSelectedMethodChanged();
             }
         }
@@ -260,22 +257,10 @@ namespace KipTM.Checks
                 if (value == _result.TargetDevice.Channel)
                     return;
                 _result.TargetDevice.Channel = value;
-                UpdateCustomSettings(_data.TargetTypeKey, SelectedChannel);
+                UpdateCustomMethodSettings(SelectedChannel);
                 UpdateEthalonChannel(_data.TargetTypeKey, SelectedChannel);
                 OnSelectedChannelChanged();
             }
-        }
-
-        /// <summary>
-        /// Пререпроверить подходит ли этому каналу выбранный тип эталонного канала,
-        /// если нет - выбрать подходящий
-        /// </summary>
-        /// <param name="targetTypeKey"></param>
-        /// <param name="selectedChannel"></param>
-        private void UpdateEthalonChannel(string targetTypeKey, ChannelDescriptor selectedChannel)
-        {
-            //TODO: Пререпроверить подходит ли этому каналу выбранный тип эталонного канала
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -417,6 +402,15 @@ namespace KipTM.Checks
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
+
+        public event EventHandler AvailableEthalonTypeChanged;
+
+        protected virtual void OnAvailableEthalonTypeChanged()
+        {
+            EventHandler handler = AvailableEthalonTypeChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
         public event EventHandler SelectedEthalonTypeChanged;
 
         protected virtual void OnSelectedEthalonTypeChanged()
@@ -425,6 +419,134 @@ namespace KipTM.Checks
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
+        #endregion
+
+        #region Services
+
+        /// <summary>
+        /// Обновить эсклюзивные настройки методики
+        /// </summary>
+        private void UpdateCustomMethodSettings(ChannelDescriptor targetChannel)
+        {
+            var properties = _channelKeys[targetChannel];
+            CustomSettings = SelectedMethod.GetCustomConfig(properties);
+            SelectedMethod.Init(CustomSettings); //todo maybe move out
+        }
+
+        /// <summary>
+        /// Пререпроверить подходит ли этому каналу выбранный тип эталонного канала,
+        /// если нет - выбрать подходящий
+        /// </summary>
+        /// <param name="targetTypeKey"></param>
+        /// <param name="selectedChannel"></param>
+        private void UpdateEthalonChannel(string targetTypeKey, ChannelDescriptor selectedChannel)
+        {
+            _avalableEthalonTypes = GetAvailableEthalons(_data.TargetTypeKey, _propertyPool, _result.TargetDevice.Channel, _allDeviceTypes);
+            OnAvailableEthalonTypeChanged();
+            if (_avalableEthalonTypes.Values.Contains(_data.Ethalon.DeviceType))
+                return;
+            SelectedEthalonTypeKey = _avalableEthalonTypes.Keys.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Получить коллекцию опистелей измерительных каналов устройства
+        /// </summary>
+        /// <param name="propertyPool"></param>
+        /// <param name="targetTypeKey">Ключ типа устройства</param>
+        /// <returns>Справочник описателей каналов и их ключей</returns>
+        private static Dictionary<ChannelDescriptor, IPropertyPool> GetChannels(IPropertyPool propertyPool, string targetTypeKey)
+        {
+            var channelKeys = new Dictionary<ChannelDescriptor, IPropertyPool>();
+            // свойства выбранного типа устройства
+            var channelsPool = propertyPool.ByKey(targetTypeKey);
+            foreach (var chKey in channelsPool.GetAllKeys())
+            {
+                // перебор каналов выбранного типа устройства
+                var oneChannel = channelsPool.ByKey(chKey).GetProperty<ChannelDescriptor>(BasicKeys.KeyChannel);
+                if (oneChannel == null)
+                    continue;
+
+                channelKeys.Add(oneChannel, channelsPool.ByKey(chKey));
+            }
+            return channelKeys;
+        }
+
+        /// <summary>
+        /// Получить коллекцию опистелей измерительных каналов устройства
+        /// </summary>
+        /// <param name="propertyPool"></param>
+        /// <param name="targetTypeKey">Ключ типа устройства</param>
+        /// <returns>Справочник описателей каналов и их ключей</returns>
+        private static Dictionary<ChannelDescriptor, string> GetChannelsKeys(IPropertyPool propertyPool, string targetTypeKey)
+        {
+            var channelKeys = new Dictionary<ChannelDescriptor, string>();
+            // свойства выбранного типа устройства
+            var channelsPool = propertyPool.ByKey(targetTypeKey);
+            foreach (var chKey in channelsPool.GetAllKeys())
+            {
+                // перебор каналов выбранного типа устройства
+                var oneChannel = channelsPool.ByKey(chKey).GetProperty<ChannelDescriptor>(BasicKeys.KeyChannel);
+                if (oneChannel == null)
+                    continue;
+
+                channelKeys.Add(oneChannel, chKey);
+            }
+            return channelKeys;
+        }
+
+        /// <summary>
+        /// Получить набор подходящих каналов эталонов
+        /// </summary>
+        // <param name="settings">настройки</param>
+        /// <param name="targetDevKey">ключ типа проверяемого устройства</param>
+        /// <param name="selectedChannel">выбраный канал</param>
+        /// <returns></returns>
+        private static Dictionary<string, DeviceTypeDescriptor> GetAvailableEthalons(string targetDevKey, IPropertyPool propertyPool,
+            ChannelDescriptor selectedChannel, IDictionary<string, DeviceTypeDescriptor> allTypes) //IMainSettings settings, 
+        {
+            var avalableEthalonTypes = new Dictionary<string, DeviceTypeDescriptor>();
+            foreach (var dev in allTypes)
+            {
+                //исключить проверяемое устройство
+                if (dev.Key == targetDevKey)
+                    continue;
+
+                var channels = GetChannelsKeys(propertyPool, dev.Key);
+                foreach (var channel in channels)
+                {
+                    if (!CheckEthalonChannel(selectedChannel, channel.Key))
+                        continue;
+                    avalableEthalonTypes.Add(channel.Value, dev.Value);
+                }
+            }
+            avalableEthalonTypes.Add(UserEthalonChannel.Key,
+                new DeviceTypeDescriptor("Аналоговый прибор", "Приборы без аппаратного интерфейса", ""));
+            return avalableEthalonTypes;
+        }
+
+        /// <summary>
+        /// Проверить подходит ли эталонный канал выбранному
+        /// </summary>
+        /// <param name="selectedChannel">Выбранный канал</param>
+        /// <param name="ethalonChannel">Эталонный канал</param>
+        /// <returns>True - подходит</returns>
+        private static bool CheckEthalonChannel(ChannelDescriptor selectedChannel, ChannelDescriptor ethalonChannel)
+        {
+            //проверка типа измерительного канала
+            if (selectedChannel.TypeChannel != ethalonChannel.TypeChannel)
+                return false;
+            //проверка нарпавленности измерительного канала
+            if (selectedChannel.Order == ethalonChannel.Order)
+                return false;
+            //проверка диапазона измерительного канала
+            if (selectedChannel.Min < ethalonChannel.Min || selectedChannel.Max > ethalonChannel.Max)
+                return false;
+
+            //проверка допуска измерительного канала
+            if (selectedChannel.Error < ethalonChannel.Error)
+                return false;
+            return true;
+        }
         #endregion
     }
 }

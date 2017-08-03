@@ -97,6 +97,23 @@ namespace KipTM.Checks
         }
         #endregion
 
+        public static CheckConfigDevice GenerateForType(string key, IMainSettings settings, IMethodsService method, IPropertyPool propertyPool, DictionariesPool dictionaries, TestResult result)
+        {
+            var data = new CheckConfigData();
+            data.TargetTypeKey = key;
+
+            var avalableDeviceTypes = GetAllAvailableDeviceTypes(settings, dictionaries);
+            var allDeviceTypes = avalableDeviceTypes;
+            avalableDeviceTypes =
+                avalableDeviceTypes.Where(el => method.GetDescriptors().Any(elDescr => el.Key == elDescr.Key))
+                    .ToDictionary(el => el.Key, el => el.Value);
+            data.TargetType = avalableDeviceTypes[key];
+
+            var methods = method.MethodsForType(key);
+            var res = new CheckConfigDevice(data, methods, allDeviceTypes, propertyPool, result);
+            return res;
+        }
+
         #region Инициализация
 
         /// <summary>
@@ -140,7 +157,7 @@ namespace KipTM.Checks
             var selectedChannel = SelectedChannel;
             var targetDevKey = _data.TargetTypeKey;
 
-            var avalableEthalonTypes = GetAvailableEthalons(targetDevKey, selectedChannel);
+            var avalableEthalonTypes = GetAvailableEthalons(targetDevKey, _propertyPool, selectedChannel);
 
             _avalableEthalonTypes = avalableEthalonTypes;
             _data.EthalonTypeKey = _avalableEthalonTypes.FirstOrDefault().Key;
@@ -162,7 +179,7 @@ namespace KipTM.Checks
         /// <param name="targetDevKey">ключ типа проверяемого устройства</param>
         /// <param name="selectedChannel">выбраный канал</param>
         /// <returns></returns>
-        private Dictionary<string, DeviceTypeDescriptor> GetAvailableEthalons(string targetDevKey,
+        private Dictionary<string, DeviceTypeDescriptor> GetAvailableEthalons(string targetDevKey, IPropertyPool propertyPool,
             ChannelDescriptor selectedChannel) //IMainSettings settings, 
         {
             var avalableEthalonTypes = new Dictionary<string, DeviceTypeDescriptor>();
@@ -172,7 +189,7 @@ namespace KipTM.Checks
                 if (dev.Key == targetDevKey)
                     continue;
 
-                var channels = GetChannels(dev.Key);
+                var channels = GetChannels(propertyPool, dev.Key);
                 foreach (var channel in channels)
                 {
                     if (!CheckEthalonChannel(selectedChannel, channel.Key))
@@ -219,7 +236,7 @@ namespace KipTM.Checks
             _result.TargetDevice.Device = new DeviceDescriptor(targetType);
             _checks = _method.MethodsForType(targetTypeKey);
             // заполняем набор измерительных каналов
-            var channelKeys = GetChannels(targetTypeKey);
+            var channelKeys = GetChannels(_propertyPool, targetTypeKey);
             Channels = channelKeys.Keys;
             _channelKeys = channelKeys;
             // выбираем первый тип канала
@@ -245,11 +262,11 @@ namespace KipTM.Checks
         /// </summary>
         /// <param name="targetTypeKey">Ключ типа устройства</param>
         /// <returns>Справочник описателей каналов и их ключей</returns>
-        private Dictionary<ChannelDescriptor, string> GetChannels(string targetTypeKey)
+        private static Dictionary<ChannelDescriptor, string> GetChannels(IPropertyPool propertyPool, string targetTypeKey)
         {
             var channelKeys = new Dictionary<ChannelDescriptor, string>();
             // свойства выбранного типа устройства
-            var channelsPool = _propertyPool.ByKey(targetTypeKey);
+            var channelsPool = propertyPool.ByKey(targetTypeKey);
             foreach (var chKey in channelsPool.GetAllKeys())
             {
                 // перебор каналов выбранного типа устройства
@@ -268,7 +285,7 @@ namespace KipTM.Checks
         /// <param name="settings">Настройки</param>
         /// <param name="dictionaries">Справочник функционала</param>
         /// <returns></returns>
-        private Dictionary<string, DeviceTypeDescriptor> GetAllAvailableDeviceTypes(IMainSettings settings,
+        private static Dictionary<string, DeviceTypeDescriptor> GetAllAvailableDeviceTypes(IMainSettings settings,
             DictionariesPool dictionaries)
         {
             var avalableDeviceTypes = new Dictionary<string, DeviceTypeDescriptor>();

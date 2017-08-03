@@ -91,13 +91,9 @@ namespace KipTM.Workflow.States
         {
             var result = new TestResult();
 
-            //TODO Вынести из CheckConfig фабрику получения из выбранного ключа устройства CheckConfigDevice с заполнением TypeDescriptor, набор допустимых эталонов и специализированные настройки
-            var checkConfig = new CheckConfig(_settings, _methodicService, _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, result);
-            checkConfig.SelectedDeviceTypeKey = devTypeKey;
-            var checkConfigDevice = new CheckConfigDevice(checkConfig.SelectedDeviceType, devTypeKey,
-                _methodicService.MethodsForType(devTypeKey), checkConfig._avalableEthalonTypes,
-                checkConfig.CustomSettings, _propertiesLibrary.PropertyPool, result);
-
+            // создание конфигурации конкретной проверки
+            var checkConfigDevice = CheckConfig.GenerateForType(devTypeKey, _settings, _methodicService,
+                _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, result);
 
             var checkConfigViewModel = new CheckConfigViewModel(checkConfigDevice, _channelFactory, _customFactory);
             var resFactory = new TestResultViewModelFactory(result, checkConfigDevice, _resultMaker, _filler, _archive);

@@ -27,21 +27,25 @@ namespace KipTM.ViewModel.Checks.Config
 
 
         /// <summary>
-        /// Initializes a new instance of the CheckConfigViewModel class.
+        /// Визуальная модель конфигурации конкретного типа проверки
         /// </summary>
         public CheckConfigViewModel(CheckConfigDevice model, IChannelsFactory channelFactory, CustomConfigFactory customConfigFactory)
         {
             _model = model;
             _customConfigFactory = customConfigFactory;
             CustomSetiings = _customConfigFactory.GetCustomSettings(_model.CustomSettings);
+
             _model.SelectedChannelChanged += _model_SelectedChannelChanged;
             _model.SelectedMethodChanged += ModelSelectedMethodChanged;
             _model.SelectedEthalonTypeChanged += _model_SelectedEthalonTypeChanged;
-            _checkDeviceChanel = new SelectChannelViewModel(channelFactory.GetChannels());
+            _model.AvailableEthalonTypeChanged += _model_AvailableEthalonTypeChanged;
+
             _model.TargetTransportChannel = _checkDeviceChanel.SelectedChannel;
+            _model.EthalonTransportChannel = _ethalonChanel.SelectedChannel;
+
+            _checkDeviceChanel = new SelectChannelViewModel(channelFactory.GetChannels());
             _checkDeviceChanel.ChannelTypeChanget += _checkDeviceChanel_ChannelTypeChanget;
             _ethalonChanel = new SelectChannelViewModel(channelFactory.GetChannels());
-            _model.EthalonTransportChannel = _ethalonChanel.SelectedChannel;
             _ethalonChanel.ChannelTypeChanget += _ethalonChanel_ChannelTypeChanget;
         }
 
@@ -67,6 +71,16 @@ namespace KipTM.ViewModel.Checks.Config
         {
             _model.TargetTransportChannel = _checkDeviceChanel.SelectedChannel;
             OnCheckedDeviseChannelChanged();
+        }
+
+        /// <summary>
+        /// Изменение доступного набора эталонных каналов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _model_AvailableEthalonTypeChanged(object sender, EventArgs e)
+        {
+            RaisePropertyChanged("EthalonTypes");
         }
 
         /// <summary>
