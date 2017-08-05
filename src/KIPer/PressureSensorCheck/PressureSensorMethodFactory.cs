@@ -2,20 +2,15 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ADTSChecks.Model.Checks;
-using ADTSChecks.Model.Devices;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Checks;
-using KipTM.Model.Checks;
 
 namespace ADTSChecks
 {
     /// <summary>
     /// Фабрика методик
     /// </summary>
-    public class ADTSMethodFactory : IMethodFactory
+    public class PressureSensorMethodFactory : IMethodFactory
     {
         private Dictionary<string, ICheckMethod> _methods;
         /// <summary>
@@ -23,11 +18,11 @@ namespace ADTSChecks
         /// </summary>
         private Dictionary<string, Func<ICheckMethod>> createMetods = new Dictionary<string, Func<ICheckMethod>>()
         {
-                {Test.key, ()=> new Calibration(NLog.LogManager.GetLogger("ADTSCheckMethod"))},
-                {Calibration.key, ()=> new Test(NLog.LogManager.GetLogger("ADTSTestMethod"))},
+        //        {Test.key, ()=> new Calibration(NLog.LogManager.GetLogger("ADTSCheckMethod"))},
+        //        {Calibration.key, ()=> new Test(NLog.LogManager.GetLogger("ADTSTestMethod"))},
         }; 
 
-        public ADTSMethodFactory()
+        public PressureSensorMethodFactory()
         {
             _methods = createMetods.ToDictionary(el => el.Key, el => el.Value());
         }
@@ -37,7 +32,8 @@ namespace ADTSChecks
         /// </summary>
         public string GetKey()
         {
-            return ADTSModel.Key;
+            throw new NotImplementedException();
+            //    return ADTSModel.Key;
         }
 
         public ICheckMethod GetNewMethod(string key)
@@ -65,7 +61,7 @@ namespace ADTSChecks
         /// <returns></returns>
         public Bitmap GetBigImage()
         {
-            return ADTSChecks.Properties.Resources.adts405;
+            return PressureSensorCheck.Properties.Resources.pressureSensor;
         }
 
         /// <summary>
@@ -74,7 +70,7 @@ namespace ADTSChecks
         /// <returns></returns>
         public Bitmap GetSmallImage()
         {
-            return ADTSChecks.Properties.Resources.adts405;
+            return PressureSensorCheck.Properties.Resources.pressureSensor;
         }
 
         /// <summary>
@@ -83,7 +79,7 @@ namespace ADTSChecks
         /// <returns></returns>
         public string GetName()
         {
-            return ADTSChecks.Properties.Resources.NameADTS;
+            return PressureSensorCheck.Properties.Resources.NamePressureSensor;
         }
 
     }

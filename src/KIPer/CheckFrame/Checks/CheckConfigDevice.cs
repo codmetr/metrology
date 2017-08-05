@@ -84,10 +84,9 @@ namespace KipTM.Checks
         /// <summary>
         /// Конфигурация проверки
         /// </summary>
-        /// <param name="device"></param>
-        /// <param name="devTypeKey"></param>
+        /// <param name="data"></param>
         /// <param name="methods"></param>
-        /// <param name="ethalons"></param>
+        /// <param name="allDeviceTypes"></param>
         /// <param name="propertyPool"></param>
         /// <param name="result"></param>
         public CheckConfigDevice(CheckConfigData data, IDictionary<string, ICheckMethod> methods, IDictionary<string, DeviceTypeDescriptor> allDeviceTypes,
@@ -108,9 +107,6 @@ namespace KipTM.Checks
             _result.TargetDevice.Device = new DeviceDescriptor(data.TargetType);
             UpdateCustomMethodSettings(_result.TargetDevice.Channel);
         }
-        #endregion
-
-        #region Инициализация
         #endregion
 
         #region Перечисления
