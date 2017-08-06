@@ -1,4 +1,5 @@
-﻿using ADTSChecks.Checks.Data;
+﻿using ADTSChecks.Checks;
+using ADTSChecks.Checks.Data;
 using ADTSChecks.Checks.ViewModel;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.Model.Devices;
@@ -7,6 +8,7 @@ using CheckFrame.Model;
 using CheckFrame.Model.Channels;
 using CheckFrame.ViewModel.Checks.Channels;
 using KipTM.Archive;
+using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks;
 using KipTM.Model;
 using KipTM.Model.Channels;

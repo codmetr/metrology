@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
+using KipTM.Model.Checks;
 
-namespace KipTM.Model.Checks.Steps
+namespace KipTM.Interfaces.Checks.Steps
 {
     public abstract class TestStep:ITestStep
     {
@@ -25,13 +25,8 @@ namespace KipTM.Model.Checks.Steps
         /// <summary>
         /// Запустить тест
         /// </summary>
-        public abstract void Start(EventWaitHandle whEnd);
+        public abstract void Start(CancellationToken cancel);
 
-        /// <summary>
-        /// Остановить тест
-        /// </summary>
-        public abstract bool Stop();
-        
         /// <summary>
         /// Шаг запущен
         /// </summary>

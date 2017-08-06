@@ -17,14 +17,8 @@ namespace KipTM.Model.Checks
         /// <summary>
         /// Запустить шаг
         /// </summary>
-        /// <param name="whEnd"></param>
-        void Start(EventWaitHandle whEnd);
-
-        /// <summary>
-        /// Остановить шаг
-        /// </summary>
-        /// <returns></returns>
-        bool Stop();
+        /// <param name="cancel"></param>
+        void Start(CancellationToken cancel);
 
         /// <summary>
         /// Шаг запущен

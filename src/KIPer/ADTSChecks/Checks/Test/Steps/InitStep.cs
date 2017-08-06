@@ -4,6 +4,7 @@ using ADTS;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
 using ArchiveData.DTO.Params;
+using CheckFrame.Checks.Steps;
 using CheckFrame.Model.Checks.Steps;
 using KipTM.Model.Checks;
 using NLog;
@@ -19,7 +20,6 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         private readonly ADTSModel _adts;
         private readonly ChannelDescriptor _calibChan;
         private readonly NLog.Logger _logger;
-        private CancellationTokenSource _cancellationTokenSource;
 
         public InitStep(string name, ADTSModel adts, ChannelDescriptor calibChan, Logger logger)
         {
@@ -27,19 +27,16 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             _adts = adts;
             _calibChan = calibChan;
             _logger = logger;
-            _cancellationTokenSource = new CancellationTokenSource();
         }
 
-        public override void Start(EventWaitHandle whEnd)
+        public override void Start(CancellationToken cancel)
         {
             TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
-            var cancel = _cancellationTokenSource.Token;
             DateTime testDate = DateTime.Now;
             OnStarted();
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel test")));
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
@@ -50,7 +47,6 @@ namespace ADTSChecks.Model.Steps.ADTSTest
                 if(!cancel.IsCancellationRequested)
                     _logger.With(l => l.Trace(string.Format("[ERROR] set state {0}", State.Control)));
                 //OnError(new EventArgError() { Error = ADTSCheckError.ErrorStartCalibration });
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
@@ -62,7 +58,6 @@ namespace ADTSChecks.Model.Steps.ADTSTest
                 if (cancel.IsCancellationRequested)
                 {
                     _adts.StopWaitState(wh);
-                    whEnd.Set();
                     OnEnd(new EventArgEnd(KeyStep, false));
                     return;
                 }
@@ -73,22 +68,13 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel test")));
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
             OnProgressChanged(new EventArgProgress(100,
                 string.Format("Поверка запущена (Дата: {0})", testDate.ToString())));
-            whEnd.Set();
             OnEnd(new EventArgEnd(KeyStep, true));
             return;
-        }
-
-        public override bool Stop()
-        {
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
-            return true;
         }
     }
 }

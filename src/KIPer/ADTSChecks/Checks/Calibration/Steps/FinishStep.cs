@@ -2,6 +2,7 @@
 using System.Threading;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO.Params;
+using CheckFrame.Checks.Steps;
 using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks.Steps;
 using KipTM.Model.Channels;
@@ -17,8 +18,6 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
         private readonly ADTSModel _adts;
         private IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
-        private CancellationTokenSource _cancellationTokenSource;
-        private readonly TimeSpan _checkCancelPeriod;
 
         public FinishStep(string name, ADTSModel adts, IUserChannel userChannel, Logger logger)
         {
@@ -26,20 +25,16 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             _adts = adts;
             _logger = logger;
             _userChannel = userChannel;
-            _cancellationTokenSource = new CancellationTokenSource();
-            _checkCancelPeriod = TimeSpan.FromMilliseconds(10);
         }
 
-        public override void Start(EventWaitHandle whEnd)
+        public override void Start(CancellationToken cancel)
         {
-            var cancel = _cancellationTokenSource.Token;
             double? slope;
             double? zero;
             OnStarted();
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
@@ -47,7 +42,6 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             {
                 _logger.With(l => l.Trace(string.Format("[ERROR] Can not get result calibration")));
                 //OnError(new EventArgError() { Error = ADTSCheckError.ErrorGetResultCalibration });
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
@@ -61,7 +55,6 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
@@ -70,16 +63,12 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
                 "\"{0}\"";//string.Format("Применить результат калибровки?");//TODO: локализовать
             var wh = new ManualResetEvent(false);
             _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
-            while (!wh.WaitOne(_checkCancelPeriod))
-            {
-                if (cancel.IsCancellationRequested)
-                    break;
-            }
+
+            WaitHandle.WaitAny(new[] {wh, cancel.WaitHandle});
             bool accept = _userChannel.AcceptValue;
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
@@ -91,29 +80,19 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
             if (_adts.AcceptCalibration(accept, cancel))
             {
                 //OnError(new EventArgError() { Error = ADTSCheckError.ErrorAcceptResultCalibration });
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
             OnProgressChanged(new EventArgProgress(100,
                 string.Format("{0} результата калибровки", accept ? "Подтверждение" : "Отмена")));
-            whEnd.Set();
             OnEnd(new EventArgEnd(KeyStep, true));
             return;
-        }
-
-        public override bool Stop()
-        {
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
-            return true;
         }
 
         public void SetUserChannel(IUserChannel userChannel)

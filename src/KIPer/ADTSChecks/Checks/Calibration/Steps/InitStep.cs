@@ -4,6 +4,7 @@ using ADTS;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
 using ArchiveData.DTO.Params;
+using CheckFrame.Checks.Steps;
 using CheckFrame.Model.Checks.Steps;
 using KipTM.Model.Checks;
 using NLog;
@@ -19,7 +20,6 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
         private readonly ADTSModel _adts;
         private readonly ChannelDescriptor _calibChan;
         private readonly NLog.Logger _logger;
-        private CancellationTokenSource _cancellationTokenSource;
 
         public InitStep(string name, ADTSModel adts, ChannelDescriptor calibChan, Logger logger)
         {
@@ -27,18 +27,15 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             _adts = adts;
             _calibChan = calibChan;
             _logger = logger;
-            _cancellationTokenSource = new CancellationTokenSource();
         }
 
-        public override void Start(EventWaitHandle whEnd)
+        public override void Start(CancellationToken cancel)
         {
-            var cancel = _cancellationTokenSource.Token;
             DateTime? calibDate;
             OnStarted();
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
@@ -48,7 +45,6 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             {
                 _logger.With(l => l.Trace(string.Format("[ERROR] start clibration")));
                 //OnError(new EventArgError() { Error = ADTSCheckError.ErrorStartCalibration });
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
@@ -57,22 +53,13 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
             OnProgressChanged(new EventArgProgress(100,
                 string.Format("Калибровка запущена (Дата: {0})", calibDate == null ? "null" : calibDate.Value.ToString())));
-            whEnd.Set();
             OnEnd(new EventArgEnd(KeyStep, true));
             return;
-        }
-
-        public override bool Stop()
-        {
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
-            return true;
         }
     }
 }

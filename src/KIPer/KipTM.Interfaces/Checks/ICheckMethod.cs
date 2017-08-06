@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using KipTM.Archive;
 using KipTM.Model.Checks;
 
@@ -36,16 +37,11 @@ namespace KipTM.Interfaces.Checks
         /// Запуск калибровки
         /// </summary>
         /// <returns></returns>
-        bool Start();
+        bool Start(CancellationToken cancel);
 
         /// <summary>
         /// Список шагов
         /// </summary>
         IEnumerable<CheckStepConfig> Steps { get; } 
-
-        /// <summary>
-        /// Остановка проверки
-        /// </summary>
-        void Stop();
     }
 }

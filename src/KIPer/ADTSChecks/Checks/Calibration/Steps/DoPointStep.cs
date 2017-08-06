@@ -4,8 +4,9 @@ using ADTS;
 using ADTSChecks.Checks.Data;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO.Params;
-using CheckFrame.Model.Channels;
+using CheckFrame.Checks.Steps;
 using CheckFrame.Model.Checks.Steps;
+using KipTM.Interfaces.Channels;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using NLog;
@@ -27,8 +28,6 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
         private IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
         private ManualResetEvent _setCurrentValueAsPoint = new ManualResetEvent(false);
-        private CancellationTokenSource _cancellationTokenSource;
-        private readonly TimeSpan _checkCancelPeriod;
 
         public DoPointStep(
             string name, ADTSModel adts, Parameters param, ADTSPoint point, double rate,
@@ -42,32 +41,29 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             _unit = unit;
             _logger = logger;
             _ethalonChannel = ethalonChannel;
-            _cancellationTokenSource = new CancellationTokenSource();
-            _checkCancelPeriod = TimeSpan.FromMilliseconds(10);
             _userChannel = userChannel;
         }
 
-        public override void Start(EventWaitHandle whEnd)
+        public override void Start(CancellationToken cancel)
         {
             TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
-            var cancel = _cancellationTokenSource.Token;
             var point = _point.Pressure;
 
             OnStarted();
             // Установка единиц измерений
-            if (!DoOne(whEnd, cancel, () => _adts.SetPressureUnit(_unit, cancel), "[ERROR] Set unit for point"))
+            if (!DoOne(cancel, () => _adts.SetPressureUnit(_unit, cancel), "[ERROR] Set unit for point"))
             {
                 return;
             }
             // Установить скорость
-            if (!DoOne(whEnd, cancel, () => _adts.SetRate(_param, _rate, cancel), "[ERROR] Set rate for point"))
+            if (!DoOne(cancel, () => _adts.SetRate(_param, _rate, cancel), "[ERROR] Set rate for point"))
             {
                 return;
             }
             Thread.Sleep(TimeSpan.FromSeconds(1));
 
             // Установить цель для ADST
-            if (!DoOne(whEnd, cancel, () => _adts.SetParameter(_param, point, cancel), "[ERROR] Set rate for point"))
+            if (!DoOne(cancel, () => _adts.SetParameter(_param, point, cancel), "[ERROR] Set rate for point"))
             {
                 return;
             }
@@ -82,7 +78,6 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
                 if (cancel.IsCancellationRequested)
                 {
                     _adts.StopWaitStatus(wh);
-                    whEnd.Set();
                     OnEnd(new EventArgEnd(KeyStep, false));
                     return;
                 }
@@ -95,14 +90,14 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
                 _adts.SetParameter(_param, point, cancel);
             }
 
-            if (IsCancel(whEnd, cancel))
+            if (IsCancel(cancel))
             {
                 return;
             }
 
             // Получить эталонное значение
             var realValue = _ethalonChannel.GetEthalonValue(point, cancel);
-            if (IsCancel(whEnd, cancel))
+            if (IsCancel(cancel))
             {
                 return;
             }
@@ -114,13 +109,13 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
                     new ParameterResult(DateTime.Now, realValue)));
             OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.IsCorrect),
                     new ParameterResult(DateTime.Now, correctPoint)));
-            if (IsCancel(whEnd, cancel))
+            if (IsCancel(cancel))
             {
                 return;
             }
 
             // Передача ADTS реального значения
-            if (!DoOne(whEnd, cancel, () => _adts.SetActualValue(realValue, cancel), "[ERROR] Can not set real value"))
+            if (!DoOne(cancel, () => _adts.SetActualValue(realValue, cancel), "[ERROR] Can not set real value"))
             {
                 return;
             }
@@ -129,16 +124,8 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             OnProgressChanged(new EventArgProgress(100,
                 string.Format("Точка {0}: Реальное значени {1}({2})",
                     point, realValue, correctPoint ? "correct" : "incorrect")));
-            whEnd.Set();
             OnEnd(new EventArgEnd(KeyStep, true));
             return;
-        }
-
-        public override bool Stop()
-        {
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
-            return true;
         }
 
         public void SetEthalonChannel(IEthalonChannel ehalon)
@@ -178,16 +165,15 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
         /// <param name="func"></param>
         /// <param name="errorMessage"></param>
         /// <returns></returns>
-        private bool DoOne(EventWaitHandle whEnd, CancellationToken cancel, Func<bool> func, string errorMessage)
+        private bool DoOne(CancellationToken cancel, Func<bool> func, string errorMessage)
         {
             if (!func())
             {
                 _logger.With(l => l.Trace(errorMessage));
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return false;
             }
-            if (IsCancel(whEnd, cancel))
+            if (IsCancel(cancel))
             {
                 return false;
             }
@@ -197,44 +183,17 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
         /// <summary>
         /// Обертка для проверки на "отмену" операции
         /// </summary>
-        /// <param name="whEnd"></param>
         /// <param name="cancel"></param>
         /// <returns></returns>
-        private bool IsCancel(EventWaitHandle whEnd, CancellationToken cancel)
+        private bool IsCancel(CancellationToken cancel)
         {
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel test")));
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return true;
             }
             return false;
-        }
-
-        private bool WaitUserAccept(EventWaitHandle whEnd)
-        {
-            var cancel = _cancellationTokenSource.Token;
-            _userChannel.Message = string.Format(string.Format("Установлена точка {0}, для продолжения нажмите \"Далее\"", _point));//TODO: локализовать
-            
-            var wh = new ManualResetEvent(false);
-            _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
-            while (!wh.WaitOne(_checkCancelPeriod))
-            {
-                if (cancel.IsCancellationRequested)
-                    break;
-            }
-            bool accept = _userChannel.AcceptValue;
-            if (cancel.IsCancellationRequested)
-            {
-                _logger.With(l => l.Trace(string.Format("Cancel calibration")));
-                whEnd.Set();
-                OnEnd(new EventArgEnd(KeyStep, false));
-                return false;
-            }
-
-            _logger.With(l => l.Trace(string.Format("Calibration accept: {0}", accept ? "accept" : "deny")));
-            return true;
         }
     }
 }

@@ -8,27 +8,25 @@ using KipTM.Archive;
 using KipTM.Interfaces.Checks;
 using KipTM.Model.Checks;
 
-namespace PACEChecks.Checks.Calibration
+namespace PressureSensorCheck.Check
 {
-    public class Calibration: ICheckMethod
+    public class PressureSensorCheck: ICheckMethod
     {
-
-        public string Key { get { return "PaceCalibration"; } }
-        public string Title { get { return "Клибровка PACE"; } }
-
+        public string Key { get; }
+        public string Title { get; }
         public object GetCustomConfig(IPropertyPool propertyPool)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
         public bool Init(object customConf)
         {
-            return true;
+            throw new NotImplementedException();
         }
 
         public bool Start(CancellationToken cancel)
         {
-            return true;
+            throw new NotImplementedException();
         }
 
         public IEnumerable<CheckStepConfig> Steps { get; }

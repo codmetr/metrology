@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using KipTM.Model.TransportChannels;
 
-namespace KipTM.Model.Channels
+namespace KipTM.Interfaces.Channels
 {
     public interface IEthalonChannel
     {

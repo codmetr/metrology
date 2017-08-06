@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace CheckFrame.Model.Checks.Steps
 {
@@ -17,13 +18,13 @@ namespace CheckFrame.Model.Checks.Steps
         /// Поставить на паузу
         /// </summary>
         /// <returns></returns>
-        bool Pause();
+        bool Pause(CancellationToken cancel);
 
         /// <summary>
         /// Восстановить с паузы
         /// </summary>
         /// <returns></returns>
-        bool Resume();
+        bool Resume(CancellationToken cancel);
 
         /// <summary>
         /// Изменилась доступность вызова паузы

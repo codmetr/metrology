@@ -77,7 +77,7 @@
     <Compile Include="IViewModelFactory.cs" />
     <Compile Include="Checks\Calibration\Calibration.cs" />
     <Compile Include="Checks\CheckBase.cs" />
-    <Compile Include="Checks\Data\ADTSMethodParameters.cs" />
+    <Compile Include="Checks\Data\ADTSParameters.cs" />
     <Compile Include="Checks\Data\ADTSPoint.cs" />
     <Compile Include="Checks\Data\AdtsPointService.cs" />
     <Compile Include="Checks\Test\Test.cs" />

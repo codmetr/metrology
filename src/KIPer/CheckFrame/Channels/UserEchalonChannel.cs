@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using ArchiveData.DTO;
+using KipTM.Interfaces.Channels;
 using KipTM.Model.Channels;
 using KipTM.Model.TransportChannels;
 

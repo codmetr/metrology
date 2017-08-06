@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using KipTM.Interfaces.Channels;
 using KipTM.Model.Channels;
 using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;

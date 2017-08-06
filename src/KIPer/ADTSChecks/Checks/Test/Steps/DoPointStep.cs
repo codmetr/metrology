@@ -4,8 +4,10 @@ using ADTS;
 using ADTSChecks.Checks.Data;
 using ADTSChecks.Model.Devices;
 using ArchiveData.DTO.Params;
+using CheckFrame.Checks.Steps;
 using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks.Steps;
+using KipTM.Interfaces.Channels;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using NLog;
@@ -28,7 +30,6 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         private IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
         private readonly ManualResetEvent _setCurrentValueAsPoint = new ManualResetEvent(false);
-        private CancellationTokenSource _cancellationTokenSource;
         private bool _isPauseAvailable = false;
         private State _stateBeforeHold = State.Control;
 
@@ -47,30 +48,29 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             _logger = logger;
             _userChannel = userChannel;
             _ethalonChannel = ethalonChannel;
-            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         #region ITestStep
+
         /// <summary>
         /// Запустить шаг
         /// </summary>
-        /// <param name="whEnd"></param>
-        public override void Start(EventWaitHandle whEnd)
+        /// <param name="cancel"></param>
+        public override void Start(CancellationToken cancel)
         {
             TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
-            var cancel = _cancellationTokenSource.Token;
             var point = _point.Pressure;
 
             OnStarted();
             // Установка единиц измерений
-            if (!DoOne(whEnd, cancel, () => _adts.SetPressureUnit(_unit, cancel), "[ERROR] Set unit for point"))
+            if (!DoOne(cancel, () => _adts.SetPressureUnit(_unit, cancel), "[ERROR] Set unit for point"))
             {
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
 
             // Установить скорость
-            if (!DoOne(whEnd, cancel, () => _adts.SetRate(_param, _rate, cancel), "[ERROR] Set rate for point"))
+            if (!DoOne(cancel, () => _adts.SetRate(_param, _rate, cancel), "[ERROR] Set rate for point"))
             {
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
@@ -79,7 +79,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             Thread.Sleep(TimeSpan.FromSeconds(1));
 
             // Установить цель для ADST
-            if (!DoOne(whEnd, cancel, () => _adts.SetParameter(_param, point, cancel), "[ERROR] Set point"))
+            if (!DoOne(cancel, () => _adts.SetParameter(_param, point, cancel), "[ERROR] Set point"))
             {
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
@@ -94,7 +94,6 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             if (!Wait(wh, _setCurrentValueAsPoint, waitPointPeriod, cancel, out isSettedCurrent))
             {
                 _adts.StopWaitStatus(wh);
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return;
             }
@@ -112,7 +111,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
 
             if (cancel.IsCancellationRequested)
             {
-                DoEndCancel(whEnd);
+                DoEndCancel();
                 return;
             }
             // Получить эталонное значение
@@ -139,7 +138,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
                     new ParameterResult(DateTime.Now, correctPoint)));
             if (cancel.IsCancellationRequested)
             {
-                DoEndCancel(whEnd);
+                DoEndCancel();
                 return;
             }
 
@@ -147,19 +146,8 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             OnProgressChanged(new EventArgProgress(100,
                 string.Format("Точка {0}: Реальное значени {1}({2})",
                     point, realValue, correctPoint ? "correct" : "incorrect")));
-            DoEnd(whEnd, true);
+            DoEnd(true);
             return;
-        }
-
-        /// <summary>
-        /// Остановить шаг
-        /// </summary>
-        /// <returns></returns>
-        public override bool Stop()
-        {
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
-            return true;
         }
 
         #endregion
@@ -224,11 +212,10 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         /// Поставить на паузу
         /// </summary>
         /// <returns></returns>
-        public bool Pause()
+        public bool Pause(CancellationToken cancel)
         {
             if (!IsPauseAvailable)
                 return false;
-            var cancel = _cancellationTokenSource.Token;
             _stateBeforeHold = _adts.StateADTS ?? State.Control;
             if (_stateBeforeHold == State.Hold)
                 _stateBeforeHold = State.Control;
@@ -239,11 +226,10 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         /// Восстановить с паузы
         /// </summary>
         /// <returns></returns>
-        public bool Resume()
+        public bool Resume(CancellationToken cancel)
         {
             if (!IsPauseAvailable)
                 return false;
-            var cancel = _cancellationTokenSource.Token;
             return _adts.SetState(_stateBeforeHold, cancel);
         }
 
@@ -270,18 +256,17 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         /// <param name="func"></param>
         /// <param name="errorMessage"></param>
         /// <returns></returns>
-        private bool DoOne(EventWaitHandle whEnd, CancellationToken cancel, Func<bool> func, string errorMessage)
+        private bool DoOne(CancellationToken cancel, Func<bool> func, string errorMessage)
         {
             if (!func())
             {
                 _logger.With(l => l.Trace(errorMessage));
-                whEnd.Set();
                 OnEnd(new EventArgEnd(KeyStep, false));
                 return false;
             }
             if (cancel.IsCancellationRequested)
             {
-                DoEndCancel(whEnd);
+                DoEndCancel();
                 return false;
             }
             return true;
@@ -309,16 +294,14 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             return true;
         }
 
-        private void DoEnd(EventWaitHandle whEnd, bool result)
+        private void DoEnd(bool result)
         {
-            whEnd.Set();
             OnEnd(new EventArgEnd(KeyStep, result));
         }
 
-        private void DoEndCancel(EventWaitHandle whEnd)
+        private void DoEndCancel()
         {
             _logger.With(l => l.Trace(string.Format("Cancel test")));
-            whEnd.Set();
             OnEnd(new EventArgEnd(KeyStep, false));
         }
         #endregion

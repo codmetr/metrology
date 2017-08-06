@@ -2,7 +2,7 @@
 using System.Threading;
 using KipTM.Model.Checks;
 
-namespace CheckFrame.Model.Checks.Steps
+namespace CheckFrame.Checks.Steps
 {
     public abstract class TestStep:ITestStep
     {
@@ -20,12 +20,7 @@ namespace CheckFrame.Model.Checks.Steps
         /// <summary>
         /// Запустить тест
         /// </summary>
-        public abstract void Start(EventWaitHandle whEnd);
-
-        /// <summary>
-        /// Остановить тест
-        /// </summary>
-        public abstract bool Stop();
+        public abstract void Start(CancellationToken cancel);
         
         /// <summary>
         /// Шаг запущен

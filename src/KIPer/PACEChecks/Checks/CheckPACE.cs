@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using KipTM.Archive;
 using KipTM.Interfaces.Checks;
 using KipTM.Model.Checks;
@@ -31,17 +32,12 @@ namespace PACEChecks
             throw new NotImplementedException();
         }
 
-        public bool Start()
+        public bool Start(CancellationToken cancel)
         {
             throw new NotImplementedException();
         }
 
         public IEnumerable<CheckStepConfig> Steps { get; private set; }
-
-        public void Stop()
-        {
-            throw new NotImplementedException();
-        }
 
         #endregion
 

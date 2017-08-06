@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -18,6 +19,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Archive;
 using KipTM.EventAggregator;
+using KipTM.Interfaces.Channels;
 using KipTM.Model;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
@@ -50,6 +52,9 @@ namespace ADTSChecks.Checks.ViewModel
         private ITransportChannelType _ethalonChannelType;
         private bool _stopEnabled = false;
 
+        private CancellationTokenSource _cancellation;
+        private CancellationToken _currentToken;
+
         protected CheckStateViewModel _stateViewModel;
         private string _title;
         private bool _pauseEnabled = false;
@@ -60,6 +65,9 @@ namespace ADTSChecks.Checks.ViewModel
         protected CheckBaseViewModel(CheckBase method, IPropertyPool propertyPool,
             IDeviceManager deviceManager, TestResult resultPool, ADTSParameters customConfig)
         {
+            _cancellation = new CancellationTokenSource();
+            _currentToken = _cancellation.Token;
+
             Method = method;
             _propertyPool = propertyPool;
             // Базовая инициализация
@@ -268,11 +276,11 @@ namespace ADTSChecks.Checks.ViewModel
         {
             if (IsPaused)
             {
-                Method.Resume();
+                Method.Resume(_currentToken);
             }
             else
             {
-                Method.Pause();
+                Method.Pause(_currentToken);
             }
         }
 
@@ -337,10 +345,11 @@ namespace ADTSChecks.Checks.ViewModel
             else
                 Method.SetEthalonChannel(_userEchalonChannel, null);
             // Запускаем
+            _currentToken = _cancellation.Token;
             Task.Run(() =>
             {
                 // Выполнить шаг
-                Method.Start();
+                Method.Start(_currentToken);
                 // В базовое состояние
                 ToStart();
                 // Следующее действие - следующий шаг
@@ -390,7 +399,8 @@ namespace ADTSChecks.Checks.ViewModel
         {
             State.TitleBtnNext = "Старт";
 
-            Method.Stop();
+            _cancellation.Cancel();
+            _cancellation = new CancellationTokenSource();
 
             if (_userChannel.QueryType == UserQueryType.GetAccept)
             {
@@ -411,7 +421,10 @@ namespace ADTSChecks.Checks.ViewModel
             State.TitleBtnNext = "Старт";
 
             if (!withoutDevices)
-                Method.Stop();
+            {
+                _cancellation.Cancel();
+                _cancellation = new CancellationTokenSource();
+            }
 
             if (_userChannel.QueryType == UserQueryType.GetAccept)
             {
