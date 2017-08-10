@@ -40,13 +40,13 @@ namespace KipTM.ViewModel.Checks.Config
             _model.SelectedEthalonTypeChanged += _model_SelectedEthalonTypeChanged;
             _model.AvailableEthalonTypeChanged += _model_AvailableEthalonTypeChanged;
 
-            _model.TargetTransportChannel = _checkDeviceChanel.SelectedChannel;
-            _model.EthalonTransportChannel = _ethalonChanel.SelectedChannel;
-
             _checkDeviceChanel = new SelectChannelViewModel(channelFactory.GetChannels());
             _checkDeviceChanel.ChannelTypeChanget += _checkDeviceChanel_ChannelTypeChanget;
             _ethalonChanel = new SelectChannelViewModel(channelFactory.GetChannels());
             _ethalonChanel.ChannelTypeChanget += _ethalonChanel_ChannelTypeChanget;
+
+            _model.TargetTransportChannel = _checkDeviceChanel.SelectedChannel;
+            _model.EthalonTransportChannel = _ethalonChanel.SelectedChannel;
         }
 
         #region Обработка событий изменения конфигурации

@@ -267,14 +267,14 @@ namespace CheckFrame.Checks
         private void SetCurrentPause(IPausedStep paused)
         {
             if (_currentPause != null)
-                _currentPause.PauseAccessibilityChanged -= CurrentPauseOnPauseAccessibilityChanged;
+                _currentPause.PauseAccessibilityChanged -= OnPauseAccessibilityChanged;
 
             _currentPause = paused;
             IsPauseAvailable = false;
             if (_currentPause == null)
                 return;
             IsPauseAvailable = _currentPause.IsPauseAvailable;
-            _currentPause.PauseAccessibilityChanged += CurrentPauseOnPauseAccessibilityChanged;
+            _currentPause.PauseAccessibilityChanged += OnPauseAccessibilityChanged;
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace CheckFrame.Checks
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="eventArgs"></param>
-        private void CurrentPauseOnPauseAccessibilityChanged(object sender, EventArgs eventArgs)
+        private void OnPauseAccessibilityChanged(object sender, EventArgs eventArgs)
         {
             if (_currentPause == null)
                 return;

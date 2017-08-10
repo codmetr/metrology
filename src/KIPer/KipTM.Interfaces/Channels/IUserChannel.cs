@@ -39,11 +39,6 @@ namespace KipTM.Model.Channels
         /// <summary>
         /// Запрос на получение реального значение визуального параметра от пользователя
         /// </summary>
-        void NeedQuey(UserQueryType queryType);
-
-        /// <summary>
-        /// Запрос на получение реального значение визуального параметра от пользователя
-        /// </summary>
         /// <param name="queryType"></param>
         /// <param name="wh">Симофор по которому можно будет понять, что пользователь подтвердил ввод</param>
         void NeedQuery(UserQueryType queryType, EventWaitHandle wh);
