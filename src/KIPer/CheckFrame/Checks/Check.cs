@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using ArchiveData.DTO;
 using ArchiveData.DTO.Params;
 using CheckFrame.Model.Checks.Steps;
@@ -185,7 +183,6 @@ namespace CheckFrame.Checks
             }
         }
         #endregion
-
 
         /// <summary>
         /// Деcтвие перед запуском проверки

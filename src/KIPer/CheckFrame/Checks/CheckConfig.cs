@@ -6,12 +6,9 @@ using ArchiveData.DTO;
 using CheckFrame.Archive;
 using CheckFrame.Checks;
 using CheckFrame.Model.Channels;
-using CheckFrame.Model.Checks;
 using KipTM.Archive;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Checks;
-using KipTM.Model;
-using KipTM.Model.Checks;
 using KipTM.Model.TransportChannels;
 using KipTM.Settings;
 
