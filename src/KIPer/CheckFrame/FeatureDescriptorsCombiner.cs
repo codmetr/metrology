@@ -27,7 +27,7 @@ namespace CheckFrame
             DeviceConfigs = UnionByKey(_features, f => f.DeviceConfigs, (ch1, ch2) => ch1.Key == ch2.Key);
             //ChannelFactories = _features.Select(el => el.ChannelFactories);
             ChannelFactories = new ChannelFactoryCombiner(_features);
-            EthalonChannels = UnionByKey(_features, f=>f.EthalonChannels, (ch1, ch2)=>ch1.Key==ch2.Key);
+            EthalonChannels = UnionByKey(_features, f=>f.EthalonChannels, (ch1, ch2)=>ch1.Key == ch2.Key);
         }
 
         /// <summary>
@@ -62,9 +62,9 @@ namespace CheckFrame
         /// Получить набор поддерживаемых типов проверок по типам устройств
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ArchivedKeyValuePair> GetDefaultForCheckTypes()
+        public IDictionary<DeviceTypeDescriptor, IEnumerable<string>> GetDefaultForCheckTypes()
         {
-            return _features.SelectMany(el => el.GetDefaultForCheckTypes());
+            return _features.SelectMany(el => el.GetDefaultForCheckTypes()).ToDictionary(el=>el.Key, el=>el.Value);
         }
 
         public IEnumerable<IFeaturesDescriptor> Features { get { return _features; } }

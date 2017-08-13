@@ -5,12 +5,12 @@ using KipTM.Interfaces.Channels;
 using KipTM.Model.Channels;
 using KipTM.Model.TransportChannels;
 
-namespace CheckFrame.Model.Channels
+namespace CheckFrame.Channels
 {
     public class UserEthalonChannel : IEthalonChannel
     {
+
         public static string Key = "Пользовательский канал";
-        private static DeviceTypeDescriptor _typeDescriptor = new DeviceTypeDescriptor("", "", "");
 
         private readonly IUserChannel _userChannel;
         private readonly TimeSpan _waitPeriod;
@@ -21,7 +21,8 @@ namespace CheckFrame.Model.Channels
             _waitPeriod = waitPeriod;
         }
 
-        public static DeviceTypeDescriptor TypeDescriptor { get {return _typeDescriptor;} }
+        public static DeviceTypeDescriptor Descriptor { get; }
+            = new DeviceTypeDescriptor("Аналоговый прибор", "Приборы без аппаратного интерфейса", "") { TypeKey = Key};
 
         public bool Activate(ITransportChannelType transport)
         {

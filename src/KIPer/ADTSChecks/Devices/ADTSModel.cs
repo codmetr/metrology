@@ -5,15 +5,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using ADTS;
 using ADTSData;
-using CheckFrame.Model;
+using ArchiveData.DTO;
 using KipTM.Model;
 using KipTM.Model.TransportChannels;
 using MainLoop;
 
-namespace ADTSChecks.Model.Devices
+namespace ADTSChecks.Devices
 {
     public class ADTSModel
     {
+        /// <summary>
+        /// Описатель типа ADTS-430
+        /// </summary>
+        public static DeviceTypeDescriptor Descriptor =>
+             new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer) {TypeKey = ADTSModel.Key};
+
         /// <summary>
         /// Маркер канала Ps
         /// </summary>

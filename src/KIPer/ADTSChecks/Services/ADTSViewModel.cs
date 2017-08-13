@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Input;
 using ADTS;
-using ADTSChecks.Model.Devices;
+using ADTSChecks.Devices;
 using GalaSoft.MvvmLight;
 using KipTM.Interfaces;
 using KipTM.Model;

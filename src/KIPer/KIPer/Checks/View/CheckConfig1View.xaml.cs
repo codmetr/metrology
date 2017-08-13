@@ -12,21 +12,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using KipTM.Devices.ViewModel;
-using KipTM.ViewModel;
-using KipTM.ViewModel.DeviceTypes;
+using KipTM.ViewModel.Checks;
+using KipTM.ViewModel.Checks.Config;
 using Tools;
 using Tools.View;
 
-namespace KipTM.View
+namespace KipTM.View.Checks
 {
     /// <summary>
-    /// Interaction logic for DeviceTypesView.xaml
+    /// Interaction logic for CheckConfigView.xaml
     /// </summary>
-    [View(typeof(DeviceTypeCollectionViewModel))]
-    public partial class DeviceTypesView : UserControl
+    [View(typeof(CheckConfigViewModel))]
+    public partial class CheckConfig1View : UserControl
     {
-        public DeviceTypesView()
+        public CheckConfig1View()
         {
             InitializeComponent();
         }

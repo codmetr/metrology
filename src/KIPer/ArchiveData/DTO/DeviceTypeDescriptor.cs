@@ -24,6 +24,11 @@ namespace ArchiveData.DTO
         }
 
         /// <summary>
+        /// Ключ типа прибора
+        /// </summary>
+        public string TypeKey { get; set; }
+
+        /// <summary>
         /// Модель прибора
         /// </summary>
         public string Model { get; set; }
@@ -38,5 +43,41 @@ namespace ArchiveData.DTO
         /// </summary>
         public string DeviceManufacturer { get; set; }
 
+        public FunctionType Function { get; }
+
+        public enum FunctionType
+        {
+            Controller,
+            Converter,
+        }
+
+        public override string ToString()
+        {
+            return $"[{DeviceCommonType}]:{Model}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            var tObj = obj as DeviceTypeDescriptor;
+            if (tObj != null)
+                return GetHashCode() == tObj.GetHashCode();
+
+            return base.Equals(obj);
+        }
+
+
+        public override int GetHashCode()
+        {
+            unchecked // Overflow is fine, just wrap
+            {
+                int hash = (int)2166136261;
+                // Suitable nullity checks etc, of course :)
+                if (TypeKey != null) hash = (hash * 16777619) ^ TypeKey.GetHashCode();
+                if (Model != null) hash = (hash * 16777619) ^ Model.GetHashCode();
+                if (DeviceCommonType != null) hash = (hash * 16777619) ^ DeviceCommonType.GetHashCode();
+                hash = (hash * 16777619) ^ Function.GetHashCode();
+                return hash;
+            }
+        }
     }
 }

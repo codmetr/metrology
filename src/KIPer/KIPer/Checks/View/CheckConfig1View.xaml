@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="KipTM.View.Checks.CheckConfig1View"
+﻿<UserControl x:Class="KipTM.View.Checks.CheckConfigView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
              xmlns:checks="clr-namespace:KipTM.ViewModel.Checks"
              xmlns:config="clr-namespace:KipTM.ViewModel.Checks.Config"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="600" d:DataContext="{d:DesignInstance config:CheckConfigViewModel}">
+             d:DesignHeight="600" d:DesignWidth="600" d:DataContext="{d:DesignInstance config:CheckConfig1ViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

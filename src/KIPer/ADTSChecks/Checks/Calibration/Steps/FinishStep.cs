@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using ADTSChecks.Model.Devices;
+using ADTSChecks.Devices;
 using ArchiveData.DTO.Params;
 using CheckFrame.Checks.Steps;
 using CheckFrame.Model.Channels;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using ArchiveData.DTO;
 using KipTM.Interfaces.Checks;
 using KipTM.Model.Checks;
 
@@ -13,7 +14,7 @@ namespace KipTM.Interfaces
         /// <summary>
         /// Набор поддерживаемых методик для конкретного типа устройств
         /// </summary>
-        IDictionary<string, ICheckMethod> MethodsForType(string deviceKey);
+        IDictionary<string, ICheckMethod> MethodsForType(DeviceTypeDescriptor deviceKey);
 
         /// <summary>
         /// Получить описатели устройств

@@ -131,8 +131,12 @@
     <Compile Include="Archive\PropertyArchive.cs" />
     <Compile Include="Archive\ViewModel\TestResultViewModelFactory.cs" />
     <Compile Include="Checks\ViewModel\CheckPool.cs" />
+    <Compile Include="Checks\ViewModel\Config\CheckConfig1ViewModel.cs" />
     <Compile Include="Checks\View\ChannelDescriptorView.xaml.cs">
       <DependentUpon>ChannelDescriptorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Checks\View\CheckConfig1View.xaml.cs">
+      <DependentUpon>CheckConfig1View.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataService\DeviceCacheKey.cs" />
     <Compile Include="Design\DesignDataService.cs" />
@@ -185,7 +189,6 @@
     <Compile Include="Devices\ViewModel\DeviceTypeViewModel.cs" />
     <Compile Include="Archive\ViewModel\DeviceViewModel.cs" />
     <Compile Include="Devices\ViewModel\EtalonTypeViewModel.cs" />
-    <Compile Include="Devices\FunctionDescriptor.cs" />
     <Compile Include="Archive\ViewModel\IDeviceViewModel.cs" />
     <Compile Include="Devices\ViewModel\IDeviceTypesViewModel.cs" />
     <Compile Include="Devices\ViewModel\IMethodicViewModel.cs" />
@@ -246,6 +249,10 @@
     <Page Include="Checks\View\ChannelDescriptorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Checks\View\CheckConfig1View.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -502,6 +509,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Content\Archive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Checks\ViewModel\Config\Descriptors\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using ArchiveData.DTO;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Checks;
 
@@ -30,7 +31,7 @@ namespace ADTSChecks
         /// <summary>
         /// Получить ключ устройства для типа оборудования
         /// </summary>
-        public string GetKey()
+        public DeviceTypeDescriptor GetKey()
         {
             throw new NotImplementedException();
             //    return ADTSModel.Key;

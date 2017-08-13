@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ArchiveData.DTO;
 using KipTM.Archive.DataTypes;
 
 namespace KipTM.Archive
@@ -15,57 +16,36 @@ namespace KipTM.Archive
 
         public DictionariesPool()
         {
-            DeviceTypes = new List<string>();
-            CheckTypes = new Dictionary<string, List<string>>();
+            CheckTypes = new Dictionary<DeviceTypeDescriptor, IEnumerable<string>>();
+            DeviceTypes = CheckTypes.Keys.ToList();
             Users = new List<string>();
         }
 
         /// <summary>
         /// Типы устройств
         /// </summary>
-        public List<string> DeviceTypes { get; set; }
+        public List<DeviceTypeDescriptor> DeviceTypes { get; set; }
 
         /// <summary>
         /// Справочкник типов поддерживаемых проверок для типа устройства
         /// </summary>
-        public Dictionary<string, List<string>> CheckTypes { get; set; }
+        public IDictionary<DeviceTypeDescriptor, IEnumerable<string>> CheckTypes { get; set; }
 
         /// <summary>
         /// Пользователи
         /// </summary>
         public List<string> Users { get; set; }
 
-        public static DictionariesPool Load(ArchiveBase archive)
+        public static DictionariesPool Load(IDictionary<DeviceTypeDescriptor, IEnumerable<string>> devDictionaryes,  ArchiveBase archive)
         {
             var res = new DictionariesPool();
 
             // Заполнение списка типов устройств
-            var tempElement = archive.Data.First(el => el.Key == DeviceTypesKey);
-            if (tempElement != null)
-            {
-                if (tempElement.Value is IEnumerable<object>)
-                    res.DeviceTypes = (tempElement.Value as IEnumerable<object>).Select(el => (string)el).ToList();
-            }
-
-            // Заполнение справочкника типов поддерживаемых проверок для типа устройства
-            var subArchive = archive.GetArchive(CheckTypesKey);
-            if (subArchive != null)
-            {
-                foreach (var pair in subArchive.Data)
-                {
-                    var devType = pair.Key as string;
-                    var checkTypes = pair.Value as List<string>;
-                    if (devType != null && checkTypes != null)
-                    {
-                        if (res.CheckTypes==null)
-                            res.CheckTypes = new Dictionary<string, List<string>>();
-                        res.CheckTypes.Add(devType, checkTypes);
-                    }
-                }
-            }
+            res.CheckTypes = devDictionaryes;
+            res.DeviceTypes = devDictionaryes.Keys.ToList();
             
             // Заполнение списка пользователи
-            tempElement = archive.Data.First(el => el.Key == UsersKey);
+            var tempElement = archive.Data.First(el => el.Key == UsersKey);
             if (tempElement != null)
             {
                 if (tempElement.Value is List<string>)

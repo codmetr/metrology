@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ADTS;
 using ADTSChecks.Checks;
 using ADTSChecks.Checks.Data;
-using ADTSChecks.Model.Devices;
+using ADTSChecks.Devices;
 using ADTSChecks.Model.Steps.ADTSTest;
 using ADTSData;
 using ArchiveData.DTO;

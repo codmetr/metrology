@@ -4,6 +4,8 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ArchiveData.DTO;
+using KipTM.Interfaces.Settings;
 
 namespace KipTM.Settings
 {
@@ -82,7 +84,7 @@ namespace KipTM.Settings
         /// <summary>
         /// Последние сконфигурированные наборы поддерживаемых для проверки устройств
         /// </summary>
-        public List<DeviceTypeSettings> Devices { get; set; }
+        public List<DeviceTypeDescriptor> Devices { get; set; }
         
         /// <summary>
         /// Последние сконфигурированные эталоны

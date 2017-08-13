@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using ADTS;
-using ADTSChecks.Model.Devices;
 using CheckFrame.Checks;
 using IEEE488;
 using KipTM.Interfaces.Checks;

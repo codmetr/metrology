@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using ADTS;
+using ADTSChecks.Devices;
 using ADTSChecks.Model.Checks;
-using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
 using KipTM.Archive.DataTypes;
 using KipTM.Interfaces;
@@ -18,7 +18,7 @@ namespace ADTSChecks
         {
             DeviceTypes = new List<DeviceTypeDescriptor>()
             {
-                new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer)
+                ADTSModel.Descriptor
             };
             EthalonTypes = new List<DeviceTypeDescriptor>()
             {
@@ -75,15 +75,13 @@ namespace ADTSChecks
         /// Получить набор поддерживаемых типов проверок по типам устройств
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ArchivedKeyValuePair> GetDefaultForCheckTypes()
+        public IDictionary<DeviceTypeDescriptor, IEnumerable<string>> GetDefaultForCheckTypes()
         {
-            return new List<ArchivedKeyValuePair>
-            {
-                new ArchivedKeyValuePair(ADTSModel.Key, new List<string>()
-                {
-                    Calibration.key,
-                }),
-            };
+            return new Dictionary<DeviceTypeDescriptor, IEnumerable<string>>() {
+                { ADTSModel.Descriptor, new List<string>()
+                    {
+                        Calibration.key,
+                    }}};
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using ArchiveData.DTO;
+using KipTM.Interfaces.Settings;
 
 namespace KipTM.Settings
 {
@@ -7,7 +9,7 @@ namespace KipTM.Settings
         /// <summary>
         /// Типы проверяемых устройств и их измерительные каналы
         /// </summary>
-        List<DeviceTypeSettings> Devices { get; }
+        List<DeviceTypeDescriptor> Devices { get; }
         
         /// <summary>
         /// Последние сконфигурированные эталоны

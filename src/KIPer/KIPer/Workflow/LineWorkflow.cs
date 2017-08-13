@@ -8,11 +8,11 @@ using Tools.View;
 namespace KipTM.Workflow
 {
     /// <summary>
-    /// Механизм линейного перехода между состояниями
+    /// Конвейер - механизм линейного перехода между состояниями
     /// </summary>
     public class LineWorkflow : INotifyPropertyChanged, IWorkflow, IDisposable
     {
-        #region Fields
+        #region Поля
 
         /// <summary>
         /// Шаги
@@ -50,8 +50,9 @@ namespace KipTM.Workflow
         private IWorkflowStep _currentState;
 
         #endregion
+
         /// <summary>
-        /// Механизм линейного перехода между состояниями
+        /// Конвейер - механизм линейного перехода между состояниями
         /// </summary>
         /// <param name="states">Набор доступных состояний</param>
         public LineWorkflow(List<IWorkflowStep> states)
@@ -189,6 +190,8 @@ namespace KipTM.Workflow
         }
         #endregion
 
+        #region IDisposable
+
         public void Dispose()
         {
             if (_states != null)
@@ -199,5 +202,7 @@ namespace KipTM.Workflow
                         dispStep.Dispose();
                 }
         }
+
+        #endregion
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using ADTS;
 using ADTSChecks.Checks.Data;
+using ADTSChecks.Devices;
 using ADTSChecks.Model.Checks;
-using ADTSChecks.Model.Devices;
 using ADTSChecks.Properties;
 using ArchiveData.DTO;
 using CheckFrame.Archive;

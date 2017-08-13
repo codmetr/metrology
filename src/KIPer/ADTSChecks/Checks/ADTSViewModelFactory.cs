@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 using ADTSChecks.Checks;
 using ADTSChecks.Checks.Data;
 using ADTSChecks.Checks.ViewModel;
+using ADTSChecks.Devices;
 using ADTSChecks.Model.Checks;
-using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
+using CheckFrame.Channels;
 using CheckFrame.Checks;
 using CheckFrame.Model;
 using CheckFrame.Model.Channels;
@@ -102,13 +103,13 @@ namespace KipTM.ViewModel.Checks
             if (method is Calibration)
             {
                 var adtsMethodic = method as Calibration;
-                result = new CalibrationViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.TargetTypeKey),
+                result = new CalibrationViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.TargetType.TypeKey),
                     _deviceManager, resultSet, customSettings);
             }
             else if (method is Test)
             {
                 var adtsMethodic = method as Test;
-                result = new TestViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.TargetTypeKey),
+                result = new TestViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.TargetType.TypeKey),
                     _deviceManager, resultSet, customSettings);
             }
             if (result != null)

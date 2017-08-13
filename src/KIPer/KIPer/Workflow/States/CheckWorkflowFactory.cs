@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ArchiveData.DTO;
 using CheckFrame;
+using CheckFrame.Checks;
 using CheckFrame.ViewModel.Archive;
 using KipTM.Archive.ViewModel;
 using KipTM.Checks;
@@ -81,12 +82,12 @@ namespace KipTM.Workflow.States
         /// Создать новый конвейер состояний для запуска новой проверки
         /// </summary>
         /// <returns></returns>
-        public IWorkflow GetNew(string devTypeKey)
+        public IWorkflow GetNew(DeviceTypeDescriptor devTypeKey)
         {
             var result = new TestResult();
 
             // создание конфигурации конкретной проверки
-            var checkConfigDevice = CheckConfig.GenerateForType(devTypeKey, _settings, _methodicService,
+            var checkConfigDevice = CheckConfigFactory.GenerateForType(devTypeKey, _settings, _methodicService,
                 _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, result);
 
             var checkConfigViewModel = new CheckConfigViewModel(checkConfigDevice, _channelFactory, _customFactory);

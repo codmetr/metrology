@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using KipTM.DataService;
+using ArchiveData.DTO;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Checks;
-using KipTM.Model.Checks;
 
 namespace KipTM.Model
 {
     public class MethodsService : IMethodsService
     {
-        private readonly Dictionary<string, Dictionary<string, ICheckMethod>> _methods;
-        private readonly Dictionary<string, IMethodFactory> _factories;
+        private readonly Dictionary<DeviceTypeDescriptor, Dictionary<string, ICheckMethod>> _methods;
+        private readonly Dictionary<DeviceTypeDescriptor, IMethodFactory> _factories;
 
         public MethodsService(IEnumerable<IMethodFactory> factories )
         {
@@ -22,7 +20,7 @@ namespace KipTM.Model
         /// <summary>
         /// Набор поддерживаемых методик для конкретного типа устройств
         /// </summary>
-        public IDictionary<string, ICheckMethod> MethodsForType(string deviceKey)
+        public IDictionary<string, ICheckMethod> MethodsForType(DeviceTypeDescriptor deviceKey)
         {
             return _methods[deviceKey];
         }

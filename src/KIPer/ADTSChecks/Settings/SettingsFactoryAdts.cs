@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ADTSChecks.Model.Devices;
+using ADTSChecks.Devices;
+using ArchiveData.DTO;
+using KipTM.Interfaces.Settings;
 using KipTM.Settings;
 
 namespace ADTSChecks.Settings
@@ -14,17 +16,18 @@ namespace ADTSChecks.Settings
         /// Типы проверяемых устройств и их измерительные каналы
         /// </summary>
         /// <returns>Набор описателей устройств</returns>
-        IEnumerable<DeviceTypeSettings> IDeviceTypeSettingsFactory.GetDefault()
+        IEnumerable<DeviceTypeDescriptor> IDeviceTypeSettingsFactory.GetDefault()
         {
-            return new List<DeviceTypeSettings>()
+            return new List<DeviceTypeDescriptor>()
             {
-                new DeviceTypeSettings()
-                {
-                    Key = ADTSModel.Key,
-                    Model = ADTSModel.Model,
-                    DeviceCommonType = ADTSModel.DeviceCommonType,
-                    DeviceManufacturer = ADTSModel.DeviceManufacturer,
-                },
+                ADTSModel.Descriptor,
+                //new DeviceTypeSettings()
+                //{
+                //    Key = ADTSModel.Key,
+                //    Model = ADTSModel.Model,
+                //    DeviceCommonType = ADTSModel.DeviceCommonType,
+                //    DeviceManufacturer = ADTSModel.DeviceManufacturer,
+                //},
             };
         }
 
@@ -38,9 +41,10 @@ namespace ADTSChecks.Settings
             {
                 Address = "0",
                 Name = ADTSModel.Key,
-                Model = ADTSModel.Model,
-                DeviceCommonType = ADTSModel.DeviceCommonType,
-                DeviceManufacturer = ADTSModel.DeviceManufacturer,
+                TypeDescriptor = ADTSModel.Descriptor,
+                //Model = ADTSModel.Model,
+                //DeviceCommonType = ADTSModel.DeviceCommonType,
+                //DeviceManufacturer = ADTSModel.DeviceManufacturer,
                 TypesEtalonParameters = new List<string>(ADTSModel.TypesEtalonParameters),
                 SerialNumber = "123",
                 NamePort = "COM2"

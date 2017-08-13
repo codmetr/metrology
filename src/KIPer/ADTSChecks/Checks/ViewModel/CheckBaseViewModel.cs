@@ -12,6 +12,7 @@ using ADTSChecks.Model.Checks;
 using ADTSChecks.ViewModel.Services;
 using ADTSData;
 using ArchiveData.DTO;
+using CheckFrame.Channels;
 using CheckFrame.Model.Channels;
 using CheckFrame.ViewModel.Checks;
 using CheckFrame.ViewModel.Checks.Channels;

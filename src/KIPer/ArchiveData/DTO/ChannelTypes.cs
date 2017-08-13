@@ -1,12 +1,12 @@
 ﻿namespace ArchiveData.DTO
 {
     /// <summary>
-    /// Типы поддерживаемых величин
+    /// Типы величин
     /// </summary>
     public enum ChannelType
     {
         /// <summary>
-        /// Температура
+        /// Давление
         /// </summary>
         Pressure,
         
@@ -14,5 +14,15 @@
         /// Температура
         /// </summary>
         Temperature,
+
+        /// <summary>
+        /// Напряжение
+        /// </summary>
+        Voltage,
+
+        /// <summary>
+        /// Ток
+        /// </summary>
+        Current,
     }
 }

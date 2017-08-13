@@ -5,14 +5,8 @@ using System.Linq;
 using ArchiveData.DTO;
 using CheckFrame.ViewModel.Archive;
 using GalaSoft.MvvmLight;
-using KipTM.Model.Devices;
-using KipTM.ViewModel.ResultFiller;
-using MarkerService.Filler;
 using System.Windows.Input;
 using KipTM.Archive;
-using KipTM.Checks;
-using KipTM.Model;
-using MarkerService;
 using Tools.View;
 
 namespace KipTM.ViewModel

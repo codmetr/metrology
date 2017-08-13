@@ -17,10 +17,6 @@ namespace CheckFrame.Checks
         /// </summary>
         public string CheckTypeKey;
         /// <summary>
-        /// Ключ типа проверяемого устройства
-        /// </summary>
-        public string TargetTypeKey;
-        /// <summary>
         /// Тип проверяемого устройства
         /// </summary>
         public DeviceTypeDescriptor TargetType;

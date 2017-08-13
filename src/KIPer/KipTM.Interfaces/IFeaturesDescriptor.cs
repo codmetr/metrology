@@ -46,6 +46,6 @@ namespace KipTM.Interfaces
         /// Получить набор поддерживаемых типов проверок по типам устройств
         /// </summary>
         /// <returns></returns>
-        IEnumerable<ArchivedKeyValuePair> GetDefaultForCheckTypes();
+        IDictionary<DeviceTypeDescriptor, IEnumerable<string>> GetDefaultForCheckTypes();
     }
 }

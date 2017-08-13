@@ -95,10 +95,10 @@ namespace KipTM.ViewModel
             var checkBtns = new List<OneBtnDescripto>();
             foreach (var keyCheck in _checkFactory.GetAvailableKeys())
             {
-                checkBtns.Add(new OneBtnDescripto(keyCheck.Key, keyCheck.Title,
+                checkBtns.Add(new OneBtnDescripto(keyCheck.Key.TypeKey, keyCheck.Title,
                     BitmapToImage(keyCheck.BigImg),
                     BitmapToImage(keyCheck.SmallImg), SelectChecks));
-                _workflows.Add(keyCheck.Key, _checkFactory.GetNew(keyCheck.Key));
+                _workflows.Add(keyCheck.Key.TypeKey, _checkFactory.GetNew(keyCheck.Key));
             }
             _checkBtns = checkBtns;
             _eventAggregator.Subscribe(this);

@@ -30,10 +30,10 @@ namespace KipTM.Model
             //_propertyPool = new DataPool(ArchiveBase.LoadFromFile(PathProperties, PropertyArchive.GetDefault()));
 
             //var devices = features.SelectMany(el => el.GetDefaultForCheckTypes()).ToList();
-            var devices = features.GetDefaultForCheckTypes().ToList();
+            var devices = features.GetDefaultForCheckTypes();
             //_dictionariesArchive = ArchiveBase.LoadFromFile(PathDictionaries, DictionariesArchive.GetDefault(devices));
-            _dictionariesArchive = DictionariesArchive.GetDefault(devices);
-            _dictionariesPool = DictionariesPool.Load(_dictionariesArchive);
+            _dictionariesArchive = DictionariesArchive.GetDefault();
+            _dictionariesPool = DictionariesPool.Load(devices, _dictionariesArchive);
             //_checksArchive = ArchiveBase.LoadFromFile(PathArchive, new ArchiveBase());
             //_checksPool = ChecksPool.Load(_checksArchive);
             //_checksArchive = ArchiveBase.LoadFromFile(PathArchive, new ArchiveBase());

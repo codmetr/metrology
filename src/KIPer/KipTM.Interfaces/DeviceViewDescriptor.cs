@@ -1,10 +1,11 @@
 ﻿using System.Drawing;
+using ArchiveData.DTO;
 
 namespace KipTM.Interfaces
 {
     public class DeviceViewDescriptor
     {
-        public string Key { get; set; }
+        public DeviceTypeDescriptor Key { get; set; }
 
         public string Title { get; set; }
 

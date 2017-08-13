@@ -13,14 +13,6 @@ namespace KipTM.Interfaces
     public interface IDataService
     {
         /// <summary>
-        /// Список типов поддерживаемых устройств
-        /// </summary>
-        IEnumerable<IDeviceTypeDescriptor> DeviceTypes { get; }
-        /// <summary>
-        /// Список типов поддерживаемых эталонов
-        /// </summary>
-        IEnumerable<IDeviceTypeDescriptor> EtalonTypes { get; }
-        /// <summary>
         /// Архив результатов проверок
         /// </summary>
         ResultsArchive ResultsArchive { get; }

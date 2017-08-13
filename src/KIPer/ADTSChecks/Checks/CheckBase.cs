@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using ADTSChecks.Checks.Data;
-using ADTSChecks.Model.Devices;
+using ADTSChecks.Devices;
 using ADTSData;
 using CheckFrame.Checks;
 using NLog;

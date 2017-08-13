@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using ArchiveData.DTO;
 using KipTM.Interfaces.Checks;
 
 namespace KipTM.Interfaces
@@ -12,7 +13,7 @@ namespace KipTM.Interfaces
         /// <summary>
         /// Получить ключ устройства для типа оборудования
         /// </summary>
-        string GetKey();
+        DeviceTypeDescriptor GetKey();
         
         /// <summary>
         /// Получить набор методик для конкретного типа оборудования

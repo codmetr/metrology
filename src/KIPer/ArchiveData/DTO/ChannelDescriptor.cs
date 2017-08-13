@@ -21,10 +21,10 @@ namespace ArchiveData.DTO
             _getLocalizedName = () => _name;
         }
 
-        /// <summary>
-        /// Описатель измерительного канала
-        /// </summary>
-        /// <param name="getLocalizedName">Механизм получения локализованного имени</param>
+        ///// <summary>
+        ///// Описатель измерительного канала
+        ///// </summary>
+        ///// <param name="getLocalizedName">Механизм получения локализованного имени</param>
         //public ChannelDescriptor(Func<string> getLocalizedName)
         //    :this()
         //{

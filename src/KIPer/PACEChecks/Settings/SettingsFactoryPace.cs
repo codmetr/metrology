@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using ArchiveData.DTO;
+using KipTM.Interfaces.Settings;
 using KipTM.Settings;
 using PACEChecks.Devices;
 
@@ -10,17 +12,18 @@ namespace PACEChecks.Settings
         /// Типы проверяемых устройств и их измерительные каналы
         /// </summary>
         /// <returns>Набор описателей устройств</returns>
-        IEnumerable<DeviceTypeSettings> IDeviceTypeSettingsFactory.GetDefault()
+        IEnumerable<DeviceTypeDescriptor> IDeviceTypeSettingsFactory.GetDefault()
         {
-            return new List<DeviceTypeSettings>()
+            return new List<DeviceTypeDescriptor>()
             {
-                new DeviceTypeSettings()
-                {
-                    Key = PACE1000Model.Key,
-                    Model = PACE1000Model.Model,
-                    DeviceCommonType = PACE1000Model.DeviceCommonType,
-                    DeviceManufacturer = PACE1000Model.DeviceManufacturer,
-                },
+                PACE1000Model.Descriptor,
+                //new DeviceTypeSettings()
+                //{
+                //    Key = PACE1000Model.Key,
+                //    Model = PACE1000Model.Model,
+                //    DeviceCommonType = PACE1000Model.DeviceCommonType,
+                //    DeviceManufacturer = PACE1000Model.DeviceManufacturer,
+                //},
             };
         }
 
@@ -34,9 +37,10 @@ namespace PACEChecks.Settings
             {
                 Address = "0",
                 Name = PACE1000Model.Key,
-                Model = PACE1000Model.Model,
-                DeviceCommonType = PACE1000Model.DeviceCommonType,
-                DeviceManufacturer = PACE1000Model.DeviceManufacturer,
+                TypeDescriptor = PACE1000Model.Descriptor,
+                //Model = PACE1000Model.Model,
+                //DeviceCommonType = PACE1000Model.DeviceCommonType,
+                //DeviceManufacturer = PACE1000Model.DeviceManufacturer,
                 TypesEtalonParameters = new List<string>(PACE1000Model.TypesEtalonParameters),
                 SerialNumber = "123",
                 NamePort = "COM1"

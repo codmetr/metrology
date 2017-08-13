@@ -49,7 +49,6 @@
     <Compile Include="Check\Steps\StepInit.cs" />
     <Compile Include="Check\Steps\StepLeak.cs" />
     <Compile Include="Check\Steps\StepMainError.cs" />
-    <Compile Include="Check\Steps\StepProbing.cs" />
     <Compile Include="PressureSensorCheck.cs" />
     <Compile Include="PressureSensorMethodFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +59,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
+      <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
+      <Name>ArchiveData</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
       <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
       <Name>KipTM.Interfaces</Name>

@@ -4,8 +4,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ADTSChecks.Devices;
 using ADTSChecks.Model.Checks;
-using ADTSChecks.Model.Devices;
+using ArchiveData.DTO;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Checks;
 using KipTM.Model.Checks;
@@ -35,17 +36,9 @@ namespace ADTSChecks
         /// <summary>
         /// Получить ключ устройства для типа оборудования
         /// </summary>
-        public string GetKey()
+        public DeviceTypeDescriptor GetKey()
         {
-            return ADTSModel.Key;
-        }
-
-        public ICheckMethod GetNewMethod(string key)
-        {
-            if(!_methods.ContainsKey(key))
-                throw new KeyNotFoundException(string.Format("For {0} not found method {1}", GetKey(), key));
-            _methods[key] = createMetods[key]();
-            return _methods[key];
+            return ADTSModel.Descriptor;
         }
 
         /// <summary>

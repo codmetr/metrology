@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ArchiveData.DTO;
 
 namespace KipTM.Settings
 {
@@ -11,19 +12,24 @@ namespace KipTM.Settings
         public string Name;
 
         /// <summary>
-        /// Модель прибора
+        /// Описатель устройства
         /// </summary>
-        public string Model;
+        public DeviceTypeDescriptor TypeDescriptor;
 
-        /// <summary>
-        /// Класс устройств
-        /// </summary>
-        public string DeviceCommonType;
-
-        /// <summary>
-        /// Изготовитель
-        /// </summary>
-        public string DeviceManufacturer;
+        ///// <summary>
+        ///// Модель прибора
+        ///// </summary>
+        //public string Model;
+        //
+        ///// <summary>
+        ///// Класс устройств
+        ///// </summary>
+        //public string DeviceCommonType;
+        //
+        ///// <summary>
+        ///// Изготовитель
+        ///// </summary>
+        //public string DeviceManufacturer;
 
         /// <summary>
         /// Типы параметров

@@ -2,7 +2,7 @@
 using System.Threading;
 using ADTS;
 using ADTSChecks.Checks.Data;
-using ADTSChecks.Model.Devices;
+using ADTSChecks.Devices;
 using ArchiveData.DTO.Params;
 using CheckFrame.Checks.Steps;
 using CheckFrame.Model.Checks.Steps;

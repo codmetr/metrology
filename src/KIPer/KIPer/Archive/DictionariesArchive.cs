@@ -7,21 +7,15 @@ namespace KipTM.Archive
     class DictionariesArchive:ArchiveBase
     {
         #region GetDefault
-        public static ArchiveBase GetDefault(List<ArchivedKeyValuePair> devices)
+        public static ArchiveBase GetDefault()
         {
-            return new ArchiveBase(GetDefaultData(devices));
+            return new ArchiveBase(GetDefaultData());
         }
 
-        private static List<ArchivedKeyValuePair> GetDefaultData(List<ArchivedKeyValuePair> devices)
+        private static List<ArchivedKeyValuePair> GetDefaultData()
         {
             return new List<ArchivedKeyValuePair>
             {
-                new ArchivedKeyValuePair(DictionariesPool.DeviceTypesKey, devices.Select(el=>el.Key)),
-                new ArchivedKeyValuePair(DictionariesPool.CheckTypesKey, devices.Where(el =>
-                {
-                    var checks = el.Value as List<string>;
-                    return checks == null ? false : checks.Count > 0;
-                }).ToList()),
                 new ArchivedKeyValuePair(DictionariesPool.UsersKey, GetDefaultForUsers()),
             };
         }

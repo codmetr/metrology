@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using ArchiveData.DTO;
 using CheckFrame.Archive;
+using CheckFrame.Channels;
 using CheckFrame.Checks;
 using CheckFrame.Model.Channels;
 using CheckFrame.Model.Checks;
@@ -40,7 +41,7 @@ namespace KipTM.Checks
         /// <summary>
         /// Все доступные типы устройств и их описатели
         /// </summary>
-        private IDictionary<string, DeviceTypeDescriptor> _allDeviceTypes;
+        private IEnumerable<DeviceTypeDescriptor> _allDeviceTypes;
         /// <summary>
         /// Доступные типы эталоннных устройств
         /// </summary>
@@ -89,7 +90,7 @@ namespace KipTM.Checks
         /// <param name="allDeviceTypes"></param>
         /// <param name="propertyPool"></param>
         /// <param name="result"></param>
-        public CheckConfigDevice(CheckConfigData data, IDictionary<string, ICheckMethod> methods, IDictionary<string, DeviceTypeDescriptor> allDeviceTypes,
+        public CheckConfigDevice(CheckConfigData data, IDictionary<string, ICheckMethod> methods, IEnumerable<DeviceTypeDescriptor> allDeviceTypes,
             IPropertyPool propertyPool, TestResult result)
         {
             _data = data;
@@ -98,11 +99,11 @@ namespace KipTM.Checks
             _allDeviceTypes = allDeviceTypes;
             _result = result;
             _propertyPool = propertyPool;
-            _channelKeys = GetChannels(_propertyPool, _data.TargetTypeKey);
+            _channelKeys = GetChannels(_propertyPool, _data.TargetType);
             _channels = _channelKeys.Keys;
             _result.TargetDevice.Channel = _channels.FirstOrDefault();
 
-            _avalableEthalonTypes = GetAvailableEthalons(_data.TargetTypeKey, propertyPool, _result.TargetDevice.Channel, _allDeviceTypes);
+            _avalableEthalonTypes = GetAvailableEthalons(_data.TargetType, propertyPool, _result.TargetDevice.Channel, _allDeviceTypes);
             _data.Ethalon = new DeviceDescriptor(_avalableEthalonTypes.Values.FirstOrDefault());
             _result.TargetDevice.Device = new DeviceDescriptor(data.TargetType);
             UpdateCustomMethodSettings(_result.TargetDevice.Channel);
@@ -128,7 +129,7 @@ namespace KipTM.Checks
         }
 
         /// <summary>
-        /// Доступные типы эталонов
+        /// Доступные типы эталоных каналов (со всех доступных устройств)
         /// </summary>
         public IEnumerable<string> EthalonTypes { get { return _avalableEthalonTypes.Keys; } }
 
@@ -254,7 +255,7 @@ namespace KipTM.Checks
                     return;
                 _result.TargetDevice.Channel = value;
                 UpdateCustomMethodSettings(SelectedChannel);
-                UpdateEthalonChannel(_data.TargetTypeKey, SelectedChannel);
+                UpdateEthalonChannel(_data.TargetType, SelectedChannel);
                 OnSelectedChannelChanged();
             }
         }
@@ -283,7 +284,7 @@ namespace KipTM.Checks
         }
 
         /// <summary>
-        /// Тип устройства
+        /// Тип устройства содержащего выбранный эталонный канал
         /// </summary>
         public DeviceTypeDescriptor SelectedEthalonType
         {
@@ -433,11 +434,11 @@ namespace KipTM.Checks
         /// Пререпроверить подходит ли этому каналу выбранный тип эталонного канала,
         /// если нет - выбрать подходящий
         /// </summary>
-        /// <param name="targetTypeKey"></param>
+        /// <param name="targetType"></param>
         /// <param name="selectedChannel"></param>
-        private void UpdateEthalonChannel(string targetTypeKey, ChannelDescriptor selectedChannel)
+        private void UpdateEthalonChannel(DeviceTypeDescriptor targetType, ChannelDescriptor selectedChannel)
         {
-            _avalableEthalonTypes = GetAvailableEthalons(_data.TargetTypeKey, _propertyPool, _result.TargetDevice.Channel, _allDeviceTypes);
+            _avalableEthalonTypes = GetAvailableEthalons(targetType, _propertyPool, selectedChannel, _allDeviceTypes);
             OnAvailableEthalonTypeChanged();
             if (_avalableEthalonTypes.Values.Contains(_data.Ethalon.DeviceType))
                 return;
@@ -450,11 +451,11 @@ namespace KipTM.Checks
         /// <param name="propertyPool"></param>
         /// <param name="targetTypeKey">Ключ типа устройства</param>
         /// <returns>Справочник описателей каналов и их ключей</returns>
-        private static Dictionary<ChannelDescriptor, IPropertyPool> GetChannels(IPropertyPool propertyPool, string targetTypeKey)
+        private static Dictionary<ChannelDescriptor, IPropertyPool> GetChannels(IPropertyPool propertyPool, DeviceTypeDescriptor targetType)
         {
             var channelKeys = new Dictionary<ChannelDescriptor, IPropertyPool>();
             // свойства выбранного типа устройства
-            var channelsPool = propertyPool.ByKey(targetTypeKey);
+            var channelsPool = propertyPool.ByKey(targetType.TypeKey);
             foreach (var chKey in channelsPool.GetAllKeys())
             {
                 // перебор каналов выбранного типа устройства
@@ -471,13 +472,13 @@ namespace KipTM.Checks
         /// Получить коллекцию опистелей измерительных каналов устройства
         /// </summary>
         /// <param name="propertyPool"></param>
-        /// <param name="targetTypeKey">Ключ типа устройства</param>
+        /// <param name="targetType">тип устройства</param>
         /// <returns>Справочник описателей каналов и их ключей</returns>
-        private static Dictionary<ChannelDescriptor, string> GetChannelsKeys(IPropertyPool propertyPool, string targetTypeKey)
+        private static Dictionary<ChannelDescriptor, string> GetChannelsKeys(IPropertyPool propertyPool, DeviceTypeDescriptor targetType)
         {
             var channelKeys = new Dictionary<ChannelDescriptor, string>();
             // свойства выбранного типа устройства
-            var channelsPool = propertyPool.ByKey(targetTypeKey);
+            var channelsPool = propertyPool.ByKey(targetType.TypeKey);
             foreach (var chKey in channelsPool.GetAllKeys())
             {
                 // перебор каналов выбранного типа устройства
@@ -493,30 +494,31 @@ namespace KipTM.Checks
         /// <summary>
         /// Получить набор подходящих каналов эталонов
         /// </summary>
-        // <param name="settings">настройки</param>
-        /// <param name="targetDevKey">ключ типа проверяемого устройства</param>
+        /// <param name="targetDev">тип проверяемого устройства</param>
+        /// <param name="propertyPool"></param>
         /// <param name="selectedChannel">выбраный канал</param>
-        /// <returns></returns>
-        private static Dictionary<string, DeviceTypeDescriptor> GetAvailableEthalons(string targetDevKey, IPropertyPool propertyPool,
-            ChannelDescriptor selectedChannel, IDictionary<string, DeviceTypeDescriptor> allTypes) //IMainSettings settings, 
+        /// <param name="allTypes"></param>
+        /// <returns>Коллекцию формата (ключ изметительного канала - описатель устройства-носителя канала)</returns>
+        private static IDictionary<string, DeviceTypeDescriptor> GetAvailableEthalons(DeviceTypeDescriptor targetDev, IPropertyPool propertyPool,
+            ChannelDescriptor selectedChannel, IEnumerable<DeviceTypeDescriptor> allTypes) //IMainSettings settings, 
         {
             var avalableEthalonTypes = new Dictionary<string, DeviceTypeDescriptor>();
             foreach (var dev in allTypes)
-            {
+            {// выбираем очередное устройство
                 //исключить проверяемое устройство
-                if (dev.Key == targetDevKey)
+                if (dev == targetDev)
                     continue;
 
-                var channels = GetChannelsKeys(propertyPool, dev.Key);
+                var channels = GetChannelsKeys(propertyPool, dev);
                 foreach (var channel in channels)
-                {
+                {// перебираем каналы выбранного устройства
                     if (!CheckEthalonChannel(selectedChannel, channel.Key))
                         continue;
-                    avalableEthalonTypes.Add(channel.Value, dev.Value);
+
+                    avalableEthalonTypes.Add(channel.Value, dev);
                 }
             }
-            avalableEthalonTypes.Add(UserEthalonChannel.Key,
-                new DeviceTypeDescriptor("Аналоговый прибор", "Приборы без аппаратного интерфейса", ""));
+            avalableEthalonTypes.Add(UserEthalonChannel.Key, UserEthalonChannel.Descriptor);
             return avalableEthalonTypes;
         }
 

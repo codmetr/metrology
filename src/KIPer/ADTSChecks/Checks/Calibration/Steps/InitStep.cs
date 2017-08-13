@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using ADTS;
-using ADTSChecks.Model.Devices;
+using ADTSChecks.Devices;
 using ArchiveData.DTO;
 using ArchiveData.DTO.Params;
 using CheckFrame.Checks.Steps;

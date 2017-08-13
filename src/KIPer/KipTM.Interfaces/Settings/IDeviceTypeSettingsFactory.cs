@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using ArchiveData.DTO;
+using KipTM.Interfaces.Settings;
 
 namespace KipTM.Settings
 {
@@ -11,6 +13,6 @@ namespace KipTM.Settings
         /// Типы проверяемых устройств и их измерительные каналы
         /// </summary>
         /// <returns></returns>
-        IEnumerable<DeviceTypeSettings> GetDefault();
+        IEnumerable<DeviceTypeDescriptor> GetDefault();
     }
 }

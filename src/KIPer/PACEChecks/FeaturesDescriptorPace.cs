@@ -21,7 +21,7 @@ namespace PACEChecks
             };
             EthalonTypes = new List<DeviceTypeDescriptor>()
             {
-                new DeviceTypeDescriptor(PACE1000Model.Model, PACE1000Model.DeviceCommonType, PACE1000Model.DeviceManufacturer)
+                PACE1000Model.Descriptor
             };
             Models = new Dictionary<Type, IDeviceModelFactory>()
             {
@@ -76,12 +76,10 @@ namespace PACEChecks
         /// Получить набор поддерживаемых типов проверок по типам устройств
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ArchivedKeyValuePair> GetDefaultForCheckTypes()
+        public IDictionary<DeviceTypeDescriptor, IEnumerable<string>> GetDefaultForCheckTypes()
         {
-            return new List<ArchivedKeyValuePair>
-            {
-                new ArchivedKeyValuePair(PACE1000Model.Key, new List<string>()),
-            };
+            return new Dictionary<DeviceTypeDescriptor, IEnumerable<string>>() {
+            { PACE1000Model.Descriptor, new List<string>(){}}};
         }
     }
 }

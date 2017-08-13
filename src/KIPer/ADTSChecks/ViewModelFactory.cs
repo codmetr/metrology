@@ -1,8 +1,8 @@
 ﻿using ADTSChecks.Checks;
 using ADTSChecks.Checks.Data;
 using ADTSChecks.Checks.ViewModel;
+using ADTSChecks.Devices;
 using ADTSChecks.Model.Checks;
-using ADTSChecks.Model.Devices;
 using ArchiveData.DTO;
 using CheckFrame.Model;
 using CheckFrame.Model.Channels;

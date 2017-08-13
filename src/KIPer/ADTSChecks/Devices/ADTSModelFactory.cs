@@ -1,4 +1,4 @@
-﻿using ADTSChecks.Model.Devices;
+﻿using ADTSChecks.Devices;
 using CheckFrame.Checks;
 using KipTM.Interfaces.Checks;
 using KipTM.Model;

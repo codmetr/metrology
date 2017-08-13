@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using ADTSChecks.Model.Devices;
+using ADTSChecks.Devices;
 using CheckFrame.Checks.Steps;
 using CheckFrame.Model.Checks.Steps;
 using KipTM.Model.Checks;

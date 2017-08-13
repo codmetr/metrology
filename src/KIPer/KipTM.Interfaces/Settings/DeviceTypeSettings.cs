@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KipTM.Settings
+﻿namespace KipTM.Interfaces.Settings
 {
     public class DeviceTypeSettings
     {
@@ -27,13 +21,5 @@ namespace KipTM.Settings
         /// Изготовитель
         /// </summary>
         public string DeviceManufacturer;
-
-        ///// <summary>
-        ///// Типы параметров
-        ///// </summary>
-        //public List<string> TypesEtalonParameters;
-
-
-        //public List<string> AvilableEthalonTypes;
     }
 }

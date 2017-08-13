@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ArchiveData.DTO;
 using KipTM.Model;
 using KipTM.Model.TransportChannels;
 using MainLoop;
@@ -10,8 +11,17 @@ using PACESeries;
 
 namespace PACEChecks.Devices
 {
+    /// <summary>
+    /// Модель PACE1000
+    /// </summary>
     public class PACE1000Model
     {
+        /// <summary>
+        /// Описатель типа PACE1000
+        /// </summary>
+        public static DeviceTypeDescriptor Descriptor =>
+            new DeviceTypeDescriptor(PACE1000Model.Model, PACE1000Model.DeviceCommonType, PACE1000Model.DeviceManufacturer) {TypeKey = PACE1000Model.Key};
+
         private IDeviceManager _deviceManager;
         private PACESeries.PACE1000Driver _driver;
         private ILoops _loops;
