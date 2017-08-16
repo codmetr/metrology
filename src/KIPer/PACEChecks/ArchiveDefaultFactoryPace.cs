@@ -48,6 +48,7 @@ namespace PACEChecks
             {
                 new ArchivedKeyValuePair(BasicKeys.KeyChannel, new ChannelDescriptor()
                     {
+                        Key = BasicKeys.KeyChannel,
                         Name = PACEData.KeysDic.PACE1000Pressure,
                         Max = 1355.0,
                         Order = ChannelOrder.Measuring,

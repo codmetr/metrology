@@ -25,7 +25,7 @@ namespace KipTM.Model
 
         private IDictionary<Type, IDeviceFactory> _devicesFactories;
 
-        private IDictionary<string, IDeviceConfig> _channelsFactories;
+        private IDictionary<string, IDeviceConfig> _configFactories;
 
         /// <summary>
         /// Cache devices
@@ -51,7 +51,7 @@ namespace KipTM.Model
 
             _devicesFactories = features.Devices.ToDictionary(el => el.Key, el => el.Value);
 
-            _channelsFactories = features.DeviceConfigs.ToDictionary(el => el.Key, el => el.Value);
+            _configFactories = features.DeviceConfigs.ToDictionary(el => el.Key, el => el.Value);
 
             foreach (var feature in features.DeviceConfigs)
             {
@@ -105,13 +105,13 @@ namespace KipTM.Model
             if(!_devicesFactories.ContainsKey(typeof(T)))
                 throw new IndexOutOfRangeException(string.Format("For type [{0}] not found factory", typeof(T)));
 
-            if (!_channelsFactories.ContainsKey(transportDescription.Key))
+            if (!_configFactories.ContainsKey(transportDescription.Key))
                 throw new IndexOutOfRangeException(string.Format("For channel [{0}] not found factory", transportDescription.Key));
             var key = new DeviceCacheKey(typeof (T), transportDescription);
             if (!_devicesCache.ContainsKey(key))
             {
-                var chann = _channelsFactories[transportDescription.Key].GetDriver(transportDescription.Settings);
-                _devicesCache.Add(key, _devicesFactories[typeof(T)].GetDevice(chann));
+                var conf = _configFactories[transportDescription.Key].GetDriver(transportDescription.Settings);
+                _devicesCache.Add(key, _devicesFactories[typeof(T)].GetDevice(conf));
             }
 
             return (T)_devicesCache[key];

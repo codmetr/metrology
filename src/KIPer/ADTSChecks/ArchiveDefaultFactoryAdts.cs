@@ -54,6 +54,7 @@ namespace ADTSChecks
             {
                 new ArchivedKeyValuePair(BasicKeys.KeyChannel, new ChannelDescriptor()
                     {
+                        Key = BasicKeys.KeyChannel,
                         Name = ADTSModel.Ps,
                         Max = 1355.0,
                         Order = ChannelOrder.Source,
@@ -78,6 +79,7 @@ namespace ADTSChecks
                 new ArchivedKeyValuePair(BasicKeys.KeyChannel, 
                     new ChannelDescriptor()
                     {
+                        Key = BasicKeys.KeyChannel,
                         Name = ADTSModel.Pt,
                         Max = 2700.0,
                         Order = ChannelOrder.Source,

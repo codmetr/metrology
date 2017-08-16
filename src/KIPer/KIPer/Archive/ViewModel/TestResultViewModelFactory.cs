@@ -51,7 +51,7 @@ namespace KipTM.Archive.ViewModel
                 }
             }
             var accessor = new DataAccessor(_result, _checkConf.Data, _checkConf.CustomSettings, _archive);
-            return new TestResultViewModel(_result, parameters, accessor);
+            return new TestResultViewModel(_result, _checkConf.Data, parameters, accessor);
         }
 
     }

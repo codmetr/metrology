@@ -95,26 +95,28 @@ namespace KipTM.ViewModel.Checks
             IMethodViewModel result = null;
             method.SetADTS(_deviceManager.GetModel<ADTSModel>());
             method.ChannelType = checkDeviceChanel;
-            if (checkConfig.EthalonTypeKey == UserEthalonChannel.Key)
+            var devType = checkConfig.TargetDevice.Device.DeviceType.TypeKey;
+            var ethalonChannel = checkConfig.Ethalons.FirstOrDefault().Key;
+            if (ethalonChannel.Key == UserEthalonChannel.Channel.Key)
                 method.SetEthalonChannel(null, null);
             else
-                method.SetEthalonChannel(_deviceManager.GetEthalonChannel(checkConfig.EthalonTypeKey), ethalonChanel);
+                method.SetEthalonChannel(_deviceManager.GetEthalonChannel(ethalonChannel.Key), ethalonChanel);
 
             if (method is Calibration)
             {
                 var adtsMethodic = method as Calibration;
-                result = new CalibrationViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.TargetType.TypeKey),
+                result = new CalibrationViewModel(adtsMethodic, _propertyPool.ByKey(devType),
                     _deviceManager, resultSet, customSettings);
             }
             else if (method is Test)
             {
                 var adtsMethodic = method as Test;
-                result = new TestViewModel(adtsMethodic, _propertyPool.ByKey(checkConfig.TargetType.TypeKey),
+                result = new TestViewModel(adtsMethodic, _propertyPool.ByKey(devType),
                     _deviceManager, resultSet, customSettings);
             }
             if (result != null)
             {
-                result.SetEthalonChannel(checkConfig.EthalonTypeKey, ethalonChanel);
+                result.SetEthalonChannel(ethalonChannel.Key, ethalonChanel);
             }
             return result;
         }

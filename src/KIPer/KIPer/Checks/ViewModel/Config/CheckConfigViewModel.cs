@@ -137,7 +137,7 @@ namespace KipTM.ViewModel.Checks.Config
         /// <summary>
         /// Доступные типы устройства
         /// </summary>
-        public IEnumerable<string> EthalonTypes { get { return _model.EthalonTypes; } }
+        public IEnumerable<ChannelDescriptor> EthalonChannels { get { return _model.EthalonChannels; } }
 
         #endregion
 
@@ -298,7 +298,7 @@ namespace KipTM.ViewModel.Checks.Config
         /// <summary>
         /// Тип устройства
         /// </summary>
-        public string SelectedEthalonType
+        public ChannelDescriptor SelectedEthalonType
         {
             get { return _model.SelectedEthalonTypeKey; }
             set

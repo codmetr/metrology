@@ -12,26 +12,27 @@ namespace CheckFrame.Checks
     /// </summary>
     public class CheckConfigData
     {
+        public CheckConfigData()
+        {
+            TargetDevice = new DeviceWithChannel() {Device = new DeviceDescriptor()};
+            Ethalons = new Dictionary<ChannelDescriptor, DeviceWithChannel>();
+        }
         /// <summary>
         /// Ключ типа методики проверки
         /// </summary>
         public string CheckTypeKey;
+
         /// <summary>
-        /// Тип проверяемого устройства
+        /// Целевое устройство
         /// </summary>
-        public DeviceTypeDescriptor TargetType;
+        public DeviceWithChannel TargetDevice { get; set; }
+
         /// <summary>
-        /// Ключ типа эталона
+        /// Набор использованных эталонов
         /// </summary>
-        public string EthalonTypeKey;
-        /// <summary>
-        /// Тип эталона
-        /// </summary>
-        public DeviceTypeDescriptor EthalonType;
-        /// <summary>
-        /// Описатель эталона
-        /// </summary>
-        public DeviceDescriptor Ethalon;
+        public Dictionary<ChannelDescriptor, DeviceWithChannel> Ethalons { get; set; }
+
+
         /// <summary>
         /// Эталон - устройство без аппаратного интерфейса
         /// </summary>

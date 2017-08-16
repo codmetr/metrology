@@ -33,6 +33,12 @@ namespace ArchiveData.DTO
         //}
 
         /// <summary>
+        /// Ключь типа канала
+        /// </summary>
+        public string Key { get; set; }
+
+
+        /// <summary>
         /// Название канала
         /// </summary>
         public string Name

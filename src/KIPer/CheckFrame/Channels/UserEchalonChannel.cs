@@ -11,6 +11,11 @@ namespace CheckFrame.Channels
     {
 
         public static string Key = "Пользовательский канал";
+        public static ChannelDescriptor Channel { get; }
+            = new ChannelDescriptor(){
+            Key = Key, Name = Key, Max = double.PositiveInfinity, Min = double.NegativeInfinity, Error = Double.Epsilon};
+        public static DeviceTypeDescriptor Descriptor { get; }
+            = new DeviceTypeDescriptor("Аналоговый прибор", "Приборы без аппаратного интерфейса", "") { TypeKey = Key};
 
         private readonly IUserChannel _userChannel;
         private readonly TimeSpan _waitPeriod;
@@ -20,9 +25,6 @@ namespace CheckFrame.Channels
             _userChannel = userChannel;
             _waitPeriod = waitPeriod;
         }
-
-        public static DeviceTypeDescriptor Descriptor { get; }
-            = new DeviceTypeDescriptor("Аналоговый прибор", "Приборы без аппаратного интерфейса", "") { TypeKey = Key};
 
         public bool Activate(ITransportChannelType transport)
         {

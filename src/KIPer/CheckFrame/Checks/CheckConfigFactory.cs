@@ -29,8 +29,7 @@ namespace CheckFrame.Checks
             IPropertyPool propertyPool, DictionariesPool dictionaries, TestResult result)
         {
             var data = new CheckConfigData();
-
-            data.TargetType = key;
+            data.TargetDevice.Device.DeviceType = key;
             var avalableDeviceTypes = GetAllAvailableDeviceTypes(settings, dictionaries);
             var methods = method.MethodsForType(key);
             var res = new CheckConfigDevice(data, methods, avalableDeviceTypes, propertyPool, result);
@@ -49,8 +48,7 @@ namespace CheckFrame.Checks
             var avalableDeviceTypes = new List<DeviceTypeDescriptor>();
             foreach (var deviceType in dictionaries.DeviceTypes)
             {
-                var setDevice = settings.Devices.Contains(deviceType);
-                if (setDevice == null)
+                if (!settings.Devices.Contains(deviceType))
                     continue;
                 avalableDeviceTypes.Add(deviceType);
             }
