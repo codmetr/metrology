@@ -106,6 +106,11 @@ namespace KipTM.Checks
             _avalableEthalonTypes = GetAvailableEthalons(_data.TargetType, propertyPool, _result.TargetDevice.Channel, _allDeviceTypes);
             _data.Ethalon = new DeviceDescriptor(_avalableEthalonTypes.Values.FirstOrDefault());
             _result.TargetDevice.Device = new DeviceDescriptor(data.TargetType);
+            _result.Ethalons.Add(_result.TargetDevice.Channel, new DeviceWithChannel()
+            {
+                Device = _data.Ethalon,
+                //TODO реализовать выбор канала
+            });
             UpdateCustomMethodSettings(_result.TargetDevice.Channel);
         }
         #endregion

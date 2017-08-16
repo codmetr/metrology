@@ -510,9 +510,7 @@
   <ItemGroup>
     <Resource Include="Content\Archive.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Checks\ViewModel\Config\Descriptors\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo refresh Libs:

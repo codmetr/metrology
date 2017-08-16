@@ -25,7 +25,7 @@ namespace ReportAdts
 
         public object GetReport(TestResult result)
         {
-            var ethalon = result.Etalons.FirstOrDefault();
+            var ethalon = result.Ethalons.FirstOrDefault().Value;
             var commonData = new AdtsCommonReportData()
             {
                 CheckDate = result.Timestamp.ToString("d"),
