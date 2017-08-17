@@ -12,8 +12,6 @@ namespace ArchiveData.DTO
 
         public TestResult()
         {
-            TargetDevice = new DeviceWithChannel();
-            Ethalons = new Dictionary<ChannelDescriptor, DeviceWithChannel>();
             Results = new List<TestStepResult>();
             Timestamp = DateTime.Now;
         }
@@ -86,16 +84,6 @@ namespace ArchiveData.DTO
         /// Пометка к поверке
         /// </summary>
         public string Note { get; set; }
-
-        /// <summary>
-        /// Целевое устройство
-        /// </summary>
-        public DeviceWithChannel TargetDevice { get; set; }
-
-        /// <summary>
-        /// Набор использованных эталонов
-        /// </summary>
-        public Dictionary<ChannelDescriptor, DeviceWithChannel> Ethalons { get; set; }
 
         /// <summary>
         /// Результаты

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ArchiveData.DTO;
+using CheckFrame.Checks;
 
 namespace ReportService
 {
@@ -16,6 +17,6 @@ namespace ReportService
         /// </summary>
         /// <param name="result">Результаты</param>
         /// <returns>Модель отчета</returns>
-        object GetReport(TestResult result);
+        object GetReport(TestResult result, CheckConfigData conf);
     }
 }

@@ -279,7 +279,7 @@ namespace KipTM.Checks
         /// </summary>
         public ChannelDescriptor SelectedEthalonTypeKey
         {
-            get { return _result.Ethalons.Keys.FirstOrDefault(); }
+            get { return _data.Ethalons.Keys.FirstOrDefault(); }
             set
             {
 

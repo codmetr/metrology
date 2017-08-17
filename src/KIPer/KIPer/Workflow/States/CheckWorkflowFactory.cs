@@ -100,7 +100,7 @@ namespace KipTM.Workflow.States
                 new ConfigCheckState(checkConfigViewModel),
                 new CheckState(checkFactory, _eventAggregator),
                 new ResultState(resFactory),
-                new ReportState(() => new ReportViewModel(_reportFactory, result)),
+                new ReportState(() => new ReportViewModel(_reportFactory, result, checkConfigDevice.Data)),
             };
 
             return new LineWorkflow(steps);

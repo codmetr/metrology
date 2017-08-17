@@ -73,7 +73,6 @@
     <Compile Include="Checks\CheckConverterConfigData.cs" />
     <Compile Include="Checks\CheckConfigDevice.cs" />
     <Compile Include="Checks\CheckConfigFactory.cs" />
-    <Compile Include="Checks\CheckConfigData.cs" />
     <Compile Include="Devices\DeviceFactoryAttribute.cs" />
     <Compile Include="Devices\DeviceModelFactoryAttribute.cs" />
     <Compile Include="Checks\ICheckViewModelFactory.cs" />

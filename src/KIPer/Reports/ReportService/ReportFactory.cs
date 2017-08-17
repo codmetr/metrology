@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ArchiveData.DTO;
+using CheckFrame.Checks;
 using StructureMap;
 using Tools;
 
@@ -29,8 +30,9 @@ namespace ReportService
         /// Получить отчет по типу проверки
         /// </summary>
         /// <param name="result">результат проверки</param>
+        /// <param name="conf"></param>
         /// <returns>Data source для отчета</returns>
-        public object GetReporter(TestResult result)
+        public object GetReporter(TestResult result, CheckConfigData conf)
         {
             var reporters = GetReporters();
             foreach (var reporter in reporters)
@@ -43,7 +45,7 @@ namespace ReportService
                         continue;
                     if (atr.ReportKey != result.CheckType)
                         continue;
-                    return reporter.GetReport(result);
+                    return reporter.GetReport(result, conf);
                 }
             }
             return null;

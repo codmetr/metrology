@@ -7,6 +7,7 @@ using ADTSData;
 using CrystalDecisions.CrystalReports.Engine;
 using ReportService;
 using ArchiveData.DTO;
+using CheckFrame.Checks;
 
 namespace ReportAdts
 {
@@ -23,16 +24,16 @@ namespace ReportAdts
             return result;
         }
 
-        public object GetReport(TestResult result)
+        public object GetReport(TestResult result, CheckConfigData conf)
         {
-            var ethalon = result.Ethalons.FirstOrDefault().Value;
+            var ethalon = conf.Ethalons.FirstOrDefault().Value;
             var commonData = new AdtsCommonReportData()
             {
                 CheckDate = result.Timestamp.ToString("d"),
-                DeviceType = result.TargetDevice.Device.DeviceType.Model,
-                ChannelRange = getRangeFromType(result.TargetDevice.Device.DeviceType),
+                DeviceType = conf.TargetDevice.Device.DeviceType.Model,
+                ChannelRange = getRangeFromType(conf.TargetDevice.Device.DeviceType),
                 CheckMethod = "K199",//result.CheckType,
-                SerialNumber = result.TargetDevice.Device.SerialNumber,
+                SerialNumber = conf.TargetDevice.Device.SerialNumber,
                 AtmosphericPressure = result.AtmospherePressure,
                 Temperature = result.Temperature,
                 ReportNumber = "123"

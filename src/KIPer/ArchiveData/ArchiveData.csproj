@@ -42,6 +42,7 @@
     <Compile Include="DTO\ChannelDescriptor.cs" />
     <Compile Include="DTO\ChannelOrder.cs" />
     <Compile Include="DTO\ChannelTypes.cs" />
+    <Compile Include="DTO\CheckConfigData.cs" />
     <Compile Include="DTO\CustomDeviceTypes\ControllerTypeDescriptor.cs" />
     <Compile Include="DTO\DeviceWithChannel.cs" />
     <Compile Include="DTO\ResultsArchive.cs" />

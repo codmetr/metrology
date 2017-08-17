@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ArchiveData.DTO;
+using CheckFrame.Checks;
 using GalaSoft.MvvmLight;
+using KipTM.Checks;
 using ReportService;
 
 namespace KipTM.ViewModel.Report
@@ -19,9 +21,9 @@ namespace KipTM.ViewModel.Report
     {
         private object _reportSource;
 
-        public ReportViewModel(IReportFactory reportFactory, TestResult result)
+        public ReportViewModel(IReportFactory reportFactory, TestResult result, CheckConfigData conf)
         {
-            var reporter = reportFactory.GetReporter(result);
+            var reporter = reportFactory.GetReporter(result, conf);
             if (reporter != null)
                 ReportSource = reporter;
         }
