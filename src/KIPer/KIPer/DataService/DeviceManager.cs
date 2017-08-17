@@ -2,22 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using CheckFrame;
-using KipTM.DataService;
-using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks;
-using KipTM.Model.Channels;
+using KipTM.Model;
 using KipTM.Model.TransportChannels;
 using MainLoop;
-using NLog;
 
-namespace KipTM.Model
+namespace KipTM.DataService
 {
     public class DeviceManager : IDeviceManager, IDisposable
     {
         private readonly NLog.Logger _logger;
 
-        private readonly ILoops _loops = new Loops();
+        private readonly ILoops _loops;
 
         private readonly IDictionary<string, IEthalonCannelFactory> _ethalonChannels;
 

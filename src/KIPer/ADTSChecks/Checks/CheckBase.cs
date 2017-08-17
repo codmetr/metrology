@@ -16,6 +16,11 @@ namespace ADTSChecks.Checks
         public const string KeySettingsPT = KeysDic.KeySettingsPT;
         public const string KeySettingsPSPT = KeysDic.KeySettingsPSPT;
 
+        public const string KeyPoints = "Points";
+        public const string KeyRate = "Rate";
+        public const string KeyUnit = "Unit";
+        //public const string KeyChannel = "Channel";
+
         protected string MethodName = "ADTS";
 
         /// <summary>

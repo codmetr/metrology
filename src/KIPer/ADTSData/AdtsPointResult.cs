@@ -13,5 +13,6 @@ namespace ADTSData
         public double RealValue { get; set; }
         public double Error { get; set; }
         public bool IsCorrect { get; set; }
+        public string Unit { get; set; }
     }
 }

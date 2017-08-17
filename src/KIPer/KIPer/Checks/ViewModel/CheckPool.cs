@@ -14,6 +14,9 @@ using Tools;
 
 namespace KipTM.Checks.ViewModel
 {
+    /// <summary>
+    /// Конфигуратор фабрики визуальной модели проверки
+    /// </summary>
     public class CheckPool
     {
         private readonly IDeviceManager _deviceManager;
@@ -21,6 +24,12 @@ namespace KipTM.Checks.ViewModel
         private IDictionary<Type, ICheckViewModelFactory> _fatories;
 
 
+        /// <summary>
+        /// Конфигуратор фабрики визуальной модели проверки
+        /// </summary>
+        /// <param name="deviceManager"></param>
+        /// <param name="propertyPool"></param>
+        /// <param name="factories"></param>
         public CheckPool(IDeviceManager deviceManager, IPropertyPool propertyPool, IEnumerable<ICheckViewModelFactory> factories)
         {
             _deviceManager = deviceManager;
@@ -32,6 +41,11 @@ namespace KipTM.Checks.ViewModel
             }
         }
 
+        /// <summary>
+        /// Получить фабрику визуальной модели проверки по типу устройства
+        /// </summary>
+        /// <param name="targetType"></param>
+        /// <returns></returns>
         public ICheckViewModelFactory GetFactory(Type targetType)
         {
             ICheckViewModelFactory result = null;

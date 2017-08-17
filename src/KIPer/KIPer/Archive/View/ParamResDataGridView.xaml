@@ -45,7 +45,7 @@
             <DataGridTemplateColumn Header="Результат">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate DataType="archive:IParameterResultViewModel">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5,0,5,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,5,0">
                             <TextBlock Text="{Binding Error}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                             <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                         </StackPanel>

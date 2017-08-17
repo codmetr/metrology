@@ -8,6 +8,7 @@ using ADTSChecks.Model.Steps.ADTSTest;
 using ADTSData;
 using ArchiveData.DTO;
 using ArchiveData.DTO.Params;
+using CheckFrame.Archive;
 using KipTM.Archive;
 using KipTM.Model.Checks;
 using Tools;
@@ -18,10 +19,10 @@ namespace ADTSChecks.Model.Checks
     {
         public const string key = KeysDic.Test;
 
-        public const string KeyPropertyPoints = "Points";
-        public const string KeyPropertyRate = "Rate";
-        public const string KeyPropertyUnit = "Unit";
-        public const string KeyPropertyChannel = "Channel";
+        //public const string KeyPropertyPoints = "Points";
+        //public const string KeyPropertyRate = "Rate";
+        //public const string KeyPropertyUnit = "Unit";
+        //public const string KeyPropertyChannel = "Channel";
         public PressureUnits _unit;
 
         private AdtsTestResults _result;
@@ -48,10 +49,10 @@ namespace ADTSChecks.Model.Checks
         public override object GetCustomConfig(IPropertyPool propertyes)
         {
             //var propertyes = propertyPool.ByKey(ChannelKey);
-            var points = propertyes.GetProperty<List<ADTSPoint>>(KeyPropertyPoints);
-            var channel = propertyes.GetProperty<ChannelDescriptor>(KeyPropertyChannel);
-            var rate = propertyes.GetProperty<double>(KeyPropertyRate);
-            _unit = propertyes.GetProperty<PressureUnits>(KeyPropertyUnit);
+            var points = propertyes.GetProperty<List<ADTSPoint>>(KeyPoints);
+            var channel = propertyes.GetProperty<ChannelDescriptor>(BasicKeys.KeyChannel);
+            var rate = propertyes.GetProperty<double>(KeyRate);
+            _unit = propertyes.GetProperty<PressureUnits>(KeyUnit);
             return new ADTSParameters(channel, points, rate, _unit);
         }
 

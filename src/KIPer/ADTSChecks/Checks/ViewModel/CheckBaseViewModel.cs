@@ -499,45 +499,53 @@ namespace ADTSChecks.Checks.ViewModel
         /// <param name="eventArgTestResult"></param>
         protected void ResultUpdated(object sender, EventArgTestStepResult eventArgTestResult)
         {
-            _dispatcher.Invoke(() =>
+            _dispatcher.Invoke(() => { DoResultUpdated(eventArgTestResult); });
+        }
+        
+        /// <summary>
+        /// Обновление результата прохождения шага на экране
+        /// </summary>
+        /// <param name="eventArgTestResult"></param>
+        private void DoResultUpdated(EventArgTestStepResult eventArgTestResult)
+        {
+            var newRes = eventArgTestResult.Result as AdtsPointResult;
+            State.ResultsLog.Add(eventArgTestResult);
+            AdtsPointResult fidedRes = null;
+            if (newRes == null)
             {
-                var newRes = eventArgTestResult.Result as AdtsPointResult;
-                State.ResultsLog.Add(eventArgTestResult);
-                AdtsPointResult fidedRes = null;
-                if (newRes == null)
-                {
-                    // новый результат не AdtsPointResult, потому не с чем сравнивать
-                    _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChannelKey, eventArgTestResult.Key, eventArgTestResult.Result));
-                    return;
-                }
+                // новый результат не AdtsPointResult, потому не с чем сравнивать
+                _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChannelKey, eventArgTestResult.Key,
+                    eventArgTestResult.Result));
+                return;
+            }
 
-                // поиск точки в имеющихся результатах
-                foreach (var stepResult in _resultPool.Results)
+            // поиск точки в имеющихся результатах
+            foreach (var stepResult in _resultPool.Results)
+            {
+                var res = stepResult.Result as AdtsPointResult;
+                if (res == null)
+                    continue;
+                if (Math.Abs(res.Point - newRes.Point) < double.Epsilon &&
+                    stepResult.CheckKey == Method.Key &&
+                    stepResult.ChannelKey == Method.ChannelKey)
                 {
-                    var res = stepResult.Result as AdtsPointResult;
-                    if (res == null)
-                        continue;
-                    if (Math.Abs(res.Point - newRes.Point) < double.Epsilon &&
-                        stepResult.CheckKey == Method.Key &&
-                        stepResult.ChannelKey == Method.ChannelKey)
-                    {
-                        fidedRes = res;
-                        break;
-                    }
+                    fidedRes = res;
+                    break;
                 }
+            }
 
-                if (fidedRes == null)
-                {
-                    // это новая точка
-                    _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChannelKey, eventArgTestResult.Key, eventArgTestResult.Result));
-                    return;
-                }
+            if (fidedRes == null)
+            {
+                // это новая точка
+                _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChannelKey, eventArgTestResult.Key,
+                    eventArgTestResult.Result));
+                return;
+            }
 
-                fidedRes.RealValue = newRes.RealValue;
-                fidedRes.Tolerance = newRes.Tolerance;
-                fidedRes.Error = newRes.Error;
-                fidedRes.IsCorrect = newRes.IsCorrect;
-            });
+            fidedRes.RealValue = newRes.RealValue;
+            fidedRes.Tolerance = newRes.Tolerance;
+            fidedRes.Error = newRes.Error;
+            fidedRes.IsCorrect = newRes.IsCorrect;
         }
 
         void EndMethod(object sender, EventArgs e)

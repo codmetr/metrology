@@ -120,7 +120,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             _userChannel.Message =
                 string.Format(
                     "Установлено на точке {0} {1} полученно эталонное значение {2} {3}. Для продолжения нажмите ",
-                    point.ToString("F2"), _unit.ToString(), realValue.ToString("F2"), _unit.ToString()) + "\"{0}\"";
+                    point.ToString("F2"), _unit.ToStr(), realValue.ToString("F2"), _unit.ToStr()) + "\"{0}\"";
             wh.Reset();
             _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
             wh.WaitOne(TimeSpan.FromSeconds(30));
@@ -130,6 +130,8 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
             OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.RealValue),
                     new ParameterResult(DateTime.Now, realValue)));
+            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.Unit),
+                    new ParameterResult(DateTime.Now, _unit.ToStr())));
             OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.Error),
                     new ParameterResult(DateTime.Now, Math.Abs(point) - Math.Abs(realValue))));
             OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.Tolerance),

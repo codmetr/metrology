@@ -96,7 +96,7 @@ namespace KipTM.ViewModel.Checks
             method.SetADTS(_deviceManager.GetModel<ADTSModel>());
             method.ChannelType = checkDeviceChanel;
             var devType = checkConfig.TargetDevice.Device.DeviceType.TypeKey;
-            var ethalonChannel = checkConfig.Ethalons.FirstOrDefault().Key;
+            var ethalonChannel = checkConfig.Ethalons.FirstOrDefault().Value.Channel;
             if (ethalonChannel.Key == UserEthalonChannel.Channel.Key)
                 method.SetEthalonChannel(null, null);
             else

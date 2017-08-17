@@ -20,9 +20,9 @@ namespace ADTSChecks.Model.Checks
         //public static string Key = "Калибровка ADTS";
         public const string key = "Калибровка ADTS";
 
-        public const string KeyPoints = "Points";
-        public const string KeyRate = "Rate";
-        public const string KeyUnit = "Unit";
+        //public const string KeyPoints = "Points";
+        //public const string KeyRate = "Rate";
+        //public const string KeyUnit = "Unit";
 
         private AdtsTestResults _result;
         private AdtsPointResult _resultPoint;
@@ -53,10 +53,10 @@ namespace ADTSChecks.Model.Checks
         public override object GetCustomConfig(IPropertyPool propertyes)
         {
             //var propertyes = propertyPool.ByKey(ChannelKey);
-            var points = propertyes.GetProperty<List<ADTSPoint>>(Calibration.KeyPoints);
+            var points = propertyes.GetProperty<List<ADTSPoint>>(CheckBase.KeyPoints);
             var channel = propertyes.GetProperty<ChannelDescriptor>(BasicKeys.KeyChannel);
-            var rate = propertyes.GetProperty<double>(Calibration.KeyRate);
-            var unit = propertyes.GetProperty<PressureUnits>(Calibration.KeyUnit);
+            var rate = propertyes.GetProperty<double>(CheckBase.KeyRate);
+            var unit = propertyes.GetProperty<PressureUnits>(CheckBase.KeyUnit);
             return new ADTSParameters(channel, points, rate, unit);
         }
 

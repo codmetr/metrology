@@ -34,9 +34,9 @@ namespace ADTSChecks.ViewModel.ResultFiller.ADTS
             {
                 NameParameter = string.Format("Поверка точки {0}", result.Point),
                 Error = result.RealValue.ToString("F2"),
-                PointMeasuring = result.Point.ToString("F2"),
-                Tolerance = result.Tolerance.ToString("F2"),
-                Unit = "мБар"
+                PointMeasuring = string.Format("{0} {1}", result.Point.ToString("F2"), result.Unit),
+                Tolerance = string.Format("±{0} {1}", result.Tolerance.ToString("F2"), result.Unit),
+                Unit = result.Unit,
             };
         }
     }

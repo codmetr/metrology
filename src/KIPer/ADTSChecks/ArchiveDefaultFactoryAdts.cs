@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ADTS;
+using ADTSChecks.Checks;
 using ADTSChecks.Checks.Data;
 using ADTSChecks.Devices;
 using ADTSChecks.Model.Checks;
@@ -39,8 +40,8 @@ namespace ADTSChecks
         {
             return new List<ArchivedKeyValuePair>
             {
-                new ArchivedKeyValuePair(Calibration.KeySettingsPS, GetDefaultForADTSCheckPS()),
-                new ArchivedKeyValuePair(Calibration.KeySettingsPT, GetDefaultForADTSCheckPT())
+                new ArchivedKeyValuePair(CheckBase.KeySettingsPS, GetDefaultForADTSCheckPS()),
+                new ArchivedKeyValuePair(CheckBase.KeySettingsPT, GetDefaultForADTSCheckPT())
             };
         }
 
@@ -62,9 +63,9 @@ namespace ADTSChecks
                         Min = 3.0,
                         Error = 0.01,
                     }.SetLocalizedNameFunc(()=>Resources.ChannelPs)),
-                new ArchivedKeyValuePair(Calibration.KeyPoints, GetDefaultForADTSCheckPSPoints()),
-                new ArchivedKeyValuePair(Calibration.KeyRate, 50.0),
-                new ArchivedKeyValuePair(Calibration.KeyUnit, PressureUnits.MBar),
+                new ArchivedKeyValuePair(CheckBase.KeyPoints, GetDefaultForADTSCheckPSPoints()),
+                new ArchivedKeyValuePair(CheckBase.KeyRate, 50.0),
+                new ArchivedKeyValuePair(CheckBase.KeyUnit, PressureUnits.MBar),
             };
         }
 
@@ -87,9 +88,9 @@ namespace ADTSChecks
                         Min = 3.0,
                         Error = 0.01,
                     }.SetLocalizedNameFunc(()=>Resources.ChannelPt)),
-                new ArchivedKeyValuePair(Calibration.KeyPoints, GetDefaultForADTSCheckPTPoints()),
-                new ArchivedKeyValuePair(Calibration.KeyRate, 50.0),
-                new ArchivedKeyValuePair(Calibration.KeyUnit, PressureUnits.MBar),
+                new ArchivedKeyValuePair(CheckBase.KeyPoints, GetDefaultForADTSCheckPTPoints()),
+                new ArchivedKeyValuePair(CheckBase.KeyRate, 50.0),
+                new ArchivedKeyValuePair(CheckBase.KeyUnit, PressureUnits.MBar),
             };
         }
 

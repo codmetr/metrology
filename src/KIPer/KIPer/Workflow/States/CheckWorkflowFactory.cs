@@ -41,6 +41,7 @@ namespace KipTM.Workflow.States
         private readonly IEventAggregator _eventAggregator;
         private readonly IReportFactory _reportFactory;
         private readonly IDeviceManager _deviceManager;
+        private readonly CheckPool _checkPool;
 
         /// <summary>
         /// Фабрика конвейера состояний проверки
@@ -76,6 +77,7 @@ namespace KipTM.Workflow.States
             _eventAggregator = eventAggregator;
             _reportFactory = reportFactory;
             _deviceManager = deviceManager;
+            _checkPool = new CheckPool(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels);
         }
 
         /// <summary>
@@ -92,8 +94,7 @@ namespace KipTM.Workflow.States
 
             var checkConfigViewModel = new CheckConfigViewModel(checkConfigDevice, _channelFactory, _customFactory);
             var resFactory = new TestResultViewModelFactory(result, checkConfigDevice, _resultMaker, _filler, _archive);
-            var checkPool = new CheckPool(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels);
-            var checkFactory = new CheckFactory(checkPool, checkConfigDevice, result, _eventAggregator);
+            var checkFactory = new CheckFactory(_checkPool, checkConfigDevice, result, _eventAggregator);
 
             var steps = new List<IWorkflowStep>()
             {

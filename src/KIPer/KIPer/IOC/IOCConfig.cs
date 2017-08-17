@@ -8,6 +8,7 @@ using CheckFrame.Checks;
 using CheckFrame.ViewModel.Archive;
 using GalaSoft.MvvmLight;
 using KipTM.Checks.ViewModel.Config;
+using KipTM.DataService;
 using KipTM.Design;
 using KipTM.EventAggregator;
 using KipTM.Interfaces;

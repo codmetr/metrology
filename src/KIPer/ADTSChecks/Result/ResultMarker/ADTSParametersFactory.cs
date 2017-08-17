@@ -56,7 +56,7 @@ namespace ADTSChecks.ViewModel.ResultMarker.ADTS
                 Error = String.Empty,
                 PointMeasuring = string.Format("{0} {1}", target.Pressure.ToString("F2"), unit),
                 Tolerance = string.Format("±{0} {1}", target.Tolerance.ToString("F2"), unit),
-                Unit = String.Empty,
+                Unit = unit,
             };
             var result = new List<IParameterResultViewModel> { itemMarker };
             return result;

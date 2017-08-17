@@ -18,6 +18,8 @@ namespace ADTSChecks.Checks.Data
 
             if (ptype.PType == ParameterType.RealValue)
                 field.RealValue = (double)value;
+            else if (ptype.PType == ParameterType.Unit)
+                field.Unit = (string)value;
             else if (ptype.PType == ParameterType.Error)
                 field.Error = (double)value;
             else if (ptype.PType == ParameterType.Tolerance)

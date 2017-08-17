@@ -3,6 +3,7 @@
     public enum ParameterType
     {
         RealValue,
+        Unit,
         Error,
         IsCorrect,
         Tolerance,
