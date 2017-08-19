@@ -5,12 +5,12 @@ namespace ArchiveData.DTO
     /// <summary>
     /// Базовый описатель типа устройства
     /// </summary>
-    [DebuggerDisplay("{DeviceCommonType}: {Model}({DeviceManufacturer})")]
+    [DebuggerDisplay("{DeviceCommonType}: {Model}({Manufacturer})")]
     public class DeviceTypeDescriptor : IDeviceTypeDescriptor
     {
         public DeviceTypeDescriptor(string model, string deviceCommonType, string deviceManufacturer)
         {
-            DeviceManufacturer = deviceManufacturer;
+            Manufacturer = deviceManufacturer;
             DeviceCommonType = deviceCommonType;
             Model = model;
         }
@@ -41,9 +41,9 @@ namespace ArchiveData.DTO
         /// <summary>
         /// Изготовитель
         /// </summary>
-        public string DeviceManufacturer { get; set; }
+        public string Manufacturer { get; set; }
 
-        public FunctionType Function { get; }
+        public FunctionType Function { get; set; }
 
         public enum FunctionType
         {

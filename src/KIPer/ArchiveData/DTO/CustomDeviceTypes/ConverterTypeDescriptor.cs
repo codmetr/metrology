@@ -5,10 +5,16 @@ namespace ArchiveData.DTO.CustomDeviceTypes
     /// <summary>
     /// Описатель типа конвертера
     /// </summary>
-    [DebuggerDisplay("Converter {DeviceCommonType}: {Model}({DeviceManufacturer})")]
-    public class ControllerTypeDescriptor : DeviceTypeDescriptor
+    [DebuggerDisplay("Converter {DeviceCommonType}: {Model}({Manufacturer})")]
+    public class ConverterTypeDescriptor : DeviceTypeDescriptor
     {
-        public ControllerTypeDescriptor(string model, string deviceCommonType, string deviceManufacturer)
+        /// <summary>
+        /// Описатель типа конвертера
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="deviceCommonType"></param>
+        /// <param name="deviceManufacturer"></param>
+        public ConverterTypeDescriptor(string model, string deviceCommonType, string deviceManufacturer)
             :base(model, deviceCommonType, deviceManufacturer)
         {
         }

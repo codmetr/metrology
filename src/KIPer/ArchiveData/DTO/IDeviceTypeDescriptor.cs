@@ -15,6 +15,6 @@
         /// <summary>
         /// Изготовитель
         /// </summary>
-        string DeviceManufacturer { get; }
+        string Manufacturer { get; }
     }
 }

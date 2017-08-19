@@ -33,7 +33,7 @@
                     <TextBlock Style="{StaticResource DescriptionTextStyle}">Модель:</TextBlock>
                     <TextBlock Text="{Binding Device.Model}" Style="{StaticResource ValueTextStyle}"/>
                     <TextBlock Style="{StaticResource DescriptionTextStyle}">Производитель:</TextBlock>
-                    <TextBlock Text="{Binding Device.DeviceManufacturer}" Style="{StaticResource ValueTextStyle}"/>
+                    <TextBlock Text="{Binding Device.Manufacturer}" Style="{StaticResource ValueTextStyle}"/>
                 </StackPanel>
             </Border>
             <GroupBox Grid.Row="1" Header="Эталонные параметры">

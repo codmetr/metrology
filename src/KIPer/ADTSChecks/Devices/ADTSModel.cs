@@ -12,13 +12,20 @@ using MainLoop;
 
 namespace ADTSChecks.Devices
 {
+    /// <summary>
+    /// Модель ADTS-450
+    /// </summary>
     public class ADTSModel
     {
         /// <summary>
-        /// Описатель типа ADTS-430
+        /// Описатель типа ADTS450
         /// </summary>
         public static DeviceTypeDescriptor Descriptor =>
-             new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer) {TypeKey = ADTSModel.Key};
+             new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer)
+             {
+                 TypeKey = ADTSModel.Key,
+                 Function = DeviceTypeDescriptor.FunctionType.Controller,
+             };
 
         /// <summary>
         /// Маркер канала Ps
@@ -68,6 +75,9 @@ namespace ADTSChecks.Devices
         public static IEnumerable<string> TypesEtalonParameters = new[]
         {"давление", "авиационная высота", "авиационная скорость"};
 
+        /// <summary>
+        /// Модель ADTS430
+        /// </summary>
         public ADTSModel(string title, ILoops loops, IDeviceManager deviceManager)
         {
             Title = title;

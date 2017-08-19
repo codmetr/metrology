@@ -26,6 +26,10 @@ namespace CheckFrame.Checks
         /// <summary>
         /// Набор использованных эталонов
         /// </summary>
+        /// <remarks>
+        /// ключь - измерительный канал целевого устройства
+        /// значение - описатель выбранного устройства и
+        /// </remarks>
         public Dictionary<ChannelDescriptor, DeviceWithChannel> Ethalons { get; set; }
 
 

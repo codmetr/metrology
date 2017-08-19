@@ -58,7 +58,6 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         /// <param name="cancel"></param>
         public override void Start(CancellationToken cancel)
         {
-            TimeSpan waitPointPeriod = TimeSpan.FromMilliseconds(50);
             var point = _point.Pressure;
 
             OnStarted();
@@ -91,7 +90,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             IsPauseAvailable = true;
             EventWaitHandle wh = _param == Parameters.PT ? _adts.WaitPitotSetted() : _adts.WaitPressureSetted();
             bool isSettedCurrent;
-            if (!Wait(wh, _setCurrentValueAsPoint, waitPointPeriod, cancel, out isSettedCurrent))
+            if (!Wait(wh, _setCurrentValueAsPoint, cancel, out isSettedCurrent))
             {
                 _adts.StopWaitStatus(wh);
                 OnEnd(new EventArgEnd(KeyStep, false));
@@ -249,11 +248,10 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         public double Tolerance { get { return _point.Tolerance; } }
         #endregion
 
-        #region Serveice
+        #region Service
         /// <summary>
         /// Обертка для выполнения длительной операции
         /// </summary>
-        /// <param name="whEnd"></param>
         /// <param name="cancel"></param>
         /// <param name="func"></param>
         /// <param name="errorMessage"></param>
@@ -274,25 +272,25 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             return true;
         }
 
-
-        private bool Wait(EventWaitHandle wh, EventWaitHandle whSetCurentValue, TimeSpan waitPointPeriod, CancellationToken cancel, out bool isSettedCurrentPoint)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="wh"></param>
+        /// <param name="whSetCurentValue"></param>
+        /// <param name="waitPointPeriod"></param>
+        /// <param name="cancel"></param>
+        /// <param name="isSettedCurrentPoint"></param>
+        /// <returns></returns>
+        private bool Wait(EventWaitHandle wh, EventWaitHandle whSetCurentValue, CancellationToken cancel, out bool isSettedCurrentPoint)
         {
             isSettedCurrentPoint = false;
-            var whArray = new WaitHandle[] { wh, whSetCurentValue };
-            int exitIndex = WaitHandle.WaitAny(whArray, waitPointPeriod);
-            while (exitIndex == WaitHandle.WaitTimeout)
-            {
-                //todo support pause
-                if (cancel.IsCancellationRequested)
-                {
-                    return false;
-                }
-                exitIndex = WaitHandle.WaitAny(whArray, waitPointPeriod);
-            }
+            var whArray = new [] { wh, whSetCurentValue,cancel.WaitHandle };
+            int exitIndex = WaitHandle.WaitAny(whArray);
+            //todo support pause
+            if (cancel.IsCancellationRequested)
+                return false;
             if (exitIndex == 1)
-            {
                 isSettedCurrentPoint = true;
-            }
             return true;
         }
 

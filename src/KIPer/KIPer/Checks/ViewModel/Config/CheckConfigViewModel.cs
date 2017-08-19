@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ArchiveData.DTO;
 using CheckFrame.ViewModel.Checks;
 using GalaSoft.MvvmLight;
@@ -21,9 +22,10 @@ namespace KipTM.ViewModel.Checks.Config
         private readonly CheckConfigDevice _model;
         private readonly CustomConfigFactory _customConfigFactory;
         private SelectChannelViewModel _checkDeviceChanel;
-        private SelectChannelViewModel _ethalonChanel;
         private ICustomSettingsViewModel _customSetiings;
         private bool _isCustomSettingsAvailable;
+
+        public Dictionary<ChannelDescriptor, EthalonConfigViewModel> _ethalons;
 
 
         /// <summary>
@@ -37,30 +39,20 @@ namespace KipTM.ViewModel.Checks.Config
 
             _model.SelectedChannelChanged += _model_SelectedChannelChanged;
             _model.SelectedMethodChanged += ModelSelectedMethodChanged;
-            _model.SelectedEthalonTypeChanged += _model_SelectedEthalonTypeChanged;
-            _model.AvailableEthalonTypeChanged += _model_AvailableEthalonTypeChanged;
 
             _checkDeviceChanel = new SelectChannelViewModel(channelFactory.GetChannels());
             _checkDeviceChanel.ChannelTypeChanget += _checkDeviceChanel_ChannelTypeChanget;
-            _ethalonChanel = new SelectChannelViewModel(channelFactory.GetChannels());
-            _ethalonChanel.ChannelTypeChanget += _ethalonChanel_ChannelTypeChanget;
+
+            var echalon = _model.EthalonWithCh;
+            _ethalons = _model.Channels.ToDictionary(elKey => elKey,
+                elV => new EthalonConfigViewModel(echalon, _model.GetAvailableEthalons(elV),
+                    channelFactory.GetChannels()));
 
             _model.TargetTransportChannel = _checkDeviceChanel.SelectedChannel;
-            _model.EthalonTransportChannel = _ethalonChanel.SelectedChannel;
+            _model.EthalonTransportChannel = _ethalons[_model.SelectedChannel].EthalonChanel.SelectedChannel;
         }
 
         #region Обработка событий изменения конфигурации
-
-        /// <summary>
-        /// Изменение конфигурации канала связи с эталоном
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void _ethalonChanel_ChannelTypeChanget(object sender, EventArgs e)
-        {
-            _model.EthalonTransportChannel = _ethalonChanel.SelectedChannel;
-            OnEthalonDeviseChannelChanged();
-        }
 
         /// <summary>
         /// Изменение конфигурации канала связи с объектом контроля
@@ -70,29 +62,6 @@ namespace KipTM.ViewModel.Checks.Config
         void _checkDeviceChanel_ChannelTypeChanget(object sender, EventArgs e)
         {
             _model.TargetTransportChannel = _checkDeviceChanel.SelectedChannel;
-            OnCheckedDeviseChannelChanged();
-        }
-
-        /// <summary>
-        /// Изменение доступного набора эталонных каналов
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void _model_AvailableEthalonTypeChanged(object sender, EventArgs e)
-        {
-            RaisePropertyChanged("EthalonTypes");
-        }
-
-        /// <summary>
-        /// Изменение типа эталонного канала
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void _model_SelectedEthalonTypeChanged(object sender, EventArgs e)
-        {
-            RaisePropertyChanged("SelectedEthalonType");
-            RaisePropertyChanged("IsAnalogEthalon");
-            RaisePropertyChanged("IsNoAnalogEthalon");
         }
 
         /// <summary>
@@ -133,12 +102,6 @@ namespace KipTM.ViewModel.Checks.Config
         {
             get { return _model.Methods; }
         }
-
-        /// <summary>
-        /// Доступные типы устройства
-        /// </summary>
-        public IEnumerable<ChannelDescriptor> EthalonChannels { get { return _model.EthalonChannels; } }
-
         #endregion
 
         #region Условия проверки
@@ -276,6 +239,7 @@ namespace KipTM.ViewModel.Checks.Config
                 _model.SelectedChannel = value;
                 CustomSetiings = _customConfigFactory.GetCustomSettings(_model.CustomSettings);
                 RaisePropertyChanged();
+                RaisePropertyChanged("EthalonOneCh");
             }
         }
 
@@ -295,125 +259,8 @@ namespace KipTM.ViewModel.Checks.Config
 
         #region Настройки эталона
 
-        /// <summary>
-        /// Тип устройства
-        /// </summary>
-        public ChannelDescriptor SelectedEthalonType
-        {
-            get { return _model.SelectedEthalonTypeKey; }
-            set
-            {
-               _model.SelectedEthalonTypeKey = value;
-               RaisePropertyChanged();
-            }
-        }
+        public EthalonConfigViewModel EthalonOneCh { get { return _ethalons[SelectedChannel]; } }
 
-        public bool IsAnalogEthalon
-        {
-            get { return _model.IsAnalogEthalon; }
-            set
-            {
-                _model.IsAnalogEthalon =  value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("IsNoAnalogEthalon");
-            }
-        }
-
-        public bool IsNoAnalogEthalon
-        {
-            get { return !IsAnalogEthalon; }
-        }
-
-        /// <summary>
-        /// Инвентарный номер
-        /// </summary>
-        public string EthalonDeviceType
-        {
-            get { return _model.EthalonDeviceType; }
-            set
-            {
-                _model.EthalonDeviceType = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Производитель эталона
-        /// </summary>
-        public string EthalonManufacturer
-        {
-            get { return _model.EthalonManufacturer; }
-            set
-            {
-                _model.EthalonManufacturer = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Серийный номер
-        /// </summary>
-        public string EthalonSerialNumber
-        {
-            get { return _model.EthalonSerialNumber; }
-            set
-            {
-                _model.EthalonSerialNumber = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Дата предыдущей поверки/калибровки
-        /// </summary>
-        public DateTime EthalonPreviousCheckTime
-        {
-            get { return _model.EthalonPreviousCheckTime; }
-            set
-            {
-                _model.EthalonPreviousCheckTime = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Настройки канала эталона
-        /// </summary>
-        public SelectChannelViewModel EthalonChanel
-        {
-            get { return _ethalonChanel; }
-            set { _ethalonChanel = value; }
-        }
-
-        #endregion
-
-        #region Настройки каналов
-
-        public ITransportChannelType GetCheckedDeviseChannel()
-        {
-            return CheckDeviceChanel.GetSelectedChannelType();
-        }
-
-        public ITransportChannelType GetEthalonDeviseChannel()
-        {
-            return EthalonChanel.GetSelectedChannelType();
-        }
-
-        public event EventHandler CheckedDeviseChannelChanged;
-
-        protected virtual void OnCheckedDeviseChannelChanged()
-        {
-            EventHandler handler = CheckedDeviseChannelChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-        public event EventHandler EthalonDeviseChannelChanged;
-
-        protected virtual void OnEthalonDeviseChannelChanged()
-        {
-            EventHandler handler = EthalonDeviseChannelChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
         #endregion
 
         #region Настройка конкретного типа проверки конкретного устройства
@@ -447,10 +294,8 @@ namespace KipTM.ViewModel.Checks.Config
         public override void Cleanup()
         {
             _checkDeviceChanel.ChannelTypeChanget -= _checkDeviceChanel_ChannelTypeChanget;
-            _ethalonChanel.ChannelTypeChanget -= _ethalonChanel_ChannelTypeChanget;
             _model.SelectedChannelChanged -= _model_SelectedChannelChanged;
             _model.SelectedMethodChanged -= ModelSelectedMethodChanged;
-            _model.SelectedEthalonTypeChanged -= _model_SelectedEthalonTypeChanged;
             base.Cleanup();
         }
 

@@ -68,7 +68,7 @@
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Margin="5" Text="Изготовитель: "/>
-                                        <TextBlock Margin="5" Text="{Binding Device.DeviceType.DeviceManufacturer}"/>
+                                        <TextBlock Margin="5" Text="{Binding Device.DeviceType.Manufacturer}"/>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>

@@ -48,7 +48,7 @@ namespace ADTSChecks
         /// </summary>
         public IEnumerable<DeviceTypeDescriptor> DeviceTypes { get; private set; }
         /// <summary>
-        /// Описатель поддерживаемых типов эталонов
+        /// Типы устройств для использования в качестве эталона
         /// </summary>
         public IEnumerable<DeviceTypeDescriptor> EthalonTypes { get; private set; }
         /// <summary>
