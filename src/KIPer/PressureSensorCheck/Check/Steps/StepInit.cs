@@ -8,8 +8,10 @@ using KipTM.Interfaces.Checks.Steps;
 
 namespace PressureSensorCheck.Check.Steps
 {
-    class StepInit : TestStep
+    public class StepInit : TestStep
     {
+
+
         public override void Start(CancellationToken cancel)
         {
             throw new NotImplementedException();

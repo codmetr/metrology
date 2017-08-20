@@ -261,7 +261,6 @@ namespace KipTM.Checks
 
                 UpdateCustomMethodSettings(SelectedChannel);
                 // todo: перевести на выбор визуальной модели в самом CheckConfigViewModel
-                UpdateEthalonChannel(_data.TargetDevice.Device.DeviceType, SelectedChannel);
                 OnSelectedChannelChanged();
             }
         }
@@ -356,25 +355,6 @@ namespace KipTM.Checks
             var properties = _channelKeys[targetChannel];
             CustomSettings = SelectedMethod.GetCustomConfig(properties);
             SelectedMethod.Init(CustomSettings); //todo maybe move out
-        }
-
-        /// <summary>
-        /// Пререпроверить подходит ли этому каналу выбранный тип эталонного канала,
-        /// если нет - выбрать подходящий
-        /// </summary>
-        /// <param name="targetType"></param>
-        /// <param name="selectedChannel"></param>
-        private void UpdateEthalonChannel(DeviceTypeDescriptor targetType, ChannelDescriptor selectedChannel)
-        {
-            _avalableEthalonTypes = GetAvailableEthalons(targetType, _propertyPool, selectedChannel, _allDeviceTypes);
-            OnAvailableEthalonTypeChanged();
-            var ethalon = _data.Ethalons.FirstOrDefault().Value.Device;
-            if (_avalableEthalonTypes.Values.Contains(ethalon.DeviceType))
-                return;
-            var channel = _avalableEthalonTypes.FirstOrDefault();
-            _data.Ethalons[_data.TargetDevice.Channel].Channel = channel.Key;
-            _data.IsAnalogEthalon = channel.Key.Key == UserEthalonChannel.Channel.Key;
-            _data.Ethalons[_data.TargetDevice.Channel].Device.DeviceType = channel.Value;
         }
 
         /// <summary>

@@ -44,11 +44,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Channels\DPI620EthalonChannel.cs" />
+    <Compile Include="Channels\DPI620EthalonChannelFactory.cs" />
     <Compile Include="Check\PressureSensorCheck.cs" />
     <Compile Include="Check\Steps\StepFinish.cs" />
     <Compile Include="Check\Steps\StepInit.cs" />
     <Compile Include="Check\Steps\StepLeak.cs" />
     <Compile Include="Check\Steps\StepMainError.cs" />
+    <Compile Include="Devices\DPI620Factory.cs" />
+    <Compile Include="Devices\DPI620Model.cs" />
+    <Compile Include="Devices\DPI620ModelFactory.cs" />
     <Compile Include="PressureSensorCheck.cs" />
     <Compile Include="PressureSensorMethodFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,9 +68,21 @@
       <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
       <Name>ArchiveData</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CheckFrame\CheckFrame.csproj">
+      <Project>{81B358FE-6B31-49FF-AB34-45CB960E57B6}</Project>
+      <Name>CheckFrame</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DPI620Genii\DPI620Genii.csproj">
+      <Project>{5bc5e2f0-d45b-467f-944c-fc1a649ab1a4}</Project>
+      <Name>DPI620Genii</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
       <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
       <Name>KipTM.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MineLoop\MainLoop.csproj">
+      <Project>{FA8F1885-A429-4F3A-93B7-CB3FCEF61072}</Project>
+      <Name>MainLoop</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

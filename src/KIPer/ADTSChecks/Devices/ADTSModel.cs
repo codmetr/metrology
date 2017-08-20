@@ -27,6 +27,13 @@ namespace ADTSChecks.Devices
                  Function = DeviceTypeDescriptor.FunctionType.Controller,
              };
 
+        public static string Key { get { return "ADTS"; } }
+        public static string Model { get { return KeysDic.ADTSModelKey; } }
+        public static string DeviceCommonType { get { return "Калибратор давления"; } }
+        public static string DeviceManufacturer { get { return "GE Druk"; } }
+        public static IEnumerable<string> TypesEtalonParameters = new[]
+            {"давление", "авиационная высота", "авиационная скорость"};
+
         /// <summary>
         /// Маркер канала Ps
         /// </summary>
@@ -67,13 +74,6 @@ namespace ADTSChecks.Devices
         private IDictionary<EventWaitHandle, Func<Status, bool>> _waitStatusPool; 
         private IDictionary<EventWaitHandle, Func<State, bool>> _waitStatePool; 
         #endregion
-
-        public static string Key { get { return "ADTS"; } }
-        public static string Model { get { return KeysDic.ADTSModelKey; } }
-        public static string DeviceCommonType { get { return "Калибратор давления"; } }
-        public static string DeviceManufacturer { get { return "GE Druk"; } }
-        public static IEnumerable<string> TypesEtalonParameters = new[]
-        {"давление", "авиационная высота", "авиационная скорость"};
 
         /// <summary>
         /// Модель ADTS430

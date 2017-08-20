@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace DPI620Genii
 {
-    class DPI620DriverCom
+    public class DPI620DriverCom
     {
         readonly Dictionary<string, string> _dicCmdSetUnit = new Dictionary<string, string>()
         {
