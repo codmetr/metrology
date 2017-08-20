@@ -37,6 +37,5 @@ namespace KipTM.ViewModel
         /// </summary>
         public ObservableCollection<ITestResultViewModel> TestsCollection { get; set; }
 
-        
     }
 }

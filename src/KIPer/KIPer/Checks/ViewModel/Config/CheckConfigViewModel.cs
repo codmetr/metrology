@@ -237,6 +237,7 @@ namespace KipTM.ViewModel.Checks.Config
             set
             {
                 _model.SelectedChannel = value;
+                _model.EthalonTransportChannel = EthalonOneCh.EthalonChanel.SelectedChannel;
                 CustomSetiings = _customConfigFactory.GetCustomSettings(_model.CustomSettings);
                 RaisePropertyChanged();
                 RaisePropertyChanged("EthalonOneCh");
