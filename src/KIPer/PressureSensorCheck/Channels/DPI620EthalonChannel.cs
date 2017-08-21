@@ -9,7 +9,7 @@ using KipTM.Model.TransportChannels;
 
 namespace PressureSensorCheck.Channels
 {
-    public class DPI620EthalonChannel: IEthalonChannel
+    public class Dpi620PressChannel : IEthalonChannel
     {
         public bool Activate(ITransportChannelType transport)
         {

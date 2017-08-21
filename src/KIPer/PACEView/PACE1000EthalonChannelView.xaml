@@ -6,7 +6,7 @@
              xmlns:res="clr-namespace:WpfCommonStyles;assembly=WpfCommonStyles"
              xmlns:viewModel="clr-namespace:PACEChecks.Channels.ViewModel;assembly=PACEChecks"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{d:DesignInstance viewModel:PaceEchalonChannelViewModel}">
+             d:DesignHeight="300" d:DesignWidth="400" d:DataContext="{d:DesignInstance viewModel:PaceEthalonChannelViewModel}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>

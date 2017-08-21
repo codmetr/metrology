@@ -168,22 +168,6 @@ namespace PACEChecks.Channels
             return IsConnected;
         }
 
-        private void UpdateState(EventWaitHandle wh)
-        {
-            var whPresure = new ManualResetEvent(false);
-            var whPresureUnit = new ManualResetEvent(false);
-            //todo: make eroor reaction from model
-            _paseModel.UpdatePressure(whPresure);
-            _paseModel.UpdateUnit(whPresureUnit);
-
-            Task.Run(() =>
-            {
-                WaitHandle.WaitAll(new WaitHandle[] {whPresure, whPresureUnit});
-                if (wh != null)
-                    wh.Set();
-            });
-        }
-
         private bool UpdateState()
         {
             

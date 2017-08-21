@@ -95,6 +95,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressureSensorCheck", "Pres
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressureSensorView", "PressureSensorView\PressureSensorView.csproj", "{B2680040-7EEC-4CB6-9ECC-F00F88435BD8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressureSensorData", "PressureSensorData\PressureSensorData.csproj", "{3A880679-B67B-4D02-A6FF-75857CEF1369}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -564,6 +566,24 @@ Global
 		{B2680040-7EEC-4CB6-9ECC-F00F88435BD8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B2680040-7EEC-4CB6-9ECC-F00F88435BD8}.Release|x86.ActiveCfg = Release|Any CPU
 		{B2680040-7EEC-4CB6-9ECC-F00F88435BD8}.Release|x86.Build.0 = Release|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Debug|x86.Build.0 = Debug|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Emilation|Any CPU.ActiveCfg = Release|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Emilation|Any CPU.Build.0 = Release|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Emilation|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Emilation|Mixed Platforms.Build.0 = Release|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Emilation|x86.ActiveCfg = Release|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Emilation|x86.Build.0 = Release|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Release|x86.ActiveCfg = Release|Any CPU
+		{3A880679-B67B-4D02-A6FF-75857CEF1369}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -595,5 +615,6 @@ Global
 		{BD216C8B-921B-4499-85F3-9BA9A014029E} = {D30AAB61-39FF-405A-9824-C7E062D2BA3D}
 		{B39FC5B2-8D9B-49A9-9189-76BA124AE522} = {AF06EF1D-E52D-4A6A-80C6-87F704F40E4C}
 		{B2680040-7EEC-4CB6-9ECC-F00F88435BD8} = {AF06EF1D-E52D-4A6A-80C6-87F704F40E4C}
+		{3A880679-B67B-4D02-A6FF-75857CEF1369} = {D30AAB61-39FF-405A-9824-C7E062D2BA3D}
 	EndGlobalSection
 EndGlobal

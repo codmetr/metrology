@@ -51,6 +51,7 @@
     <Compile Include="Check\Steps\StepInit.cs" />
     <Compile Include="Check\Steps\StepLeak.cs" />
     <Compile Include="Check\Steps\StepMainError.cs" />
+    <Compile Include="Data\PressureConverterPoint.cs" />
     <Compile Include="Devices\DPI620Factory.cs" />
     <Compile Include="Devices\DPI620Model.cs" />
     <Compile Include="Devices\DPI620ModelFactory.cs" />
@@ -83,6 +84,10 @@
     <ProjectReference Include="..\MineLoop\MainLoop.csproj">
       <Project>{FA8F1885-A429-4F3A-93B7-CB3FCEF61072}</Project>
       <Name>MainLoop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PressureSensorData\PressureSensorData.csproj">
+      <Project>{3a880679-b67b-4d02-a6ff-75857cef1369}</Project>
+      <Name>PressureSensorData</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
