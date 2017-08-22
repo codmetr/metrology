@@ -49,7 +49,6 @@
     <Compile Include="Check\PressureSensorCheck.cs" />
     <Compile Include="Check\Steps\StepFinish.cs" />
     <Compile Include="Check\Steps\StepInit.cs" />
-    <Compile Include="Check\Steps\StepLeak.cs" />
     <Compile Include="Check\Steps\StepMainError.cs" />
     <Compile Include="Data\PressureConverterPoint.cs" />
     <Compile Include="Devices\DPI620Factory.cs" />
