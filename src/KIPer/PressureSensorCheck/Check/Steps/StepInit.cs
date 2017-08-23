@@ -16,10 +16,12 @@ namespace PressureSensorCheck.Check.Steps
     /// </summary>
     internal class StepInit : TestStep
     {
+        public static string KeyStep = "Init";
+
         /// <summary>
         /// Базовая точка
         /// </summary>
-        public PressureConverterPoint _pointBase;
+        public PressureSensorPoint _pointBase;
 
         /// <summary>
         /// Пользовательский канал

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks.Steps;
 using KipTM.Model.Channels;
+using KipTM.Model.Checks;
+using NLog;
 using PressureSensorCheck.Data;
 using PressureSensorData;
 
@@ -18,27 +20,43 @@ namespace PressureSensorCheck.Check.Steps
     internal class StepMainError : TestStep
     {
         /// <summary>
+        /// Ключь шага
+        /// </summary>
+        public const string KeyStep = "MainError";
+        /// <summary>
+        /// Логгер
+        /// </summary>
+        private readonly NLog.Logger _logger;
+        /// <summary>
         /// Точка проверки
         /// </summary>
-        public PressureConverterPoint _point;
-
+        private readonly PressureSensorPoint _point;
         /// <summary>
         /// Результат проверки точки
         /// </summary>
-        public PressureSensorPointResult _result = null;
-
+        private PressureSensorPointResult _result = null;
         /// <summary>
         /// Канал работы с пользователем
         /// </summary>
-        private IUserChannel _userChannel;
+        private readonly IUserChannel _userChannel;
         /// <summary>
         /// Эталонный измеритель давления
         /// </summary>
-        private IEthalonChannel _ethalonPressure;
+        private readonly IEthalonChannel _ethalonPressure;
         /// <summary>
         /// Эталонный измеритель напряжения
         /// </summary>
-        private IEthalonChannel _ethalonVoltage;
+        private readonly IEthalonChannel _ethalonVoltage;
+
+        public StepMainError(PressureSensorPoint point, IUserChannel userChannel, IEthalonChannel ethalonPressure, IEthalonChannel ethalonVoltage, Logger logger)
+        {
+            Name = $"Проверка основной погрешности на точке {point.PressurePoint} {point.PressureUnit}";
+            _point = point;
+            _userChannel = userChannel;
+            _ethalonPressure = ethalonPressure;
+            _ethalonVoltage = ethalonVoltage;
+            _logger = logger;
+        }
 
         /// <summary>
         /// Выполнить шаг
@@ -46,6 +64,7 @@ namespace PressureSensorCheck.Check.Steps
         /// <param name="cancel"></param>
         public override void Start(CancellationToken cancel)
         {
+            OnStarted();
             _userChannel.Message = $"Установите на эталонном источнике давления значение {_point.PressurePoint} {_point.PressureUnit}";
             var wh = new ManualResetEvent(false);
             _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
@@ -63,6 +82,8 @@ namespace PressureSensorCheck.Check.Steps
                 VoltageValue = valueVoltage,
                 PressureValue = valuePressure
             };
+            OnResultUpdated(new EventArgStepResult());
+            OnEnd(new EventArgEnd(KeyStep, true));
         }
     }
 }

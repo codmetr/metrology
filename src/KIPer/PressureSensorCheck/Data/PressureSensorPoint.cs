@@ -9,7 +9,7 @@ namespace PressureSensorCheck.Data
     /// <summary>
     /// Точка проверки преобразования давления в напряжение
     /// </summary>
-    public class PressureConverterPoint
+    public class PressureSensorPoint
     {
         /// <summary>
         /// Точка давления

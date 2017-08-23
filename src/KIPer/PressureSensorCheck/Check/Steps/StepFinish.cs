@@ -18,7 +18,7 @@ namespace PressureSensorCheck.Check.Steps
         /// <summary>
         /// Базовая точка
         /// </summary>
-        public PressureConverterPoint _pointBase;
+        public PressureSensorPoint _pointBase;
 
         /// <summary>
         /// Пользовательский канал
