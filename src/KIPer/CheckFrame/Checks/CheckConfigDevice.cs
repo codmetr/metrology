@@ -285,11 +285,11 @@ namespace KipTM.Checks
         }
 
         /// <summary>
-        /// Эталон
+        /// Эталоны
         /// </summary>
-        public DeviceWithChannel EthalonWithCh
+        public Dictionary<ChannelDescriptor, DeviceWithChannel> EthalonWithCh
         {
-            get { return _data.Ethalons.FirstOrDefault().Value; }
+            get { return _data.Ethalons; }
         }
 
         /// <summary>

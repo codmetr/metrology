@@ -74,9 +74,6 @@
     <Compile Include="Checks\ICustomSettingsViewModel.cs" />
     <Compile Include="Checks\IMethodViewModel.cs" />
     <Compile Include="Checks\ISubscriber.cs" />
-    <Compile Include="Checks\Steps\ISettedEthalonChannel.cs" />
-    <Compile Include="Checks\Steps\ISettedUserChannel.cs" />
-    <Compile Include="Checks\Steps\IStoppedOnPoint.cs" />
     <Compile Include="Checks\Steps\ITestStep.cs" />
     <Compile Include="Checks\Steps\IToBaseStep.cs" />
     <Compile Include="Checks\Steps\TestStep.cs" />

@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="KipTM.Checks.View.EthalonConfigView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:config="clr-namespace:KipTM.Checks.ViewModel.Config"
+             xmlns:dto="clr-namespace:ArchiveData.DTO;assembly=ArchiveData"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance config:EthalonConfigViewModel}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <TextBlock><Run Text="Тип СИ:"/></TextBlock>
+        <ComboBox ItemsSource="{Binding Channels}" VerticalContentAlignment="Stretch"
+                  SelectedItem="{Binding SelectedEthalonType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate DataType="dto:ChannelDescriptor">
+                    <TextBlock Text="{Binding Name}" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Text="Тип СИ:">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsAnalog}" Value="TRUE">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <TextBox Text="{Binding AnalogEthDevType, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsAnalog}" Value="TRUE">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <TextBlock><Run Text="Заводской номер:"/></TextBlock>
+        <TextBox Text="{Binding EthalonSerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock><Run Text="Дата предыдущей поверки:"/></TextBlock>
+        <DatePicker FirstDayOfWeek="Monday" DisplayDate="{Binding EthalonPreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Expander Header="Настройки подключения" IsExpanded="True"
+                  Visibility="{Binding IsNoAnalog, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+            <StackPanel>
+                <ContentPresenter Content="{Binding EthalonChanel}"/>
+            </StackPanel>
+        </Expander>
+    </StackPanel>
+</UserControl>

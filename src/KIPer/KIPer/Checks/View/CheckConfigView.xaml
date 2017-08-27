@@ -71,9 +71,9 @@
             <!--Настройки эталона-->
             <GroupBox Header="Настройки эталона:">
                 <ContentPresenter Content="{Binding EthalonOneCh}">
-                    <ContentPresenter.ContentTemplate>
+                    <!--<ContentPresenter.ContentTemplate>
                         <DataTemplate DataType="config1:EthalonConfigViewModel">
-                            <!--x:Key="DtEthalon" x:Name="dasd">-->
+                            --><!--x:Key="DtEthalon" x:Name="dasd">--><!--
                             <StackPanel>
                                 <TextBlock><Run Text="Тип СИ:"/></TextBlock>
                                 <ComboBox ItemsSource="{Binding Channels}" VerticalContentAlignment="Stretch"
@@ -120,7 +120,7 @@
                                 </Expander>
                             </StackPanel>
                         </DataTemplate>
-                    </ContentPresenter.ContentTemplate>
+                    </ContentPresenter.ContentTemplate>-->
                 </ContentPresenter> <!--ContentTemplate="{StaticResource DtEthalon}"/>-->
             </GroupBox>
             <!--Настройки эталона-->

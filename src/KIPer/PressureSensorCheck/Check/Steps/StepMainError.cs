@@ -82,7 +82,7 @@ namespace PressureSensorCheck.Check.Steps
                 VoltageValue = valueVoltage,
                 PressureValue = valuePressure
             };
-            OnResultUpdated(new EventArgStepResult());
+            //OnResultUpdated(new EventArgStepResult());//TODO: пересмотреть механизм сохранения
             OnEnd(new EventArgEnd(KeyStep, true));
         }
     }

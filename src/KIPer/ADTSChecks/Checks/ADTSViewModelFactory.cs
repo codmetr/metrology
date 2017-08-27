@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ADTSChecks.Checks;
 using ADTSChecks.Checks.Data;
 using ADTSChecks.Checks.ViewModel;
 using ADTSChecks.Devices;
@@ -12,21 +7,15 @@ using ADTSChecks.Model.Checks;
 using ArchiveData.DTO;
 using CheckFrame.Channels;
 using CheckFrame.Checks;
-using CheckFrame.Model;
-using CheckFrame.Model.Channels;
 using CheckFrame.ViewModel.Checks.Channels;
 using KipTM.Archive;
-using KipTM.Checks;
 using KipTM.Interfaces.Checks;
 using KipTM.Model;
-using KipTM.Model.Channels;
-using KipTM.Model.Checks;
-using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
 
-namespace KipTM.ViewModel.Checks
+namespace ADTSChecks.Checks
 {
-    [ViewModelFactoryAttribute(typeof(CheckBase))]
+    [ViewModelFactory(typeof(CheckBase))]
     public class ADTSViewModelFactory : ICheckViewModelFactory
     {
         private IDeviceManager _deviceManager;
@@ -97,10 +86,10 @@ namespace KipTM.ViewModel.Checks
             method.ChannelType = checkDeviceChanel;
             var devType = checkConfig.TargetDevice.Device.DeviceType.TypeKey;
             var ethalonChannel = checkConfig.Ethalons.FirstOrDefault().Value.Channel;
-            if (ethalonChannel.Key == UserEthalonChannel.Channel.Key)
-                method.SetEthalonChannel(null, null);
-            else
-                method.SetEthalonChannel(_deviceManager.GetEthalonChannel(ethalonChannel.Key), ethalonChanel);
+            //if (ethalonChannel.Key == UserEthalonChannel.Channel.Key)
+            //    method.SetEthalonChannel(null, null);
+            //else
+            //    method.SetEthalonChannel(_deviceManager.GetEthalonChannel(ethalonChannel.Key), ethalonChanel);
 
             if (method is Calibration)
             {
@@ -114,6 +103,10 @@ namespace KipTM.ViewModel.Checks
                 result = new TestViewModel(adtsMethodic, _propertyPool.ByKey(devType),
                     _deviceManager, resultSet, customSettings);
             }
+            //if (ethalonChannel.Key == UserEthalonChannel.Channel.Key)
+            //    result.SetEthalonChannel(null, null);
+            //else
+            //    result.SetEthalonChannel(ethalonChannel.Key, ethalonChanel);
             if (result != null)
             {
                 result.SetEthalonChannel(ethalonChannel.Key, ethalonChanel);

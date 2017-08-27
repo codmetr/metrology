@@ -16,9 +16,6 @@ using KipTM.Model.Checks.Steps;
 using KipTM.Model.TransportChannels;
 using KipTM.ViewModel.Events;
 using NLog;
-using ISettedEthalonChannel = CheckFrame.Model.Checks.Steps.ISettedEthalonChannel;
-using ISettedUserChannel = CheckFrame.Model.Checks.Steps.ISettedUserChannel;
-using IStoppedOnPoint = CheckFrame.Model.Checks.Steps.IStoppedOnPoint;
 
 namespace CheckFrame.Checks
 {
@@ -39,7 +36,13 @@ namespace CheckFrame.Checks
         protected ITestStep _currenTestStep = null;
         protected readonly object _currenTestStepLocker = new object();
 
+        /// <summary>
+        /// Описатель канала подключения к целевому устройству
+        /// </summary>
         public ITransportChannelType ChannelType;
+        /// <summary>
+        /// Описатель канала подключения к эталонному устройству
+        /// </summary>
         public ITransportChannelType EthalonChannelType;
 
         private IPausedStep _currentPause = null;
@@ -240,21 +243,6 @@ namespace CheckFrame.Checks
                     continue;
                 step.SetUserChannel(userChannel);
             }
-        }
-
-        /// <summary>
-        /// Установить текущую точку как очередную ожидаемую
-        /// </summary>
-        public void SetCurrentValueAsPoint()
-        {
-            IStoppedOnPoint pointstep;
-            lock (_currenTestStepLocker)
-            {
-                pointstep = _currenTestStep as IStoppedOnPoint;
-            }
-            if (pointstep == null)
-                return;
-            pointstep.SetCurrentValueAsPoint();
         }
 
         /// <summary>

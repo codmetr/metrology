@@ -18,12 +18,18 @@ namespace PressureSensorCheck.Check.Steps
         /// <summary>
         /// Базовая точка
         /// </summary>
-        public PressureSensorPoint _pointBase;
+        private readonly PressureSensorPoint _pointBase;
 
         /// <summary>
         /// Пользовательский канал
         /// </summary>
-        private IUserChannel _userChannel;
+        private readonly IUserChannel _userChannel;
+
+        public StepFinish(PressureSensorPoint pointBase, IUserChannel userChannel)
+        {
+            _pointBase = pointBase;
+            _userChannel = userChannel;
+        }
 
         public override void Start(CancellationToken cancel)
         {

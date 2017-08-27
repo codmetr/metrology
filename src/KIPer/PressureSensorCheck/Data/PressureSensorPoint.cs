@@ -27,5 +27,10 @@ namespace PressureSensorCheck.Data
         /// Единицы измерения напряжения
         /// </summary>
         public string VoltageUnit { get; set; }
+
+        /// <summary>
+        /// Допуск по напряжению
+        /// </summary>
+        public double Tollerance { get; set; }
     }
 }

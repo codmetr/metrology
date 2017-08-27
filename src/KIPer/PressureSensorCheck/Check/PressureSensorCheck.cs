@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using ArchiveData.DTO.Params;
+using CheckFrame.Model.Checks.Steps;
 using KipTM.Archive;
-using KipTM.Interfaces.Checks;
+using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using NLog;
 using PressureSensorCheck.Check.Steps;
@@ -47,15 +45,10 @@ namespace PressureSensorCheck.Check
 
             foreach (var point in pressureConverterConfig.Points)
             {
-                steps.Add(new CheckStepConfig(new StepMainError(), false));
+                //steps.Add(new CheckStepConfig(new StepMainError(point, _userChannel, pressureConverterConfig.ChannelFrom, pressureConverterConfig.ChannelTo, _logger), false));
             }
 
             return true;
-        }
-
-        public bool Start(CancellationToken cancel)
-        {
-            throw new NotImplementedException();
         }
 
         public IEnumerable<CheckStepConfig> Steps { get; private set; }

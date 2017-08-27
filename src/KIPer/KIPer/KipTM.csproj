@@ -135,6 +135,12 @@
     <Compile Include="Checks\View\ChannelDescriptorView.xaml.cs">
       <DependentUpon>ChannelDescriptorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Checks\View\EthalonConfigView.xaml.cs">
+      <DependentUpon>EthalonConfigView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Checks\View\PressureSensorCheckConfig.xaml.cs">
+      <DependentUpon>PressureSensorCheckConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataService\DeviceCacheKey.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="DataService\PropertiesLibrary.cs" />
@@ -244,6 +250,14 @@
       <DependentUpon>ResultView.xaml</DependentUpon>
     </Compile>
     <Page Include="Checks\View\ChannelDescriptorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Checks\View\EthalonConfigView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Checks\View\PressureSensorCheckConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

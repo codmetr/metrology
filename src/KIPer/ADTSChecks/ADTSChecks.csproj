@@ -74,7 +74,6 @@
     <Compile Include="Devices\ADTSModelFactory.cs" />
     <Compile Include="Devices\ADTSFactory.cs" />
     <Compile Include="FeaturesDescriptorAdts.cs" />
-    <Compile Include="IViewModelFactory.cs" />
     <Compile Include="Checks\Calibration\Calibration.cs" />
     <Compile Include="Checks\CheckBase.cs" />
     <Compile Include="Checks\Data\ADTSParameters.cs" />
@@ -98,7 +97,6 @@
     </Compile>
     <Compile Include="Result\ResultMarker\ADTSParametersFactory.cs" />
     <Compile Include="Settings\SettingsFactoryAdts.cs" />
-    <Compile Include="ViewModelFactory.cs" />
     <Compile Include="Checks\ViewModel\CheckBaseViewModel.cs" />
     <Compile Include="Checks\Calibration\CalibrationViewModel.cs" />
     <Compile Include="Checks\ViewModel\CheckStateViewModel.cs" />

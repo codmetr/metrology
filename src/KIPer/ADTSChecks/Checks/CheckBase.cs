@@ -3,6 +3,7 @@ using ADTSChecks.Checks.Data;
 using ADTSChecks.Devices;
 using ADTSData;
 using CheckFrame.Checks;
+using CheckFrame.Model.Checks.Steps;
 using NLog;
 
 namespace ADTSChecks.Checks
@@ -58,6 +59,21 @@ namespace ADTSChecks.Checks
         public ADTSModel GetADTS()
         {
             return _adts;
+        }
+
+        /// <summary>
+        /// Установить текущую точку как очередную ожидаемую
+        /// </summary>
+        public void SetCurrentValueAsPoint()
+        {
+            IStoppedOnPoint pointstep;
+            lock (_currenTestStepLocker)
+            {
+                pointstep = _currenTestStep as IStoppedOnPoint;
+            }
+            if (pointstep == null)
+                return;
+            pointstep.SetCurrentValueAsPoint();
         }
 
     }
