@@ -45,7 +45,7 @@ namespace KipTM.ViewModel.Checks.Config
 
             var echalon = _model.EthalonWithCh;
             _ethalons = _model.Channels.ToDictionary(elKey => elKey,
-                elV => new EthalonConfigViewModel(echalon, _model.GetAvailableEthalons(elV),
+                elV => new EthalonConfigViewModel(echalon.Values.FirstOrDefault(), _model.GetAvailableEthalons(elV),
                     channelFactory.GetChannels()));
 
             _model.TargetTransportChannel = _checkDeviceChanel.SelectedChannel;

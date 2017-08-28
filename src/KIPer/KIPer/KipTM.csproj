@@ -132,14 +132,15 @@
     <Compile Include="Archive\ViewModel\TestResultViewModelFactory.cs" />
     <Compile Include="Checks\ViewModel\CheckPool.cs" />
     <Compile Include="Checks\ViewModel\Config\EthalonConfigViewModel.cs" />
+    <Compile Include="Checks\ViewModel\Config\PressureSensorCheckConfigVM.cs" />
     <Compile Include="Checks\View\ChannelDescriptorView.xaml.cs">
       <DependentUpon>ChannelDescriptorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Checks\View\EthalonConfigView.xaml.cs">
       <DependentUpon>EthalonConfigView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Checks\View\PressureSensorCheckConfig.xaml.cs">
-      <DependentUpon>PressureSensorCheckConfig.xaml</DependentUpon>
+    <Compile Include="Checks\View\PressureSensorCheckConfigView.xaml.cs">
+      <DependentUpon>PressureSensorCheckConfigView.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataService\DeviceCacheKey.cs" />
     <Compile Include="Design\DesignDataService.cs" />
@@ -257,7 +258,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Checks\View\PressureSensorCheckConfig.xaml">
+    <Page Include="Checks\View\PressureSensorCheckConfigView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
