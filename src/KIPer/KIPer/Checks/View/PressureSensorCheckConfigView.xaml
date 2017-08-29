@@ -5,13 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:config="clr-namespace:KipTM.Checks.ViewModel.Config"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="600"
+             d:DesignHeight="400" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance config:PressureSensorCheckConfigVm}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -132,6 +133,20 @@
                     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=EthalonPressure.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Grid.Row="6" Grid.Column="0">Класс или погрешность:</TextBlock>
                     <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Path=EthalonPressure.ErrorClass, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    
+                    <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" FontSize="14">Эталон выходного сигнала</TextBlock>
+                    <TextBlock Grid.Row="8" Grid.Column="0">Наименование:</TextBlock>
+                    <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Path=EthalonVoltage.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="9" Grid.Column="0">Тип:</TextBlock>
+                    <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Path=EthalonVoltage.SensorType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="10" Grid.Column="0">Заводской номер:</TextBlock>
+                    <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Path=EthalonVoltage.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="11" Grid.Column="0">Регистрационный номер:</TextBlock>
+                    <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Path=EthalonVoltage.RegNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="12" Grid.Column="0">Разряд:</TextBlock>
+                    <TextBox Grid.Row="12" Grid.Column="1" Text="{Binding Path=EthalonVoltage.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="13" Grid.Column="0">Класс или погрешность:</TextBlock>
+                    <TextBox Grid.Row="13" Grid.Column="1" Text="{Binding Path=EthalonVoltage.ErrorClass, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Окружающая среда">
@@ -140,9 +155,17 @@
                         <Style TargetType="TextBlock">
                             <Setter Property="TextWrapping" Value="Wrap"/>
                             <Setter Property="FontSize" Value="10"/>
+                            <Setter Property="Margin" Value="3"/>
+                        </Style>
+
+                        <Style TargetType="TextBox">
+                            <Setter Property="TextWrapping" Value="Wrap"/>
+                            <Setter Property="FontSize" Value="10"/>
+                            <Setter Property="Margin" Value="3"/>
                         </Style>
                     </Grid.Resources>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
@@ -153,13 +176,16 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0">Температура:</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="0">Температура, °C:</TextBlock>
                     <TextBox Grid.Row="0" Grid.Column="1"></TextBox>
-                    <TextBlock Grid.Row="1" Grid.Column="0">Влажность:</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="2">23±2</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0">Влажность, %:</TextBlock>
                     <TextBox Grid.Row="1" Grid.Column="1"></TextBox>
-                    <TextBlock Grid.Row="2" Grid.Column="0">Давление дня:</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="2">от 30 до 80</TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="0">Давление дня кПа(мм рт.ст.):</TextBlock>
                     <TextBox Grid.Row="2" Grid.Column="1"></TextBox>
-                    <TextBlock Grid.Row="3" Grid.Column="0">Напряжение питания:</TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="2">от 84 до 106,7 (от 630 до 800)</TextBlock>
+                    <TextBlock Grid.Row="3" Grid.Column="0">Напряжение питания, В:</TextBlock>
                     <TextBox Grid.Row="3" Grid.Column="1"></TextBox>
                 </Grid>
             </TabItem>
@@ -169,6 +195,13 @@
                         <Style TargetType="TextBlock">
                             <Setter Property="TextWrapping" Value="Wrap"/>
                             <Setter Property="FontSize" Value="10"/>
+                            <Setter Property="Margin" Value="3"/>
+                        </Style>
+
+                        <Style TargetType="TextBox">
+                            <Setter Property="TextWrapping" Value="Wrap"/>
+                            <Setter Property="FontSize" Value="10"/>
+                            <Setter Property="Margin" Value="3"/>
                         </Style>
                     </Grid.Resources>
                     <Grid.ColumnDefinitions>
