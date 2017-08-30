@@ -22,7 +22,7 @@
                     <Setter Property="HeaderTemplate">
                         <Setter.Value>
                             <DataTemplate DataType="TabItem">
-                                <Border Margin="0" Height="40" Width="150">
+                                <Border Margin="0" Height="40" Width="140">
                                     <TextBlock Text="{Binding}" TextWrapping="Wrap" FontSize="14"/>
                                 </Border>
                             </DataTemplate>

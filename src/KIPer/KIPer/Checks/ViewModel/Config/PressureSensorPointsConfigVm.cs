@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace KipTM.Checks.ViewModel.Config
 {
-    public class PressureSensorCheckConfigVm:INotifyPropertyChanged
+    public class PressureSensorPointsConfigVm:INotifyPropertyChanged
     {
         /// <summary>
         /// Принадлежит:
@@ -71,54 +71,6 @@ namespace KipTM.Checks.ViewModel.Config
         /// Эталон напряжения
         /// </summary>
         public EthalonDescriptor EthalonVoltage { get; set; }
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// Описатель эталона
-    /// </summary>
-    public class EthalonDescriptor: INotifyPropertyChanged
-    {
-
-        /// <summary>
-        /// Наименование:
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Тип:
-        /// </summary>
-        public string SensorType { get; set; }
-
-        /// <summary>
-        /// Заводской номер (номера):
-        /// </summary>
-        public string SerialNumber { get; set; }
-
-        /// <summary>
-        /// Регистрационный номер:
-        /// </summary>
-        public string RegNum { get; set; }
-
-        /// <summary>
-        /// Разряд:
-        /// </summary>
-        public string Category { get; set; }
-
-        /// <summary>
-        /// Класс или погрешность:
-        /// </summary>
-        public string ErrorClass { get; set; }
 
         #region INotifyPropertyChanged
 

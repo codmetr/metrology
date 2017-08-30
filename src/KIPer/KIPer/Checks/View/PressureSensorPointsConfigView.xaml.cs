@@ -20,10 +20,10 @@ namespace KipTM.Checks.View
     /// <summary>
     /// Interaction logic for PressureSensorCheckConfig.xaml
     /// </summary>
-    [View(typeof(PressureSensorCheckConfigVm))]
-    public partial class PressureSensorCheckConfigView : UserControl
+    [View(typeof(PressureSensorPointsConfigVm))]
+    public partial class PressureSensorPointsConfigView : UserControl
     {
-        public PressureSensorCheckConfigView()
+        public PressureSensorPointsConfigView()
         {
             InitializeComponent();
         }
