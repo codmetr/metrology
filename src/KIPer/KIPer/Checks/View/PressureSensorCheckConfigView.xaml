@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
+                <ResourceDictionary Source="../../Skins/FluentSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
         </ResourceDictionary>
@@ -22,8 +22,8 @@
                     <Setter Property="HeaderTemplate">
                         <Setter.Value>
                             <DataTemplate DataType="TabItem">
-                                <Border Margin="0" Height="40" Width="140">
-                                    <TextBlock Text="{Binding}" TextWrapping="Wrap" FontSize="14"/>
+                                <Border Height="40" Width="140">
+                                    <TextBlock Text="{Binding}" TextWrapping="Wrap" Style="{StaticResource TblHeaderStyle}"/>
                                 </Border>
                             </DataTemplate>
                         </Setter.Value>
@@ -33,16 +33,11 @@
             <TabItem Header="Средства измерения">
                 <Grid>
                     <Grid.Resources>
-                        <Style TargetType="TextBlock">
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
                             <Setter Property="TextWrapping" Value="Wrap"/>
-                            <Setter Property="FontSize" Value="10"/>
-                            <Setter Property="Margin" Value="3"/>
                         </Style>
-                        
-                        <Style TargetType="TextBox">
+                        <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}">
                             <Setter Property="TextWrapping" Value="Wrap"/>
-                            <Setter Property="FontSize" Value="10"/>
-                            <Setter Property="Margin" Value="3"/>
                         </Style>
                     </Grid.Resources>
                     <Grid.ColumnDefinitions>
@@ -86,16 +81,11 @@
             <TabItem Header="Эталоны">
                 <Grid>
                     <Grid.Resources>
-                        <Style TargetType="TextBlock">
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
                             <Setter Property="TextWrapping" Value="Wrap"/>
-                            <Setter Property="FontSize" Value="10"/>
-                            <Setter Property="Margin" Value="3"/>
                         </Style>
-
-                        <Style TargetType="TextBox">
+                        <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}">
                             <Setter Property="TextWrapping" Value="Wrap"/>
-                            <Setter Property="FontSize" Value="10"/>
-                            <Setter Property="Margin" Value="3"/>
                         </Style>
                     </Grid.Resources>
                     <Grid.ColumnDefinitions>
@@ -120,7 +110,9 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="14">Эталон давления</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource TblHeaderStyle}">
+                        Эталон давления
+                    </TextBlock>
                     <TextBlock Grid.Row="1" Grid.Column="0">Наименование:</TextBlock>
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=EthalonPressure.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Grid.Row="2" Grid.Column="0">Тип:</TextBlock>
@@ -133,8 +125,10 @@
                     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=EthalonPressure.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Grid.Row="6" Grid.Column="0">Класс или погрешность:</TextBlock>
                     <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Path=EthalonPressure.ErrorClass, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    
-                    <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" FontSize="14">Эталон выходного сигнала</TextBlock>
+
+                    <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource TblHeaderStyle}">
+                        Эталон выходного сигнала
+                    </TextBlock>
                     <TextBlock Grid.Row="8" Grid.Column="0">Наименование:</TextBlock>
                     <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Path=EthalonVoltage.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Grid.Row="9" Grid.Column="0">Тип:</TextBlock>
@@ -152,16 +146,11 @@
             <TabItem Header="Окружающая среда">
                 <Grid>
                     <Grid.Resources>
-                        <Style TargetType="TextBlock">
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
                             <Setter Property="TextWrapping" Value="Wrap"/>
-                            <Setter Property="FontSize" Value="10"/>
-                            <Setter Property="Margin" Value="3"/>
                         </Style>
-
-                        <Style TargetType="TextBox">
+                        <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}">
                             <Setter Property="TextWrapping" Value="Wrap"/>
-                            <Setter Property="FontSize" Value="10"/>
-                            <Setter Property="Margin" Value="3"/>
                         </Style>
                     </Grid.Resources>
                     <Grid.ColumnDefinitions>
@@ -192,16 +181,11 @@
             <TabItem Header="Организация">
                 <Grid>
                     <Grid.Resources>
-                        <Style TargetType="TextBlock">
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
                             <Setter Property="TextWrapping" Value="Wrap"/>
-                            <Setter Property="FontSize" Value="10"/>
-                            <Setter Property="Margin" Value="3"/>
                         </Style>
-
-                        <Style TargetType="TextBox">
+                        <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}">
                             <Setter Property="TextWrapping" Value="Wrap"/>
-                            <Setter Property="FontSize" Value="10"/>
-                            <Setter Property="Margin" Value="3"/>
                         </Style>
                     </Grid.Resources>
                     <Grid.ColumnDefinitions>

@@ -319,6 +319,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Skins\FluentSkin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Skins\Easy2ContentSkins.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -10,10 +10,79 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
+                <ResourceDictionary Source="../../Skins/FluentSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}"/>
+            <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <StackPanel.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}"/>
+            </StackPanel.Resources>
+            <TextBlock Style="{StaticResource TblHeaderStyle}">Верхний предел измерений (ВПИ):</TextBlock>
+            <Grid Margin="10,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0">от:</TextBlock>
+                <TextBox Grid.Column="1"></TextBox>
+                <TextBlock Grid.Column="2">до:</TextBlock>
+                <TextBox Grid.Column="3"></TextBox>
+                <TextBlock Grid.Column="4">ед.изм.:</TextBlock>
+                <ComboBox Grid.Column="5" Style="{StaticResource CbBasicStyle}"></ComboBox>
+            </Grid>
+            <TextBlock Style="{StaticResource TblHeaderStyle}">Погрешности:</TextBlock>
+            <Grid Margin="10,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">Абсолютная погрешность</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="1">% ВПИ:</TextBlock>
+                <TextBox Grid.Column="1" Grid.Row="1"/>
+                <TextBlock Grid.Column="2" Grid.Row="1">%</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="2">Δ:</TextBlock>
+                <TextBox Grid.Column="1" Grid.Row="2"/>
+                <TextBlock Grid.Column="2" Grid.Row="2">В</TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">Относительная погрешность</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="4">γ:</TextBlock>
+                <TextBox Grid.Column="1" Grid.Row="4"/>
+                <TextBlock Grid.Column="2" Grid.Row="4">%</TextBlock>
+            </Grid>
+        </StackPanel>
+        <DataGrid Grid.Column="1" AutoGenerateColumns="False"
+                  CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
+                  CanUserResizeRows="False" CanUserResizeColumns="False" CanUserSortColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Входной сигнал,&#10;мм рт.ст." Width="*"/>
+                <DataGridTextColumn Header="Рассчетное значение&#10;выходного сигнала, В" Width="*"/>
+                <DataGridTextColumn Header="Предел основной&#10;погрешности, %" Width="*"/>
+                <DataGridTextColumn Header="Предел основной&#10;погрешности вариации, %" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>
