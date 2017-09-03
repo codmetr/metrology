@@ -19,6 +19,7 @@ using KipTM.Manuals.ViewModel;
 using KipTM.ViewModel.Events;
 using KipTM.Workflow;
 using KipTM.Workflow.States.Events;
+using KipTM.Workflow.States.PressureSensor;
 using Tools.View;
 using ViewViewmodelMatcher = Tools.ViewViewmodelMatcher;
 
@@ -100,6 +101,8 @@ namespace KipTM.ViewModel
                     BitmapToImage(keyCheck.SmallImg), SelectChecks));
                 _workflows.Add(keyCheck.Key.TypeKey, _checkFactory.GetNew(keyCheck.Key));
             }
+            checkBtns.Add(new OneBtnDescripto("pressureSensor", "Датчик давления", new BitmapImage(), new BitmapImage(), SelectChecks));
+            _workflows.Add("pressureSensor", new PressureSensorWorkflow().Make());
             _checkBtns = checkBtns;
             _eventAggregator.Subscribe(this);
         }

@@ -67,7 +67,7 @@
                     <ribbon:RibbonGroup.ItemTemplate>
                         <DataTemplate>
                             <ribbon:RibbonButton IsEnabled="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBooleanConverter}}"
-                                Label="ADTS" Command="{Binding BtnCmd}" CommandParameter="{Binding Key}"
+                                Label="{Binding Title}" Command="{Binding BtnCmd}" CommandParameter="{Binding Key}"
                                 LargeImageSource="{Binding LagreImage}"
                                 SmallImageSource="{Binding SmallImage}">
                             </ribbon:RibbonButton>

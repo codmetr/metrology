@@ -49,6 +49,10 @@
     <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
     <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
     <Reference Include="CrystalDecisions.Windows.Forms, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="DynamicDataDisplay, Version=0.3.0.1, Culture=neutral, PublicKeyToken=5b7d744a7263923f, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicDataDisplay.0.3.0.1\lib\net45\DynamicDataDisplay.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FlashControlV71, Version=1.0.3187.32366, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
     <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
@@ -89,6 +93,14 @@
     <Reference Include="RibbonControlsLibrary">
       <HintPath>..\Lib\RibbonControlsLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="SAPBusinessObjects.WPF.Viewer, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\SAPBusinessObjects.WPF.Viewer.dll</HintPath>
+    </Reference>
+    <Reference Include="SAPBusinessObjects.WPF.ViewerShared, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\SAPBusinessObjects.WPF.ViewerShared.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\Lib\StructureMap.dll</HintPath>
     </Reference>
@@ -116,6 +128,10 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="ZedGraph, Version=5.1.7.430, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZedGraph.5.1.7\lib\net35-Client\ZedGraph.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -134,6 +150,7 @@
     <Compile Include="Checks\ViewModel\Config\EthalonConfigViewModel.cs" />
     <Compile Include="Checks\ViewModel\Config\PressureSensorPointsConfigVm.cs" />
     <Compile Include="Checks\ViewModel\Config\PressureSensorCheckConfigVM.cs" />
+    <Compile Include="Checks\ViewModel\Config\PressureSensorResultVM.cs" />
     <Compile Include="Checks\View\ChannelDescriptorView.xaml.cs">
       <DependentUpon>ChannelDescriptorView.xaml</DependentUpon>
     </Compile>
@@ -145,6 +162,12 @@
     </Compile>
     <Compile Include="Checks\View\PressureSensorCheckConfigView.xaml.cs">
       <DependentUpon>PressureSensorCheckConfigView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Checks\View\PressureSensorReportView.xaml.cs">
+      <DependentUpon>PressureSensorReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Checks\View\PressureSensorResultsView.xaml.cs">
+      <DependentUpon>PressureSensorResultsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataService\DeviceCacheKey.cs" />
     <Compile Include="Design\DesignDataService.cs" />
@@ -162,6 +185,20 @@
       <DependentUpon>DocsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Manuals\View\WebBrowserUtility.cs" />
+    <Compile Include="Report\PressureSensor\PressureSensorCertificateDto.cs" />
+    <Compile Include="Report\PressureSensor\PressureSensorReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PressureSensorReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\PressureSensor\PressureSensorReportDto.cs" />
+    <Compile Include="Report\PressureSensor\PressureSensorСertificate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PressureSensorСertificate.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Services\FillReportView.xaml.cs">
       <DependentUpon>FillReportView.xaml</DependentUpon>
     </Compile>
@@ -191,7 +228,10 @@
     <Compile Include="Workflow\States\CheckWorkflowFactory.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />
     <Compile Include="Workflow\States\Events\EventCheckState.cs" />
+    <Compile Include="Workflow\States\PressureSensor\ConfigPointsState.cs" />
     <Compile Include="Workflow\States\PressureSensor\ConfigState.cs" />
+    <Compile Include="Workflow\States\PressureSensor\PressureSensorWorkflow.cs" />
+    <Compile Include="Workflow\States\PressureSensor\ResultState.cs" />
     <Compile Include="Workflow\States\ResultState.cs" />
     <Compile Include="Workflow\States\ReportState.cs" />
     <Compile Include="Devices\ViewModel\DeviceTypeCollectionViewModel.cs" />
@@ -268,6 +308,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Checks\View\PressureSensorCheckConfigView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Checks\View\PressureSensorReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Checks\View\PressureSensorResultsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -407,6 +455,14 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <CustomToolNamespace>KipTM</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="Report\PressureSensor\PressureSensorReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PressureSensorReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\PressureSensor\PressureSensorСertificate.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PressureSensorСertificate.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Report\ReportHost.resx">
       <DependentUpon>ReportHost.cs</DependentUpon>
     </EmbeddedResource>
@@ -531,7 +587,13 @@
   <ItemGroup>
     <Resource Include="Content\Archive.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="License-LGPL.txt" />
+  </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo refresh Libs:

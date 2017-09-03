@@ -10,22 +10,22 @@
     <converters:BoolToColorConverterSelected x:Key="BoolToColorConverterSelected"/>
 
     <Style TargetType="TextBlock" x:Key="TblBasicStyle">
-        <Setter Property="FontSize" Value="10"/>
-        <Setter Property="Margin" Value="3"/>
-    </Style>
-
-    <Style TargetType="TextBlock" x:Key="TblHeaderStyle">
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Margin" Value="3"/>
     </Style>
 
+    <Style TargetType="TextBlock" x:Key="TblHeaderStyle">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Margin" Value="3"/>
+    </Style>
+
     <Style TargetType="TextBox" x:Key="TbxBasicStyle">
-        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="Margin" Value="3"/>
     </Style>
 
     <Style TargetType="ComboBox" x:Key="CbBasicStyle">
-        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="Margin" Value="3"/>
     </Style>
 </ResourceDictionary>
