@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewer="clr-namespace:SAPBusinessObjects.WPF.Viewer;assembly=SAPBusinessObjects.WPF.Viewer"
              xmlns:local="clr-namespace:KipTM.Checks.View"
+             xmlns:attachedCommandBehavior="clr-namespace:AttachedCommandBehavior;assembly=Tools.View"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000">
     <UserControl.Resources>
@@ -31,9 +32,21 @@
                 </Style>
             </TabControl.Resources>
             <TabItem Header="Свидетельство о поверке">
-                <viewer:CrystalReportsViewer/>
+                <viewer:CrystalReportsViewer />
             </TabItem>
-            <TabItem Header="Протокол поверки">
+            <TabItem>
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <Border Height="50" Width="160">
+                            <TextBlock Text="Протокол поверки" TextWrapping="Wrap"
+                                       Style="{StaticResource TblHeaderStyle}" VerticalAlignment="Center">
+                                <attachedCommandBehavior:CommandBehaviorCollection.Behaviors>
+                                    <attachedCommandBehavior:BehaviorBinding Event="MouseLeftButtonDown" Command="{Binding LoadedCommand}"/>
+                                </attachedCommandBehavior:CommandBehaviorCollection.Behaviors>
+                            </TextBlock>
+                        </Border>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
                 <viewer:CrystalReportsViewer/>
             </TabItem>
         </TabControl>

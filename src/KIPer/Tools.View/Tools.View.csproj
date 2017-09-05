@@ -46,6 +46,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttachedCommandBehavior\BehaviorBinding.cs" />
+    <Compile Include="AttachedCommandBehavior\CommandBehavior.cs" />
+    <Compile Include="AttachedCommandBehavior\CommandBehaviorBinding.cs" />
+    <Compile Include="AttachedCommandBehavior\CommandBehaviorCollection.cs" />
+    <Compile Include="AttachedCommandBehavior\EventHandlerGenerator.cs" />
+    <Compile Include="AttachedCommandBehavior\ExecutionStrategy.cs" />
     <Compile Include="CommandWrapper.cs" />
     <Compile Include="Converters\DoubleToTimespanConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
