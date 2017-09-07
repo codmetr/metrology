@@ -191,13 +191,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PressureSensorReport.rpt</DependentUpon>
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Report\PressureSensor\PressureSensorReportDto.cs" />
+    <Compile Include="Report\PressureSensor\PressureSensorReportViewModel.cs" />
     <Compile Include="Report\PressureSensor\PressureSensorСertificate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PressureSensorСertificate.rpt</DependentUpon>
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Services\FillReportView.xaml.cs">
       <DependentUpon>FillReportView.xaml</DependentUpon>
@@ -231,6 +234,7 @@
     <Compile Include="Workflow\States\PressureSensor\ConfigPointsState.cs" />
     <Compile Include="Workflow\States\PressureSensor\ConfigState.cs" />
     <Compile Include="Workflow\States\PressureSensor\PressureSensorWorkflow.cs" />
+    <Compile Include="Workflow\States\PressureSensor\ReportState.cs" />
     <Compile Include="Workflow\States\PressureSensor\ResultState.cs" />
     <Compile Include="Workflow\States\ResultState.cs" />
     <Compile Include="Workflow\States\ReportState.cs" />
@@ -458,10 +462,12 @@
     <EmbeddedResource Include="Report\PressureSensor\PressureSensorReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>PressureSensorReport.cs</LastGenOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\PressureSensor\PressureSensorСertificate.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>PressureSensorСertificate.cs</LastGenOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\ReportHost.resx">
       <DependentUpon>ReportHost.cs</DependentUpon>

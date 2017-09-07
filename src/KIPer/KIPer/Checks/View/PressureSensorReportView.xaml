@@ -6,8 +6,9 @@
              xmlns:viewer="clr-namespace:SAPBusinessObjects.WPF.Viewer;assembly=SAPBusinessObjects.WPF.Viewer"
              xmlns:local="clr-namespace:KipTM.Checks.View"
              xmlns:attachedCommandBehavior="clr-namespace:AttachedCommandBehavior;assembly=Tools.View"
-             mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="1000">
+             xmlns:pressureSensor="clr-namespace:KipTM.Report.PressureSensor"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance pressureSensor:PressureSensorReportViewModel}"
+             d:DesignHeight="600" d:DesignWidth="1000" Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -32,22 +33,10 @@
                 </Style>
             </TabControl.Resources>
             <TabItem Header="Свидетельство о поверке">
-                <viewer:CrystalReportsViewer />
+                <viewer:CrystalReportsViewer x:Name="CertificateReport"/>
             </TabItem>
-            <TabItem>
-                <TabItem.HeaderTemplate>
-                    <DataTemplate>
-                        <Border Height="50" Width="160">
-                            <TextBlock Text="Протокол поверки" TextWrapping="Wrap"
-                                       Style="{StaticResource TblHeaderStyle}" VerticalAlignment="Center">
-                                <attachedCommandBehavior:CommandBehaviorCollection.Behaviors>
-                                    <attachedCommandBehavior:BehaviorBinding Event="MouseLeftButtonDown" Command="{Binding LoadedCommand}"/>
-                                </attachedCommandBehavior:CommandBehaviorCollection.Behaviors>
-                            </TextBlock>
-                        </Border>
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
-                <viewer:CrystalReportsViewer/>
+            <TabItem Header="Протокол поверки">
+                <viewer:CrystalReportsViewer x:Name="MainReport"/>
             </TabItem>
         </TabControl>
     </Grid>
