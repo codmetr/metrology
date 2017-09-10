@@ -14,7 +14,11 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Skins/FluentSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
+            <ControlTemplate x:Key="CrTempl">
+                <viewer:CrystalReportsViewer x:Name="MainReport"
+                                             ShowCopyButton="False" ShowLogo="False" ShowRefreshButton="False"
+                                             ShowSearchTextButton="False" ShowToggleSidePanelButton="False" ToggleSidePanel="None"/>
+            </ControlTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="20">
@@ -33,10 +37,11 @@
                 </Style>
             </TabControl.Resources>
             <TabItem Header="Свидетельство о поверке">
-                <viewer:CrystalReportsViewer x:Name="CertificateReport"/>
+                <viewer:CrystalReportsViewer x:Name="CertificateReport" Template="{StaticResource CrTempl}"/>
             </TabItem>
             <TabItem Header="Протокол поверки">
-                <viewer:CrystalReportsViewer x:Name="MainReport"/>
+                <viewer:CrystalReportsViewer x:Name="MainReport" Template="{StaticResource CrTempl}">
+                </viewer:CrystalReportsViewer>
             </TabItem>
         </TabControl>
     </Grid>

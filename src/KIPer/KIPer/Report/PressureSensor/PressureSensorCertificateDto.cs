@@ -14,9 +14,13 @@ namespace KipTM.Report.PressureSensor
         public object Organization { get; set; }
 
         /// <summary>
-        /// Наименование юридического лица
+        /// Номер свивдетельства о поверке
         /// </summary>
-        public object TimeEnd { get; set; }
+        public object CertificateNumber { get; set; }
 
+        /// <summary>
+        /// Время действия сертификата
+        /// </summary>
+        public object Validity { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace KipTM.Report.PressureSensor
         {
             MainReportData = new PressureSensorReport();
             MainReportData.Load();
-            MainReportData.SetDataSource(mainReportData);
+            MainReportData.SetDataSource(new[] { mainReportData});
             CertificateReportDate = new PressureSensorСertificate();
             CertificateReportDate.Load();
         }
