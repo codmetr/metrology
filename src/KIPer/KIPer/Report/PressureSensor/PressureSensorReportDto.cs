@@ -177,6 +177,16 @@ namespace KipTM.Report.PressureSensor
         public object Title { get; set; }
 
         /// <summary>
+        /// Тип прибора
+        /// </summary>
+        public object Type { get; set; }
+
+        /// <summary>
+        /// Разряд, класс или погрешность
+        /// </summary>
+        public object RangeClass { get; set; }
+
+        /// <summary>
         /// Серийный номер
         /// </summary>
         public object SerialNumber { get; set; }

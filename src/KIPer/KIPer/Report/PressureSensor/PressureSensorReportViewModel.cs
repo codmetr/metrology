@@ -15,13 +15,17 @@ namespace KipTM.Report.PressureSensor
         /// Визуальная модель отчетов
         /// </summary>
         /// <param name="mainReportData"></param>
-        public PressureSensorReportViewModel(PressureSensorReportDto mainReportData)
+        /// <param name="certificateDto"></param>
+        public PressureSensorReportViewModel(PressureSensorReportDto mainReportData, PressureSensorCertificateDto certificateDto)
         {
             MainReportData = new PressureSensorReport();
             MainReportData.Load();
-            MainReportData.SetDataSource(new[] { mainReportData});
+            //MainReportData.SetDataSource(new[] { mainReportData});
             CertificateReportDate = new PressureSensorСertificate();
             CertificateReportDate.Load();
+            //CertificateReportDate.SetDataSource(new[] { certificateDto });
+            //MainReportData = null;
+            //CertificateReportDate = null;
         }
 
         /// <summary>

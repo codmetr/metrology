@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using GalaSoft.MvvmLight.Threading;
 
@@ -28,6 +29,7 @@ namespace KipTM
                 if (logger != null)
                     logger.Info(string.Format("Start App"));
                 base.OnStartup(e);
+                Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             }
             catch (Exception ex)
             {
@@ -38,6 +40,11 @@ namespace KipTM
 
         }
 
+
+        private static void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            Debug.WriteLine(e.Exception.ToString());
+        }
 
         #endregion
     }

@@ -36,12 +36,12 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="Свидетельство о поверке">
-                <viewer:CrystalReportsViewer x:Name="CertificateReport" Template="{StaticResource CrTempl}"/>
-            </TabItem>
             <TabItem Header="Протокол поверки">
                 <viewer:CrystalReportsViewer x:Name="MainReport" Template="{StaticResource CrTempl}">
                 </viewer:CrystalReportsViewer>
+            </TabItem>
+            <TabItem Header="Свидетельство о поверке">
+                <viewer:CrystalReportsViewer x:Name="CertificateReport" Template="{StaticResource CrTempl}"/>
             </TabItem>
         </TabControl>
     </Grid>

@@ -29,6 +29,6 @@ namespace KipTM.Workflow.States.PressureSensor
             //throw new NotImplementedException();
         }
 
-        public object ViewModel => _vm;
+        public object ViewModel {get { return _vm; } }
     }
 }
