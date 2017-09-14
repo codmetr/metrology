@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CrystalDecisions.CrystalReports.Engine;
 
 namespace KipTM.Report.PressureSensor
 {
@@ -19,9 +20,11 @@ namespace KipTM.Report.PressureSensor
         public PressureSensorReportViewModel(PressureSensorReportDto mainReportData, PressureSensorCertificateDto certificateDto)
         {
             MainReportData = new PressureSensorReport();
+            //MainReportData = new BlankReport();
             MainReportData.Load();
-            //MainReportData.SetDataSource(new[] { mainReportData});
-            CertificateReportDate = new PressureSensorСertificate();
+            MainReportData.SetDataSource(new[] { mainReportData});
+            //CertificateReportDate = new PressureSensorСertificate();
+            CertificateReportDate = new BlankReport();
             CertificateReportDate.Load();
             //CertificateReportDate.SetDataSource(new[] { certificateDto });
             //MainReportData = null;
@@ -31,11 +34,11 @@ namespace KipTM.Report.PressureSensor
         /// <summary>
         /// Основной отчет
         /// </summary>
-        public PressureSensorReport MainReportData { get; private set; }
+        public ReportClass MainReportData { get; private set; }
 
         /// <summary>
         /// Отчет свидельство
         /// </summary>
-        public PressureSensorСertificate CertificateReportDate { get; private set; }
+        public ReportClass CertificateReportDate { get; private set; }
     }
 }

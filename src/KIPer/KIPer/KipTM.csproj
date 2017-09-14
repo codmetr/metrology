@@ -185,6 +185,12 @@
       <DependentUpon>DocsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Manuals\View\WebBrowserUtility.cs" />
+    <Compile Include="Report\PressureSensor\BlankReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BlankReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Report\PressureSensor\PressureSensorCertificateDto.cs" />
     <Compile Include="Report\PressureSensor\PressureSensorReport.cs">
       <AutoGen>True</AutoGen>
@@ -459,6 +465,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <CustomToolNamespace>KipTM</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="Report\PressureSensor\BlankReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>BlankReport.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Report\PressureSensor\PressureSensorReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>PressureSensorReport.cs</LastGenOutput>
@@ -592,9 +602,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Content\Archive.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="License-LGPL.txt" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

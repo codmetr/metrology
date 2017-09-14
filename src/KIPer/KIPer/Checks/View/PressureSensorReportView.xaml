@@ -10,20 +10,15 @@
              mc:Ignorable="d" d:DataContext="{d:DesignInstance pressureSensor:PressureSensorReportViewModel}"
              d:DesignHeight="600" d:DesignWidth="1000" Loaded="UserControl_Loaded">
     <UserControl.Resources>
-        <ResourceDictionary>
+        <!--<ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Skins/FluentSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <ControlTemplate x:Key="CrTempl">
-                <viewer:CrystalReportsViewer x:Name="MainReport"
-                                             ShowCopyButton="False" ShowLogo="False" ShowRefreshButton="False"
-                                             ShowSearchTextButton="False" ShowToggleSidePanelButton="False" ToggleSidePanel="None"/>
-            </ControlTemplate>
-        </ResourceDictionary>
+        </ResourceDictionary>-->
     </UserControl.Resources>
     <Grid Margin="20">
         <TabControl TabStripPlacement="Left">
-            <TabControl.Resources>
+            <!--<TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="HeaderTemplate">
                         <Setter.Value>
@@ -35,13 +30,15 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
-            </TabControl.Resources>
+            </TabControl.Resources>-->
             <TabItem Header="Протокол поверки">
-                <viewer:CrystalReportsViewer x:Name="MainReport" Template="{StaticResource CrTempl}">
-                </viewer:CrystalReportsViewer>
+                <viewer:CrystalReportsViewer x:Name="MainReport"/>
             </TabItem>
-            <TabItem Header="Свидетельство о поверке">
-                <viewer:CrystalReportsViewer x:Name="CertificateReport" Template="{StaticResource CrTempl}"/>
+            <!--<TabItem Header="Свидетельство о поверке">
+                <viewer:CrystalReportsViewer x:Name="CertificateReport"/>
+            </TabItem>-->
+            <TabItem Header="debug">
+                <Button Click="Button_Click">dads</Button>
             </TabItem>
         </TabControl>
     </Grid>

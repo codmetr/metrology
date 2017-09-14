@@ -30,11 +30,21 @@ namespace KipTM.Checks.View
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            //var vm = DataContext as PressureSensorReportViewModel;
+            //if(vm == null)
+            //    return;
+            //CertificateReport.ViewerCore.ReportSource = vm.CertificateReportDate;
+            //MainReport.ViewerCore.ReportSource = vm.MainReportData;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
             var vm = DataContext as PressureSensorReportViewModel;
             if(vm == null)
                 return;
-            CertificateReport.ViewerCore.ReportSource = vm.CertificateReportDate;
+            //CertificateReport.ViewerCore.ReportSource = vm.CertificateReportDate;
             MainReport.ViewerCore.ReportSource = vm.MainReportData;
+
         }
     }
 }
