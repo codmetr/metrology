@@ -10,35 +10,43 @@
              mc:Ignorable="d" d:DataContext="{d:DesignInstance pressureSensor:PressureSensorReportViewModel}"
              d:DesignHeight="600" d:DesignWidth="1000" Loaded="UserControl_Loaded">
     <UserControl.Resources>
-        <!--<ResourceDictionary>
+        <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Skins/FluentSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>-->
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="20">
         <TabControl TabStripPlacement="Left">
-            <!--<TabControl.Resources>
-                <Style TargetType="TabItem">
-                    <Setter Property="HeaderTemplate">
-                        <Setter.Value>
-                            <DataTemplate DataType="TabItem">
-                                <Border Height="50" Width="160">
-                                    <TextBlock Text="{Binding}" TextWrapping="Wrap" Style="{StaticResource TblHeaderStyle}" VerticalAlignment="Center"/>
-                                </Border>
-                            </DataTemplate>
-                        </Setter.Value>
-                    </Setter>
+            <TabControl.Resources>
+                <DataTemplate x:Key="DtTabHeader"  DataType="TabItem">
+                    <Border Height="50" Width="160">
+                        <TextBlock Text="{Binding}" TextWrapping="Wrap" Style="{StaticResource TblHeaderStyle}" VerticalAlignment="Center"/>
+                    </Border>
+                </DataTemplate>
+                <Style x:Key="StForTab" TargetType="TabItem">
+                    <Setter Property="HeaderTemplate" Value="{StaticResource DtTabHeader}"/>
                 </Style>
-            </TabControl.Resources>-->
-            <TabItem Header="Протокол поверки">
-                <viewer:CrystalReportsViewer x:Name="MainReport"/>
+            </TabControl.Resources>
+            <TabItem Header="Протокол поверки" Style="{StaticResource StForTab}" Loaded="MainReport_Loaded">
+                <viewer:CrystalReportsViewer 
+                    x:Name="MainReport" 
+                    ShowCopyButton="False" ShowLogo="False" ShowPrevPageButton="True"
+                    ShowRefreshButton="False" ShowSearchTextButton="False" ShowStatusbar="True"
+                    ShowToggleSidePanelButton="False" ShowToolbar="True" ToggleSidePanel="None"/>
             </TabItem>
-            <!--<TabItem Header="Свидетельство о поверке">
-                <viewer:CrystalReportsViewer x:Name="CertificateReport"/>
-            </TabItem>-->
-            <TabItem Header="debug">
-                <Button Click="Button_Click">dads</Button>
+            <TabItem>
+                <TabItem.Header>
+                    <Border Height="50" Width="160">
+                        <TextBlock Text="Свидетельство о поверке" TextWrapping="Wrap" MouseLeftButtonDown="CertificateReport_Loaded"
+                                   Style="{StaticResource TblHeaderStyle}" VerticalAlignment="Center"/>
+                    </Border>
+                </TabItem.Header>
+                <viewer:CrystalReportsViewer
+                    x:Name="CertificateReport" 
+                    ShowCopyButton="False" ShowLogo="False" ShowPrevPageButton="True"
+                    ShowRefreshButton="False" ShowSearchTextButton="False" ShowStatusbar="True"
+                    ShowToggleSidePanelButton="False" ShowToolbar="True" ToggleSidePanel="None"/>
             </TabItem>
         </TabControl>
     </Grid>

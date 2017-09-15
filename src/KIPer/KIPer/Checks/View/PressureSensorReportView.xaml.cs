@@ -23,6 +23,8 @@ namespace KipTM.Checks.View
     [View(typeof(PressureSensorReportViewModel))]
     public partial class PressureSensorReportView : UserControl
     {
+        private bool _isMainReportLoaded = false;
+        private bool _isCertificateReportLoaded = false;
         public PressureSensorReportView()
         {
             InitializeComponent();
@@ -30,20 +32,28 @@ namespace KipTM.Checks.View
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            //var vm = DataContext as PressureSensorReportViewModel;
-            //if(vm == null)
-            //    return;
-            //CertificateReport.ViewerCore.ReportSource = vm.CertificateReportDate;
-            //MainReport.ViewerCore.ReportSource = vm.MainReportData;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void MainReport_Loaded(object sender, RoutedEventArgs e)
         {
+            if(_isMainReportLoaded)
+                return;
+            _isMainReportLoaded = true;
             var vm = DataContext as PressureSensorReportViewModel;
             if(vm == null)
                 return;
-            //CertificateReport.ViewerCore.ReportSource = vm.CertificateReportDate;
             MainReport.ViewerCore.ReportSource = vm.MainReportData;
+        }
+
+        private void CertificateReport_Loaded(object sender, MouseButtonEventArgs e)
+        {
+            if(_isCertificateReportLoaded)
+                return;
+            _isCertificateReportLoaded = true;
+            var vm = DataContext as PressureSensorReportViewModel;
+            if(vm == null)
+                return;
+            CertificateReport.ViewerCore.ReportSource = vm.CertificateReportDate;
 
         }
     }
