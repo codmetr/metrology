@@ -54,7 +54,7 @@ namespace DPI620Genii
             return _reader.ReadLine();
         }
 
-        public void SetUnits(int slotId, String unitCode)
+        public void SetUnits(int slotId, string unitCode)
         {
             Log("DPI620 UNIT CODE " + unitCode);
 
