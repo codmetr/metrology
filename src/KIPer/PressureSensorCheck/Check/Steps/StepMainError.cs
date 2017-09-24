@@ -72,7 +72,7 @@ namespace PressureSensorCheck.Check.Steps
             if (cancel.IsCancellationRequested)
                 return;
             var valueVoltage = _ethalonVoltage.GetEthalonValue(_point.VoltagePoint, cancel);
-            var valuePressure = _ethalonVoltage.GetEthalonValue(_point.PressurePoint, cancel);
+            var valuePressure = _ethalonPressure.GetEthalonValue(_point.PressurePoint, cancel);
             _result = new PressureSensorPointResult()
             {
                 PressurePoint = _point.PressurePoint,

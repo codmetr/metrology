@@ -9,68 +9,19 @@ using System.Threading.Tasks;
 
 namespace KipTM.Checks.ViewModel.Config
 {
+    /// <summary>
+    /// Конфигурация самой проверки и её исполнение
+    /// </summary>
     public class PressureSensorPointsConfigVm:INotifyPropertyChanged
     {
-        /// <summary>
-        /// Принадлежит:
-        /// </summary>
-        public string Master { get; set; }
+        public ObservableCollection<PointViewModel> Points { get; set; }
 
-        /// <summary>
-        /// Наименование:
-        /// </summary>
-        public string Title { get; set; }
+        public PointViewModel SelectedPoint { get; set; }
 
-        /// <summary>
-        /// Тип:
-        /// </summary>
-        public string SensorType { get; set; }
+        public PointConfigViewModel NewConfig { get; set; }
 
-        /// <summary>
-        /// Модификация:
-        /// </summary>
-        public string SensorModel { get; set; }
+        
 
-        /// <summary>
-        /// Регистрационный номер в Федеральном информационном фонде по обеспечению единства измерений:
-        /// </summary>
-        public string RegNum { get; set; }
-
-        /// <summary>
-        /// Серия и номер знака предыдущей проверки (если такие серия и номер имеются):
-        /// </summary>
-        public string NumberLastCheck { get; set; }
-
-        /// <summary>
-        /// Заводской номер (номера):
-        /// </summary>
-        public string SerialNumber { get; set; }
-
-        /// <summary>
-        /// Поверено:
-        /// </summary>
-        /// <remarks>
-        /// Наименование величин, диапазонов, на которых поверено средство измерений (если предусмотрено методикой поверки)
-        /// </remarks>
-        public string CheckedParameters { get; set; }
-
-        /// <summary>
-        /// Поверено в соответствии с:
-        /// </summary>
-        /// <remarks>
-        /// Наименование документа, на основании которого выполнена поверка
-        /// </remarks>
-        public string ChecklLawBase { get; set; }
-
-        /// <summary>
-        /// Эталон давления
-        /// </summary>
-        public EthalonDescriptor EthalonPressure { get; set; }
-
-        /// <summary>
-        /// Эталон напряжения
-        /// </summary>
-        public EthalonDescriptor EthalonVoltage { get; set; }
 
         #region INotifyPropertyChanged
 
@@ -82,5 +33,103 @@ namespace KipTM.Checks.ViewModel.Config
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// Описатель одной точки проверки
+    /// </summary>
+    public class PointViewModel : INotifyPropertyChanged
+    {
+        public PointConfigViewModel Config { get; set; }
+
+        public PointResultViewModel Result { get; set; }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+    }
+
+    /// <summary>
+    /// Конфигурация точки
+    /// </summary>
+    public class PointConfigViewModel : INotifyPropertyChanged
+    {
+        /// <summary>
+        /// Проверяемая точка давления
+        /// </summary>
+        public double Pressire { get; set; }
+
+        /// <summary>
+        /// Единицы измерения давления
+        /// </summary>
+        public string Unit { get; set; }
+
+        /// <summary>
+        /// Ожидаемое значение напряжения
+        /// </summary>
+        public double U { get; set; }
+
+        /// <summary>
+        /// Допуск по напряжению
+        /// </summary>
+        public double dU { get; set; }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+    }
+
+    /// <summary>
+    /// Результат на точке
+    /// </summary>
+    public class PointResultViewModel : INotifyPropertyChanged
+    {
+        /// <summary>
+        /// Фактическое давление
+        /// </summary>
+        public double PressureReal { get; set; }
+
+        /// <summary>
+        /// Фактическое напряжение
+        /// </summary>
+        public double UReal { get; set; }
+
+        /// <summary>
+        /// Фактическая погрешность
+        /// </summary>
+        public double dUReal { get; set; }
+
+        /// <summary>
+        /// Напряжение на заданной точке в допуске
+        /// </summary>
+        public bool IsCorrect { get; set; }
+        
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
     }
 }

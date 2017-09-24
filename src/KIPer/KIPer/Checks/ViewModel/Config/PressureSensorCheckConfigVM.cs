@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace KipTM.Checks.ViewModel.Config
 {
+    /// <summary>
+    /// Конфигурация проверки
+    /// </summary>
     public class PressureSensorCheckConfigVm:INotifyPropertyChanged
     {
         /// <summary>

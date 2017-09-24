@@ -84,7 +84,7 @@ namespace Dpi620Test
         }
 
 
-        internal class Dpi620StateMoq
+        protected class Dpi620StateMoq
         {
             internal static Dpi620StateMoq Instance { get; } = new Dpi620StateMoq();
 

@@ -47,7 +47,7 @@ namespace PressureSensorCheck.Check
             {
                 //steps.Add(new CheckStepConfig(new StepMainError(point, _userChannel, pressureConverterConfig.ChannelFrom, pressureConverterConfig.ChannelTo, _logger), false));
             }
-
+            Steps = steps;
             return true;
         }
 
