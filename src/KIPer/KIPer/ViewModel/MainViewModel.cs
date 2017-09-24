@@ -94,14 +94,15 @@ namespace KipTM.ViewModel
             _testResults.LoadTests(_dataService.ResultsArchive);
             _workflows = new Dictionary<string, IWorkflow>();
             var checkBtns = new List<OneBtnDescripto>();
-            foreach (var keyCheck in _checkFactory.GetAvailableKeys())
-            {
-                checkBtns.Add(new OneBtnDescripto(keyCheck.Key.TypeKey, keyCheck.Title,
-                    BitmapToImage(keyCheck.BigImg),
-                    BitmapToImage(keyCheck.SmallImg), SelectChecks));
-                _workflows.Add(keyCheck.Key.TypeKey, _checkFactory.GetNew(keyCheck.Key));
-            }
-            checkBtns.Add(new OneBtnDescripto("pressureSensor", "Датчик давления", new BitmapImage(), new BitmapImage(), SelectChecks));
+            //foreach (var keyCheck in _checkFactory.GetAvailableKeys())
+            //{
+            //    checkBtns.Add(new OneBtnDescripto(keyCheck.Key.TypeKey, keyCheck.Title,
+            //        BitmapToImage(keyCheck.BigImg),
+            //        BitmapToImage(keyCheck.SmallImg), SelectChecks));
+            //    _workflows.Add(keyCheck.Key.TypeKey, _checkFactory.GetNew(keyCheck.Key));
+            //}
+            checkBtns.Add(new OneBtnDescripto("pressureSensor", "Датчик давления", BitmapToImage(Resources.EHCerabarM),
+                BitmapToImage(Resources.EHCerabarM), SelectChecks));
             _workflows.Add("pressureSensor", new PressureSensorWorkflow().Make());
             _checkBtns = checkBtns;
             _eventAggregator.Subscribe(this);

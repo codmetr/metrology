@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:local="clr-namespace:Dpi620Test"
-        xmlns:dnmDD="http://research.microsoft.com/DynamicDataDisplay/1.0"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        xmlns:dnmDD="http://research.microsoft.com/DynamicDataDisplay/1.0"
+        xmlns:liveChart="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:MainViewModel}"
         Title="Консоль DPI620Genii" Height="400" Width="800">
@@ -35,17 +37,21 @@
                         <RadioButton GroupName="{Binding Name}" VerticalContentAlignment="Center" DockPanel.Dock="Top"
                                      Content="Автоопрос" Command="{Binding StartAutoread}"/>
                         <dnmDD:ViewportUIContainer DockPanel.Dock="Bottom">
-                            <UniformGrid Columns="1">
-                                <dnmDD:ChartPlotter Name="plotter" Margin="10">
-                                    <dnmDD:ChartPlotter.HorizontalAxis>
-                                        <dnmDD:HorizontalTimeSpanAxis Name="xAxis"/>
-                                    </dnmDD:ChartPlotter.HorizontalAxis>
-                                    <dnmDD:ChartPlotter.VerticalAxis>
-                                        <dnmDD:VerticalIntegerAxis Name="yU"/>
-                                    </dnmDD:ChartPlotter.VerticalAxis>
-                                </dnmDD:ChartPlotter>
-                            </UniformGrid>
+                            <dnmDD:ChartPlotter x:Name="plotter" Margin="10" DataContext="{Binding}" DataContextChanged="FrameworkElement_OnDataContextChanged">
+                                <dnmDD:ChartPlotter.HorizontalAxis>
+                                    <dnmDD:HorizontalTimeSpanAxis Name="xAxis" />
+                                </dnmDD:ChartPlotter.HorizontalAxis>
+                                <dnmDD:ChartPlotter.VerticalAxis>
+                                    <dnmDD:VerticalIntegerAxis Name="yU"/>
+                                </dnmDD:ChartPlotter.VerticalAxis>
+                            </dnmDD:ChartPlotter>
                         </dnmDD:ViewportUIContainer>
+                        <!--<liveChart:CartesianChart>
+                            <liveChart:CartesianChart.Series>
+                                <liveChart:LineSeries />
+                            </liveChart:CartesianChart.Series>
+
+                        </liveChart:CartesianChart>-->
                     </DockPanel>
                 </Grid>
             </DataTemplate>
@@ -81,10 +87,10 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <controls:ToggleSwitch 
+        <controls:ToggleSwitch x:Name ="tsConnect"
             Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left"
-            OnLabel="Подключено" OffLabel="Отключено"
-            IsChecked="{Binding IsConnected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            OnLabel="Подключено" OffLabel="Отключено" CheckChangedCommand="{Binding CheckChanged}" CheckedCommandParameter="{Binding ElementName=tsConnect, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+            IsChecked="{Binding IsConnected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,-5,0,5"/>
 
         <GroupBox Header="Слот 1" Grid.Column="0" Grid.Row="1" IsEnabled="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}">
             <ContentPresenter Content="{Binding Slot1}" ContentTemplate="{StaticResource SlotDT}"
@@ -94,5 +100,34 @@
             <ContentPresenter Content="{Binding Slot2}" ContentTemplate="{StaticResource SlotDT}"
                               IsEnabled="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}"/>
         </GroupBox>
+        <Expander Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Header="Лог">
+            <StackPanel>
+                <ListView ItemsSource="{Binding Log.Log}" Name="logView" Height="100">
+                    <ListView.View>
+                        <GridView>
+                            <GridView.Columns>
+                                <GridViewColumn DisplayMemberBinding="{Binding TimeStamp}" Header="Время" Width="100" x:Name="colmn1"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Level}" Header="Уровень" Width="100" x:Name="colmn2"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Message}"  Header="Сообщение" Width="{Binding ElementName=helperField, Path=ActualWidth}"/>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Grid Visibility="Hidden" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <!--Width is bound to width of the first GridViewColumn -->
+                        <ColumnDefinition Width="{Binding ElementName=colmn1, Path=ActualWidth}"/>
+                        <!--Width is bound to width of the first GridViewColumn -->
+                        <ColumnDefinition Width="{Binding ElementName=colmn2, Path=ActualWidth}"/>
+                        <!--Width is set to "Fill"-->
+                        <ColumnDefinition Width="*"/>
+                        <!--Correction Width-->
+                        <ColumnDefinition Width="10"/>
+                    </Grid.ColumnDefinitions>
+                    <!--This is the hidden helper Field which is used to bind to, using the "Fill" column of the helper grid-->
+                    <Grid Grid.Column="1" x:Name="helperField"/>
+                </Grid>
+            </StackPanel>
+        </Expander>
     </Grid>
 </controls:MetroWindow>

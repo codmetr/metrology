@@ -44,6 +44,7 @@
     <Compile Include="DPI620DriverCom.cs" />
     <Compile Include="DPI620DriverUsb.cs" />
     <Compile Include="DPI620Genii.cs" />
+    <Compile Include="IDPI620Driver.cs" />
     <Compile Include="IDpi620Genii.cs" />
     <Compile Include="ParamId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

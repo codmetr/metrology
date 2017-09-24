@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DPI620Genii
 {
-    public class DPI620DriverUsb
+    public class DPI620DriverUsb : IDPI620Driver
     {
         readonly Dictionary<string, string> _dicCmdSetUnit = new Dictionary<string, string>()
         {
