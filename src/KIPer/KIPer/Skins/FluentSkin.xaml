@@ -5,7 +5,7 @@
     <converters:BinToTextResultConverter x:Key="BinToTextResultConverter"/>
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    <converters:InverseBooleanToVisibilityConverter x:Key="IverseBooleanToVisibilityConverter"/>
+    <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
     <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
     <converters:BoolToColorConverterSelected x:Key="BoolToColorConverterSelected"/>
 

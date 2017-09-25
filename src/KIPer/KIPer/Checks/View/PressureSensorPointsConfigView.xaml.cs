@@ -27,5 +27,10 @@ namespace KipTM.Checks.View
         {
             InitializeComponent();
         }
+
+        private void Plotter_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

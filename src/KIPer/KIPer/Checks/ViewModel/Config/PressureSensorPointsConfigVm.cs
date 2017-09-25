@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Tools.View;
 
 namespace KipTM.Checks.ViewModel.Config
 {
@@ -14,14 +16,129 @@ namespace KipTM.Checks.ViewModel.Config
     /// </summary>
     public class PressureSensorPointsConfigVm:INotifyPropertyChanged
     {
+        /// <summary>
+        /// Список выбранных точек
+        /// </summary>
         public ObservableCollection<PointViewModel> Points { get; set; }
 
+        /// <summary>
+        /// Ткущая выбранная точка
+        /// </summary>
         public PointViewModel SelectedPoint { get; set; }
 
+        /// <summary>
+        /// Конфигурация для новой точки
+        /// </summary>
         public PointConfigViewModel NewConfig { get; set; }
 
-        
+        /// <summary>
+        /// Добавить точку проверку
+        /// </summary>
+        public ICommand AddPoint => new CommandWrapper(DoAddPoint);
 
+        private void DoAddPoint()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Измерения
+        /// </summary>
+        public ObservableCollection<MeasuringPoint> Measured { get; set; }
+
+        /// <summary>
+        /// Текущее значение измерение
+        /// </summary>
+        public MeasuringPoint LastMeasuredPoint { get; set; }
+
+        /// <summary>
+        /// Прогресс выполнения проверки
+        /// </summary>
+        public double CheckProgress { get; set; }
+
+        /// <summary>
+        /// Проверка выполняется
+        /// </summary>
+        public bool IsRun { get; set; }
+        
+        /// <summary>
+        /// Запустить проверку
+        /// </summary>
+        public ICommand StartCheck { get { return new CommandWrapper(DoStart); } }
+
+        private void DoStart()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Приостановить проверку
+        /// </summary>
+        public ICommand PauseCheck { get { return new CommandWrapper(DoPause); } }
+
+        private void DoPause()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Остановить проверку
+        /// </summary>
+        public ICommand StopCheck { get { return new CommandWrapper(DoStop); } }
+
+        private void DoStop()
+        {
+            throw new NotImplementedException();
+        }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+    }
+
+    public class MeasuringPoint : INotifyPropertyChanged
+    {
+        /// <summary>
+        /// Текущее давление
+        /// </summary>
+        public double Pressure { get; set; }
+
+        /// <summary>
+        /// Текущее напряжение
+        /// </summary>
+        public double U { get; set; }
+
+        /// <summary>
+        /// Нормативное напряжение соответствующее заданному давлению
+        /// </summary>
+        public double Un { get; set; }
+
+        /// <summary>
+        /// Отклонение от нормативного напряжения на заданном давлении
+        /// </summary>
+        public double dU { get; set; }
+
+        /// <summary>
+        /// Допустимое отклонение от нормативного напряжения на заданном давлении
+        /// </summary>
+        public double dUn { get; set; }
+
+        /// <summary>
+        /// Относительное отклонение от нормативного напряжения на заданном давлении
+        /// </summary>
+        public double qU { get; set; }
+
+        /// <summary>
+        /// Допустимое относительное отклонение от нормативного напряжения на заданном давлении
+        /// </summary>
+        public double qUn { get; set; }
 
         #region INotifyPropertyChanged
 

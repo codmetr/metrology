@@ -32,11 +32,13 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Style="{StaticResource TblBasicStyle}">Ход проверки</TextBlock>
-            <DataGrid Grid.Row="1">
+            <DataGrid Grid.Row="1" ItemsSource="{Binding Points}" SelectedItem="{Binding SelectedPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Width="Auto"/>
-                    <DataGridTextColumn Header="Шаг" Width="*"/>
-                    <DataGridTextColumn Header="Время" Width="Auto"/>
+                    <DataGridCheckBoxColumn Width="Auto" Binding="{Binding Result.IsCorrect, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Шаг" Width="*" Binding="{Binding Config.Pressire}"/>
+                    <DataGridTextColumn Header="Pреал" Width="Auto" Binding="{Binding Result.PressureReal}"/>
+                    <DataGridTextColumn Header="Uреал" Width="Auto" Binding="{Binding Result.UReal}"/>
+                    <DataGridTextColumn Header="dUреал" Width="Auto" Binding="{Binding Result.dUReal}"/>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="2">
@@ -54,15 +56,15 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Column="0" Grid.ColumnSpan="4">Добавление точки:</TextBlock>
                 <TextBlock Grid.Column="0" Grid.Row="1">P:</TextBlock>
-                <TextBox Grid.Column="1" Grid.Row="1"></TextBox>
+                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NewConfig.Pressire, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Column="2" Grid.Row="1">мм рт.ст.</TextBlock>
                 <TextBlock Grid.Column="0" Grid.Row="2">U:</TextBlock>
-                <TextBox Grid.Column="1" Grid.Row="2"></TextBox>
+                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding NewConfig.U, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Column="2" Grid.Row="2">В</TextBlock>
                 <TextBlock Grid.Column="0" Grid.Row="3">ΔU:</TextBlock>
-                <TextBox Grid.Column="1" Grid.Row="3"></TextBox>
+                <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding NewConfig.dU, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Column="2" Grid.Row="3">В</TextBlock>
-                <Button Grid.Row="1" Grid.Column="3" Grid.RowSpan="3">
+                <Button Grid.Row="1" Grid.Column="3" Grid.RowSpan="3" Command="{Binding AddPoint}">
                     <TextBlock FontSize="18" TextAlignment="Center">
                     Добавить<LineBreak/>точку
                     </TextBlock>
@@ -99,17 +101,17 @@
                 Текущее значение
             </TextBlock>
             <TextBlock Grid.Column="0" Grid.Row="1">P:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="1"></TextBox>
+            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding LastMeasuredPoint.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Grid.Column="2" Grid.Row="1">кПа</TextBlock>
             <TextBlock Grid.Column="3" Grid.Row="1">U:</TextBlock>
-            <TextBox Grid.Column="4" Grid.Row="1"></TextBox>
+            <TextBox Grid.Column="4" Grid.Row="1" Text="{Binding LastMeasuredPoint.U, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Grid.Column="5" Grid.Row="1">В</TextBlock>
             <!--<WindowsFormsHost Name="WFHost" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300">
                 <zedGraph:ZedGraphControl x:Name="zChart" Height="300" Width="300"/>
             </WindowsFormsHost>-->
-            <d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300">
+            <d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300"> 
                 <UniformGrid Columns="1">
-                    <d3:ChartPlotter Name="plotter" Margin="10">
+                    <d3:ChartPlotter Name="plotter" Margin="10" DataContext="{Binding Measured, UpdateSourceTrigger=PropertyChanged}" DataContextChanged="Plotter_OnDataContextChanged">
                         <d3:ChartPlotter.HorizontalAxis>
                             <d3:HorizontalTimeSpanAxis Name="xAxis"/>
                         </d3:ChartPlotter.HorizontalAxis>
@@ -123,26 +125,27 @@
                 Мгновенная погрешность:
             </TextBlock>
             <TextBlock Grid.Column="0" Grid.Row="4">ΔU:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="4"></TextBox>
+            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding LastMeasuredPoint.dU, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Grid.Column="2" Grid.Row="4">В</TextBlock>
             <TextBlock Grid.Column="3" Grid.Row="4">δU:</TextBlock>
-            <TextBox Grid.Column="4" Grid.Row="4"></TextBox>
+            <TextBox Grid.Column="4" Grid.Row="4" Text="{Binding LastMeasuredPoint.qU, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Grid.Column="5" Grid.Row="4">%</TextBlock>
             <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}">
                 Допуск:
             </TextBlock>
             <TextBlock Grid.Column="0" Grid.Row="6">ΔU:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="6"></TextBox>
+            <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding LastMeasuredPoint.dUn, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Grid.Column="2" Grid.Row="6">В</TextBlock>
             <TextBlock Grid.Column="3" Grid.Row="6">δU:</TextBlock>
-            <TextBox Grid.Column="4" Grid.Row="6"></TextBox>
+            <TextBox Grid.Column="4" Grid.Row="6" Text="{Binding LastMeasuredPoint.qUn, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Grid.Column="5" Grid.Row="6">%</TextBlock>
-            <ProgressBar Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="7" Height="20" Value="50" LargeChange="3" BorderThickness="0">
+            <ProgressBar Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="7" Height="20" LargeChange="3" BorderThickness="0"
+                         Value="{Binding CheckProgress, UpdateSourceTrigger=PropertyChanged}">
                 <ProgressBar.Foreground>
                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}"/>
                 </ProgressBar.Foreground>
             </ProgressBar>
-            <StackPanel Grid.Column="2" Grid.Row="9" Grid.ColumnSpan="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,-0.357,0">
+            <StackPanel Grid.Column="2" Grid.Row="9" Grid.ColumnSpan="5" Orientation="Horizontal" HorizontalAlignment="Right">
                 <StackPanel.Resources>
                     <Style TargetType="Button">
                         <Setter Property="Height" Value="50"/>
@@ -151,8 +154,17 @@
                         <Setter Property="Margin" Value="20,10,0,0"/>
                     </Style>
                 </StackPanel.Resources>
-                <Button>Начать поверку</Button>
-                <Button>Стоп</Button>
+                <Button 
+                    Command="{Binding StartCheck}"
+                    Visibility="{Binding IsRun, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                    Начать поверку
+                </Button>
+                <Button
+                    Command="{Binding PauseCheck}"
+                    Visibility="{Binding IsRun, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Пауза
+                </Button>
+                <Button Command="{Binding StopCheck}">Стоп</Button>
             </StackPanel>
         </Grid>
     </Grid>
