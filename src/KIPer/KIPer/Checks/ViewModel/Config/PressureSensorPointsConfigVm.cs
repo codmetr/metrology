@@ -5,8 +5,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DPI620Genii;
 using Tools.View;
 
 namespace KipTM.Checks.ViewModel.Config
@@ -16,13 +18,44 @@ namespace KipTM.Checks.ViewModel.Config
     /// </summary>
     public class PressureSensorPointsConfigVm:INotifyPropertyChanged
     {
+        private double _minP = 0;
+        private double _maxP = 100;
+        private double _minU = 2;
+        private double _maxU = 5;
+        private readonly IDPI620Driver _dpi620;
+
+        private readonly Func<double, double> _getUbyPressure;
+        private readonly Func<double, double> _getdUbyU;
+
+        public PressureSensorPointsConfigVm(Func<double, double> getUbyPressure, Func<double, double> getdUbyU, IDPI620Driver dpi620)
+        {
+            _dpi620 = dpi620;
+            Points = new ObservableCollection<PointViewModel>();
+            NewConfig = new PointConfigViewModel();
+            _getUbyPressure = getUbyPressure?? ((press) =>
+            {
+                if (press >= _maxP)
+                    return _maxU;
+                if (press <= _minP)
+                    return _minU;
+                var val = _minU + (press - _minP) * ((_maxU - _minU)/(_maxP - _minP));
+                return val;
+            });
+            _getdUbyU = getdUbyU ?? ((u) => 0.1);
+        }
+
         /// <summary>
         /// Список выбранных точек
         /// </summary>
         public ObservableCollection<PointViewModel> Points { get; set; }
 
         /// <summary>
-        /// Ткущая выбранная точка
+        /// Единицы измерения давления
+        /// </summary>
+        public string PressureUnit { get; } = "мм рт.ст.";
+
+        /// <summary>
+        /// Текущая выбранная точка
         /// </summary>
         public PointViewModel SelectedPoint { get; set; }
 
@@ -38,7 +71,17 @@ namespace KipTM.Checks.ViewModel.Config
 
         private void DoAddPoint()
         {
-            throw new NotImplementedException();
+            Points.Add(new PointViewModel()
+            {
+                Config = new PointConfigViewModel()
+                {
+                    Pressire = NewConfig.Pressire,
+                    U = NewConfig.U,
+                    dU = NewConfig.dU,
+                    Unit = PressureUnit,
+                },
+                Result = new PointResultViewModel()
+            });
         }
 
         /// <summary>
@@ -68,7 +111,7 @@ namespace KipTM.Checks.ViewModel.Config
 
         private void DoStart()
         {
-            throw new NotImplementedException();
+            IsRun = true;
         }
 
         /// <summary>
@@ -78,7 +121,7 @@ namespace KipTM.Checks.ViewModel.Config
 
         private void DoPause()
         {
-            throw new NotImplementedException();
+            IsRun = false;
         }
 
         /// <summary>
@@ -88,7 +131,41 @@ namespace KipTM.Checks.ViewModel.Config
 
         private void DoStop()
         {
-            throw new NotImplementedException();
+            IsRun = false;
+        }
+
+        private void Autoread(AutoreadState arg)
+        {
+            while (!arg.Cancel.WaitHandle.WaitOne(arg.PeriodRepeat))
+            {
+                var item = new MeasuringPoint()
+                {
+                    TimeStamp = DateTime.Now - arg.StartTime,
+                    U = _dpi620.GetValue(1, PressureUnit),
+                };
+                ReadedPoints.Add(item);
+                _logger.Trace($"{Name} readed repeat: {item} {SelectedUnit}");
+            }
+            arg.AutoreadWh.Set();
+        }
+
+        protected class AutoreadState
+        {
+            public AutoreadState(CancellationToken cancel, TimeSpan periodRepeat, DateTime startTime, EventWaitHandle autoreadWh)
+            {
+                Cancel = cancel;
+                PeriodRepeat = periodRepeat;
+                StartTime = startTime;
+                AutoreadWh = autoreadWh;
+            }
+
+            public CancellationToken Cancel { get; }
+
+            public TimeSpan PeriodRepeat { get; }
+
+            public DateTime StartTime { get; }
+
+            public EventWaitHandle AutoreadWh { get; }
         }
 
         #region INotifyPropertyChanged
@@ -139,6 +216,12 @@ namespace KipTM.Checks.ViewModel.Config
         /// Допустимое относительное отклонение от нормативного напряжения на заданном давлении
         /// </summary>
         public double qUn { get; set; }
+
+        /// <summary>
+        /// Метка времени измерения
+        /// </summary>
+        public TimeSpan TimeStamp { get; set; }
+
 
         #region INotifyPropertyChanged
 

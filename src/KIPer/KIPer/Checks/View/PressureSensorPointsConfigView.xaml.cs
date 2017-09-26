@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KipTM.Checks.ViewModel.Config;
+using Microsoft.Research.DynamicDataDisplay;
+using Microsoft.Research.DynamicDataDisplay.DataSources;
 using Tools.View;
 
 namespace KipTM.Checks.View
@@ -30,7 +34,27 @@ namespace KipTM.Checks.View
 
         private void Plotter_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            var chart = sender as ChartPlotter;
+            var prop = e.NewValue as ObservableCollection<MeasuringPoint>;
+            var source = new ObservableDataSource<Point>();
+            source.AppendMany(prop.Select(el => new Point(el.TimeStamp.Ticks / 10000000000.0, el.U)));
+            prop.CollectionChanged += (sen, args) =>
+            {
+                if (args.Action == NotifyCollectionChangedAction.Add)
+                {
+                    for (int i = 0; i < args.NewItems.Count; i++)
+                    {
+                        var el = args.NewItems[i] as MeasuringPoint;
+                        if (el != null)
+                            source.AppendAsync(this.Dispatcher, new Point(el.TimeStamp.Ticks / 10000000000.0, el.U));
+                    }
+                }
+                else if (args.Action == NotifyCollectionChangedAction.Reset)
+                {
+                    source.Collection.Clear();
+                }
+            };
+            var line = chart.AddLineGraph(source, Colors.Brown, 1, "U");
         }
     }
 }

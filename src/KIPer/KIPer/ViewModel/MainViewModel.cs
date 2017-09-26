@@ -160,7 +160,7 @@ namespace KipTM.ViewModel
         {
             get
             {
-                return new RelayCommand<object>(
+                return new CommandWrapper(
                     (mainView) =>
                     {
                         Load();

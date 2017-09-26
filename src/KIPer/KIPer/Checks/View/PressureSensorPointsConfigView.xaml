@@ -32,13 +32,14 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Style="{StaticResource TblBasicStyle}">Ход проверки</TextBlock>
-            <DataGrid Grid.Row="1" ItemsSource="{Binding Points}" SelectedItem="{Binding SelectedPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid Grid.Row="1" AutoGenerateColumns="False"
+                      ItemsSource="{Binding Points}" SelectedItem="{Binding SelectedPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Width="Auto" Binding="{Binding Result.IsCorrect, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridCheckBoxColumn Width="Auto" Binding="{Binding Result.IsCorrect, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Шаг" Width="*" Binding="{Binding Config.Pressire}"/>
-                    <DataGridTextColumn Header="Pреал" Width="Auto" Binding="{Binding Result.PressureReal}"/>
-                    <DataGridTextColumn Header="Uреал" Width="Auto" Binding="{Binding Result.UReal}"/>
-                    <DataGridTextColumn Header="dUреал" Width="Auto" Binding="{Binding Result.dUReal}"/>
+                    <DataGridTextColumn Header="Pреал" Width="50" Binding="{Binding Result.PressureReal}"/>
+                    <DataGridTextColumn Header="Uреал" Width="50" Binding="{Binding Result.UReal}"/>
+                    <DataGridTextColumn Header="dUреал" Width="50" Binding="{Binding Result.dUReal}"/>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="2">
@@ -95,7 +96,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" MinHeight="60"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
                 Текущее значение
@@ -109,17 +110,16 @@
             <!--<WindowsFormsHost Name="WFHost" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300">
                 <zedGraph:ZedGraphControl x:Name="zChart" Height="300" Width="300"/>
             </WindowsFormsHost>-->
-            <d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300"> 
-                <UniformGrid Columns="1">
-                    <d3:ChartPlotter Name="plotter" Margin="10" DataContext="{Binding Measured, UpdateSourceTrigger=PropertyChanged}" DataContextChanged="Plotter_OnDataContextChanged">
-                        <d3:ChartPlotter.HorizontalAxis>
-                            <d3:HorizontalTimeSpanAxis Name="xAxis"/>
-                        </d3:ChartPlotter.HorizontalAxis>
-                        <d3:ChartPlotter.VerticalAxis>
-                            <d3:VerticalIntegerAxis Name="yU"/>
-                        </d3:ChartPlotter.VerticalAxis>
-                    </d3:ChartPlotter>
-                </UniformGrid>
+            <d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300">
+                <d3:ChartPlotter Name="plotter" Margin="10,5,10,15" DataContextChanged="Plotter_OnDataContextChanged"
+                                 DataContext="{Binding Measured, UpdateSourceTrigger=PropertyChanged}">
+                    <d3:ChartPlotter.HorizontalAxis>
+                        <d3:HorizontalTimeSpanAxis Name="xAxis"/>
+                    </d3:ChartPlotter.HorizontalAxis>
+                    <d3:ChartPlotter.VerticalAxis>
+                        <d3:VerticalIntegerAxis Name="yU"/>
+                    </d3:ChartPlotter.VerticalAxis>
+                </d3:ChartPlotter>
             </d3:ViewportUIContainer>
             <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
                 Мгновенная погрешность:

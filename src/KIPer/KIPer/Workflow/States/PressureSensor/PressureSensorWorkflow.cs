@@ -17,7 +17,7 @@ namespace KipTM.Workflow.States.PressureSensor
             var steps = new List<IWorkflowStep>()
             {
                 new ConfigState(new PressureSensorCheckConfigVm()),
-                new ConfigPointsState(new PressureSensorPointsConfigVm()),
+                new ConfigPointsState(new PressureSensorPointsConfigVm(null, null)),
                 new ResultState(new PressureSensorResultVM()),
                 new ReportState(new PressureSensorReportViewModel(new PressureSensorReportDto()
                 {
