@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DPI620Genii;
+using NLog;
 using Tools.View;
 
 namespace KipTM.Checks.ViewModel.Config
@@ -23,6 +24,7 @@ namespace KipTM.Checks.ViewModel.Config
         private double _minU = 2;
         private double _maxU = 5;
         private readonly IDPI620Driver _dpi620;
+        private readonly Logger _logger;
 
         private readonly Func<double, double> _getUbyPressure;
         private readonly Func<double, double> _getdUbyU;
@@ -30,6 +32,7 @@ namespace KipTM.Checks.ViewModel.Config
         public PressureSensorPointsConfigVm(Func<double, double> getUbyPressure, Func<double, double> getdUbyU, IDPI620Driver dpi620)
         {
             _dpi620 = dpi620;
+            _logger = NLog.LogManager.GetLogger("PressureSensorPointsConfigVm");
             Points = new ObservableCollection<PointViewModel>();
             NewConfig = new PointConfigViewModel();
             _getUbyPressure = getUbyPressure?? ((press) =>
@@ -138,13 +141,20 @@ namespace KipTM.Checks.ViewModel.Config
         {
             while (!arg.Cancel.WaitHandle.WaitOne(arg.PeriodRepeat))
             {
+                var u = _dpi620.GetValue(1, "");
+                var pressure = _dpi620.GetValue(2, PressureUnit);
+                var du = _getUbyPressure(pressure) - u;
+
                 var item = new MeasuringPoint()
                 {
                     TimeStamp = DateTime.Now - arg.StartTime,
-                    U = _dpi620.GetValue(1, PressureUnit),
+                    U = u,
+                    Pressure = pressure,
+                    dU = du,
+                    Un = _getUbyPressure(pressure),
                 };
-                ReadedPoints.Add(item);
-                _logger.Trace($"{Name} readed repeat: {item} {SelectedUnit}");
+                Measured.Add(item);
+                _logger.Trace($"Readed repeat: P:{item.Pressure} {PressureUnit}");
             }
             arg.AutoreadWh.Set();
         }
