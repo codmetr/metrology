@@ -26,6 +26,13 @@ namespace KipTM.Checks.ViewModel.Config
         private readonly IDPI620Driver _dpi620;
         private readonly Logger _logger;
 
+        private CancellationTokenSource _cancellation = new CancellationTokenSource();
+
+        private DateTime? _startTime = null;
+
+        private readonly ManualResetEvent _autorepeatWh = new ManualResetEvent(true);
+        private readonly TimeSpan _periodAutoread = TimeSpan.FromMilliseconds(100);
+
         private readonly Func<double, double> _getUbyPressure;
         private readonly Func<double, double> _getdUbyU;
 
@@ -115,6 +122,15 @@ namespace KipTM.Checks.ViewModel.Config
         private void DoStart()
         {
             IsRun = true;
+            if (_startTime != null)
+                return;
+            _startTime = DateTime.Now;
+            var cancel = _cancellation.Token;
+            _autorepeatWh.Reset();
+            Measured.Clear();
+            Task.Factory.StartNew((arg) => Autoread((AutoreadState)arg),
+                new AutoreadState(cancel, _periodAutoread, _startTime.Value, _autorepeatWh),
+                cancel);
         }
 
         /// <summary>
@@ -135,6 +151,10 @@ namespace KipTM.Checks.ViewModel.Config
         private void DoStop()
         {
             IsRun = false;
+            _cancellation.Cancel();
+            _cancellation = new CancellationTokenSource();
+            _autorepeatWh.WaitOne();
+            _startTime = null;
         }
 
         private void Autoread(AutoreadState arg)
@@ -143,8 +163,9 @@ namespace KipTM.Checks.ViewModel.Config
             {
                 var u = _dpi620.GetValue(1, "");
                 var pressure = _dpi620.GetValue(2, PressureUnit);
-                var du = _getUbyPressure(pressure) - u;
-
+                var un = _getUbyPressure(pressure);
+                var du = un - u;
+                var qu = u / un - 1.0;
                 var item = new MeasuringPoint()
                 {
                     TimeStamp = DateTime.Now - arg.StartTime,
@@ -152,6 +173,9 @@ namespace KipTM.Checks.ViewModel.Config
                     Pressure = pressure,
                     dU = du,
                     Un = _getUbyPressure(pressure),
+                    dUn = _getdUbyU(un),
+                    qU = qu,
+                    qUn = 0,
                 };
                 Measured.Add(item);
                 _logger.Trace($"Readed repeat: P:{item.Pressure} {PressureUnit}");
