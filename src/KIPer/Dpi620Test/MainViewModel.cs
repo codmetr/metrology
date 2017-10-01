@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using DPI620Genii;
 using MahApps.Metro.Controls;
+using Moq;
 using NLog;
 using Tools.View;
 

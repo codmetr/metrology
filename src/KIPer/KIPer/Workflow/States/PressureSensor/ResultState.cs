@@ -11,7 +11,7 @@ namespace KipTM.Workflow.States.PressureSensor
     {
         private PressureSensorResultVM _vm;
 
-        public ResultState(PressureSensorResultVM vm)
+        public ResultState(PressureSensorResultVM vm, Action )
         {
             _vm = vm;
         }

@@ -38,6 +38,7 @@ namespace KipTM.Checks.ViewModel.Config
 
         public PressureSensorPointsConfigVm(Func<double, double> getUbyPressure, Func<double, double> getdUbyU, IDPI620Driver dpi620)
         {
+            Measured = new ObservableCollection<MeasuringPoint>();
             _dpi620 = dpi620;
             _logger = NLog.LogManager.GetLogger("PressureSensorPointsConfigVm");
             Points = new ObservableCollection<PointViewModel>();
@@ -128,6 +129,7 @@ namespace KipTM.Checks.ViewModel.Config
             var cancel = _cancellation.Token;
             _autorepeatWh.Reset();
             Measured.Clear();
+            _dpi620.Open();
             Task.Factory.StartNew((arg) => Autoread((AutoreadState)arg),
                 new AutoreadState(cancel, _periodAutoread, _startTime.Value, _autorepeatWh),
                 cancel);
@@ -154,6 +156,7 @@ namespace KipTM.Checks.ViewModel.Config
             _cancellation.Cancel();
             _cancellation = new CancellationTokenSource();
             _autorepeatWh.WaitOne();
+            _dpi620.Close();
             _startTime = null;
         }
 

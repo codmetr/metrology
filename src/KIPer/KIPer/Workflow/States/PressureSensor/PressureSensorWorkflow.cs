@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DPI620Genii;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.Report.PressureSensor;
 using KipTM.ViewModel.Checks.Config;
 using KipTM.ViewModel.Workflow.States;
+using Moq;
 
 namespace KipTM.Workflow.States.PressureSensor
 {
@@ -14,11 +15,14 @@ namespace KipTM.Workflow.States.PressureSensor
     {
         public IWorkflow Make()
         {
+            var config = new PressureSensorCheckConfigVm();
+            var configPoints = new PressureSensorPointsConfigVm(null, null, GetMoq());
+            var result = new PressureSensorResultVM();
             var steps = new List<IWorkflowStep>()
             {
-                new ConfigState(new PressureSensorCheckConfigVm()),
-                new ConfigPointsState(new PressureSensorPointsConfigVm(null, null)),
-                new ResultState(new PressureSensorResultVM()),
+                new ConfigState(config),
+                new ConfigPointsState(configPoints),
+                new ResultState(result),
                 new ReportState(new PressureSensorReportViewModel(new PressureSensorReportDto()
                 {
                     ReportNumber = "007",
@@ -88,5 +92,21 @@ namespace KipTM.Workflow.States.PressureSensor
 
             return new LineWorkflow(steps);
         }
+
+        private static IDPI620Driver GetMoq()
+        {
+            var moq = new Moq.Mock<IDPI620Driver>();
+
+            moq.Setup(drv => drv.Open()).Callback(() => { Dpi620StateMoq.Instance.Start(); });
+            moq.Setup(drv => drv.Close()).Callback(() => { Dpi620StateMoq.Instance.Stop(); });
+
+            moq.Setup(drv => drv.SetUnits(It.IsAny<int>(), It.IsAny<string>())).Callback(
+                (int slotId, string unitCode) => { Dpi620StateMoq.Instance.SetUnit(slotId, unitCode); });
+
+            moq.Setup(drv => drv.GetValue(It.IsAny<int>(), It.IsAny<string>()))
+                .Returns((int slotId, string unitCode) => Dpi620StateMoq.Instance.GetValue(slotId, unitCode));
+            return moq.Object;
+        }
+
     }
 }

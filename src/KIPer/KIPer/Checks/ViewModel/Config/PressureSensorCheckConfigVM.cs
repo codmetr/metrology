@@ -12,8 +12,19 @@ namespace KipTM.Checks.ViewModel.Config
     /// <summary>
     /// Конфигурация проверки
     /// </summary>
-    public class PressureSensorCheckConfigVm:INotifyPropertyChanged
+    public class PressureSensorCheckConfigVm : INotifyPropertyChanged
     {
+        public PressureSensorCheckConfigVm()
+        {
+            EthalonPressure = new EthalonDescriptor();
+            EthalonVoltage = new EthalonDescriptor();
+            Config = new CheckPressureSensorConfig();
+            Temperature = 23;
+            Humidity = 50;
+            DayPressure = 760;
+            CommonVoltage = 220;
+        }
+
         /// <summary>
         /// Принадлежит:
         /// </summary>
@@ -75,6 +86,195 @@ namespace KipTM.Checks.ViewModel.Config
         /// </summary>
         public EthalonDescriptor EthalonVoltage { get; set; }
 
+        /// <summary>
+        /// Конфигурация логики проверки
+        /// </summary>
+        public CheckPressureSensorConfig Config { get; set; }
+
+        /// <summary>
+        /// Температура
+        /// </summary>
+        public double Temperature { get; set; }
+
+        /// <summary>
+        /// Влажность
+        /// </summary>
+        public double Humidity { get; set; }
+
+        /// <summary>
+        /// Давление дня
+        /// </summary>
+        public double DayPressure { get; set; }
+
+        /// <summary>
+        /// Напряжение сети
+        /// </summary>
+        public double CommonVoltage { get; set; }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Конфигурация логики проверки
+    /// </summary>
+    public class CheckPressureSensorConfig : INotifyPropertyChanged
+    {
+        private double _vpiMax;
+        private double _vpiMin;
+        private double _tolerancePercentVpi;
+        private double _pointsOnRange = 5;
+        private string _unit;
+        private string _outputRange;
+
+        public CheckPressureSensorConfig()
+        {
+            _vpiMax = 780;
+            _vpiMin = 0;
+            _tolerancePercentVpi = 0.25;
+            Points = new ObservableCollection<PointConfigViewModel>();
+            Units = new List<string>()
+            {
+                "мм рт.ст."
+            };
+            Unit = Units.FirstOrDefault();
+            OutputRanges = new[]
+            {
+                "4-20 мА",
+                "0-5 мА",
+            };
+            OutputRange = OutputRanges.FirstOrDefault();
+            UpdatePoints();
+        }
+
+        /// <summary>
+        /// Максимум диапазона
+        /// </summary>
+        public double VpiMax
+        {
+            get { return _vpiMax; }
+            set
+            {
+                _vpiMax = value;
+                UpdatePoints();
+                OnPropertyChanged("VpiMax");
+            }
+        }
+
+        /// <summary>
+        /// Минимум диапазона
+        /// </summary>
+        public double VpiMin
+        {
+            get { return _vpiMin; }
+            set
+            {
+                _vpiMin = value;
+                UpdatePoints();
+                OnPropertyChanged("VpiMin");
+            }
+        }
+
+        /// <summary>
+        /// Единицы измерения
+        /// </summary>
+        public IEnumerable<string> Units { get; set; }
+
+        /// <summary>
+        /// Выбранная единица измерения
+        /// </summary>
+        public string Unit { get; set; }
+
+        /// <summary>
+        /// Допуск по проценту ВПИ
+        /// </summary>
+        public double TolerancePercentVpi
+        {
+            get { return _tolerancePercentVpi; }
+            set
+            {
+                _tolerancePercentVpi = value;
+                UpdatePoints();
+                OnPropertyChanged("TolerancePercentVpi");
+            }
+        }
+
+        /// <summary>
+        /// Абсолютный допуск
+        /// </summary>
+        public double ToleranceDelta { get; set; }
+
+        /// <summary>
+        /// относительная погрешность
+        /// </summary>
+        public double TolerancePercentSigma { get; set; }
+
+        /// <summary>
+        /// Варианты выходного диапазона
+        /// </summary>
+        public IEnumerable<string> OutputRanges { get; set; }
+
+        /// <summary>
+        /// Выбранный выходной диапазон
+        /// </summary>
+        public string OutputRange
+        {
+            get { return _outputRange; }
+            set
+            {
+                _outputRange = value;
+                UpdatePoints();
+                OnPropertyChanged("OutputRange");
+            }
+        }
+
+        /// <summary>
+        /// Точки проверки
+        /// </summary>
+        public ObservableCollection<PointConfigViewModel> Points { get; set; }
+
+        /// <summary>
+        /// Перерассчитать точки
+        /// </summary>
+        private void UpdatePoints()
+        {
+            var max = _vpiMax;
+            var min = _vpiMin;
+            var tollerance = _tolerancePercentVpi;
+            if (tollerance <= 0)
+                return;
+            if (min >= max)
+                return;
+
+            var step = (max - min) / (_pointsOnRange - 1);
+            var du = (max - min) * tollerance / 100.0;
+            double uMin = 0.0;
+            double uMax = 5.0;
+            if (OutputRange == "4-20 мА")
+            {
+                uMin = 4;
+                uMax = 20;
+            }
+            double uStep = (uMax - uMin) / (_pointsOnRange - 1);
+
+            Points.Clear();
+            for (double i = 0; i < _pointsOnRange; i++)
+            {
+                var point = min + (i * step);
+                var uPoint = uMin + (i * uStep);
+                Points.Add(new PointConfigViewModel()
+                { Pressire = point, U = uPoint, Unit = Unit, dU = tollerance });
+            }
+        }
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -90,7 +290,7 @@ namespace KipTM.Checks.ViewModel.Config
     /// <summary>
     /// Описатель эталона
     /// </summary>
-    public class EthalonDescriptor: INotifyPropertyChanged
+    public class EthalonDescriptor : INotifyPropertyChanged
     {
 
         /// <summary>
