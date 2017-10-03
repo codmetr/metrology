@@ -277,6 +277,11 @@ namespace KipTM.Checks.ViewModel.Config
     /// </summary>
     public class PointViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Номер точки
+        /// </summary>
+        public int Index { get; set; }
+
         public PointConfigViewModel Config { get; set; }
 
         public PointResultViewModel Result { get; set; }
@@ -319,6 +324,11 @@ namespace KipTM.Checks.ViewModel.Config
         /// </summary>
         public double dU { get; set; }
 
+        /// <summary>
+        /// Допуск по вариации напряжения
+        /// </summary>
+        public double Uvar { get; set; }
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -343,14 +353,29 @@ namespace KipTM.Checks.ViewModel.Config
         public double PressureReal { get; set; }
 
         /// <summary>
-        /// Фактическое напряжение
+        /// Фактическое напряжение (прямой ход)
         /// </summary>
         public double UReal { get; set; }
 
         /// <summary>
-        /// Фактическая погрешность
+        /// Фактическая погрешность (прямой ход)
         /// </summary>
         public double dUReal { get; set; }
+
+        /// <summary>
+        /// Фактическое напряжение (обратный ход)
+        /// </summary>
+        public double Uback { get; set; }
+
+        /// <summary>
+        /// Фактическая вариация
+        /// </summary>
+        public double Uvar { get; set; }
+
+        /// <summary>
+        /// Фактическая погрешность вариации
+        /// </summary>
+        public double dUvar { get; set; }
 
         /// <summary>
         /// Напряжение на заданной точке в допуске

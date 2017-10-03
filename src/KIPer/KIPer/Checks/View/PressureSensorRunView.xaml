@@ -33,6 +33,8 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Style="{StaticResource TblBasicStyle}">Ход проверки</TextBlock>
             <DataGrid Grid.Row="1" AutoGenerateColumns="False"
+                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
+                      CanUserResizeRows="False" CanUserResizeColumns="False" CanUserSortColumns="False"
                       ItemsSource="{Binding Points}" SelectedItem="{Binding SelectedPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Width="Auto" Binding="{Binding Result.IsCorrect, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>

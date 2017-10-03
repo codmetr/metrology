@@ -13,6 +13,11 @@ namespace KipTM.Checks.ViewModel.Config
     /// </summary>
     public class PressureSensorResultVM:INotifyPropertyChanged
     {
+        public PressureSensorResultVM()
+        {
+            PointResults= new ObservableCollection<PointViewModel>();
+        }
+
         public string Assay { get; set; }
 
         public string Leak { get; set; }
