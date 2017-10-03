@@ -17,7 +17,7 @@ namespace KipTM.Checks.ViewModel.Config
     /// <summary>
     /// Конфигурация самой проверки и её исполнение
     /// </summary>
-    public class PressureSensorPointsConfigVm:INotifyPropertyChanged
+    public class PressureSensorRunVm:INotifyPropertyChanged
     {
         private double _minP = 0;
         private double _maxP = 100;
@@ -36,7 +36,7 @@ namespace KipTM.Checks.ViewModel.Config
         private readonly Func<double, double> _getUbyPressure;
         private readonly Func<double, double> _getdUbyU;
 
-        public PressureSensorPointsConfigVm(Func<double, double> getUbyPressure, Func<double, double> getdUbyU, IDPI620Driver dpi620)
+        public PressureSensorRunVm(Func<double, double> getUbyPressure, Func<double, double> getdUbyU, IDPI620Driver dpi620)
         {
             Measured = new ObservableCollection<MeasuringPoint>();
             _dpi620 = dpi620;

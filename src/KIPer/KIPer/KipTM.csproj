@@ -158,7 +158,7 @@
     <Compile Include="Archive\ViewModel\TestResultViewModelFactory.cs" />
     <Compile Include="Checks\ViewModel\CheckPool.cs" />
     <Compile Include="Checks\ViewModel\Config\EthalonConfigViewModel.cs" />
-    <Compile Include="Checks\ViewModel\Config\PressureSensorPointsConfigVm.cs" />
+    <Compile Include="Checks\ViewModel\Config\PressureSensorRunVm.cs" />
     <Compile Include="Checks\ViewModel\Config\PressureSensorCheckConfigVM.cs" />
     <Compile Include="Checks\ViewModel\Config\PressureSensorResultVM.cs" />
     <Compile Include="Checks\View\ChannelDescriptorView.xaml.cs">
@@ -167,8 +167,8 @@
     <Compile Include="Checks\View\EthalonConfigView.xaml.cs">
       <DependentUpon>EthalonConfigView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Checks\View\PressureSensorPointsConfigView.xaml.cs">
-      <DependentUpon>PressureSensorPointsConfigView.xaml</DependentUpon>
+    <Compile Include="Checks\View\PressureSensorRunView.xaml.cs">
+      <DependentUpon>PressureSensorRunView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Checks\View\PressureSensorCheckConfigView.xaml.cs">
       <DependentUpon>PressureSensorCheckConfigView.xaml</DependentUpon>
@@ -248,12 +248,8 @@
     <Compile Include="Workflow\States\CheckWorkflowFactory.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />
     <Compile Include="Workflow\States\Events\EventCheckState.cs" />
-    <Compile Include="Workflow\States\PressureSensor\ConfigPointsState.cs" />
-    <Compile Include="Workflow\States\PressureSensor\ConfigState.cs" />
     <Compile Include="Workflow\States\PressureSensor\Dpi620StateMoq.cs" />
     <Compile Include="Workflow\States\PressureSensor\PressureSensorWorkflow.cs" />
-    <Compile Include="Workflow\States\PressureSensor\ReportState.cs" />
-    <Compile Include="Workflow\States\PressureSensor\ResultState.cs" />
     <Compile Include="Workflow\States\ResultState.cs" />
     <Compile Include="Workflow\States\ReportState.cs" />
     <Compile Include="Devices\ViewModel\DeviceTypeCollectionViewModel.cs" />
@@ -325,7 +321,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Checks\View\PressureSensorPointsConfigView.xaml">
+    <Page Include="Checks\View\PressureSensorRunView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -22,12 +22,12 @@ using Tools.View;
 namespace KipTM.Checks.View
 {
     /// <summary>
-    /// Interaction logic for PressureSensorCheckConfig.xaml
+    /// Interaction logic for PressureSensorRunView.xaml
     /// </summary>
-    [View(typeof(PressureSensorPointsConfigVm))]
-    public partial class PressureSensorPointsConfigView : UserControl
+    [View(typeof(PressureSensorRunVm))]
+    public partial class PressureSensorRunView : UserControl
     {
-        public PressureSensorPointsConfigView()
+        public PressureSensorRunView()
         {
             InitializeComponent();
         }
@@ -36,6 +36,8 @@ namespace KipTM.Checks.View
         {
             var chart = sender as ChartPlotter;
             var prop = e.NewValue as ObservableCollection<MeasuringPoint>;
+            if(prop == null)
+                return;
             var source = new ObservableDataSource<Point>();
             source.AppendMany(prop.Select(el => new Point(el.TimeStamp.Ticks / 10000000000.0, el.U)));
             prop.CollectionChanged += (sen, args) =>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KipTM.Workflow
 {
-    class SimpleWorkflowStep:IWorkflowStep
+    public class SimpleWorkflowStep:IWorkflowStep
     {
         private Action _stateIn = null;
         private Action _stateOut = null;
@@ -39,6 +39,7 @@ namespace KipTM.Workflow
         public void StateOut()
         {
             _stateOut?.Invoke();
+
         }
 
         public object ViewModel { get; }

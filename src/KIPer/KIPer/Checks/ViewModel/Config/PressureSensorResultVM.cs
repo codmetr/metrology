@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,13 @@ namespace KipTM.Checks.ViewModel.Config
     /// </summary>
     public class PressureSensorResultVM:INotifyPropertyChanged
     {
+        public string Assay { get; set; }
+
+        public string Leak { get; set; }
+
+        public string CommonResult { get; set; }
+
+        public ObservableCollection<PointViewModel> PointResults { get; set; }
 
         #region INotifyPropertyChanged
 
