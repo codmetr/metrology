@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace KipTM.Workflow.States.PressureSensor
         public IWorkflow Make()
         {
             var config = new PressureSensorCheckConfigVm();
-            var configPoints = new PressureSensorRunVm(null, null, GetMoq());
+            var run = new PressureSensorRunVm(null, null, GetMoq());
             var result = new PressureSensorResultVM();
             var reportMain = new PressureSensorReportDto()
             {
@@ -84,8 +85,8 @@ namespace KipTM.Workflow.States.PressureSensor
                 };
             var steps = new List<IWorkflowStep>()
             {
-                new SimpleWorkflowStep(config),
-                new SimpleWorkflowStep(configPoints).SetOut(()=>UpdateResultByConf(configPoints, result)),
+                new SimpleWorkflowStep(config).SetOut(()=>UpdateRunByConf(config, run)),
+                new SimpleWorkflowStep(run).SetOut(()=>UpdateResultByRun(run, result)),
                 new SimpleWorkflowStep(result).SetOut(()=>UpdateReportByResult(result, reportMain, reportCertificate)),
                 new SimpleWorkflowStep(new PressureSensorReportViewModel(reportMain, reportCertificate)),
             };
@@ -93,11 +94,50 @@ namespace KipTM.Workflow.States.PressureSensor
             return new LineWorkflow(steps);
         }
 
-        private void UpdateReportByResult(PressureSensorResultVM result, PressureSensorReportDto reportMain, PressureSensorCertificateDto reportCertificate)
+        private void UpdateRunByConf(PressureSensorCheckConfigVm config, PressureSensorRunVm run)
         {
+            if (run.IsRun)
+                return;
+            run.Points.Clear();
+            foreach (var point in config.Config.Points)
+            {
+                var resPoint = run.Points.FirstOrDefault(el => Math.Abs(el.Config.Pressire - point.Pressire) < Double.Epsilon);
+                if (resPoint == null)
+                    run.Points.Add(new PointViewModel() { Config = point});
+                else
+                {
+                    resPoint.Config.Unit = point.Unit;
+                    resPoint.Config.U = point.U;
+                    resPoint.Config.dU = point.dU;
+                    resPoint.Config.Uvar = point.Uvar;
+                }
+            }
         }
 
-        private void UpdateResultByConf(PressureSensorRunVm configPoints, PressureSensorResultVM result)
+        private void UpdateResultByRun(PressureSensorRunVm run, PressureSensorResultVM result)
+        {
+            //if(run.IsRun)
+            //    return;
+            result.PointResults.Clear();
+            foreach (var point in run.Points)
+            {
+                var resPoint = result.PointResults.FirstOrDefault(el => Math.Abs(el.Config.Pressire - point.Config.Pressire) < Double.Epsilon);
+                if(resPoint == null)
+                    result.PointResults.Add(point);
+                else
+                {
+                    resPoint.Config.Unit = point.Config.Unit;
+                    resPoint.Config.U = point.Config.U;
+                    resPoint.Config.dU = point.Config.dU;
+                    resPoint.Config.Uvar = point.Config.Uvar;
+                }
+            }
+            
+
+
+        }
+
+        private void UpdateReportByResult(PressureSensorResultVM result, PressureSensorReportDto reportMain, PressureSensorCertificateDto reportCertificate)
         {
 
         }

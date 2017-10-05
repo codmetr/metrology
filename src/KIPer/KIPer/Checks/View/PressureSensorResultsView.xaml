@@ -50,14 +50,17 @@
             <TextBlock Grid.Row="0" Style="{StaticResource TblBasicStyle}">
                 Результат определения основной приведенной погрешности:
             </TextBlock>
-            <DataGrid Grid.Row="1" Margin="3" ItemsSource="{Binding PointResults, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid Grid.Row="1" Margin="3" AutoGenerateColumns="False"
+                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
+                      CanUserResizeRows="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                      ItemsSource="{Binding PointResults, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="№" Width="Auto"/>
-                    <DataGridTextColumn Header="Pвх, кПа" Width="*"/>
-                    <DataGridTextColumn Header="Uэт, В" Width="*"/>
-                    <DataGridTextColumn Header="Uфакт, В" Width="*"/>
-                    <DataGridTextColumn Header="ΔU, В" Width="*"/>
-                    <DataGridTextColumn Header="ΔUдопуст, В" Width="*"/>
+                    <DataGridTextColumn Header="№" Width="Auto" Binding="{Binding Index, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Pвх, кПа" Width="*" Binding="{Binding Config.Pressire, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Uэт, В" Width="*" Binding="{Binding Config.U, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Uфакт, В" Width="*" Binding="{Binding Result.UReal, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="ΔU, В" Width="*" Binding="{Binding Result.dUReal, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="ΔUдопуст, В" Width="*" Binding="{Binding Config.dU, UpdateSourceTrigger=PropertyChanged}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -69,14 +72,17 @@
             <TextBlock Grid.Row="0" Style="{StaticResource TblBasicStyle}">
                 Результат определния вариации выходного сигнала:
             </TextBlock>
-            <DataGrid Grid.Row="1" Margin="3" ItemsSource="{Binding PointResults, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid Grid.Row="1" Margin="3" AutoGenerateColumns="False"
+                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
+                      CanUserResizeRows="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                      ItemsSource="{Binding PointResults, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="№" Width="Auto"/>
-                    <DataGridTextColumn Header="Pвх, кПа" Width="*"/>
-                    <DataGridTextColumn Header="Uпр, В" Width="*"/>
-                    <DataGridTextColumn Header="Uобр, В" Width="*"/>
-                    <DataGridTextColumn Header="ΔU, В" Width="*"/>
-                    <DataGridTextColumn Header="ΔUдопуст, В" Width="*"/>
+                    <DataGridTextColumn Header="№" Width="Auto" Binding="{Binding Index, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Pвх, кПа" Width="*" Binding="{Binding Config.Pressire, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Uпр, В" Width="*" Binding="{Binding Result.UReal, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Uобр, В" Width="*" Binding="{Binding Result.Uback, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Uвар, В" Width="*" Binding="{Binding Result.Uvar, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Uвар допуст, В" Width="*" Binding="{Binding Config.Uvar, UpdateSourceTrigger=PropertyChanged}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
