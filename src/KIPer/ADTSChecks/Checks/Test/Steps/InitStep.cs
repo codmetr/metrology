@@ -63,7 +63,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
                 }
             }
 
-            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyCalibDate, null, ParameterType.Metadata), new ParameterResult(DateTime.Now, testDate)));
+            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyCalibDate, null, ParameterType.Metadata), new ParameterResult(DateTime.Now, testDate)));
 
             if (cancel.IsCancellationRequested)
             {

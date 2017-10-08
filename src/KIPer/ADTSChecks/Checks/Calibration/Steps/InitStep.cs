@@ -49,7 +49,7 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
                 return;
             }
             if (calibDate!=null)
-                OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyCalibDate, null, ParameterType.Metadata), new ParameterResult(DateTime.Now, calibDate.Value)));
+                OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyCalibDate, null, ParameterType.Metadata), new ParameterResult(DateTime.Now, calibDate.Value)));
             if (cancel.IsCancellationRequested)
             {
                 _logger.With(l => l.Trace(string.Format("Cancel calibration")));

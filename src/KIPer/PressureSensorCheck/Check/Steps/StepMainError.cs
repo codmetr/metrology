@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CheckFrame.Checks.Steps;
 using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks.Steps;
 using KipTM.Model.Channels;
@@ -11,13 +12,14 @@ using KipTM.Model.Checks;
 using NLog;
 using PressureSensorCheck.Data;
 using PressureSensorData;
+using Tools;
 
 namespace PressureSensorCheck.Check.Steps
 {
     /// <summary>
     /// Шаг инициализации поверки датчика давления
     /// </summary>
-    internal class StepMainError : TestStep
+    internal class StepMainError : TestStepWithBuffer
     {
         /// <summary>
         /// Ключь шага
@@ -65,6 +67,7 @@ namespace PressureSensorCheck.Check.Steps
         public override void Start(CancellationToken cancel)
         {
             OnStarted();
+            Log($"Wait set {_point.PressurePoint} {_point.PressureUnit}");
             _userChannel.Message = $"Установите на эталонном источнике давления значение {_point.PressurePoint} {_point.PressureUnit}";
             var wh = new ManualResetEvent(false);
             _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
@@ -73,6 +76,7 @@ namespace PressureSensorCheck.Check.Steps
                 return;
             var valueVoltage = _ethalonVoltage.GetEthalonValue(_point.VoltagePoint, cancel);
             var valuePressure = _ethalonPressure.GetEthalonValue(_point.PressurePoint, cancel);
+            Log($"Received U = {valueVoltage} on V = {valuePressure}");
             _result = new PressureSensorPointResult()
             {
                 PressurePoint = _point.PressurePoint,
@@ -82,8 +86,22 @@ namespace PressureSensorCheck.Check.Steps
                 VoltageValue = valueVoltage,
                 PressureValue = valuePressure
             };
-            //OnResultUpdated(new EventArgStepResult());//TODO: пересмотреть механизм сохранения
+
+            if (_buffer != null)
+            {
+                Log("save result point to buffer");
+                PressureSensorResult res;
+                if (_buffer.TryResolve<PressureSensorResult>(out res))
+                {
+                    res.Points.Add(_result);
+                }
+            }
             OnEnd(new EventArgEnd(KeyStep, true));
+        }
+
+        private void Log(string s)
+        {
+            _logger.With(l => l.Trace(s));
         }
     }
 }

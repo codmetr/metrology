@@ -2,9 +2,9 @@
 using System.Threading;
 using KipTM.Model.Checks;
 
-namespace KipTM.Interfaces.Checks.Steps
+namespace CheckFrame.Checks.Steps
 {
-    public abstract class TestStep<T>:ITestStep<T>
+    public abstract class TestStepBase:ITestStep
     {
         protected string _name;
 
@@ -18,29 +18,19 @@ namespace KipTM.Interfaces.Checks.Steps
         }
 
         /// <summary>
-        /// Набор необходимых измерительных и управляющих каналов
-        /// </summary>
-        //public abstract IEnumerable<string> RequiredChannels { get; }
-
-        /// <summary>
         /// Запустить тест
         /// </summary>
         public abstract void Start(CancellationToken cancel);
-
+        
         /// <summary>
         /// Шаг запущен
         /// </summary>
-        public event EventHandler<EventArgs> Started;
+        public event EventHandler<System.EventArgs> Started;
 
         /// <summary>
         /// Изменение прогресса шага (0-100 %)
         /// </summary>
         public event EventHandler<EventArgProgress> ProgressChanged;
-
-        /// <summary>
-        /// Получены какие-то результаты шага
-        /// </summary>
-        public event EventHandler<EventArgStepResult<T>> ResultUpdated;
 
         /// <summary>
         /// Шаг окончен
@@ -56,19 +46,13 @@ namespace KipTM.Interfaces.Checks.Steps
 
         protected virtual void OnStarted()
         {
-            EventHandler<EventArgs> handler = Started;
-            if (handler != null) handler(this, EventArgs.Empty);
+            EventHandler<System.EventArgs> handler = Started;
+            if (handler != null) handler(this, System.EventArgs.Empty);
         }
 
         protected virtual void OnProgressChanged(EventArgProgress e)
         {
             EventHandler<EventArgProgress> handler = ProgressChanged;
-            if (handler != null) handler(this, e);
-        }
-
-        protected virtual void OnResultUpdated(EventArgStepResult<T> e)
-        {
-            EventHandler<EventArgStepResult<T>> handler = ResultUpdated;
             if (handler != null) handler(this, e);
         }
 

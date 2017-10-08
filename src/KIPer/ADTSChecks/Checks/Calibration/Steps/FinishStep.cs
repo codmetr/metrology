@@ -46,9 +46,9 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
                 return;
             }
             _logger.With(l => l.Trace(string.Format("Calibration result: slope {0}; zero: {1}", (object)slope ?? "NULL", (object)zero ?? "NULL")));
-            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor("Slope", null, ParameterType.RealValue),
+            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor("Slope", null, ParameterType.RealValue),
                 new ParameterResult(DateTime.Now, slope)));
-            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor("Zero", null, ParameterType.RealValue),
+            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor("Zero", null, ParameterType.RealValue),
                 new ParameterResult(DateTime.Now, zero)));
             //OnProgress(new EventArgCheckProgress(percentGetRes, string.Format("Результат калибровки наклон:{0} ноль:{1}", (object)slope ?? "NULL", (object)zero ?? "NULL")));
 
@@ -75,7 +75,7 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
 
             _logger.With(l => l.Trace(string.Format("Calibration accept: {0}", accept ? "accept" : "deny")));
 
-            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor("Accept", null, ParameterType.IsCorrect),
+            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor("Accept", null, ParameterType.IsCorrect),
                 new ParameterResult(DateTime.Now, accept)));
             if (cancel.IsCancellationRequested)
             {

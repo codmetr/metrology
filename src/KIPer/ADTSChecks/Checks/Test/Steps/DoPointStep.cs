@@ -127,15 +127,15 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             // Расчитать погрешность и зафиксировать реультата
             bool correctPoint = Math.Abs(Math.Abs(point) - Math.Abs(realValue)) <= _point.Tolerance;
             _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
-            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.RealValue),
+            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.RealValue),
                     new ParameterResult(DateTime.Now, realValue)));
-            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.Unit),
+            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.Unit),
                     new ParameterResult(DateTime.Now, _unit.ToStr())));
-            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.Error),
+            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.Error),
                     new ParameterResult(DateTime.Now, Math.Abs(point) - Math.Abs(realValue))));
-            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.Tolerance),
+            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.Tolerance),
                     new ParameterResult(DateTime.Now, _point.Tolerance)));
-            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.IsCorrect),
+            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.IsCorrect),
                     new ParameterResult(DateTime.Now, correctPoint)));
             if (cancel.IsCancellationRequested)
             {

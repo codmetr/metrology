@@ -105,11 +105,11 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             // Расчитать погрешность и зафиксировать реультата
             bool correctPoint = Math.Abs(Math.Abs(point) - Math.Abs(realValue)) <= _point.Tolerance;
             _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
-            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.RealValue),
+            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.RealValue),
                     new ParameterResult(DateTime.Now, realValue)));
-            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.Unit),
+            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.Unit),
                     new ParameterResult(DateTime.Now, _unit.ToStr())));
-            OnResultUpdated(new EventArgStepResult(new ParameterDescriptor(KeyPressure, point, ParameterType.IsCorrect),
+            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.IsCorrect),
                     new ParameterResult(DateTime.Now, correctPoint)));
             if (IsCancel(cancel))
             {

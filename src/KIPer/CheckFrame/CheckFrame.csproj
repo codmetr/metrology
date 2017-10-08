@@ -69,10 +69,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Archive\BasicKeys.cs" />
+    <Compile Include="Checks\CheckWithBuffer.cs" />
+    <Compile Include="Checks\CheckBase.cs" />
     <Compile Include="Checks\Check.cs" />
     <Compile Include="Checks\CheckConverterConfigData.cs" />
     <Compile Include="Checks\CheckConfigDevice.cs" />
     <Compile Include="Checks\CheckConfigFactory.cs" />
+    <Compile Include="Checks\IDataBuffer.cs" />
+    <Compile Include="Checks\SimpleDataBuffer.cs" />
+    <Compile Include="Checks\Steps\TestStepWithBuffer.cs" />
+    <Compile Include="Checks\Steps\TestStepBase.cs" />
     <Compile Include="Devices\DeviceFactoryAttribute.cs" />
     <Compile Include="Devices\DeviceModelFactoryAttribute.cs" />
     <Compile Include="Checks\ICheckViewModelFactory.cs" />

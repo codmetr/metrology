@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 namespace KipTM.Model.Checks
 {
+    public interface ITestStep<T>: ITestStep
+    {
+        /// <summary>
+        /// Шаг запущен
+        /// </summary>
+        event EventHandler<EventArgStepResult<T>> ResultUpdated;
+    }
+
     public interface ITestStep
     {
         /// <summary>
@@ -24,11 +32,6 @@ namespace KipTM.Model.Checks
         /// Шаг запущен
         /// </summary>
         event EventHandler<EventArgs> Started;
-
-        /// <summary>
-        /// Шаг запущен
-        /// </summary>
-        event EventHandler<EventArgStepResult> ResultUpdated;
 
         /// <summary>
         /// Изменение прогресса шага (0-100 %)

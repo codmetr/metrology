@@ -7,18 +7,23 @@ using ArchiveData.DTO.Params;
 
 namespace KipTM.Model.Checks
 {
-    public class EventArgStepResult : EventArgs
+    public class EventArgStepResult<T> : EventArgs
     {
-        public EventArgStepResult(ParameterDescriptor descr, ParameterResult res)
-        {
-            Result = new Dictionary<ParameterDescriptor, ParameterResult>() { { descr, res } };
-        }
-
-        public EventArgStepResult(IDictionary<ParameterDescriptor, ParameterResult> results)
+        public EventArgStepResult(T results)
         {
             Result = results;
         }
 
-        public IDictionary<ParameterDescriptor, ParameterResult> Result { get; private set; }
+        public T Result { get; private set; }
+    }
+
+    public class EventArgStepResultDict : EventArgStepResult<IDictionary<ParameterDescriptor, ParameterResult>>
+    {
+        public EventArgStepResultDict(ParameterDescriptor descr, ParameterResult res)
+            :base(new Dictionary<ParameterDescriptor, ParameterResult>() { { descr, res } })
+        {}
+
+        public EventArgStepResultDict(IDictionary<ParameterDescriptor, ParameterResult> results):base(results)
+        {}
     }
 }

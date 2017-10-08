@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CheckFrame.Checks.Steps;
 using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Checks.Steps;
 using KipTM.Model.Channels;
@@ -14,7 +15,7 @@ namespace PressureSensorCheck.Check.Steps
     /// <summary>
     /// Шаг инициализации поверки датчика давления
     /// </summary>
-    internal class StepInit : TestStep
+    internal class StepInit : TestStepBase
     {
         public static string KeyStep = "Init";
 

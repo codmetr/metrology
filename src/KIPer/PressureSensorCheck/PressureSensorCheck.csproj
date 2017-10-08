@@ -89,6 +89,10 @@
       <Project>{3a880679-b67b-4d02-a6ff-75857cef1369}</Project>
       <Name>PressureSensorData</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tools\Tools.csproj">
+      <Project>{E53085F8-5740-43B1-B564-FAE5EF4C900A}</Project>
+      <Name>Tools</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\pressureSensor.jpg" />

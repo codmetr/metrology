@@ -20,24 +20,22 @@ using NLog;
 namespace CheckFrame.Checks
 {
     /// <summary>
-    /// Базовая реализация проверки с линейным прохождением шагов
+    /// Базовая реализация проверки с линейным прохождением шагов и сохранением результатов через буфер
     /// </summary>
-    public abstract class Check: CheckBase
+    public abstract class CheckWithBuffer: CheckBase
     {
 
-        protected Check(Logger logger):base(logger)
+        protected CheckWithBuffer(Logger logger):base(logger)
         {}
 
-        #region events
+        #region Steps events
 
         /// <summary>
-        /// Получен результат
+        /// Деcтвие перед запуском проверки
         /// </summary>
-        public event EventHandler<EventArgTestStepResult> ResultUpdated;
-
-        #endregion
-
-        #region Steps events
+        protected override void OnStartAction(CancellationToken cancel)
+        {
+        }
 
         protected override void AttachStep(ITestStep step)
         {
@@ -58,15 +56,6 @@ namespace CheckFrame.Checks
         protected virtual void StepResultUpdated(object sender, EventArgStepResult<IDictionary<ParameterDescriptor, ParameterResult>> e)
         {
             FillResult(e);
-        }
-        #endregion
-
-        #region Event invocators
-
-        protected virtual void OnResultUpdated(EventArgTestStepResult e)
-        {
-            EventHandler<EventArgTestStepResult> handler = ResultUpdated;
-            if (handler != null) handler(this, e);
         }
         #endregion
 
