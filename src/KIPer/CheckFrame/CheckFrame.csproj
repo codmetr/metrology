@@ -75,7 +75,6 @@
     <Compile Include="Checks\CheckConverterConfigData.cs" />
     <Compile Include="Checks\CheckConfigDevice.cs" />
     <Compile Include="Checks\CheckConfigFactory.cs" />
-    <Compile Include="Checks\IDataBuffer.cs" />
     <Compile Include="Checks\SimpleDataBuffer.cs" />
     <Compile Include="Checks\Steps\TestStepWithBuffer.cs" />
     <Compile Include="Checks\Steps\TestStepBase.cs" />

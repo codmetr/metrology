@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CheckFrame.Checks
+﻿namespace KipTM.Interfaces.Checks
 {
     /// <summary>
     /// Буффер данных для обмена между шагами

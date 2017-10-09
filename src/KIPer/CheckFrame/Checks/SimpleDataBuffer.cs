@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using KipTM.Interfaces.Checks;
 
 namespace CheckFrame.Checks 
 {

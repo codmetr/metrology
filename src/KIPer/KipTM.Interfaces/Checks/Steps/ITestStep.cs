@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using KipTM.Interfaces.Checks;
 
 namespace KipTM.Model.Checks
 {
@@ -13,6 +14,14 @@ namespace KipTM.Model.Checks
         /// Шаг запущен
         /// </summary>
         event EventHandler<EventArgStepResult<T>> ResultUpdated;
+    }
+
+    public interface ITestStepWithBuffer: ITestStep
+    {
+        /// <summary>
+        /// Передает буфер для размещения результатов проверки
+        /// </summary>
+        void SetBuffer(IDataBuffer buffer);
     }
 
     public interface ITestStep

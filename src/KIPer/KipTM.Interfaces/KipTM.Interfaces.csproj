@@ -72,6 +72,7 @@
     <Compile Include="Checks\ICheckMethod.cs" />
     <Compile Include="Checks\ICustomConfigFactory.cs" />
     <Compile Include="Checks\ICustomSettingsViewModel.cs" />
+    <Compile Include="Checks\IDataBuffer.cs" />
     <Compile Include="Checks\IMethodViewModel.cs" />
     <Compile Include="Checks\ISubscriber.cs" />
     <Compile Include="Checks\Steps\ITestStep.cs" />

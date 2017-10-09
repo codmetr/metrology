@@ -24,11 +24,9 @@ namespace CheckFrame.Checks
     /// </summary>
     public abstract class CheckWithBuffer: CheckBase
     {
-
+        private SimpleDataBuffer _dataBuffer = new SimpleDataBuffer();
         protected CheckWithBuffer(Logger logger):base(logger)
         {}
-
-        #region Steps events
 
         /// <summary>
         /// Деcтвие перед запуском проверки
@@ -39,46 +37,15 @@ namespace CheckFrame.Checks
 
         protected override void AttachStep(ITestStep step)
         {
-            var stepWithRes =  step as ITestStep<IDictionary<ParameterDescriptor, ParameterResult>>;
-            if(stepWithRes!=null)
-                stepWithRes.ResultUpdated += StepResultUpdated;
+            var stepWithBuffer =  step as ITestStepWithBuffer;
+            if(stepWithBuffer != null)
+                stepWithBuffer.SetBuffer(_dataBuffer);
             base.AttachStep(step);
         }
 
-        protected void DetachStep(ITestStep step)
+        protected override void StepEnd(object sender, EventArgEnd e)
         {
-            var stepWithRes = step as ITestStep<IDictionary<ParameterDescriptor, ParameterResult>>;
-            if (stepWithRes != null)
-                stepWithRes.ResultUpdated -= StepResultUpdated;
-            base.DetachStep(step);
+            //if(e.Result)
         }
-
-        protected virtual void StepResultUpdated(object sender, EventArgStepResult<IDictionary<ParameterDescriptor, ParameterResult>> e)
-        {
-            FillResult(e);
-        }
-        #endregion
-
-        #region Fill results
-        /// <summary>
-        /// Заполнение полученных результатов проверки
-        /// </summary>
-        /// <param name="e"></param>
-        private void FillResult(EventArgStepResult<IDictionary<ParameterDescriptor, ParameterResult>> e)
-        {
-            foreach (var parameterResult in e.Result)
-            {
-                SwitchParameter(parameterResult.Key, parameterResult.Value);
-            }
-        }
-
-        /// <summary>
-        /// Распределить результат в нужное поле результата
-        /// </summary>
-        /// <param name="descriptor"></param>
-        /// <param name="result"></param>
-        protected abstract void SwitchParameter(ParameterDescriptor descriptor, ParameterResult result);
-
-        #endregion
     }
 }
