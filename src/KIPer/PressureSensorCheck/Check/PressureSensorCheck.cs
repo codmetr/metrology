@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using ArchiveData.DTO.Params;
+using CheckFrame.Checks;
 using CheckFrame.Model.Checks.Steps;
 using KipTM.Archive;
 using KipTM.Model.Channels;
@@ -9,14 +10,16 @@ using KipTM.Model.Checks;
 using NLog;
 using PressureSensorCheck.Check.Steps;
 using PressureSensorCheck.Data;
+using PressureSensorCheck.Devices;
 using PressureSensorData;
 
 namespace PressureSensorCheck.Check
 {
-    public class PressureSensorCheck: CheckFrame.Checks.Check
+    public class PressureSensorCheck: CheckBase
     {
         public static string CheckKey = "PressureSensor";
         public static string CheckName = "Поверка датчика давления";
+        private SimpleDataBuffer _dataBuffer = new SimpleDataBuffer();
 
         private PressureSensorPointResult _resultPoint = null;
         private PressureSensorResult _result = null;
@@ -45,31 +48,33 @@ namespace PressureSensorCheck.Check
 
             foreach (var point in pressureConverterConfig.Points)
             {
-                //steps.Add(new CheckStepConfig(new StepMainError(point, _userChannel, pressureConverterConfig.ChannelFrom, pressureConverterConfig.ChannelTo, _logger), false));
+                var step = new StepMainError(point, _userChannel, null, null, _logger);//TODO: добавить эталоны
+                step.SetBuffer(_dataBuffer);
+                steps.Add(new CheckStepConfig(step, false));
             }
             Steps = steps;
             return true;
+        }
+
+        protected override void OnStartAction(CancellationToken cancel)
+        {
+            _dataBuffer.Clear();
+            base.OnStartAction(cancel);
         }
 
         public IEnumerable<CheckStepConfig> Steps { get; private set; }
 
         protected override void StepEnd(object sender, EventArgEnd e)
         {
-            if (e.Key == StepMainError.KeyStep && _resultPoint != null)
-            {
+            if(_dataBuffer.TryResolve(out _resultPoint))
                 _result.Points.Add(_resultPoint);
-                OnResultUpdated(new EventArgTestStepResult(e.Key, _resultPoint));
-                _resultPoint = null;
-            }
-            else if (e.Key == StepInit.KeyStep)
-            {
-                //OnResultUpdated(new EventArgTestStepResult(e.Key, _result.CheckTime));
-            }
+            _dataBuffer.Clear();
         }
 
-        protected override void SwitchParameter(ParameterDescriptor descriptor, ParameterResult result)
+        protected override void OnEndMethod(EventArgs e)
         {
-            throw new NotImplementedException();
+            _dataBuffer.Clear();
+            base.OnEndMethod(e);
         }
     }
 }

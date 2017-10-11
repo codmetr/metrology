@@ -90,11 +90,7 @@ namespace PressureSensorCheck.Check.Steps
             if (_buffer != null)
             {
                 Log("save result point to buffer");
-                PressureSensorResult res;
-                if (_buffer.TryResolve<PressureSensorResult>(out res))
-                {
-                    res.Points.Add(_result);
-                }
+                _buffer.Append(_result);
             }
             OnEnd(new EventArgEnd(KeyStep, true));
         }
