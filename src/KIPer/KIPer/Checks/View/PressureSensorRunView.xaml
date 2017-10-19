@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:config="clr-namespace:KipTM.Checks.ViewModel.Config"
              xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
+             xmlns:view="clr-namespace:KipTM.Checks.View"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000"
              d:DataContext="{d:DesignInstance config:PressureSensorRunVm}">
@@ -13,6 +14,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Skins/FluentSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <view:PointConfigConverter x:Key="PointConfigConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="20">
@@ -38,7 +40,7 @@
                       ItemsSource="{Binding Points}" SelectedItem="{Binding SelectedPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Width="Auto" Binding="{Binding Result.IsCorrect, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Шаг" Width="*" Binding="{Binding Config.Pressire}"/>
+                    <DataGridTextColumn Header="Шаг" Width="*" Binding="{Binding Config, Converter={StaticResource PointConfigConverter}}"/>
                     <DataGridTextColumn Header="Pреал" Width="50" Binding="{Binding Result.PressureReal}"/>
                     <DataGridTextColumn Header="Uреал" Width="50" Binding="{Binding Result.UReal}"/>
                     <DataGridTextColumn Header="dUреал" Width="50" Binding="{Binding Result.dUReal}"/>

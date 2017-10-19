@@ -167,6 +167,7 @@
     <Compile Include="Checks\View\EthalonConfigView.xaml.cs">
       <DependentUpon>EthalonConfigView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Checks\View\PointConfigConverter.cs" />
     <Compile Include="Checks\View\PressureSensorRunView.xaml.cs">
       <DependentUpon>PressureSensorRunView.xaml</DependentUpon>
     </Compile>
