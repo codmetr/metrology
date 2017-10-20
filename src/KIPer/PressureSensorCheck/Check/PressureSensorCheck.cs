@@ -5,6 +5,7 @@ using ArchiveData.DTO.Params;
 using CheckFrame.Checks;
 using CheckFrame.Model.Checks.Steps;
 using KipTM.Archive;
+using KipTM.Interfaces.Channels;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using NLog;
@@ -21,12 +22,17 @@ namespace PressureSensorCheck.Check
         public static string CheckName = "Поверка датчика давления";
         private SimpleDataBuffer _dataBuffer = new SimpleDataBuffer();
 
+        private IEthalonChannel _pressure;
+        private IEthalonChannel _voltage;
+
         private PressureSensorPointResult _resultPoint = null;
         private PressureSensorResult _result = null;
 
-        public PressureSensorCheck(Logger logger) : base(logger)
+
+        public PressureSensorCheck(Logger logger, IEthalonChannel pressure, IEthalonChannel voltage) : base(logger)
         {
-            
+            _pressure = pressure;
+            _voltage = voltage;
         }
 
         public override object GetCustomConfig(IPropertyPool propertyPool)
@@ -48,7 +54,7 @@ namespace PressureSensorCheck.Check
 
             foreach (var point in pressureConverterConfig.Points)
             {
-                var step = new StepMainError(point, _userChannel, null, null, _logger);//TODO: добавить эталоны
+                var step = new StepMainError(point, _userChannel, _pressure, _voltage, _logger);//TODO: добавить эталоны
                 step.SetBuffer(_dataBuffer);
                 steps.Add(new CheckStepConfig(step, false));
             }

@@ -130,9 +130,13 @@ namespace KipTM.Checks.ViewModel.Config
             _autorepeatWh.Reset();
             Measured.Clear();
             _dpi620.Open();
-            Task.Factory.StartNew((arg) => Autoread((AutoreadState)arg),
+
+            var tUpdate = new Task((arg) => Autoread((AutoreadState)arg),
                 new AutoreadState(cancel, _periodAutoread, _startTime.Value, _autorepeatWh),
-                cancel);
+                cancel, TaskCreationOptions.None);
+            tUpdate.Start(TaskScheduler.Default);
+
+            var check = new PressureSensorCheck();
         }
 
         /// <summary>
