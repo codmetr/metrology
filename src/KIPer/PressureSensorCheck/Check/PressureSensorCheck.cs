@@ -5,6 +5,7 @@ using ArchiveData.DTO.Params;
 using CheckFrame.Checks;
 using CheckFrame.Model.Checks.Steps;
 using KipTM.Archive;
+using KipTM.EventAggregator;
 using KipTM.Interfaces.Channels;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
@@ -54,7 +55,7 @@ namespace PressureSensorCheck.Check
 
             foreach (var point in pressureConverterConfig.Points)
             {
-                var step = new StepMainError(point, _userChannel, _pressure, _voltage, _logger);//TODO: добавить эталоны
+                var step = new StepMainError(point, ChConfig.UsrChannel, _pressure, _voltage, _logger);//TODO: добавить эталоны
                 step.SetBuffer(_dataBuffer);
                 steps.Add(new CheckStepConfig(step, false));
             }
@@ -62,10 +63,12 @@ namespace PressureSensorCheck.Check
             return true;
         }
 
-        protected override void OnStartAction(CancellationToken cancel)
+        protected override bool PrepareCheck(CancellationToken cancel)
         {
+            if (!base.PrepareCheck(cancel))
+                return false;
             _dataBuffer.Clear();
-            base.OnStartAction(cancel);
+            return true;
         }
 
         public IEnumerable<CheckStepConfig> Steps { get; private set; }

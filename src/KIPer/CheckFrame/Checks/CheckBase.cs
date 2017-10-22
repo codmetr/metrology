@@ -27,23 +27,13 @@ namespace CheckFrame.Checks
         protected readonly Logger _logger;
 
         private IEventAggregator _agregator;
-        protected ChannelDescriptor _calibChan;
-        protected IEthalonChannel _ethalonChannel;
-        protected IUserChannel _userChannel;
+
+        protected ChannelsConfig _channels = new ChannelsConfig();
 
         private IEnumerable<CheckStepConfig> _steps;
 
         protected ITestStep _currenTestStep = null;
         protected readonly object _currenTestStepLocker = new object();
-
-        /// <summary>
-        /// Описатель канала подключения к целевому устройству
-        /// </summary>
-        public ITransportChannelType ChannelType;
-        /// <summary>
-        /// Описатель канала подключения к эталонному устройству
-        /// </summary>
-        public ITransportChannelType EthalonChannelType;
 
         private IPausedStep _currentPause = null;
         private bool _isPauseAvailable;
@@ -111,21 +101,12 @@ namespace CheckFrame.Checks
         /// <returns></returns>
         public bool Start(CancellationToken cancel)
         {
-            OnStartAction(cancel);
-
-            try
+            if (!PrepareCheck(cancel))
             {
-                if (!_ethalonChannel.Activate(EthalonChannelType))
-                    throw new Exception(string.Format("Can not Activate ethalon channel: {0}", _ethalonChannel));
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.ToString());
-                if (_agregator != null)
-                    _agregator.Post(new ErrorMessageEventArg("Не удалось подключить эталонный канал"));
                 OnEndMethod(null);
                 return false;
             }
+
             try
             {
                 foreach (var testStep in Steps)
@@ -161,8 +142,7 @@ namespace CheckFrame.Checks
             {
                 SetCurrentPause(null);
                 ToBaseAction();
-                _ethalonChannel.Stop();
-                OnEndMethod(null);
+                EndCheck();
             }
             return true;
 
@@ -185,60 +165,33 @@ namespace CheckFrame.Checks
         /// <summary>
         /// Деcтвие перед запуском проверки
         /// </summary>
-        protected virtual void OnStartAction(CancellationToken cancel)
+        protected virtual bool PrepareCheck(CancellationToken cancel)
         {
-        }
-
-        /// <summary>
-        /// Ключ канала
-        /// </summary>
-        public string ChannelKey
-        {
-            get { return _calibChan.Name; }
-        }
-
-        /// <summary>
-        /// Задать агрегатор событий
-        /// </summary>
-        /// <param name="agregator">агрегатор событий</param>
-        public void SetAggregator(IEventAggregator agregator)
-        {
-            _agregator = agregator;
-        }
-
-        /// <summary>
-        /// Задать канал эталона
-        /// </summary>
-        /// <param name="ethalonChannel"></param>
-        /// <param name="transport"></param>
-        public void SetEthalonChannel(IEthalonChannel ethalonChannel, ITransportChannelType transport)
-        {
-            _ethalonChannel = ethalonChannel;
-            EthalonChannelType = transport;
-            foreach (var testStep in Steps)
+            try
             {
-                var step = testStep.Step as ISettedEthalonChannel;
-                if (step == null)
-                    continue;
-                step.SetEthalonChannel(ethalonChannel);
+                ChConfig.Activate();
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
-        /// Задать канал связи с пользователем
+        /// Деcтвие после проверки
         /// </summary>
-        /// <param name="userChannel"></param>
-        public void SetUserChannel(IUserChannel userChannel)
+        protected virtual void EndCheck()
         {
-            _userChannel = userChannel;
-            foreach (var testStep in Steps)
-            {
-                var step = testStep.Step as ISettedUserChannel;
-                if (step == null)
-                    continue;
-                step.SetUserChannel(userChannel);
-            }
+            ChConfig.Stop();
+            OnEndMethod(null);
         }
+
+        /// <summary>
+        /// Конфигурация каналов
+        /// </summary>
+        public ChannelsConfig ChConfig { get { return _channels; } }
 
         /// <summary>
         /// Установить текущий шаг как объект паузы

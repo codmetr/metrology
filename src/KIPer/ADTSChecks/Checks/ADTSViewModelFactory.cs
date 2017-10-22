@@ -15,7 +15,7 @@ using KipTM.Model.TransportChannels;
 
 namespace ADTSChecks.Checks
 {
-    [ViewModelFactory(typeof(CheckBase))]
+    [ViewModelFactory(typeof(CheckBaseADTS))]
     public class ADTSViewModelFactory : ICheckViewModelFactory
     {
         private IDeviceManager _deviceManager;
@@ -64,7 +64,7 @@ namespace ADTSChecks.Checks
             if (_propertyPool == null)
                 throw new NullReferenceException("Not defined _propertyPool");
 
-            return ConfigAdtsMethod(method as CheckBase, checkConfig, customSettings as ADTSParameters,
+            return ConfigAdtsMethod(method as CheckBaseADTS, checkConfig, customSettings as ADTSParameters,
                 resultSet, checkDeviceChanel, ethalonChanel);
         }
 
@@ -78,12 +78,12 @@ namespace ADTSChecks.Checks
         /// <param name="checkDeviceChanel"></param>
         /// <param name="ethalonChanel"></param>
         /// <returns></returns>
-        IMethodViewModel ConfigAdtsMethod(CheckBase method, CheckConfigData checkConfig, ADTSParameters customSettings,
+        IMethodViewModel ConfigAdtsMethod(CheckBaseADTS method, CheckConfigData checkConfig, ADTSParameters customSettings,
             TestResult resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
         {
             IMethodViewModel result = null;
             method.SetADTS(_deviceManager.GetModel<ADTSModel>());
-            method.ChannelType = checkDeviceChanel;
+            method.ChConfig.ChannelType = checkDeviceChanel;
             var devType = checkConfig.TargetDevice.Device.DeviceType.TypeKey;
             var ethalonChannel = checkConfig.Ethalons.FirstOrDefault().Value.Channel;
             //if (ethalonChannel.Key == UserEthalonChannel.Channel.Key)

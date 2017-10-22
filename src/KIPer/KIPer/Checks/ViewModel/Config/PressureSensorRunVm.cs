@@ -136,7 +136,7 @@ namespace KipTM.Checks.ViewModel.Config
                 cancel, TaskCreationOptions.None);
             tUpdate.Start(TaskScheduler.Default);
 
-            var check = new PressureSensorCheck();
+            var check = new PressureSensorCheck.Check.PressureSensorCheck(NLog.LogManager.GetLogger(string.Format("", )));
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ using Tools;
 
 namespace ADTSChecks.Model.Checks
 {
-    public class Calibration : CheckBase
+    public class Calibration : CheckBaseADTS
     {
         //public static string Key = "Калибровка ADTS";
         public const string key = "Калибровка ADTS";
@@ -53,10 +53,10 @@ namespace ADTSChecks.Model.Checks
         public override object GetCustomConfig(IPropertyPool propertyes)
         {
             //var propertyes = propertyPool.ByKey(ChannelKey);
-            var points = propertyes.GetProperty<List<ADTSPoint>>(CheckBase.KeyPoints);
+            var points = propertyes.GetProperty<List<ADTSPoint>>(CheckBaseADTS.KeyPoints);
             var channel = propertyes.GetProperty<ChannelDescriptor>(BasicKeys.KeyChannel);
-            var rate = propertyes.GetProperty<double>(CheckBase.KeyRate);
-            var unit = propertyes.GetProperty<PressureUnits>(CheckBase.KeyUnit);
+            var rate = propertyes.GetProperty<double>(CheckBaseADTS.KeyRate);
+            var unit = propertyes.GetProperty<PressureUnits>(CheckBaseADTS.KeyUnit);
             return new ADTSParameters(channel, points, rate, unit);
         }
 
@@ -68,34 +68,34 @@ namespace ADTSChecks.Model.Checks
         {
             _logger.With(l => l.Trace("Init ADTSCheckMethodic"));
 
-            _calibChan = parameters.CalibChannel;
+            ChConfig.Channel = parameters.CalibChannel;
 
             var steps = new List<CheckStepConfig>();
 
             // добавление шага инициализации
-            var step = new CheckStepConfig(new InitStep("Инициализация калибровки", _adts, _calibChan, _logger), true);
+            var step = new CheckStepConfig(new InitStep("Инициализация калибровки", _adts, ChConfig.Channel, _logger), true);
             steps.Add(step);
             AttachStep(step.Step);
 
             // добавление шагов прохождения точек
             Parameters param;
-            if (_calibChan.Name == ADTSModel.Ps)
+            if (ChConfig.Channel.Name == ADTSModel.Ps)
                 param = Parameters.PS;
-            else if (_calibChan.Name == ADTSModel.Pt)
+            else if (ChConfig.Channel.Name == ADTSModel.Pt)
                 param = Parameters.PT;
             else param = Parameters.PS;
             foreach (var point in parameters.Points)
             {
                 step = new CheckStepConfig( new DoPointStep(string.Format("Калибровка точки {0} {1}", point.Pressure, parameters.Unit.ToStr()),
-                    _adts, param, point, parameters.Rate, parameters.Unit, _ethalonChannel,
-                    _userChannel, _logger), false, point.IsAvailable);
+                    _adts, param, point, parameters.Rate, parameters.Unit, ChConfig.EthChannel,
+                    ChConfig.UsrChannel, _logger), false, point.IsAvailable);
 
                 AttachStep(step.Step);
                 steps.Add(step);
             }
 
             // добавление шага подтверждения калибровки
-            step = new CheckStepConfig(new FinishStep("Подтверждение калибровки", _adts, _userChannel, _logger), true);
+            step = new CheckStepConfig(new FinishStep("Подтверждение калибровки", _adts, ChConfig.UsrChannel, _logger), true);
             AttachStep(step.Step);
             steps.Add(step);
 

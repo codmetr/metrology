@@ -63,7 +63,7 @@ namespace ADTSChecks.Checks.ViewModel
 
         #endregion
 
-        protected CheckBaseViewModel(CheckBase method, IPropertyPool propertyPool,
+        protected CheckBaseViewModel(CheckBaseADTS method, IPropertyPool propertyPool,
             IDeviceManager deviceManager, TestResult resultPool, ADTSParameters customConfig)
         {
             _cancellation = new CancellationTokenSource();
@@ -76,9 +76,9 @@ namespace ADTSChecks.Checks.ViewModel
             Method.Init(customConfig);
             AttachEvent(method);
 
-            _connection = Method.ChannelType;
+            _connection = Method.ChConfig.ChannelType;
             _userChannel = new UserChannel();
-            Method.SetUserChannel(_userChannel);
+            Method.ChConfig.SetUserChannel(Method.Steps, _userChannel);
             _deviceManager = deviceManager;
             _resultPool = resultPool;
             _userChannel.QueryStarted += OnQueryStarted;
@@ -105,7 +105,7 @@ namespace ADTSChecks.Checks.ViewModel
         {
             _agregator = agregator;
             if (Method != null)
-                Method.SetAggregator(agregator);
+                Method.ChConfig.SetAggregator(agregator);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace ADTSChecks.Checks.ViewModel
         {
             if (string.IsNullOrEmpty(ethalonTypeKey) || ethalonTypeKey == UserEthalonChannel.Key || settings == null)
             {
-                Method.SetEthalonChannel(_userEchalonChannel, null);
+                Method.ChConfig.SetEthalonChannel(Method.Steps, _userEchalonChannel, null);
                 _ethalonTypeKey = UserEthalonChannel.Key;
                 _ethalonChannelType = null;
                 State.IsUserChannel = true;
@@ -251,7 +251,7 @@ namespace ADTSChecks.Checks.ViewModel
         #endregion
 
         #region Services
-        protected virtual CheckBase Method { get; set; }
+        protected virtual CheckBaseADTS Method { get; set; }
 
         /// <summary>
         /// Эталонный канал
@@ -311,7 +311,7 @@ namespace ADTSChecks.Checks.ViewModel
         protected void DoStart()
         {
             State.TitleBtnNext = "Далее";
-            Method.ChannelType = _connection;
+            Method.ChConfig.ChannelType = _connection;
             try
             {
                 State.ADTS.Start(_connection);
@@ -331,7 +331,7 @@ namespace ADTSChecks.Checks.ViewModel
             {
                 try
                 {
-                    Method.SetEthalonChannel(_deviceManager.GetEthalonChannel(_ethalonTypeKey), _ethalonChannelType);
+                    Method.ChConfig.SetEthalonChannel(Method.Steps, _deviceManager.GetEthalonChannel(_ethalonTypeKey), _ethalonChannelType);
                 }
                 catch (Exception ex) //todo поймать ошибку подключения
                 {
@@ -344,7 +344,7 @@ namespace ADTSChecks.Checks.ViewModel
                 }
             }
             else
-                Method.SetEthalonChannel(_userEchalonChannel, null);
+                Method.ChConfig.SetEthalonChannel(Method.Steps, _userEchalonChannel, null);
             // Запускаем
             _currentToken = _cancellation.Token;
             Task.Run(() =>
@@ -514,7 +514,7 @@ namespace ADTSChecks.Checks.ViewModel
             if (newRes == null)
             {
                 // новый результат не AdtsPointResult, потому не с чем сравнивать
-                _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChannelKey, eventArgTestResult.Key,
+                _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChConfig.ChannelKey, eventArgTestResult.Key,
                     eventArgTestResult.Result));
                 return;
             }
@@ -527,7 +527,7 @@ namespace ADTSChecks.Checks.ViewModel
                     continue;
                 if (Math.Abs(res.Point - newRes.Point) < double.Epsilon &&
                     stepResult.CheckKey == Method.Key &&
-                    stepResult.ChannelKey == Method.ChannelKey)
+                    stepResult.ChannelKey == Method.ChConfig.ChannelKey)
                 {
                     fidedRes = res;
                     break;
@@ -537,7 +537,7 @@ namespace ADTSChecks.Checks.ViewModel
             if (fidedRes == null)
             {
                 // это новая точка
-                _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChannelKey, eventArgTestResult.Key,
+                _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChConfig.ChannelKey, eventArgTestResult.Key,
                     eventArgTestResult.Result));
                 return;
             }
@@ -561,7 +561,7 @@ namespace ADTSChecks.Checks.ViewModel
 
         #endregion
 
-        private void AttachEvent(CheckBase model)
+        private void AttachEvent(CheckBaseADTS model)
         {
             model.StepsChanged += OnStepsChanged;
             model.ResultUpdated += ResultUpdated;
@@ -569,7 +569,7 @@ namespace ADTSChecks.Checks.ViewModel
             model.PauseAvailableChanged += model_PauseAvailableChanged;
         }
 
-        private void DetachEvent(CheckBase model)
+        private void DetachEvent(CheckBaseADTS model)
         {
             model.StepsChanged -= OnStepsChanged;
             model.ResultUpdated -= ResultUpdated;

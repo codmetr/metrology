@@ -40,8 +40,8 @@ namespace ADTSChecks
         {
             return new List<ArchivedKeyValuePair>
             {
-                new ArchivedKeyValuePair(CheckBase.KeySettingsPS, GetDefaultForADTSCheckPS()),
-                new ArchivedKeyValuePair(CheckBase.KeySettingsPT, GetDefaultForADTSCheckPT())
+                new ArchivedKeyValuePair(CheckBaseADTS.KeySettingsPS, GetDefaultForADTSCheckPS()),
+                new ArchivedKeyValuePair(CheckBaseADTS.KeySettingsPT, GetDefaultForADTSCheckPT())
             };
         }
 
@@ -63,9 +63,9 @@ namespace ADTSChecks
                         Min = 3.0,
                         Error = 0.01,
                     }.SetLocalizedNameFunc(()=>Resources.ChannelPs)),
-                new ArchivedKeyValuePair(CheckBase.KeyPoints, GetDefaultForADTSCheckPSPoints()),
-                new ArchivedKeyValuePair(CheckBase.KeyRate, 50.0),
-                new ArchivedKeyValuePair(CheckBase.KeyUnit, PressureUnits.MBar),
+                new ArchivedKeyValuePair(CheckBaseADTS.KeyPoints, GetDefaultForADTSCheckPSPoints()),
+                new ArchivedKeyValuePair(CheckBaseADTS.KeyRate, 50.0),
+                new ArchivedKeyValuePair(CheckBaseADTS.KeyUnit, PressureUnits.MBar),
             };
         }
 
@@ -88,9 +88,9 @@ namespace ADTSChecks
                         Min = 3.0,
                         Error = 0.01,
                     }.SetLocalizedNameFunc(()=>Resources.ChannelPt)),
-                new ArchivedKeyValuePair(CheckBase.KeyPoints, GetDefaultForADTSCheckPTPoints()),
-                new ArchivedKeyValuePair(CheckBase.KeyRate, 50.0),
-                new ArchivedKeyValuePair(CheckBase.KeyUnit, PressureUnits.MBar),
+                new ArchivedKeyValuePair(CheckBaseADTS.KeyPoints, GetDefaultForADTSCheckPTPoints()),
+                new ArchivedKeyValuePair(CheckBaseADTS.KeyRate, 50.0),
+                new ArchivedKeyValuePair(CheckBaseADTS.KeyUnit, PressureUnits.MBar),
             };
         }
 

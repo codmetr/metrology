@@ -309,7 +309,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Настройки">
+            <TabItem Header="Настройки" Visibility="Collapsed">
             </TabItem>
         </TabControl>
     </Grid>

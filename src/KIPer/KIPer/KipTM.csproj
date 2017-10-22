@@ -566,6 +566,10 @@
       <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
       <Name>MainLoop</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PressureSensorCheck\PressureSensorCheck.csproj">
+      <Project>{b39fc5b2-8d9b-49a9-9189-76ba124ae522}</Project>
+      <Name>PressureSensorCheck</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Reports\ReportService\ReportService.csproj">
       <Project>{71e2479c-c370-44bd-b6e0-48aa88101e7b}</Project>
       <Name>ReportService</Name>

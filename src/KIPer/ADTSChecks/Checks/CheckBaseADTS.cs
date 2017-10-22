@@ -4,6 +4,7 @@ using ADTSChecks.Devices;
 using ADTSData;
 using CheckFrame.Checks;
 using CheckFrame.Model.Checks.Steps;
+using KipTM.EventAggregator;
 using NLog;
 
 namespace ADTSChecks.Checks
@@ -11,7 +12,7 @@ namespace ADTSChecks.Checks
     /// <summary>
     /// Базовая реализация проверки ADTS
     /// </summary>
-    public abstract class CheckBase : Check
+    public abstract class CheckBaseADTS : Check
     {
         public const string KeySettingsPS = KeysDic.KeySettingsPS;
         public const string KeySettingsPT = KeysDic.KeySettingsPT;
@@ -32,15 +33,18 @@ namespace ADTSChecks.Checks
         protected ADTSModel _adts;
 
 
-        protected CheckBase(Logger logger):base(logger)
+        protected CheckBaseADTS(Logger logger):base(logger)
         {
             Title = MethodName;
         }
 
 
-        protected override void OnStartAction(CancellationToken cancel)
+        protected override bool PrepareCheck(CancellationToken cancel)
         {
-            _adts.Start(ChannelType);
+            if (!base.PrepareCheck(cancel))
+                return false;
+            _adts.Start(ChConfig.ChannelType);
+            return true;
         }
 
         /// <summary>

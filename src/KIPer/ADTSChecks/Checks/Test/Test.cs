@@ -15,7 +15,7 @@ using Tools;
 
 namespace ADTSChecks.Model.Checks
 {
-    public class Test : CheckBase
+    public class Test : CheckBaseADTS
     {
         public const string key = KeysDic.Test;
 
@@ -65,7 +65,7 @@ namespace ADTSChecks.Model.Checks
             _logger.With(l => l.Trace("Init ADTSTestMethodic"));
 
             _parameters = parameters;
-            _calibChan = parameters.CalibChannel;
+            ChConfig.Channel = parameters.CalibChannel;
 
             //if (_userChannel == null)
             //    throw new NullReferenceException("\"UserChannel\" not fount in parameters as IUserChannel");
@@ -73,22 +73,22 @@ namespace ADTSChecks.Model.Checks
             var steps = new List<CheckStepConfig>();
 
             // добавление шага инициализации
-            CheckStepConfig step = new CheckStepConfig(new InitStep("Инициализация поверки", _adts, _calibChan, _logger), true);
+            CheckStepConfig step = new CheckStepConfig(new InitStep("Инициализация поверки", _adts, ChConfig.Channel, _logger), true);
             AttachStep(step.Step);
             steps.Add(step);
 
             // добавление шагов прохождения точек
             Parameters param;
-            if (_calibChan.Name == ADTSModel.Ps)
+            if (ChConfig.Channel.Name == ADTSModel.Ps)
                 param = Parameters.PS;
-            else if (_calibChan.Name == ADTSModel.Pt)
+            else if (ChConfig.Channel.Name == ADTSModel.Pt)
                 param = Parameters.PT;
             else param = Parameters.PS;
 
             foreach (var point in parameters.Points)
             {
                 step = new CheckStepConfig(new DoPointStep(string.Format("Поверка точки {0} {1}", point.Pressure, _unit.ToStr()), _adts, param, point,
-                    parameters.Rate, parameters.Unit, _ethalonChannel, _userChannel, _logger), false, point.IsAvailable);
+                    parameters.Rate, parameters.Unit, ChConfig.EthChannel, ChConfig.UsrChannel, _logger), false, point.IsAvailable);
                 AttachStep(step.Step);
                 steps.Add(step);
             }

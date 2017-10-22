@@ -31,8 +31,9 @@ namespace CheckFrame.Checks
         /// <summary>
         /// Деcтвие перед запуском проверки
         /// </summary>
-        protected override void OnStartAction(CancellationToken cancel)
+        protected override bool PrepareCheck(CancellationToken cancel)
         {
+            return base.PrepareCheck(cancel);
         }
 
         protected override void AttachStep(ITestStep step)

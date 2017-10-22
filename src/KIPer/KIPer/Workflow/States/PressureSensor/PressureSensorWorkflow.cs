@@ -21,7 +21,7 @@ namespace KipTM.Workflow.States.PressureSensor
             var result = new PressureSensorResultVM();
             var reportMain = new PressureSensorReportDto()
             {
-                ReportNumber = "007",
+                ReportNumber = "1",
                 ReportTime = "700",
                 TypeDevice = "123",
                 Assay = "Корректно",

@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Archive\BasicKeys.cs" />
+    <Compile Include="Checks\ChannelsConfig.cs" />
     <Compile Include="Checks\CheckWithBuffer.cs" />
     <Compile Include="Checks\CheckBase.cs" />
     <Compile Include="Checks\Check.cs" />
