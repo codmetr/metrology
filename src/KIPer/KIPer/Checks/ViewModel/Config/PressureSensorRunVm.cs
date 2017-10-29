@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DPI620Genii;
 using NLog;
+using PressureSensorCheck.Devices;
 using Tools.View;
 
 namespace KipTM.Checks.ViewModel.Config
 {
     /// <summary>
-    /// Конфигурация самой проверки и её исполнение
+    /// Выпонение проверки
     /// </summary>
     public class PressureSensorRunVm:INotifyPropertyChanged
     {
@@ -33,26 +34,21 @@ namespace KipTM.Checks.ViewModel.Config
         private readonly ManualResetEvent _autorepeatWh = new ManualResetEvent(true);
         private readonly TimeSpan _periodAutoread = TimeSpan.FromMilliseconds(100);
 
-        private readonly Func<double, double> _getUbyPressure;
-        private readonly Func<double, double> _getdUbyU;
+        private readonly CheckPressureSensorConfig _config;
 
-        public PressureSensorRunVm(Func<double, double> getUbyPressure, Func<double, double> getdUbyU, IDPI620Driver dpi620)
+        /// <summary>
+        /// Выпонение проверки
+        /// </summary>
+        /// <param name="config">конфигурация проверки</param>
+        /// <param name="dpi620">драйвер DPI620Genii</param>
+        public PressureSensorRunVm(CheckPressureSensorConfig config, IDPI620Driver dpi620)
         {
             Measured = new ObservableCollection<MeasuringPoint>();
             _dpi620 = dpi620;
             _logger = NLog.LogManager.GetLogger("PressureSensorPointsConfigVm");
             Points = new ObservableCollection<PointViewModel>();
             NewConfig = new PointConfigViewModel();
-            _getUbyPressure = getUbyPressure?? ((press) =>
-            {
-                if (press >= _maxP)
-                    return _maxU;
-                if (press <= _minP)
-                    return _minU;
-                var val = _minU + (press - _minP) * ((_maxU - _minU)/(_maxP - _minP));
-                return val;
-            });
-            _getdUbyU = getdUbyU ?? ((u) => 0.1);
+            _config = config;
         }
 
         /// <summary>
@@ -135,8 +131,13 @@ namespace KipTM.Checks.ViewModel.Config
                 new AutoreadState(cancel, _periodAutoread, _startTime.Value, _autorepeatWh),
                 cancel, TaskCreationOptions.None);
             tUpdate.Start(TaskScheduler.Default);
-
-            var check = new PressureSensorCheck.Check.PressureSensorCheck(NLog.LogManager.GetLogger(string.Format("", )));
+            var checkLogger = NLog.LogManager.GetLogger(string.Format("Check{0}",
+                _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
+            var check = new PressureSensorCheck.Check.PressureSensorCheck(checkLogger,
+                new DPI620Ethalon(_dpi620, 0, "mmHg"),
+                new DPI620Ethalon(_dpi620, 1, "mA"));
+            var task = new Task(()=>check.Start(cancel));
+            task.Start(TaskScheduler.Default);
         }
 
         /// <summary>
@@ -170,7 +171,7 @@ namespace KipTM.Checks.ViewModel.Config
             {
                 var u = _dpi620.GetValue(1, "");
                 var pressure = _dpi620.GetValue(2, PressureUnit);
-                var un = _getUbyPressure(pressure);
+                var un = GetUForPressure(pressure);
                 var du = un - u;
                 var qu = u / un - 1.0;
                 var item = new MeasuringPoint()
@@ -179,8 +180,8 @@ namespace KipTM.Checks.ViewModel.Config
                     U = u,
                     Pressure = pressure,
                     dU = du,
-                    Un = _getUbyPressure(pressure),
-                    dUn = _getdUbyU(un),
+                    Un = GetUForPressure(pressure),
+                    dUn = GetdUForU(un),
                     qU = qu,
                     qUn = 0,
                 };
@@ -188,6 +189,33 @@ namespace KipTM.Checks.ViewModel.Config
                 _logger.Trace($"Readed repeat: P:{item.Pressure} {PressureUnit}");
             }
             arg.AutoreadWh.Set();
+        }
+
+        private double GetUForPressure(double pressure)
+        {
+            var percentVpi = (pressure - _config.VpiMin)/(_config.VpiMax - _config.VpiMin);
+            if (pressure < _config.VpiMin)
+                percentVpi = 0;
+            double uMin = 0.0;
+            double uMax = 5.0;
+            if (_config.OutputRange == OutGange.I4_20mA)
+            {
+                uMin = 4;
+                uMax = 20;
+            }
+            var val = uMin + (uMax - uMin) * percentVpi;
+
+            return val;
+        }
+
+        /// <summary>
+        /// Получить допуск для конкретной точки напряжения
+        /// </summary>
+        /// <param name="u"></param>
+        /// <returns></returns>
+        private double GetdUForU(double u)
+        {
+            return _config.ToleranceDelta;
         }
 
         protected class AutoreadState

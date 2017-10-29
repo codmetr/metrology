@@ -240,6 +240,7 @@
     <Compile Include="Checks\ViewModel\CheckFactory.cs" />
     <Compile Include="Skins\Converters\BinToTextResultConverter.cs" />
     <Compile Include="Skins\Converters\BoolToColorConverter.cs" />
+    <Compile Include="Skins\Converters\OutGangerStringConverter.cs" />
     <Compile Include="Skins\Converters\InverseBooleanConverter.cs" />
     <Compile Include="Skins\Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModel\OneBtnDescripto.cs" />

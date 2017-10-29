@@ -133,7 +133,7 @@ namespace KipTM.Checks.ViewModel.Config
         private double _tolerancePercentVpi;
         private double _pointsOnRange = 5;
         private string _unit;
-        private string _outputRange;
+        private OutGange _outputRange;
 
         public CheckPressureSensorConfig()
         {
@@ -148,8 +148,8 @@ namespace KipTM.Checks.ViewModel.Config
             Unit = Units.FirstOrDefault();
             OutputRanges = new[]
             {
-                "4-20 мА",
-                "0-5 мА",
+                OutGange.I4_20mA,
+                OutGange.I0_5mA,
             };
             OutputRange = OutputRanges.FirstOrDefault();
             UpdatePoints();
@@ -220,12 +220,12 @@ namespace KipTM.Checks.ViewModel.Config
         /// <summary>
         /// Варианты выходного диапазона
         /// </summary>
-        public IEnumerable<string> OutputRanges { get; set; }
+        public IEnumerable<OutGange> OutputRanges { get; set; }
 
         /// <summary>
         /// Выбранный выходной диапазон
         /// </summary>
-        public string OutputRange
+        public OutGange OutputRange
         {
             get { return _outputRange; }
             set
@@ -258,7 +258,7 @@ namespace KipTM.Checks.ViewModel.Config
             var du = (max - min) * tollerance / 100.0;
             double uMin = 0.0;
             double uMax = 5.0;
-            if (OutputRange == "4-20 мА")
+            if (OutputRange == OutGange.I4_20mA)
             {
                 uMin = 4;
                 uMax = 20;
@@ -285,6 +285,15 @@ namespace KipTM.Checks.ViewModel.Config
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// Диапазон выходного сигнала
+    /// </summary>
+    public enum OutGange
+    {
+        I4_20mA,
+        I0_5mA,
     }
 
     /// <summary>

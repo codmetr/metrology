@@ -16,8 +16,12 @@ namespace KipTM.Workflow.States.PressureSensor
     {
         public IWorkflow Make()
         {
-            var config = new PressureSensorCheckConfigVm();
-            var run = new PressureSensorRunVm(null, null, GetMoq());
+            var configData = new CheckPressureSensorConfig();
+            var config = new PressureSensorCheckConfigVm()
+            {
+                Config = configData,
+            };
+            var run = new PressureSensorRunVm(configData, GetMoq());
             var result = new PressureSensorResultVM();
             var reportMain = new PressureSensorReportDto()
             {
