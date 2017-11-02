@@ -114,7 +114,7 @@
             <!--<WindowsFormsHost Name="WFHost" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300">
                 <zedGraph:ZedGraphControl x:Name="zChart" Height="300" Width="300"/>
             </WindowsFormsHost>-->
-            <d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300">
+            <d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="250">
                 <d3:ChartPlotter Name="plotter" Margin="10,5,10,15" DataContextChanged="Plotter_OnDataContextChanged"
                                  DataContext="{Binding Measured, UpdateSourceTrigger=PropertyChanged}">
                     <d3:ChartPlotter.HorizontalAxis>

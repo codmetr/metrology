@@ -32,6 +32,7 @@
                 </Style>
             </TabControl.Resources>
             <TabItem Header="Средства измерения">
+                <ScrollViewer>
                 <StackPanel Margin="20,0,20,0">
                     <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
                         Преобразователь давления:
@@ -173,6 +174,7 @@
                         <TextBox Grid.Row="1" Grid.Column="0" Height="60"></TextBox>
                     </Grid>
                 </StackPanel>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Точки проверки">
                 <Grid Margin="20,0,20,0">
