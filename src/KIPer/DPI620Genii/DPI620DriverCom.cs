@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace DPI620Genii
 {
-    public class DPI620DriverCom
+    public class DPI620DriverCom : IDPI620Driver
     {
         readonly Dictionary<string, string> _dicCmdSetUnit = new Dictionary<string, string>()
         {
@@ -86,6 +86,11 @@ namespace DPI620Genii
         private string Read()
         {
             return _reader.ReadLine();
+        }
+
+        public void Open()
+        {
+            throw new NotImplementedException();
         }
 
         public void SetUnits(int slotId, String unitCode)
