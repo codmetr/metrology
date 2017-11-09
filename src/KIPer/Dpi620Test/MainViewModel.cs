@@ -10,10 +10,11 @@ using MahApps.Metro.Controls;
 using Moq;
 using NLog;
 using Tools.View;
+using Tools.View.Busy;
 
 namespace Dpi620Test
 {
-    public class MainViewModel:INotifyPropertyChanged
+    public class MainViewModel:INotifyPropertyChanged, IBusy
     {
         private readonly LogViewModel _logViewModel;
         private readonly Logger _logger;
@@ -21,15 +22,16 @@ namespace Dpi620Test
 
         public MainViewModel(IDPI620Driver dpi620, SettingsViewModel settings, Dispatcher disp, Action prepareDpi)
         {
+            IsBusy = false;
             Settings = settings;
             _logViewModel = new LogViewModel(disp);
             _dpi620 = new Dpi620Presenter(dpi620, prepareDpi);
             _logger = NLog.LogManager.GetLogger("MainLog");
-            Slot1 = new SlotViewModel("Слот 1", Settings, dpi620, 1, _logger)
+            Slot1 = new SlotViewModel("Слот 1", Settings, dpi620, 1, _logger, this)
             {
                 Units = _dpi620.UnitsSlot1, SelectedUnit = _dpi620.UnitsSlot1.FirstOrDefault()
             };
-            Slot2 = new SlotViewModel("Слот 2", Settings, dpi620, 2, _logger)
+            Slot2 = new SlotViewModel("Слот 2", Settings, dpi620, 2, _logger, this)
             {
                 Units = _dpi620.UnitsSlot2,
                 SelectedUnit = _dpi620.UnitsSlot2.FirstOrDefault()
@@ -43,7 +45,19 @@ namespace Dpi620Test
         /// </summary>
         public bool IsConnected { get; set; }
 
-        public ICommand CheckChanged { get { return new CommandWrapper(DoChackChanged);} }
+        /// <summary>
+        /// Интерфейс занят
+        /// </summary>
+        public bool IsBusy { get; set; }
+
+        public ICommand CheckChanged { get
+        {
+            return new CommandWrapper((arg) =>
+            {
+                using (new LockControl(this))
+                    DoChackChanged(arg);
+            });
+        } }
 
         private void DoChackChanged(object arg)
         {

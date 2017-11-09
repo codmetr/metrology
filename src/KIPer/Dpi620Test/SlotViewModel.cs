@@ -8,6 +8,7 @@ using System.Windows.Input;
 using DPI620Genii;
 using NLog;
 using Tools.View;
+using Tools.View.Busy;
 
 namespace Dpi620Test
 {
@@ -27,7 +28,9 @@ namespace Dpi620Test
 
         private readonly int _slotNum;
 
-        public SlotViewModel(string name, SettingsViewModel settings, IDPI620Driver dpi620, int slotNum, Logger logger)
+        private readonly IBusy _busy;
+
+        public SlotViewModel(string name, SettingsViewModel settings, IDPI620Driver dpi620, int slotNum, Logger logger, IBusy busy)
         {
             Name = name;
             _settings = settings;
@@ -41,7 +44,7 @@ namespace Dpi620Test
                 new OnePointViewModel() { TimeStamp = TimeSpan.FromMilliseconds(20), Val = 1.9},
                 new OnePointViewModel() { TimeStamp = TimeSpan.FromMilliseconds(30), Val = 10},
             });
-
+            _busy = busy;
         }
 
         public string Name { get; set; }
@@ -52,14 +55,24 @@ namespace Dpi620Test
 
         public bool IsAutorequest { get; set; }
 
-        public ICommand SetUnit => new CommandWrapper(DoSetUnit);
+        public ICommand SetUnit => new CommandWrapper(
+            () =>
+            {
+                using (new LockControl(_busy))
+                    DoSetUnit();
+            });
 
         private void DoSetUnit()
         {
             _dpi620.SetUnits(_slotNum, SelectedUnit);
         }
 
-        public ICommand ReadOnce =>new CommandWrapper(DoReadOnce);
+        public ICommand ReadOnce =>new CommandWrapper(
+            () =>
+            {
+                using (new LockControl(_busy))
+                    DoReadOnce();
+            });
 
         private void DoReadOnce()
         {
@@ -68,7 +81,12 @@ namespace Dpi620Test
             _logger.Trace($"{Name} readed once: {ReadingResult}");
         }
 
-        public ICommand StartAutoread => new CommandWrapper(DoStartAutoread);
+        public ICommand StartAutoread => new CommandWrapper(
+            () =>
+            {
+                using (new LockControl(_busy))
+                    DoStartAutoread();
+            });
 
         private void DoStartAutoread()
         {
@@ -83,7 +101,12 @@ namespace Dpi620Test
                 cancel);
         }
 
-        public ICommand StopAutoread => new CommandWrapper(DoStopAutoread);
+        public ICommand StopAutoread => new CommandWrapper(
+            () =>
+            {
+                using (new LockControl(_busy))
+                    DoStopAutoread();
+            });
 
         private void DoStopAutoread()
         {

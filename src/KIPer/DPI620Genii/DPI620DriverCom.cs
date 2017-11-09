@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
@@ -38,8 +39,8 @@ namespace DPI620Genii
         {
             _serial = new SerialPort(portName);
             _serial.BaudRate = 19200;
-            _writer = new StreamWriter(_serial.BaseStream, Encoding.UTF8);
-            _reader = new StreamReader(_serial.BaseStream, Encoding.UTF8);
+            _writer = new StreamWriter(_serial.BaseStream, Encoding.Unicode);
+            _reader = new StreamReader(_serial.BaseStream, Encoding.Unicode);
 
             Write("#km=r\r\n");
         }
@@ -58,7 +59,7 @@ namespace DPI620Genii
                 
                 Thread.Sleep(400);
                 string readedLine;
-                while ((readedLine = _reader.ReadLine()).Length > 0) {
+                while ((readedLine = Read()).Length > 0) {
                     sb.Append(readedLine);
                 }
                 Write("*km=l\r\n");
@@ -87,23 +88,24 @@ namespace DPI620Genii
 
         private void Write(string data)
         {
-            _writer.Write(data);
-            Log(">>" + data + "\n");
+            _serial.Write(data);
+            //_writer.Write(data);
+            Log($">>{data} | {DataToHex(data)}");
         }
 
         private string Read()
         {
-            var line = _reader.ReadLine();
-            Log("<<" + line + "\n");
+            var line = _serial.ReadLine();
+            Log($"<<{line} | {DataToHex(line)}");
             return line;
         }
 
         public void SetPort(string portName)
         {
-            _serial = new SerialPort(portName);
-            _serial.BaudRate = 19200;
-            _writer = new StreamWriter(_serial.BaseStream, Encoding.UTF8);
-            _reader = new StreamReader(_serial.BaseStream, Encoding.UTF8);
+            _serial = new SerialPort(portName, 19200, Parity.None, 8, StopBits.One);
+            _serial.RtsEnable = false;
+            _serial.DtrEnable = true;
+            _serial.ReadTimeout = 1000;
             Log("Set port: " + portName);
         }
 
@@ -111,7 +113,19 @@ namespace DPI620Genii
         {
             try
             {
-                Write("#km=r\r\n");
+                _serial.Open();
+                Log("Serial \"" + _serial.PortName + "\" open");
+                _writer = new StreamWriter(_serial.BaseStream, Encoding.UTF8);
+                _reader = new StreamReader(_serial.BaseStream, Encoding.UTF8);
+                Write("*km=r\r\n");
+                Write("*su3=1\r\n");
+                Write("*km=r\r\n");
+                Write("*ir2?\r\n");
+                Read();
+                Read();
+                Read();
+                Read();
+                Read();
             }
             catch (IOException ex)
             {
@@ -144,18 +158,21 @@ namespace DPI620Genii
         {
             try
             {
-                if (("UCMA" == unitCode) || ("UVVO" == unitCode) || ("UVMV" == unitCode))
+                //if (("UCMA" == unitCode) || ("UVVO" == unitCode) || ("UVMV" == unitCode))
+                if(slotId == 1)
                 {
                     Write("#ir1?\r\n");
                 }
                 else
                 {
-                    Write("#ir2?\r\n");
+                    Write("*ir2?\r\n");
                 }
-
+                Read();
                 var sb = Read();
-                Log("RAW620: " + unitCode + " " + sb);
-                double val = double.Parse(sb.Split("=".ToCharArray())[1]);
+                //Log("RAW620: " + unitCode + " " + sb);
+                var valstr = sb.Split("=".ToCharArray())[1].Trim();
+                Log("Value = \"" + valstr + "\"");
+                double val = double.Parse(valstr, NumberStyles.Any, CultureInfo.InvariantCulture);
 
                 return val;
             }
@@ -183,6 +200,17 @@ namespace DPI620Genii
             {
                 Log(ex.ToString());
             }
+        }
+
+        private string DataToHex(string str)
+        {
+            var sb = new StringBuilder();
+            foreach (char c in str)
+            {
+                sb.Append(((byte) c).ToString("X2"));
+                sb.Append(" ");
+            }
+            return sb.ToString();
         }
     }
 }
