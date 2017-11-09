@@ -19,11 +19,11 @@ namespace Dpi620Test
         private readonly Logger _logger;
         private readonly Dpi620Presenter _dpi620;
 
-        public MainViewModel(IDPI620Driver dpi620, SettingsViewModel settings, Dispatcher disp)
+        public MainViewModel(IDPI620Driver dpi620, SettingsViewModel settings, Dispatcher disp, Action prepareDpi)
         {
             Settings = settings;
             _logViewModel = new LogViewModel(disp);
-            _dpi620 = new Dpi620Presenter(dpi620);
+            _dpi620 = new Dpi620Presenter(dpi620, prepareDpi);
             _logger = NLog.LogManager.GetLogger("MainLog");
             Slot1 = new SlotViewModel("Слот 1", Settings, dpi620, 1, _logger)
             {

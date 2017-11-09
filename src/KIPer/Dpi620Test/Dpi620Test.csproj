@@ -183,7 +183,7 @@
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
@@ -201,6 +201,10 @@
     <ProjectReference Include="..\Tools.View\Tools.View.csproj">
       <Project>{69AB619C-5B3A-4EE7-9318-73D92E75F812}</Project>
       <Name>Tools.View</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools\Tools.csproj">
+      <Project>{E53085F8-5740-43B1-B564-FAE5EF4C900A}</Project>
+      <Name>Tools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

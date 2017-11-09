@@ -10,14 +10,17 @@ namespace Dpi620Test
     internal class Dpi620Presenter
     {
         private readonly IDPI620Driver _dpi620;
+        private readonly Action _prepare = () => {};
 
-        public Dpi620Presenter(IDPI620Driver dpi620)
+        public Dpi620Presenter(IDPI620Driver dpi620, Action prepare)
         {
             _dpi620 = dpi620;
+            _prepare = prepare;
         }
 
         public void Open()
         {
+            _prepare();
             _dpi620.Open();
         }
 

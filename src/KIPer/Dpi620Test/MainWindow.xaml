@@ -72,6 +72,9 @@
                         <TextBlock>Период автоопроса:</TextBlock>
                         <xctk:TimeSpanUpDown Watermark="перод автоопроса" DefaultValue="1" Text="ss:fff"
                                              Value="{Binding PeriodAutoread, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock>Порт подлючения:</TextBlock>
+                        <xctk:WatermarkComboBox Watermark="Порт подключения" ItemsSource="{Binding Ports, UpdateSourceTrigger=PropertyChanged}"
+                                                SelectedItem="{Binding SelectedPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </UniformGrid>
                 </StackPanel>
             </controls:Flyout>

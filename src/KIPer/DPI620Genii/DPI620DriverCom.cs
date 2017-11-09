@@ -33,6 +33,7 @@ namespace DPI620Genii
         private SerialPort _serial;
         private StreamWriter _writer;
         private StreamReader _reader;
+        private Action<string> _toLog = s => {};
         public void Open(string portName)
         {
             _serial = new SerialPort(portName);
@@ -40,7 +41,7 @@ namespace DPI620Genii
             _writer = new StreamWriter(_serial.BaseStream, Encoding.UTF8);
             _reader = new StreamReader(_serial.BaseStream, Encoding.UTF8);
 
-            _writer.Write("#km=r\r\n");
+            Write("#km=r\r\n");
         }
 
         public bool TryToIdentifyCOM(String port)
@@ -73,24 +74,54 @@ namespace DPI620Genii
             return false;
         }
 
+        public DPI620DriverCom Setlog(Action<string> toLog)
+        {
+            _toLog = toLog;
+            return this;
+        }
+
         private void Log(string msg)
         {
-
+            _toLog(msg);
         }
 
         private void Write(string data)
         {
             _writer.Write(data);
+            Log(">>" + data + "\n");
         }
 
         private string Read()
         {
-            return _reader.ReadLine();
+            var line = _reader.ReadLine();
+            Log("<<" + line + "\n");
+            return line;
+        }
+
+        public void SetPort(string portName)
+        {
+            _serial = new SerialPort(portName);
+            _serial.BaudRate = 19200;
+            _writer = new StreamWriter(_serial.BaseStream, Encoding.UTF8);
+            _reader = new StreamReader(_serial.BaseStream, Encoding.UTF8);
+            Log("Set port: " + portName);
         }
 
         public void Open()
         {
-            throw new NotImplementedException();
+            try
+            {
+                Write("#km=r\r\n");
+            }
+            catch (IOException ex)
+            {
+                Log(ex.ToString());
+                throw;
+            }
+            catch (Exception e)
+            {
+                Log(e.ToString());
+            }
         }
 
         public void SetUnits(int slotId, String unitCode)
@@ -144,7 +175,8 @@ namespace DPI620Genii
         {
             try
             {
-                _writer.Write("#km=l\r\n");
+                Write("#km=l\r\n");
+                Log("Serial \"" + _serial.PortName + "\" close");
                 _serial.Close();
             }
             catch (IOException ex)
