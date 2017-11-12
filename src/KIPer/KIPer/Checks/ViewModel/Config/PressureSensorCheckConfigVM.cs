@@ -6,6 +6,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using ArchiveData.DTO;
+using KipTM.Interfaces;
+using PressureSensorCheck.Devices;
 
 namespace KipTM.Checks.ViewModel.Config
 {
@@ -111,6 +114,8 @@ namespace KipTM.Checks.ViewModel.Config
         /// </summary>
         public double CommonVoltage { get; set; }
 
+        public DPI620GeniiConfig DpiConfig { get; set; }
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -121,6 +126,54 @@ namespace KipTM.Checks.ViewModel.Config
         }
 
         #endregion
+    }
+
+    public class DPI620GeniiConfig : INotifyPropertyChanged
+    {
+        public IEnumerable<string> Ports { get; set; }
+
+        public string SelectPort { get; set; }
+
+        public DpiSlotConfig Slot1 { get; set; }
+
+        public DpiSlotConfig Slot2 { get; set; }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+        public class DpiSlotConfig:INotifyPropertyChanged
+        {
+            public IEnumerable<ChannelType> ChannelTypes { get; set; }
+
+            public ChannelType ChannelType { get; set; }
+
+            public double From { get; set; }
+
+            public double To { get; set; }
+
+            public IEnumerable<Units> UnitSet { get; set; }
+
+            public Units SelectedUnit { get; set; }
+
+            #region INotifyPropertyChanged
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            protected virtual void OnPropertyChanged(string propertyName = null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+
+            #endregion
+        }
     }
 
     /// <summary>

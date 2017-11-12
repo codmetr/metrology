@@ -102,6 +102,7 @@
     <Compile Include="Settings\IEthalonSettingsFactory.cs" />
     <Compile Include="Settings\IMainSettings.cs" />
     <Compile Include="TransportChannels\ITransportChannelType.cs" />
+    <Compile Include="Units.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">

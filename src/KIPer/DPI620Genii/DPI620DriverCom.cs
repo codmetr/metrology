@@ -42,7 +42,7 @@ namespace DPI620Genii
             _writer = new StreamWriter(_serial.BaseStream, Encoding.Unicode);
             _reader = new StreamReader(_serial.BaseStream, Encoding.Unicode);
 
-            Write("#km=r\r\n");
+            Write("*km=r\r\n");
         }
 
         public bool TryToIdentifyCOM(String port)
@@ -161,7 +161,7 @@ namespace DPI620Genii
                 //if (("UCMA" == unitCode) || ("UVVO" == unitCode) || ("UVMV" == unitCode))
                 if(slotId == 1)
                 {
-                    Write("#ir1?\r\n");
+                    Write("*ir1?\r\n");
                 }
                 else
                 {

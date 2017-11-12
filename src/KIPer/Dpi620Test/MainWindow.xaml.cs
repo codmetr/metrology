@@ -43,7 +43,7 @@ namespace Dpi620Test
             {
                 SelectedPort = selectedPort,
                 Ports = ports,
-                PeriodAutoread = TimeSpan.FromSeconds(1)
+                PeriodAutoread = TimeSpan.FromMilliseconds(100)
             };
 
             Action prepare = () =>

@@ -20,7 +20,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Visibility="Collapsed">
                         <TextBlock Margin="3" VerticalAlignment="Center">Единицы измерения:</TextBlock>
                         <ComboBox ItemsSource="{Binding Units}" Margin="3"
                                   SelectedItem="{Binding SelectedUnit, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
@@ -99,7 +99,7 @@
             <ContentPresenter Content="{Binding Slot1}" ContentTemplate="{StaticResource SlotDT}"
                               IsEnabled="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}"/>
         </GroupBox>
-        <GroupBox Header="Слот 1" Grid.Column="1" Grid.Row="1" IsEnabled="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}">
+        <GroupBox Header="Слот 2" Grid.Column="1" Grid.Row="1" IsEnabled="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}">
             <ContentPresenter Content="{Binding Slot2}" ContentTemplate="{StaticResource SlotDT}"
                               IsEnabled="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}"/>
         </GroupBox>

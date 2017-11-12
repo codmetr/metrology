@@ -319,6 +319,22 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Настройки" Visibility="Collapsed">
+                <StackPanel>
+                    <UniformGrid Rows="1">
+                        <TextBlock Style="{StaticResource TblBasicStyle}">Порт подклчение:</TextBlock>
+                        <ComboBox></ComboBox>
+                    </UniformGrid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                </StackPanel>
             </TabItem>
         </TabControl>
     </Grid>

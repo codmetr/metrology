@@ -30,8 +30,11 @@ namespace PressureSensorCheck.Devices
 
         public enum Unit
         {
+            bar,
             kgSm,
             volt,
+            mA,
+            A,
         }
 
         private Dictionary<Unit, string> _unitDict = new Dictionary<Unit, string>()

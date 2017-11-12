@@ -29,12 +29,13 @@ namespace Dpi620Test
             _logger = NLog.LogManager.GetLogger("MainLog");
             Slot1 = new SlotViewModel("Слот 1", Settings, dpi620, 1, _logger, this)
             {
-                Units = _dpi620.UnitsSlot1, SelectedUnit = _dpi620.UnitsSlot1.FirstOrDefault()
+                Units = _dpi620.UnitsSlot1,
+                SelectedUnit = ""//_dpi620.UnitsSlot1.FirstOrDefault()
             };
             Slot2 = new SlotViewModel("Слот 2", Settings, dpi620, 2, _logger, this)
             {
                 Units = _dpi620.UnitsSlot2,
-                SelectedUnit = _dpi620.UnitsSlot2.FirstOrDefault()
+                SelectedUnit = ""//_dpi620.UnitsSlot2.FirstOrDefault()
             };
         }
 
