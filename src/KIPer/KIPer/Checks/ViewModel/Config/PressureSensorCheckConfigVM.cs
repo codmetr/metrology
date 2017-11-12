@@ -114,6 +114,9 @@ namespace KipTM.Checks.ViewModel.Config
         /// </summary>
         public double CommonVoltage { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public DPI620GeniiConfig DpiConfig { get; set; }
 
         #region INotifyPropertyChanged
