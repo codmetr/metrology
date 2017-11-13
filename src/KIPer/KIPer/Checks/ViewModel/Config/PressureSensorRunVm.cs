@@ -25,6 +25,7 @@ namespace KipTM.Checks.ViewModel.Config
         private double _minU = 2;
         private double _maxU = 5;
         private readonly IDPI620Driver _dpi620;
+        private DPI620GeniiConfig _dpiConf;
         private readonly Logger _logger;
 
         private CancellationTokenSource _cancellation = new CancellationTokenSource();
@@ -41,10 +42,12 @@ namespace KipTM.Checks.ViewModel.Config
         /// </summary>
         /// <param name="config">конфигурация проверки</param>
         /// <param name="dpi620">драйвер DPI620Genii</param>
-        public PressureSensorRunVm(CheckPressureSensorConfig config, IDPI620Driver dpi620)
+        /// <param name="dpiConf">контейнер конфигурации DPI620</param>
+        public PressureSensorRunVm(CheckPressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf)
         {
             Measured = new ObservableCollection<MeasuringPoint>();
             _dpi620 = dpi620;
+            _dpiConf = dpiConf;
             _logger = NLog.LogManager.GetLogger("PressureSensorPointsConfigVm");
             Points = new ObservableCollection<PointViewModel>();
             NewConfig = new PointConfigViewModel();

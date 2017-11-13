@@ -17,11 +17,13 @@ namespace KipTM.Workflow.States.PressureSensor
         public IWorkflow Make()
         {
             var configData = new CheckPressureSensorConfig();
+            var dpiConf = new DPI620GeniiConfig();
             var config = new PressureSensorCheckConfigVm()
             {
                 Config = configData,
+                DpiConfig = dpiConf,
             };
-            var run = new PressureSensorRunVm(configData, GetMoq());
+            var run = new PressureSensorRunVm(configData, new DPI620DriverCom(), dpiConf);
             var result = new PressureSensorResultVM();
             var reportMain = new PressureSensorReportDto()
             {

@@ -22,6 +22,7 @@ namespace KipTM.Checks.ViewModel.Config
             EthalonPressure = new EthalonDescriptor();
             EthalonVoltage = new EthalonDescriptor();
             Config = new CheckPressureSensorConfig();
+            DpiConfig = new DPI620GeniiConfig();
             Temperature = 23;
             Humidity = 50;
             DayPressure = 760;
@@ -115,7 +116,7 @@ namespace KipTM.Checks.ViewModel.Config
         public double CommonVoltage { get; set; }
 
         /// <summary>
-        /// 
+        /// Конфигурация DPI620
         /// </summary>
         public DPI620GeniiConfig DpiConfig { get; set; }
 
