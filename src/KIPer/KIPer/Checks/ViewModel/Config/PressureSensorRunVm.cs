@@ -12,19 +12,20 @@ using DPI620Genii;
 using NLog;
 using PressureSensorCheck.Devices;
 using Tools.View;
+using System.Diagnostics;
 
 namespace KipTM.Checks.ViewModel.Config
 {
     /// <summary>
     /// Выпонение проверки
     /// </summary>
-    public class PressureSensorRunVm:INotifyPropertyChanged
+    public class PressureSensorRunVm : INotifyPropertyChanged
     {
         private double _minP = 0;
         private double _maxP = 100;
         private double _minU = 2;
         private double _maxU = 5;
-        private readonly IDPI620Driver _dpi620;
+        private readonly DPI620DriverCom _dpi620;
         private DPI620GeniiConfig _dpiConf;
         private readonly Logger _logger;
 
@@ -43,7 +44,7 @@ namespace KipTM.Checks.ViewModel.Config
         /// <param name="config">конфигурация проверки</param>
         /// <param name="dpi620">драйвер DPI620Genii</param>
         /// <param name="dpiConf">контейнер конфигурации DPI620</param>
-        public PressureSensorRunVm(CheckPressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf)
+        public PressureSensorRunVm(CheckPressureSensorConfig config, DPI620DriverCom dpi620, DPI620GeniiConfig dpiConf)
         {
             Measured = new ObservableCollection<MeasuringPoint>();
             _dpi620 = dpi620;
@@ -113,7 +114,7 @@ namespace KipTM.Checks.ViewModel.Config
         /// Проверка выполняется
         /// </summary>
         public bool IsRun { get; set; }
-        
+
         /// <summary>
         /// Запустить проверку
         /// </summary>
@@ -128,7 +129,16 @@ namespace KipTM.Checks.ViewModel.Config
             var cancel = _cancellation.Token;
             _autorepeatWh.Reset();
             Measured.Clear();
-            _dpi620.Open();
+            try
+            {
+                _dpi620.Open(_dpiConf.SelectPort);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                ShowMessage("Не удалось связаться с DPI620Genii. Укажите конфигурацию DPI620Genii на вкладке \"Настройка\": укажите порт подключения");
+                return;
+            }
 
             var tUpdate = new Task((arg) => Autoread((AutoreadState)arg),
                 new AutoreadState(cancel, _periodAutoread, _startTime.Value, _autorepeatWh),
@@ -136,11 +146,40 @@ namespace KipTM.Checks.ViewModel.Config
             tUpdate.Start(TaskScheduler.Default);
             var checkLogger = NLog.LogManager.GetLogger(string.Format("Check{0}",
                 _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
+
+
+            DPI620Ethalon inCH;
+            DPI620Ethalon outCh;
+            if (_dpiConf.Slot1.ChannelType == ArchiveData.DTO.ChannelType.Pressure)
+            {
+                inCH = new DPI620Ethalon(_dpi620, 0, _dpiConf.Slot1.SelectedUnit.ToString());//TODO: Преобразовать по-нормальному SelectedUnit в строку
+                outCh = new DPI620Ethalon(_dpi620, 1, _dpiConf.Slot2.SelectedUnit.ToString());//TODO: Преобразовать по-нормальному SelectedUnit в строку
+            }
+            else if (_dpiConf.Slot2.ChannelType == ArchiveData.DTO.ChannelType.Pressure)
+            {
+                inCH = new DPI620Ethalon(_dpi620, 1, _dpiConf.Slot2.SelectedUnit.ToString());//TODO: Преобразовать по-нормальному SelectedUnit в строку
+                outCh = new DPI620Ethalon(_dpi620, 2, _dpiConf.Slot1.SelectedUnit.ToString());//TODO: Преобразовать по-нормальному SelectedUnit в строку
+            }
+            else
+            {
+                ShowMessage("Укажите конфигурацию DPI620Genii на вкладке \"Настройка\": укажите какие датчики в каких слотах");
+                return;
+            }
+
             var check = new PressureSensorCheck.Check.PressureSensorCheck(checkLogger,
-                new DPI620Ethalon(_dpi620, 0, "mmHg"),
-                new DPI620Ethalon(_dpi620, 1, "mA"));
-            var task = new Task(()=>check.Start(cancel));
+            new DPI620Ethalon(_dpi620, 0, "mmHg"),
+            new DPI620Ethalon(_dpi620, 1, "mA"));
+            var task = new Task(() => check.Start(cancel));
             task.Start(TaskScheduler.Default);
+        }
+
+        /// <summary>
+        /// Показать сообщение пользователю
+        /// </summary>
+        /// <param name="msg"></param>
+        private void ShowMessage(string msg)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -196,7 +235,7 @@ namespace KipTM.Checks.ViewModel.Config
 
         private double GetUForPressure(double pressure)
         {
-            var percentVpi = (pressure - _config.VpiMin)/(_config.VpiMax - _config.VpiMin);
+            var percentVpi = (pressure - _config.VpiMin) / (_config.VpiMax - _config.VpiMin);
             if (pressure < _config.VpiMin)
                 percentVpi = 0;
             double uMin = 0.0;
@@ -416,7 +455,7 @@ namespace KipTM.Checks.ViewModel.Config
         /// Напряжение на заданной точке в допуске
         /// </summary>
         public bool IsCorrect { get; set; }
-        
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
