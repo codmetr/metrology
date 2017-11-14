@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DPI620Genii;
+using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
 using KipTM.Model.TransportChannels;
 
@@ -15,13 +16,16 @@ namespace PressureSensorCheck.Devices
     {
         private readonly IDPI620Driver _dpi620;
         private readonly int _slotId;
-        private readonly string _unit;
 
-        public DPI620Ethalon(IDPI620Driver dpi620, int slotId, string unit)
+        /// <summary>
+        /// Эталонный канал на основе DPI620Genii
+        /// </summary>
+        /// <param name="dpi620">двайвер DPI620Genii</param>
+        /// <param name="slotId">номер слота (с 1), по которому подключено оборудование</param>
+        public DPI620Ethalon(IDPI620Driver dpi620, int slotId)
         {
             _dpi620 = dpi620;
             _slotId = slotId;
-            _unit = unit;
         }
 
         public bool Activate(ITransportChannelType transport)
@@ -45,7 +49,7 @@ namespace PressureSensorCheck.Devices
 
         public double GetEthalonValue(double point, CancellationToken calcel)
         {
-            return _dpi620.GetValue(_slotId, _unit);
+            return _dpi620.GetValue(_slotId);
         }
     }
 }

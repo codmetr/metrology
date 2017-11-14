@@ -3,7 +3,7 @@
     public interface IDPI620Driver
     {
         void Close();
-        double GetValue(int slotId, string unitCode);
+        double GetValue(int slotId);
         void Open();
         void SetUnits(int slotId, string unitCode);
     }

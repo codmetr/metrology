@@ -35,45 +35,45 @@ namespace DPI620Genii
         private StreamWriter _writer;
         private StreamReader _reader;
         private Action<string> _toLog = s => {};
-        public void Open(string portName)
-        {
-            _serial = new SerialPort(portName);
-            _serial.BaudRate = 19200;
-            _writer = new StreamWriter(_serial.BaseStream, Encoding.Unicode);
-            _reader = new StreamReader(_serial.BaseStream, Encoding.Unicode);
+        //public void Open(string portName)
+        //{
+        //    _serial = new SerialPort(portName);
+        //    _serial.BaudRate = 19200;
+        //    _writer = new StreamWriter(_serial.BaseStream, Encoding.Unicode);
+        //    _reader = new StreamReader(_serial.BaseStream, Encoding.Unicode);
 
-            Write("*km=r\r\n");
-        }
+        //    Write("*km=r\r\n");
+        //}
 
-        public bool TryToIdentifyCOM(String port)
-        {
-            try
-            {
-                StringBuilder sb = new StringBuilder();
+        //public bool TryToIdentifyCOM(String port)
+        //{
+        //    try
+        //    {
+        //        StringBuilder sb = new StringBuilder();
 
-                Open(port);
+        //        Open(port);
 
-                Thread.Sleep(100);
+        //        Thread.Sleep(100);
 
-                Write("*ri?\r\n");
+        //        Write("*ri?\r\n");
                 
-                Thread.Sleep(400);
-                string readedLine;
-                while ((readedLine = Read()).Length > 0) {
-                    sb.Append(readedLine);
-                }
-                Write("*km=l\r\n");
-                if (sb.ToString().ToLower().Contains("dpi620"))
-                {
-                    return true;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-            return false;
-        }
+        //        Thread.Sleep(400);
+        //        string readedLine;
+        //        while ((readedLine = Read()).Length > 0) {
+        //            sb.Append(readedLine);
+        //        }
+        //        Write("*km=l\r\n");
+        //        if (sb.ToString().ToLower().Contains("dpi620"))
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        return false;
+        //    }
+        //    return false;
+        //}
 
         public DPI620DriverCom Setlog(Action<string> toLog)
         {
@@ -138,23 +138,28 @@ namespace DPI620Genii
             }
         }
 
-        public void SetUnits(int slotId, String unitCode)
-        {
-            Log("DPI620 UNIT CODE " + unitCode);
+        //public void SetUnits(int slotId, String unitCode)
+        //{
+        //    Log("DPI620 UNIT CODE " + unitCode);
 
-            if (!_dicCmdSetUnit.ContainsKey(unitCode))
-                return;
-            try
-            {
-                Write(_dicCmdSetUnit[unitCode]);
-            }
-            catch (IOException ex)
-            {
-                Log(ex.ToString());
-            }
-        }
+        //    if (!_dicCmdSetUnit.ContainsKey(unitCode))
+        //        return;
+        //    try
+        //    {
+        //        Write(_dicCmdSetUnit[unitCode]);
+        //    }
+        //    catch (IOException ex)
+        //    {
+        //        Log(ex.ToString());
+        //    }
+        //}
 
-        public double GetValue(int slotId, string unitCode)
+        /// <summary>
+        /// Получить значение
+        /// </summary>
+        /// <param name="slotId">Номер слота</param>
+        /// <returns></returns>
+        public double GetValue(int slotId/*, string unitCode*/)
         {
             try
             {

@@ -13,6 +13,7 @@ using NLog;
 using PressureSensorCheck.Devices;
 using Tools.View;
 using System.Diagnostics;
+using PressureSensorCheck.Data;
 
 namespace KipTM.Checks.ViewModel.Config
 {
@@ -131,7 +132,8 @@ namespace KipTM.Checks.ViewModel.Config
             Measured.Clear();
             try
             {
-                _dpi620.Open(_dpiConf.SelectPort);
+                _dpi620.SetPort(_dpiConf.SelectPort);
+                _dpi620.Open();
             }
             catch (Exception ex)
             {
@@ -148,17 +150,23 @@ namespace KipTM.Checks.ViewModel.Config
                 _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
 
 
-            DPI620Ethalon inCH;
-            DPI620Ethalon outCh;
+            DPI620GeniiConfig.DpiSlotConfig inSlot;
+            DPI620GeniiConfig.DpiSlotConfig outSlot;
+            int inSlotNum;
+            int outSlotNum;
             if (_dpiConf.Slot1.ChannelType == ArchiveData.DTO.ChannelType.Pressure)
             {
-                inCH = new DPI620Ethalon(_dpi620, 0, _dpiConf.Slot1.SelectedUnit.ToString());//TODO: Преобразовать по-нормальному SelectedUnit в строку
-                outCh = new DPI620Ethalon(_dpi620, 1, _dpiConf.Slot2.SelectedUnit.ToString());//TODO: Преобразовать по-нормальному SelectedUnit в строку
+                inSlot = _dpiConf.Slot2;
+                outSlot = _dpiConf.Slot1;
+                inSlotNum = 1;
+                outSlotNum = 2;
             }
             else if (_dpiConf.Slot2.ChannelType == ArchiveData.DTO.ChannelType.Pressure)
             {
-                inCH = new DPI620Ethalon(_dpi620, 1, _dpiConf.Slot2.SelectedUnit.ToString());//TODO: Преобразовать по-нормальному SelectedUnit в строку
-                outCh = new DPI620Ethalon(_dpi620, 2, _dpiConf.Slot1.SelectedUnit.ToString());//TODO: Преобразовать по-нормальному SelectedUnit в строку
+                inSlot = _dpiConf.Slot2;
+                outSlot = _dpiConf.Slot1;
+                inSlotNum = 2;
+                outSlotNum = 1;
             }
             else
             {
@@ -166,9 +174,18 @@ namespace KipTM.Checks.ViewModel.Config
                 return;
             }
 
-            var check = new PressureSensorCheck.Check.PressureSensorCheck(checkLogger,
-            new DPI620Ethalon(_dpi620, 0, "mmHg"),
-            new DPI620Ethalon(_dpi620, 1, "mA"));
+            var check = new PressureSensorCheck.Check.PressureSensorCheck(checkLogger, new DPI620Ethalon(_dpi620, inSlotNum), new DPI620Ethalon(_dpi620, outSlotNum));
+            check.FillSteps(new PressureSensorConfig()
+            {
+                Points = _config.Points.Select(el=>new PressureSensorPoint()
+                {
+                    PressureUnit = inSlot.SelectedUnit.ToString(), //TODO преобразовать в нормальное название единиц измерения
+                    PressurePoint = el.U,
+                    VoltagePoint = el.Pressire,
+                    VoltageUnit = outSlot.SelectedUnit.ToString(), //TODO преобразовать в нормальное название единиц измерения
+                    Tollerance = el.dU,
+                }).ToList()
+            });
             var task = new Task(() => check.Start(cancel));
             task.Start(TaskScheduler.Default);
         }

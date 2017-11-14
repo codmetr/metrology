@@ -138,9 +138,6 @@ namespace KipTM.Workflow.States.PressureSensor
                     resPoint.Config.Uvar = point.Config.Uvar;
                 }
             }
-            
-
-
         }
 
         private void UpdateReportByResult(PressureSensorResultVM result, PressureSensorReportDto reportMain, PressureSensorCertificateDto reportCertificate)

@@ -46,7 +46,7 @@ namespace PressureSensorCheck.Check
             return FillSteps(customConf as PressureSensorConfig);
         }
 
-        private bool FillSteps(PressureSensorConfig pressureConverterConfig)
+        public bool FillSteps(PressureSensorConfig pressureConverterConfig)
         {
             var steps = new List<CheckStepConfig>()
             {
