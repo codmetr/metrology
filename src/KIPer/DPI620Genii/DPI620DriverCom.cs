@@ -157,7 +157,7 @@ namespace DPI620Genii
         /// <summary>
         /// Получить значение
         /// </summary>
-        /// <param name="slotId">Номер слота</param>
+        /// <param name="slotId">Номер слота (c 1)</param>
         /// <returns></returns>
         public double GetValue(int slotId/*, string unitCode*/)
         {

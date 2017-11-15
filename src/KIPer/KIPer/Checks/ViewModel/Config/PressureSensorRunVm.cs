@@ -228,8 +228,8 @@ namespace KipTM.Checks.ViewModel.Config
         {
             while (!arg.Cancel.WaitHandle.WaitOne(arg.PeriodRepeat))
             {
-                var u = _dpi620.GetValue(1, "");
-                var pressure = _dpi620.GetValue(2, PressureUnit);
+                var u = _dpi620.GetValue(1);
+                var pressure = _dpi620.GetValue(2);
                 var un = GetUForPressure(pressure);
                 var du = un - u;
                 var qu = u / un - 1.0;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -70,22 +71,61 @@ namespace DPI620Genii
             }
         }
 
-        public double GetValue(int slotId, string unitCode)
+        //public double GetValue(int slotId, string unitCode)
+        //{
+        //    try
+        //    {
+        //        if (("UCMA" == unitCode) || ("UVVO" == unitCode) || ("UVMV" == unitCode))
+        //        {
+        //            Write("#ir1?\r\n");
+        //        }
+        //        else
+        //        {
+        //            Write("#ir2?\r\n");
+        //        }
+
+        //        var sb = Read();
+        //        Log("RAW620: " + unitCode + " " + sb);
+        //        double val = double.Parse(sb.Split("=".ToCharArray())[1]);
+
+        //        return val;
+        //    }
+        //    catch (IOException ex)
+        //    {
+        //        Log(ex.ToString());
+        //        throw;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Log(e.ToString());
+        //    }
+        //    return 0.0D;
+        //}
+
+        /// <summary>
+        /// Получить значение
+        /// </summary>
+        /// <param name="slotId">Номер слота (c 1)</param>
+        /// <returns></returns>
+        public double GetValue(int slotId/*, string unitCode*/)
         {
             try
             {
-                if (("UCMA" == unitCode) || ("UVVO" == unitCode) || ("UVMV" == unitCode))
+                //if (("UCMA" == unitCode) || ("UVVO" == unitCode) || ("UVMV" == unitCode))
+                if (slotId == 1)
                 {
-                    Write("#ir1?\r\n");
+                    Write("*ir1?\r\n");
                 }
                 else
                 {
-                    Write("#ir2?\r\n");
+                    Write("*ir2?\r\n");
                 }
-
+                Read();
                 var sb = Read();
-                Log("RAW620: " + unitCode + " " + sb);
-                double val = double.Parse(sb.Split("=".ToCharArray())[1]);
+                //Log("RAW620: " + unitCode + " " + sb);
+                var valstr = sb.Split("=".ToCharArray())[1].Trim();
+                Log("Value = \"" + valstr + "\"");
+                double val = double.Parse(valstr, NumberStyles.Any, CultureInfo.InvariantCulture);
 
                 return val;
             }

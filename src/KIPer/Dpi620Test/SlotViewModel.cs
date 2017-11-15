@@ -64,7 +64,7 @@ namespace Dpi620Test
 
         private void DoSetUnit()
         {
-            _dpi620.SetUnits(_slotNum, SelectedUnit);
+            //_dpi620.SetUnits(_slotNum, SelectedUnit);
         }
 
         public ICommand ReadOnce =>new CommandWrapper(
@@ -76,7 +76,7 @@ namespace Dpi620Test
 
         private void DoReadOnce()
         {
-            var val = _dpi620.GetValue(_slotNum, SelectedUnit);
+            var val = _dpi620.GetValue(_slotNum);
             ReadingResult = $"{val} {SelectedUnit}";
             _logger.Trace($"{Name} readed once: {ReadingResult}");
         }
@@ -123,7 +123,7 @@ namespace Dpi620Test
                 var item = new OnePointViewModel()
                 {
                     TimeStamp = DateTime.Now - arg.StartTime,
-                    Val = _dpi620.GetValue(_slotNum, SelectedUnit)
+                    Val = _dpi620.GetValue(_slotNum)
                 };
                 ReadedPoints.Add(item);
                 _logger.Trace($"{Name} readed repeat: {item} {SelectedUnit}");

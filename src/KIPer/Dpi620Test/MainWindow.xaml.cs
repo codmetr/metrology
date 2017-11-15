@@ -61,11 +61,11 @@ namespace Dpi620Test
             moq.Setup(drv => drv.Open()).Callback(() => { Dpi620StateMoq.Instance.Start(); });
             moq.Setup(drv => drv.Close()).Callback(() => { Dpi620StateMoq.Instance.Stop(); });
 
-            moq.Setup(drv => drv.SetUnits(It.IsAny<int>(), It.IsAny<string>())).Callback(
-                (int slotId, string unitCode) => { Dpi620StateMoq.Instance.SetUnit(slotId, unitCode); });
+            //moq.Setup(drv => drv.SetUnits(It.IsAny<int>(), It.IsAny<string>())).Callback(
+            //    (int slotId, string unitCode) => { Dpi620StateMoq.Instance.SetUnit(slotId, unitCode); });
 
-            moq.Setup(drv => drv.GetValue(It.IsAny<int>(), It.IsAny<string>()))
-                .Returns((int slotId, string unitCode) => Dpi620StateMoq.Instance.GetValue(slotId, unitCode));
+            moq.Setup(drv => drv.GetValue(It.IsAny<int>()))
+                .Returns((int slotId) => Dpi620StateMoq.Instance.GetValue(slotId));
             return moq.Object;
         }
 
@@ -106,7 +106,7 @@ namespace Dpi620Test
 
             private Dpi620StateMoq(){}
 
-            public double GetValue(int slot, string unit)
+            public double GetValue(int slot)
             {
                 if (!_isOpened)
                     return 0.0;

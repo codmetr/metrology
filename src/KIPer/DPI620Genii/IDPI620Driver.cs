@@ -5,6 +5,6 @@
         void Close();
         double GetValue(int slotId);
         void Open();
-        void SetUnits(int slotId, string unitCode);
+        //void SetUnits(int slotId, string unitCode);
     }
 }

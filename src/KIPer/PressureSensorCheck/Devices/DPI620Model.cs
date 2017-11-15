@@ -28,28 +28,8 @@ namespace PressureSensorCheck.Devices
         public static string DeviceCommonType { get { return "Переносное устройство калибровки давления"; } }
         public static string DeviceManufacturer { get { return "GE"; } }
 
-        public enum Unit
-        {
-            bar,
-            kgSm,
-            volt,
-            mA,
-            A,
-        }
-
-        private Dictionary<Unit, string> _unitDict = new Dictionary<Unit, string>()
-        { // todo: выяснить настоящие коды (указаны коды для примера)
-            {Unit.kgSm, "kgsm" },
-            {Unit.volt, "volt" },
-        };
-
-        private Dictionary<int, Unit> _curUnit = new Dictionary<int, Unit>()
-        {
-            {0, Unit.kgSm },
-            {1, Unit.volt },
-        };
         private IDeviceManager _deviceManager;
-        private DPI620DriverUsb _dpi620;
+        private IDPI620Driver _dpi620;
 
         public DPI620Model(IDeviceManager deviceManager)
         {
@@ -57,10 +37,12 @@ namespace PressureSensorCheck.Devices
         }
 
 
-        public void Open()
+        public void Open(string port)
         {
-            _dpi620 = _deviceManager.GetDevice<DPI620DriverUsb>(null);
-            _dpi620.Open();
+            var dpi620 = _deviceManager.GetDevice<DPI620DriverCom>(null);
+            dpi620.SetPort(port);
+            dpi620.Open();
+            _dpi620 = dpi620;
         }
 
         public void Close()
@@ -68,15 +50,9 @@ namespace PressureSensorCheck.Devices
             _dpi620.Close();
         }
 
-        public void SetUnit(int slot, Unit unit)
-        {
-            _dpi620.SetUnits(slot, _unitDict[unit]);
-        }
-
         public double GetValue(int slot)
         {
-            var unit = _unitDict[_curUnit[slot]];
-            var res = _dpi620.GetValue(slot, unit);
+            var res = _dpi620.GetValue(slot);
             return res;
         }
     }

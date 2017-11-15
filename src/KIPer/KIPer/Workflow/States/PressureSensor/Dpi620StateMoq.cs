@@ -13,7 +13,7 @@ namespace KipTM.Workflow.States.PressureSensor
 
         private Dpi620StateMoq() { }
 
-        public double GetValue(int slot, string unit)
+        public double GetValue(int slot)
         {
             if (!_isOpened)
                 return 0.0;
