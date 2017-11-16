@@ -224,6 +224,10 @@ namespace KipTM.Checks.ViewModel.Config
             _startTime = null;
         }
 
+        /// <summary>
+        /// Авточтение
+        /// </summary>
+        /// <param name="arg"></param>
         private void Autoread(AutoreadState arg)
         {
             while (!arg.Cancel.WaitHandle.WaitOne(arg.PeriodRepeat))

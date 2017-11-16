@@ -23,6 +23,7 @@ namespace PressureSensorCheck.Devices
                 TypeKey = Key,
                 Function = DeviceTypeDescriptor.FunctionType.Controller,
             };
+
         public static string Key { get { return "DPI620Genii"; } }
         public static string Model { get { return "DPI620Genii"; } }
         public static string DeviceCommonType { get { return "Переносное устройство калибровки давления"; } }
@@ -35,7 +36,6 @@ namespace PressureSensorCheck.Devices
         {
             _deviceManager = deviceManager;
         }
-
 
         public void Open(string port)
         {
