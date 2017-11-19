@@ -6,6 +6,7 @@
              xmlns:config="clr-namespace:KipTM.Checks.ViewModel.Config"
              xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
              xmlns:view="clr-namespace:KipTM.Checks.View"
+             xmlns:modalContent="clr-namespace:Tools.View.ModalContent;assembly=Tools.View"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000"
              d:DataContext="{d:DesignInstance config:PressureSensorRunVm}">
@@ -17,159 +18,172 @@
             <view:PointConfigConverter x:Key="PointConfigConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="20">
-        <Grid.Resources>
-            <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}"/>
-            <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}"/>
-        </Grid.Resources>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400"/>
-            <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Style="{StaticResource TblBasicStyle}">Ход проверки</TextBlock>
-            <DataGrid Grid.Row="1" AutoGenerateColumns="False"
+    <modalContent:ModalContentPresenter IsModal="{Binding ModalState.IsShowModal, UpdateSourceTrigger=PropertyChanged}">
+        <Grid Margin="20">
+            <Grid.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}"/>
+                <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}"/>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Style="{StaticResource TblBasicStyle}">Ход проверки</TextBlock>
+                <DataGrid Grid.Row="1" AutoGenerateColumns="False"
                       CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
                       CanUserResizeRows="False" CanUserResizeColumns="False" CanUserSortColumns="False"
                       ItemsSource="{Binding Points}" SelectedItem="{Binding SelectedPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Width="Auto" Binding="{Binding Result.IsCorrect, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Шаг" Width="*" Binding="{Binding Config, Converter={StaticResource PointConfigConverter}}"/>
-                    <DataGridTextColumn Header="Pреал" Width="50" Binding="{Binding Result.PressureReal}"/>
-                    <DataGridTextColumn Header="Uреал" Width="50" Binding="{Binding Result.UReal}"/>
-                    <DataGridTextColumn Header="dUреал" Width="50" Binding="{Binding Result.dUReal}"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            <Grid Grid.Row="2">
+                    <DataGrid.Columns>
+                        <DataGridCheckBoxColumn Width="Auto" Binding="{Binding Result.IsCorrect, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Шаг" Width="*" Binding="{Binding Config, Converter={StaticResource PointConfigConverter}}"/>
+                        <DataGridTextColumn Header="Pреал" Width="50" Binding="{Binding Result.PressureReal}"/>
+                        <DataGridTextColumn Header="Uреал" Width="50" Binding="{Binding Result.UReal}"/>
+                        <DataGridTextColumn Header="dUреал" Width="50" Binding="{Binding Result.dUReal}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="0" Grid.ColumnSpan="4">Добавление точки:</TextBlock>
+                    <TextBlock Grid.Column="0" Grid.Row="1">P:</TextBlock>
+                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NewConfig.Pressire, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="1">мм рт.ст.</TextBlock>
+                    <TextBlock Grid.Column="0" Grid.Row="2">U:</TextBlock>
+                    <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding NewConfig.U, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="2">В</TextBlock>
+                    <TextBlock Grid.Column="0" Grid.Row="3">ΔU:</TextBlock>
+                    <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding NewConfig.dU, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="3">В</TextBlock>
+                    <Button Grid.Row="1" Grid.Column="3" Grid.RowSpan="3" Command="{Binding AddPoint}">
+                        <TextBlock FontSize="18" TextAlignment="Center">
+                    Добавить<LineBreak/>точку
+                        </TextBlock>
+                    </Button>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="2" IsSharedSizeScope="True">
+                <Grid.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}"/>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}"/>
+                </Grid.Resources>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="ParamName"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="ParamUnit"/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="ParamName"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="ParamUnit"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" MinHeight="60"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.ColumnSpan="4">Добавление точки:</TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="1">P:</TextBlock>
-                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NewConfig.Pressire, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Column="2" Grid.Row="1">мм рт.ст.</TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="2">U:</TextBlock>
-                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding NewConfig.U, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Column="2" Grid.Row="2">В</TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="3">ΔU:</TextBlock>
-                <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding NewConfig.dU, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Column="2" Grid.Row="3">В</TextBlock>
-                <Button Grid.Row="1" Grid.Column="3" Grid.RowSpan="3" Command="{Binding AddPoint}">
-                    <TextBlock FontSize="18" TextAlignment="Center">
-                    Добавить<LineBreak/>точку
-                    </TextBlock>
-                </Button>
-            </Grid>
-        </Grid>
-        <Grid Grid.Column="2" IsSharedSizeScope="True">
-            <Grid.Resources>
-                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}"/>
-                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}"/>
-            </Grid.Resources>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="ParamName"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="ParamUnit"/>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="ParamName"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="ParamUnit"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto" MinHeight="60"/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
+                <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
                 Текущее значение
-            </TextBlock>
-            <TextBlock Grid.Column="0" Grid.Row="1">P:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding LastMeasuredPoint.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Column="2" Grid.Row="1">кПа</TextBlock>
-            <TextBlock Grid.Column="3" Grid.Row="1">U:</TextBlock>
-            <TextBox Grid.Column="4" Grid.Row="1" Text="{Binding LastMeasuredPoint.U, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Column="5" Grid.Row="1">В</TextBlock>
-            <!--<WindowsFormsHost Name="WFHost" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300">
+                </TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="1">P:</TextBlock>
+                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding LastMeasuredPoint.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="2" Grid.Row="1">кПа</TextBlock>
+                <TextBlock Grid.Column="3" Grid.Row="1">U:</TextBlock>
+                <TextBox Grid.Column="4" Grid.Row="1" Text="{Binding LastMeasuredPoint.U, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="5" Grid.Row="1">В</TextBlock>
+                <!--<WindowsFormsHost Name="WFHost" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300">
                 <zedGraph:ZedGraphControl x:Name="zChart" Height="300" Width="300"/>
             </WindowsFormsHost>-->
-            <d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="250">
-                <d3:ChartPlotter Name="plotter" Margin="10,5,10,15" DataContextChanged="Plotter_OnDataContextChanged"
+                <d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="250">
+                    <d3:ChartPlotter Name="plotter" Margin="10,5,10,15" DataContextChanged="Plotter_OnDataContextChanged"
                                  DataContext="{Binding Measured, UpdateSourceTrigger=PropertyChanged}">
-                    <d3:ChartPlotter.HorizontalAxis>
-                        <d3:HorizontalTimeSpanAxis Name="xAxis"/>
-                    </d3:ChartPlotter.HorizontalAxis>
-                    <d3:ChartPlotter.VerticalAxis>
-                        <d3:VerticalIntegerAxis Name="yU"/>
-                    </d3:ChartPlotter.VerticalAxis>
-                </d3:ChartPlotter>
-            </d3:ViewportUIContainer>
-            <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
+                        <d3:ChartPlotter.HorizontalAxis>
+                            <d3:HorizontalTimeSpanAxis Name="xAxis"/>
+                        </d3:ChartPlotter.HorizontalAxis>
+                        <d3:ChartPlotter.VerticalAxis>
+                            <d3:VerticalIntegerAxis Name="yU"/>
+                        </d3:ChartPlotter.VerticalAxis>
+                    </d3:ChartPlotter>
+                </d3:ViewportUIContainer>
+                <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
                 Мгновенная погрешность:
-            </TextBlock>
-            <TextBlock Grid.Column="0" Grid.Row="4">ΔU:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding LastMeasuredPoint.dU, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Column="2" Grid.Row="4">В</TextBlock>
-            <TextBlock Grid.Column="3" Grid.Row="4">δU:</TextBlock>
-            <TextBox Grid.Column="4" Grid.Row="4" Text="{Binding LastMeasuredPoint.qU, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Column="5" Grid.Row="4">%</TextBlock>
-            <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}">
+                </TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="4">ΔU:</TextBlock>
+                <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding LastMeasuredPoint.dU, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="2" Grid.Row="4">В</TextBlock>
+                <TextBlock Grid.Column="3" Grid.Row="4">δU:</TextBlock>
+                <TextBox Grid.Column="4" Grid.Row="4" Text="{Binding LastMeasuredPoint.qU, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="5" Grid.Row="4">%</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}">
                 Допуск:
-            </TextBlock>
-            <TextBlock Grid.Column="0" Grid.Row="6">ΔU:</TextBlock>
-            <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding LastMeasuredPoint.dUn, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Column="2" Grid.Row="6">В</TextBlock>
-            <TextBlock Grid.Column="3" Grid.Row="6">δU:</TextBlock>
-            <TextBox Grid.Column="4" Grid.Row="6" Text="{Binding LastMeasuredPoint.qUn, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Column="5" Grid.Row="6">%</TextBlock>
-            <ProgressBar Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="7" Height="20" LargeChange="3" BorderThickness="0"
+                </TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="6">ΔU:</TextBlock>
+                <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding LastMeasuredPoint.dUn, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="2" Grid.Row="6">В</TextBlock>
+                <TextBlock Grid.Column="3" Grid.Row="6">δU:</TextBlock>
+                <TextBox Grid.Column="4" Grid.Row="6" Text="{Binding LastMeasuredPoint.qUn, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="5" Grid.Row="6">%</TextBlock>
+                <TextBlock Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="7" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}"/>
+                <ProgressBar Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="7" Height="20" LargeChange="3" BorderThickness="0"
                          Value="{Binding CheckProgress, UpdateSourceTrigger=PropertyChanged}">
-                <ProgressBar.Foreground>
-                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}"/>
-                </ProgressBar.Foreground>
-            </ProgressBar>
-            <StackPanel Grid.Column="2" Grid.Row="9" Grid.ColumnSpan="5" Orientation="Horizontal" HorizontalAlignment="Right">
-                <StackPanel.Resources>
-                    <Style TargetType="Button">
-                        <Setter Property="Height" Value="50"/>
-                        <Setter Property="Width" Value="150"/>
-                        <Setter Property="FontSize" Value="18"/>
-                        <Setter Property="Margin" Value="20,10,0,0"/>
-                    </Style>
-                </StackPanel.Resources>
-                <Button 
+                    <ProgressBar.Foreground>
+                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}"/>
+                    </ProgressBar.Foreground>
+                </ProgressBar>
+                <StackPanel Grid.Column="2" Grid.Row="9" Grid.ColumnSpan="5" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Height" Value="50"/>
+                            <Setter Property="Width" Value="150"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Margin" Value="20,10,0,0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button 
+                        Command="{Binding Accept}"
+                        Visibility="{Binding IsAsk, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        Далее
+                    </Button>
+                    <Button 
                     Command="{Binding StartCheck}"
                     Visibility="{Binding IsRun, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                    Начать поверку
-                </Button>
-                <Button
+                        Начать поверку
+                    </Button>
+                    <Button
                     Command="{Binding PauseCheck}"
                     Visibility="{Binding IsRun, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    Пауза
-                </Button>
-                <Button Command="{Binding StopCheck}">Стоп</Button>
-            </StackPanel>
+                        Пауза
+                    </Button>
+                    <Button Command="{Binding StopCheck}">Стоп</Button>
+                </StackPanel>
+            </Grid>
         </Grid>
-    </Grid>
+        <modalContent:ModalContentPresenter.ModalContent>
+            <ContentPresenter Content="{Binding ModalState.CurrentModal, UpdateSourceTrigger=PropertyChanged}"/>
+            <!--<controls:WaitScreenKpk5 Note="{Binding ModalState.Note, UpdateSourceTrigger=PropertyChanged}"/>-->
+            <!--<controls:AskScreen/>-->
+        </modalContent:ModalContentPresenter.ModalContent>
+    </modalContent:ModalContentPresenter>
 </UserControl>

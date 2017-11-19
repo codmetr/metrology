@@ -13,14 +13,16 @@ using NLog;
 using PressureSensorCheck.Devices;
 using Tools.View;
 using System.Diagnostics;
+using KipTM.Model.Channels;
 using PressureSensorCheck.Data;
+using Tools.View.ModalContent;
 
 namespace KipTM.Checks.ViewModel.Config
 {
     /// <summary>
     /// Выпонение проверки
     /// </summary>
-    public class PressureSensorRunVm : INotifyPropertyChanged
+    public class PressureSensorRunVm : INotifyPropertyChanged, IObserver<MeasuringPoint>
     {
         private double _minP = 0;
         private double _maxP = 100;
@@ -39,6 +41,9 @@ namespace KipTM.Checks.ViewModel.Config
 
         private readonly CheckPressureSensorConfig _config;
 
+        private ModalState _modalState = new ModalState();
+        private AutoUpdater _autoupdater;
+
         /// <summary>
         /// Выпонение проверки
         /// </summary>
@@ -54,6 +59,7 @@ namespace KipTM.Checks.ViewModel.Config
             Points = new ObservableCollection<PointViewModel>();
             NewConfig = new PointConfigViewModel();
             _config = config;
+            _autoupdater = new AutoUpdater(_logger);
         }
 
         /// <summary>
@@ -107,6 +113,11 @@ namespace KipTM.Checks.ViewModel.Config
         public MeasuringPoint LastMeasuredPoint { get; set; }
 
         /// <summary>
+        /// Пояснение
+        /// </summary>
+        public string Note { get; set; }
+
+        /// <summary>
         /// Прогресс выполнения проверки
         /// </summary>
         public double CheckProgress { get; set; }
@@ -115,6 +126,18 @@ namespace KipTM.Checks.ViewModel.Config
         /// Проверка выполняется
         /// </summary>
         public bool IsRun { get; set; }
+
+        /// <summary>
+        /// Выполняется запрос с подтвержнелием
+        /// </summary>
+        public bool IsAsk { get; set; }
+
+        /// <summary>
+        /// Запустить проверку
+        /// </summary>
+        public ICommand Accept { get { return new CommandWrapper(DoAccept); } }
+
+        internal Action DoAccept { get; set; } = () => { };
 
         /// <summary>
         /// Запустить проверку
@@ -138,17 +161,16 @@ namespace KipTM.Checks.ViewModel.Config
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
-                ShowMessage("Не удалось связаться с DPI620Genii. Укажите конфигурацию DPI620Genii на вкладке \"Настройка\": укажите порт подключения");
+                ShowMessage("Не удалось связаться с DPI620Genii. Укажите конфигурацию DPI620Genii на вкладке \"Настройка\": укажите порт подключения", cancel);
                 return;
             }
 
-            var tUpdate = new Task((arg) => Autoread((AutoreadState)arg),
-                new AutoreadState(cancel, _periodAutoread, _startTime.Value, _autorepeatWh),
+            var tUpdate = new Task((arg) => _autoupdater.Start(_dpi620, (AutoUpdater.AutoreadState)arg, _config),
+                new AutoUpdater.AutoreadState(cancel, _periodAutoread, _startTime.Value, _autorepeatWh),
                 cancel, TaskCreationOptions.None);
             tUpdate.Start(TaskScheduler.Default);
             var checkLogger = NLog.LogManager.GetLogger(string.Format("Check{0}",
                 _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
-
 
             DPI620GeniiConfig.DpiSlotConfig inSlot;
             DPI620GeniiConfig.DpiSlotConfig outSlot;
@@ -170,7 +192,7 @@ namespace KipTM.Checks.ViewModel.Config
             }
             else
             {
-                ShowMessage("Укажите конфигурацию DPI620Genii на вкладке \"Настройка\": укажите какие датчики в каких слотах");
+                ShowMessage("Укажите конфигурацию DPI620Genii на вкладке \"Настройка\": укажите какие датчики в каких слотах", cancel);
                 return;
             }
 
@@ -186,7 +208,14 @@ namespace KipTM.Checks.ViewModel.Config
                     Tollerance = el.dU,
                 }).ToList()
             });
-            var task = new Task(() => check.Start(cancel));
+            check.ChConfig.UsrChannel = new PressureSensorUserChannel(this);
+            var task = new Task(() =>
+            {
+                using (_autoupdater.Subscribe(this))
+                {
+                    check.Start(cancel);
+                }
+            });
             task.Start(TaskScheduler.Default);
         }
 
@@ -194,9 +223,9 @@ namespace KipTM.Checks.ViewModel.Config
         /// Показать сообщение пользователю
         /// </summary>
         /// <param name="msg"></param>
-        private void ShowMessage(string msg)
+        private void ShowMessage(string msg, CancellationToken cancel)
         {
-            throw new NotImplementedException();
+            AskModal("", msg, cancel);
         }
 
         /// <summary>
@@ -225,63 +254,66 @@ namespace KipTM.Checks.ViewModel.Config
         }
 
         /// <summary>
-        /// Авточтение
+        /// Состояние модального окна
         /// </summary>
-        /// <param name="arg"></param>
-        private void Autoread(AutoreadState arg)
+        public ModalState ModalState
         {
-            while (!arg.Cancel.WaitHandle.WaitOne(arg.PeriodRepeat))
-            {
-                var u = _dpi620.GetValue(1);
-                var pressure = _dpi620.GetValue(2);
-                var un = GetUForPressure(pressure);
-                var du = un - u;
-                var qu = u / un - 1.0;
-                var item = new MeasuringPoint()
-                {
-                    TimeStamp = DateTime.Now - arg.StartTime,
-                    U = u,
-                    Pressure = pressure,
-                    dU = du,
-                    Un = GetUForPressure(pressure),
-                    dUn = GetdUForU(un),
-                    qU = qu,
-                    qUn = 0,
-                };
-                Measured.Add(item);
-                _logger.Trace($"Readed repeat: P:{item.Pressure} {PressureUnit}");
-            }
-            arg.AutoreadWh.Set();
-        }
-
-        private double GetUForPressure(double pressure)
-        {
-            var percentVpi = (pressure - _config.VpiMin) / (_config.VpiMax - _config.VpiMin);
-            if (pressure < _config.VpiMin)
-                percentVpi = 0;
-            double uMin = 0.0;
-            double uMax = 5.0;
-            if (_config.OutputRange == OutGange.I4_20mA)
-            {
-                uMin = 4;
-                uMax = 20;
-            }
-            var val = uMin + (uMax - uMin) * percentVpi;
-
-            return val;
+            get { return _modalState; }
+            set { _modalState = value; }
         }
 
         /// <summary>
-        /// Получить допуск для конкретной точки напряжения
+        /// Вызов модального окна
         /// </summary>
-        /// <param name="u"></param>
+        /// <param name="title"></param>
+        /// <param name="msg"></param>
+        /// <param name="cancel"></param>
         /// <returns></returns>
-        private double GetdUForU(double u)
+        private bool AskModal(string title, string msg, CancellationToken cancel)
         {
-            return _config.ToleranceDelta;
+            ModalState.IsShowModal = true;
+            var res = ModalState.AskOkCancel(string.Format("{0}\n\n{1}", title, msg));
+            ModalState.IsShowModal = false;
+            return res;
         }
 
-        protected class AutoreadState
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+        #region IObserver<MeasuringPoint>
+
+        public void OnNext(MeasuringPoint value)
+        {
+            Measured.Add(value);
+            LastMeasuredPoint = value;
+            _logger.Trace($"Readed repeat: P:{value.Pressure} {PressureUnit}");
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
+    public class AutoUpdater : IObservable<MeasuringPoint>
+    {
+
+        internal class AutoreadState
         {
             public AutoreadState(CancellationToken cancel, TimeSpan periodRepeat, DateTime startTime, EventWaitHandle autoreadWh)
             {
@@ -300,16 +332,107 @@ namespace KipTM.Checks.ViewModel.Config
             public EventWaitHandle AutoreadWh { get; }
         }
 
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public AutoUpdater(Logger logger)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            _logger = logger;
+            observers = new List<IObserver<MeasuringPoint>>();
         }
 
-        #endregion
+        private readonly Logger _logger;
+        private List<IObserver<MeasuringPoint>> observers;
+
+        public IDisposable Subscribe(IObserver<MeasuringPoint> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber(observers, observer);
+        }
+
+        internal void Start(DPI620DriverCom dpi620, AutoreadState arg, CheckPressureSensorConfig conf)
+        {
+            try
+            {
+                while (!arg.Cancel.WaitHandle.WaitOne(arg.PeriodRepeat))
+                {
+                    var u = dpi620.GetValue(1);
+                    var pressure = dpi620.GetValue(2);
+                    var un = GetUForPressure(conf, pressure);
+                    var du = un - u;
+                    var qu = u / un - 1.0;
+                    var item = new MeasuringPoint()
+                    {
+                        TimeStamp = DateTime.Now - arg.StartTime,
+                        U = u,
+                        Pressure = pressure,
+                        dU = du,
+                        Un = GetUForPressure(conf, pressure),
+                        dUn = GetdUForU(conf, un),
+                        qU = qu,
+                        qUn = 0,
+                    };
+                    Publish(item);
+                    _logger.Trace($"Readed repeat: P:{item.Pressure}");
+                }
+            }
+            finally
+            {
+                arg.AutoreadWh.Set();
+            }
+        }
+
+
+        private double GetUForPressure(CheckPressureSensorConfig conf, double pressure)
+        {
+            var percentVpi = (pressure - conf.VpiMin) / (conf.VpiMax - conf.VpiMin);
+            if (pressure < conf.VpiMin)
+                percentVpi = 0;
+            double uMin = 0.0;
+            double uMax = 5.0;
+            if (conf.OutputRange == OutGange.I4_20mA)
+            {
+                uMin = 4;
+                uMax = 20;
+            }
+            var val = uMin + (uMax - uMin) * percentVpi;
+
+            return val;
+        }
+
+        /// <summary>
+        /// Получить допуск для конкретной точки напряжения
+        /// </summary>
+        /// <param name="u"></param>
+        /// <returns></returns>
+        private double GetdUForU(CheckPressureSensorConfig conf, double u)
+        {
+            return conf.ToleranceDelta;
+        }
+
+        private void Publish(MeasuringPoint data)
+        {
+            foreach (var observer in observers)
+            {
+                observer.OnNext(data);
+            }
+        }
+
+        private class Unsubscriber : IDisposable
+        {
+            private List<IObserver<MeasuringPoint>> _observers;
+            private IObserver<MeasuringPoint> _observer;
+
+            public Unsubscriber(List<IObserver<MeasuringPoint>> observers, IObserver<MeasuringPoint> observer)
+            {
+                this._observers = observers;
+                this._observer = observer;
+            }
+
+            public void Dispose()
+            {
+                if (_observer != null && _observers.Contains(_observer))
+                    _observers.Remove(_observer);
+            }
+        }
     }
 
     public class MeasuringPoint : INotifyPropertyChanged
@@ -488,5 +611,43 @@ namespace KipTM.Checks.ViewModel.Config
 
         #endregion
 
+    }
+
+    public class PressureSensorUserChannel : IUserChannel
+    {
+        private readonly PressureSensorRunVm _vm;
+
+        public PressureSensorUserChannel(PressureSensorRunVm vm)
+        {
+            _vm = vm;
+        }
+
+        public UserQueryType QueryType { get; }
+        public string Message { get { return _vm.Note; } set { _vm.Note = value; } }
+        public bool AcceptValue { get; set; }
+        public double RealValue { get; set; }
+        public bool AgreeValue { get; set; }
+        public void NeedQuery(UserQueryType queryType, EventWaitHandle wh)
+        {
+            _vm.IsAsk = true;
+            _vm.DoAccept = () => ConfigQuery(wh);
+        }
+
+        private void ConfigQuery(EventWaitHandle wh)
+        {
+            wh.Set();
+            _vm.DoAccept = () => { };
+            Message = "";
+            _vm.IsAsk = false;
+        }
+
+        public event EventHandler QueryStarted;
+
+        public void Clear()
+        {
+            _vm.DoAccept = () => { };
+            Message = "";
+            _vm.IsAsk = false;
+        }
     }
 }

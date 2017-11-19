@@ -27,7 +27,12 @@ namespace PressureSensorCheck.Check.Steps
         /// <summary>
         /// Пользовательский канал
         /// </summary>
-        private IUserChannel _userChannel;
+        private readonly IUserChannel _userChannel;
+
+        public StepInit(IUserChannel userChannel)
+        {
+            _userChannel = userChannel;
+        }
 
         public override void Start(CancellationToken cancel)
         {

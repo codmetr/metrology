@@ -37,6 +37,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -57,6 +58,15 @@
     <Compile Include="CommandWrapper.cs" />
     <Compile Include="Converters\DoubleToTimespanConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
+    <Compile Include="InputBindingsManager.cs" />
+    <Compile Include="InvokeTool.cs" />
+    <Compile Include="ModalContent\AskOkCancelViewModel.cs" />
+    <Compile Include="ModalContent\AskViewModel.cs" />
+    <Compile Include="ModalContent\ModalContentCommands.cs" />
+    <Compile Include="ModalContent\ModalContentPresenter.cs" />
+    <Compile Include="ModalContent\ModelMessanger.cs" />
+    <Compile Include="ModalContent\NoteMsg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewAttribute.cs" />
     <Compile Include="ViewViewmodelMatcher.cs" />

@@ -43,14 +43,14 @@ namespace PressureSensorCheck.Check
 
         public override bool Init(object customConf)
         {
-            return FillSteps(customConf as PressureSensorConfig);
+            return FillSteps(customConf as PressureSensorConfig);//TODO: избавиться от этого метода или придумать как передавать во внутрь канал к GUI
         }
 
         public bool FillSteps(PressureSensorConfig pressureConverterConfig)
         {
             var steps = new List<CheckStepConfig>()
             {
-                new CheckStepConfig(new StepInit(), true),
+                new CheckStepConfig(new StepInit(ChConfig.UsrChannel), true),
             };
 
             foreach (var point in pressureConverterConfig.Points)
@@ -65,13 +65,11 @@ namespace PressureSensorCheck.Check
 
         protected override bool PrepareCheck(CancellationToken cancel)
         {
-            if (!base.PrepareCheck(cancel))
-                return false;
+            //if (!base.PrepareCheck(cancel))
+            //    return false;
             _dataBuffer.Clear();
             return true;
         }
-
-        public IEnumerable<CheckStepConfig> Steps { get; private set; }
 
         protected override void StepEnd(object sender, EventArgEnd e)
         {

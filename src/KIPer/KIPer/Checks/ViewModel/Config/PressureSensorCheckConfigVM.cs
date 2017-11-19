@@ -134,6 +134,11 @@ namespace KipTM.Checks.ViewModel.Config
 
     public class DPI620GeniiConfig : INotifyPropertyChanged
     {
+        public DPI620GeniiConfig()
+        {
+            Slot1 = new DpiSlotConfig();
+            Slot2 = new DpiSlotConfig();
+        }
         public IEnumerable<string> Ports { get; set; }
 
         public string SelectPort { get; set; }
