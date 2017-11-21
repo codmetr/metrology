@@ -116,7 +116,7 @@
                 <!--<WindowsFormsHost Name="WFHost" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300">
                 <zedGraph:ZedGraphControl x:Name="zChart" Height="300" Width="300"/>
             </WindowsFormsHost>-->
-                <d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="250">
+                <d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="200">
                     <d3:ChartPlotter Name="plotter" Margin="10,5,10,15" DataContextChanged="Plotter_OnDataContextChanged"
                                  DataContext="{Binding Measured, UpdateSourceTrigger=PropertyChanged}">
                         <d3:ChartPlotter.HorizontalAxis>
@@ -145,7 +145,7 @@
                 <TextBlock Grid.Column="3" Grid.Row="6">δU:</TextBlock>
                 <TextBox Grid.Column="4" Grid.Row="6" Text="{Binding LastMeasuredPoint.qUn, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Column="5" Grid.Row="6">%</TextBlock>
-                <TextBlock Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="7" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="7" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TblHeaderStyle}"/>
                 <ProgressBar Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="7" Height="20" LargeChange="3" BorderThickness="0"
                          Value="{Binding CheckProgress, UpdateSourceTrigger=PropertyChanged}">
                     <ProgressBar.Foreground>
