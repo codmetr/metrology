@@ -50,7 +50,7 @@ namespace PressureSensorCheck.Check
         {
             var steps = new List<CheckStepConfig>()
             {
-                new CheckStepConfig(new StepInit(ChConfig.UsrChannel), true),
+                new CheckStepConfig(new StepInit(ChConfig.UsrChannel) { _pointBase= new PressureSensorPoint() { PressurePoint = 760, PressureUnit = "мм рт.ст." } }, true),
             };
 
             foreach (var point in pressureConverterConfig.Points)

@@ -197,6 +197,7 @@ namespace KipTM.Checks.ViewModel.Config
             }
 
             var check = new PressureSensorCheck.Check.PressureSensorCheck(checkLogger, new DPI620Ethalon(_dpi620, inSlotNum), new DPI620Ethalon(_dpi620, outSlotNum));
+            check.ChConfig.UsrChannel = new PressureSensorUserChannel(this);
             check.FillSteps(new PressureSensorConfig()
             {
                 Points = _config.Points.Select(el=>new PressureSensorPoint()
@@ -208,7 +209,6 @@ namespace KipTM.Checks.ViewModel.Config
                     Tollerance = el.dU,
                 }).ToList()
             });
-            check.ChConfig.UsrChannel = new PressureSensorUserChannel(this);
             var task = new Task(() =>
             {
                 using (_autoupdater.Subscribe(this))
@@ -410,6 +410,8 @@ namespace KipTM.Checks.ViewModel.Config
 
         private void Publish(MeasuringPoint data)
         {
+            if (observers == null)
+                return;
             foreach (var observer in observers)
             {
                 observer.OnNext(data);

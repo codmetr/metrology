@@ -62,7 +62,8 @@ namespace CheckFrame.Checks
 
         public void Stop()
         {
-            _ethalonChannel.Stop();
+            if(_ethalonChannel!=null)
+                _ethalonChannel.Stop();
         }
 
         /// <summary>
