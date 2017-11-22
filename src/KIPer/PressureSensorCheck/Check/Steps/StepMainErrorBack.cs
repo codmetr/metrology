@@ -11,9 +11,9 @@ using Tools;
 namespace PressureSensorCheck.Check.Steps
 {
     /// <summary>
-    /// Шаг прямого хода поверки датчика давления
+    /// Шаг обратного хода поверки датчика давления
     /// </summary>
-    internal class StepMainError : TestStepWithBuffer
+    internal class StepMainErrorBack : TestStepBase
     {
         /// <summary>
         /// Ключь шага
@@ -45,13 +45,13 @@ namespace PressureSensorCheck.Check.Steps
         private readonly IEthalonChannel _ethalonVoltage;
 
         /// <summary>
-        /// Шаг прямого хода поверки датчика давления
+        /// Шаг обратного хода поверки датчика давления
         /// </summary>
-        public StepMainError(PressureSensorPoint point, IUserChannel userChannel, IEthalonChannel ethalonPressure, IEthalonChannel ethalonVoltage, Logger logger)
+        public StepMainErrorBack(PressureSensorPoint point, PressureSensorPointResult result, IUserChannel userChannel, IEthalonChannel ethalonPressure, IEthalonChannel ethalonVoltage, Logger logger)
         {
-            Name = $"Проверка основной погрешности на точке {point.PressurePoint} {point.PressureUnit}";
+            Name = $"Проверка основной погрешности обратного хода на точке {point.PressurePoint} {point.PressureUnit}";
             _point = point;
-            _result = new PressureSensorPointResult();
+            _result = result;
             _userChannel = userChannel;
             _ethalonPressure = ethalonPressure;
             _ethalonVoltage = ethalonVoltage;
@@ -75,19 +75,7 @@ namespace PressureSensorCheck.Check.Steps
             var valueVoltage = _ethalonVoltage.GetEthalonValue(_point.VoltagePoint, cancel);
             var valuePressure = _ethalonPressure.GetEthalonValue(_point.PressurePoint, cancel);
             Log($"Received U = {valueVoltage} on P = {valuePressure}");
-            _result.PressurePoint = _point.PressurePoint;
-            _result.PressureUnit = _point.PressureUnit;
-            _result.VoltagePoint = _point.VoltagePoint;
-            _result.VoltageUnit = _point.VoltageUnit;
-            _result.VoltageValue = valueVoltage;
-            _result.PressureValue = valuePressure;
             _result.VoltageValueBack = valueVoltage;
-
-            if (_buffer != null)
-            {
-                Log("save result point to buffer");
-                _buffer.Append(_result);
-            }
             OnEnd(new EventArgEnd(KeyStep, true));
         }
 
@@ -95,10 +83,5 @@ namespace PressureSensorCheck.Check.Steps
         {
             _logger.With(l => l.Trace(s));
         }
-
-        /// <summary>
-        /// Результат проверки точки
-        /// </summary>
-        public PressureSensorPointResult Result { get { return _result; } }
     }
 }

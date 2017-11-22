@@ -571,6 +571,10 @@
       <Project>{b39fc5b2-8d9b-49a9-9189-76ba124ae522}</Project>
       <Name>PressureSensorCheck</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PressureSensorData\PressureSensorData.csproj">
+      <Project>{3A880679-B67B-4D02-A6FF-75857CEF1369}</Project>
+      <Name>PressureSensorData</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Reports\ReportService\ReportService.csproj">
       <Project>{71e2479c-c370-44bd-b6e0-48aa88101e7b}</Project>
       <Name>ReportService</Name>

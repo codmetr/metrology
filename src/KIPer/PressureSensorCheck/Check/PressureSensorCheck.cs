@@ -53,10 +53,23 @@ namespace PressureSensorCheck.Check
                 new CheckStepConfig(new StepInit(ChConfig.UsrChannel) { _pointBase= new PressureSensorPoint() { PressurePoint = 760, PressureUnit = "мм рт.ст." } }, true),
             };
 
+            var count = pressureConverterConfig.Points.Count;
+            var backStepPoints = new Tuple<PressureSensorPoint, PressureSensorPointResult>[count];
+            var i = 0;
             foreach (var point in pressureConverterConfig.Points)
             {
                 var step = new StepMainError(point, ChConfig.UsrChannel, _pressure, _voltage, _logger);//TODO: добавить эталоны
+                backStepPoints[i] = new Tuple<PressureSensorPoint, PressureSensorPointResult>(point, step.Result);
                 step.SetBuffer(_dataBuffer);
+                steps.Add(new CheckStepConfig(step, false));
+                i++;
+            }
+
+            for (; i >= 0; i--)
+            {
+                var point = backStepPoints[i].Item1;
+                var res = backStepPoints[i].Item2;
+                var step = new StepMainErrorBack(point, res, ChConfig.UsrChannel, _pressure, _voltage, _logger);
                 steps.Add(new CheckStepConfig(step, false));
             }
             Steps = steps;
@@ -83,5 +96,7 @@ namespace PressureSensorCheck.Check
             _dataBuffer.Clear();
             base.OnEndMethod(e);
         }
+
+        public PressureSensorResult Result { get { return _result; } }
     }
 }

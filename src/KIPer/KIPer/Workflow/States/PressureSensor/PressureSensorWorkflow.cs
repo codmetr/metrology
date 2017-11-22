@@ -99,7 +99,7 @@ namespace KipTM.Workflow.States.PressureSensor
             {
                 new SimpleWorkflowStep(config).SetOut(()=>UpdateRunByConf(config, run, logger)),
                 new SimpleWorkflowStep(run).SetOut(()=>UpdateResultByRun(run, result, logger)),
-                new SimpleWorkflowStep(result).SetOut(()=>UpdateReportByResult(result, reportMain, reportCertificate)),
+                new SimpleWorkflowStep(result).SetOut(()=>UpdateReportByResult(config, result, reportMain, reportCertificate)),
                 new SimpleWorkflowStep(new PressureSensorReportViewModel(reportMain, reportCertificate)),
             };
 
@@ -166,9 +166,54 @@ namespace KipTM.Workflow.States.PressureSensor
             }
         }
 
-        private void UpdateReportByResult(PressureSensorResultVM result, PressureSensorReportDto reportMain, PressureSensorCertificateDto reportCertificate)
+        private void UpdateReportByResult(PressureSensorCheckConfigVm config, PressureSensorResultVM result, PressureSensorReportDto reportMain, PressureSensorCertificateDto reportCertificate)
         {
+            reportMain.Assay = result.Assay;
+            reportMain.CommonResult = result.CommonResult;
+            reportMain.CertificateDate = DateTime.Now;//TODO: заполнить дату проверки из последнего изменения при прохождении проверки
 
+
+            // Заполнение результатов проверки основной погрешности
+            var mainAccur = (reportMain.MainAccurancy ?? new List<MainAccurancyPointDto>()).ToList();
+            foreach (var point in result.PointResults)
+            {
+                var mainAcPoint = mainAccur.FirstOrDefault(
+                        el => el.PressurePoint.ToString() == point.Config.Pressire.ToString("F0"));
+                if (mainAcPoint == null)
+                {
+                    mainAcPoint = new MainAccurancyPointDto()
+                    {
+                        PressurePoint = point.Config.Pressire.ToString("F0"),
+                        Uet = point.Config.U.ToString("F3"),
+                        dUet = point.Config.dU.ToString("F3"),
+                    };
+                    mainAccur.Add(mainAcPoint);
+                }
+                mainAcPoint.U = point.Result.UReal.ToString("F3");
+                mainAcPoint.dU = point.Result.dUReal.ToString("F3");
+            }
+            reportMain.MainAccurancy = mainAccur.OrderBy(el => int.Parse(el.PressurePoint.ToString())).ToArray();
+
+            // Заполнение результатов проверки вариации
+            var varAccur = (reportMain.VariationAccurancy ?? new List<VariationAccurancyPointDto>()).ToList();
+            foreach (var point in result.PointResults)
+            {
+                var varAcPoint = varAccur.FirstOrDefault(
+                    el => el.PressurePoint.ToString() == point.Config.Pressire.ToString("F0"));
+                if (varAcPoint == null)
+                {
+                    varAcPoint = new VariationAccurancyPointDto()
+                    {
+                        PressurePoint = point.Config.Pressire.ToString("F0"),
+                        dUet = point.Config.Uvar.ToString("F3"),
+                    };
+                    varAccur.Add(varAcPoint);
+                }
+                varAcPoint.dU = point.Result.Uvar.ToString("F3");
+                varAcPoint.Uf = point.Result.UReal.ToString("F3");
+                varAcPoint.Ur = point.Result.Uback.ToString("F3");
+            }
+            reportMain.VariationAccurancy = varAccur.OrderBy(el => int.Parse(el.PressurePoint.ToString())).ToArray();
         }
 
         private static IDPI620Driver GetMoq()

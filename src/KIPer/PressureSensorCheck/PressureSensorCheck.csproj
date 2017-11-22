@@ -50,6 +50,7 @@
     <Compile Include="Check\PressureSensorCheck.cs" />
     <Compile Include="Check\Steps\StepFinish.cs" />
     <Compile Include="Check\Steps\StepInit.cs" />
+    <Compile Include="Check\Steps\StepMainErrorBack.cs" />
     <Compile Include="Check\Steps\StepMainError.cs" />
     <Compile Include="Data\PressureSensorConfig.cs" />
     <Compile Include="Data\PressureSensorPoint.cs" />

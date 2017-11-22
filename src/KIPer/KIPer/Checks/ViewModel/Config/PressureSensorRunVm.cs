@@ -15,6 +15,7 @@ using Tools.View;
 using System.Diagnostics;
 using KipTM.Model.Channels;
 using PressureSensorCheck.Data;
+using PressureSensorData;
 using Tools.View.ModalContent;
 
 namespace KipTM.Checks.ViewModel.Config
@@ -178,8 +179,8 @@ namespace KipTM.Checks.ViewModel.Config
             int outSlotNum;
             if (_dpiConf.Slot1.ChannelType == ArchiveData.DTO.ChannelType.Pressure)
             {
-                inSlot = _dpiConf.Slot2;
-                outSlot = _dpiConf.Slot1;
+                inSlot = _dpiConf.Slot1;
+                outSlot = _dpiConf.Slot2;
                 inSlotNum = 1;
                 outSlotNum = 2;
             }
@@ -203,20 +204,47 @@ namespace KipTM.Checks.ViewModel.Config
                 Points = _config.Points.Select(el=>new PressureSensorPoint()
                 {
                     PressureUnit = inSlot.SelectedUnit.ToString(), //TODO преобразовать в нормальное название единиц измерения
-                    PressurePoint = el.U,
-                    VoltagePoint = el.Pressire,
+                    PressurePoint = el.Pressire,
+                    VoltagePoint = el.U,
                     VoltageUnit = outSlot.SelectedUnit.ToString(), //TODO преобразовать в нормальное название единиц измерения
                     Tollerance = el.dU,
                 }).ToList()
             });
             var task = new Task(() =>
             {
-                using (_autoupdater.Subscribe(this))
+                try
                 {
-                    check.Start(cancel);
+                    using (_autoupdater.Subscribe(this))
+                    {
+                        if (check.Start(cancel))
+                        {
+                            if (!cancel.IsCancellationRequested)
+                                UpdateResult(check.Result);
+                        }
+                    }
+                }
+                finally
+                {
+                    IsRun = false;
                 }
             });
             task.Start(TaskScheduler.Default);
+        }
+
+        private void UpdateResult(PressureSensorResult checkResult)
+        {
+            foreach (var point in Points)
+            {
+                var res = checkResult.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.Config.Pressire) < double.Epsilon);
+                if(res ==null)
+                    continue;
+                point.Result.PressureReal = res.PressureValue;
+                point.Result.UReal = res.VoltageValue;
+                point.Result.Uback = res.VoltageValueBack;
+                point.Result.dUReal = res.VoltageValue - res.VoltagePoint;
+                point.Result.dUvar = Math.Abs(res.VoltageValue - res.VoltageValueBack);
+                point.Result.IsCorrect = point.Result.dUReal <= point.Config.dU;
+            }
         }
 
         /// <summary>

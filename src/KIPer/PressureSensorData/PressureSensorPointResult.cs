@@ -27,5 +27,9 @@
         /// Результат: напряжение
         /// </summary>
         public double VoltageValue { get; set; }
+        /// <summary>
+        /// Результат: напряжение на обратном ходе
+        /// </summary>
+        public double VoltageValueBack { get; set; }
     }
 }
