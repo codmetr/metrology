@@ -18,13 +18,32 @@ namespace KipTM.Checks.ViewModel.Config
             PointResults= new ObservableCollection<PointViewModel>();
         }
 
+        /// <summary>
+        /// Результат опробирования
+        /// </summary>
         public string Assay { get; set; }
 
+        /// <summary>
+        /// Результат проверки на герметичность
+        /// </summary>
         public string Leak { get; set; }
 
+        /// <summary>
+        /// Общий результат поверки
+        /// </summary>
         public string CommonResult { get; set; }
 
+        /// <summary>
+        /// Результат визуального осмотра
+        /// </summary>
+        public string VisualCheckResult { get; set; }
+
         public ObservableCollection<PointViewModel> PointResults { get; set; }
+
+        /// <summary>
+        /// Дата протокола
+        /// </summary>
+        public DateTime? TimeStamp { get; set; }
 
         #region INotifyPropertyChanged
 

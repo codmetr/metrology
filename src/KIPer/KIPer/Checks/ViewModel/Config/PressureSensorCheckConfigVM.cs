@@ -30,6 +30,11 @@ namespace KipTM.Checks.ViewModel.Config
         }
 
         /// <summary>
+        /// Пользователь:
+        /// </summary>
+        public string User { get; set; }
+
+        /// <summary>
         /// Принадлежит:
         /// </summary>
         public string Master { get; set; }

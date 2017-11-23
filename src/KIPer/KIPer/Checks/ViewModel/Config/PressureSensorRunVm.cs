@@ -69,6 +69,11 @@ namespace KipTM.Checks.ViewModel.Config
         public ObservableCollection<PointViewModel> Points { get; set; }
 
         /// <summary>
+        /// Время последних результатов
+        /// </summary>
+        public DateTime? LastResultTime { get; set; }
+
+        /// <summary>
         /// Единицы измерения давления
         /// </summary>
         public string PressureUnit { get; } = "мм рт.ст.";
@@ -245,6 +250,7 @@ namespace KipTM.Checks.ViewModel.Config
                 point.Result.dUvar = Math.Abs(res.VoltageValue - res.VoltageValueBack);
                 point.Result.IsCorrect = point.Result.dUReal <= point.Config.dU;
             }
+            LastResultTime = DateTime.Now;
         }
 
         /// <summary>

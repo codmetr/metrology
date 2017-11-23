@@ -41,6 +41,8 @@
             <TextBox Text="{Binding Leak, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock>Выводы по результатам поверки:</TextBlock>
             <TextBox Text="{Binding CommonResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock>Результат визуального осмотра:</TextBlock>
+            <TextBox Text="{Binding VisualCheckResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         <Grid Grid.Column="2" Grid.Row="1">
             <Grid.RowDefinitions>

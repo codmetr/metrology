@@ -157,6 +157,7 @@ namespace KipTM.Workflow.States.PressureSensor
                         resPoint.Config.Uvar = point.Config.Uvar;
                     }
                 }
+                result.TimeStamp = run.LastResultTime;
             }
             catch (Exception e)
             {
@@ -170,8 +171,27 @@ namespace KipTM.Workflow.States.PressureSensor
         {
             reportMain.Assay = result.Assay;
             reportMain.CommonResult = result.CommonResult;
-            reportMain.CertificateDate = DateTime.Now;//TODO: заполнить дату проверки из последнего изменения при прохождении проверки
-
+            if (result.TimeStamp == null)
+            {
+                reportMain.CertificateDate = "";
+                reportMain.ReportTime = "";
+            }
+            else
+            {
+                reportMain.CertificateDate = result.TimeStamp.Value.ToString("dd.MM.yy");
+                reportMain.ReportTime = result.TimeStamp.Value.ToString("dd.MM.yy");
+            }
+            reportMain.ReportNumber = config.RegNum;
+            reportMain.TypeDevice = config.SensorType;
+            reportMain.SerialNumber = config.SerialNumber;
+            reportMain.Owner = config.Master;
+            reportMain.Temperature = config.Temperature.ToString("F0");
+            reportMain.Humidity = config.Humidity.ToString("F0");
+            reportMain.Pressure = config.DayPressure.ToString("F0");
+            reportMain.Voltage = config.CommonVoltage.ToString("F0");
+            reportMain.VisualCheckResult = result.VisualCheckResult;
+            reportMain.LeakCheckResult = result.Leak;
+            reportMain.CommonResult = result.CommonResult;
 
             // Заполнение результатов проверки основной погрешности
             var mainAccur = (reportMain.MainAccurancy ?? new List<MainAccurancyPointDto>()).ToList();
@@ -189,8 +209,16 @@ namespace KipTM.Workflow.States.PressureSensor
                     };
                     mainAccur.Add(mainAcPoint);
                 }
-                mainAcPoint.U = point.Result.UReal.ToString("F3");
-                mainAcPoint.dU = point.Result.dUReal.ToString("F3");
+                if (point.Result == null)
+                {
+                    mainAcPoint.U = "";
+                    mainAcPoint.dU = "";
+                }
+                else
+                {
+                    mainAcPoint.U = point.Result.UReal.ToString("F3");
+                    mainAcPoint.dU = point.Result.dUReal.ToString("F3");
+                }
             }
             reportMain.MainAccurancy = mainAccur.OrderBy(el => int.Parse(el.PressurePoint.ToString())).ToArray();
 
@@ -209,9 +237,18 @@ namespace KipTM.Workflow.States.PressureSensor
                     };
                     varAccur.Add(varAcPoint);
                 }
-                varAcPoint.dU = point.Result.Uvar.ToString("F3");
-                varAcPoint.Uf = point.Result.UReal.ToString("F3");
-                varAcPoint.Ur = point.Result.Uback.ToString("F3");
+                if (point.Result == null)
+                {
+                    varAcPoint.dU = "";
+                    varAcPoint.Uf = "";
+                    varAcPoint.Ur = "";
+                }
+                else
+                {
+                    varAcPoint.dU = point.Result.Uvar.ToString("F3");
+                    varAcPoint.Uf = point.Result.UReal.ToString("F3");
+                    varAcPoint.Ur = point.Result.Uback.ToString("F3");
+                }
             }
             reportMain.VariationAccurancy = varAccur.OrderBy(el => int.Parse(el.PressurePoint.ToString())).ToArray();
         }

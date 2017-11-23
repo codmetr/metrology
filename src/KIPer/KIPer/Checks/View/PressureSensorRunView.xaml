@@ -145,7 +145,7 @@
                 <TextBlock Grid.Column="3" Grid.Row="6">δU:</TextBlock>
                 <TextBox Grid.Column="4" Grid.Row="6" Text="{Binding LastMeasuredPoint.qUn, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Column="5" Grid.Row="6">%</TextBlock>
-                <TextBlock Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="7" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TblHeaderStyle}"/>
+                <TextBlock Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="7" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TblHeaderStyle}" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontWeight="Bold" />
                 <ProgressBar Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="7" Height="20" LargeChange="3" BorderThickness="0"
                          Value="{Binding CheckProgress, UpdateSourceTrigger=PropertyChanged}">
                     <ProgressBar.Foreground>
