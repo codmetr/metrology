@@ -180,7 +180,16 @@ namespace KipTM.ViewModel
         public object SelectedAction
         {
             get { return _selectedAction; }
-            set { Set(ref _selectedAction, value); }
+            set
+            {
+                Set(ref _selectedAction, value);
+                if (value is IWorkflow)
+                    return;
+                foreach (var btn in CheckBtns)
+                {
+                    btn.IsSelected = false;
+                }
+            }
         }
 
         /// <summary>
@@ -226,6 +235,8 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand<string>((string opt) =>
                 {
+                    if(SelectedAction == _workflows[opt])
+                        return;
                     SelectedAction = _workflows[opt];
                     foreach (var btnDescripto in CheckBtns)
                     {

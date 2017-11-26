@@ -35,6 +35,16 @@ namespace KipTM.Checks.ViewModel.Config
         public string User { get; set; }
 
         /// <summary>
+        /// Номер сертификата:
+        /// </summary>
+        public string SertificateNumber { get; set; }
+
+        /// <summary>
+        /// Дата сертификата:
+        /// </summary>
+        public string SertificateDate { get; set; }
+
+        /// <summary>
         /// Принадлежит:
         /// </summary>
         public string Master { get; set; }

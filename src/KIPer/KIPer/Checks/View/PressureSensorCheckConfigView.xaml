@@ -61,9 +61,9 @@
                             <TextBlock Grid.Row="0" Grid.Column="0">Пользователь:</TextBlock>
                             <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding User, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="1" Grid.Column="0">Номер сертификата:</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding User, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SertificateNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="1" Grid.Column="3">Дата сертификата:</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding User, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding SertificateDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
                         <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
                         Преобразователь давления:
@@ -222,10 +222,10 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" DataContext="{Binding Config}">
                         <StackPanel.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
+                            <!--<Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                             </Style>
-                            <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}"/>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}"/>-->
                         </StackPanel.Resources>
                         <TextBlock Style="{StaticResource TblHeaderStyle}">Верхний предел измерений (ВПИ):</TextBlock>
                         <Grid Margin="10,0,0,0">
@@ -312,12 +312,12 @@
                         </TextBlock>
                         <Grid>
                             <Grid.Resources>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
+                                <!--<Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
                                     <Setter Property="TextWrapping" Value="Wrap"/>
                                 </Style>
                                 <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}">
                                     <Setter Property="TextWrapping" Value="Wrap"/>
-                                </Style>
+                                </Style>-->
                             </Grid.Resources>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -352,7 +352,7 @@
             <TabItem Header="Настройки">
                 <StackPanel DataContext="{Binding DpiConfig}">
                     <UniformGrid Rows="1">
-                        <TextBlock Style="{StaticResource TblBasicStyle}">Порт подклчение:</TextBlock>
+                        <TextBlock Style="{StaticResource TblBasicStyle}">Порт подклчение DPI620Genii:</TextBlock>
                         <ComboBox SelectedItem="{Binding SelectPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Ports}"/>
                     </UniformGrid>
                     <Grid>

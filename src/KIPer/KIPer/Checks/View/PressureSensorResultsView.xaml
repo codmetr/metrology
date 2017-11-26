@@ -30,20 +30,25 @@
         <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Style="{StaticResource TblHeaderStyle}">
             Результат поверки
         </TextBlock>
-        <StackPanel Grid.Column="0" Grid.Row="1" Width="300">
-            <StackPanel.Resources>
-                <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}"/>
-                <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}"/>
-            </StackPanel.Resources>
-            <TextBlock>Результат опробирования:</TextBlock>
-            <TextBox Text="{Binding Assay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock>Результат проверки герметичности:</TextBlock>
-            <TextBox Text="{Binding Leak, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock>Выводы по результатам поверки:</TextBlock>
-            <TextBox Text="{Binding CommonResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock>Результат визуального осмотра:</TextBlock>
-            <TextBox Text="{Binding VisualCheckResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
+        <DockPanel Grid.Column="0" Grid.Row="1" Width="300">
+            <StackPanel DockPanel.Dock="Top">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}"/>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}"/>
+                </StackPanel.Resources>
+                <TextBlock>Результат опробирования:</TextBlock>
+                <TextBox Text="{Binding Assay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock>Результат проверки герметичности:</TextBlock>
+                <TextBox Text="{Binding Leak, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock>Выводы по результатам поверки:</TextBlock>
+                <TextBox Text="{Binding CommonResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock>Результат визуального осмотра:</TextBlock>
+                <TextBox Text="{Binding VisualCheckResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+            <Button DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Height="50" Command="{Binding Save}">
+                <TextBlock Text="Сохранить" TextWrapping="Wrap" Style="{StaticResource TblHeaderStyle}" VerticalAlignment="Center"/>
+            </Button>
+        </DockPanel>
         <Grid Grid.Column="2" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

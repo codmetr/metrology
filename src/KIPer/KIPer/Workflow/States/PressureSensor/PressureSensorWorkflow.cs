@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DPI620Genii;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.Report.PressureSensor;
+using KipTM.ViewModel;
 using KipTM.ViewModel.Checks.Config;
 using KipTM.ViewModel.Workflow.States;
 using Moq;
@@ -15,7 +16,7 @@ namespace KipTM.Workflow.States.PressureSensor
 {
     public class PressureSensorWorkflow
     {
-        public IWorkflow Make(Logger logger)
+        public IWorkflow Make(ArchivesViewModel archive, Logger logger)
         {
             var configData = new CheckPressureSensorConfig();
             var ports = System.IO.Ports.SerialPort.GetPortNames();
@@ -30,7 +31,7 @@ namespace KipTM.Workflow.States.PressureSensor
                 DpiConfig = dpiConf,
             };
             var run = new PressureSensorRunVm(configData, new DPI620DriverCom(), dpiConf);
-            var result = new PressureSensorResultVM();
+            var result = new PressureSensorResultVM(archive, config);
             var reportMain = new PressureSensorReportDto()
             {
                 ReportNumber = "1",
@@ -169,60 +170,42 @@ namespace KipTM.Workflow.States.PressureSensor
 
         private void UpdateReportByResult(PressureSensorCheckConfigVm config, PressureSensorResultVM result, PressureSensorReportDto reportMain, PressureSensorCertificateDto reportCertificate)
         {
-            reportMain.Assay = result.Assay;
-            reportMain.CommonResult = result.CommonResult;
-            if (result.TimeStamp == null)
-            {
-                reportMain.CertificateDate = "";
-                reportMain.ReportTime = "";
-            }
-            else
-            {
-                reportMain.CertificateDate = result.TimeStamp.Value.ToString("dd.MM.yy");
-                reportMain.ReportTime = result.TimeStamp.Value.ToString("dd.MM.yy");
-            }
-            reportMain.ReportNumber = config.RegNum;
-            reportMain.TypeDevice = config.SensorType;
-            reportMain.SerialNumber = config.SerialNumber;
-            reportMain.Owner = config.Master;
-            reportMain.Temperature = config.Temperature.ToString("F0");
-            reportMain.Humidity = config.Humidity.ToString("F0");
-            reportMain.Pressure = config.DayPressure.ToString("F0");
-            reportMain.Voltage = config.CommonVoltage.ToString("F0");
-            reportMain.VisualCheckResult = result.VisualCheckResult;
-            reportMain.LeakCheckResult = result.Leak;
-            reportMain.CommonResult = result.CommonResult;
+            ApplyCommonData(config, result, reportMain);
+
+            ApplyEthalons(config, reportMain);
 
             // Заполнение результатов проверки основной погрешности
-            var mainAccur = (reportMain.MainAccurancy ?? new List<MainAccurancyPointDto>()).ToList();
-            foreach (var point in result.PointResults)
-            {
-                var mainAcPoint = mainAccur.FirstOrDefault(
-                        el => el.PressurePoint.ToString() == point.Config.Pressire.ToString("F0"));
-                if (mainAcPoint == null)
-                {
-                    mainAcPoint = new MainAccurancyPointDto()
-                    {
-                        PressurePoint = point.Config.Pressire.ToString("F0"),
-                        Uet = point.Config.U.ToString("F3"),
-                        dUet = point.Config.dU.ToString("F3"),
-                    };
-                    mainAccur.Add(mainAcPoint);
-                }
-                if (point.Result == null)
-                {
-                    mainAcPoint.U = "";
-                    mainAcPoint.dU = "";
-                }
-                else
-                {
-                    mainAcPoint.U = point.Result.UReal.ToString("F3");
-                    mainAcPoint.dU = point.Result.dUReal.ToString("F3");
-                }
-            }
-            reportMain.MainAccurancy = mainAccur.OrderBy(el => int.Parse(el.PressurePoint.ToString())).ToArray();
+            ApplyMainAccurancy(result, reportMain);
 
             // Заполнение результатов проверки вариации
+            ApplyVariation(result, reportMain);
+        }
+
+        private void ApplyEthalons(PressureSensorCheckConfigVm config, PressureSensorReportDto reportMain)
+        {
+            var ethalons = new List<EthalonDto>();
+            ethalons.Add(new EthalonDto()
+            {
+                Type = config.EthalonPressure.SensorType,
+                Title = config.EthalonPressure.Title,
+                RangeClass = config.EthalonPressure.ErrorClass,
+                SerialNumber = config.EthalonPressure.SerialNumber,
+                CheckCertificateDate = config.EthalonPressure.Category,
+                CheckCertificateNumber = config.EthalonPressure.RegNum,
+            });
+            ethalons.Add(new EthalonDto()
+            {
+                Type = config.EthalonVoltage.SensorType,
+                Title = config.EthalonVoltage.Title,
+                RangeClass = config.EthalonVoltage.ErrorClass,
+                SerialNumber = config.EthalonVoltage.SerialNumber,
+                CheckCertificateDate = config.EthalonVoltage.Category,
+                CheckCertificateNumber = config.EthalonVoltage.RegNum,
+            });
+        }
+
+        private static void ApplyVariation(PressureSensorResultVM result, PressureSensorReportDto reportMain)
+        {
             var varAccur = (reportMain.VariationAccurancy ?? new List<VariationAccurancyPointDto>()).ToList();
             foreach (var point in result.PointResults)
             {
@@ -251,6 +234,67 @@ namespace KipTM.Workflow.States.PressureSensor
                 }
             }
             reportMain.VariationAccurancy = varAccur.OrderBy(el => int.Parse(el.PressurePoint.ToString())).ToArray();
+        }
+
+        private static void ApplyMainAccurancy(PressureSensorResultVM result, PressureSensorReportDto reportMain)
+        {
+            var mainAccur = (reportMain.MainAccurancy ?? new List<MainAccurancyPointDto>()).ToList();
+            foreach (var point in result.PointResults)
+            {
+                var mainAcPoint = mainAccur.FirstOrDefault(
+                        el => el.PressurePoint.ToString() == point.Config.Pressire.ToString("F0"));
+                if (mainAcPoint == null)
+                {
+                    mainAcPoint = new MainAccurancyPointDto()
+                    {
+                        PressurePoint = point.Config.Pressire.ToString("F0"),
+                        Uet = point.Config.U.ToString("F3"),
+                        dUet = point.Config.dU.ToString("F3"),
+                    };
+                    mainAccur.Add(mainAcPoint);
+                }
+                if (point.Result == null)
+                {
+                    mainAcPoint.U = "";
+                    mainAcPoint.dU = "";
+                }
+                else
+                {
+                    mainAcPoint.U = point.Result.UReal.ToString("F3");
+                    mainAcPoint.dU = point.Result.dUReal.ToString("F3");
+                }
+            }
+            reportMain.MainAccurancy = mainAccur.OrderBy(el => int.Parse(el.PressurePoint.ToString())).ToArray();
+        }
+
+        private static void ApplyCommonData(PressureSensorCheckConfigVm config, PressureSensorResultVM result, PressureSensorReportDto reportMain)
+        {
+            reportMain.User = config.User;
+            reportMain.CertificateNumber = config.SertificateNumber;
+            reportMain.CertificateDate = config.SertificateDate;
+            reportMain.Assay = result.Assay;
+            reportMain.CommonResult = result.CommonResult;
+            if (result.TimeStamp == null)
+            {
+                reportMain.CertificateDate = "";
+                reportMain.ReportTime = "";
+            }
+            else
+            {
+                reportMain.CertificateDate = result.TimeStamp.Value.ToString("dd.MM.yy");
+                reportMain.ReportTime = result.TimeStamp.Value.ToString("dd.MM.yy");
+            }
+            reportMain.ReportNumber = config.RegNum;
+            reportMain.TypeDevice = config.SensorType;
+            reportMain.SerialNumber = config.SerialNumber;
+            reportMain.Owner = config.Master;
+            reportMain.Temperature = config.Temperature.ToString("F0");
+            reportMain.Humidity = config.Humidity.ToString("F0");
+            reportMain.Pressure = config.DayPressure.ToString("F0");
+            reportMain.Voltage = config.CommonVoltage.ToString("F0");
+            reportMain.VisualCheckResult = result.VisualCheckResult;
+            reportMain.LeakCheckResult = result.Leak;
+            reportMain.CommonResult = result.CommonResult;
         }
 
         private static IDPI620Driver GetMoq()

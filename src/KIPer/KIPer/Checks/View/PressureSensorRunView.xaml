@@ -167,13 +167,13 @@
                         Далее
                     </Button>
                     <Button 
-                    Command="{Binding StartCheck}"
-                    Visibility="{Binding IsRun, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                        Command="{Binding StartCheck}"
+                        Visibility="{Binding IsRun, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                         Начать поверку
                     </Button>
                     <Button
-                    Command="{Binding PauseCheck}"
-                    Visibility="{Binding IsRun, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        Command="{Binding PauseCheck}"
+                        Visibility="{Binding IsRun, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
                         Пауза
                     </Button>
                     <Button Command="{Binding StopCheck}">Стоп</Button>
