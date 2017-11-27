@@ -87,7 +87,7 @@ namespace KipTM.Checks.ViewModel.Config
         public PressureResult(PressureSensorResultVM result)
         {
             _result = result;
-            var devType = new DeviceTypeDescriptor(model:_result);
+            var devType = new DeviceTypeDescriptor(_result.);
             Device = new DeviceViewModel(new DeviceDescriptor(devType)) {DeviceType = devType};
             
         }
