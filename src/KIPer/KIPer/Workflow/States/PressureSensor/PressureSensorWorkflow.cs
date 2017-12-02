@@ -36,18 +36,18 @@ namespace KipTM.Workflow.States.PressureSensor
             {
                 ReportNumber = "1",
                 ReportTime = "700",
-                TypeDevice = "123",
+                TypeDevice = "",
                 Assay = "Корректно",
-                CertificateDate = "01.01.0001",
-                CertificateNumber = "111",
+                CertificateDate = DateTime.Now.ToString("dd.MM.yyyy"),
+                CertificateNumber = "",
                 CommonResult = "Ok",
                 Humidity = "50",
-                LeakCheckResult = "no leaks",
-                Owner = "я",
+                LeakCheckResult = "нет утечек",
+                Owner = "",
                 Pressure = "760",
-                SerialNumber = "ser1",
+                SerialNumber = "",
                 Temperature = "21",
-                User = "Иванов Иван Иванович",
+                User = "",
                 VisualCheckResult = "не нашел",
                 Voltage = "220",
                 Ethalons = new[]
@@ -57,9 +57,9 @@ namespace KipTM.Workflow.States.PressureSensor
                         Title = "DPI620Genii",
                         Type = "многофункциональный манометр",
                         RangeClass = "0.001 ВПИ",
-                        SerialNumber = "321",
-                        CheckCertificateDate = "02.01.0001",
-                        CheckCertificateNumber = "222"
+                        SerialNumber = "",
+                        CheckCertificateDate = DateTime.Now.ToString("dd.MM.yyyy"),
+                        CheckCertificateNumber = ""
                     },
                 },
                 MainAccurancy = new[]
@@ -79,23 +79,25 @@ namespace KipTM.Workflow.States.PressureSensor
                     new VariationAccurancyPointDto() {PressurePoint = "30", Uf = "2", Ur = "2.5", dU = "0.5", dUet = "0.1"},
                     new VariationAccurancyPointDto() {PressurePoint = "40", Uf = "1", Ur = "1.5", dU = "0.5", dUet = "0.1"},
                     new VariationAccurancyPointDto() {PressurePoint = "50", Uf = "0", Ur = "0.5", dU = "0.5", dUet = "0.1"},
-                }};
+                }
+            };
 
-                var reportCertificate = new PressureSensorCertificateDto()
+            var reportCertificate = new PressureSensorCertificateDto()
+            {
+                Ethalons = new[]
                 {
-                    Ethalons = new[]
+                    new EthalonDto()
                     {
-                        new EthalonDto()
-                        {
-                            Title = "DPI620Genii",
-                            Type = "многофункциональный манометр",
-                            RangeClass = "0.001 ВПИ",
-                            SerialNumber = "321",
-                            CheckCertificateDate = "02.01.0001",
-                            CheckCertificateNumber = "222"
-                        },
+                        Title = "DPI620Genii",
+                        Type = "многофункциональный манометр",
+                        RangeClass = "0.001 ВПИ",
+                        SerialNumber = "",
+                        CheckCertificateDate = DateTime.Now.ToString("dd.MM.yyyy"),
+                        CheckCertificateNumber = ""
                     },
-                };
+                },
+            };
+
             var steps = new List<IWorkflowStep>()
             {
                 new SimpleWorkflowStep(config).SetOut(()=>UpdateRunByConf(config, run, logger)),

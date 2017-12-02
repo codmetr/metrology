@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using ADTS;
 using ADTSChecks.Checks;
 using ADTSChecks.Checks.Data;
@@ -86,10 +87,10 @@ namespace ADTSChecks.Model.Checks
             else param = Parameters.PS;
             foreach (var point in parameters.Points)
             {
-                step = new CheckStepConfig( new DoPointStep(string.Format("Калибровка точки {0} {1}", point.Pressure, parameters.Unit.ToStr()),
-                    _adts, param, point, parameters.Rate, parameters.Unit, ChConfig.EthChannel,
-                    ChConfig.UsrChannel, _logger), false, point.IsAvailable);
-
+                var stepPoint = new DoPointStep(string.Format("Калибровка точки {0} {1}", point.Pressure, parameters.Unit.ToStr()),
+                    _adts, param, point, parameters.Rate, parameters.Unit, ChConfig.EthChannel, ChConfig.UsrChannel, _logger);
+                step = new CheckStepConfig(stepPoint, false, point.IsAvailable);
+                stepPoint.SetBuffer(_dataBuffer);
                 AttachStep(step.Step);
                 steps.Add(step);
             }
@@ -113,43 +114,26 @@ namespace ADTSChecks.Model.Checks
             return true;
         }
 
-        protected override void StepEnd(object sender, EventArgEnd e)
+        protected override bool PrepareCheck(CancellationToken cancel)
         {
-            if (e.Key == DoPointStep.KeyStep && _resultPoint != null)
-            {
-                _result.PointsResults.Add(_resultPoint);
-                OnResultUpdated(new EventArgTestStepResult(e.Key, _resultPoint));
-                _resultPoint = null;
-            }
-            else if (e.Key == InitStep.KeyStep)
-            {
-                OnResultUpdated(new EventArgTestStepResult(e.Key, _result.CheckTime));
-            }
+            //if (!base.PrepareCheck(cancel))
+            //    return false;
+            _dataBuffer.Clear();
+            return true;
         }
 
-        #region Fill results
-        /// <summary>
-        /// Распределить результат в нужное поле результата
-        /// </summary>
-        /// <param name="descriptor"></param>
-        /// <param name="result"></param>
-        protected override void SwitchParameter(ParameterDescriptor descriptor, ParameterResult result)
+        protected override void StepEnd(object sender, EventArgEnd e)
         {
-            switch (descriptor.Name)
-            {
-                case InitStep.KeyCalibDate:
-                    _result.CheckTime = (DateTime)result.Value;
-                    break;
-                case DoPointStep.KeyPressure:
-                    if (_resultPoint == null)
-                        _resultPoint = new AdtsPointResult();
-                    _resultPoint.SetProperty(descriptor, result.Value);
-                    break;
-                default:
-                    throw new KeyNotFoundException(string.Format("Received not exected key [{0}]", descriptor.Name));
-            }
+            if (_dataBuffer.TryResolve(out _resultPoint))
+                _result.PointsResults.Add(_resultPoint);
+            _dataBuffer.Clear();
         }
-        #endregion
+
+        protected override void OnEndMethod(EventArgs e)
+        {
+            _dataBuffer.Clear();
+            base.OnEndMethod(e);
+        }
 
     }
 }

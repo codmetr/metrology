@@ -60,6 +60,11 @@ namespace KipTM.Checks.ViewModel.Config
 
         public ICommand Save{ get { return new CommandWrapper(OnSave); } }
 
+        public PressureSensorCheckConfigVm Config
+        {
+            get { return _config; }
+        }
+
         private void OnSave()
         {
             if(_result!=null)
@@ -87,7 +92,7 @@ namespace KipTM.Checks.ViewModel.Config
         public PressureResult(PressureSensorResultVM result)
         {
             _result = result;
-            var devType = new DeviceTypeDescriptor(_result.);
+            var devType = new DeviceTypeDescriptor(/*_result.Config.SensorModel, _result.Config.*/);
             Device = new DeviceViewModel(new DeviceDescriptor(devType)) {DeviceType = devType};
             
         }

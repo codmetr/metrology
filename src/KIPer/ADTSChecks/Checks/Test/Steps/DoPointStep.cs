@@ -3,6 +3,7 @@ using System.Threading;
 using ADTS;
 using ADTSChecks.Checks.Data;
 using ADTSChecks.Devices;
+using ADTSData;
 using ArchiveData.DTO.Params;
 using CheckFrame.Checks.Steps;
 using CheckFrame.Model.Channels;
@@ -15,7 +16,7 @@ using Tools;
 
 namespace ADTSChecks.Model.Steps.ADTSTest
 {
-    public class DoPointStep : TestStep, IStoppedOnPoint, ISettedEthalonChannel, IPausedStep, ISettedUserChannel
+    public class DoPointStep : TestStepWithBuffer, IStoppedOnPoint, ISettedEthalonChannel, IPausedStep, ISettedUserChannel
     {
         #region members
         public const string KeyStep = "DoPointStep";
@@ -32,6 +33,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         private readonly ManualResetEvent _setCurrentValueAsPoint = new ManualResetEvent(false);
         private bool _isPauseAvailable = false;
         private State _stateBeforeHold = State.Control;
+        private AdtsPointResult _result;
 
         #endregion
 
@@ -48,6 +50,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             _logger = logger;
             _userChannel = userChannel;
             _ethalonChannel = ethalonChannel;
+            _result = new AdtsPointResult();
         }
 
         #region ITestStep
@@ -127,20 +130,24 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             // Расчитать погрешность и зафиксировать реультата
             bool correctPoint = Math.Abs(Math.Abs(point) - Math.Abs(realValue)) <= _point.Tolerance;
             _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
-            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.RealValue),
-                    new ParameterResult(DateTime.Now, realValue)));
-            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.Unit),
-                    new ParameterResult(DateTime.Now, _unit.ToStr())));
-            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.Error),
-                    new ParameterResult(DateTime.Now, Math.Abs(point) - Math.Abs(realValue))));
-            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.Tolerance),
-                    new ParameterResult(DateTime.Now, _point.Tolerance)));
-            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.IsCorrect),
-                    new ParameterResult(DateTime.Now, correctPoint)));
+
+            _result.Point = point;
+            _result.Tolerance = _point.Tolerance;
+            _result.RealValue = realValue;
+            _result.Unit = _unit.ToStr();
+            _result.Error = Math.Abs(point) - Math.Abs(realValue);
+            _result.IsCorrect = correctPoint;
+
             if (cancel.IsCancellationRequested)
             {
                 DoEndCancel();
                 return;
+            }
+
+            if (_buffer != null)
+            {
+                _logger.With(l => l.Trace("save result point to buffer"));
+                _buffer.Append(_result);
             }
 
             // Сдвинуть прогресс

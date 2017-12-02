@@ -90,7 +90,8 @@ namespace KipTM.ViewModel
             _dataService.LoadResults();
             _dataService.FillDeviceList(features.DeviceTypes, features.EthalonTypes);
 
-            _testResults = new ArchivesViewModel();
+            var archive = new ArchivesViewModel();
+            _testResults = archive;
             _testResults.LoadTests(_dataService.ResultsArchive);
             _workflows = new Dictionary<string, IWorkflow>();
             var checkBtns = new List<OneBtnDescripto>();
@@ -103,7 +104,7 @@ namespace KipTM.ViewModel
             //}
             checkBtns.Add(new OneBtnDescripto("pressureSensor", "Датчик давления", BitmapToImage(Resources.EHCerabarM),
                 BitmapToImage(Resources.EHCerabarM), SelectChecks));
-            _workflows.Add("pressureSensor", new PressureSensorWorkflow().Make(_logger));
+            _workflows.Add("pressureSensor", new PressureSensorWorkflow().Make(archive, _logger));
             _checkBtns = checkBtns;
             _eventAggregator.Subscribe(this);
         }

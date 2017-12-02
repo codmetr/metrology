@@ -3,6 +3,7 @@ using System.Threading;
 using ADTS;
 using ADTSChecks.Checks.Data;
 using ADTSChecks.Devices;
+using ADTSData;
 using ArchiveData.DTO.Params;
 using CheckFrame.Checks.Steps;
 using CheckFrame.Model.Checks.Steps;
@@ -14,7 +15,7 @@ using Tools;
 
 namespace ADTSChecks.Model.Steps.ADTSCalibration
 {
-    public class DoPointStep : TestStep, IStoppedOnPoint, ISettedEthalonChannel
+    public class DoPointStep : TestStepWithBuffer, IStoppedOnPoint, ISettedEthalonChannel
     {
         public const string KeyStep = "DoPointStep";
         public const string KeyPressure = "Pressure";
@@ -27,6 +28,7 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
         private IEthalonChannel _ethalonChannel;
         private IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
+        private AdtsPointResult _result;
         private ManualResetEvent _setCurrentValueAsPoint = new ManualResetEvent(false);
 
         public DoPointStep(
@@ -42,6 +44,7 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             _logger = logger;
             _ethalonChannel = ethalonChannel;
             _userChannel = userChannel;
+            _result = new AdtsPointResult();
         }
 
         public override void Start(CancellationToken cancel)
@@ -105,12 +108,20 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             // Расчитать погрешность и зафиксировать реультата
             bool correctPoint = Math.Abs(Math.Abs(point) - Math.Abs(realValue)) <= _point.Tolerance;
             _logger.With(l => l.Trace(string.Format("Real value {0} ({1})", realValue, correctPoint ? "correct" : "incorrect")));
-            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.RealValue),
-                    new ParameterResult(DateTime.Now, realValue)));
-            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.Unit),
-                    new ParameterResult(DateTime.Now, _unit.ToStr())));
-            OnResultUpdated(new EventArgStepResultDict(new ParameterDescriptor(KeyPressure, point, ParameterType.IsCorrect),
-                    new ParameterResult(DateTime.Now, correctPoint)));
+
+            _result.Point = point;
+            _result.Tolerance = _point.Tolerance;
+            _result.RealValue = realValue;
+            _result.Unit = _unit.ToStr();
+            _result.Error = Math.Abs(point) - Math.Abs(realValue);
+            _result.IsCorrect = correctPoint;
+
+            if (_buffer != null)
+            {
+                _logger.With(l => l.Trace("save result point to buffer"));
+                _buffer.Append(_result);
+            }
+
             if (IsCancel(cancel))
             {
                 return;
@@ -123,8 +134,7 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             }
 
             // Сдвинуть прогресс
-            OnProgressChanged(new EventArgProgress(100,
-                string.Format("Точка {0}: Реальное значени {1}({2})",
+            OnProgressChanged(new EventArgProgress(100, string.Format("Точка {0}: Реальное значени {1}({2})",
                     point, realValue, correctPoint ? "correct" : "incorrect")));
             OnEnd(new EventArgEnd(KeyStep, true));
             return;

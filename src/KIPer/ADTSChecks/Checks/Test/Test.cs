@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using ADTS;
 using ADTSChecks.Checks;
 using ADTSChecks.Checks.Data;
@@ -9,6 +10,7 @@ using ADTSData;
 using ArchiveData.DTO;
 using ArchiveData.DTO.Params;
 using CheckFrame.Archive;
+using CheckFrame.Checks;
 using KipTM.Archive;
 using KipTM.Model.Checks;
 using Tools;
@@ -25,8 +27,11 @@ namespace ADTSChecks.Model.Checks
         //public const string KeyPropertyChannel = "Channel";
         public PressureUnits _unit;
 
-        private AdtsTestResults _result;
-        private AdtsPointResult _resultPoint;
+        private AdtsTestResults _result = null;
+        private AdtsPointResult _resultPoint = null;
+
+        private SimpleDataBuffer _dataBuffer = new SimpleDataBuffer();
+
 
         public Test(NLog.Logger logger)
             : base(logger)
@@ -87,9 +92,11 @@ namespace ADTSChecks.Model.Checks
 
             foreach (var point in parameters.Points)
             {
-                step = new CheckStepConfig(new DoPointStep(string.Format("Поверка точки {0} {1}", point.Pressure, _unit.ToStr()), _adts, param, point,
-                    parameters.Rate, parameters.Unit, ChConfig.EthChannel, ChConfig.UsrChannel, _logger), false, point.IsAvailable);
+                var stepPoint = new DoPointStep(string.Format("Поверка точки {0} {1}", point.Pressure, _unit.ToStr()),
+                    _adts, param, point, parameters.Rate, parameters.Unit, ChConfig.EthChannel, ChConfig.UsrChannel, _logger);
+                step = new CheckStepConfig(stepPoint, false, point.IsAvailable);
                 AttachStep(step.Step);
+                stepPoint.SetBuffer(_dataBuffer);
                 steps.Add(step);
             }
 
@@ -108,43 +115,25 @@ namespace ADTSChecks.Model.Checks
             return true;
         }
 
+        protected override bool PrepareCheck(CancellationToken cancel)
+        {
+            //if (!base.PrepareCheck(cancel))
+            //    return false;
+            _dataBuffer.Clear();
+            return true;
+        }
+
         protected override void StepEnd(object sender, EventArgEnd e)
         {
-            if (e.Key == DoPointStep.KeyStep && _resultPoint != null)
-            {
+            if (_dataBuffer.TryResolve(out _resultPoint))
                 _result.PointsResults.Add(_resultPoint);
-                OnResultUpdated(new EventArgTestStepResult(e.Key, _resultPoint));
-                _resultPoint = null;
-            }
-            else if (e.Key == InitStep.KeyStep)
-            {
-                //OnResultUpdated(new EventArgTestStepResult(e.Key, _result.CheckTime));
-            }
-
+            _dataBuffer.Clear();
         }
-        #region Fill results
-        /// <summary>
-        /// Распределить результат в нужное поле результата
-        /// </summary>
-        /// <param name="descriptor"></param>
-        /// <param name="result"></param>
-        protected override void SwitchParameter(ParameterDescriptor descriptor, ParameterResult result)
+
+        protected override void OnEndMethod(EventArgs e)
         {
-            switch (descriptor.Name)
-            {
-                case InitStep.KeyCalibDate:
-                    _result.CheckTime = (DateTime)result.Value;
-                    break;
-                case DoPointStep.KeyPressure:
-                    if (_resultPoint == null)
-                        _resultPoint = new AdtsPointResult();
-                    _resultPoint.SetProperty(descriptor, result.Value);
-                    break;
-                default:
-                    throw new KeyNotFoundException(string.Format("Received not exected key [{0}]", descriptor.Name));
-            }
+            _dataBuffer.Clear();
+            base.OnEndMethod(e);
         }
-        #endregion
-
     }
 }

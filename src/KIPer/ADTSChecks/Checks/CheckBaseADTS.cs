@@ -12,7 +12,7 @@ namespace ADTSChecks.Checks
     /// <summary>
     /// Базовая реализация проверки ADTS
     /// </summary>
-    public abstract class CheckBaseADTS : Check
+    public abstract class CheckBaseADTS : CheckBase
     {
         public const string KeySettingsPS = KeysDic.KeySettingsPS;
         public const string KeySettingsPT = KeysDic.KeySettingsPT;
@@ -31,14 +31,12 @@ namespace ADTSChecks.Checks
         protected ADTSParameters _parameters;
 
         protected ADTSModel _adts;
-
-
+        
         protected CheckBaseADTS(Logger logger):base(logger)
         {
             Title = MethodName;
         }
-
-
+        
         protected override bool PrepareCheck(CancellationToken cancel)
         {
             if (!base.PrepareCheck(cancel))

@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using ArchiveData.DTO.Params;
 using CheckFrame.Checks;
-using CheckFrame.Model.Checks.Steps;
 using KipTM.Archive;
-using KipTM.EventAggregator;
 using KipTM.Interfaces.Channels;
-using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using NLog;
 using PressureSensorCheck.Check.Steps;
 using PressureSensorCheck.Data;
-using PressureSensorCheck.Devices;
 using PressureSensorData;
 
 namespace PressureSensorCheck.Check

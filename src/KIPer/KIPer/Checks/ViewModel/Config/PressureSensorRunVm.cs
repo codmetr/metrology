@@ -215,25 +215,25 @@ namespace KipTM.Checks.ViewModel.Config
                     Tollerance = el.dU,
                 }).ToList()
             });
-            var task = new Task(() =>
-            {
-                try
-                {
-                    using (_autoupdater.Subscribe(this))
-                    {
-                        if (check.Start(cancel))
-                        {
-                            if (!cancel.IsCancellationRequested)
-                                UpdateResult(check.Result);
-                        }
-                    }
-                }
-                finally
-                {
-                    IsRun = false;
-                }
-            });
+            var task = new Task(() =>{TryStart(cancel, check);});
             task.Start(TaskScheduler.Default);
+        }
+
+        private void TryStart(CancellationToken cancel, PressureSensorCheck.Check.PressureSensorCheck check)
+        {
+            try
+            {
+                using (_autoupdater.Subscribe(this))
+                {
+                    if (check.Start(cancel))
+                        if (!cancel.IsCancellationRequested)
+                            UpdateResult(check.Result);
+                }
+            }
+            finally
+            {
+                IsRun = false;
+            }
         }
 
         private void UpdateResult(PressureSensorResult checkResult)
