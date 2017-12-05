@@ -10,6 +10,7 @@ using ADTSData;
 using ArchiveData.DTO;
 using ArchiveData.DTO.Params;
 using CheckFrame.Archive;
+using CheckFrame.Checks;
 using KipTM.Archive;
 using KipTM.Model.Checks;
 using Tools;
@@ -27,6 +28,7 @@ namespace ADTSChecks.Model.Checks
 
         private AdtsTestResults _result;
         private AdtsPointResult _resultPoint;
+        private SimpleDataBuffer _dataBuffer = new SimpleDataBuffer();
 
         public Calibration(NLog.Logger logger)
             : base(logger)
@@ -125,7 +127,10 @@ namespace ADTSChecks.Model.Checks
         protected override void StepEnd(object sender, EventArgEnd e)
         {
             if (_dataBuffer.TryResolve(out _resultPoint))
+            {
                 _result.PointsResults.Add(_resultPoint);
+                _result.CheckTime = DateTime.Now;
+            }
             _dataBuffer.Clear();
         }
 

@@ -126,7 +126,10 @@ namespace ADTSChecks.Model.Checks
         protected override void StepEnd(object sender, EventArgEnd e)
         {
             if (_dataBuffer.TryResolve(out _resultPoint))
+            {
                 _result.PointsResults.Add(_resultPoint);
+                _result.CheckTime = DateTime.Now;
+            }
             _dataBuffer.Clear();
         }
 

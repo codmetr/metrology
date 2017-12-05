@@ -526,8 +526,7 @@ namespace ADTSChecks.Checks.ViewModel
                 if (res == null)
                     continue;
                 if (Math.Abs(res.Point - newRes.Point) < double.Epsilon &&
-                    stepResult.CheckKey == Method.Key &&
-                    stepResult.ChannelKey == Method.ChConfig.ChannelKey)
+                    stepResult.CheckKey == Method.Key && stepResult.ChannelKey == Method.ChConfig.ChannelKey)
                 {
                     fidedRes = res;
                     break;
@@ -537,8 +536,8 @@ namespace ADTSChecks.Checks.ViewModel
             if (fidedRes == null)
             {
                 // это новая точка
-                _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChConfig.ChannelKey, eventArgTestResult.Key,
-                    eventArgTestResult.Result));
+                _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChConfig.ChannelKey,
+                    eventArgTestResult.Key, eventArgTestResult.Result));
                 return;
             }
 
@@ -564,7 +563,7 @@ namespace ADTSChecks.Checks.ViewModel
         private void AttachEvent(CheckBaseADTS model)
         {
             model.StepsChanged += OnStepsChanged;
-            model.ResultUpdated += ResultUpdated;
+            //model.ResultUpdated += ResultUpdated;
             model.EndMethod += EndMethod;
             model.PauseAvailableChanged += model_PauseAvailableChanged;
         }
@@ -572,7 +571,7 @@ namespace ADTSChecks.Checks.ViewModel
         private void DetachEvent(CheckBaseADTS model)
         {
             model.StepsChanged -= OnStepsChanged;
-            model.ResultUpdated -= ResultUpdated;
+            //model.ResultUpdated -= ResultUpdated;
             model.EndMethod -= EndMethod;
             model.PauseAvailableChanged -= model_PauseAvailableChanged;
         }

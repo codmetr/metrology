@@ -119,9 +119,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             // Получить эталонное значение
             var realValue = _ethalonChannel.GetEthalonValue(point, cancel);
 
-            _userChannel.Message =
-                string.Format(
-                    "Установлено на точке {0} {1} полученно эталонное значение {2} {3}. Для продолжения нажмите ",
+            _userChannel.Message = string.Format( "Установлено на точке {0} {1} полученно эталонное значение {2} {3}. Для продолжения нажмите ",
                     point.ToString("F2"), _unit.ToStr(), realValue.ToString("F2"), _unit.ToStr()) + "\"{0}\"";
             wh.Reset();
             _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
@@ -151,8 +149,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             }
 
             // Сдвинуть прогресс
-            OnProgressChanged(new EventArgProgress(100,
-                string.Format("Точка {0}: Реальное значени {1}({2})",
+            OnProgressChanged(new EventArgProgress(100, string.Format("Точка {0}: Реальное значени {1}({2})",
                     point, realValue, correctPoint ? "correct" : "incorrect")));
             DoEnd(true);
             return;
@@ -291,7 +288,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         private bool Wait(EventWaitHandle wh, EventWaitHandle whSetCurentValue, CancellationToken cancel, out bool isSettedCurrentPoint)
         {
             isSettedCurrentPoint = false;
-            var whArray = new [] { wh, whSetCurentValue,cancel.WaitHandle };
+            var whArray = new[] { wh, whSetCurentValue, cancel.WaitHandle };
             int exitIndex = WaitHandle.WaitAny(whArray);
             //todo support pause
             if (cancel.IsCancellationRequested)
