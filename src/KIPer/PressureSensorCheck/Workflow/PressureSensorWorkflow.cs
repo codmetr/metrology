@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DPI620Genii;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.Report.PressureSensor;
 using KipTM.ViewModel;
-using KipTM.ViewModel.Checks.Config;
-using KipTM.ViewModel.Workflow.States;
 using Moq;
 using NLog;
 
@@ -16,7 +12,7 @@ namespace KipTM.Workflow.States.PressureSensor
 {
     public class PressureSensorWorkflow
     {
-        public IWorkflow Make(ArchivesViewModel archive, Logger logger)
+        public IWorkflow Make(Logger logger)
         {
             var configData = new CheckPressureSensorConfig();
             var ports = System.IO.Ports.SerialPort.GetPortNames();
@@ -31,7 +27,7 @@ namespace KipTM.Workflow.States.PressureSensor
                 DpiConfig = dpiConf,
             };
             var run = new PressureSensorRunVm(configData, new DPI620DriverCom(), dpiConf);
-            var result = new PressureSensorResultVM(archive, config);
+            var result = new PressureSensorResultVM(config);
             var reportMain = new PressureSensorReportDto()
             {
                 ReportNumber = "1",

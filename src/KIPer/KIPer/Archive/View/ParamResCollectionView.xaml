@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:archive="clr-namespace:CheckFrame.ViewModel.Archive;assembly=CheckFrame"
+             xmlns:archive1="clr-namespace:CheckFrame.ViewModel.Archive;assembly=KipTM.Interfaces"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -12,7 +13,7 @@
                 <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <DataTemplate DataType="{x:Type archive:IParameterResultViewModel}" x:Key="ParameterResultTemplate">
+            <DataTemplate DataType="{x:Type archive1:IParameterResultViewModel}" x:Key="ParameterResultTemplate">
                 <DataTemplate.Resources>
                     <Style TargetType="TextBlock" BasedOn="{StaticResource ItemedTextBoxStyle}"/>
                     <Style TargetType="Border" BasedOn="{StaticResource ItemedBorderStyle}"/>

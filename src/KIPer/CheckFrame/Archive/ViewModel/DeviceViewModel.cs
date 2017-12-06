@@ -1,15 +1,13 @@
-﻿using ArchiveData.DTO;
-using GalaSoft.MvvmLight;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using ArchiveData.DTO;
 
 namespace KipTM.ViewModel
 {
     /// <summary>
     /// Идентификатор конкретного устройства
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
     /// </summary>
-    public class DeviceViewModel : ViewModelBase, IDeviceViewModel
+    public class DeviceViewModel : INotifyPropertyChanged, IDeviceViewModel
     {
         private string _serialNumber;
         private IDeviceTypeDescriptor _deviceType;
@@ -31,7 +29,13 @@ namespace KipTM.ViewModel
         public IDeviceTypeDescriptor DeviceType
         {
             get { return _deviceType; }
-            set { Set(ref _deviceType, value); }
+            set
+            {
+                if(value == _deviceType)
+                    return;
+                _deviceType = value;
+                OnPropertyChanged("DeviceType");
+            }
         }
 
         /// <summary>
@@ -40,7 +44,20 @@ namespace KipTM.ViewModel
         public string SerialNumber
         {
             get { return _serialNumber; }
-            set { Set(ref _serialNumber, value); }
+            set
+            {
+                if(value == _serialNumber)
+                    return;
+                _serialNumber = value;
+                OnPropertyChanged("SerialNumber");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

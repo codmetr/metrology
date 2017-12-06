@@ -158,9 +158,6 @@
     <Compile Include="Archive\ViewModel\TestResultViewModelFactory.cs" />
     <Compile Include="Checks\ViewModel\CheckPool.cs" />
     <Compile Include="Checks\ViewModel\Config\EthalonConfigViewModel.cs" />
-    <Compile Include="Checks\ViewModel\Config\PressureSensorRunVm.cs" />
-    <Compile Include="Checks\ViewModel\Config\PressureSensorCheckConfigVM.cs" />
-    <Compile Include="Checks\ViewModel\Config\PressureSensorResultVM.cs" />
     <Compile Include="Checks\View\ChannelDescriptorView.xaml.cs">
       <DependentUpon>ChannelDescriptorView.xaml</DependentUpon>
     </Compile>
@@ -196,29 +193,6 @@
       <DependentUpon>DocsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Manuals\View\WebBrowserUtility.cs" />
-    <Compile Include="Report\PressureSensor\BlankReport.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BlankReport.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Report\PressureSensor\PressureSensorCertificateDto.cs" />
-    <Compile Include="Report\PressureSensor\PressureSensorReport.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PressureSensorReport.rpt</DependentUpon>
-      <SubType>Component</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Report\PressureSensor\PressureSensorReportDto.cs" />
-    <Compile Include="Report\PressureSensor\PressureSensorReportViewModel.cs" />
-    <Compile Include="Report\PressureSensor\PressureSensorСertificate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PressureSensorСertificate.rpt</DependentUpon>
-      <SubType>Component</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Services\FillReportView.xaml.cs">
       <DependentUpon>FillReportView.xaml</DependentUpon>
     </Compile>
@@ -244,30 +218,19 @@
     <Compile Include="Skins\Converters\InverseBooleanConverter.cs" />
     <Compile Include="Skins\Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModel\OneBtnDescripto.cs" />
-    <Compile Include="Workflow\IWorkflow.cs" />
-    <Compile Include="Workflow\SimpleWorkflowStep.cs" />
     <Compile Include="Workflow\States\CheckState.cs" />
     <Compile Include="Workflow\States\CheckWorkflowFactory.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />
     <Compile Include="Workflow\States\Events\EventCheckState.cs" />
-    <Compile Include="Workflow\States\PressureSensor\Dpi620StateMoq.cs" />
-    <Compile Include="Workflow\States\PressureSensor\PressureSensorWorkflow.cs" />
     <Compile Include="Workflow\States\ResultState.cs" />
     <Compile Include="Workflow\States\ReportState.cs" />
     <Compile Include="Devices\ViewModel\DeviceTypeCollectionViewModel.cs" />
     <Compile Include="Devices\ViewModel\DeviceTypeViewModel.cs" />
-    <Compile Include="Archive\ViewModel\DeviceViewModel.cs" />
     <Compile Include="Devices\ViewModel\EtalonTypeViewModel.cs" />
-    <Compile Include="Archive\ViewModel\IDeviceViewModel.cs" />
     <Compile Include="Devices\ViewModel\IDeviceTypesViewModel.cs" />
     <Compile Include="Devices\ViewModel\IMethodicViewModel.cs" />
-    <Compile Include="Archive\ViewModel\IArchivesViewModel.cs" />
-    <Compile Include="Archive\ViewModel\ITestResultViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="Devices\ViewModel\MethodicViewModel.cs" />
-    <Compile Include="Workflow\IWorkflowStep.cs" />
-    <Compile Include="Workflow\LineWorkflow.cs" />
-    <Compile Include="Workflow\WorkflowStepChangeEvent.cs" />
     <Compile Include="Services\ViewModel\SelectChannelViewModel.cs" />
     <Compile Include="Services\ViewModel\ServiceViewModel.cs" />
     <Compile Include="Archive\ViewModel\ArchivesViewModel.cs" />
@@ -474,20 +437,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <CustomToolNamespace>KipTM</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Report\PressureSensor\BlankReport.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>BlankReport.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Report\PressureSensor\PressureSensorReport.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>PressureSensorReport.cs</LastGenOutput>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Report\PressureSensor\PressureSensorСertificate.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>PressureSensorСertificate.cs</LastGenOutput>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\ReportHost.resx">
       <DependentUpon>ReportHost.cs</DependentUpon>

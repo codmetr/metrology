@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -55,6 +56,11 @@
     <Compile Include="Archive\IDictionariesArchiveFactory.cs" />
     <Compile Include="Archive\IDictionaryDataDefault.cs" />
     <Compile Include="Archive\IPropertyPool.cs" />
+    <Compile Include="Archive\ViewModel\IArchivesViewModel.cs" />
+    <Compile Include="Archive\ViewModel\IDeviceViewModel.cs" />
+    <Compile Include="Archive\ViewModel\IParameterResultViewModel.cs" />
+    <Compile Include="Archive\ViewModel\IParameterViewModel.cs" />
+    <Compile Include="Archive\ViewModel\ITestResultViewModel.cs" />
     <Compile Include="Channels\IChannelsFactory.cs" />
     <Compile Include="Channels\IDeviceConfig.cs" />
     <Compile Include="Channels\IEthalonCannelFactory.cs" />
@@ -103,6 +109,9 @@
     <Compile Include="Settings\IMainSettings.cs" />
     <Compile Include="TransportChannels\ITransportChannelType.cs" />
     <Compile Include="Units.cs" />
+    <Compile Include="Workflow\IWorkflow.cs" />
+    <Compile Include="Workflow\IWorkflowStep.cs" />
+    <Compile Include="Workflow\WorkflowStepChangeEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">

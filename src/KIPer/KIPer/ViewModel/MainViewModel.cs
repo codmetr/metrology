@@ -104,7 +104,7 @@ namespace KipTM.ViewModel
             //}
             checkBtns.Add(new OneBtnDescripto("pressureSensor", "Датчик давления", BitmapToImage(Resources.EHCerabarM),
                 BitmapToImage(Resources.EHCerabarM), SelectChecks));
-            _workflows.Add("pressureSensor", new PressureSensorWorkflow().Make(archive, _logger));
+            _workflows.Add("pressureSensor", new PressureSensorWorkflow().Make(_logger));
             _checkBtns = checkBtns;
             _eventAggregator.Subscribe(this);
         }

@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Archive\BasicKeys.cs" />
+    <Compile Include="Archive\ViewModel\DeviceViewModel.cs" />
     <Compile Include="Checks\ChannelsConfig.cs" />
     <Compile Include="Checks\CheckWithBuffer.cs" />
     <Compile Include="Checks\CheckBase.cs" />
@@ -107,12 +108,12 @@
     <Compile Include="Services\ViewModel\FillReport\TemplateReportData.cs" />
     <Compile Include="Services\ViewModel\ParameterValuePair.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Archive\ViewModel\IParameterResultViewModel.cs" />
-    <Compile Include="Archive\ViewModel\IParameterViewModel.cs" />
     <Compile Include="Archive\ViewModel\ParameterResultViewModel.cs" />
     <Compile Include="Archive\ViewModel\ParameterViewModel.cs" />
     <Compile Include="Checks\ViewModel\StepState.cs" />
     <Compile Include="Checks\ViewModel\StepViewModel.cs" />
+    <Compile Include="Workflow\LineWorkflow.cs" />
+    <Compile Include="Workflow\SimpleWorkflowStep.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">

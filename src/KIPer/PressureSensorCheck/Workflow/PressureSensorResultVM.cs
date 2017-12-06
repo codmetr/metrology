@@ -21,12 +21,10 @@ namespace KipTM.Checks.ViewModel.Config
     public class PressureSensorResultVM:INotifyPropertyChanged
     {
         private ITestResultViewModel _result = null;
-        private ArchivesViewModel _archive;
         private PressureSensorCheckConfigVm _config;
 
-        public PressureSensorResultVM(ArchivesViewModel archive, PressureSensorCheckConfigVm config)
+        public PressureSensorResultVM(PressureSensorCheckConfigVm config)
         {
-            _archive = archive;
             _config = config;
             PointResults = new ObservableCollection<PointViewModel>();
         }
