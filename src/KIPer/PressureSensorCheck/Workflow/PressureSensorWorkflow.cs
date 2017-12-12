@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using DPI620Genii;
-using KipTM.Checks.ViewModel.Config;
 using KipTM.Report.PressureSensor;
-using KipTM.ViewModel;
+using KipTM.Workflow;
 using Moq;
 using NLog;
 
-namespace KipTM.Workflow.States.PressureSensor
+namespace PressureSensorCheck.Workflow
 {
     public class PressureSensorWorkflow
     {
@@ -105,9 +104,14 @@ namespace KipTM.Workflow.States.PressureSensor
             return new LineWorkflow(steps);
         }
 
+        /// <summary>
+        /// Обновление визуальной модели выполнения по конфигурации
+        /// </summary>
+        /// <param name="config">конфигурация</param>
+        /// <param name="run">выполнение проверки</param>
+        /// <param name="logger">логгер</param>
         private void UpdateRunByConf(PressureSensorCheckConfigVm config, PressureSensorRunVm run, Logger logger)
         {
-
             try
             {
                 if (run.IsRun)
@@ -135,6 +139,12 @@ namespace KipTM.Workflow.States.PressureSensor
             }
         }
 
+        /// <summary>
+        /// Обновление модели результата по текущему прогрессу выполненния проверки
+        /// </summary>
+        /// <param name="run">проверка</param>
+        /// <param name="result">результат</param>
+        /// <param name="logger">логгер</param>
         private void UpdateResultByRun(PressureSensorRunVm run, PressureSensorResultVM result, Logger logger)
         {
             //if(run.IsRun)
@@ -142,6 +152,7 @@ namespace KipTM.Workflow.States.PressureSensor
 
             try
             {
+                result.LastResult = run.LastResult;
                 result.PointResults.Clear();
                 foreach (var point in run.Points)
                 {
@@ -166,6 +177,13 @@ namespace KipTM.Workflow.States.PressureSensor
             }
         }
 
+        /// <summary>
+        /// Обновление отчета по результату
+        /// </summary>
+        /// <param name="config">конфигурация</param>
+        /// <param name="result">результат</param>
+        /// <param name="reportMain">отчет</param>
+        /// <param name="reportCertificate">сервификат</param>
         private void UpdateReportByResult(PressureSensorCheckConfigVm config, PressureSensorResultVM result, PressureSensorReportDto reportMain, PressureSensorCertificateDto reportCertificate)
         {
             ApplyCommonData(config, result, reportMain);

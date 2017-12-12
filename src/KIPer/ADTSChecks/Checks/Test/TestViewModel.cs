@@ -1,4 +1,5 @@
-﻿using ADTSChecks.Checks.Data;
+﻿using System.Diagnostics;
+using ADTSChecks.Checks.Data;
 using ADTSChecks.Model.Checks;
 using ArchiveData.DTO;
 using CheckFrame.Model;
@@ -20,8 +21,8 @@ namespace ADTSChecks.Checks.ViewModel
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
         /// </summary>
         public TestViewModel(
-            Test methodic, IPropertyPool propertyPool,
-            IDeviceManager deviceManager, TestResult resultPool, ADTSParameters customConf):
+            Test methodic, ADTSCheckConfig propertyPool,
+            IDeviceManager deviceManager, TestResultID resultPool, ADTSParameters customConf):
             base(methodic, propertyPool, deviceManager, resultPool, customConf)
         {
             Title = "Поверка ADTS";

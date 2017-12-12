@@ -4,7 +4,7 @@ using ArchiveData.DTO;
 namespace CheckFrame.Checks
 {
     /// <summary>
-    /// Конфигурация конкретной проверки
+    /// Универсальные данные конфигурации проверки
     /// </summary>
     public class CheckConfigData
     {
@@ -32,10 +32,59 @@ namespace CheckFrame.Checks
         /// </remarks>
         public Dictionary<ChannelDescriptor, DeviceWithChannel> Ethalons { get; set; }
 
-
         /// <summary>
         /// Эталон - устройство без аппаратного интерфейса
         /// </summary>
         public bool IsAnalogEthalon;
+
+        /// <summary>
+        /// Тип поверки
+        /// </summary>
+        public string CheckType { get; set; }
+
+        /// <summary>
+        /// Пользователь проводивший проверку
+        /// </summary>
+        public string User { get; set; }
+
+        /// <summary>
+        /// Заказчик
+        /// </summary>
+        public string Client { get; set; }
+
+        /// <summary>
+        /// Результат внешнего осмотра
+        /// </summary>
+        public string VisualInspection { get; set; }
+
+        /// <summary>
+        /// Атмосферное давление, гПа
+        /// </summary>
+        public string AtmospherePressure { get; set; }
+
+        /// <summary>
+        /// Температура, C
+        /// </summary>
+        public string Temperature { get; set; }
+
+        /// <summary>
+        /// Относительная влажность, %
+        /// </summary>
+        public string Humidity { get; set; }
+
+        /// <summary>
+        /// Напряжение питания, В
+        /// </summary>
+        public string SourceVoltage { get; set; }
+
+        /// <summary>
+        /// Результат опробирования
+        /// </summary>
+        public string Assaying { get; set; }
+
+        /// <summary>
+        /// Пометка к поверке
+        /// </summary>
+        public string Note { get; set; }
     }
 }

@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DPI620Genii;
-using NLog;
-using PressureSensorCheck.Devices;
-using Tools.View;
-using System.Diagnostics;
 using KipTM.Model.Channels;
+using NLog;
 using PressureSensorCheck.Data;
+using PressureSensorCheck.Devices;
 using PressureSensorData;
+using Tools.View;
 using Tools.View.ModalContent;
 
-namespace KipTM.Checks.ViewModel.Config
+namespace PressureSensorCheck.Workflow
 {
     /// <summary>
     /// Выпонение проверки
@@ -60,12 +60,18 @@ namespace KipTM.Checks.ViewModel.Config
             NewConfig = new PointConfigViewModel();
             _config = config;
             _autoupdater = new AutoUpdater(_logger);
+            LastResult = null;
         }
 
         /// <summary>
         /// Список выбранных точек
         /// </summary>
         public ObservableCollection<PointViewModel> Points { get; set; }
+
+        /// <summary>
+        /// Текущий результат
+        /// </summary>
+        public PressureSensorResult LastResult { get; set; }
 
         /// <summary>
         /// Время последних результатов
@@ -154,29 +160,13 @@ namespace KipTM.Checks.ViewModel.Config
             IsRun = true;
             if (_startTime != null)
                 return;
+            // подготовка внутрених переменных к старту проверки
             _startTime = DateTime.Now;
             var cancel = _cancellation.Token;
             _autorepeatWh.Reset();
             Measured.Clear();
-            try
-            {
-                _dpi620.SetPort(_dpiConf.SelectPort);
-                _dpi620.Open();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.ToString());
-                ShowMessage("Не удалось связаться с DPI620Genii. Укажите конфигурацию DPI620Genii на вкладке \"Настройка\": укажите порт подключения", cancel);
-                return;
-            }
-
-            var tUpdate = new Task((arg) => _autoupdater.Start(_dpi620, (AutoUpdater.AutoreadState)arg, _config),
-                new AutoUpdater.AutoreadState(cancel, _periodAutoread, _startTime.Value, _autorepeatWh),
-                cancel, TaskCreationOptions.None);
-            tUpdate.Start(TaskScheduler.Default);
-            var checkLogger = NLog.LogManager.GetLogger(string.Format("Check{0}",
-                _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
-
+            
+            // выбор входных и выходных слотов
             DPI620GeniiConfig.DpiSlotConfig inSlot;
             DPI620GeniiConfig.DpiSlotConfig outSlot;
             int inSlotNum;
@@ -201,6 +191,28 @@ namespace KipTM.Checks.ViewModel.Config
                 return;
             }
 
+            // попытка подключения к DPI 620
+            try
+            {
+                _dpi620.SetPort(_dpiConf.SelectPort);
+                _dpi620.Open();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                ShowMessage("Не удалось связаться с DPI620Genii. Укажите конфигурацию DPI620Genii на вкладке \"Настройка\": укажите порт подключения", cancel);
+                return;
+            }
+
+            // запуск авточтения состояния
+            var tUpdate = new Task((arg) => _autoupdater.Start(_dpi620, (AutoUpdater.AutoreadState)arg, _config),
+                new AutoUpdater.AutoreadState(cancel, _periodAutoread, _startTime.Value, _autorepeatWh),
+                cancel, TaskCreationOptions.None);
+            tUpdate.Start(TaskScheduler.Default);
+            var checkLogger = NLog.LogManager.GetLogger(string.Format("Check{0}",
+                _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
+            
+            // конфигурирование шагов проверки
             var check = new PressureSensorCheck.Check.PressureSensorCheck(checkLogger, new DPI620Ethalon(_dpi620, inSlotNum), new DPI620Ethalon(_dpi620, outSlotNum));
             check.ChConfig.UsrChannel = new PressureSensorUserChannel(this);
             check.FillSteps(new PressureSensorConfig()
@@ -214,10 +226,17 @@ namespace KipTM.Checks.ViewModel.Config
                     Tollerance = el.dU,
                 }).ToList()
             });
+
+            // запуск самой проверки
             var task = new Task(() =>{TryStart(cancel, check);});
             task.Start(TaskScheduler.Default);
         }
 
+        /// <summary>
+        /// Выполнение проверки с гарантированым снятием признака запуска проверки
+        /// </summary>
+        /// <param name="cancel"></param>
+        /// <param name="check"></param>
         private void TryStart(CancellationToken cancel, PressureSensorCheck.Check.PressureSensorCheck check)
         {
             try
@@ -235,8 +254,13 @@ namespace KipTM.Checks.ViewModel.Config
             }
         }
 
+        /// <summary>
+        /// Обновить состояние визуальной модели результата
+        /// </summary>
+        /// <param name="checkResult"></param>
         private void UpdateResult(PressureSensorResult checkResult)
         {
+            LastResult = checkResult;
             foreach (var point in Points)
             {
                 var res = checkResult.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.Config.Pressire) < double.Epsilon);
@@ -266,6 +290,9 @@ namespace KipTM.Checks.ViewModel.Config
         /// </summary>
         public ICommand PauseCheck { get { return new CommandWrapper(DoPause); } }
 
+        /// <summary>
+        /// Приостановить проверку
+        /// </summary>
         private void DoPause()
         {
             IsRun = false;

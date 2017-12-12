@@ -52,8 +52,10 @@
     <Compile Include="DTO\Params\ParameterDescriptor.cs" />
     <Compile Include="DTO\Params\ParameterResult.cs" />
     <Compile Include="DTO\Params\ParameterType.cs" />
-    <Compile Include="DTO\TestResult.cs" />
+    <Compile Include="DTO\TestResultID.cs" />
     <Compile Include="DTO\TestStepResult.cs" />
+    <Compile Include="IDataAccessor.cs" />
+    <Compile Include="IDictionaryPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

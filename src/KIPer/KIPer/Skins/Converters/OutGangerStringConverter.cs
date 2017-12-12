@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 using KipTM.Checks.ViewModel.Config;
+using PressureSensorCheck.Workflow;
 
 namespace KipTM.Skins.Converters
 {

@@ -25,7 +25,7 @@ namespace CheckFrame.ViewModel.Checks.Channels
         /// <summary>
         /// Текущий результат
         /// </summary>
-        TestResult CurrentResult { get; }
+        TestResultID CurrentResult { get; }
         
         /// <summary>
         /// Методика запущена

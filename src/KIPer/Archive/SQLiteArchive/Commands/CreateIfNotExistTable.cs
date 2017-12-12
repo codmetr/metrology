@@ -42,7 +42,7 @@ namespace SQLiteArchive.Commands
                     [Val] NTEXT,
                     [TypeVal] DECIMAL);";
             // Параметры проведеня проверерки, сохраненные как Adjacency List
-            const string sqlCreateParameters = @"CREATE TABLE IF NOT EXISTS [Parameters](
+            const string sqlCreateParameters = @"CREATE TABLE IF NOT EXISTS [Config](
                     [RepairId] DECIMAL NOT NULL REFERENCES Repairs([RepairId]),
                     [Id] DECIMAL,
                     [ParentId] DECIMAL,

@@ -10,7 +10,7 @@ namespace ArchiveData.DTO
         /// </summary>
         public ResultsArchive()
         {
-            Results = new List<TestResult>();
+            Results = new List<TestResultID>();
         }
 
         public bool Load()
@@ -23,11 +23,11 @@ namespace ArchiveData.DTO
             throw new NotImplementedException();
         }
 
-        public void AddResult(TestResult result)
+        public void AddResult(TestResultID result)
         {
             Results.Add(result);
         }
 
-        public List<TestResult> Results { get; private set; }
+        public List<TestResultID> Results { get; private set; }
     }
 }

@@ -19,8 +19,8 @@ namespace ADTSChecks.Checks.ViewModel
         /// Initializes a new instance of the ADTSCalibrationViewModel class.
         /// </summary>
         public CalibrationViewModel(
-            Calibration methodic, IPropertyPool propertyPool,
-            IDeviceManager deviceManager, TestResult resultPool, ADTSParameters customConf) :
+            Calibration methodic, ADTSCheckConfig propertyPool,
+            IDeviceManager deviceManager, TestResultID resultPool, ADTSParameters customConf) :
                 base(methodic, propertyPool, deviceManager, resultPool, customConf)
         {
             Title = "Калибровка ADTS";

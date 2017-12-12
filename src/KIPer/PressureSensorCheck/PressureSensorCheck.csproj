@@ -101,6 +101,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Workflow\Dpi620StateMoq.cs" />
+    <Compile Include="Data\PressureResult.cs" />
     <Compile Include="Workflow\PressureSensorCheckConfigVM.cs" />
     <Compile Include="Workflow\PressureSensorResultVM.cs" />
     <Compile Include="Workflow\PressureSensorRunVm.cs" />

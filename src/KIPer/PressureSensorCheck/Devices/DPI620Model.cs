@@ -21,7 +21,7 @@ namespace PressureSensorCheck.Devices
             new DeviceTypeDescriptor(Model, DeviceCommonType, DeviceManufacturer)
             {
                 TypeKey = Key,
-                Function = DeviceTypeDescriptor.FunctionType.Controller,
+                //Function = DeviceTypeDescriptor.FunctionType.Controller,
             };
 
         public static string Key { get { return "DPI620Genii"; } }

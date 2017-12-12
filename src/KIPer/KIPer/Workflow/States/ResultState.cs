@@ -10,7 +10,7 @@ namespace KipTM.Workflow.States
     /// </summary>
     class ResultState : IWorkflowStep
     {
-        private TestResultViewModel _result;
+        private ITestResultViewModel _result;
         private readonly TestResultViewModelFactory _checkFactory;
 
         /// <summary>

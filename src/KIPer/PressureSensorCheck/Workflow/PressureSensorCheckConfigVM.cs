@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using ArchiveData.DTO;
+using KipTM.Checks.ViewModel.Config;
 using KipTM.Interfaces;
-using PressureSensorCheck.Devices;
 
-namespace KipTM.Checks.ViewModel.Config
+namespace PressureSensorCheck.Workflow
 {
     /// <summary>
     /// Конфигурация проверки

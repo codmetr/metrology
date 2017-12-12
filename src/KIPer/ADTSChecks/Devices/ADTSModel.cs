@@ -24,7 +24,7 @@ namespace ADTSChecks.Devices
              new DeviceTypeDescriptor(ADTSModel.Model, ADTSModel.DeviceCommonType, ADTSModel.DeviceManufacturer)
              {
                  TypeKey = ADTSModel.Key,
-                 Function = DeviceTypeDescriptor.FunctionType.Controller,
+                 //Function = DeviceTypeDescriptor.FunctionType.Controller,
              };
 
         public static string Key { get { return "ADTS"; } }

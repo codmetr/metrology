@@ -19,6 +19,9 @@ using SQLiteArchive;
 
 namespace KipTM.Model
 {
+    /// <summary>
+    /// Сервис хранимых данных (настройки и результаты проверки)
+    /// </summary>
     public class DataService : IDataService, IDisposable
     {
         

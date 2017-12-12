@@ -23,7 +23,7 @@ namespace PACEChecks.Devices
             new DeviceTypeDescriptor(PACE1000Model.Model, PACE1000Model.DeviceCommonType, PACE1000Model.DeviceManufacturer)
             {
                 TypeKey = PACE1000Model.Key,
-                Function = DeviceTypeDescriptor.FunctionType.Controller,
+                //Function = DeviceTypeDescriptor.FunctionType.Controller,
             };
 
         private IDeviceManager _deviceManager;

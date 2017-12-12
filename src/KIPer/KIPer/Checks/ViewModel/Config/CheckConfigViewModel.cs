@@ -7,15 +7,11 @@ using GalaSoft.MvvmLight;
 using KipTM.Checks;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.Interfaces.Channels;
-using KipTM.Model.TransportChannels;
 
 namespace KipTM.ViewModel.Checks.Config
 {
     /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
+    /// Визуальная модель шага конфигурации системы
     /// </summary>
     public class CheckConfigViewModel : ViewModelBase
     {
@@ -24,9 +20,7 @@ namespace KipTM.ViewModel.Checks.Config
         private SelectChannelViewModel _checkDeviceChanel;
         private ICustomSettingsViewModel _customSetiings;
         private bool _isCustomSettingsAvailable;
-
         public Dictionary<ChannelDescriptor, EthalonConfigViewModel> _ethalons;
-
 
         /// <summary>
         /// Визуальная модель конфигурации конкретного типа проверки

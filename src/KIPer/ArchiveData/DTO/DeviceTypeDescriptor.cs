@@ -43,13 +43,13 @@ namespace ArchiveData.DTO
         /// </summary>
         public string Manufacturer { get; set; }
 
-        public FunctionType Function { get; set; }
-
-        public enum FunctionType
-        {
-            Controller,
-            Converter,
-        }
+        //public FunctionType Function { get; set; }
+        //
+        //public enum FunctionType
+        //{
+        //    Controller,
+        //    Converter,
+        //}
 
         public override string ToString()
         {
@@ -75,7 +75,7 @@ namespace ArchiveData.DTO
                 if (TypeKey != null) hash = (hash * 16777619) ^ TypeKey.GetHashCode();
                 if (Model != null) hash = (hash * 16777619) ^ Model.GetHashCode();
                 if (DeviceCommonType != null) hash = (hash * 16777619) ^ DeviceCommonType.GetHashCode();
-                hash = (hash * 16777619) ^ Function.GetHashCode();
+                hash = (hash * 16777619)/* ^ Function.GetHashCode()*/;
                 return hash;
             }
         }

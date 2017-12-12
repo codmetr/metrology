@@ -11,14 +11,14 @@ namespace SQLiteArchive.Commands
     /// <summary>
     /// Загрузить список всех идентификаторов проверок
     /// </summary>
-    public class LoadAllRapairs : IQuery<IEnumerable<Repair>>
+    public class LoadAllRapairs : IQuery<IEnumerable<RepairDto>>
     {
-        public IEnumerable<Repair> Execute(IDbContext context)
+        public IEnumerable<RepairDto> Execute(IDbContext context)
         {
             const string sql = 
                 @"SELECT * FROM [Repairs]";
-            List<Repair> repairs = new List<Repair>();
-            context.Transaction(ts => repairs.AddRange(ts.Connection.Query<Repair>(sql)));
+            List<RepairDto> repairs = new List<RepairDto>();
+            context.Transaction(ts => repairs.AddRange(ts.Connection.Query<RepairDto>(sql)));
             return repairs;
         }
     }

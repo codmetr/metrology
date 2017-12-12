@@ -50,7 +50,6 @@ namespace KipTM.IOC
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
             unityContainer.RegisterType<IArchive, ArchiveXML>();
             unityContainer.RegisterType<IDocsFactory, DocsFactory>();
-            unityContainer.RegisterInstance<IObjectiveArchive>(new ObjectiveArchive(dbName));
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IFeaturesDescriptor>());
             unityContainer.RegisterInstance<FeatureDescriptorsCombiner>(
                 unityContainer.Resolve<FeatureDescriptorsCombiner>());

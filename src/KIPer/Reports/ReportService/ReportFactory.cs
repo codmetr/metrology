@@ -29,10 +29,11 @@ namespace ReportService
         /// <summary>
         /// Получить отчет по типу проверки
         /// </summary>
-        /// <param name="result">результат проверки</param>
+        /// <param name="resultId">результат проверки</param>
         /// <param name="conf"></param>
+        /// <param name="result"></param>
         /// <returns>Data source для отчета</returns>
-        public object GetReporter(TestResult result, CheckConfigData conf)
+        public object GetReporter(TestResultID resultId, CheckConfigData conf, object result)
         {
             var reporters = GetReporters();
             foreach (var reporter in reporters)
@@ -43,9 +44,9 @@ namespace ReportService
                     var atr = atrib as ReportAttribute;
                     if (atr == null)
                         continue;
-                    if (atr.ReportKey != result.CheckType)
+                    if (atr.ReportKey != resultId.DeviceType)
                         continue;
-                    return reporter.GetReport(result, conf);
+                    return reporter.GetReport(resultId, conf, result);
                 }
             }
             return null;

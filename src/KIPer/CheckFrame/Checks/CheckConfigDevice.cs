@@ -13,7 +13,7 @@ using KipTM.Model.TransportChannels;
 namespace KipTM.Checks
 {
     /// <summary>
-    /// Конфигурация проверки конкретного типа
+    /// Конфигурация проверки
     /// </summary>
     public class CheckConfigDevice
     {
@@ -54,7 +54,7 @@ namespace KipTM.Checks
         /// <summary>
         /// Контейнер с результатом
         /// </summary>
-        private TestResult _result;
+        private TestResultID _result;
         /// <summary>
         /// Конфигурация
         /// </summary>
@@ -84,7 +84,7 @@ namespace KipTM.Checks
         /// <param name="propertyPool">набор свойств</param>
         /// <param name="result">контейнер результата</param>
         public CheckConfigDevice(CheckConfigData data, IDictionary<string, ICheckMethod> methods, IEnumerable<DeviceTypeDescriptor> allDeviceTypes,
-            IPropertyPool propertyPool, TestResult result)
+            IPropertyPool propertyPool, TestResultID result)
         {
             if (data?.TargetDevice?.Device == null)
             {
@@ -100,8 +100,6 @@ namespace KipTM.Checks
             _channelKeys = GetChannels(_propertyPool, _data.TargetDevice.Device.DeviceType);
             _channels = _channelKeys.Keys;
             _data.TargetDevice.Channel = _channels.FirstOrDefault();
-            
-
 
             _avalableEthalonTypes = GetAvailableEthalons(_data.TargetDevice.Device.DeviceType, propertyPool, _data.TargetDevice.Channel, _allDeviceTypes);
             var ethalon = _avalableEthalonTypes.FirstOrDefault();
@@ -143,7 +141,7 @@ namespace KipTM.Checks
         /// <summary>
         /// Контейнер результата
         /// </summary>
-        public TestResult Result
+        public TestResultID Result
         {
             get { return _result; }
             protected set { _result = value; }
@@ -159,17 +157,17 @@ namespace KipTM.Checks
         /// <summary>
         /// Атмосферное давление, гПа
         /// </summary>
-        public string AtmospherePressure { get { return _result.AtmospherePressure; } set { _result.AtmospherePressure = value; } }
+        public string AtmospherePressure { get { return _data.AtmospherePressure; } set { _data.AtmospherePressure = value; } }
 
         /// <summary>
         /// Температура
         /// </summary>
-        public string Temperature { get { return _result.Temperature; } set { _result.Temperature = value; } }
+        public string Temperature { get { return _data.Temperature; } set { _data.Temperature = value; } }
 
         /// <summary>
         /// Влажность
         /// </summary>
-        public string Humidity { get { return _result.Humidity; } set { _result.Humidity = value; } }
+        public string Humidity { get { return _data.Humidity; } set { _data.Humidity = value; } }
         #endregion
 
         #region Настройки проверяемого устройства
@@ -197,8 +195,8 @@ namespace KipTM.Checks
         /// </summary>
         public string Client
         {
-            get { return _result.Client; }
-            set { _result.Client = value; }
+            get { return _data.Client; }
+            set { _data.Client = value; }
         }
 
         /// <summary>
@@ -228,7 +226,7 @@ namespace KipTM.Checks
             set
             {
                 _data.CheckTypeKey = value;
-                _result.CheckType = value;
+                _data.CheckType = value;
                 SelectedMethod = _methods[_data.CheckTypeKey];
             }
         }

@@ -148,13 +148,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Archive\CommonPropertyKeys.cs" />
-    <Compile Include="Archive\ArchiveDataAdts.cs" />
-    <Compile Include="Archive\DataAccessor.cs" />
-    <Compile Include="Archive\DictionariesArchiveFactory.cs" />
-    <Compile Include="Archive\DictionariesArchive.cs" />
-    <Compile Include="Archive\IDataAccessor.cs" />
-    <Compile Include="Archive\PropertyArchive.cs" />
     <Compile Include="Archive\ViewModel\TestResultViewModelFactory.cs" />
     <Compile Include="Checks\ViewModel\CheckPool.cs" />
     <Compile Include="Checks\ViewModel\Config\EthalonConfigViewModel.cs" />
@@ -179,7 +172,6 @@
     </Compile>
     <Compile Include="DataService\DeviceCacheKey.cs" />
     <Compile Include="Design\DesignDataService.cs" />
-    <Compile Include="DataService\PropertiesLibrary.cs" />
     <Compile Include="DataService\DeviceManager.cs" />
     <Compile Include="DataService\DataService.cs" />
     <Compile Include="DataService\MethodsService.cs" />

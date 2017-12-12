@@ -24,18 +24,18 @@ namespace ReportAdts
             return result;
         }
 
-        public object GetReport(TestResult result, CheckConfigData conf)
+        public object GetReport(TestResultID resultId, CheckConfigData conf, object result)
         {
             var ethalon = conf.Ethalons.FirstOrDefault().Value;
             var commonData = new AdtsCommonReportData()
             {
-                CheckDate = result.Timestamp.ToString("d"),
+                CheckDate = resultId.Timestamp.ToString("d"),
                 DeviceType = conf.TargetDevice.Device.DeviceType.Model,
                 ChannelRange = getRangeFromType(conf.TargetDevice.Device.DeviceType),
                 CheckMethod = "K199",//result.CheckType,
                 SerialNumber = conf.TargetDevice.Device.SerialNumber,
-                AtmosphericPressure = result.AtmospherePressure,
-                Temperature = result.Temperature,
+                AtmosphericPressure = conf.AtmospherePressure,
+                Temperature = conf.Temperature,
                 ReportNumber = "123"
             };
             if (ethalon != null)
@@ -48,16 +48,16 @@ namespace ReportAdts
             var staticResults = new List<AdtsReportData>();
             var dinamicResults = new List<AdtsReportData>();
 
-
-            foreach (var stepResult in result.Results.Where(res => res.ChannelKey == KeysDic.KeySettingsPS))
+            var resPoints = result as IEnumerable<TestStepResult>;
+            foreach (var stepResult in resPoints.Where(res => res.ChannelKey == KeysDic.KeySettingsPS))
             {
                 var res = stepResult.Result as AdtsPointResult;
                 if (res==null)
                     continue;
                 staticResults.Add(dataToReport(res));
             }
-
-            foreach (var stepResult in result.Results.Where(res => res.ChannelKey == KeysDic.KeySettingsPT))
+            
+            foreach (var stepResult in resPoints.Where(res => res.ChannelKey == KeysDic.KeySettingsPT))
             {
                 var res = stepResult.Result as AdtsPointResult;
                 if (res==null)

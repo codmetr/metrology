@@ -12,9 +12,10 @@ namespace ReportService
         /// <summary>
         /// Получить отчет по типу проверки
         /// </summary>
-        /// <param name="result">результат проверки</param>
+        /// <param name="resultId">результат проверки</param>
         /// <param name="conf"></param>
+        /// <param name="result"></param>
         /// <returns>Data source для отчета</returns>
-        object GetReporter(TestResult result, CheckConfigData conf);
+        object GetReporter(TestResultID resultId, CheckConfigData conf, object result);
     }
 }

@@ -6,7 +6,7 @@ using ArchiveData.DTO;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Checks;
 
-namespace ADTSChecks
+namespace PressureSensorCheck
 {
     /// <summary>
     /// Фабрика методик

@@ -68,6 +68,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ADTSCheckConfig.cs" />
     <Compile Include="ArchiveDefaultFactoryAdts.cs" />
     <Compile Include="Checks\ADTSViewModelFactory.cs" />
     <Compile Include="Checks\ViewModel\CustomConfigFactory.cs" />

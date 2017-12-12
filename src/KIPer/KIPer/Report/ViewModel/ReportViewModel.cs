@@ -21,9 +21,9 @@ namespace KipTM.ViewModel.Report
     {
         private object _reportSource;
 
-        public ReportViewModel(IReportFactory reportFactory, TestResult result, CheckConfigData conf)
+        public ReportViewModel(IReportFactory reportFactory, TestResultID resultId, CheckConfigData conf, object result)
         {
-            var reporter = reportFactory.GetReporter(result, conf);
+            var reporter = reportFactory.GetReporter(resultId, conf, result);
             if (reporter != null)
                 ReportSource = reporter;
         }

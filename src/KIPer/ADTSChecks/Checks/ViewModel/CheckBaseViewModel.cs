@@ -1,12 +1,3 @@
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Threading;
 using ADTSChecks.Checks.Data;
 using ADTSChecks.Model.Checks;
 using ADTSChecks.ViewModel.Services;
@@ -26,6 +17,16 @@ using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using KipTM.Model.TransportChannels;
 using KipTM.ViewModel.Events;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Threading;
 using Tools.View;
 
 namespace ADTSChecks.Checks.ViewModel
@@ -40,7 +41,7 @@ namespace ADTSChecks.Checks.ViewModel
         private IEventAggregator _agregator;
         protected IUserChannel _userChannel;
         protected UserEthalonChannel _userEchalonChannel;
-        protected IPropertyPool _propertyPool;
+        protected ADTSCheckConfig _property;
         private ITransportChannelType _connection;
         private double _realValue;
         private bool _accept;
@@ -48,7 +49,8 @@ namespace ADTSChecks.Checks.ViewModel
         protected Dispatcher _dispatcher;
         protected IDeviceManager _deviceManager;
         private string _ethalonTypeKey;
-        protected TestResult _resultPool;
+        protected TestResultID _resultId;
+        protected List<TestStepResult> _resPoints = new List<TestStepResult>();
         private object _ethalonChannel;
         private ITransportChannelType _ethalonChannelType;
         private bool _stopEnabled = false;
@@ -63,14 +65,14 @@ namespace ADTSChecks.Checks.ViewModel
 
         #endregion
 
-        protected CheckBaseViewModel(CheckBaseADTS method, IPropertyPool propertyPool,
-            IDeviceManager deviceManager, TestResult resultPool, ADTSParameters customConfig)
+        protected CheckBaseViewModel(CheckBaseADTS method, ADTSCheckConfig property,
+            IDeviceManager deviceManager, TestResultID resultPool, ADTSParameters customConfig)
         {
             _cancellation = new CancellationTokenSource();
             _currentToken = _cancellation.Token;
 
             Method = method;
-            _propertyPool = propertyPool;
+            _property = property;
             // Базовая инициализация
             //var adts = _propertyPool.ByKey(method.ChannelKey);
             Method.Init(customConfig);
@@ -80,7 +82,7 @@ namespace ADTSChecks.Checks.ViewModel
             _userChannel = new UserChannel();
             Method.ChConfig.SetUserChannel(Method.Steps, _userChannel);
             _deviceManager = deviceManager;
-            _resultPool = resultPool;
+            _resultId = resultPool;
             _userChannel.QueryStarted += OnQueryStarted;
             _currentAction = DoStart;
             _dispatcher = Dispatcher.CurrentDispatcher;
@@ -142,7 +144,7 @@ namespace ADTSChecks.Checks.ViewModel
         /// <summary>
         /// Текущий результат
         /// </summary>
-        public TestResult CurrentResult{get { return _resultPool; }}
+        public TestResultID CurrentResult{get { return _resultId; }}
 
         /// <summary>
         /// Проверка запущена
@@ -514,13 +516,13 @@ namespace ADTSChecks.Checks.ViewModel
             if (newRes == null)
             {
                 // новый результат не AdtsPointResult, потому не с чем сравнивать
-                _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChConfig.ChannelKey, eventArgTestResult.Key,
+                _resPoints.Add(new TestStepResult(Method.Key, Method.ChConfig.ChannelKey, eventArgTestResult.Key,
                     eventArgTestResult.Result));
                 return;
             }
 
             // поиск точки в имеющихся результатах
-            foreach (var stepResult in _resultPool.Results)
+            foreach (var stepResult in _resPoints)
             {
                 var res = stepResult.Result as AdtsPointResult;
                 if (res == null)
@@ -536,7 +538,7 @@ namespace ADTSChecks.Checks.ViewModel
             if (fidedRes == null)
             {
                 // это новая точка
-                _resultPool.Results.Add(new TestStepResult(Method.Key, Method.ChConfig.ChannelKey,
+                _resPoints.Add(new TestStepResult(Method.Key, Method.ChConfig.ChannelKey,
                     eventArgTestResult.Key, eventArgTestResult.Result));
                 return;
             }

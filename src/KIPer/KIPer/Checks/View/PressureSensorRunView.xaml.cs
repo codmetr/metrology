@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using KipTM.Checks.ViewModel.Config;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
+using PressureSensorCheck.Workflow;
 using Tools.View;
 
 namespace KipTM.Checks.View

@@ -26,7 +26,7 @@ namespace CheckFrame.Checks
         /// <returns></returns>
         public static CheckConfigDevice GenerateForType(
             DeviceTypeDescriptor key, IMainSettings settings, IMethodsService method,
-            IPropertyPool propertyPool, DictionariesPool dictionaries, TestResult result)
+            IPropertyPool propertyPool, DictionariesPool dictionaries, TestResultID result)
         {
             var data = new CheckConfigData();
             data.TargetDevice.Device.DeviceType = key;

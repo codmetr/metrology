@@ -2,6 +2,9 @@
 
 namespace KipTM.Archive
 {
+    /// <summary>
+    /// Набор свойств
+    /// </summary>
     public interface IPropertyPool
     {
         /// <summary>

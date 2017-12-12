@@ -7,6 +7,7 @@ using CheckFrame.ViewModel.Archive;
 using GalaSoft.MvvmLight;
 using System.Windows.Input;
 using CheckFrame.Checks;
+using Core.Archive.DataTypes;
 using KipTM.Archive;
 using Tools.View;
 
@@ -25,12 +26,12 @@ namespace KipTM.ViewModel
         private ObservableCollection<IDeviceViewModel> _etalons;
         private IDataAccessor _save;
 
-        private readonly TestResult _result;
+        private readonly TestResultID _result;
 
         /// <summary>
         /// Описатель результата проверок конкретного прибора
         /// </summary>
-        public TestResultViewModel(TestResult result, CheckConfigData data, IEnumerable<IParameterResultViewModel> parameters, IDataAccessor accessor)
+        public TestResultViewModel(TestResultID result, CheckConfigData data, IEnumerable<IParameterResultViewModel> parameters, IDataAccessor accessor)
         {
             _result = result;
             if (IsInDesignMode)
@@ -76,8 +77,8 @@ namespace KipTM.ViewModel
             }
             else
             {
-                _testType = _result.Note;
-                _user = _result.User;
+                _testType = data.Note;
+                _user = data.User;
                 _time = _result.Timestamp;
                 _device = new DeviceViewModel(data.TargetDevice.Device);
                 _etalons = new ObservableCollection<IDeviceViewModel>(data.Ethalons.Values.Select(el => new DeviceViewModel(el.Device)));

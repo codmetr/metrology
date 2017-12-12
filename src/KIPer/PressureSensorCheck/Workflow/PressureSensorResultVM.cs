@@ -1,32 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using ArchiveData.DTO;
-using CheckFrame.Checks;
-using CheckFrame.ViewModel.Archive;
-using KipTM.Archive;
-using KipTM.ViewModel;
+using Core.Archive.DataTypes;
+using PressureSensorData;
 using Tools.View;
 
-namespace KipTM.Checks.ViewModel.Config
+namespace PressureSensorCheck.Workflow
 {
     /// <summary>
     /// Визуальная модель результата поверки датчика давления
     /// </summary>
     public class PressureSensorResultVM:INotifyPropertyChanged
     {
-        private ITestResultViewModel _result = null;
         private PressureSensorCheckConfigVm _config;
+        /// <summary>
+        /// Хранилище результата для конкретной проверки
+        /// </summary>
+        private IDataAccessor _accessor = null;
 
         public PressureSensorResultVM(PressureSensorCheckConfigVm config)
         {
             _config = config;
             PointResults = new ObservableCollection<PointViewModel>();
+            LastResult = null;
         }
 
         /// <summary>
@@ -56,18 +53,30 @@ namespace KipTM.Checks.ViewModel.Config
         /// </summary>
         public DateTime? TimeStamp { get; set; }
 
-        public ICommand Save{ get { return new CommandWrapper(OnSave); } }
-
+        /// <summary>
+        /// Конфигурация проверки
+        /// </summary>
         public PressureSensorCheckConfigVm Config
         {
             get { return _config; }
         }
 
+        /// <summary>
+        /// Текущий результат проверки
+        /// </summary>
+        public PressureSensorResult LastResult { get; set; }
+
+        /// <summary>
+        /// Сохранить
+        /// </summary>
+        public ICommand Save{ get { return new CommandWrapper(OnSave); } }
+
+        /// <summary>
+        /// Фактическое выполнение сохранение
+        /// </summary>
         private void OnSave()
         {
-            if(_result!=null)
-                return;
-            _result = new PressureResult(this);
+            _accessor.Save(LastResult);
         }
 
         #region INotifyPropertyChanged
@@ -82,25 +91,6 @@ namespace KipTM.Checks.ViewModel.Config
         }
 
         #endregion
-    }
-
-    public class PressureResult: ITestResultViewModel
-    {
-        private readonly PressureSensorResultVM _result;
-        public PressureResult(PressureSensorResultVM result)
-        {
-            _result = result;
-            var devType = new DeviceTypeDescriptor(/*_result.Config.SensorModel, _result.Config.*/);
-            Device = new DeviceViewModel(new DeviceDescriptor(devType)) {DeviceType = devType};
-            
-        }
-
-        public string TestType { get; set; }
-        public string User { get; set; }
-        public DateTime Time { get; set; }
-        public IDeviceViewModel Device { get; set; }
-        public ObservableCollection<IParameterResultViewModel> Parameters { get; set; }
-        public ObservableCollection<IDeviceViewModel> Etalons { get; set; }
     }
 }
 

@@ -39,6 +39,6 @@ namespace KipTM.Interfaces.Checks
         /// <param name="ethalonChanel"></param>
         /// <returns></returns>
         IMethodViewModel GetViewModel(object method, CheckConfigData checkConfig, object customSettings,
-            TestResult resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel);
+            TestResultID resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel);
     }
 }

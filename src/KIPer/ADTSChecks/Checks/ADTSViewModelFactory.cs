@@ -56,7 +56,7 @@ namespace ADTSChecks.Checks
         /// <param name="ethalonChanel"></param>
         /// <returns></returns>
         public IMethodViewModel GetViewModel(object method, CheckConfigData checkConfig, object customSettings,
-            TestResult resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
+            TestResultID resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
         {
             if(_deviceManager == null)
                 throw new NullReferenceException("Not defined _deviceManager");
@@ -69,7 +69,7 @@ namespace ADTSChecks.Checks
         }
 
         /// <summary>
-        /// 
+        /// Компановка модели
         /// </summary>
         /// <param name="method"></param>
         /// <param name="checkConfig"></param>
@@ -78,8 +78,8 @@ namespace ADTSChecks.Checks
         /// <param name="checkDeviceChanel"></param>
         /// <param name="ethalonChanel"></param>
         /// <returns></returns>
-        IMethodViewModel ConfigAdtsMethod(CheckBaseADTS method, CheckConfigData checkConfig, ADTSParameters customSettings,
-            TestResult resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
+        private IMethodViewModel ConfigAdtsMethod(CheckBaseADTS method, CheckConfigData checkConfig, ADTSParameters customSettings,
+            TestResultID resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
         {
             IMethodViewModel result = null;
             method.SetADTS(_deviceManager.GetModel<ADTSModel>());
@@ -94,13 +94,13 @@ namespace ADTSChecks.Checks
             if (method is Calibration)
             {
                 var adtsMethodic = method as Calibration;
-                result = new CalibrationViewModel(adtsMethodic, _propertyPool.ByKey(devType),
+                result = new CalibrationViewModel(adtsMethodic, ADTSCheckConfig.GetDefault(),
                     _deviceManager, resultSet, customSettings);
             }
             else if (method is Test)
             {
                 var adtsMethodic = method as Test;
-                result = new TestViewModel(adtsMethodic, _propertyPool.ByKey(devType),
+                result = new TestViewModel(adtsMethodic, ADTSCheckConfig.GetDefault(),
                     _deviceManager, resultSet, customSettings);
             }
             //if (ethalonChannel.Key == UserEthalonChannel.Channel.Key)

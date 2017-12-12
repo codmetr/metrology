@@ -12,7 +12,7 @@ namespace KipTM.Checks.ViewModel
     {
         private readonly CheckPool _checkPool;
         private readonly CheckConfigDevice _checkConfig;
-        private readonly TestResult _result;
+        private readonly TestResultID _result;
         private readonly IEventAggregator _eventAggregator;
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace KipTM.Checks.ViewModel
         /// <param name="checkConfig"></param>
         /// <param name="result"></param>
         /// <param name="eventAggregator"></param>
-        public CheckFactory(CheckPool checkPool, CheckConfigDevice checkConfig, TestResult result, IEventAggregator eventAggregator)
+        public CheckFactory(CheckPool checkPool, CheckConfigDevice checkConfig, TestResultID result, IEventAggregator eventAggregator)
         {
             _checkPool = checkPool;
             _checkConfig = checkConfig;

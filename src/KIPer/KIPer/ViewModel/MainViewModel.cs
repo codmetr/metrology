@@ -19,7 +19,7 @@ using KipTM.Manuals.ViewModel;
 using KipTM.ViewModel.Events;
 using KipTM.Workflow;
 using KipTM.Workflow.States.Events;
-using KipTM.Workflow.States.PressureSensor;
+using PressureSensorCheck.Workflow;
 using Tools.View;
 using ViewViewmodelMatcher = Tools.ViewViewmodelMatcher;
 

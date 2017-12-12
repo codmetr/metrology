@@ -4,6 +4,7 @@ using ArchiveData.DTO;
 using CheckFrame;
 using CheckFrame.Checks;
 using CheckFrame.ViewModel.Archive;
+using Core.Archive.DataTypes;
 using KipTM.Archive.ViewModel;
 using KipTM.Checks;
 using KipTM.Checks.ViewModel;
@@ -37,7 +38,7 @@ namespace KipTM.Workflow.States
         private readonly IFillerFactory<IParameterResultViewModel> _filler;
         private readonly IEnumerable<ICheckViewModelFactory> _factoriesViewModels;
         private readonly CustomConfigFactory _customFactory;
-        private readonly IObjectiveArchive _archive;
+        private readonly IDataAccessor _archive;
         private readonly IEventAggregator _eventAggregator;
         private readonly IReportFactory _reportFactory;
         private readonly IDeviceManager _deviceManager;
@@ -62,7 +63,7 @@ namespace KipTM.Workflow.States
         FeatureDescriptorsCombiner features, IMainSettings settings, IMethodsService methodicService,
             IPropertiesLibrary propertiesLibrary, IMarkerFactory<IParameterResultViewModel> resultMaker,
             IFillerFactory<IParameterResultViewModel> filler, IEnumerable<ICheckViewModelFactory> factoriesViewModels,
-            IDictionary<Type, ICustomConfigFactory> customFatories, IObjectiveArchive archive, IEventAggregator eventAggregator,
+            IDictionary<Type, ICustomConfigFactory> customFatories, IDataAccessor archive, IEventAggregator eventAggregator,
             IReportFactory reportFactory, IDeviceManager deviceManager)
         {
             _channelFactory = features.ChannelFactories;
@@ -86,22 +87,24 @@ namespace KipTM.Workflow.States
         /// <returns></returns>
         public IWorkflow GetNew(DeviceTypeDescriptor devTypeKey)
         {
-            var result = new TestResult();
+            var result = new TestResultID();
 
             // создание конфигурации конкретной проверки
             var checkConfigDevice = CheckConfigFactory.GenerateForType(devTypeKey, _settings, _methodicService,
                 _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, result);
+            // TODO: добавить настроки не через IPropertyPool
 
             var checkConfigViewModel = new CheckConfigViewModel(checkConfigDevice, _channelFactory, _customFactory);
             var resFactory = new TestResultViewModelFactory(result, checkConfigDevice, _resultMaker, _filler, _archive);
             var checkFactory = new CheckFactory(_checkPool, checkConfigDevice, result, _eventAggregator);
 
+            var resState = new ResultState(resFactory);
             var steps = new List<IWorkflowStep>()
             {
                 new ConfigCheckState(checkConfigViewModel),
                 new CheckState(checkFactory, _eventAggregator),
-                new ResultState(resFactory),
-                new ReportState(() => new ReportViewModel(_reportFactory, result, checkConfigDevice.Data)),
+                resState,
+                new ReportState(() => new ReportViewModel(_reportFactory, result, checkConfigDevice.Data, resState.ViewModel as )),
             };
 
             return new LineWorkflow(steps);

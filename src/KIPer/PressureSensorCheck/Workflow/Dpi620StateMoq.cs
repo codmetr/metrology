@@ -1,6 +1,6 @@
 using System;
 
-namespace KipTM.Workflow.States.PressureSensor
+namespace PressureSensorCheck.Workflow
 {
     internal class Dpi620StateMoq
     {
