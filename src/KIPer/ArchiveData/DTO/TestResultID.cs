@@ -8,7 +8,7 @@ namespace ArchiveData.DTO
     /// </summary>
     public class TestResultID
     {
-        private int? _resultId = null;
+        private int? _id = null;
 
         /// <summary>
         /// Контейнер результата одной проверки
@@ -23,10 +23,10 @@ namespace ArchiveData.DTO
         /// <summary>
         /// Идентификатор результата (если результат не сохранен - null)
         /// </summary>
-        public int? ResultId
+        public int? Id
         {
-            get { return _resultId; }
-            set { _resultId = value; }
+            get { return _id; }
+            set { _id = value; }
         }
 
         /// <summary>

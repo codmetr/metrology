@@ -33,7 +33,7 @@ namespace SQLiteArchive.Commands
                     [Name],
                     [Val],
                     [TypeVal]
-                FROM [Results] WHERE RepairId = @RepairId";
+                FROM [Results] WHERE Id = @Id";
             _nodes.Clear();
             return context.Transaction(ts => ts.Connection.Query<Node>(sql, _repairId).Select(el =>
             {

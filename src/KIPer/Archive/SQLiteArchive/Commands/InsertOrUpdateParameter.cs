@@ -38,7 +38,7 @@ namespace SQLiteArchive.Commands
         private string GetInsertOrUpdateSql(Node node)
         {
             const string sqlInsert = @"INSERT INTO [Parameters]"+
-                                        " (RepairId, Id, ParrentId, Name, Val, TypeVal)" +
+                                        " (Id, Id, ParrentId, Name, Val, TypeVal)" +
                                         " VALUES" +
                                         " ('{0}', '{1}', '{2}', {3}, '{4}', '5');";
 
@@ -47,7 +47,7 @@ namespace SQLiteArchive.Commands
                                         " [Name] = '{3}'," +
                                         " [Val] = {4}," +
                                         " [TypeVal] = '{5}'" +
-                                        " WHERE Id ='{1}' AND [RepairId] = '{0}';";
+                                        " WHERE Id ='{1}' AND [Id] = '{0}';";
             var sql = node.IsNew ? sqlInsert : sqlUpdate;
             return string.Format(sql, _repairId, node.Id, node.ParrentId, node.Name, node.Val==null?"NULL":string.Format("'{0}'",node.Val), node.TypeVal);
         }

@@ -8,12 +8,12 @@ namespace SQLiteArchive
     /// <summary>
     /// Идентификатор проверки
     /// </summary>
-    public class RepairDto
+    public class CheckDto
     {
         /// <summary>
         /// Идентификатор проверки
         /// </summary>
-        public int RepairId { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Метка времени создания

@@ -83,7 +83,7 @@
     <Compile Include="Db\SqLiteDbContext.cs" />
     <Compile Include="IArchive.cs" />
     <Compile Include="DTO\Metadata.cs" />
-    <Compile Include="DTO\RepairDto.cs" />
+    <Compile Include="DTO\CheckDto.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

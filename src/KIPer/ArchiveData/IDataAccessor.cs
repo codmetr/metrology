@@ -21,6 +21,13 @@ namespace Core.Archive.DataTypes
         void UpdateResult(TestResultID check, object result);
 
         /// <summary>
+        /// Обновить конфигурацию проверки
+        /// </summary>
+        /// <param name="check"></param>
+        /// <param name="result"></param>
+        void UpdateConfig(TestResultID check, object result);
+
+        /// <summary>
         /// Сохранить результат в контейнер результатов проверки типизировано
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -28,10 +35,23 @@ namespace Core.Archive.DataTypes
         void Save<T>(T data);
 
         /// <summary>
+        /// Сохранить конфигурацию в контейнер результатов проверки типизировано
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        void SaveConfig<T>(T data);
+
+        /// <summary>
         /// Загрузить результат по проверке
         /// </summary>
         /// <returns></returns>
         object Load(TestResultID check);
+
+        /// <summary>
+        /// Загрузить конфигурацию по проверке
+        /// </summary>
+        /// <returns></returns>
+        object LoadConfig(TestResultID check);
     }
 
     /// <summary>

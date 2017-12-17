@@ -17,8 +17,18 @@ namespace SQLiteArchive
         private DataSource _dataSource;
         private IDictionaryPool _dictionaryPool;
 
+        /// <summary>
+        /// Список всех поддерживаемых типов устройств
+        /// </summary>
         public IEnumerable<DeviceTypeDescriptor> DeviceTypes { get { return _dictionaryPool.DeviceTypes; } }
+        /// <summary>
+        /// Справочник всех результатов проверок по ключу
+        /// </summary>
         public IDictionary<TestResultID, object> Repairs { get; internal set; }
+        /// <summary>
+        /// Справочник всех конфигураций проверок по ключу
+        /// </summary>
+        public IDictionary<TestResultID, object> Configs { get; internal set; }
 
         private IDictionary<string, Type> _resTypes;
 
@@ -96,85 +106,28 @@ namespace SQLiteArchive
             _dataSource.Update(newNodes, lessNodes, changedNodes);
         }
 
-        private RepairDto GetUpdatedRepair(TestResultID check)
+        public void UpdateConfig(TestResultID check, object res)
         {
-            var repair = _dataSource.Repairs.FirstOrDefault(el => el.Id == check.Id);
-            if (repair == null)
-                return null;
-            repair.AirMark = check.AirMark;
-            repair.AirNumber = check.AirNumber;
-            repair.AirType.Title = check.AirType.Title;
-            repair.CommonResult = check.CommonResult;
-            if (repair.Executor.Post == null)
-                repair.Executor.Post = new PostDto();
-            if (check.Executor != null)
-            {
-                repair.Executor.Name = check.Executor.Name;
-                repair.Executor.Surname = check.Executor.Surname;
-                repair.Executor.Patronymic = check.Executor.Patronymic;
-                repair.Executor.PersonnelNumber = check.Executor.PersonnelNumber;
-                repair.Executor.Note = check.Executor.Note;
-                repair.Executor.PhotoPath = ""; //TODO: check.Executor.Photo;
-                if (check.Executor.Post == null)
-                    repair.Executor.Post.Title = "";
-                else
-                {
-                    repair.Executor.Post.Title = check.Executor.Post.Title;
-                    repair.Executor.Post.Id = check.Executor.Post.Id;
-                }
-            }
-            else
-            {
-                repair.Executor.Name = "";
-                repair.Executor.Surname = "";
-                repair.Executor.Patronymic = "";
-                repair.Executor.PersonnelNumber = "";
-                repair.Executor.Note = "";
-                repair.Executor.PhotoPath = ""; //TODO: check.Executor.Photo;
-                repair.Executor.Post.Title = "";
-            }
-            repair.Note = check.Note;
-            repair.TimeStamp = check.TimeStamp;
-            if(repair.FormTO == null)
-                repair.FormTO = new FormDto();
-            repair.FormTO.Title = check.FormTO.Title;
-            repair.MainDevice.DeviceType = check.MainDevice.DeviceType.DeviceType;
-            repair.MainDevice.SerialNumber = check.MainDevice.SerialNumber;
-            repair.MainDevice.TSN = check.MainDevice.TSN;
-            repair.MainDevice.TSO = check.MainDevice.TSO;
-            UpdateMetadata(repair.MainDevice, check.MainDevice);
-            foreach (var deviceDto in repair.Devices)
-            {
-                var dev = check.Devices.FirstOrDefault(el => el.DeviceType.DeviceType == deviceDto.DeviceType);
-                deviceDto.DeviceType = dev.DeviceType.DeviceType;
-                deviceDto.SerialNumber = dev.SerialNumber;
-                deviceDto.TSN = dev.TSN;
-                deviceDto.TSO = dev.TSO;
-                UpdateMetadata(deviceDto, dev);
-            }
-            return repair;
+            List<Node> newNodes;
+            List<Node> changedNodes;
+            List<Node> lessNodes;
+            var isTreeNoChanged = AnilizeNodes(check, res, out newNodes, out changedNodes, out lessNodes);
+            _dataSource.Update(newNodes, lessNodes, changedNodes);
         }
 
-        private void UpdateMetadata(DeviceDto deviceDto, DeviceInfo dev)
+        private CheckDto GetUpdatedRepair(TestResultID check)
         {
-            if (dev.Metadate != null)
-            {
-                foreach (var key in dev.Metadate.Keys)
-                {
-                    var md = deviceDto.Metadata.FirstOrDefault(el => el.Key == key);
-                    if (md != null)
-                        md.Value = dev.Metadate[key];
-                    else
-                        deviceDto.Metadata.Add(new DeviceMetadataDto()
-                        {
-                            Key = key,
-                            Value = dev.Metadate[key],
-                        });
-                }
-                var lessData = deviceDto.Metadata.Where(el => !dev.Metadate.ContainsKey(el.Key)).ToList();
-                foreach (var data in lessData)
-                    deviceDto.Metadata.Remove(data);
-            }
+            var checkDto = _dataSource.Repairs.FirstOrDefault(el => el.Id == check.Id);
+            if (checkDto == null)
+                return null;
+            checkDto.CommonResult = check.CommonResult;
+            checkDto.CreateTime = check.CreateTime;
+            checkDto.DeviceType= check.DeviceType;
+            checkDto.SerialNumber = check.SerialNumber;
+            checkDto.TargetDeviceKey = check.TargetDeviceKey;
+            checkDto.Timestamp = check.Timestamp;
+            checkDto.Note = check.Note;
+            return checkDto;
         }
 
         private bool AnilizeNodes(TestResultID check, object res, out List<Node> newNodes, out List<Node> changedNodes, out List<Node> lessNodes)
@@ -202,27 +155,27 @@ namespace SQLiteArchive
         /// <summary>
         /// Конвертация результата в DTO
         /// </summary>
-        /// <param name="repair"></param>
+        /// <param name="check"></param>
         /// <param name="result"></param>
         /// <returns></returns>
-        private Node ResToDto(RepairDto repair, object result)
+        private Node ResToDto(CheckDto check, object result)
         {
-            return TreeParser.Convert(result, new Node() { RepairId = (int)repair.Id, Name = "root" },
-                new ItemDescriptor(), repair.Id);
+            return TreeParser.Convert(result, new Node() { RepairId = (int)check.Id, Name = "root" },
+                new ItemDescriptor(), check.Id);
         }
 
         /// <summary>
         /// Конвертация DTO в результат
         /// </summary>
-        /// <param name="repair"></param>
+        /// <param name="check"></param>
         /// <returns></returns>
-        private object ResFromDto(RepairDto repair)
+        private object ResFromDto(CheckDto check)
         {
             object res;
-            var nodeList = _dataSource.Nodes.Where(el => el.RepairId == repair.Id).ToList();
-            if(!_resTypes.ContainsKey(repair.MainDevice.DeviceType))
-                throw new IndexOutOfRangeException(string.Format("For device \"{0}\" not found result type", repair.MainDevice.DeviceType));
-            var resTypes = _resTypes[repair.MainDevice.DeviceType];
+            var nodeList = _dataSource.Nodes.Where(el => el.RepairId == check.Id).ToList();
+            if(!_resTypes.ContainsKey(check.MainDevice.DeviceType))
+                throw new IndexOutOfRangeException(string.Format("For device \"{0}\" not found result type", check.MainDevice.DeviceType));
+            var resTypes = _resTypes[check.MainDevice.DeviceType];
             if (!nodeList.Any())
             {
                 if (resTypes == null)
@@ -234,7 +187,7 @@ namespace SQLiteArchive
             if (!TreeParser.TryParse(tree, out res, resTypes, new ItemDescriptor()))
                 throw new InvalidCastException(
                     string.Format("Can not parce result for device type {0} from tree to type {1}",
-                        repair.MainDevice.DeviceType, _resTypes[repair.MainDevice.DeviceType]));
+                        check.MainDevice.DeviceType, _resTypes[check.MainDevice.DeviceType]));
             if (res == null)
                 res = resTypes.Assembly.CreateInstance(resTypes.FullName);
             return res;
@@ -243,23 +196,23 @@ namespace SQLiteArchive
         /// <summary>
         /// Конвертация DTO в запись о проверке
         /// </summary>
-        /// <param name="repair"></param>
+        /// <param name="check"></param>
         /// <returns></returns>
-        private TestResultID DescriptorFromDto(RepairDto repair)
+        private TestResultID DescriptorFromDto(CheckDto check)
         {
             var mainDeviceType =
-                _dictionaryPool.DeviceTypes.FirstOrDefault(el => el.DeviceType == repair.MainDevice.DeviceType);
+                _dictionaryPool.DeviceTypes.FirstOrDefault(el => el.DeviceType == check.MainDevice.DeviceType);
             var resDevice = new TestResultID() {IsNewCheckType = true};
-            resDevice.Id = (int)repair.Id;
+            resDevice.Id = (int)check.Id;
             resDevice.MainDevice = new DeviceInfo()
             {
                 DeviceType = mainDeviceType,
-                SerialNumber = repair.MainDevice.SerialNumber,
-                TSN = repair.MainDevice.TSN,
-                TSO = repair.MainDevice.TSO,
-                Metadate = repair.MainDevice.Metadata.ToDictionary(el=>el.Key, elV=>elV.Value),
+                SerialNumber = check.MainDevice.SerialNumber,
+                TSN = check.MainDevice.TSN,
+                TSO = check.MainDevice.TSO,
+                Metadate = check.MainDevice.Metadata.ToDictionary(el=>el.Key, elV=>elV.Value),
             };
-            resDevice.Devices = repair.Devices.Select(item =>
+            resDevice.Devices = check.Devices.Select(item =>
             {
                 var devType = _dictionaryPool.DeviceTypes.FirstOrDefault(el => item.DeviceType == el.DeviceType);
                 return new DeviceInfo()
@@ -268,32 +221,32 @@ namespace SQLiteArchive
                     SerialNumber = item.SerialNumber,
                     TSN = item.TSN,
                     TSO = item.TSO,
-                    Metadate = repair.MainDevice.Metadata.ToDictionary(el => el.Key, elV => elV.Value),
+                    Metadate = check.MainDevice.Metadata.ToDictionary(el => el.Key, elV => elV.Value),
                 };
             });
-            resDevice.AirType = _dictionaryPool.AirTypes.FirstOrDefault(el => el.Id == repair.AirType.Id);
+            resDevice.AirType = _dictionaryPool.AirTypes.FirstOrDefault(el => el.Id == check.AirType.Id);
             if (resDevice.AirType == null)
-                resDevice.AirType = new AirTypeDescriptor(repair.AirType.Title) { Id = (int)repair.AirType.Id };
-            resDevice.Executor = _dictionaryPool.Users.FirstOrDefault(el => el.Id == repair.Executor.Id);
+                resDevice.AirType = new AirTypeDescriptor(check.AirType.Title) { Id = (int)check.AirType.Id };
+            resDevice.Executor = _dictionaryPool.Users.FirstOrDefault(el => el.Id == check.Executor.Id);
             if (resDevice.Executor == null)
-                resDevice.Executor = new UserDescriptor(repair.Executor.Name)
+                resDevice.Executor = new UserDescriptor(check.Executor.Name)
                 {
-                    Id = (int)repair.Executor.Id,
-                    Surname = repair.Executor.Surname,
-                    Patronymic = repair.Executor.Patronymic,
-                    PersonnelNumber = repair.Executor.PersonnelNumber,
-                    Note = repair.Executor.Note,
-                    Post = null,//rnew PostDescriptor(repair.Executor.Post.Title){Id = repair.Executor.Post.Id},
-                    //Photo = null,//repair.Executor.PhotPath
+                    Id = (int)check.Executor.Id,
+                    Surname = check.Executor.Surname,
+                    Patronymic = check.Executor.Patronymic,
+                    PersonnelNumber = check.Executor.PersonnelNumber,
+                    Note = check.Executor.Note,
+                    Post = null,//rnew PostDescriptor(check.Executor.Post.Title){Id = check.Executor.Post.Id},
+                    //Photo = null,//check.Executor.PhotPath
                 };
-            resDevice.FormTO = _dictionaryPool.Forms.FirstOrDefault(el => el.Id == repair.Id);
+            resDevice.FormTO = _dictionaryPool.Forms.FirstOrDefault(el => el.Id == check.Id);
             if (resDevice.FormTO == null)
-                resDevice.FormTO = new FormToDescriptor(repair.FormTO.Title) { Id = (int)repair.FormTO.Id };
-            resDevice.AirMark = repair.AirMark;
-            resDevice.AirNumber = repair.AirNumber;
-            resDevice.Note = repair.Note;
-            resDevice.CommonResult = repair.CommonResult;
-            resDevice.TimeStamp = repair.TimeStamp;
+                resDevice.FormTO = new FormToDescriptor(check.FormTO.Title) { Id = (int)check.FormTO.Id };
+            resDevice.AirMark = check.AirMark;
+            resDevice.AirNumber = check.AirNumber;
+            resDevice.Note = check.Note;
+            resDevice.CommonResult = check.CommonResult;
+            resDevice.TimeStamp = check.TimeStamp;
             return resDevice;
         }
 
@@ -302,9 +255,9 @@ namespace SQLiteArchive
         /// </summary>
         /// <param name="repair"></param>
         /// <returns></returns>
-        private RepairDto DescriptorToDto(TestResultID repair)
+        private CheckDto DescriptorToDto(TestResultID repair)
         {
-            return new RepairDto()
+            return new CheckDto()
             {
                 Id = repair.Id,
                 MainDevice = new DeviceDto()
@@ -337,7 +290,7 @@ namespace SQLiteArchive
                     Surname = repair.Executor.Surname,
                     Patronymic = repair.Executor.Patronymic,
                     PersonnelNumber = repair.Executor.PersonnelNumber,
-                    PhotoPath = "", // TODO GetPath repair.Executor.Photo
+                    PhotoPath = "", // TODO GetPath check.Executor.Photo
                     Note = repair.Executor.Note,
                     Post = new PostDto()
                     {

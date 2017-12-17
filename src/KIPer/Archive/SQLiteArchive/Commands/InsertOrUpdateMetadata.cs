@@ -37,7 +37,7 @@ namespace SQLiteArchive.Commands
         private string GetInsertOrUpdateSql(string key, string data, int repairId)
         {
             const string sql = @"INSERT OR REPLACE INTO [Metadata]" +
-                                        " (RepairId, Key, Data)" +
+                                        " (Id, Key, Data)" +
                                         " VALUES" +
                                         " ('{0}', '{1}', '{2}');";
             return string.Format(sql, _repairId, key, data);

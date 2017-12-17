@@ -27,7 +27,7 @@ namespace SQLiteArchive.Commands
         {
             const string sql =
                 @"SELECT [Key], [Data]
-                FROM [Results] WHERE RepairId = @RepairId";
+                FROM [Results] WHERE Id = @Id";
             return context.Transaction(ts => ts.Connection.Query<Metadata>(sql, _repairId));
         }
     }

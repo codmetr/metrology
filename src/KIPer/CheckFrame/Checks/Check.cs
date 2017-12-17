@@ -33,7 +33,7 @@ namespace CheckFrame.Checks
             base.AttachStep(step);
         }
 
-        protected void DetachStep(ITestStep step)
+        protected override void DetachStep(ITestStep step)
         {
             var stepWithRes = step as ITestStep<IDictionary<ParameterDescriptor, ParameterResult>>;
             if (stepWithRes != null)

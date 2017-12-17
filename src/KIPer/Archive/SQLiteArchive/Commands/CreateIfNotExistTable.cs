@@ -12,11 +12,11 @@ namespace SQLiteArchive.Commands
         {
             // Список идентификаторов проверок
             const string sqlCreateRepairs = @"CREATE TABLE IF NOT EXISTS [Repairs](
-                    [RepairId] integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+                    [Id] integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
                     [Timestamp] DATETIME NOT NULL);";
             // Описатели проверки
             const string sqlCreateRepairDescriptors = @"CREATE TABLE IF NOT EXISTS [RepairDescriptors](
-                    [RepairId] integer NOT NULL REFERENCES Repairs([RepairId]),
+                    [Id] integer NOT NULL REFERENCES Repairs([Id]),
                     [Id] integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
                     [TargetDevice] integer,
                     [EthalonDevice] integer,
@@ -28,14 +28,14 @@ namespace SQLiteArchive.Commands
                     [HumidityUnit] integer);";
             // Описатели устройств
             const string sqlCreateDevices = @"CREATE TABLE IF NOT EXISTS [Devices](
-                    [RepairId] DECIMAL NOT NULL REFERENCES Repairs([RepairId]),
+                    [Id] DECIMAL NOT NULL REFERENCES Repairs([Id]),
                     [Id] integer PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
                     [Type] NTEXT,
                     [SerialNumber] NTEXT,
                     [DateLastVerification] integer);";
             // Описатели изммерительных каналов, сохраненные как Adjacency List
             const string sqlCreateChannels = @"CREATE TABLE IF NOT EXISTS [Channels](
-                    [RepairId] DECIMAL NOT NULL REFERENCES Repairs([RepairId]),
+                    [Id] DECIMAL NOT NULL REFERENCES Repairs([Id]),
                     [Id] DECIMAL,
                     [ParentId] DECIMAL,
                     [Name] NTEXT,
@@ -43,7 +43,7 @@ namespace SQLiteArchive.Commands
                     [TypeVal] DECIMAL);";
             // Параметры проведеня проверерки, сохраненные как Adjacency List
             const string sqlCreateParameters = @"CREATE TABLE IF NOT EXISTS [Config](
-                    [RepairId] DECIMAL NOT NULL REFERENCES Repairs([RepairId]),
+                    [Id] DECIMAL NOT NULL REFERENCES Repairs([Id]),
                     [Id] DECIMAL,
                     [ParentId] DECIMAL,
                     [Name] NTEXT,
@@ -51,7 +51,7 @@ namespace SQLiteArchive.Commands
                     [TypeVal] DECIMAL);";
             // Результаты проверерки, сохраненные как Adjacency List
             const string sqlCreateResults = @"CREATE TABLE IF NOT EXISTS [Results](
-                    [RepairId] DECIMAL NOT NULL REFERENCES Repairs([RepairId]),
+                    [Id] DECIMAL NOT NULL REFERENCES Repairs([Id]),
                     [Id] DECIMAL NOT NULL,
                     [ParentId] DECIMAL,
                     [Name] NTEXT,
@@ -60,11 +60,11 @@ namespace SQLiteArchive.Commands
             /*const string sql =
                 // Список идентификаторов проверок
                 @"CREATE TABLE IF NOT EXISTS [Repairs](
-                    [RepairId] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+                    [Id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
                     [Timestamp] DATETIME NOT NULL);" +
                 // Результаты проверерки, сохраненные как Adjacency List
                 @"CREATE TABLE IF NOT EXISTS [Results](
-                    [RepairId] DECIMAL NOT NULL REFERENCES Repairs([RepairId]),
+                    [Id] DECIMAL NOT NULL REFERENCES Repairs([Id]),
                     [Id] DECIMAL NOT NULL,
                     [ParentId] DECIMAL,
                     [Name] NTEXT,
@@ -72,7 +72,7 @@ namespace SQLiteArchive.Commands
                     [TypeVal] DECIMAL);" +
                 // Параметры проведеня проверерки, сохраненные как Adjacency List
                 @"CREATE TABLE IF NOT EXISTS [Parameters](
-                    [RepairId] DECIMAL NOT NULL REFERENCES Repairs([RepairId]),
+                    [Id] DECIMAL NOT NULL REFERENCES Repairs([Id]),
                     [Id] DECIMAL,
                     [ParentId] DECIMAL,
                     [Name] NTEXT,
@@ -80,12 +80,12 @@ namespace SQLiteArchive.Commands
                     [TypeVal] DECIMAL);" +
                 // Словарь дополнительных данных проверок
                 @"CREATE TABLE IF NOT EXISTS [Metadata](
-                    [RepairId] DECIMAL NOT NULL REFERENCES Repairs([RepairId]),
+                    [Id] DECIMAL NOT NULL REFERENCES Repairs([Id]),
                     [Key] NTEXT,
                     [Data] NTEXT);" +
                 // Словарь дополнительных данных проверок
                 @"CREATE TABLE IF NOT EXISTS [Metadata](
-                    [RepairId] DECIMAL NOT NULL REFERENCES Repairs([RepairId]),
+                    [Id] DECIMAL NOT NULL REFERENCES Repairs([Id]),
                     [Key] NTEXT,
                     [Data] NTEXT);";
             context.Transaction(ts => ts.Connection.Execute(sql));*/

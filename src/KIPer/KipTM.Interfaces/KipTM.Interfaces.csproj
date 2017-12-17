@@ -42,11 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Archive\CommonPropertyKeys.cs" />
-    <Compile Include="Archive\DataPool.cs" />
     <Compile Include="Archive\DataTypes\ArchivedKeyValuePair.cs" />
     <Compile Include="Archive\DictionariesPool.cs" />
     <Compile Include="Archive\IArchiveDataDefault.cs" />
-    <Compile Include="Archive\IArchivePool.cs" />
     <Compile Include="Archive\IDictionariesArchiveFactory.cs" />
     <Compile Include="Archive\IDictionaryDataDefault.cs" />
     <Compile Include="Archive\IPropertyPool.cs" />

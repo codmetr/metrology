@@ -61,6 +61,20 @@ namespace SQLiteArchive
         }
 
         /// <summary>
+        /// Обновить конфигурацию проверки
+        /// </summary>
+        /// <param name="check"></param>
+        /// <param name="config"></param>
+        public void UpdateConfig(TestResultID check, object config)
+        {
+            var repair = _dataPool.Configs.Keys.FirstOrDefault(el => el.Id == _check.Id);
+            if (repair == null)
+                throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", _check.Id));
+            _dataPool.UpdateConfig(check, config);
+
+        }
+
+        /// <summary>
         /// Сохранить тип результата в контейнер результатов проверки
         /// </summary>
         /// <param name="data"></param>
@@ -73,12 +87,34 @@ namespace SQLiteArchive
         }
 
         /// <summary>
+        /// Сохранить конфигурацию в контейнер результатов проверки типизировано
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        public void SaveConfig<T>(T data)
+        {
+            if (!_dataPool.Configs.ContainsKey(_check))
+                throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", _check.Id));
+            _dataPool.Repairs[_check] = data;
+            _dataPool.UpdateConfig(_check, data);
+        }
+
+        /// <summary>
         /// Загрузить результат по проверке
         /// </summary>
         /// <returns></returns>
         public object Load(TestResultID check)
         {
             return _dataPool.Repairs[check];
+        }
+
+        /// <summary>
+        /// Загрузить конфигурацию по проверке
+        /// </summary>
+        /// <returns></returns>
+        public object LoadConfig(TestResultID check)
+        {
+            return _dataPool.Configs[check];
         }
     }
 }

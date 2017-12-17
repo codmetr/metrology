@@ -29,7 +29,7 @@ namespace SQLiteArchive
 
         public List<Node> Nodes = new List<Node>();
 
-        public List<RepairDto> Repairs = new List<RepairDto>();
+        public List<CheckDto> Repairs = new List<CheckDto>();
         private bool _isCreted = false;
 
         public void Load()
@@ -66,19 +66,19 @@ namespace SQLiteArchive
             DataBase.Execute(new ClearTableRepairs());
         }
 
-        public void Add(RepairDto repair, IEnumerable<Node> nodes)
+        public void Add(CheckDto check, IEnumerable<Node> nodes)
         {
             CreateTableIfNoExist();
-            DataBase.Execute(new AddRepair(repair, _trace));
-            Repairs.Add(repair);
+            DataBase.Execute(new AddRepair(check, _trace));
+            Repairs.Add(check);
             DataBase.Execute(new InsertOrUpdateNodes(nodes, _trace));
             Nodes.AddRange(nodes);
         }
 
-        public void Update(RepairDto repair, IEnumerable<Node> newNodes, IEnumerable<Node> lessNodes, IEnumerable<Node> updateNodes)
+        public void Update(CheckDto check, IEnumerable<Node> newNodes, IEnumerable<Node> lessNodes, IEnumerable<Node> updateNodes)
         {
             CreateTableIfNoExist();
-            DataBase.Execute(new UpdateRepair(repair, _trace));
+            DataBase.Execute(new UpdateRepair(check, _trace));
 
             var nodes = newNodes.ToList();
             nodes.AddRange(updateNodes);
@@ -92,9 +92,9 @@ namespace SQLiteArchive
             }
         }
 
-        public void Update(RepairDto repair)
+        public void Update(CheckDto check)
         {
-            DataBase.Execute(new UpdateRepair(repair, _trace));
+            DataBase.Execute(new UpdateRepair(check, _trace));
         }
 
         public void Update(IEnumerable<Node> newNodes, IEnumerable<Node> lessNodes, IEnumerable<Node> updateNodes)
@@ -112,9 +112,9 @@ namespace SQLiteArchive
             }
         }
 
-        public IEnumerable<Node> Load(RepairDto repair)
+        public IEnumerable<Node> Load(CheckDto check)
         {
-            var load = new LoadNodes(repair.Id, _trace);
+            var load = new LoadNodes(check.Id, _trace);
             DataBase.Execute(load);
             return load.Nodes;
         }
