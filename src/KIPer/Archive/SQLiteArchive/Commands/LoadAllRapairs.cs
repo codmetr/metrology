@@ -11,7 +11,7 @@ namespace SQLiteArchive.Commands
     /// <summary>
     /// Загрузить список всех идентификаторов проверок
     /// </summary>
-    public class LoadAllRapairs : IQuery<IEnumerable<CheckDto>>
+    public class LoadAllRepairs : IQuery<IEnumerable<CheckDto>>
     {
         public IEnumerable<CheckDto> Execute(IDbContext context)
         {

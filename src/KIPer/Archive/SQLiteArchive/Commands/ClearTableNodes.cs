@@ -3,7 +3,7 @@ using SQLiteArchive.Db;
 
 namespace SQLiteArchive.Commands
 {
-    public class ClearTable:ICommand
+    public class ClearTableNodes:ICommand
     {
         public void Execute(IDbContext context)
         {

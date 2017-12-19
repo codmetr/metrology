@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using SQLiteArchive.Commands;
 using SQLiteArchive.Db;
-using SQLiteArchive.Db.DTO;
 using SQLiteArchive.Tree;
 
 namespace SQLiteArchive
@@ -18,16 +17,18 @@ namespace SQLiteArchive
         private IDatabase _dataBase = null;
         private Action<string> _trace;
 
-        private readonly string _dbName;
-        private IList<Node> _nodes = new List<Node>(); 
+        private const string ResultNodesTable = "ResNodes";
+        private const string ConfigNodesTable = "ConfNodes";
 
+        private readonly string _dbName;
         public DataSource(string dbName = "test.db", Action<string> trace = null)
         {
             _dbName = dbName;
             _trace = trace;
         }
 
-        public List<Node> Nodes = new List<Node>();
+        public List<Node> NodesRes = new List<Node>();
+        public List<Node> NodesConf = new List<Node>();
 
         public List<CheckDto> Repairs = new List<CheckDto>();
         private bool _isCreted = false;
@@ -37,25 +38,32 @@ namespace SQLiteArchive
             if (!File.Exists(_dbName))
                 return;
             CreateTableIfNoExist();
-            var loadNodes = new LoadNodes(trace:_trace);
-            DataBase.Execute(loadNodes);
-            Nodes.Clear();
-            Nodes.AddRange(loadNodes.Nodes);
-            if (Nodes.Any())
-            {
-                Node.SetMaxId((int)Nodes.Max(el => el.Id)+1);
-            }
+            DoLoadNodes(ResultNodesTable, NodesRes);
+            DoLoadNodes(ConfigNodesTable, NodesConf);
 
-            var loadRepairs = new LoadAllRepairs(_trace);
-            DataBase.Execute(loadRepairs);
+            var loadRepairs = new LoadAllRepairs();
+            var repairs = DataBase.Query(loadRepairs);
             Repairs.Clear();
-            Repairs.AddRange(loadRepairs.Repairs);
+            Repairs.AddRange(repairs);
+        }
+
+        private void DoLoadNodes(string table, List<Node> nodes)
+        {
+            var loadNodes = new LoadNodes(table, trace: _trace);
+            DataBase.Execute(loadNodes);
+            nodes.Clear();
+            nodes.AddRange(loadNodes.Nodes);
+            if (nodes.Any())
+            {
+                Node.SetMaxId((int)nodes.Max(el => el.Id) + 1);
+            }
         }
 
         public void Save()
         {
             CreateTableIfNoExist();
-            DataBase.Execute(new InsertOrUpdateNodes(Nodes, _trace));
+            DataBase.Execute(new InsertOrUpdateNodes(NodesRes, ResultNodesTable, _trace));
+            DataBase.Execute(new InsertOrUpdateNodes(NodesConf, ConfigNodesTable, _trace));
         }
 
         public void Clear()
