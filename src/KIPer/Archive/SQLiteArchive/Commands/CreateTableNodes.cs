@@ -5,9 +5,16 @@ namespace SQLiteArchive.Commands
 {
     public class CreateTableNodes:ICommand
     {
+        private readonly string _table;
+
+        public CreateTableNodes(string table)
+        {
+            _table = table;
+        }
+
         public void Execute(IDbContext context)
         {// AUTOINCREMENT
-            const string sql = @"CREATE TABLE IF NOT EXISTS [Nodes] 
+            string sql = string.Format(@"CREATE TABLE IF NOT EXISTS [{0}] 
                         (
                             [Id] integer PRIMARY KEY NOT NULL,
                             [RepairId] integer NOT NULL,
@@ -15,7 +22,7 @@ namespace SQLiteArchive.Commands
                             [Name] char(255),
                             [Val] char(255),
                             [TypeVal] integer
-                        );";
+                        );", _table);
 
             context.Transaction(ts =>
             {

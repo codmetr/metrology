@@ -26,7 +26,7 @@ namespace KipTM.Interfaces.Checks
         /// <summary>
         /// Сконфигурировать пул свойств
         /// </summary>
-        ICheckViewModelFactory SetPropertyPool(IPropertyPool propertyPool);
+        ICheckViewModelFactory SetPropertyPool(object propertyPool);
 
         /// <summary>
         /// Сформировать визуальную модель проверки

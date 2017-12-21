@@ -57,7 +57,6 @@ namespace KipTM.ViewModel
         public static void Cleanup()
         {
             var ds = ServiceLocator.Current.GetInstance<IDataService>();
-            ds.SaveSettings();
             var dsdisp = ds as IDisposable;
             if(dsdisp != null)
                 dsdisp.Dispose();

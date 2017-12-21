@@ -60,23 +60,19 @@
     <Compile Include="Access\DataPool.cs" />
     <Compile Include="Access\DataSource.cs" />
     <Compile Include="Access\TypeHelperEx.cs" />
-    <Compile Include="Archive.cs" />
     <Compile Include="ArchiveXML.cs" />
+    <Compile Include="Commands\AddCheck.cs" />
+    <Compile Include="Commands\ClearTableChecks.cs" />
     <Compile Include="Commands\ClearTableNodes.cs" />
     <Compile Include="Commands\CreateNewRepair.cs" />
     <Compile Include="Commands\CreateIfNotExistTable.cs" />
     <Compile Include="Commands\CreateTableNodes.cs" />
-    <Compile Include="Commands\InsertOrUpdateMetadata.cs" />
     <Compile Include="Commands\InsertOrUpdateNodes.cs" />
-    <Compile Include="Commands\InsertOrUpdateParameter.cs" />
-    <Compile Include="Commands\InsertOrUpdateResult.cs" />
     <Compile Include="Commands\LoadAllRapairs.cs" />
-    <Compile Include="Commands\LoadMetadatas.cs" />
     <Compile Include="Commands\LoadNodes.cs" />
-    <Compile Include="Commands\LoadParameters.cs" />
-    <Compile Include="Commands\LoadResults.cs" />
     <Compile Include="Commands\Remove.cs" />
     <Compile Include="Commands\RemoveNodes.cs" />
+    <Compile Include="Commands\UpdateCheck.cs" />
     <Compile Include="DataRow.cs" />
     <Compile Include="Db\Database.cs" />
     <Compile Include="Db\Entity.cs" />
@@ -86,7 +82,6 @@
     <Compile Include="Db\IQuery.cs" />
     <Compile Include="Db\SqLiteDbContext.cs" />
     <Compile Include="IArchive.cs" />
-    <Compile Include="DTO\Metadata.cs" />
     <Compile Include="DTO\CheckDto.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -100,7 +95,6 @@
     <Compile Include="Tree\Node.cs" />
     <Compile Include="Tree\NodeLiner.cs" />
     <Compile Include="Tree\TreeParser.cs" />
-    <Compile Include="TypeHelperEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

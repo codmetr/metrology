@@ -33,7 +33,6 @@ namespace KipTM.Workflow.States
         private readonly IMainSettings _settings;
         private readonly IChannelsFactory _channelFactory;
         private readonly IMethodsService _methodicService;
-        private readonly IPropertiesLibrary _propertiesLibrary;
         private readonly IMarkerFactory<IParameterResultViewModel> _resultMaker;
         private readonly IFillerFactory<IParameterResultViewModel> _filler;
         private readonly IEnumerable<ICheckViewModelFactory> _factoriesViewModels;
@@ -50,7 +49,6 @@ namespace KipTM.Workflow.States
         /// <param name="eventAggregator">Сборщик событий</param>
         /// <param name="methodicService">Источник методик</param>
         /// <param name="settings">Настройки</param>
-        /// <param name="propertiesLibrary">Свойства</param>
         /// <param name="archive">Архив</param>
         /// <param name="resultMaker"></param>
         /// <param name="filler">Заполнение результата</param>
@@ -61,7 +59,7 @@ namespace KipTM.Workflow.States
         /// <param name="factoriesViewModels">Преобразователи в визуальные модели</param>
         public CheckWorkflowFactory(
         FeatureDescriptorsCombiner features, IMainSettings settings, IMethodsService methodicService,
-            IPropertiesLibrary propertiesLibrary, IMarkerFactory<IParameterResultViewModel> resultMaker,
+            IMarkerFactory<IParameterResultViewModel> resultMaker,
             IFillerFactory<IParameterResultViewModel> filler, IEnumerable<ICheckViewModelFactory> factoriesViewModels,
             IDictionary<Type, ICustomConfigFactory> customFatories, IDataAccessor archive, IEventAggregator eventAggregator,
             IReportFactory reportFactory, IDeviceManager deviceManager)
@@ -69,7 +67,6 @@ namespace KipTM.Workflow.States
             _channelFactory = features.ChannelFactories;
             _settings = settings;
             _methodicService = methodicService;
-            _propertiesLibrary = propertiesLibrary;
             _resultMaker = resultMaker;
             _filler = filler;
             _factoriesViewModels = factoriesViewModels;
@@ -78,7 +75,7 @@ namespace KipTM.Workflow.States
             _eventAggregator = eventAggregator;
             _reportFactory = reportFactory;
             _deviceManager = deviceManager;
-            _checkPool = new CheckPool(_deviceManager, _propertiesLibrary.PropertyPool, _factoriesViewModels);
+            _checkPool = new CheckPool(_deviceManager, null/*TODO как-то получить настройки для конкретного типа провери*/, _factoriesViewModels);
         }
 
         /// <summary>
@@ -91,7 +88,7 @@ namespace KipTM.Workflow.States
 
             // создание конфигурации конкретной проверки
             var checkConfigDevice = CheckConfigFactory.GenerateForType(devTypeKey, _settings, _methodicService,
-                _propertiesLibrary.PropertyPool, _propertiesLibrary.DictionariesPool, result);
+                null/*TODO как-то получить настройки для конкретного типа провери*/, _propertiesLibrary.DictionariesPool, result);
             // TODO: добавить настроки не через IPropertyPool
 
             var checkConfigViewModel = new CheckConfigViewModel(checkConfigDevice, _channelFactory, _customFactory);
@@ -104,7 +101,7 @@ namespace KipTM.Workflow.States
                 new ConfigCheckState(checkConfigViewModel),
                 new CheckState(checkFactory, _eventAggregator),
                 resState,
-                new ReportState(() => new ReportViewModel(_reportFactory, result, checkConfigDevice.Data, resState.ViewModel as )),
+                new ReportState(() => new ReportViewModel(_reportFactory, result, checkConfigDevice.Data, resState.ViewModel)),
             };
 
             return new LineWorkflow(steps);

@@ -67,7 +67,6 @@ namespace KipTM.IOC
 
             unityContainer.RegisterInstance<IMainSettings>(unityContainer.Resolve<IArchive>()
                     .Load(MainSettings.SettingsFileName, unityContainer.Resolve<MainSettingsFactory>().GetDefault()));
-            unityContainer.RegisterType<IPropertiesLibrary, PropertiesLibrary>();
             unityContainer.RegisterInstance<IMarkerFactory<IParameterResultViewModel>>(
                 MarkerFactory<IParameterResultViewModel>.Locator);
             unityContainer.RegisterInstance<IFillerFactory<IParameterResultViewModel>>(

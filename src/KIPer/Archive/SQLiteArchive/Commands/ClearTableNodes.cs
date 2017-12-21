@@ -5,9 +5,16 @@ namespace SQLiteArchive.Commands
 {
     public class ClearTableNodes:ICommand
     {
+        private readonly string _table;
+
+        public ClearTableNodes(string table)
+        {
+            _table = table;
+        }
+
         public void Execute(IDbContext context)
         {
-            const string sql = @"DELETE FROM [Nodes]";
+            string sql = string.Format(@"DELETE FROM [{0}]", _table);
             context.Transaction(ts => ts.Connection.Execute(sql));
         }
     }

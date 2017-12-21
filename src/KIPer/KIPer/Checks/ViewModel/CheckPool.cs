@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CheckFrame.Checks;
+using Core.Archive.DataTypes;
 using KipTM.Archive;
 using KipTM.EventAggregator;
 using KipTM.Interfaces.Checks;
@@ -20,7 +21,7 @@ namespace KipTM.Checks.ViewModel
     public class CheckPool
     {
         private readonly IDeviceManager _deviceManager;
-        private readonly IPropertyPool _propertyPool;
+        private readonly object _conf;
         private IDictionary<Type, ICheckViewModelFactory> _fatories;
 
 
@@ -28,16 +29,16 @@ namespace KipTM.Checks.ViewModel
         /// Конфигуратор фабрики визуальной модели проверки
         /// </summary>
         /// <param name="deviceManager"></param>
-        /// <param name="propertyPool"></param>
+        /// <param name="conf"></param>
         /// <param name="factories"></param>
-        public CheckPool(IDeviceManager deviceManager, IPropertyPool propertyPool, IEnumerable<ICheckViewModelFactory> factories)
+        public CheckPool(IDeviceManager deviceManager, object conf, IEnumerable<ICheckViewModelFactory> factories)
         {
             _deviceManager = deviceManager;
-            _propertyPool = propertyPool;
+            _conf = conf;
             Load(factories);
             foreach (var factory in _fatories.Values)
             {
-                factory.SetDeviceManager(_deviceManager).SetPropertyPool(_propertyPool);
+                factory.SetDeviceManager(_deviceManager).SetPropertyPool(_conf);
             }
         }
 

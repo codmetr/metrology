@@ -30,7 +30,7 @@ namespace SQLiteArchive
         public List<Node> NodesRes = new List<Node>();
         public List<Node> NodesConf = new List<Node>();
 
-        public List<CheckDto> Repairs = new List<CheckDto>();
+        public List<CheckDto> Checks = new List<CheckDto>();
         private bool _isCreted = false;
 
         public void Load()
@@ -41,10 +41,10 @@ namespace SQLiteArchive
             DoLoadNodes(ResultNodesTable, NodesRes);
             DoLoadNodes(ConfigNodesTable, NodesConf);
 
-            var loadRepairs = new LoadAllRepairs();
-            var repairs = DataBase.Query(loadRepairs);
-            Repairs.Clear();
-            Repairs.AddRange(repairs);
+            var loadChecks = new LoadAllChecks();
+            var checks = DataBase.Query(loadChecks);
+            Checks.Clear();
+            Checks.AddRange(checks);
         }
 
         private void DoLoadNodes(string table, List<Node> nodes)
@@ -70,66 +70,79 @@ namespace SQLiteArchive
         {
             if (!File.Exists(_dbName))
                 return;
-            DataBase.Execute(new ClearTableNodes());
-            DataBase.Execute(new ClearTableRepairs());
+            DataBase.Execute(new ClearTableNodes(ResultNodesTable));
+            DataBase.Execute(new ClearTableNodes(ConfigNodesTable));
+            DataBase.Execute(new ClearTableChecks());
         }
 
-        public void Add(CheckDto check, IEnumerable<Node> nodes)
+        public void AddResult(CheckDto check, IEnumerable<Node> nodes)
         {
             CreateTableIfNoExist();
-            DataBase.Execute(new AddRepair(check, _trace));
-            Repairs.Add(check);
-            DataBase.Execute(new InsertOrUpdateNodes(nodes, _trace));
-            Nodes.AddRange(nodes);
+            DataBase.Execute(new AddCheck(check, _trace));
+            Checks.Add(check);
+            DataBase.Execute(new InsertOrUpdateNodes(nodes, ResultNodesTable, _trace));
+            NodesRes.AddRange(nodes);
         }
 
-        public void Update(CheckDto check, IEnumerable<Node> newNodes, IEnumerable<Node> lessNodes, IEnumerable<Node> updateNodes)
+        public void AddConfig(CheckDto check, IEnumerable<Node> nodes)
         {
             CreateTableIfNoExist();
-            DataBase.Execute(new UpdateRepair(check, _trace));
+            DataBase.Execute(new AddCheck(check, _trace));
+            Checks.Add(check);
+            DataBase.Execute(new InsertOrUpdateNodes(nodes, ConfigNodesTable, _trace));
+            NodesConf.AddRange(nodes);
+        }
+
+        public void UpdateRes(CheckDto check, IEnumerable<Node> newNodes, IEnumerable<Node> lessNodes, IEnumerable<Node> updateNodes)
+        {
+            CreateTableIfNoExist();
+            Update(NodesRes, check, ResultNodesTable, newNodes, lessNodes, updateNodes);
+        }
+
+        public void UpdateConf(CheckDto check, IEnumerable<Node> newNodes, IEnumerable<Node> lessNodes, IEnumerable<Node> updateNodes)
+        {
+            CreateTableIfNoExist();
+            Update(NodesConf, check, ConfigNodesTable, newNodes, lessNodes, updateNodes);
+        }
+
+        private void Update(List<Node> tNodes, CheckDto check, string table, IEnumerable<Node> newNodes, IEnumerable<Node> lessNodes, IEnumerable<Node> updateNodes)
+        {
+            DataBase.Execute(new UpdateCheck(check, _trace));
 
             var nodes = newNodes.ToList();
             nodes.AddRange(updateNodes);
-            DataBase.Execute(new InsertOrUpdateNodes(nodes, _trace));
-            Nodes.AddRange(newNodes);
+            DataBase.Execute(new InsertOrUpdateNodes(nodes, table, _trace));
+            tNodes.AddRange(newNodes);
 
-            DataBase.Execute(new RemoveNodes(lessNodes, _trace));
+            DataBase.Execute(new RemoveNodes(lessNodes, table, _trace));
             foreach (var lessNode in lessNodes)
             {
-                Nodes.Remove(lessNode);
+                tNodes.Remove(lessNode);
             }
         }
 
         public void Update(CheckDto check)
         {
-            DataBase.Execute(new UpdateRepair(check, _trace));
+            DataBase.Execute(new UpdateCheck(check, _trace));
         }
 
-        public void Update(IEnumerable<Node> newNodes, IEnumerable<Node> lessNodes, IEnumerable<Node> updateNodes)
+        public IEnumerable<Node> LoadRes(CheckDto check)
         {
-            CreateTableIfNoExist();
-            var nodes = newNodes.ToList();
-            nodes.AddRange(updateNodes);
-            DataBase.Execute(new InsertOrUpdateNodes(nodes, _trace));
-            Nodes.AddRange(newNodes);
-
-            DataBase.Execute(new RemoveNodes(lessNodes, _trace));
-            foreach (var lessNode in lessNodes)
-            {
-                Nodes.Remove(lessNode);
-            }
+            var load = new LoadNodes(ResultNodesTable, check.Id, _trace);
+            DataBase.Execute(load);
+            return load.Nodes;
         }
 
-        public IEnumerable<Node> Load(CheckDto check)
+        public IEnumerable<Node> LoadConf(CheckDto check)
         {
-            var load = new LoadNodes(check.Id, _trace);
+            var load = new LoadNodes(ConfigNodesTable, check.Id, _trace);
             DataBase.Execute(load);
             return load.Nodes;
         }
 
         private IDbContext ConnectionContext
         {
-            get { return _connectionContext = _connectionContext ?? new SqLiteDbContext(string.Format("Data Source={0};", _dbName), _trace); }
+            get { return _connectionContext = _connectionContext ?? new SqLiteDbContext(string.Format("Data Source={0};", _dbName)); }
         }
 
         private IDatabase DataBase
@@ -141,8 +154,9 @@ namespace SQLiteArchive
         {
             if(_isCreted)
                 return;
-            DataBase.Execute(new CreateTableNodes());
-            DataBase.Execute(new CreateTableRepairs());
+            DataBase.Execute(new CreateTableNodes(ResultNodesTable));
+            DataBase.Execute(new CreateTableNodes(ConfigNodesTable));
+            DataBase.Execute(new CreateTables());
             _isCreted = true;
         }
     }

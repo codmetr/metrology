@@ -107,15 +107,6 @@ namespace KipTM.Model
             _resultsArchive = _archive.Load(ResultsArchiveFileName, _resultsArchive);
         }
 
-        public void SaveResults()
-        {
-            _archive.Save(ResultsArchiveFileName, _resultsArchive);
-        }
-
-        public void SaveSettings()
-        {
-            _archive.Save(MainSettings.SettingsFileName, _settings);
-        }
         #endregion
 
         public void Dispose()

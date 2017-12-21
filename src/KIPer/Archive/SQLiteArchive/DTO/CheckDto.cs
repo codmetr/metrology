@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Dapper.Contrib.Extensions;
 
 namespace SQLiteArchive
 {
     /// <summary>
     /// Идентификатор проверки
     /// </summary>
+    [Table("Repairs")]
     public class CheckDto
     {
         /// <summary>
         /// Идентификатор проверки
         /// </summary>
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Метка времени создания

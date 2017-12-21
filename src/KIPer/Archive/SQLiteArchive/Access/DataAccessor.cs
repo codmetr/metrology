@@ -30,7 +30,7 @@ namespace SQLiteArchive
             _dataPool = dataPool;
             if (!_dataPool.Repairs.ContainsKey(_check))
             {
-                _dataPool.AddRepair(check, null);
+                _dataPool.AddResult(check, null);
             }
         }
 

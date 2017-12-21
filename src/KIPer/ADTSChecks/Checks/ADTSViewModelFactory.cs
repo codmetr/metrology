@@ -39,9 +39,9 @@ namespace ADTSChecks.Checks
         /// <summary>
         /// Сконфигурировать пул свойств
         /// </summary>
-        public ICheckViewModelFactory SetPropertyPool(IPropertyPool propertyPool)
+        public ICheckViewModelFactory SetPropertyPool(object propertyPool)
         {
-            _propertyPool = propertyPool;
+            _propertyPool = propertyPool as IPropertyPool;
             return this;
         }
 

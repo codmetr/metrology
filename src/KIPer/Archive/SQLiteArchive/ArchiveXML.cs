@@ -18,41 +18,6 @@ namespace SQLiteArchive
         }
 
         /// <summary>
-        /// Save entity by key
-        /// </summary>
-        /// <typeparam name="T">entity Type</typeparam>
-        /// <param name="key">key entity</param>
-        /// <param name="entity">value entity</param>
-        public void Save<T>(string key, T entity)
-        {
-            var path = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonDocuments), string.Format(_archiveFileFormat, key));
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-            var archiveType = entity == null ? typeof(T) : entity.GetType();
-            var realTypes = (new List<Type>()).AddTypes(typeof (T));
-            var allTypes = (new List<Type>()).AddTypes(entity, typeof(T));
-            var arrSubTypes = allTypes.Where(el => !realTypes.Contains(el)).ToList();
-            
-            // Save value
-            var xmlSerializer = new XmlSerializer(archiveType, arrSubTypes.ToArray());
-            var dir = Path.GetDirectoryName(path);
-            if (dir != null && !Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
-            using (FileStream fs = new FileStream(path, FileMode.Create))
-            {
-                XmlWriter writer = XmlWriter.Create(fs);
-                xmlSerializer.Serialize(writer, entity);
-            }
-
-            if (!arrSubTypes.Any())
-                return;
-
-            SaveExtraTypes(key, arrSubTypes);
-        }
-
-        /// <summary>
         /// Load by key
         /// </summary>
         /// <typeparam name="T">entity Type</typeparam>
@@ -86,29 +51,6 @@ namespace SQLiteArchive
         }
 
         /// <summary>
-        /// Save extra types
-        /// </summary>
-        /// <param name="key">key entity</param>
-        /// <param name="arrSubTypes">extra types</param>
-        private void SaveExtraTypes(string key, IEnumerable<Type> arrSubTypes)
-        {
-            var pathExtTypes = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonDocuments), string.Format(_archiveFileFormat, string.Format(ExtraTypesKeyFormat, key)));
-            if (File.Exists(pathExtTypes))
-            {
-                File.Delete(pathExtTypes);
-            }
-            
-            // Save extraTypes
-            var arrSubTypesStr = arrSubTypes.Select(TypeToString).ToList();
-            var xmlSerializer = new XmlSerializer(arrSubTypesStr.GetType());
-            using (FileStream fs = new FileStream(pathExtTypes, FileMode.Create))
-            {
-                XmlWriter writer = XmlWriter.Create(fs);
-                xmlSerializer.Serialize(writer, arrSubTypesStr);
-            }
-        }
-
-        /// <summary>
         /// Load extra types
         /// </summary>
         /// <param name="key">key entity</param>
@@ -133,16 +75,6 @@ namespace SQLiteArchive
                 }
             }
             return arrSubTypes;
-        }
-
-        /// <summary>
-        /// get type string identificator
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        private static string TypeToString(Type type)
-        {
-            return type.AssemblyQualifiedName;
         }
 
         /// <summary>

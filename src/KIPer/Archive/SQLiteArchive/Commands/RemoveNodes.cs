@@ -12,16 +12,19 @@ namespace SQLiteArchive.Commands
     {
         private readonly IEnumerable<Node> _nodes = null;
         private Action<string> _trace;
+        private readonly string _table;
 
-        public RemoveNodes(Node node, Action<string> trace = null)
+        public RemoveNodes(Node node, string table, Action<string> trace = null)
         {
             _nodes = new []{node};
+            _table = table;
             _trace = trace;
         }
 
-        public RemoveNodes(IEnumerable<Node> nodes, Action<string> trace = null)
+        public RemoveNodes(IEnumerable<Node> nodes, string table, Action<string> trace = null)
         {
             _nodes = nodes;
+            _table = table;
             _trace = trace;
         }
 
@@ -32,7 +35,7 @@ namespace SQLiteArchive.Commands
             if (!_nodes.Any())
                 return;
             var sqlSb = new StringBuilder();
-            const string sqldelete = @"DELETE [Nodes] WHERE Id = '{0}' AND RepairId = '{1}'";
+            string sqldelete = string.Format(@"DELETE [{0}]", _table) + " WHERE Id = '{0}' AND RepairId = '{1}'";
             foreach (var node in _nodes)
             {
                 if (node == null || node.IsNew)

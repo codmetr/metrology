@@ -22,19 +22,9 @@ namespace KipTM.Interfaces
         IMainSettings Settings { get; }
 
         /// <summary>
-        /// Сохранить текущие настройки
-        /// </summary>
-        void SaveSettings();
-
-        /// <summary>
         /// Загрузить настройки
         /// </summary>
         void LoadResults();
-
-        /// <summary>
-        /// Сохранить текущие результаты
-        /// </summary>
-        void SaveResults();
 
         /// <summary>
         /// Задать список типов устройств и эталонов
