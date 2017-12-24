@@ -26,7 +26,7 @@ namespace CheckFrame.Checks
         /// <returns></returns>
         public static CheckConfigDevice GenerateForType(
             DeviceTypeDescriptor key, IMainSettings settings, IMethodsService method,
-            IPropertyPool propertyPool, DictionariesPool dictionaries, TestResultID result)
+            IPropertyPool propertyPool, IEnumerable<DeviceTypeDescriptor> dictionaries, TestResultID result)
         {
             var data = new CheckConfigData();
             data.TargetDevice.Device.DeviceType = key;
@@ -43,10 +43,10 @@ namespace CheckFrame.Checks
         /// <param name="dictionaries">Справочник функционала</param>
         /// <returns></returns>
         private static List<DeviceTypeDescriptor> GetAllAvailableDeviceTypes(IMainSettings settings,
-            DictionariesPool dictionaries)
+            IEnumerable<DeviceTypeDescriptor> dictionaries)
         {
             var avalableDeviceTypes = new List<DeviceTypeDescriptor>();
-            foreach (var deviceType in dictionaries.DeviceTypes)
+            foreach (var deviceType in dictionaries)
             {
                 if (!settings.Devices.Contains(deviceType))
                     continue;

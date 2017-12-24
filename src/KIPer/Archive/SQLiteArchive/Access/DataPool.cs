@@ -262,9 +262,9 @@ namespace SQLiteArchive
         {
             object res;
             var nodeList = _dataSource.NodesRes.Where(el => el.RepairId == check.Id).ToList();
-            if(!_resTypes.ContainsKey(check.DeviceType))
+            if(!_confTypes.ContainsKey(check.DeviceType))
                 throw new IndexOutOfRangeException(string.Format("For device \"{0}\" not found result type", check.DeviceType));
-            var resTypes = _resTypes[check.DeviceType];
+            var resTypes = _confTypes[check.DeviceType];
             if (!nodeList.Any())
             {
                 if (resTypes == null)
@@ -276,7 +276,7 @@ namespace SQLiteArchive
             if (!TreeParser.TryParse(tree, out res, resTypes, new ItemDescriptor()))
                 throw new InvalidCastException(
                     string.Format("Can not parce result for device type {0} from tree to type {1}",
-                        check.DeviceType, _resTypes[check.DeviceType]));
+                        check.DeviceType, _confTypes[check.DeviceType]));
             if (res == null)
                 res = resTypes.Assembly.CreateInstance(resTypes.FullName);
             return res;

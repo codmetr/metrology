@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ArchiveData;
 using CheckFrame;
 using CheckFrame.Checks;
 using CheckFrame.ViewModel.Archive;
+using Core.Archive.DataTypes;
 using GalaSoft.MvvmLight;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.DataService;
@@ -33,8 +35,6 @@ namespace KipTM.IOC
     {
         public static UnityContainer Config(UnityContainer unityContainer)
         {
-            string dbName = Properties.Settings.Default.DbName;
-
             //unityContainer.RegisterTypes(pluginsTypes);
             if (ViewModelBase.IsInDesignModeStatic)
             {
@@ -50,6 +50,7 @@ namespace KipTM.IOC
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
             unityContainer.RegisterType<IArchive, ArchiveXML>();
             unityContainer.RegisterType<IDocsFactory, DocsFactory>();
+            unityContainer.RegisterType<IMethodsService, MethodsService>();
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IFeaturesDescriptor>());
             unityContainer.RegisterInstance<FeatureDescriptorsCombiner>(
                 unityContainer.Resolve<FeatureDescriptorsCombiner>());
@@ -72,6 +73,10 @@ namespace KipTM.IOC
             unityContainer.RegisterInstance<IFillerFactory<IParameterResultViewModel>>(
                 FillerFactory<IParameterResultViewModel>.Locator);
             unityContainer.RegisterInstance<IReportFactory>(new ReportFactory(unityContainer.ResolveAll<IReporter>()));
+            unityContainer.RegisterInstance<IDictionaryPool>(new DictionariesPool());
+            unityContainer.RegisterInstance<IDataAccessor>(new DataAccessorSqLite(DataPool.Load(unityContainer.Resolve<IDictionaryPool>(),
+                new Dictionary<string, Type>() /*TODO: Задать типы результатов*/,
+                new Dictionary<string, Type>() /*TODO: Задать типы конфигураций*/)));
 
             #region CustomConfigFactories
 
@@ -90,6 +95,24 @@ namespace KipTM.IOC
             unityContainer.RegisterInstance<IDictionary<Type, ICustomConfigFactory>>(factoryDic);
 
             #endregion
+
+            /*
+            FeatureDescriptorsCombiner features = unityContainer.Resolve<FeatureDescriptorsCombiner>();
+            IMainSettings settings = unityContainer.Resolve<IMainSettings>();
+            IEnumerable<IMethodFactory> services = unityContainer.Resolve<IEnumerable<IMethodFactory>>();
+            IMethodsService methodicService = unityContainer.Resolve<IMethodsService>();
+            IMarkerFactory<IParameterResultViewModel> resultMaker = unityContainer.Resolve<IMarkerFactory<IParameterResultViewModel>>();
+            IDictionaryPool dict = unityContainer.Resolve<IDictionaryPool>();
+            IFillerFactory<IParameterResultViewModel> filler = unityContainer.Resolve<IFillerFactory<IParameterResultViewModel>>();
+            IEnumerable<ICheckViewModelFactory> factoriesViewModels = unityContainer.Resolve<IEnumerable<ICheckViewModelFactory>>();
+            IDictionary<Type, ICustomConfigFactory> customFatories = unityContainer.Resolve<IDictionary<Type, ICustomConfigFactory>>();
+            IDataAccessor archive = unityContainer.Resolve<IDataAccessor>();
+            IEventAggregator eventAggregator = unityContainer.Resolve<IEventAggregator>();
+            IReportFactory reportFactory = unityContainer.Resolve<IReportFactory>();
+            IDeviceManager deviceManager = unityContainer.Resolve<IDeviceManager>();
+             */
+
+
 
             // Устоновка Singletone CheckWorkflowFactory
             unityContainer.RegisterType<CheckWorkflowFactory>(new ContainerControlledLifetimeManager());

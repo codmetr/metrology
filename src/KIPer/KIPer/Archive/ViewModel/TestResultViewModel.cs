@@ -145,7 +145,7 @@ namespace KipTM.ViewModel
 
         private void DoSave()
         {
-            _save.Save();
+            _save.Save(_result, _parameters);
         }
     }
 }

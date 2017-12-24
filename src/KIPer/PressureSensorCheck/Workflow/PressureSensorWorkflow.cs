@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ArchiveData.DTO;
 using DPI620Genii;
 using KipTM.Report.PressureSensor;
 using KipTM.Workflow;
@@ -15,6 +16,7 @@ namespace PressureSensorCheck.Workflow
         {
             var configData = new CheckPressureSensorConfig();
             var ports = System.IO.Ports.SerialPort.GetPortNames();
+            var checkResId = new TestResultID();
             var dpiConf = new DPI620GeniiConfig()
             {
                 Ports = ports,
@@ -26,7 +28,7 @@ namespace PressureSensorCheck.Workflow
                 DpiConfig = dpiConf,
             };
             var run = new PressureSensorRunVm(configData, new DPI620DriverCom(), dpiConf);
-            var result = new PressureSensorResultVM(config);
+            var result = new PressureSensorResultVM(checkResId, config);
             var reportMain = new PressureSensorReportDto()
             {
                 ReportNumber = "1",

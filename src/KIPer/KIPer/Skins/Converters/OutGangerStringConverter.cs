@@ -24,11 +24,13 @@ namespace KipTM.Skins.Converters
             if (value.GetType() != typeof(OutGange))
                 throw new InvalidOperationException("The value must be a OutGange");
 
-            return Default[(OutGange)value];
+            return (object)Default[(OutGange)value];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value != null)
+                return default(OutGange);
             if (value.GetType() == typeof(OutGange))
                 return (OutGange)value;
             if (value.GetType() != typeof(string))

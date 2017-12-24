@@ -206,7 +206,6 @@ namespace PressureSensorCheck.Workflow
         private double _vpiMin;
         private double _tolerancePercentVpi;
         private double _pointsOnRange = 5;
-        private string _unit;
         private OutGange _outputRange;
 
         public CheckPressureSensorConfig()
@@ -304,6 +303,8 @@ namespace PressureSensorCheck.Workflow
             get { return _outputRange; }
             set
             {
+                if (value == _outputRange)
+                    return;
                 _outputRange = value;
                 UpdatePoints();
                 OnPropertyChanged("OutputRange");

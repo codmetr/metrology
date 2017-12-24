@@ -90,8 +90,7 @@ namespace KipTM.ViewModel
             _dataService.LoadResults();
             _dataService.FillDeviceList(features.DeviceTypes, features.EthalonTypes);
 
-            var archive = new ArchivesViewModel();
-            _testResults = archive;
+            _testResults = new ArchivesViewModel();
             _testResults.LoadTests(_dataService.ResultsArchive);
             _workflows = new Dictionary<string, IWorkflow>();
             var checkBtns = new List<OneBtnDescripto>();

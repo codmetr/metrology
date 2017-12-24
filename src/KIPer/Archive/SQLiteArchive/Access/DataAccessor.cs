@@ -16,22 +16,16 @@ namespace SQLiteArchive
     /// - срез выборов пользователей
     /// - дерево результата
     /// </remarks>
-    class DataAccessorSqLite : IDataAccessor
+    public class DataAccessorSqLite : IDataAccessor
     {
         /// <summary>
         /// работа с БД
         /// </summary>
         private readonly SQLiteArchive.DataPool _dataPool;
-        private readonly TestResultID _check;
 
-        public DataAccessorSqLite(TestResultID check, SQLiteArchive.DataPool dataPool)
+        public DataAccessorSqLite(SQLiteArchive.DataPool dataPool)
         {
-            _check = check;
             _dataPool = dataPool;
-            if (!_dataPool.Repairs.ContainsKey(_check))
-            {
-                _dataPool.AddResult(check, null);
-            }
         }
 
         /// <summary>
@@ -40,9 +34,9 @@ namespace SQLiteArchive
         /// <param name="check"></param>
         public void Update(TestResultID check)
         {
-            var repair = _dataPool.Repairs.Keys.FirstOrDefault(el => el.Id == _check.Id);
+            var repair = _dataPool.Repairs.Keys.FirstOrDefault(el => el.Id == check.Id);
             if (repair == null)
-                throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", _check.Id));
+                throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", check.Id));
             _dataPool.UpdateRepair(check);
 
         }
@@ -51,11 +45,12 @@ namespace SQLiteArchive
         /// Обновить результат проверки
         /// </summary>
         /// <param name="check"></param>
+        /// <param name="result"></param>
         public void UpdateResult(TestResultID check, object result)
         {
-            var repair = _dataPool.Repairs.Keys.FirstOrDefault(el => el.Id == _check.Id);
+            var repair = _dataPool.Repairs.Keys.FirstOrDefault(el => el.Id == check.Id);
             if (repair == null)
-                throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", _check.Id));
+                throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", check.Id));
             _dataPool.UpdateResult(check, result);
 
         }
@@ -67,9 +62,9 @@ namespace SQLiteArchive
         /// <param name="config"></param>
         public void UpdateConfig(TestResultID check, object config)
         {
-            var repair = _dataPool.Configs.Keys.FirstOrDefault(el => el.Id == _check.Id);
+            var repair = _dataPool.Configs.Keys.FirstOrDefault(el => el.Id == check.Id);
             if (repair == null)
-                throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", _check.Id));
+                throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", check.Id));
             _dataPool.UpdateConfig(check, config);
 
         }
@@ -77,26 +72,28 @@ namespace SQLiteArchive
         /// <summary>
         /// Сохранить тип результата в контейнер результатов проверки
         /// </summary>
+        /// <param name="check"></param>
         /// <param name="data"></param>
-        public void Save<T>(T data)
+        public void Save<T>(TestResultID check, T data)
         {
-            if (!_dataPool.Repairs.ContainsKey(_check))
-                throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", _check.Id));
-            _dataPool.Repairs[_check] = data;
-            _dataPool.UpdateResult(_check, data);
+            if (!_dataPool.Repairs.ContainsKey(check))
+                throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", check.Id));
+            _dataPool.Repairs[check] = data;
+            _dataPool.UpdateResult(check, data);
         }
 
         /// <summary>
         /// Сохранить конфигурацию в контейнер результатов проверки типизировано
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="check"></param>
         /// <param name="data"></param>
-        public void SaveConfig<T>(T data)
+        public void SaveConfig<T>(TestResultID check, T data)
         {
-            if (!_dataPool.Configs.ContainsKey(_check))
-                throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", _check.Id));
-            _dataPool.Repairs[_check] = data;
-            _dataPool.UpdateConfig(_check, data);
+            if (!_dataPool.Configs.ContainsKey(check))
+                throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", check.Id));
+            _dataPool.Repairs[check] = data;
+            _dataPool.UpdateConfig(check, data);
         }
 
         /// <summary>

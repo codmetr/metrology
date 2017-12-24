@@ -40,6 +40,7 @@ namespace KipTM.Report.PressureSensor
                 {
                     _mainReportData = new PressureSensorReport();
                     //_mainReportData = new BlankReport();
+                    _mainReportData.FileName = _mainReportData.ResourceName;
                     _mainReportData.Load();
                     _mainReportData.SetDataSource(new[] { _mainReportDto });
                     _mainReportData.Subreports["EthalonRep"].SetDataSource(_mainReportDto.Ethalons);

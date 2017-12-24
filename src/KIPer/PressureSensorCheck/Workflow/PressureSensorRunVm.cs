@@ -24,10 +24,10 @@ namespace PressureSensorCheck.Workflow
     /// </summary>
     public class PressureSensorRunVm : INotifyPropertyChanged, IObserver<MeasuringPoint>
     {
-        private double _minP = 0;
-        private double _maxP = 100;
-        private double _minU = 2;
-        private double _maxU = 5;
+        //private double _minP = 0;
+        //private double _maxP = 100;
+        //private double _minU = 2;
+        //private double _maxU = 5;
         private readonly DPI620DriverCom _dpi620;
         private DPI620GeniiConfig _dpiConf;
         private readonly Logger _logger;

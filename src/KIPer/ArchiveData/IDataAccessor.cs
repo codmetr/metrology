@@ -31,15 +31,17 @@ namespace Core.Archive.DataTypes
         /// Сохранить результат в контейнер результатов проверки типизировано
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="check"></param>
         /// <param name="data"></param>
-        void Save<T>(T data);
+        void Save<T>(TestResultID check, T data);
 
         /// <summary>
         /// Сохранить конфигурацию в контейнер результатов проверки типизировано
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="check"></param>
         /// <param name="data"></param>
-        void SaveConfig<T>(T data);
+        void SaveConfig<T>(TestResultID check, T data);
 
         /// <summary>
         /// Загрузить результат по проверке

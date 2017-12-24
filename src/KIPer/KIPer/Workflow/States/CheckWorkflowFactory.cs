@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ArchiveData;
 using ArchiveData.DTO;
 using CheckFrame;
 using CheckFrame.Checks;
@@ -34,6 +35,7 @@ namespace KipTM.Workflow.States
         private readonly IChannelsFactory _channelFactory;
         private readonly IMethodsService _methodicService;
         private readonly IMarkerFactory<IParameterResultViewModel> _resultMaker;
+        private readonly IDictionaryPool _dict;
         private readonly IFillerFactory<IParameterResultViewModel> _filler;
         private readonly IEnumerable<ICheckViewModelFactory> _factoriesViewModels;
         private readonly CustomConfigFactory _customFactory;
@@ -46,20 +48,21 @@ namespace KipTM.Workflow.States
         /// <summary>
         /// Фабрика конвейера состояний проверки
         /// </summary>
-        /// <param name="eventAggregator">Сборщик событий</param>
-        /// <param name="methodicService">Источник методик</param>
-        /// <param name="settings">Настройки</param>
-        /// <param name="archive">Архив</param>
-        /// <param name="resultMaker"></param>
-        /// <param name="filler">Заполнение результата</param>
-        /// <param name="reportFactory">Фабрика отчетов</param>
         /// <param name="features">Забор возмодностей модулей</param>
-        /// <param name="customFatories">Фабрики специализированных настроек</param>
-        /// <param name="deviceManager">Пулл устройств</param>
+        /// <param name="settings">Настройки</param>
+        /// <param name="methodicService">Источник методик</param>
+        /// <param name="resultMaker"></param>
+        /// <param name="dict"></param>
+        /// <param name="filler">Заполнение результата</param>
         /// <param name="factoriesViewModels">Преобразователи в визуальные модели</param>
+        /// <param name="customFatories">Фабрики специализированных настроек</param>
+        /// <param name="archive">Архив</param>
+        /// <param name="eventAggregator">Сборщик событий</param>
+        /// <param name="reportFactory">Фабрика отчетов</param>
+        /// <param name="deviceManager">Пулл устройств</param>
         public CheckWorkflowFactory(
         FeatureDescriptorsCombiner features, IMainSettings settings, IMethodsService methodicService,
-            IMarkerFactory<IParameterResultViewModel> resultMaker,
+            IMarkerFactory<IParameterResultViewModel> resultMaker, IDictionaryPool dict,
             IFillerFactory<IParameterResultViewModel> filler, IEnumerable<ICheckViewModelFactory> factoriesViewModels,
             IDictionary<Type, ICustomConfigFactory> customFatories, IDataAccessor archive, IEventAggregator eventAggregator,
             IReportFactory reportFactory, IDeviceManager deviceManager)
@@ -68,6 +71,7 @@ namespace KipTM.Workflow.States
             _settings = settings;
             _methodicService = methodicService;
             _resultMaker = resultMaker;
+            _dict = dict;
             _filler = filler;
             _factoriesViewModels = factoriesViewModels;
             _customFactory = new CustomConfigFactory(customFatories);
@@ -88,7 +92,7 @@ namespace KipTM.Workflow.States
 
             // создание конфигурации конкретной проверки
             var checkConfigDevice = CheckConfigFactory.GenerateForType(devTypeKey, _settings, _methodicService,
-                null/*TODO как-то получить настройки для конкретного типа провери*/, _propertiesLibrary.DictionariesPool, result);
+                null/*TODO как-то получить настройки для конкретного типа провери*/, _dict.DeviceTypes, result);
             // TODO: добавить настроки не через IPropertyPool
 
             var checkConfigViewModel = new CheckConfigViewModel(checkConfigDevice, _channelFactory, _customFactory);

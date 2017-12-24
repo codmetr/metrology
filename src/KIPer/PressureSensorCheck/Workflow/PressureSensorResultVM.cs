@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using ArchiveData.DTO;
 using Core.Archive.DataTypes;
 using PressureSensorData;
 using Tools.View;
@@ -13,14 +14,16 @@ namespace PressureSensorCheck.Workflow
     /// </summary>
     public class PressureSensorResultVM:INotifyPropertyChanged
     {
+        private TestResultID _checkResId;
         private PressureSensorCheckConfigVm _config;
         /// <summary>
         /// Хранилище результата для конкретной проверки
         /// </summary>
         private IDataAccessor _accessor = null;
 
-        public PressureSensorResultVM(PressureSensorCheckConfigVm config)
+        public PressureSensorResultVM(TestResultID checkResId, PressureSensorCheckConfigVm config)
         {
+            _checkResId = checkResId;
             _config = config;
             PointResults = new ObservableCollection<PointViewModel>();
             LastResult = null;
@@ -76,7 +79,7 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         private void OnSave()
         {
-            _accessor.Save(LastResult);
+            _accessor.Save(_checkResId, LastResult);
         }
 
         #region INotifyPropertyChanged

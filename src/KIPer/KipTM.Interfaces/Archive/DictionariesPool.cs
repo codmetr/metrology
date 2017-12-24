@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ArchiveData;
 using ArchiveData.DTO;
-using KipTM.Archive.DataTypes;
 
-namespace KipTM.Archive
+namespace KipTM.Interfaces.Archive
 {
     /// <summary>
     /// Справочник
     /// </summary>
-    public class DictionariesPool
+    public class DictionariesPool: IDictionaryPool
     {
         public static string DeviceTypesKey { get { return "DeviceTypes"; } }
         public static string CheckTypesKey { get { return "CheckTypes"; } }
@@ -22,7 +22,7 @@ namespace KipTM.Archive
         /// <summary>
         /// Типы устройств
         /// </summary>
-        public List<DeviceTypeDescriptor> DeviceTypes { get; set; }
+        public IEnumerable<DeviceTypeDescriptor> DeviceTypes { get; set; }
 
         /// <summary>
         /// Справочкник типов поддерживаемых проверок для типа устройства
