@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using ArchiveData.DTO;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.Interfaces;
+using PressureSensorData;
 
 namespace PressureSensorCheck.Workflow
 {
@@ -14,83 +15,88 @@ namespace PressureSensorCheck.Workflow
     /// </summary>
     public class PressureSensorCheckConfigVm : INotifyPropertyChanged
     {
-        public PressureSensorCheckConfigVm()
+        public PressureSensorCheckConfigVm(PressureSensorConfig configData)
         {
+            Data = configData;
             EthalonPressure = new EthalonDescriptor();
             EthalonVoltage = new EthalonDescriptor();
             Config = new CheckPressureSensorConfig();
             DpiConfig = new DPI620GeniiConfig();
-            Temperature = 23;
-            Humidity = 50;
-            DayPressure = 760;
-            CommonVoltage = 220;
         }
 
         /// <summary>
-        /// Пользователь:
-        /// </summary>
-        public string User { get; set; }
-
-        /// <summary>
-        /// Номер сертификата:
-        /// </summary>
-        public string SertificateNumber { get; set; }
-
-        /// <summary>
-        /// Дата сертификата:
-        /// </summary>
-        public string SertificateDate { get; set; }
-
-        /// <summary>
-        /// Принадлежит:
-        /// </summary>
-        public string Master { get; set; }
-
-        /// <summary>
-        /// Наименование:
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Тип:
-        /// </summary>
-        public string SensorType { get; set; }
-
-        /// <summary>
-        /// Модификация:
-        /// </summary>
-        public string SensorModel { get; set; }
-
-        /// <summary>
-        /// Регистрационный номер в Федеральном информационном фонде по обеспечению единства измерений:
-        /// </summary>
-        public string RegNum { get; set; }
-
-        /// <summary>
-        /// Серия и номер знака предыдущей проверки (если такие серия и номер имеются):
-        /// </summary>
-        public string NumberLastCheck { get; set; }
-
-        /// <summary>
-        /// Заводской номер (номера):
-        /// </summary>
-        public string SerialNumber { get; set; }
-
-        /// <summary>
-        /// Поверено:
+        /// Фактические данные конфигурации
         /// </summary>
         /// <remarks>
-        /// Наименование величин, диапазонов, на которых поверено средство измерений (если предусмотрено методикой поверки)
+        /// Использовать на разметке экрана только в случае единственного места изменения, так как без INotifyPropertyChanged
         /// </remarks>
-        public string CheckedParameters { get; set; }
+        public PressureSensorConfig Data { get; }
 
-        /// <summary>
-        /// Поверено в соответствии с:
-        /// </summary>
-        /// <remarks>
-        /// Наименование документа, на основании которого выполнена поверка
-        /// </remarks>
-        public string ChecklLawBase { get; set; }
+        ///// <summary>
+        ///// Пользователь:
+        ///// </summary>
+        //public string User { get; set; }
+
+        ///// <summary>
+        ///// Номер сертификата:
+        ///// </summary>
+        //public string SertificateNumber { get; set; }
+
+        ///// <summary>
+        ///// Дата сертификата:
+        ///// </summary>
+        //public string SertificateDate { get; set; }
+
+        ///// <summary>
+        ///// Принадлежит:
+        ///// </summary>
+        //public string Master { get; set; }
+
+        ///// <summary>
+        ///// Наименование:
+        ///// </summary>
+        //public string Title { get; set; }
+
+        ///// <summary>
+        ///// Тип:
+        ///// </summary>
+        //public string SensorType { get; set; }
+
+        ///// <summary>
+        ///// Модификация:
+        ///// </summary>
+        //public string SensorModel { get; set; }
+
+        ///// <summary>
+        ///// Регистрационный номер в Федеральном информационном фонде по обеспечению единства измерений:
+        ///// </summary>
+        //public string RegNum { get; set; }
+
+        ///// <summary>
+        ///// Серия и номер знака предыдущей проверки (если такие серия и номер имеются):
+        ///// </summary>
+        //public string NumberLastCheck { get; set; }
+
+        ///// <summary>
+        ///// Заводской номер (номера):
+        ///// </summary>
+        //public string SerialNumber { get; set; }
+
+        ///// <summary>
+        ///// Поверено:
+        ///// </summary>
+        ///// <remarks>
+        ///// Наименование величин, диапазонов, на которых поверено средство измерений (если предусмотрено методикой поверки)
+        ///// </remarks>
+        //public string CheckedParameters { get; set; }
+
+        ///// <summary>
+        ///// Поверено в соответствии с:
+        ///// </summary>
+        ///// <remarks>
+        ///// Наименование документа, на основании которого выполнена поверка
+        ///// </remarks>
+        //public string ChecklLawBase { get; set; }
 
         /// <summary>
         /// Эталон давления
@@ -107,25 +113,25 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public CheckPressureSensorConfig Config { get; set; }
 
-        /// <summary>
-        /// Температура
-        /// </summary>
-        public double Temperature { get; set; }
+        ///// <summary>
+        ///// Температура
+        ///// </summary>
+        //public double Temperature { get; set; }
 
-        /// <summary>
-        /// Влажность
-        /// </summary>
-        public double Humidity { get; set; }
+        ///// <summary>
+        ///// Влажность
+        ///// </summary>
+        //public double Humidity { get; set; }
 
-        /// <summary>
-        /// Давление дня
-        /// </summary>
-        public double DayPressure { get; set; }
+        ///// <summary>
+        ///// Давление дня
+        ///// </summary>
+        //public double DayPressure { get; set; }
 
-        /// <summary>
-        /// Напряжение сети
-        /// </summary>
-        public double CommonVoltage { get; set; }
+        ///// <summary>
+        ///// Напряжение сети
+        ///// </summary>
+        //public double CommonVoltage { get; set; }
 
         /// <summary>
         /// Конфигурация DPI620
@@ -360,15 +366,6 @@ namespace PressureSensorCheck.Workflow
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// Диапазон выходного сигнала
-    /// </summary>
-    public enum OutGange
-    {
-        I4_20mA,
-        I0_5mA,
     }
 
     /// <summary>

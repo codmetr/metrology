@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CrystalDecisions.CrystalReports.Engine;
+using PressureSensorCheck.Report;
 
 namespace KipTM.Report.PressureSensor
 {

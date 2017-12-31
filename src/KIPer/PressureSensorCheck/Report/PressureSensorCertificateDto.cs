@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace KipTM.Report.PressureSensor
+namespace PressureSensorCheck.Report
 {
+    /// <summary>
+    /// Представление всех данных проверки для сертификата
+    /// </summary>
     public class PressureSensorCertificateDto
     {
         /// <summary>

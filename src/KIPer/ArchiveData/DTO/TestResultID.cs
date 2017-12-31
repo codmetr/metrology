@@ -6,6 +6,7 @@ namespace ArchiveData.DTO
     /// <summary>
     /// Контейнер результата одной проверки
     /// </summary>
+    // ReSharper disable once InconsistentNaming
     public class TestResultID
     {
         private int? _id = null;

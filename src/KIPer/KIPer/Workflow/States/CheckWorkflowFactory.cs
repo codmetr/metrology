@@ -5,6 +5,7 @@ using ArchiveData.DTO;
 using CheckFrame;
 using CheckFrame.Checks;
 using CheckFrame.ViewModel.Archive;
+using CheckFrame.Workflow;
 using Core.Archive.DataTypes;
 using KipTM.Archive.ViewModel;
 using KipTM.Checks;

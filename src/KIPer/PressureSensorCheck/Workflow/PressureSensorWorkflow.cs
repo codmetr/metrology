@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using ArchiveData.DTO;
+using CheckFrame.Workflow;
 using DPI620Genii;
 using KipTM.Report.PressureSensor;
 using KipTM.Workflow;
 using Moq;
 using NLog;
+using PressureSensorCheck.Report;
+using PressureSensorData;
 
 namespace PressureSensorCheck.Workflow
 {
@@ -22,13 +25,14 @@ namespace PressureSensorCheck.Workflow
                 Ports = ports,
                 SelectPort = ports.FirstOrDefault(),
             };
-            var config = new PressureSensorCheckConfigVm()
+            var conf = new PressureSensorConfig();
+            var configVm = new PressureSensorCheckConfigVm(conf)
             {
                 Config = configData,
                 DpiConfig = dpiConf,
             };
             var run = new PressureSensorRunVm(configData, new DPI620DriverCom(), dpiConf);
-            var result = new PressureSensorResultVM(checkResId, config);
+            var result = new PressureSensorResultVM(checkResId, configVm);
             var reportMain = new PressureSensorReportDto()
             {
                 ReportNumber = "1",
@@ -97,9 +101,9 @@ namespace PressureSensorCheck.Workflow
 
             var steps = new List<IWorkflowStep>()
             {
-                new SimpleWorkflowStep(config).SetOut(()=>UpdateRunByConf(config, run, logger)),
+                new SimpleWorkflowStep(configVm).SetOut(()=>UpdateRunByConf(configVm, run, logger)),
                 new SimpleWorkflowStep(run).SetOut(()=>UpdateResultByRun(run, result, logger)),
-                new SimpleWorkflowStep(result).SetOut(()=>UpdateReportByResult(config, result, reportMain, reportCertificate)),
+                new SimpleWorkflowStep(result).SetOut(()=>UpdateReportByResult(configVm, result, reportMain, reportCertificate)),
                 new SimpleWorkflowStep(new PressureSensorReportViewModel(reportMain, reportCertificate)),
             };
 
@@ -287,9 +291,9 @@ namespace PressureSensorCheck.Workflow
 
         private static void ApplyCommonData(PressureSensorCheckConfigVm config, PressureSensorResultVM result, PressureSensorReportDto reportMain)
         {
-            reportMain.User = config.User;
-            reportMain.CertificateNumber = config.SertificateNumber;
-            reportMain.CertificateDate = config.SertificateDate;
+            reportMain.User = config.Data.User;
+            reportMain.CertificateNumber = config.Data.SertificateNumber;
+            reportMain.CertificateDate = config.Data.SertificateDate;
             reportMain.Assay = result.Assay;
             reportMain.CommonResult = result.CommonResult;
             if (result.TimeStamp == null)
@@ -302,14 +306,14 @@ namespace PressureSensorCheck.Workflow
                 reportMain.CertificateDate = result.TimeStamp.Value.ToString("dd.MM.yy");
                 reportMain.ReportTime = result.TimeStamp.Value.ToString("dd.MM.yy");
             }
-            reportMain.ReportNumber = config.RegNum;
-            reportMain.TypeDevice = config.SensorType;
-            reportMain.SerialNumber = config.SerialNumber;
-            reportMain.Owner = config.Master;
-            reportMain.Temperature = config.Temperature.ToString("F0");
-            reportMain.Humidity = config.Humidity.ToString("F0");
-            reportMain.Pressure = config.DayPressure.ToString("F0");
-            reportMain.Voltage = config.CommonVoltage.ToString("F0");
+            reportMain.ReportNumber = config.Data.RegNum;
+            reportMain.TypeDevice = config.Data.SensorType;
+            reportMain.SerialNumber = config.Data.SerialNumber;
+            reportMain.Owner = config.Data.Master;
+            reportMain.Temperature = config.Data.Temperature.ToString("F0");
+            reportMain.Humidity = config.Data.Humidity.ToString("F0");
+            reportMain.Pressure = config.Data.DayPressure.ToString("F0");
+            reportMain.Voltage = config.Data.CommonVoltage.ToString("F0");
             reportMain.VisualCheckResult = result.VisualCheckResult;
             reportMain.LeakCheckResult = result.Leak;
             reportMain.CommonResult = result.CommonResult;

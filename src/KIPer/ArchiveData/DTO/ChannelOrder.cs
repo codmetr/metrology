@@ -8,11 +8,11 @@
         /// <summary>
         /// Источник
         /// </summary>
-        Source,
+        Source = 1,
 
         /// <summary>
         /// Измеритель
         /// </summary>
-        Measuring
+        Measuring = 2
     }
 }

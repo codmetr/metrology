@@ -73,7 +73,6 @@
     <Compile Include="Commands\Remove.cs" />
     <Compile Include="Commands\RemoveNodes.cs" />
     <Compile Include="Commands\UpdateCheck.cs" />
-    <Compile Include="DataRow.cs" />
     <Compile Include="Db\Database.cs" />
     <Compile Include="Db\Entity.cs" />
     <Compile Include="Db\ICommand.cs" />

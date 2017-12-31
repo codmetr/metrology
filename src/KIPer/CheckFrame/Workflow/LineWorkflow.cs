@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using KipTM.Workflow;
 using Tools.View;
 
-namespace KipTM.Workflow
+namespace CheckFrame.Workflow
 {
     /// <summary>
     /// Конвейер - механизм линейного перехода между состояниями

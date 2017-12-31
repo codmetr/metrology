@@ -8,21 +8,21 @@
         /// <summary>
         /// Давление
         /// </summary>
-        Pressure,
-        
+        Pressure =1,
+
         /// <summary>
         /// Температура
         /// </summary>
-        Temperature,
+        Temperature = 2,
 
         /// <summary>
         /// Напряжение
         /// </summary>
-        Voltage,
+        Voltage = 3,
 
         /// <summary>
         /// Ток
         /// </summary>
-        Current,
+        Current = 4,
     }
 }

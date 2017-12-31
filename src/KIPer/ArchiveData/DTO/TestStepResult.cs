@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ArchiveData.DTO
 {
     /// <summary>
     /// Описатель результата конкретного шага
     /// </summary>
+    [Obsolete]
     public class TestStepResult
     {
-        private string _checkKey;
-        private string _channelKey;
-        private string _stepKey;
-        private object _result;
-
         /// <summary>
         /// Описатель результата конкретного шага
         /// </summary>
@@ -32,42 +25,27 @@ namespace ArchiveData.DTO
         public TestStepResult(string checkKey, string channelKey, string stepKey, object result)
             : this()
         {
-            _channelKey = channelKey;
-            _checkKey = checkKey;
-            _stepKey = stepKey;
-            _result = result;
+            ChannelKey = channelKey;
+            CheckKey = checkKey;
+            StepKey = stepKey;
+            Result = result;
         }
 
         /// <summary>
         /// Ключ канала
         /// </summary>
-        public string ChannelKey
-        {
-            get { return _channelKey; }
-            set { _channelKey = value; }
-        }
+        public string ChannelKey { get; set; }
 
         /// <summary>
         /// Ключ типа проверки
         /// </summary>
-        public string CheckKey
-        {
-            get { return _checkKey; }
-            set { _checkKey = value; }
-        }
+        public string CheckKey { get; set; }
+
         /// <summary>
         /// Ключь результата
         /// </summary>
-        public string StepKey
-        {
-            get { return _stepKey; }
-            set { _stepKey = value; }
-        }
+        public string StepKey { get; set; }
 
-        public object Result
-        {
-            get { return _result; }
-            set { _result = value; }
-        }
+        public object Result { get; set; }
     }
 }

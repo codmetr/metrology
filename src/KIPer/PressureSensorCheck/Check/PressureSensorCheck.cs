@@ -7,7 +7,6 @@ using KipTM.Interfaces.Channels;
 using KipTM.Model.Checks;
 using NLog;
 using PressureSensorCheck.Check.Steps;
-using PressureSensorCheck.Data;
 using PressureSensorData;
 
 namespace PressureSensorCheck.Check
@@ -41,7 +40,12 @@ namespace PressureSensorCheck.Check
             return FillSteps(customConf as PressureSensorConfig);//TODO: избавиться от этого метода или придумать как передавать во внутрь канал к GUI
         }
 
-        public bool FillSteps(PressureSensorConfig pressureConverterConfig)
+        /// <summary>
+        /// Заполнить конфигурацию проверки
+        /// </summary>
+        /// <param name="pressureConverterConfig"></param>
+        /// <returns></returns>
+        internal bool FillSteps(PressureSensorConfig pressureConverterConfig)
         {
             var steps = new List<CheckStepConfig>()
             {

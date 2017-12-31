@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PressureSensorCheck.Data
+﻿namespace PressureSensorData
 {
     /// <summary>
     /// Точка проверки преобразования давления в напряжение
@@ -15,14 +9,17 @@ namespace PressureSensorCheck.Data
         /// Точка давления
         /// </summary>
         public double PressurePoint { get; set; }
+
         /// <summary>
         /// Единицы измерения давления
         /// </summary>
         public string PressureUnit { get; set; }
+
         /// <summary>
         /// Точка напряжения
         /// </summary>
         public double VoltagePoint { get; set; }
+
         /// <summary>
         /// Единицы измерения напряжения
         /// </summary>

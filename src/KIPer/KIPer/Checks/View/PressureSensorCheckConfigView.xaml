@@ -60,11 +60,11 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0">Пользователь:</TextBlock>
-                            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding User, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Data.User, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="1" Grid.Column="0">Номер сертификата:</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SertificateNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.SertificateNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="1" Grid.Column="3">Дата сертификата:</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding SertificateDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding Data.SertificateDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
                         <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
                         Преобразователь давления:
@@ -95,31 +95,31 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0">Принадлежит:</TextBlock>
-                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Master, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Data.Master, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="1" Grid.Column="0">Наименование:</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="2" Grid.Column="0">Тип:</TextBlock>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SensorType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.SensorType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="3" Grid.Column="0">Модификация:</TextBlock>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SensorModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Data.SensorModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="4" Grid.Column="0">Заводской номер (номера):</TextBlock>
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Data.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                             <TextBlock Grid.Row="0" Grid.Column="3" Grid.RowSpan="2">
                             Регистрационный номер в Федеральном информационном фонде<LineBreak/>
                             по обеспечению единства измерений:</TextBlock>
-                            <TextBox Grid.Row="0" Grid.Column="4" Grid.RowSpan="2" Text="{Binding RegNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="0" Grid.Column="4" Grid.RowSpan="2" Text="{Binding Data.RegNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="2" Grid.Column="3" Grid.RowSpan="2">
                             Серия и номер знака предыдущей проверки<LineBreak/>
                             (если такие серия и номер имеются):</TextBlock>
-                            <TextBox Grid.Row="2" Grid.Column="4" Grid.RowSpan="2" Text="{Binding NumberLastCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="2" Grid.Column="4" Grid.RowSpan="2" Text="{Binding Data.NumberLastCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="4" Grid.Column="3">Поверено в соответствии с:</TextBlock>
                             <TextBox Grid.Row="4" Grid.Column="4" ToolTip="Наименование документа, на основании которого выполнена поверка"
-                                 Text="{Binding ChecklLawBase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding Data.ChecklLawBase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="5" Grid.Column="0">Поверено:</TextBlock>
                             <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" Height="50"
                                  ToolTip="Наименование величин, диапазонов, на которых поверено средство измерений (если предусмотрено методикой поверки)"
-                                 Text="{Binding CheckedParameters, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding Data.CheckedParameters, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" FontSize="12">Наименование величин, диапазонов, на которых поверено средство измерений (если предусмотрено методикой поверки)</TextBlock>
                         </Grid>
                         <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
@@ -336,16 +336,16 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Температура, °C:</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Temperature, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Data.Temperature, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                             <TextBlock Grid.Row="1" Grid.Column="1">23±2</TextBlock>
                             <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">Влажность, %:</TextBlock>
-                            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Humidity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Data.Humidity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                             <TextBlock Grid.Row="3" Grid.Column="1">от 30 до 80</TextBlock>
                             <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">Давление дня, мм рт.ст.:</TextBlock>
-                            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding Temperature, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding Data.DayPressure, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                             <TextBlock Grid.Row="5" Grid.Column="1">от 630 до 800</TextBlock>
                             <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">Напряжение питания, В:</TextBlock>
-                            <TextBox Grid.Row="7" Grid.Column="0" Text="{Binding CommonVoltage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            <TextBox Grid.Row="7" Grid.Column="0" Text="{Binding Data.CommonVoltage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </Grid>
                     </StackPanel>
                 </Grid>

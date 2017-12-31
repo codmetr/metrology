@@ -11,7 +11,6 @@ using System.Windows.Input;
 using DPI620Genii;
 using KipTM.Model.Channels;
 using NLog;
-using PressureSensorCheck.Data;
 using PressureSensorCheck.Devices;
 using PressureSensorData;
 using Tools.View;

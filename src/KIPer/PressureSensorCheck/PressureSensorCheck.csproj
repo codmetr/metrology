@@ -64,8 +64,6 @@
     <Compile Include="Check\Steps\StepInit.cs" />
     <Compile Include="Check\Steps\StepMainErrorBack.cs" />
     <Compile Include="Check\Steps\StepMainError.cs" />
-    <Compile Include="Data\PressureSensorConfig.cs" />
-    <Compile Include="Data\PressureSensorPoint.cs" />
     <Compile Include="Devices\DPI620Factory.cs" />
     <Compile Include="Devices\DPI620Model.cs" />
     <Compile Include="Devices\DPI620ModelFactory.cs" />
@@ -102,7 +100,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Workflow\Dpi620StateMoq.cs" />
-    <Compile Include="Data\PressureResult.cs" />
     <Compile Include="Workflow\PressureSensorCheckConfigVM.cs" />
     <Compile Include="Workflow\PressureSensorResultVM.cs" />
     <Compile Include="Workflow\PressureSensorRunVm.cs" />

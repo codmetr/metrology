@@ -4,7 +4,6 @@ using KipTM.Interfaces.Channels;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using NLog;
-using PressureSensorCheck.Data;
 using PressureSensorData;
 using Tools;
 

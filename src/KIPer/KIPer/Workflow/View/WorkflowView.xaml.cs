@@ -1,8 +1,8 @@
 ﻿using System.Windows.Controls;
-using KipTM.Workflow;
+using CheckFrame.Workflow;
 using Tools.View;
 
-namespace KipTM.View.Checks
+namespace KipTM.Workflow.View
 {
     /// <summary>
     /// Interaction logic for WorkflowView.xaml

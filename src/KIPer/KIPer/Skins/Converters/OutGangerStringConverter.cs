@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
-using KipTM.Checks.ViewModel.Config;
-using PressureSensorCheck.Workflow;
+using PressureSensorData;
 
 namespace KipTM.Skins.Converters
 {

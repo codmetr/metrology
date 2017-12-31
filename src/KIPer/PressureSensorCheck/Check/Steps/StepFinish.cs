@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using CheckFrame.Checks.Steps;
 using KipTM.Interfaces.Checks.Steps;
 using KipTM.Model.Channels;
-using PressureSensorCheck.Data;
+using PressureSensorData;
 
 namespace PressureSensorCheck.Check.Steps
 {
