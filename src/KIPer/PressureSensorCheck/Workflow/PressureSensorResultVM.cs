@@ -14,20 +14,28 @@ namespace PressureSensorCheck.Workflow
     /// </summary>
     public class PressureSensorResultVM:INotifyPropertyChanged
     {
-        private TestResultID _checkResId;
-        private PressureSensorCheckConfigVm _config;
         /// <summary>
         /// Хранилище результата для конкретной проверки
         /// </summary>
-        private IDataAccessor _accessor = null;
+        private readonly IDataAccessor _accessor;
 
-        public PressureSensorResultVM(TestResultID checkResId, PressureSensorCheckConfigVm config)
+        public PressureSensorResultVM(TestResultID checkResId, IDataAccessor accessor, PressureSensorResult result = null)
         {
-            _checkResId = checkResId;
-            _config = config;
+            Identificator = checkResId;
+            _accessor = accessor;
             PointResults = new ObservableCollection<PointViewModel>();
-            LastResult = null;
+            Data = result;
         }
+
+        /// <summary>
+        /// Текущий результат проверки
+        /// </summary>
+        public PressureSensorResult Data { get; set; }
+
+        /// <summary>
+        /// Идентифитатор проверки
+        /// </summary>
+        public TestResultID Identificator { get; }
 
         /// <summary>
         /// Результат опробирования
@@ -57,19 +65,6 @@ namespace PressureSensorCheck.Workflow
         public DateTime? TimeStamp { get; set; }
 
         /// <summary>
-        /// Конфигурация проверки
-        /// </summary>
-        public PressureSensorCheckConfigVm Config
-        {
-            get { return _config; }
-        }
-
-        /// <summary>
-        /// Текущий результат проверки
-        /// </summary>
-        public PressureSensorResult LastResult { get; set; }
-
-        /// <summary>
         /// Сохранить
         /// </summary>
         public ICommand Save{ get { return new CommandWrapper(OnSave); } }
@@ -79,7 +74,7 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         private void OnSave()
         {
-            _accessor.Save(_checkResId, LastResult);
+            _accessor.Save(Identificator, Data);
         }
 
         #region INotifyPropertyChanged

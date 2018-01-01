@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace KipTM.Report.PressureSensor {
+namespace PressureSensorCheck.Report {
     using System;
     using System.ComponentModel;
     using CrystalDecisions.Shared;
@@ -41,7 +41,7 @@ namespace KipTM.Report.PressureSensor {
         
         public override string FullResourceName {
             get {
-                return "KipTM.Report.PressureSensor.PressureSensorСertificate.rpt";
+                return "PressureSensorCheck.Report.PressureSensorСertificate.rpt";
             }
             set {
                 // Do nothing

@@ -6,6 +6,7 @@
              xmlns:config="clr-namespace:KipTM.Checks.ViewModel.Config"
              xmlns:converters="clr-namespace:KipTM.Skins.Converters"
              xmlns:workflow="clr-namespace:PressureSensorCheck.Workflow;assembly=PressureSensorCheck"
+             xmlns:pressureSensorData="clr-namespace:PressureSensorData;assembly=PressureSensorData"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000"
              d:DataContext="{d:DesignInstance workflow:PressureSensorCheckConfigVm}">
@@ -57,14 +58,19 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0">Пользователь:</TextBlock>
                             <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Data.User, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="1" Grid.Column="0">Номер сертификата:</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.SertificateNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.CertificateNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="1" Grid.Column="3">Дата сертификата:</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding Data.SertificateDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding Data.CertificateDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0">Номер протокола:</TextBlock>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.ReportNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="3">Дата протокола:</TextBlock>
+                            <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding Data.ReportDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
                         <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
                         Преобразователь давления:
@@ -97,13 +103,13 @@
                             <TextBlock Grid.Row="0" Grid.Column="0">Принадлежит:</TextBlock>
                             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Data.Master, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="1" Grid.Column="0">Наименование:</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="2" Grid.Column="0">Тип:</TextBlock>
                             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.SensorType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="3" Grid.Column="0">Модификация:</TextBlock>
                             <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Data.SensorModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="4" Grid.Column="0">Заводской номер (номера):</TextBlock>
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Data.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Identificator.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                             <TextBlock Grid.Row="0" Grid.Column="3" Grid.RowSpan="2">
                             Регистрационный номер в Федеральном информационном фонде<LineBreak/>
@@ -148,39 +154,49 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource TblHeaderStyle}">
                             Эталон давления
                             </TextBlock>
                             <TextBlock Grid.Row="1" Grid.Column="0">Наименование:</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=EthalonPressure.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=Data.EthalonPressure.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="2" Grid.Column="0">Тип:</TextBlock>
-                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=EthalonPressure.SensorType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=Data.EthalonPressure.SensorType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="3" Grid.Column="0">Заводской номер:</TextBlock>
-                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=EthalonPressure.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=Data.EthalonPressure.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="4" Grid.Column="0">Регистрационный номер:</TextBlock>
-                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=EthalonPressure.RegNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=Data.EthalonPressure.RegNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="5" Grid.Column="0">Разряд:</TextBlock>
-                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=EthalonPressure.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=Data.EthalonPressure.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="6" Grid.Column="0">Класс или погрешность:</TextBlock>
-                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Path=EthalonPressure.ErrorClass, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Path=Data.EthalonPressure.ErrorClass, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Grid.Row="7" Grid.Column="0">Номер свидетельства о поверке:</TextBlock>
+                            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Path=Data.EthalonPressure.CheckCertificateNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Grid.Row="8" Grid.Column="0">Дата выдачи свидетельства о поверке:</TextBlock>
+                            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Path=Data.EthalonPressure.CheckCertificateDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                             <TextBlock Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Style="{StaticResource TblHeaderStyle}">
                             Эталон выходного сигнала
                             </TextBlock>
                             <TextBlock Grid.Row="1" Grid.Column="3">Наименование:</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding Path=EthalonVoltage.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding Path=Data.EthalonVoltage.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="2" Grid.Column="3">Тип:</TextBlock>
-                            <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding Path=EthalonVoltage.SensorType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding Path=Data.EthalonVoltage.SensorType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="3" Grid.Column="3">Заводской номер:</TextBlock>
-                            <TextBox Grid.Row="3" Grid.Column="4" Text="{Binding Path=EthalonVoltage.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="3" Grid.Column="4" Text="{Binding Path=Data.EthalonVoltage.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="4" Grid.Column="3">Регистрационный номер:</TextBlock>
-                            <TextBox Grid.Row="4" Grid.Column="4" Text="{Binding Path=EthalonVoltage.RegNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="4" Grid.Column="4" Text="{Binding Path=Data.EthalonVoltage.RegNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="5" Grid.Column="3">Разряд:</TextBlock>
-                            <TextBox Grid.Row="5" Grid.Column="4" Text="{Binding Path=EthalonVoltage.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="5" Grid.Column="4" Text="{Binding Path=Data.EthalonVoltage.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="6" Grid.Column="3">Класс или погрешность:</TextBlock>
-                            <TextBox Grid.Row="6" Grid.Column="4" Text="{Binding Path=EthalonVoltage.ErrorClass, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="6" Grid.Column="4" Text="{Binding Path=Data.EthalonVoltage.ErrorClass, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Grid.Row="7" Grid.Column="3">Номер свидетельства о поверке:</TextBlock>
+                            <TextBox Grid.Row="7" Grid.Column="4" Text="{Binding Path=Data.EthalonVoltage.CheckCertificateNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Grid.Row="8" Grid.Column="3">Дата выдачи свидетельства о поверке:</TextBlock>
+                            <TextBox Grid.Row="8" Grid.Column="4" Text="{Binding Path=Data.EthalonVoltage.CheckCertificateDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
                         <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
                         Организация:
@@ -203,7 +219,25 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0">Наименование юридического лица или индивидуального предпринимателя, аккредитованного в установленном порядке на проведение поверки средств измерений, регистрационный номер аттестата аккредитации:</TextBlock>
-                            <TextBox Grid.Row="1" Grid.Column="0" Height="60"></TextBox>
+                            <TextBox Grid.Row="1" Grid.Column="0" Height="60" Text="{Binding Data.Company, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                        <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
+                        Примечание:
+                        </TextBlock>
+                        <Grid>
+                            <Grid.Resources>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                </Style>
+                            </Grid.Resources>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Grid.Row="0" Grid.Column="0" Height="60" Text="{Binding Identificator.Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
                     </StackPanel>
                 </ScrollViewer>
@@ -246,7 +280,7 @@
                             <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding VpiMax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">единицы измерения:</TextBlock>
                             <ComboBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Style="{StaticResource CbBasicStyle}"
-                                      ItemsSource="{Binding Units}" SelectedItem="{Binding Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                      ItemsSource="{Binding Units}" SelectedItem="{Binding Data.Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
                         <TextBlock Style="{StaticResource TblHeaderStyle}">Погрешности:</TextBlock>
                         <Grid Margin="10,0,0,0">
@@ -267,11 +301,11 @@
                             <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding TolerancePercentVpi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Column="2" Grid.Row="1">%</TextBlock>
                             <TextBlock Grid.Column="0" Grid.Row="2">Δ:</TextBlock>
-                            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding ToleranceDelta, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Data.ToleranceDelta, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Column="2" Grid.Row="2">А</TextBlock>
                             <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">Относительная погрешность</TextBlock>
                             <TextBlock Grid.Column="0" Grid.Row="4">δ:</TextBlock>
-                            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding TolerancePercentSigma, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Data.TolerancePercentSigma, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Column="2" Grid.Row="4">%</TextBlock>
                         </Grid>
                         <TextBlock Style="{StaticResource TblHeaderStyle}">Выходной сигнал:</TextBlock>
@@ -287,9 +321,9 @@
                             <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Токовая петля</TextBlock>
                             <TextBlock Grid.Row="1" Grid.Column="0">диапазон I:</TextBlock>
                             <ComboBox Grid.Row="1" Grid.Column="1" Style="{StaticResource CbBasicStyle}"
-                                      ItemsSource="{Binding OutputRanges}" SelectedItem="{Binding OutputRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource OutGangerStringConverter}}">
+                                      ItemsSource="{Binding OutputRanges}" SelectedItem="{Binding OutputRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.ItemTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate DataType="pressureSensorData:OutGange">
                                         <ContentPresenter Content="{Binding Converter={StaticResource OutGangerStringConverter}}"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
@@ -301,7 +335,7 @@
                               CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
                               CanUserResizeRows="False" CanUserResizeColumns="False" CanUserSortColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Давление,&#10;мм рт.ст." Binding="{Binding Pressire}" FontSize="14" Width="*"/>
+                            <DataGridTextColumn Header="Давление,&#10;мм рт.ст." Binding="{Binding Pressure}" FontSize="14" Width="*"/>
                             <DataGridTextColumn Header="Рассчетное значение&#10;выходного сигнала, А" Binding="{Binding U}" Width="*"/>
                             <DataGridTextColumn Header="Предел основной&#10;погрешности, %" Binding="{Binding dU}" Width="*"/>
                             <DataGridTextColumn Header="Предел основной&#10;погрешности вариации, %" Binding="{Binding dU}" Width="*"/>

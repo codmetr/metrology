@@ -21,7 +21,8 @@ namespace KipTM.Skins.Converters
             //if (targetType != typeof(string))
             //    throw new InvalidOperationException("The target must be a string");
             if (value.GetType() != typeof(OutGange))
-                throw new InvalidOperationException("The value must be a OutGange");
+                return null;
+                //throw new InvalidOperationException("The value must be a OutGange");
 
             return (object)Default[(OutGange)value];
         }

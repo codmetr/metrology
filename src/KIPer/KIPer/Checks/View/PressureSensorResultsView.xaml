@@ -3,9 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:KipTM.Checks.View"
-             xmlns:config="clr-namespace:KipTM.Checks.ViewModel.Config"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance config:PressureSensorResultVM}"
+             xmlns:workflow="clr-namespace:PressureSensorCheck.Workflow;assembly=PressureSensorCheck"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance workflow:PressureSensorResultVM}"
              d:DesignHeight="600" d:DesignWidth="1000">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -37,13 +36,13 @@
                     <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}"/>
                 </StackPanel.Resources>
                 <TextBlock>Результат опробирования:</TextBlock>
-                <TextBox Text="{Binding Assay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Text="{Binding Data.Assay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock>Результат проверки герметичности:</TextBlock>
-                <TextBox Text="{Binding Leak, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Text="{Binding Data.Leak, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock>Выводы по результатам поверки:</TextBlock>
-                <TextBox Text="{Binding CommonResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Text="{Binding Data.CommonResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock>Результат визуального осмотра:</TextBlock>
-                <TextBox Text="{Binding VisualCheckResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Text="{Binding Data.VisualCheckResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <Button DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Height="50" Command="{Binding Save}">
                 <TextBlock Text="Сохранить" TextWrapping="Wrap" Style="{StaticResource TblHeaderStyle}" VerticalAlignment="Center"/>
@@ -63,7 +62,7 @@
                       ItemsSource="{Binding PointResults, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№" Width="Auto" Binding="{Binding Index, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Pвх, кПа" Width="*" Binding="{Binding Config.Pressire, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Pвх, кПа" Width="*" Binding="{Binding Config.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Uэт, В" Width="*" Binding="{Binding Config.U, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Uфакт, В" Width="*" Binding="{Binding Result.UReal, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="ΔU, В" Width="*" Binding="{Binding Result.dUReal, UpdateSourceTrigger=PropertyChanged}"/>
@@ -85,7 +84,7 @@
                       ItemsSource="{Binding PointResults, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№" Width="Auto" Binding="{Binding Index, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Pвх, кПа" Width="*" Binding="{Binding Config.Pressire, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Pвх, кПа" Width="*" Binding="{Binding Config.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Uпр, В" Width="*" Binding="{Binding Result.UReal, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Uобр, В" Width="*" Binding="{Binding Result.Uback, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Uвар, В" Width="*" Binding="{Binding Result.Uvar, UpdateSourceTrigger=PropertyChanged}"/>

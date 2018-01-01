@@ -7,6 +7,10 @@ namespace PressureSensorData
     /// </summary>
     public class PressureSensorResult
     {
+        public PressureSensorResult()
+        {
+            Points = new List<PressureSensorPointResult>();
+        }
         /// <summary>
         /// Результат опробирования
         /// </summary>

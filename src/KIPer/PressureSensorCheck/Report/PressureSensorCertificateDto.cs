@@ -8,6 +8,14 @@ namespace PressureSensorCheck.Report
     public class PressureSensorCertificateDto
     {
         /// <summary>
+        /// Представление всех данных проверки для сертификата
+        /// </summary>
+        public PressureSensorCertificateDto()
+        {
+            Ethalons = new EthalonDto[0];
+        }
+
+        /// <summary>
         /// Название организации
         /// </summary>
         public object Organization { get; set; }

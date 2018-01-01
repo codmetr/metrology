@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PressureSensorData
 {
@@ -13,6 +14,27 @@ namespace PressureSensorData
             Humidity = 50;
             DayPressure = 760;
             CommonVoltage = 220;
+            EthalonPressure = new EthalonDescriptor();
+            EthalonVoltage = new EthalonDescriptor();
+            Points = new List<PressureSensorPoint>();
+        }
+
+        public static PressureSensorConfig GetDefault()
+        {
+            return new PressureSensorConfig()
+            {
+                ReportDate = DateTime.Now.ToString("yy.MM.dd"),
+                CertificateDate = DateTime.Now.ToString("yy.MM.dd"),
+                Master = "[Организация]",
+                Name = "[Наименование]",
+                SensorType = "[Тип]",
+                SensorModel = "[Модификация]",
+                RegNum = "[Регистрационный номер]",
+                SerialNumber = "[Заводской номер]",
+                CheckedParameters = "абсолютное давление в диапазоне [диапазон]",
+                ChecklLawBase = "[документ с методикой поверки]", //"Федеральный закон от 26 июня 2008 г. № 102-ФЗ \"Об обеспечении единства измерений\"",
+                Company = "[Организация]",
+            };
         }
 
         /// <summary>
@@ -21,14 +43,24 @@ namespace PressureSensorData
         public string User { get; set; }
 
         /// <summary>
+        /// Номер протокола:
+        /// </summary>
+        public string ReportNumber { get; set; }
+
+        /// <summary>
+        /// Дата протокола:
+        /// </summary>
+        public string ReportDate { get; set; }
+
+        /// <summary>
         /// Номер сертификата:
         /// </summary>
-        public string SertificateNumber { get; set; }
+        public string CertificateNumber { get; set; }
 
         /// <summary>
         /// Дата сертификата:
         /// </summary>
-        public string SertificateDate { get; set; }
+        public string CertificateDate { get; set; }
 
         /// <summary>
         /// Принадлежит:
@@ -38,7 +70,7 @@ namespace PressureSensorData
         /// <summary>
         /// Наименование:
         /// </summary>
-        public string Title { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Тип:
@@ -82,6 +114,14 @@ namespace PressureSensorData
         public string ChecklLawBase { get; set; }
 
         /// <summary>
+        /// Организация
+        /// </summary>
+        ///<remarks>
+        /// Наименование юридического лица или индивидуального предпринимателя, аккредитованного в установленном порядке на проведение поверки средств измерений, регистрационный номер аттестата аккредитации
+        /// </remarks>
+        public string Company { get; set; }
+
+        /// <summary>
         /// Температура
         /// </summary>
         public double Temperature { get; set; }
@@ -102,6 +142,16 @@ namespace PressureSensorData
         public double CommonVoltage { get; set; }
 
         /// <summary>
+        /// Эталон давления
+        /// </summary>
+        public EthalonDescriptor EthalonPressure { get; set; }
+
+        /// <summary>
+        /// Эталон напряжения
+        /// </summary>
+        public EthalonDescriptor EthalonVoltage { get; set; }
+
+        /// <summary>
         /// Точки проверки
         /// </summary>
         public List<PressureSensorPoint> Points { get; set; }
@@ -115,11 +165,6 @@ namespace PressureSensorData
         /// Минимум диапазона
         /// </summary>
         public double VpiMin { get; set; }
-
-        /// <summary>
-        /// Единицы измерения
-        /// </summary>
-        public IEnumerable<string> Units { get; set; }
 
         /// <summary>
         /// Выбранная единица измерения
@@ -137,14 +182,9 @@ namespace PressureSensorData
         public double ToleranceDelta { get; set; }
 
         /// <summary>
-        /// относительная погрешность
+        /// Допуск по относительной погрешности
         /// </summary>
         public double TolerancePercentSigma { get; set; }
-
-        /// <summary>
-        /// Варианты выходного диапазона
-        /// </summary>
-        public IEnumerable<OutGange> OutputRanges { get; set; }
 
         /// <summary>
         /// Выбранный выходной диапазон

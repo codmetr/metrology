@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using CheckFrame;
+using Core.Archive.DataTypes;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Interfaces;
@@ -68,7 +69,7 @@ namespace KipTM.ViewModel
         /// <param name="deviceManager">Пулл устройств</param>
         /// <param name="lib"></param>
         /// <param name="checkFactory"></param>
-        public MainViewModel(IEventAggregator eventAggregator, IDataService dataService, IEnumerable<IService> services,
+        public MainViewModel(IEventAggregator eventAggregator, IDataService dataService, IEnumerable<IService> services, IDataAccessor accessor,
             FeatureDescriptorsCombiner features, IDeviceManager deviceManager, DocsViewModel lib, CheckWorkflowFactory checkFactory)
         {
             try
@@ -96,14 +97,14 @@ namespace KipTM.ViewModel
             var checkBtns = new List<OneBtnDescripto>();
             //foreach (var keyCheck in _checkFactory.GetAvailableKeys())
             //{
-            //    checkBtns.Add(new OneBtnDescripto(keyCheck.Key.TypeKey, keyCheck.Title,
+            //    checkBtns.Add(new OneBtnDescripto(keyCheck.Key.TypeKey, keyCheck.Name,
             //        BitmapToImage(keyCheck.BigImg),
             //        BitmapToImage(keyCheck.SmallImg), SelectChecks));
             //    _workflows.Add(keyCheck.Key.TypeKey, _checkFactory.GetNew(keyCheck.Key));
             //}
             checkBtns.Add(new OneBtnDescripto("pressureSensor", "Датчик давления", BitmapToImage(Resources.EHCerabarM),
                 BitmapToImage(Resources.EHCerabarM), SelectChecks));
-            _workflows.Add("pressureSensor", new PressureSensorWorkflow().Make(_logger));
+            _workflows.Add("pressureSensor", new PressureSensorWorkflow().Make(_logger, accessor));
             _checkBtns = checkBtns;
             _eventAggregator.Subscribe(this);
         }

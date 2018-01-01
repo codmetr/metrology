@@ -3,13 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:config="clr-namespace:KipTM.Checks.ViewModel.Config"
              xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
              xmlns:view="clr-namespace:KipTM.Checks.View"
              xmlns:modalContent="clr-namespace:Tools.View.ModalContent;assembly=Tools.View"
+             xmlns:workflow="clr-namespace:PressureSensorCheck.Workflow;assembly=PressureSensorCheck"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000"
-             d:DataContext="{d:DesignInstance config:PressureSensorRunVm}">
+             d:DataContext="{d:DesignInstance workflow:PressureSensorRunVm}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -63,7 +63,7 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Column="0" Grid.ColumnSpan="4">Добавление точки:</TextBlock>
                     <TextBlock Grid.Column="0" Grid.Row="1">P:</TextBlock>
-                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NewConfig.Pressire, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NewConfig.Pressure, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Grid.Column="2" Grid.Row="1">мм рт.ст.</TextBlock>
                     <TextBlock Grid.Column="0" Grid.Row="2">U:</TextBlock>
                     <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding NewConfig.U, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>

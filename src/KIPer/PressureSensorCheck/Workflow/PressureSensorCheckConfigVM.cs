@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using ArchiveData.DTO;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.Interfaces;
@@ -15,14 +14,19 @@ namespace PressureSensorCheck.Workflow
     /// </summary>
     public class PressureSensorCheckConfigVm : INotifyPropertyChanged
     {
-        public PressureSensorCheckConfigVm(PressureSensorConfig configData)
+        public PressureSensorCheckConfigVm(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf)
         {
             Data = configData;
-            EthalonPressure = new EthalonDescriptor();
-            EthalonVoltage = new EthalonDescriptor();
-            Config = new CheckPressureSensorConfig();
-            DpiConfig = new DPI620GeniiConfig();
+            Identificator = identificator;
+            Config = new CheckPressureLogicConfigVm(configData);
+            DpiConfig = dpiConf;
         }
+
+
+        /// <summary>
+        /// Идентифитатор проверки
+        /// </summary>
+        public TestResultID Identificator { get; }
 
         /// <summary>
         /// Фактические данные конфигурации
@@ -32,106 +36,10 @@ namespace PressureSensorCheck.Workflow
         /// </remarks>
         public PressureSensorConfig Data { get; }
 
-        ///// <summary>
-        ///// Пользователь:
-        ///// </summary>
-        //public string User { get; set; }
-
-        ///// <summary>
-        ///// Номер сертификата:
-        ///// </summary>
-        //public string SertificateNumber { get; set; }
-
-        ///// <summary>
-        ///// Дата сертификата:
-        ///// </summary>
-        //public string SertificateDate { get; set; }
-
-        ///// <summary>
-        ///// Принадлежит:
-        ///// </summary>
-        //public string Master { get; set; }
-
-        ///// <summary>
-        ///// Наименование:
-        ///// </summary>
-        //public string Title { get; set; }
-
-        ///// <summary>
-        ///// Тип:
-        ///// </summary>
-        //public string SensorType { get; set; }
-
-        ///// <summary>
-        ///// Модификация:
-        ///// </summary>
-        //public string SensorModel { get; set; }
-
-        ///// <summary>
-        ///// Регистрационный номер в Федеральном информационном фонде по обеспечению единства измерений:
-        ///// </summary>
-        //public string RegNum { get; set; }
-
-        ///// <summary>
-        ///// Серия и номер знака предыдущей проверки (если такие серия и номер имеются):
-        ///// </summary>
-        //public string NumberLastCheck { get; set; }
-
-        ///// <summary>
-        ///// Заводской номер (номера):
-        ///// </summary>
-        //public string SerialNumber { get; set; }
-
-        ///// <summary>
-        ///// Поверено:
-        ///// </summary>
-        ///// <remarks>
-        ///// Наименование величин, диапазонов, на которых поверено средство измерений (если предусмотрено методикой поверки)
-        ///// </remarks>
-        //public string CheckedParameters { get; set; }
-
-        ///// <summary>
-        ///// Поверено в соответствии с:
-        ///// </summary>
-        ///// <remarks>
-        ///// Наименование документа, на основании которого выполнена поверка
-        ///// </remarks>
-        //public string ChecklLawBase { get; set; }
-
-        /// <summary>
-        /// Эталон давления
-        /// </summary>
-        public EthalonDescriptor EthalonPressure { get; set; }
-
-        /// <summary>
-        /// Эталон напряжения
-        /// </summary>
-        public EthalonDescriptor EthalonVoltage { get; set; }
-
         /// <summary>
         /// Конфигурация логики проверки
         /// </summary>
-        public CheckPressureSensorConfig Config { get; set; }
-
-        ///// <summary>
-        ///// Температура
-        ///// </summary>
-        //public double Temperature { get; set; }
-
-        ///// <summary>
-        ///// Влажность
-        ///// </summary>
-        //public double Humidity { get; set; }
-
-        ///// <summary>
-        ///// Давление дня
-        ///// </summary>
-        //public double DayPressure { get; set; }
-
-        ///// <summary>
-        ///// Напряжение сети
-        ///// </summary>
-        //public double CommonVoltage { get; set; }
+        public CheckPressureLogicConfigVm Config { get; set; }
 
         /// <summary>
         /// Конфигурация DPI620
@@ -159,7 +67,17 @@ namespace PressureSensorCheck.Workflow
         }
         public IEnumerable<string> Ports { get; set; }
 
-        public string SelectPort { get; set; }
+        public string SelectPort
+        {
+            get { return Properties.Settings.Default.PortName; }
+            set
+            {
+                if(value == Properties.Settings.Default.PortName)
+                    return;
+                Properties.Settings.Default.PortName = value;
+                Properties.Settings.Default.Save();
+            }
+        }
 
         public DpiSlotConfig Slot1 { get; set; }
 
@@ -206,43 +124,48 @@ namespace PressureSensorCheck.Workflow
     /// <summary>
     /// Конфигурация логики проверки
     /// </summary>
-    public class CheckPressureSensorConfig : INotifyPropertyChanged
+    public class CheckPressureLogicConfigVm : INotifyPropertyChanged
     {
-        private double _vpiMax;
-        private double _vpiMin;
-        private double _tolerancePercentVpi;
         private double _pointsOnRange = 5;
-        private OutGange _outputRange;
 
-        public CheckPressureSensorConfig()
+        public CheckPressureLogicConfigVm(PressureSensorConfig data)
         {
-            _vpiMax = 780;
-            _vpiMin = 0;
-            _tolerancePercentVpi = 0.25;
+            Data = data;
+            Data.VpiMax = 780;
+            Data.VpiMin = 0;
+            Data.TolerancePercentVpi = 0.25;
             Points = new ObservableCollection<PointConfigViewModel>();
             Units = new List<string>()
             {
                 "мм рт.ст."
             };
-            Unit = Units.FirstOrDefault();
+            Data.Unit = Units.FirstOrDefault();
             OutputRanges = new[]
             {
                 OutGange.I4_20mA,
                 OutGange.I0_5mA,
             };
-            OutputRange = OutputRanges.FirstOrDefault();
+            Data.OutputRange = OutputRanges.FirstOrDefault();
             UpdatePoints();
         }
+
+        /// <summary>
+        /// Фактические данные конфигурации
+        /// </summary>
+        /// <remarks>
+        /// Использовать на разметке экрана только в случае единственного места изменения, так как без INotifyPropertyChanged
+        /// </remarks>
+        public PressureSensorConfig Data { get; }
 
         /// <summary>
         /// Максимум диапазона
         /// </summary>
         public double VpiMax
         {
-            get { return _vpiMax; }
+            get { return Data.VpiMax; }
             set
             {
-                _vpiMax = value;
+                Data.VpiMax = value;
                 UpdatePoints();
                 OnPropertyChanged("VpiMax");
             }
@@ -253,10 +176,10 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public double VpiMin
         {
-            get { return _vpiMin; }
+            get { return Data.VpiMin; }
             set
             {
-                _vpiMin = value;
+                Data.VpiMin = value;
                 UpdatePoints();
                 OnPropertyChanged("VpiMin");
             }
@@ -268,33 +191,18 @@ namespace PressureSensorCheck.Workflow
         public IEnumerable<string> Units { get; set; }
 
         /// <summary>
-        /// Выбранная единица измерения
-        /// </summary>
-        public string Unit { get; set; }
-
-        /// <summary>
         /// Допуск по проценту ВПИ
         /// </summary>
         public double TolerancePercentVpi
         {
-            get { return _tolerancePercentVpi; }
+            get { return Data.TolerancePercentVpi; }
             set
             {
-                _tolerancePercentVpi = value;
+                Data.TolerancePercentVpi = value;
                 UpdatePoints();
                 OnPropertyChanged("TolerancePercentVpi");
             }
         }
-
-        /// <summary>
-        /// Абсолютный допуск
-        /// </summary>
-        public double ToleranceDelta { get; set; }
-
-        /// <summary>
-        /// относительная погрешность
-        /// </summary>
-        public double TolerancePercentSigma { get; set; }
 
         /// <summary>
         /// Варианты выходного диапазона
@@ -306,12 +214,12 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public OutGange OutputRange
         {
-            get { return _outputRange; }
+            get { return Data.OutputRange; }
             set
             {
-                if (value == _outputRange)
+                if (value == Data.OutputRange)
                     return;
-                _outputRange = value;
+                Data.OutputRange = value;
                 UpdatePoints();
                 OnPropertyChanged("OutputRange");
             }
@@ -327,9 +235,9 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         private void UpdatePoints()
         {
-            var max = _vpiMax;
-            var min = _vpiMin;
-            var tollerance = _tolerancePercentVpi;
+            var max = Data.VpiMax;
+            var min = Data.VpiMin;
+            var tollerance = Data.TolerancePercentVpi;
             if (tollerance <= 0)
                 return;
             if (min >= max)
@@ -339,7 +247,7 @@ namespace PressureSensorCheck.Workflow
             var du = (max - min) * tollerance / 100.0;
             double uMin = 0.0;
             double uMax = 5.0;
-            if (OutputRange == OutGange.I4_20mA)
+            if (Data.OutputRange == OutGange.I4_20mA)
             {
                 uMin = 4;
                 uMax = 20;
@@ -347,12 +255,22 @@ namespace PressureSensorCheck.Workflow
             double uStep = (uMax - uMin) / (_pointsOnRange - 1);
 
             Points.Clear();
+            Data.Points.Clear();
             for (double i = 0; i < _pointsOnRange; i++)
             {
                 var point = min + (i * step);
                 var uPoint = uMin + (i * uStep);
-                Points.Add(new PointConfigViewModel()
-                { Pressire = point, U = uPoint, Unit = Unit, dU = tollerance });
+                var sensPoint = new PressureSensorPoint()
+                {
+                    PressurePoint = point,
+                    VoltagePoint = uPoint,
+                    PressureUnit = Data.Unit,
+                    VoltageUnit = "мА",
+                    Tollerance = tollerance
+                };
+                Data.Points.Add(sensPoint);
+                Points.Add(new PointConfigViewModel()//TODO добавить связь с sensPoint
+                { Pressure = point, U = uPoint, Unit = Data.Unit, dU = tollerance });
             }
         }
 
@@ -361,54 +279,6 @@ namespace PressureSensorCheck.Workflow
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// Описатель эталона
-    /// </summary>
-    public class EthalonDescriptor : INotifyPropertyChanged
-    {
-
-        /// <summary>
-        /// Наименование:
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Тип:
-        /// </summary>
-        public string SensorType { get; set; }
-
-        /// <summary>
-        /// Заводской номер (номера):
-        /// </summary>
-        public string SerialNumber { get; set; }
-
-        /// <summary>
-        /// Регистрационный номер:
-        /// </summary>
-        public string RegNum { get; set; }
-
-        /// <summary>
-        /// Разряд:
-        /// </summary>
-        public string Category { get; set; }
-
-        /// <summary>
-        /// Класс или погрешность:
-        /// </summary>
-        public string ErrorClass { get; set; }
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using DPI620Genii;
 using KipTM.Model.Channels;
 using NLog;
+using PressureSensorCheck.Check;
 using PressureSensorCheck.Devices;
 using PressureSensorData;
 using Tools.View;
@@ -38,7 +39,7 @@ namespace PressureSensorCheck.Workflow
         private readonly ManualResetEvent _autorepeatWh = new ManualResetEvent(true);
         private readonly TimeSpan _periodAutoread = TimeSpan.FromMilliseconds(100);
 
-        private readonly CheckPressureSensorConfig _config;
+        private readonly PressureSensorConfig _config;
 
         private ModalState _modalState = new ModalState();
         private AutoUpdater _autoupdater;
@@ -49,7 +50,8 @@ namespace PressureSensorCheck.Workflow
         /// <param name="config">конфигурация проверки</param>
         /// <param name="dpi620">драйвер DPI620Genii</param>
         /// <param name="dpiConf">контейнер конфигурации DPI620</param>
-        public PressureSensorRunVm(CheckPressureSensorConfig config, DPI620DriverCom dpi620, DPI620GeniiConfig dpiConf)
+        /// <param name="result"></param>
+        public PressureSensorRunVm(PressureSensorConfig config, DPI620DriverCom dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result)
         {
             Measured = new ObservableCollection<MeasuringPoint>();
             _dpi620 = dpi620;
@@ -59,7 +61,7 @@ namespace PressureSensorCheck.Workflow
             NewConfig = new PointConfigViewModel();
             _config = config;
             _autoupdater = new AutoUpdater(_logger);
-            LastResult = null;
+            Result = result;
         }
 
         /// <summary>
@@ -70,7 +72,7 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Текущий результат
         /// </summary>
-        public PressureSensorResult LastResult { get; set; }
+        public PressureSensorResult Result { get; set; }
 
         /// <summary>
         /// Время последних результатов
@@ -103,12 +105,20 @@ namespace PressureSensorCheck.Workflow
             {
                 Config = new PointConfigViewModel()
                 {
-                    Pressire = NewConfig.Pressire,
+                    Pressure = NewConfig.Pressure,
                     U = NewConfig.U,
                     dU = NewConfig.dU,
                     Unit = PressureUnit,
                 },
                 Result = new PointResultViewModel()
+            });
+            _config.Points.Add(new PressureSensorPoint()
+            {
+                PressurePoint = NewConfig.Pressure,
+                VoltagePoint = NewConfig.U,
+                Tollerance = NewConfig.dU,
+                PressureUnit = PressureUnit,
+                VoltageUnit = "мА"
             });
         }
 
@@ -212,19 +222,9 @@ namespace PressureSensorCheck.Workflow
                 _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
             
             // конфигурирование шагов проверки
-            var check = new PressureSensorCheck.Check.PressureSensorCheck(checkLogger, new DPI620Ethalon(_dpi620, inSlotNum), new DPI620Ethalon(_dpi620, outSlotNum));
+            var check = new PresSensorCheck(checkLogger, new DPI620Ethalon(_dpi620, inSlotNum), new DPI620Ethalon(_dpi620, outSlotNum));
             check.ChConfig.UsrChannel = new PressureSensorUserChannel(this);
-            check.FillSteps(new PressureSensorConfig()
-            {
-                Points = _config.Points.Select(el=>new PressureSensorPoint()
-                {
-                    PressureUnit = inSlot.SelectedUnit.ToString(), //TODO преобразовать в нормальное название единиц измерения
-                    PressurePoint = el.Pressire,
-                    VoltagePoint = el.U,
-                    VoltageUnit = outSlot.SelectedUnit.ToString(), //TODO преобразовать в нормальное название единиц измерения
-                    Tollerance = el.dU,
-                }).ToList()
-            });
+            check.FillSteps(_config);
 
             // запуск самой проверки
             var task = new Task(() =>{TryStart(cancel, check);});
@@ -236,7 +236,7 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         /// <param name="cancel"></param>
         /// <param name="check"></param>
-        private void TryStart(CancellationToken cancel, PressureSensorCheck.Check.PressureSensorCheck check)
+        private void TryStart(CancellationToken cancel, PresSensorCheck check)
         {
             try
             {
@@ -259,10 +259,10 @@ namespace PressureSensorCheck.Workflow
         /// <param name="checkResult"></param>
         private void UpdateResult(PressureSensorResult checkResult)
         {
-            LastResult = checkResult;
+            Result = checkResult;
             foreach (var point in Points)
             {
-                var res = checkResult.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.Config.Pressire) < double.Epsilon);
+                var res = checkResult.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.Config.Pressure) < double.Epsilon);
                 if(res ==null)
                     continue;
                 point.Result.PressureReal = res.PressureValue;
@@ -407,7 +407,7 @@ namespace PressureSensorCheck.Workflow
             return new Unsubscriber(observers, observer);
         }
 
-        internal void Start(DPI620DriverCom dpi620, AutoreadState arg, CheckPressureSensorConfig conf)
+        internal void Start(DPI620DriverCom dpi620, AutoreadState arg, PressureSensorConfig conf)
         {
             try
             {
@@ -440,7 +440,7 @@ namespace PressureSensorCheck.Workflow
         }
 
 
-        private double GetUForPressure(CheckPressureSensorConfig conf, double pressure)
+        private double GetUForPressure(PressureSensorConfig conf, double pressure)
         {
             var percentVpi = (pressure - conf.VpiMin) / (conf.VpiMax - conf.VpiMin);
             if (pressure < conf.VpiMin)
@@ -462,7 +462,7 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         /// <param name="u"></param>
         /// <returns></returns>
-        private double GetdUForU(CheckPressureSensorConfig conf, double u)
+        private double GetdUForU(PressureSensorConfig conf, double u)
         {
             return conf.ToleranceDelta;
         }
@@ -586,7 +586,7 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Проверяемая точка давления
         /// </summary>
-        public double Pressire { get; set; }
+        public double Pressure { get; set; }
 
         /// <summary>
         /// Единицы измерения давления

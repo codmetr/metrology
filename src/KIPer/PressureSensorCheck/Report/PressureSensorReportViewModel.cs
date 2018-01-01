@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,7 +42,7 @@ namespace KipTM.Report.PressureSensor
                 {
                     _mainReportData = new PressureSensorReport();
                     //_mainReportData = new BlankReport();
-                    _mainReportData.FileName = _mainReportData.ResourceName;
+                    _mainReportData.FileName = Path.Combine("Report",_mainReportData.ResourceName);
                     _mainReportData.Load();
                     _mainReportData.SetDataSource(new[] { _mainReportDto });
                     _mainReportData.Subreports["EthalonRep"].SetDataSource(_mainReportDto.Ethalons);
@@ -62,9 +63,9 @@ namespace KipTM.Report.PressureSensor
                 if (_certificateReportDate == null)
                 {
                     _certificateReportDate = new PressureSensorСertificate();
+                    _certificateReportDate.FileName = Path.Combine("Report", _certificateReportDate.ResourceName);
                     _certificateReportDate.Load();
                     _certificateReportDate.SetDataSource(new[] { _certificateDto });
-
                 }
                 return _certificateReportDate;
             }

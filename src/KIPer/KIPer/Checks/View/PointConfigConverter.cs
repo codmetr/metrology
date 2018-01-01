@@ -15,7 +15,7 @@ namespace KipTM.Checks.View
             var conf = value as PointConfigViewModel;
             if (conf == null)
                 return string.Empty;
-            return $"{conf.Pressire} {conf.Unit}";
+            return $"{conf.Pressure} {conf.Unit}";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

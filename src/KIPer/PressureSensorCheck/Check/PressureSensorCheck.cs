@@ -11,7 +11,7 @@ using PressureSensorData;
 
 namespace PressureSensorCheck.Check
 {
-    public class PressureSensorCheck: CheckBase
+    public class PresSensorCheck: CheckBase
     {
         public static string CheckKey = "PressureSensor";
         public static string CheckName = "Поверка датчика давления";
@@ -24,7 +24,7 @@ namespace PressureSensorCheck.Check
         private PressureSensorResult _result = null;
 
 
-        public PressureSensorCheck(Logger logger, IEthalonChannel pressure, IEthalonChannel voltage) : base(logger)
+        public PresSensorCheck(Logger logger, IEthalonChannel pressure, IEthalonChannel voltage) : base(logger)
         {
             _pressure = pressure;
             _voltage = voltage;

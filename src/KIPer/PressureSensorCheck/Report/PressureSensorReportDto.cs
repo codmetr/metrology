@@ -8,6 +8,16 @@ namespace PressureSensorCheck.Report
     public class PressureSensorReportDto
     {
         /// <summary>
+        /// Представление всех данных проверки для основного отчета
+        /// </summary>
+        public PressureSensorReportDto()
+        {
+            Ethalons = new EthalonDto[0];
+            MainAccurancy = new MainAccurancyPointDto[0];
+            VariationAccurancy = new VariationAccurancyPointDto[0];
+        }
+
+        /// <summary>
         /// Номер протокола
         /// </summary>
         public object ReportNumber { get; set; }

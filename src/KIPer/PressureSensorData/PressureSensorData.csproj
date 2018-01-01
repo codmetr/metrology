@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EthalonDescriptor.cs" />
     <Compile Include="OutGange.cs" />
     <Compile Include="PressureSensorConfig.cs" />
     <Compile Include="PressureSensorPoint.cs" />
