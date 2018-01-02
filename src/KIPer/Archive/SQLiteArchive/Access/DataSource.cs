@@ -75,22 +75,29 @@ namespace SQLiteArchive
             DataBase.Execute(new ClearTableChecks());
         }
 
-        public void AddResult(CheckDto check, IEnumerable<Node> nodes)
+        /// <summary>
+        /// Добавить запись о поверке
+        /// </summary>
+        /// <param name="check"></param>
+        public void Add(CheckDto check)
         {
             CreateTableIfNoExist();
             DataBase.Execute(new AddCheck(check, _trace));
             Checks.Add(check);
-            DataBase.Execute(new InsertOrUpdateNodes(nodes, ResultNodesTable, _trace));
-            NodesRes.AddRange(nodes);
         }
 
-        public void AddConfig(CheckDto check, IEnumerable<Node> nodes)
+        /// <summary>
+        /// Добавить данные по новой проверке
+        /// </summary>
+        /// <param name="resNodes"></param>
+        /// <param name="confNodes"></param>
+        public void AddData(IEnumerable<Node> resNodes, IEnumerable<Node> confNodes)
         {
             CreateTableIfNoExist();
-            DataBase.Execute(new AddCheck(check, _trace));
-            Checks.Add(check);
-            DataBase.Execute(new InsertOrUpdateNodes(nodes, ConfigNodesTable, _trace));
-            NodesConf.AddRange(nodes);
+            DataBase.Execute(new InsertOrUpdateNodes(resNodes, ResultNodesTable, _trace));
+            NodesRes.AddRange(resNodes);
+            DataBase.Execute(new InsertOrUpdateNodes(confNodes, ConfigNodesTable, _trace));
+            NodesConf.AddRange(confNodes);
         }
 
         public void UpdateRes(CheckDto check, IEnumerable<Node> newNodes, IEnumerable<Node> lessNodes, IEnumerable<Node> updateNodes)

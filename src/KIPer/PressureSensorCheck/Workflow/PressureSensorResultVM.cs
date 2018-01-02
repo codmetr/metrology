@@ -77,8 +77,19 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         private void OnSave()
         {
-            _accessor.Save(Identificator, Data);
-            _accessor.SaveConfig(Identificator, _conf);
+            if (Identificator.Id == null)
+            {
+                Identificator.CreateTime = DateTime.Now;
+                Identificator.Timestamp = DateTime.Now;
+                _accessor.Add(Identificator, Data, _conf);
+            }
+            else
+            {
+                Identificator.Timestamp = DateTime.Now;
+                _accessor.Update(Identificator);
+                _accessor.Save(Identificator, Data);
+                _accessor.SaveConfig(Identificator, _conf);
+            }
         }
 
         #region INotifyPropertyChanged
@@ -95,5 +106,6 @@ namespace PressureSensorCheck.Workflow
         #endregion
     }
 }
+
 
 

@@ -80,44 +80,29 @@ namespace SQLiteArchive
         /// </summary>
         /// <param name="check"></param>
         /// <param name="res"></param>
-        public void AddResult(TestResultID check, object res)
-        {
-            List<Node> nodes;
-            Repairs.Add(check, res);
-            var checkDto = Add(check, res, out nodes);
-            _dataSource.AddResult(checkDto, nodes);
-        }
-
-        /// <summary>
-        /// Добавить конфигурацию
-        /// </summary>
-        /// <param name="check"></param>
         /// <param name="conf"></param>
-        public void AddConfig(TestResultID check, object conf)
+        public void Add(TestResultID check, object res, object conf)
         {
-            List<Node> nodes;
-            Configs.Add(check, conf);
-            var checkDto = Add(check, conf, out nodes);
-            _dataSource.AddConfig(checkDto, nodes);
-        }
-
-        /// <summary>
-        /// Добавить проверку и
-        /// </summary>
-        /// <param name="check"></param>
-        /// <param name="res"></param>
-        /// <param name="nodes"></param>
-        /// <returns></returns>
-        private CheckDto Add(TestResultID check, object res, out List<Node> nodes)
-        {
+            List<Node> resNodes = new List<Node>();
+            List<Node> confNodes = new List<Node>();
+            Repairs.Add(check, res);
             var checkDto = DescriptorToDto(check);
-            nodes = new List<Node>();
+            // добавить запись о проверке
+            _dataSource.Add(checkDto);
+
             if (res != null)
             {
                 Node resDto = ResToDto(checkDto, res);
-                nodes = NodeLiner.ToSetNodes(resDto);
+                resNodes = NodeLiner.ToSetNodes(resDto);
             }
-            return checkDto;
+            if (conf != null)
+            {
+                Node confDto = ResToDto(checkDto, conf);
+                confNodes = NodeLiner.ToSetNodes(confDto);
+            }
+            // добавить данные о новой провреке
+            _dataSource.AddData(resNodes, confNodes);
+            check.Id = (int)checkDto.Id;
         }
 
         /// <summary>

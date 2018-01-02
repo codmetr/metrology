@@ -8,6 +8,14 @@ namespace Core.Archive.DataTypes
     public interface IDataAccessor
     {
         /// <summary>
+        /// Добавить новую проверку
+        /// </summary>
+        /// <param name="check">описатель новой проверки</param>
+        /// <param name="res">результат</param>
+        /// <param name="conf">конфигурация</param>
+        void Add(TestResultID check, object res, object conf);
+
+        /// <summary>
         /// Обновить 
         /// </summary>
         /// <param name="check"></param>

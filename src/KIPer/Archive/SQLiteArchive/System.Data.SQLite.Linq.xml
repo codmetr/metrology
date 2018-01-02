@@ -150,7 +150,7 @@
             Represents the sql fragment for any node in the query tree.
             </summary>
             <remarks>
-            The nodes in a query tree produce various kinds of sql
+            The resNodes in a query tree produce various kinds of sql
             <list type="bullet">
             <item>A select statement.</item>
             <item>A reference to an extent. (symbol)</item>
@@ -451,11 +451,11 @@
              <remarks>
              The translation is implemented as a visitor <see cref="T:System.Data.Common.CommandTrees.DbExpressionVisitor`1"/>
              over the query tree.  It makes a single pass over the tree, collecting the sql
-             fragments for the various nodes in the tree <see cref="T:System.Data.SQLite.Linq.ISqlFragment"/>.
+             fragments for the various resNodes in the tree <see cref="T:System.Data.SQLite.Linq.ISqlFragment"/>.
             
              The major operations are
              <list type="bullet">
-             <item>Select statement minimization.  Multiple nodes in the query tree
+             <item>Select statement minimization.  Multiple resNodes in the query tree
              that can be part of a single SQL select statement are merged. e.g. a
              Filter node that is the input of a Project node can typically share the
              same SQL statement.</item>
@@ -483,8 +483,8 @@
              <c>c.x = c1.x</c> i.e. b is renamed to c, and c is renamed to c1.
              </example>
              </item>
-             <item>Join flattening.  In the query tree, a list of join nodes is typically
-             represented as a tree of Join nodes, each with 2 children. e.g.
+             <item>Join flattening.  In the query tree, a list of join resNodes is typically
+             represented as a tree of Join resNodes, each with 2 children. e.g.
              <example>
              <code>
              a = Join(InnerJoin
@@ -563,7 +563,7 @@
              To defer the renaming choices, we use symbols <see cref="T:System.Data.SQLite.Linq.Symbol"/>.  These
              are renamed in the second phase.
             
-             Since visitor methods cannot transfer information to child nodes through
+             Since visitor methods cannot transfer information to child resNodes through
              parameters, we use some global stacks,
              <list type="bullet">
              <item>A stack for the current SQL select statement.  This is needed by
@@ -592,7 +592,7 @@
              <para>
              Sql select statement sharing.
             
-             Each of the relational operator nodes
+             Each of the relational operator resNodes
              <list type="bullet">
              <item>Project</item>
              <item>Filter</item>
@@ -1145,7 +1145,7 @@
         </member>
         <member name="M:System.Data.SQLite.Linq.SqlGenerator.VisitInputExpression(System.Data.Common.CommandTrees.DbExpression,System.String,System.Data.Metadata.Edm.TypeUsage,System.Data.SQLite.Linq.Symbol@)">
             <summary>
-            This is called by the relational nodes.  It does the following
+            This is called by the relational resNodes.  It does the following
             <list>
             <item>If the input is not a SqlSelectStatement, it assumes that the input
             is a collection expression, and creates a new SqlSelectStatement </item>
@@ -1697,14 +1697,14 @@
         </member>
         <member name="M:System.Data.SQLite.Linq.SqlGenerator.VisitExpressionEnsureSqlStatement(System.Data.Common.CommandTrees.DbExpression,System.Boolean)">
              <summary>
-             This is called from <see cref="M:System.Data.SQLite.Linq.SqlGenerator.GenerateSql(System.Data.Common.CommandTrees.DbQueryCommandTree)"/> and nodes which require a
+             This is called from <see cref="M:System.Data.SQLite.Linq.SqlGenerator.GenerateSql(System.Data.Common.CommandTrees.DbQueryCommandTree)"/> and resNodes which require a
              select statement as an argument e.g. <see cref="M:System.Data.SQLite.Linq.SqlGenerator.Visit(System.Data.Common.CommandTrees.DbIsEmptyExpression)"/>,
              <see cref="M:System.Data.SQLite.Linq.SqlGenerator.Visit(System.Data.Common.CommandTrees.DbUnionAllExpression)"/>.
             
              SqlGenerator needs its child to have a proper alias if the child is
              just an extent or a join.
             
-             The normal relational nodes result in complete valid SQL statements.
+             The normal relational resNodes result in complete valid SQL statements.
              For the rest, we need to treat them as there was a dummy
              <code>
              -- originally {expression}
@@ -1832,8 +1832,8 @@
              all the extents that have been flattened in the join in AllJoinExtents
              <example>
              in J(j1= J(a,b), c)
-             FromExtents has 2 nodes JoinSymbol(name=j1, ...) and Symbol(name=c)
-             AllJoinExtents has 3 nodes Symbol(name=a), Symbol(name=b), Symbol(name=c)
+             FromExtents has 2 resNodes JoinSymbol(name=j1, ...) and Symbol(name=c)
+             AllJoinExtents has 3 resNodes Symbol(name=a), Symbol(name=b), Symbol(name=c)
              </example>
             
              If any expression in the non-FROM clause refers to an extent in a higher scope,
@@ -1934,7 +1934,7 @@
             The symbols are of the following kinds
             <list type="bullet">
             <item><see cref="T:System.Data.SQLite.Linq.Symbol"/> represents tables (extents/nested selects/unnests)</item>
-            <item><see cref="T:System.Data.SQLite.Linq.JoinSymbol"/> represents Join nodes</item>
+            <item><see cref="T:System.Data.SQLite.Linq.JoinSymbol"/> represents Join resNodes</item>
             <item><see cref="T:System.Data.SQLite.Linq.Symbol"/> columns.</item>
             </list>
             

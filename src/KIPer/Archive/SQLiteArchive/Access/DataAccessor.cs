@@ -29,6 +29,21 @@ namespace SQLiteArchive
         }
 
         /// <summary>
+        /// Добавить новую проверку
+        /// </summary>
+        /// <param name="check">описатель новой проверки</param>
+        /// <param name="res">результат</param>
+        /// <param name="conf">конфигурация</param>
+        public void Add(TestResultID check, object res, object conf)
+        {
+            if (check.Id!=null)
+                throw new Exception(string.Format("Try add new check, but RepeirId is filled ({0})", check.Id));
+            _dataPool.Add(check, res, conf);
+            _dataPool.Repairs.Add(check, res);
+            _dataPool.Configs.Add(check, conf);
+        }
+
+        /// <summary>
         /// Обновить характеристики и метаданные проверки
         /// </summary>
         /// <param name="check"></param>

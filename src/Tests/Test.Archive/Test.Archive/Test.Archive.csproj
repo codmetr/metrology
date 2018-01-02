@@ -71,18 +71,24 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="TestData.cs" />
-    <Compile Include="UnitTest.Db.cs" />
-    <Compile Include="UnitTest.TreeParsing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTestPressureSensor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SimpleDb\SimpleDb.csproj">
-      <Project>{3b6d2cb9-f251-4a38-ad2f-323d4d79745e}</Project>
-      <Name>SimpleDb</Name>
+    <ProjectReference Include="..\..\..\KIPer\ArchiveData\ArchiveData.csproj">
+      <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
+      <Name>ArchiveData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\KIPer\Archive\SQLiteArchive\SQLiteArchive.csproj">
+      <Project>{5ddfab0d-1f66-4337-bd2f-ece434d68794}</Project>
+      <Name>SQLiteArchive</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\KIPer\PressureSensorData\PressureSensorData.csproj">
+      <Project>{3a880679-b67b-4d02-a6ff-75857cef1369}</Project>
+      <Name>PressureSensorData</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
