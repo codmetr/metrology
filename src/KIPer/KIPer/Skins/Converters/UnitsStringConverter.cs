@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
-using PressureSensorData;
+using KipTM.Interfaces;
 
 namespace KipTM.Skins.Converters
 {
-    [ValueConversion(typeof(OutGange), typeof(string))]
-    public class OutGangerStringConverter : IValueConverter
+    [ValueConversion(typeof(Units), typeof(string))]
+    public class UnitsStringConverter : IValueConverter
     {
-        public static readonly Dictionary<OutGange, string> Default = new Dictionary<OutGange, string>()
+        public static readonly Dictionary<Units, string> Default = new Dictionary<Units, string>()
         {
-            {OutGange.I0_5mA, "0-5 мА" },
-            {OutGange.I4_20mA, "4-20 мА" }
+            {Units.bar, "бар" },
+            {Units.kgSm, "кгСм" },
+            {Units.mA, "мА" },
+            {Units.A, "А" },
+            {Units.mV, "мВ" },
+            {Units.V, "М" },
         };
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -21,21 +25,21 @@ namespace KipTM.Skins.Converters
             if (value == null || targetType == typeof(string))
                 return null;
             //    throw new InvalidOperationException("The target must be a string");
-            if (value.GetType() != typeof(OutGange))
+            if (value.GetType() != typeof(Units))
                 return null;
-                //throw new InvalidOperationException("The value must be a OutGange");
+            //throw new InvalidOperationException("The value must be a Units");
 
-            return (object)Default[(OutGange)value];
+            return (object)Default[(Units)value];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
-                return default(OutGange);
+                return default(Units);
             if (value.GetType() != typeof(string))
                 throw new InvalidOperationException("The value must be a string");
-            if (targetType != typeof(OutGange))
-                throw new InvalidOperationException("The target must be a OutGange");
+            if (targetType != typeof(Units))
+                throw new InvalidOperationException("The target must be a Units");
 
             return Default.FirstOrDefault(el=>el.Value == (string)value).Key;
         }

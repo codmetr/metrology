@@ -10,7 +10,6 @@ namespace KipTM.Interfaces
     {
         bar,
         kgSm,
-        volt,
         mA,
         A,
         mV,

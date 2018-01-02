@@ -41,7 +41,7 @@ namespace PressureSensorCheck.Workflow
 
             var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf);
             var run = new PressureSensorRunVm(conf, new DPI620DriverCom(), dpiConf, result);
-            var resultVm = new PressureSensorResultVM(checkResId, accessor, res);
+            var resultVm = new PressureSensorResultVM(checkResId, accessor, res, conf);
 
             var reportUpdater =new ReportUpdater();
             var certificateUpdater = new CertificateUpdater();

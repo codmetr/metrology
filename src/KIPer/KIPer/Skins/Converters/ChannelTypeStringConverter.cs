@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
+using ArchiveData.DTO;
 using PressureSensorData;
 
 namespace KipTM.Skins.Converters
 {
-    [ValueConversion(typeof(OutGange), typeof(string))]
-    public class OutGangerStringConverter : IValueConverter
+    [ValueConversion(typeof(ChannelType), typeof(string))]
+    public class ChannelTypeStringConverter : IValueConverter
     {
-        public static readonly Dictionary<OutGange, string> Default = new Dictionary<OutGange, string>()
+        private static readonly Dictionary<ChannelType, string> Default = new Dictionary<ChannelType, string>()
         {
-            {OutGange.I0_5mA, "0-5 мА" },
-            {OutGange.I4_20mA, "4-20 мА" }
+            {ChannelType.Temperature, "температура" },
+            {ChannelType.Current, "ток" },
+            {ChannelType.Pressure, "давление" },
+            {ChannelType.Voltage, "напряжение" },
         };
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -21,21 +24,21 @@ namespace KipTM.Skins.Converters
             if (value == null || targetType == typeof(string))
                 return null;
             //    throw new InvalidOperationException("The target must be a string");
-            if (value.GetType() != typeof(OutGange))
+            if (value.GetType() != typeof(ChannelType))
                 return null;
-                //throw new InvalidOperationException("The value must be a OutGange");
+                //throw new InvalidOperationException("The value must be a ChannelType");
 
-            return (object)Default[(OutGange)value];
+            return (object)Default[(ChannelType)value];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
-                return default(OutGange);
+                return default(ChannelType);
             if (value.GetType() != typeof(string))
                 throw new InvalidOperationException("The value must be a string");
-            if (targetType != typeof(OutGange))
-                throw new InvalidOperationException("The target must be a OutGange");
+            if (targetType != typeof(ChannelType))
+                throw new InvalidOperationException("The target must be a ChannelType");
 
             return Default.FirstOrDefault(el=>el.Value == (string)value).Key;
         }

@@ -24,8 +24,9 @@ namespace PressureSensorCheck.Check
         private PressureSensorResult _result = null;
 
 
-        public PresSensorCheck(Logger logger, IEthalonChannel pressure, IEthalonChannel voltage) : base(logger)
+        public PresSensorCheck(Logger logger, IEthalonChannel pressure, IEthalonChannel voltage, PressureSensorResult result) : base(logger)
         {
+            _result = result;
             _pressure = pressure;
             _voltage = voltage;
         }

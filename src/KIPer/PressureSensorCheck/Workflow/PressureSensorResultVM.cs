@@ -19,12 +19,15 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         private readonly IDataAccessor _accessor;
 
-        public PressureSensorResultVM(TestResultID checkResId, IDataAccessor accessor, PressureSensorResult result = null)
+        private PressureSensorConfig _conf;
+
+        public PressureSensorResultVM(TestResultID checkResId, IDataAccessor accessor, PressureSensorResult result, PressureSensorConfig conf)
         {
             Identificator = checkResId;
             _accessor = accessor;
             PointResults = new ObservableCollection<PointViewModel>();
             Data = result;
+            _conf = conf;
         }
 
         /// <summary>
@@ -75,6 +78,7 @@ namespace PressureSensorCheck.Workflow
         private void OnSave()
         {
             _accessor.Save(Identificator, Data);
+            _accessor.SaveConfig(Identificator, _conf);
         }
 
         #region INotifyPropertyChanged

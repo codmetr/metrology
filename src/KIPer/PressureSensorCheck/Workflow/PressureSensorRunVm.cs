@@ -222,7 +222,7 @@ namespace PressureSensorCheck.Workflow
                 _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
             
             // конфигурирование шагов проверки
-            var check = new PresSensorCheck(checkLogger, new DPI620Ethalon(_dpi620, inSlotNum), new DPI620Ethalon(_dpi620, outSlotNum));
+            var check = new PresSensorCheck(checkLogger, new DPI620Ethalon(_dpi620, inSlotNum), new DPI620Ethalon(_dpi620, outSlotNum), Result);
             check.ChConfig.UsrChannel = new PressureSensorUserChannel(this);
             check.FillSteps(_config);
 
@@ -263,7 +263,7 @@ namespace PressureSensorCheck.Workflow
             foreach (var point in Points)
             {
                 var res = checkResult.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.Config.Pressure) < double.Epsilon);
-                if(res ==null)
+                if(res == null)
                     continue;
                 point.Result.PressureReal = res.PressureValue;
                 point.Result.UReal = res.VoltageValue;
@@ -279,6 +279,7 @@ namespace PressureSensorCheck.Workflow
         /// Показать сообщение пользователю
         /// </summary>
         /// <param name="msg"></param>
+        /// <param name="cancel"></param>
         private void ShowMessage(string msg, CancellationToken cancel)
         {
             AskModal("", msg, cancel);

@@ -206,6 +206,8 @@
     <Compile Include="Checks\ViewModel\CheckFactory.cs" />
     <Compile Include="Skins\Converters\BinToTextResultConverter.cs" />
     <Compile Include="Skins\Converters\BoolToColorConverter.cs" />
+    <Compile Include="Skins\Converters\ChannelTypeStringConverter.cs" />
+    <Compile Include="Skins\Converters\UnitsStringConverter.cs" />
     <Compile Include="Skins\Converters\OutGangerStringConverter.cs" />
     <Compile Include="Skins\Converters\InverseBooleanConverter.cs" />
     <Compile Include="Skins\Converters\InverseBooleanToVisibilityConverter.cs" />

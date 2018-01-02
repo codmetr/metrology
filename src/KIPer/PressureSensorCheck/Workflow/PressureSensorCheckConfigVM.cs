@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -62,8 +63,8 @@ namespace PressureSensorCheck.Workflow
     {
         public DPI620GeniiConfig()
         {
-            Slot1 = new DpiSlotConfig();
-            Slot2 = new DpiSlotConfig();
+            Slot1 = new DpiSlotConfig() {ChannelType = ChannelType.Pressure};
+            Slot2 = new DpiSlotConfig() { ChannelType = ChannelType.Current };
         }
         public IEnumerable<string> Ports { get; set; }
 
@@ -96,9 +97,28 @@ namespace PressureSensorCheck.Workflow
 
         public class DpiSlotConfig:INotifyPropertyChanged
         {
+            public DpiSlotConfig()
+            {
+                ChannelTypes = Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>();
+            }
+
+            private ChannelType _channelType;
+
             public IEnumerable<ChannelType> ChannelTypes { get; set; }
 
-            public ChannelType ChannelType { get; set; }
+            public ChannelType ChannelType
+            {
+                get { return _channelType; }
+                set
+                {
+                    if(value == _channelType)
+                        return;
+                    _channelType = value;
+                    UnitSet = UnitDict.GetUnitsForType(_channelType);
+                    SelectedUnit = UnitSet.FirstOrDefault();
+                    OnPropertyChanged("ChannelType");
+                }
+            }
 
             public double From { get; set; }
 
