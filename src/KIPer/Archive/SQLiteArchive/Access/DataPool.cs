@@ -46,23 +46,28 @@ namespace SQLiteArchive
         /// </summary>
         /// <param name="dictionaryPool">справочники</param>
         /// <param name="resTypeDict">список типов реультатов</param>
+        /// <param name="confTypeDict"></param>
+        /// <param name="dbPath"></param>
+        /// <param name="trace"></param>
         /// <returns></returns>
-        public static DataPool Load(IDictionaryPool dictionaryPool, IDictionary<string, Type> resTypeDict, IDictionary<string, Type> confTypeDict, Action<string> trace = null)
+        public static DataPool Load(IDictionaryPool dictionaryPool, IDictionary<string, Type> resTypeDict,
+            IDictionary<string, Type> confTypeDict, string dbPath = null, Action<string> trace = null)
         {
             var dp = new DataPool(dictionaryPool, resTypeDict, confTypeDict);
-            return Load(dp, trace);
+            return Load(dp, dbPath, trace);
         }
 
         /// <summary>
         /// Загрузить из БД результаты прошлых проверок
         /// </summary>
         /// <param name="target"></param>
+        /// <param name="dbPath"></param>
         /// <param name="trace"></param>
         /// <returns></returns>
-        public static DataPool Load(DataPool target, Action<string> trace = null)
+        private static DataPool Load(DataPool target, string dbPath = null, Action<string> trace = null)
         {
             var dp = target;
-            var dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonDocuments),
+            dbPath = dbPath ?? Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonDocuments),
                 "KipTM\\db", Properties.Settings.Default.DBName);
             dp._dataSource = new DataSource(dbPath, trace);
             dp._dataSource.Load();

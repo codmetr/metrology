@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using ArchiveData;
+using ArchiveData.DTO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using PressureSensorData;
+using SQLiteArchive;
 
 namespace Test.Archive
 {
@@ -62,9 +68,41 @@ namespace Test.Archive
         [TestMethod]
         public void TestMethod1()
         {
-            //
-            // TODO: Add test logic here
-            //
+            TestResultID id;
+            PressureSensorResult result;
+            PressureSensorConfig config;
+            DataAccessorSqLite accessor = GetAccessor();
+            FillTestData(out id, out result, out config);
+            accessor.Add(id, result, config);
+
+        }
+
+        private DataAccessorSqLite GetAccessor()
+        {
+            var testDb = "test.db";
+            Console.WriteLine($"TestResultsDirectory: {TestContext.TestResultsDirectory}");
+            var ds = new DataSource(testDb, Console.WriteLine);
+            var listDevDescriptors = new List<DeviceTypeDescriptor>()
+            {
+                new DeviceTypeDescriptor("devModel", "devCommonType", "manufacturer")
+            };
+            var dictMoq = new Mock<IDictionaryPool>();
+            dictMoq.Setup(foo => foo.DeviceTypes).Returns(listDevDescriptors);
+            var resTypes = new Dictionary<string, Type>() { {"keyType", typeof(PressureSensorResult) } };
+            var confTypes = new Dictionary<string, Type>() { { "keyType", typeof(PressureSensorConfig) } };
+            var accessor = new DataAccessorSqLite(DataPool.Load(dictMoq.Object, resTypes, confTypes, Path.Combine(TestContext.TestResultsDirectory, testDb), Console.WriteLine));
+            return accessor;
+        }
+
+        private void FillTestData(out TestResultID id, out PressureSensorResult result, out PressureSensorConfig config)
+        {
+            id = new TestResultID()
+            {
+                TargetDeviceKey = "keyType",
+                DeviceType = "devType",
+            };
+            result = new PressureSensorResult();
+            config = new PressureSensorConfig();
         }
     }
 }
