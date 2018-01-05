@@ -56,7 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Access\DataAccessor.cs" />
     <Compile Include="Access\DataPool.cs" />
     <Compile Include="Access\DataSource.cs" />
     <Compile Include="Access\TypeHelperEx.cs" />
@@ -64,7 +63,6 @@
     <Compile Include="Commands\AddCheck.cs" />
     <Compile Include="Commands\ClearTableChecks.cs" />
     <Compile Include="Commands\ClearTableNodes.cs" />
-    <Compile Include="Commands\CreateNewRepair.cs" />
     <Compile Include="Commands\CreateIfNotExistTable.cs" />
     <Compile Include="Commands\CreateTableNodes.cs" />
     <Compile Include="Commands\InsertOrUpdateNodes.cs" />

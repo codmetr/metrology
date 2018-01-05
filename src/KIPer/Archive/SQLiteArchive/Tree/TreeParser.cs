@@ -29,7 +29,8 @@ namespace SQLiteArchive.Tree
 
             if (IsSimple(itemType))
             {
-                node.Val = item;
+                var sVal = itemType.IsEnum ? (int) item : item;
+                node.Val = sVal;
                 return node;
             }
             else
@@ -139,7 +140,8 @@ namespace SQLiteArchive.Tree
                     else
                     {
                         result = false;
-                        oldPropNode.Val = propValue;
+                        var sVal = property.PropertyType.IsEnum ? (int) propValue : propValue;
+                        oldPropNode.Val = sVal;
                         lessNodes.Remove(oldPropNode);
                         changedNodes.Add(oldPropNode);
                     }
@@ -271,7 +273,15 @@ namespace SQLiteArchive.Tree
                         continue;
                     if (IsSimple(property.PropertyType))
                     {// разбор простых типов
-                        property.SetValue(res, GetSimpleValue(item), null);
+                        var sVal = GetSimpleValue(item);
+                        var sType = property.PropertyType;
+                        if (sType.IsEnum)
+                        {
+                            if (sType.IsEnumDefined(sVal))
+                                property.SetValue(res, Enum.ToObject(sType, sVal), null);
+                        }
+                        else
+                            property.SetValue(res, sVal, null);
                         continue;
                     }
 
@@ -286,7 +296,16 @@ namespace SQLiteArchive.Tree
                         foreach (var propNode in propNodes)
                         {
                             if (IsSimple(typeItem))
-                                paramListValue.Add(GetSimpleValue(propNode)); //наполнение коллекции простых типов
+                            {
+                                var sVal = GetSimpleValue(propNode);
+                                if (typeItem.IsEnum)
+                                {
+                                    if(typeItem.IsEnumDefined(sVal))
+                                        paramListValue.Add(Enum.ToObject(typeItem, sVal));
+                                }
+                                else
+                                    paramListValue.Add(sVal); //наполнение коллекции простых типов
+                            }
                             else
                             {
                                 object itemElement;
@@ -324,6 +343,8 @@ namespace SQLiteArchive.Tree
             //    var ldata = (DateTime) oldPropNode.Val;
             //    return ldata == rdata;
             //}
+            if(rlValue.GetType().IsEnum)
+                return oldPropNode.Val.Equals((int)rlValue);
             return oldPropNode.Val.Equals(rlValue);
         }
 
@@ -332,10 +353,11 @@ namespace SQLiteArchive.Tree
             var type = GetTypeValue(typeItem);
             //if (type == DbType.DateTime)
             //    val = ((DateTime) val).ToBinary();
+            var res = typeItem.IsEnum ? (int) val : val;
             return new Node()
             {
                 Name = descriptor.GetKey(property),
-                Val = val,
+                Val = res,
                 Parrent = node,
                 TypeVal = (int)type,
                 RepairId = repairId,
@@ -353,8 +375,11 @@ namespace SQLiteArchive.Tree
         {
             return type == typeof(int) ||
                 type == typeof(double) ||
+                type == typeof(double?) ||
                 type == typeof(bool) ||
-                type == typeof(DateTime);
+                type == typeof(string) ||
+                type == typeof(DateTime)||
+                type.IsEnum;
         }
 
         private static bool IsList(Type type)
@@ -374,6 +399,7 @@ namespace SQLiteArchive.Tree
             {typeof(ulong), DbType.UInt64},
             {typeof(float), DbType.Single},
             {typeof(double), DbType.Double},
+            {typeof(double?), DbType.Double},
             {typeof(decimal), DbType.Decimal},
             {typeof(bool), DbType.Boolean},
             {typeof(string), DbType.String},
@@ -405,7 +431,9 @@ namespace SQLiteArchive.Tree
 
         private static DbType GetTypeValue(Type val)
         {
-            if(!TypeMap.ContainsKey(val))
+            if (val.IsEnum)
+                return DbType.Int32;
+            if (!TypeMap.ContainsKey(val))
                 throw new KeyNotFoundException(String.Format("For type {0} not found DbType", val));
             return TypeMap[val];
         }
@@ -423,63 +451,71 @@ namespace SQLiteArchive.Tree
             var t = (DbType) typeVal;
             object res = val;
 
-            switch (t)
+            try
             {
-                case DbType.Byte:
-                    res = Byte.Parse(val);
-                    break;
-                case DbType.Boolean:
-                    res = Boolean.Parse(val);
-                    break;
-                case DbType.DateTime:
-                    res = DateTime.FromBinary(Int64.Parse(val));
-                    break;
-                case DbType.Decimal:
-                    res = Decimal.Parse(val);
-                    break;
-                case DbType.Double:
-                    res = Double.Parse(val);
-                    break;
-                case DbType.Guid:
-                    res = Guid.Parse(val);
-                    break;
-                case DbType.Int16:
-                    res = Int16.Parse(val);
-                    break;
-                case DbType.Int32:
-                    res = Int32.Parse(val);
-                    break;
-                case DbType.Int64:
-                    res = Int64.Parse(val);
-                    break;
-                case DbType.SByte:
-                    res = SByte.Parse(val);
-                    break;
-                case DbType.Single:
-                    res = Single.Parse(val);
-                    break;
-                case DbType.String:
-                    break;
-                case DbType.Time:
-                    res = TimeSpan.Parse(val);
-                    break;
-                case DbType.UInt16:
-                    res = UInt16.Parse(val);
-                    break;
-                case DbType.UInt32:
-                    res = UInt32.Parse(val);
-                    break;
-                case DbType.UInt64:
-                    res = UInt64.Parse(val);
-                    break;
-                case DbType.StringFixedLength:
-                    res = val[0];
-                    break;
-                case DbType.DateTimeOffset:
-                    res = DateTimeOffset.Parse(val);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                switch (t)
+                {
+                    case DbType.Byte:
+                        res = Byte.Parse(val);
+                        break;
+                    case DbType.Boolean:
+                        res = Boolean.Parse(val);
+                        break;
+                    case DbType.DateTime:
+                        res = DateTime.FromBinary(Int64.Parse(val));
+                        break;
+                    case DbType.Decimal:
+                        res = Decimal.Parse(val);
+                        break;
+                    case DbType.Double:
+                        res = Double.Parse(val);
+                        break;
+                    case DbType.Guid:
+                        res = Guid.Parse(val);
+                        break;
+                    case DbType.Int16:
+                        res = Int16.Parse(val);
+                        break;
+                    case DbType.Int32:
+                        res = Int32.Parse(val);
+                        break;
+                    case DbType.Int64:
+                        res = Int64.Parse(val);
+                        break;
+                    case DbType.SByte:
+                        res = SByte.Parse(val);
+                        break;
+                    case DbType.Single:
+                        res = Single.Parse(val);
+                        break;
+                    case DbType.String:
+                        break;
+                    case DbType.Time:
+                        res = TimeSpan.Parse(val);
+                        break;
+                    case DbType.UInt16:
+                        res = UInt16.Parse(val);
+                        break;
+                    case DbType.UInt32:
+                        res = UInt32.Parse(val);
+                        break;
+                    case DbType.UInt64:
+                        res = UInt64.Parse(val);
+                        break;
+                    case DbType.StringFixedLength:
+                        res = val[0];
+                        break;
+                    case DbType.DateTimeOffset:
+                        res = DateTimeOffset.Parse(val);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
             }
             return res;
         }

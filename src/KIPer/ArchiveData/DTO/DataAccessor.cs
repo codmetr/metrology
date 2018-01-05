@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using ArchiveData.DTO;
-using Core.Archive.DataTypes;
 
-namespace SQLiteArchive
+namespace ArchiveData.DTO
 {
     /// <summary>
     /// Механизм работы с хранилищем результатов в SQLite
@@ -16,14 +14,14 @@ namespace SQLiteArchive
     /// - срез выборов пользователей
     /// - дерево результата
     /// </remarks>
-    public class DataAccessorSqLite : IDataAccessor
+    public class DataAccessor : IDataAccessor
     {
         /// <summary>
         /// работа с БД
         /// </summary>
-        private readonly SQLiteArchive.DataPool _dataPool;
+        private readonly IDataPool _dataPool;
 
-        public DataAccessorSqLite(SQLiteArchive.DataPool dataPool)
+        public DataAccessor(IDataPool dataPool)
         {
             _dataPool = dataPool;
         }
@@ -39,8 +37,6 @@ namespace SQLiteArchive
             if (check.Id!=null)
                 throw new Exception(string.Format("Try add new check, but RepeirId is filled ({0})", check.Id));
             _dataPool.Add(check, res, conf);
-            _dataPool.Repairs.Add(check, res);
-            _dataPool.Configs.Add(check, conf);
         }
 
         /// <summary>

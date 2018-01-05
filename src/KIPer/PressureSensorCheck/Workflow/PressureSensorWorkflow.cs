@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ArchiveData;
 using ArchiveData.DTO;
 using CheckFrame.Workflow;
-using Core.Archive.DataTypes;
 using DPI620Genii;
 using KipTM.Report.PressureSensor;
 using KipTM.Workflow;

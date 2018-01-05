@@ -211,7 +211,7 @@
     <Compile Include="Skins\Converters\OutGangerStringConverter.cs" />
     <Compile Include="Skins\Converters\InverseBooleanConverter.cs" />
     <Compile Include="Skins\Converters\InverseBooleanToVisibilityConverter.cs" />
-    <Compile Include="ViewModel\OneBtnDescripto.cs" />
+    <Compile Include="ViewModel\OneBtnDescriptor.cs" />
     <Compile Include="Workflow\States\CheckState.cs" />
     <Compile Include="Workflow\States\CheckWorkflowFactory.cs" />
     <Compile Include="Workflow\States\ConfigCheckState.cs" />

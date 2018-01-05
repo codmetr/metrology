@@ -53,7 +53,7 @@ namespace SQLiteArchive.Db
                         func(transaction);
                         transaction.Commit();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         transaction.Rollback();
                         throw;

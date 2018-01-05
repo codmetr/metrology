@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using ArchiveData;
+using ArchiveData.DTO;
 using CheckFrame;
 using CheckFrame.Checks;
 using CheckFrame.ViewModel.Archive;
-using Core.Archive.DataTypes;
 using GalaSoft.MvvmLight;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.DataService;
@@ -74,7 +74,7 @@ namespace KipTM.IOC
                 FillerFactory<IParameterResultViewModel>.Locator);
             unityContainer.RegisterInstance<IReportFactory>(new ReportFactory(unityContainer.ResolveAll<IReporter>()));
             unityContainer.RegisterInstance<IDictionaryPool>(new DictionariesPool());
-            unityContainer.RegisterInstance<IDataAccessor>(new DataAccessorSqLite(DataPool.Load(unityContainer.Resolve<IDictionaryPool>(),
+            unityContainer.RegisterInstance<IDataAccessor>(new DataAccessor(DataPool.Load(unityContainer.Resolve<IDictionaryPool>(),
                 new Dictionary<string, Type>() /*TODO: Задать типы результатов*/,
                 new Dictionary<string, Type>() /*TODO: Задать типы конфигураций*/)));
 

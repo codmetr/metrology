@@ -1,6 +1,6 @@
 ﻿using ArchiveData.DTO;
 
-namespace Core.Archive.DataTypes
+namespace ArchiveData
 {
     /// <summary>
     /// Сохранение и загрузка универсального результата

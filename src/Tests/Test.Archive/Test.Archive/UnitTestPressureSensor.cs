@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using ArchiveData;
@@ -66,43 +67,53 @@ namespace Test.Archive
         #endregion
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestSave()
         {
-            TestResultID id;
-            PressureSensorResult result;
-            PressureSensorConfig config;
-            DataAccessorSqLite accessor = GetAccessor();
-            FillTestData(out id, out result, out config);
-            accessor.Add(id, result, config);
+            DataAccessor accessor = new DataAccessor(UtTools.GetDataPool(TestContext));
 
+            TestResultID id1;
+            PressureSensorResult result1;
+            PressureSensorConfig config1;
+            UtTools.FillTestData(out id1, out result1, out config1);
+            accessor.Add(id1, result1, config1);
+
+            TestResultID id2;
+            PressureSensorResult result2;
+            PressureSensorConfig config2;
+            UtTools.FillTestData(out id2, out result2, out config2);
+            accessor.Add(id2, result2, config2);
+
+            Assert.AreNotEqual(id1, id2);
         }
-
-        private DataAccessorSqLite GetAccessor()
+        [TestMethod]
+        public void TestSaveLoadCompare()
         {
-            var testDb = "test.db";
-            Console.WriteLine($"TestResultsDirectory: {TestContext.TestResultsDirectory}");
-            var ds = new DataSource(testDb, Console.WriteLine);
-            var listDevDescriptors = new List<DeviceTypeDescriptor>()
-            {
-                new DeviceTypeDescriptor("devModel", "devCommonType", "manufacturer")
-            };
-            var dictMoq = new Mock<IDictionaryPool>();
-            dictMoq.Setup(foo => foo.DeviceTypes).Returns(listDevDescriptors);
-            var resTypes = new Dictionary<string, Type>() { {"keyType", typeof(PressureSensorResult) } };
-            var confTypes = new Dictionary<string, Type>() { { "keyType", typeof(PressureSensorConfig) } };
-            var accessor = new DataAccessorSqLite(DataPool.Load(dictMoq.Object, resTypes, confTypes, Path.Combine(TestContext.TestResultsDirectory, testDb), Console.WriteLine));
-            return accessor;
-        }
+            DataAccessor accessor = new DataAccessor(UtTools.GetDataPool(TestContext));
 
-        private void FillTestData(out TestResultID id, out PressureSensorResult result, out PressureSensorConfig config)
-        {
-            id = new TestResultID()
-            {
-                TargetDeviceKey = "keyType",
-                DeviceType = "devType",
-            };
-            result = new PressureSensorResult();
-            config = new PressureSensorConfig();
+            TestResultID id1;
+            PressureSensorResult result1;
+            PressureSensorConfig config1;
+            UtTools.FillTestData(out id1, out result1, out config1);
+            accessor.Add(id1, result1, config1);
+
+            TestResultID id2;
+            PressureSensorResult result2;
+            PressureSensorConfig config2;
+            UtTools.FillTestData(out id2, out result2, out config2);
+            accessor.Add(id2, result2, config2);
+
+            Assert.IsFalse(UtTools.CompareData(id1, id2));
+
+            var dataPool = UtTools.GetDataPool(TestContext);
+            accessor = new DataAccessor(dataPool);
+            var res1Loaded = (PressureSensorResult)accessor.Load(id1);
+            var conf1Loaded = (PressureSensorConfig)accessor.LoadConfig(id1);
+            Assert.IsTrue(UtTools.CompareData(result1, res1Loaded));
+            Assert.IsTrue(UtTools.CompareData(config1, conf1Loaded));
+            var res2Loaded = (PressureSensorResult)accessor.Load(id2);
+            var conf2Loaded = (PressureSensorConfig)accessor.LoadConfig(id2);
+            Assert.IsTrue(UtTools.CompareData(result2, res2Loaded));
+            Assert.IsTrue(UtTools.CompareData(config2, conf2Loaded));
         }
     }
 }

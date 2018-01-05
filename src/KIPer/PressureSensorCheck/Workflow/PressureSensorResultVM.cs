@@ -2,8 +2,8 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using ArchiveData;
 using ArchiveData.DTO;
-using Core.Archive.DataTypes;
 using PressureSensorData;
 using Tools.View;
 

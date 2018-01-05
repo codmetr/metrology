@@ -7,7 +7,7 @@ namespace SQLiteArchive.Commands
     {
         public void Execute(IDbContext context)
         {
-            const string sql = @"DELETE FROM [Checks]";
+            const string sql = @"DELETE FROM [Tests]";
             context.Transaction(ts => ts.Connection.Execute(sql));
         }
     }

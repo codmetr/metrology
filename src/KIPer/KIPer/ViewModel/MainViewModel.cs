@@ -7,8 +7,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using ArchiveData;
+using ArchiveData.DTO;
 using CheckFrame;
-using Core.Archive.DataTypes;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using KipTM.Interfaces;
@@ -22,7 +23,6 @@ using KipTM.Workflow;
 using KipTM.Workflow.States.Events;
 using PressureSensorCheck.Workflow;
 using Tools.View;
-using ViewViewmodelMatcher = Tools.ViewViewmodelMatcher;
 
 namespace KipTM.ViewModel
 {
@@ -45,7 +45,7 @@ namespace KipTM.ViewModel
         
         private readonly ServiceViewModel _services;
         private readonly DocsViewModel _lib;
-        private IEnumerable<OneBtnDescripto> _checkBtns;
+        private IEnumerable<OneBtnDescriptor> _checkBtns;
 
         private readonly CheckWorkflowFactory _checkFactory;
 
@@ -69,7 +69,7 @@ namespace KipTM.ViewModel
         /// <param name="deviceManager">Пулл устройств</param>
         /// <param name="lib"></param>
         /// <param name="checkFactory"></param>
-        public MainViewModel(IEventAggregator eventAggregator, IDataService dataService, IEnumerable<IService> services, IDataAccessor accessor,
+        public MainViewModel(IEventAggregator eventAggregator, IDataService dataService, IEnumerable<IService> services, IDataPool dataPool,
             FeatureDescriptorsCombiner features, IDeviceManager deviceManager, DocsViewModel lib, CheckWorkflowFactory checkFactory)
         {
             try
@@ -94,17 +94,17 @@ namespace KipTM.ViewModel
             _testResults = new ArchivesViewModel();
             _testResults.LoadTests(_dataService.ResultsArchive);
             _workflows = new Dictionary<string, IWorkflow>();
-            var checkBtns = new List<OneBtnDescripto>();
+            var checkBtns = new List<OneBtnDescriptor>();
             //foreach (var keyCheck in _checkFactory.GetAvailableKeys())
             //{
-            //    checkBtns.Add(new OneBtnDescripto(keyCheck.Key.TypeKey, keyCheck.Name,
+            //    checkBtns.Add(new OneBtnDescriptor(keyCheck.Key.TypeKey, keyCheck.Name,
             //        BitmapToImage(keyCheck.BigImg),
             //        BitmapToImage(keyCheck.SmallImg), SelectChecks));
             //    _workflows.Add(keyCheck.Key.TypeKey, _checkFactory.GetNew(keyCheck.Key));
             //}
-            checkBtns.Add(new OneBtnDescripto("pressureSensor", "Датчик давления", BitmapToImage(Resources.EHCerabarM),
+            checkBtns.Add(new OneBtnDescriptor("pressureSensor", "Датчик давления", BitmapToImage(Resources.EHCerabarM),
                 BitmapToImage(Resources.EHCerabarM), SelectChecks));
-            _workflows.Add("pressureSensor", new PressureSensorWorkflow().Make(_logger, accessor));
+            _workflows.Add("pressureSensor", new PressureSensorWorkflow().Make(_logger, new DataAccessor(dataPool)));
             _checkBtns = checkBtns;
             _eventAggregator.Subscribe(this);
         }
@@ -169,7 +169,7 @@ namespace KipTM.ViewModel
                         var view = mainView as Window;
                         if (view == null)
                             return;
-                        ViewViewmodelMatcher.AddMatch(view.Resources, ViewAttribute.CheckView,
+                        Tools.ViewViewmodelMatcher.AddMatch(view.Resources, ViewAttribute.CheckView,
                             ViewAttribute.CheckViewModelCashOnly);
                     });
             }
@@ -196,7 +196,7 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Набор кнопок проверок
         /// </summary>
-        public IEnumerable<OneBtnDescripto> CheckBtns
+        public IEnumerable<OneBtnDescriptor> CheckBtns
         {
             get { return _checkBtns; }
             set { Set(ref _checkBtns, value); }

@@ -6,8 +6,8 @@ using ArchiveData.DTO;
 using CheckFrame.ViewModel.Archive;
 using GalaSoft.MvvmLight;
 using System.Windows.Input;
+using ArchiveData;
 using CheckFrame.Checks;
-using Core.Archive.DataTypes;
 using KipTM.Archive;
 using Tools.View;
 
@@ -77,7 +77,7 @@ namespace KipTM.ViewModel
             }
             else
             {
-                _testType = data.Note;
+                _testType = result.DeviceType;
                 _user = data.User;
                 _time = _result.Timestamp;
                 _device = new DeviceViewModel(data.TargetDevice.Device);

@@ -9,7 +9,7 @@ namespace SQLiteArchive
     /// <summary>
     /// Идентификатор проверки
     /// </summary>
-    [Table("Repairs")]
+    [Table("Tests")]
     public class CheckDto
     {
         /// <summary>

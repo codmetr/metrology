@@ -8,7 +8,7 @@ namespace KipTM.ViewModel
     /// <summary>
     /// Набор свойств одной кнопки для Ribbon
     /// </summary>
-    public class OneBtnDescripto:INotifyPropertyChanged
+    public class OneBtnDescriptor:INotifyPropertyChanged
     {
         private bool _isSelected = false;
 
@@ -20,7 +20,7 @@ namespace KipTM.ViewModel
         /// <param name="lagreImage">Большая иконка кнопки</param>
         /// <param name="smallImage">Маленькая иконка кнопки</param>
         /// <param name="btnCmd">Команда</param>
-        public OneBtnDescripto(string key, string title, BitmapImage lagreImage, BitmapImage smallImage, ICommand btnCmd)
+        public OneBtnDescriptor(string key, string title, BitmapImage lagreImage, BitmapImage smallImage, ICommand btnCmd)
         {
             Key = key;
             Title = title;

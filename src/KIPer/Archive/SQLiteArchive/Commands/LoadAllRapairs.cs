@@ -16,7 +16,7 @@ namespace SQLiteArchive.Commands
         public IEnumerable<CheckDto> Execute(IDbContext context)
         {
             const string sql =
-                @"SELECT * FROM [Checks]";
+                @"SELECT * FROM [Tests]";
             List<CheckDto> repairs = new List<CheckDto>();
             context.Transaction(ts => repairs.AddRange(ts.Connection.Query<CheckDto>(sql)));
             return repairs;

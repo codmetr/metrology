@@ -3,9 +3,9 @@
     /// <summary>
     /// Диапазон выходного сигнала
     /// </summary>
-    public enum OutGange
+    public enum OutGange:int
     {
-        I4_20mA,
-        I0_5mA,
+        I4_20mA=1,
+        I0_5mA=2,
     }
 }

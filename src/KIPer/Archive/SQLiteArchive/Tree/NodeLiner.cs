@@ -36,7 +36,8 @@ namespace SQLiteArchive.Tree
             var root = nodeDict[rootId];
             foreach (var node in nodeSet)
                 if (nodeDict.ContainsKey(node.ParrentId) && node.Id != root.Id)
-                    nodeDict[node.ParrentId].Childs.Add(node);
+                    if(!nodeDict[node.ParrentId].Childs.Contains(node))
+                        nodeDict[node.ParrentId].Childs.Add(node);
 
             return root;
         }

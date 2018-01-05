@@ -44,6 +44,7 @@
     <Compile Include="DTO\ChannelTypes.cs" />
     <Compile Include="DTO\CheckConfigData.cs" />
     <Compile Include="DTO\CustomDeviceTypes\ConverterTypeDescriptor.cs" />
+    <Compile Include="DTO\DataAccessor.cs" />
     <Compile Include="DTO\DeviceWithChannel.cs" />
     <Compile Include="DTO\ResultsArchive.cs" />
     <Compile Include="DTO\DeviceDescriptor.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="DTO\TestResultID.cs" />
     <Compile Include="DTO\TestStepResult.cs" />
     <Compile Include="IDataAccessor.cs" />
+    <Compile Include="IDataPool.cs" />
     <Compile Include="IDictionaryPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

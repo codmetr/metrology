@@ -12,7 +12,7 @@ namespace SQLiteArchive
     /// <summary>
     /// Связывание записей о проверке с DTO
     /// </summary>
-    public class DataPool
+    public class DataPool : IDataPool
     {
         private DataSource _dataSource;
         private IDictionaryPool _dictionaryPool;
@@ -38,7 +38,8 @@ namespace SQLiteArchive
             _dictionaryPool = dictionaryPool;
             _resTypes = resTypeDict;
             _confTypes = confTypeDict;
-            Repairs = new Dictionary<TestResultID, object>();
+            Repairs = new Dictionary<TestResultID, object>(new TestResultID.ComparrerId());
+            Configs = new Dictionary<TestResultID, object>(new TestResultID.ComparrerId());
         }
 
         /// <summary>
@@ -74,7 +75,10 @@ namespace SQLiteArchive
             foreach (var repair in dp._dataSource.Checks)
             {
                 var res = dp.ResFromDto(repair);
-                dp.Repairs.Add(dp.DescriptorFromDto(repair), res);
+                var conf = dp.ConfFromDto(repair);
+                var id = dp.DescriptorFromDto(repair);
+                dp.Repairs.Add(id, res);
+                dp.Configs.Add(id, conf);
             }
             return dp;
             //return MakeFakeDataPool();
@@ -91,6 +95,7 @@ namespace SQLiteArchive
             List<Node> resNodes = new List<Node>();
             List<Node> confNodes = new List<Node>();
             Repairs.Add(check, res);
+            Configs.Add(check, conf);
             var checkDto = DescriptorToDto(check);
             // добавить запись о проверке
             _dataSource.Add(checkDto);
@@ -157,6 +162,8 @@ namespace SQLiteArchive
         /// <returns></returns>
         private CheckDto GetUpdatedRepair(TestResultID check)
         {
+            if (check.Id == null)
+                return null;
             var checkDto = _dataSource.Checks.FirstOrDefault(el => el.Id == check.Id);
             if (checkDto == null)
                 return null;
@@ -251,7 +258,7 @@ namespace SQLiteArchive
         private object ConfFromDto(CheckDto check)
         {
             object res;
-            var nodeList = _dataSource.NodesRes.Where(el => el.RepairId == check.Id).ToList();
+            var nodeList = _dataSource.NodesConf.Where(el => el.RepairId == check.Id).ToList();
             if(!_confTypes.ContainsKey(check.DeviceType))
                 throw new IndexOutOfRangeException(string.Format("For device \"{0}\" not found result type", check.DeviceType));
             var resTypes = _confTypes[check.DeviceType];
@@ -302,7 +309,7 @@ namespace SQLiteArchive
         {
             return new CheckDto()
             {
-                Id = repair.Id.Value,
+                Id = repair.Id?? -1,
                 SerialNumber = repair.SerialNumber,
                 DeviceType = repair.DeviceType,
                 TargetDeviceKey = repair.TargetDeviceKey,

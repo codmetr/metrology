@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CheckFrame.Checks;
-using Core.Archive.DataTypes;
 using KipTM.Archive;
 using KipTM.EventAggregator;
 using KipTM.Interfaces.Checks;

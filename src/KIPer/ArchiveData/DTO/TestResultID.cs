@@ -64,5 +64,20 @@ namespace ArchiveData.DTO
         /// Примечание
         /// </summary>
         public string Note { get; set; }
+
+        public class ComparrerId:IEqualityComparer<TestResultID>
+        {
+            public bool Equals(TestResultID x, TestResultID y)
+            {
+                if (x.Id == null || y.Id == null)
+                    return false;
+                return x.Id == y.Id;
+            }
+
+            public int GetHashCode(TestResultID obj)
+            {
+                return obj.Id.GetHashCode();
+            }
+        }
     }
 }
