@@ -96,9 +96,9 @@ namespace PressureSensorCheck.Report
         public object User { get; set; }
 
         /// <summary>
-        /// Поверитель
+        /// Дата поверки
         /// </summary>
-        public object Checker { get; set; }
+        public object CheckDate { get; set; }
 
     }
 }

@@ -45,7 +45,7 @@ namespace PressureSensorCheck.Report
             report.Humidity = config.Humidity.ToString("F0");
             report.Pressure = config.DayPressure.ToString("F0");
             report.User = config.User;
-            report.Checker = config.User;
+            report.CheckDate = config.CertificateDate;
         }
 
         private void ApplyEthalons(PressureSensorConfig config, PressureSensorCertificateDto report)

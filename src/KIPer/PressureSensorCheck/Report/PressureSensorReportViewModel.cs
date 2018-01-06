@@ -62,6 +62,7 @@ namespace PressureSensorCheck.Report
                     _certificateReportDate.Load();
                 }
                 _certificateReportDate.SetDataSource(new[] { _certificateDto });
+                _certificateReportDate.Subreports["ethalonsSubRep"].SetDataSource(_certificateDto.Ethalons);
                 return _certificateReportDate;
             }
         }
