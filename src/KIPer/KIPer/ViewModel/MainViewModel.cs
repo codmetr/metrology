@@ -21,7 +21,11 @@ using KipTM.Manuals.ViewModel;
 using KipTM.ViewModel.Events;
 using KipTM.Workflow;
 using KipTM.Workflow.States.Events;
+using PressureSensorCheck.Check;
 using PressureSensorCheck.Workflow;
+using PressureSensorData;
+using ReportService;
+using SQLiteArchive;
 using Tools.View;
 
 namespace KipTM.ViewModel
@@ -34,13 +38,14 @@ namespace KipTM.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase, ISubscriber<EventCheckState>, ISubscriber<ErrorMessageEventArg>, ISubscriber<HelpMessageEventArg>
     {
+
         #region Переменные
 
         private readonly NLog.Logger _logger = null;
         private readonly IDataService _dataService;
         private readonly IDeviceManager _deviceManager;
         private readonly IEventAggregator _eventAggregator;
-        private readonly IArchivesViewModel _testResults;
+        private readonly IArchivesViewModel _store;
         private IDictionary<string, IWorkflow> _workflows;
         
         private readonly ServiceViewModel _services;
@@ -65,11 +70,12 @@ namespace KipTM.ViewModel
         /// <param name="eventAggregator">Сборщик событий</param>
         /// <param name="dataService">Источник данных</param>
         /// <param name="services">Сервисы</param>
+        /// <param name="dataPool"></param>
         /// <param name="features">Забор возмодностей модулей</param>
         /// <param name="deviceManager">Пулл устройств</param>
         /// <param name="lib"></param>
         /// <param name="checkFactory"></param>
-        public MainViewModel(IEventAggregator eventAggregator, IDataService dataService, IEnumerable<IService> services, IDataPool dataPool,
+        public MainViewModel(IEventAggregator eventAggregator, IDataService dataService, IEnumerable<IService> services,
             FeatureDescriptorsCombiner features, IDeviceManager deviceManager, DocsViewModel lib, CheckWorkflowFactory checkFactory)
         {
             try
@@ -91,8 +97,15 @@ namespace KipTM.ViewModel
             _dataService.LoadResults();
             _dataService.FillDeviceList(features.DeviceTypes, features.EthalonTypes);
 
-            _testResults = new ArchivesViewModel();
-            _testResults.LoadTests(_dataService.ResultsArchive);
+            var reportFactories = new Dictionary<string, IReportFactory>()
+            {{ PresSensorCheck.CheckKey, new PressureSensorCheck.Report.ReportFactory()}};
+
+            var resTypes = new Dictionary<string, Type>() { { PresSensorCheck.CheckKey, typeof(PressureSensorResult) } };
+            var confTypes = new Dictionary<string, Type>() { { PresSensorCheck.CheckKey, typeof(PressureSensorConfig) } };
+            var dataPool = DataPool.Load(null, resTypes, confTypes, GetDbPath(Properties.Settings.Default.DbName), (msg)=>_logger.With(l=>l.Debug(msg)));
+
+            _store = new ArchivesViewModel(dataPool, reportFactories);
+            //_store.LoadTests(_dataService.ResultsArchive);
             _workflows = new Dictionary<string, IWorkflow>();
             var checkBtns = new List<OneBtnDescriptor>();
             //foreach (var keyCheck in _checkFactory.GetAvailableKeys())
@@ -102,9 +115,9 @@ namespace KipTM.ViewModel
             //        BitmapToImage(keyCheck.SmallImg), SelectChecks));
             //    _workflows.Add(keyCheck.Key.TypeKey, _checkFactory.GetNew(keyCheck.Key));
             //}
-            checkBtns.Add(new OneBtnDescriptor("pressureSensor", "Датчик давления", BitmapToImage(Resources.EHCerabarM),
+            checkBtns.Add(new OneBtnDescriptor(PresSensorCheck.CheckKey, "Датчик давления", BitmapToImage(Resources.EHCerabarM),
                 BitmapToImage(Resources.EHCerabarM), SelectChecks));
-            _workflows.Add("pressureSensor", new PressureSensorWorkflow().Make(_logger, new DataAccessor(dataPool)));
+            _workflows.Add(PresSensorCheck.CheckKey, new PressureSensorWorkflow().Make(_logger, new DataAccessor(dataPool)));
             _checkBtns = checkBtns;
             _eventAggregator.Subscribe(this);
         }
@@ -274,7 +287,7 @@ namespace KipTM.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    SelectedAction = _testResults; //todo установить выбор соответсвующего ViewModel
+                    SelectedAction = _store; //todo установить выбор соответсвующего ViewModel
                     SetHelpMessage("Архив Проверок: список пойденных поверок");
                 });
             }
@@ -365,6 +378,16 @@ namespace KipTM.ViewModel
         #endregion
 
         #region Вспомогательные методы
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <returns></returns>
+        private string GetDbPath(string dbName)
+        {
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "KipTM\\Db", dbName);
+        }
 
         /// <summary>
         /// Установить подсказку

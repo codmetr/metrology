@@ -33,7 +33,7 @@ namespace ReportService
         /// <param name="conf"></param>
         /// <param name="result"></param>
         /// <returns>Data source для отчета</returns>
-        public object GetReporter(TestResultID resultId, CheckConfigData conf, object result)
+        public object GetReporter(TestResultID resultId, object conf, object result)
         {
             var reporters = GetReporters();
             foreach (var reporter in reporters)
@@ -46,7 +46,7 @@ namespace ReportService
                         continue;
                     if (atr.ReportKey != resultId.DeviceType)
                         continue;
-                    return reporter.GetReport(resultId, conf, result);
+                    return reporter.GetReport(resultId, conf as CheckConfigData, result);
                 }
             }
             return null;

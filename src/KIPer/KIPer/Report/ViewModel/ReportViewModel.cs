@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ArchiveData.DTO;
 using CheckFrame.Checks;
 using GalaSoft.MvvmLight;
-using KipTM.Checks;
 using ReportService;
 
 namespace KipTM.ViewModel.Report

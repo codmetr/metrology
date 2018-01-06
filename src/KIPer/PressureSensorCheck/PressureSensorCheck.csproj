@@ -105,6 +105,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Report\CertificateUpdater.cs" />
+    <Compile Include="Report\ReportFactory.cs" />
     <Compile Include="Report\ReportUpdater.cs" />
     <Compile Include="Workflow\Dpi620StateMoq.cs" />
     <Compile Include="Workflow\PressureSensorCheckConfigVM.cs" />
@@ -136,6 +137,10 @@
     <ProjectReference Include="..\PressureSensorData\PressureSensorData.csproj">
       <Project>{3a880679-b67b-4d02-a6ff-75857cef1369}</Project>
       <Name>PressureSensorData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Reports\ReportService\ReportService.csproj">
+      <Project>{71E2479C-C370-44BD-B6E0-48AA88101E7B}</Project>
+      <Name>ReportService</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tools.View\Tools.View.csproj">
       <Project>{69ab619c-5b3a-4ee7-9318-73d92e75f812}</Project>

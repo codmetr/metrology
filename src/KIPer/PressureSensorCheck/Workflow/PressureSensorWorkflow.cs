@@ -5,10 +5,10 @@ using ArchiveData;
 using ArchiveData.DTO;
 using CheckFrame.Workflow;
 using DPI620Genii;
-using KipTM.Report.PressureSensor;
 using KipTM.Workflow;
 using Moq;
 using NLog;
+using PressureSensorCheck.Check;
 using PressureSensorCheck.Report;
 using PressureSensorData;
 
@@ -18,7 +18,11 @@ namespace PressureSensorCheck.Workflow
     {
         public IWorkflow Make(Logger logger, IDataAccessor accessor, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null)
         {
-            id = id ?? new TestResultID();
+            id = id ?? new TestResultID()
+            {
+                TargetDeviceKey = PresSensorCheck.CheckKey,
+                DeviceType = PresSensorCheck.CheckName,
+            };
             result = result ?? new PressureSensorResult()
             {
                 Assay = "корректно",
@@ -26,76 +30,27 @@ namespace PressureSensorCheck.Workflow
                 CommonResult = "пригоден",
                 VisualCheckResult = "без видимых дефектов",
             };
-            var ports = System.IO.Ports.SerialPort.GetPortNames();
-            var checkResId = new TestResultID();
-            var dpiConf = new DPI620GeniiConfig() {Ports = ports};
-            if (!dpiConf.Ports.Contains(dpiConf.SelectPort))
-                dpiConf.SelectPort = ports.FirstOrDefault();
             if (conf == null)
             {
                 conf = PressureSensorConfig.GetDefault();
                 conf.CertificateNumber = Properties.Settings.Default.CertificateNumber.ToString();
                 conf.ReportNumber = Properties.Settings.Default.ReportNumber.ToString();
             }
+
+            var ports = System.IO.Ports.SerialPort.GetPortNames();
+            var dpiConf = new DPI620GeniiConfig() {Ports = ports};
+            if (!dpiConf.Ports.Contains(dpiConf.SelectPort))
+                dpiConf.SelectPort = ports.FirstOrDefault();
             var res = new PressureSensorResult();
 
             var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf);
             var run = new PressureSensorRunVm(conf, new DPI620DriverCom(), dpiConf, result);
-            var resultVm = new PressureSensorResultVM(checkResId, accessor, res, conf);
+            var resultVm = new PressureSensorResultVM(id, accessor, res, conf);
 
             var reportUpdater =new ReportUpdater();
             var certificateUpdater = new CertificateUpdater();
             var reportMain = new PressureSensorReportDto();
-            /*
-            {
-                ReportNumber = "1",
-                ReportTime = "700",
-                TypeDevice = "",
-                Assay = "Корректно",
-                CertificateDate = DateTime.Now.ToString("dd.MM.yyyy"),
-                CertificateNumber = "",
-                CommonResult = "Ok",
-                Humidity = "50",
-                LeakCheckResult = "нет утечек",
-                Owner = "",
-                Pressure = "760",
-                SerialNumber = "",
-                Temperature = "21",
-                User = "",
-                VisualCheckResult = "не нашел",
-                Voltage = "220",
-                Ethalons = new[]
-                {
-                    new EthalonDto()
-                    {
-                        Title = "DPI620Genii",
-                        Type = "многофункциональный манометр",
-                        RangeClass = "0.001 ВПИ",
-                        SerialNumber = "",
-                        CheckCertificateDate = DateTime.Now.ToString("dd.MM.yyyy"),
-                        CheckCertificateNumber = ""
-                    },
-                },
-                MainAccurancy = new MainAccurancyPointDto[0],
-                VariationAccurancy = new VariationAccurancyPointDto[0],
-            };*/
-
             var reportCertificate = new PressureSensorCertificateDto();
-            /*{
-                CertificateNumber = Properties.Settings.Default.CertificateNumber,
-                Ethalons = new[]
-                {
-                    new EthalonDto()
-                    {
-                        Title = "DPI620Genii",
-                        Type = "многофункциональный манометр",
-                        RangeClass = "0.001 ВПИ",
-                        SerialNumber = "",
-                        CheckCertificateDate = DateTime.Now.ToString("dd.MM.yyyy"),
-                        CheckCertificateNumber = ""
-                    },
-                },
-            };*/
 
             var steps = new List<IWorkflowStep>()
             {

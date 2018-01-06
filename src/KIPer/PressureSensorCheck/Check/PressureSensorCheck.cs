@@ -65,7 +65,7 @@ namespace PressureSensorCheck.Check
                 i++;
             }
 
-            for (; i >= 0; i--)
+            for (i--; i >= 0; i--)
             {
                 var point = backStepPoints[i].Item1;
                 var res = backStepPoints[i].Item2;

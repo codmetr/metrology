@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KipTM.Report.PressureSensor;
+using PressureSensorCheck.Report;
 using Tools.View;
 
 namespace KipTM.Checks.View

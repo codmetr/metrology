@@ -16,6 +16,6 @@ namespace ReportService
         /// <param name="conf"></param>
         /// <param name="result"></param>
         /// <returns>Data source для отчета</returns>
-        object GetReporter(TestResultID resultId, CheckConfigData conf, object result);
+        object GetReporter(TestResultID resultId, object conf, object result);
     }
 }

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using CrystalDecisions.CrystalReports.Engine;
-using PressureSensorCheck.Report;
+using KipTM.Report.PressureSensor;
 
-namespace KipTM.Report.PressureSensor
+namespace PressureSensorCheck.Report
 {
     /// <summary>
     /// Визуальная модель отчетов

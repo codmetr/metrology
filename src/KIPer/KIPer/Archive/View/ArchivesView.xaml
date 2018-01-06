@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:KipTM.ViewModel"
-             xmlns:viewModel1="clr-namespace:KipTM.ViewModel;assembly=KipTM.Interfaces"
+             xmlns:dto="clr-namespace:ArchiveData.DTO;assembly=ArchiveData"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModel:ArchivesViewModel}">
     <UserControl.Resources>
@@ -12,7 +12,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Skins/MainSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <DataTemplate x:Key="NoSelecteDataTemplate" DataType="{x:Type viewModel1:ITestResultViewModel}">
+            <DataTemplate x:Key="NoSelecteDataTemplate" DataType="{x:Type dto:TestResultID}">
                 <Border Style="{StaticResource NoSelectedBorderStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -20,18 +20,18 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <TextBlock Margin="5" Text="Проверка: "/>
-                            <TextBlock Margin="5" Text="{Binding TestType}" Style="{StaticResource ValueTextStyle}"/>
-                            <TextBlock Margin="5" Text="{Binding Path=Device.DeviceType.Model}" Style="{StaticResource ValueTextStyle}"/>
+                            <TextBlock Margin="5" Text="Усторойство: "/>
+                            <TextBlock Margin="5" Text="{Binding DeviceType}" Style="{StaticResource ValueTextStyle}"/>
+                            <TextBlock Margin="5" Text="{Binding SerialNumber}" Style="{StaticResource ValueTextStyle}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <TextBlock Margin="5" Text="Дата: "/>
-                            <TextBlock Margin="5" Text="{Binding Path=Time}" Style="{StaticResource ValueTextStyle}"/>
+                            <TextBlock Margin="5" Text="{Binding Path=Timestamp}" Style="{StaticResource ValueTextStyle}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
             </DataTemplate>
-            <DataTemplate x:Key="SelecteDataTemplate" DataType="{x:Type viewModel1:ITestResultViewModel}">
+            <DataTemplate x:Key="SelecteDataTemplate" DataType="{x:Type dto:TestResultID}">
                 <Border Style="{StaticResource SelectedBorderStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -93,12 +93,24 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="TestsList"
+        <DataGrid Grid.Column="0" AutoGenerateColumns="False"
+                  IsReadOnly="True" RowHeaderWidth="0"
+                  ItemsSource="{Binding TestsCollection, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding SelectedTest, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Дата" Binding="{Binding Timestamp}"/>
+                <DataGridTextColumn Header="Прибор" Binding="{Binding DeviceType}"/>
+                <DataGridTextColumn Header="Серийный номер" Binding="{Binding SerialNumber}"/>
+                <DataGridTextColumn Header="Результат" Binding="{Binding CommonResult}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <!--<ListBox x:Name="TestsList"
                  Grid.Column="0" 
                  ItemsSource="{Binding TestsCollection}" 
                  Style="{StaticResource CollectionMineListStyle}"
                  ItemContainerStyle="{StaticResource ListItemStyle}">
-        </ListBox>
-        <ContentPresenter Grid.Column="1" Content="{Binding ElementName=TestsList, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}"/>
+        </ListBox>-->
+        <ContentPresenter Grid.Column="1" Content="{Binding Result, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </UserControl>

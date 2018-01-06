@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using SQLiteArchive.Commands;
 using SQLiteArchive.Db;
 using SQLiteArchive.Tree;
@@ -81,6 +82,12 @@ namespace SQLiteArchive
         /// <param name="check"></param>
         public void Add(CheckDto check)
         {
+            if (!File.Exists(_dbName))
+            {
+                var dir = Path.GetDirectoryName(_dbName);
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+            }
             CreateTableIfNoExist();
             DataBase.Execute(new AddCheck(check, _trace));
             Checks.Add(check);
