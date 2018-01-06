@@ -73,6 +73,7 @@ namespace PressureSensorCheck.Report
                 CheckCertificateDate = config.EthalonVoltage.Category,
                 CheckCertificateNumber = config.EthalonVoltage.RegNum,
             });
+            report.Ethalons = ethalons.ToArray();
         }
 
         private static void ApplyMainAccurancy(PressureSensorConfig config, PressureSensorResult result, PressureSensorReportDto report)

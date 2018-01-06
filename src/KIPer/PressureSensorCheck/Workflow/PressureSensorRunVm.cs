@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DPI620Genii;
 using KipTM.Model.Channels;
+using KipTM.Model.Checks;
 using NLog;
 using PressureSensorCheck.Check;
 using PressureSensorCheck.Devices;
@@ -242,6 +243,7 @@ namespace PressureSensorCheck.Workflow
             {
                 using (_autoupdater.Subscribe(this))
                 {
+                    check.ResultUpdated +=CheckOnResultUpdated;
                     if (check.Start(cancel))
                         if (!cancel.IsCancellationRequested)
                             UpdateResult(check.Result);
@@ -249,8 +251,16 @@ namespace PressureSensorCheck.Workflow
             }
             finally
             {
+                check.ResultUpdated -= CheckOnResultUpdated;
                 IsRun = false;
             }
+        }
+
+        private void CheckOnResultUpdated(object sender, EventArgs eventArgs)
+        {
+            var check = sender as PresSensorCheck;
+            if(check!=null)
+                UpdateResult(check.Result);
         }
 
         /// <summary>
@@ -265,6 +275,8 @@ namespace PressureSensorCheck.Workflow
                 var res = checkResult.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.Config.Pressure) < double.Epsilon);
                 if(res == null)
                     continue;
+                if(point.Result == null)
+                    point.Result = new PointResultViewModel();
                 point.Result.PressureReal = res.PressureValue;
                 point.Result.UReal = res.VoltageValue;
                 point.Result.Uback = res.VoltageValueBack;

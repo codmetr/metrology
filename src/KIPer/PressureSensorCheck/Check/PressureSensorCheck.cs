@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using CheckFrame.Checks;
 using KipTM.Archive;
@@ -50,7 +51,7 @@ namespace PressureSensorCheck.Check
         {
             var steps = new List<CheckStepConfig>()
             {
-                new CheckStepConfig(new StepInit(ChConfig.UsrChannel) { _pointBase= new PressureSensorPoint() { PressurePoint = 760, PressureUnit = "мм рт.ст." } }, true),
+                //new CheckStepConfig(new StepInit(ChConfig.UsrChannel) { _pointBase= new PressureSensorPoint() { PressurePoint = 760, PressureUnit = "мм рт.ст." } }, true),
             };
 
             var count = pressureConverterConfig.Points.Count;
@@ -62,6 +63,7 @@ namespace PressureSensorCheck.Check
                 backStepPoints[i] = new Tuple<PressureSensorPoint, PressureSensorPointResult>(point, step.Result);
                 step.SetBuffer(_dataBuffer);
                 steps.Add(new CheckStepConfig(step, false));
+                AttachStep(step);
                 i++;
             }
 
@@ -71,7 +73,14 @@ namespace PressureSensorCheck.Check
                 var res = backStepPoints[i].Item2;
                 var step = new StepMainErrorBack(point, res, ChConfig.UsrChannel, _pressure, _voltage, _logger);
                 steps.Add(new CheckStepConfig(step, false));
+                AttachStep(step);
             }
+            if (Steps != null)
+                foreach (var testStep in Steps)
+                {
+                    if (testStep != null)
+                        DetachStep(testStep.Step);
+                }
             Steps = steps;
             return true;
         }
@@ -86,8 +95,11 @@ namespace PressureSensorCheck.Check
 
         protected override void StepEnd(object sender, EventArgEnd e)
         {
-            if(_dataBuffer.TryResolve(out _resultPoint))
+            if (_dataBuffer.TryResolve(out _resultPoint))
+            {
                 _result.Points.Add(_resultPoint);
+                OnResultUpdated();
+            }
             _dataBuffer.Clear();
         }
 
@@ -98,5 +110,12 @@ namespace PressureSensorCheck.Check
         }
 
         public PressureSensorResult Result { get { return _result; } }
+
+        public event EventHandler ResultUpdated;
+
+        protected virtual void OnResultUpdated()
+        {
+            ResultUpdated?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

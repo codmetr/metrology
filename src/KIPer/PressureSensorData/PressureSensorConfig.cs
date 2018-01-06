@@ -34,7 +34,17 @@ namespace PressureSensorData
                 CheckedParameters = "абсолютное давление в диапазоне [диапазон]",
                 ChecklLawBase = "[документ с методикой поверки]", //"Федеральный закон от 26 июня 2008 г. № 102-ФЗ \"Об обеспечении единства измерений\"",
                 Company = "[Организация]",
-            };
+                EthalonPressure = new EthalonDescriptor()
+                {
+                    SensorType = "Датчик давления",
+                    Title = "[Наименование]"
+                },
+                EthalonVoltage = new EthalonDescriptor()
+                {
+                    SensorType = "Вольтметр",
+                    Title = "[Наименование]"
+                },
+        };
         }
 
         /// <summary>

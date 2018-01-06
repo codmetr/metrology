@@ -39,11 +39,11 @@ namespace PressureSensorCheck.Report
                     //_mainReportData = new BlankReport();
                     _mainReportData.FileName = Path.Combine("Report",_mainReportData.ResourceName);
                     _mainReportData.Load();
-                    _mainReportData.SetDataSource(new[] { _mainReportDto });
-                    _mainReportData.Subreports["EthalonRep"].SetDataSource(_mainReportDto.Ethalons);
-                    _mainReportData.Subreports["MainError"].SetDataSource(_mainReportDto.MainAccurancy);
-                    _mainReportData.Subreports["VariationReport"].SetDataSource(_mainReportDto.VariationAccurancy);
                 }
+                _mainReportData.SetDataSource(new[] { _mainReportDto });
+                _mainReportData.Subreports["EthalonRep"].SetDataSource(_mainReportDto.Ethalons);
+                _mainReportData.Subreports["MainError"].SetDataSource(_mainReportDto.MainAccurancy);
+                _mainReportData.Subreports["VariationReport"].SetDataSource(_mainReportDto.VariationAccurancy);
                 return _mainReportData;
             }
         }
@@ -60,8 +60,8 @@ namespace PressureSensorCheck.Report
                     _certificateReportDate = new PressureSensorСertificate();
                     _certificateReportDate.FileName = Path.Combine("Report", _certificateReportDate.ResourceName);
                     _certificateReportDate.Load();
-                    _certificateReportDate.SetDataSource(new[] { _certificateDto });
                 }
+                _certificateReportDate.SetDataSource(new[] { _certificateDto });
                 return _certificateReportDate;
             }
         }

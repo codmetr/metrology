@@ -51,7 +51,7 @@ namespace PressureSensorCheck.Workflow
             var certificateUpdater = new CertificateUpdater();
             var reportMain = new PressureSensorReportDto();
             var reportCertificate = new PressureSensorCertificateDto();
-
+            var reportVm = new PressureSensorReportViewModel(reportMain, reportCertificate);
             var steps = new List<IWorkflowStep>()
             {
                 new SimpleWorkflowStep(configVm).SetOut(()=>UpdateRunByConf(configVm.Config, run, logger)),
@@ -61,7 +61,7 @@ namespace PressureSensorCheck.Workflow
                     reportUpdater.Update(conf, result, reportMain);
                     certificateUpdater.Update(id, conf, result, reportCertificate);
                 }),
-                new SimpleWorkflowStep(new PressureSensorReportViewModel(reportMain, reportCertificate)),
+                new SimpleWorkflowStep(reportVm),
             };
 
             return new LineWorkflow(steps);
