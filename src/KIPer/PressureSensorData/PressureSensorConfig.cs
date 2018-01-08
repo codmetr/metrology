@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using KipTM.Interfaces;
 
 namespace PressureSensorData
 {
@@ -15,7 +16,7 @@ namespace PressureSensorData
             DayPressure = 760;
             CommonVoltage = 220;
             EthalonPressure = new EthalonDescriptor();
-            EthalonVoltage = new EthalonDescriptor();
+            EthalonOut = new EthalonDescriptor();
             Points = new List<PressureSensorPoint>();
         }
 
@@ -23,8 +24,8 @@ namespace PressureSensorData
         {
             return new PressureSensorConfig()
             {
-                ReportDate = DateTime.Now.ToString("yy.MM.dd"),
-                CertificateDate = DateTime.Now.ToString("yy.MM.dd"),
+                ReportDate = DateTime.Now.ToString("dd.MM.yyyy"),
+                CertificateDate = DateTime.Now.ToString("dd.MM.yyyy"),
                 Master = "[Организация]",
                 Name = "[Наименование]",
                 SensorType = "[Тип]",
@@ -39,7 +40,7 @@ namespace PressureSensorData
                     SensorType = "Датчик давления",
                     Title = "[Наименование]"
                 },
-                EthalonVoltage = new EthalonDescriptor()
+                EthalonOut = new EthalonDescriptor()
                 {
                     SensorType = "Вольтметр",
                     Title = "[Наименование]"
@@ -48,9 +49,14 @@ namespace PressureSensorData
         }
 
         /// <summary>
-        /// Пользователь:
+        /// Поверитель:
         /// </summary>
         public string User { get; set; }
+
+        /// <summary>
+        /// Руководитель лаборатории
+        /// </summary>
+        public string ChiefLab { get; set; }
 
         /// <summary>
         /// Номер протокола:
@@ -71,6 +77,11 @@ namespace PressureSensorData
         /// Дата сертификата:
         /// </summary>
         public string CertificateDate { get; set; }
+
+        /// <summary>
+        /// Время действия свидетельства:
+        /// </summary>
+        public string Validity { get; set; }
 
         /// <summary>
         /// Принадлежит:
@@ -157,9 +168,9 @@ namespace PressureSensorData
         public EthalonDescriptor EthalonPressure { get; set; }
 
         /// <summary>
-        /// Эталон напряжения
+        /// Эталон выходного сигнала
         /// </summary>
-        public EthalonDescriptor EthalonVoltage { get; set; }
+        public EthalonDescriptor EthalonOut { get; set; }
 
         /// <summary>
         /// Точки проверки
@@ -179,7 +190,7 @@ namespace PressureSensorData
         /// <summary>
         /// Выбранная единица измерения
         /// </summary>
-        public string Unit { get; set; }
+        public Units Unit { get; set; }
 
         /// <summary>
         /// Допуск по проценту ВПИ

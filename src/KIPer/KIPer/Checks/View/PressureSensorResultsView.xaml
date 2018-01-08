@@ -63,10 +63,10 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№" Width="Auto" Binding="{Binding Index, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Pвх, кПа" Width="*" Binding="{Binding Config.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Uэт, В" Width="*" Binding="{Binding Config.U, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Uфакт, В" Width="*" Binding="{Binding Result.UReal, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="ΔU, В" Width="*" Binding="{Binding Result.dUReal, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="ΔUдопуст, В" Width="*" Binding="{Binding Config.dU, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Iэт, В" Width="*" Binding="{Binding Config.I, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Iфакт, В" Width="*" Binding="{Binding Result.IReal, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="ΔI, В" Width="*" Binding="{Binding Result.dIReal, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="ΔIдопуст, В" Width="*" Binding="{Binding Config.dI, UpdateSourceTrigger=PropertyChanged}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -85,10 +85,10 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№" Width="Auto" Binding="{Binding Index, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Pвх, кПа" Width="*" Binding="{Binding Config.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Uпр, В" Width="*" Binding="{Binding Result.UReal, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Uобр, В" Width="*" Binding="{Binding Result.Uback, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Uвар, В" Width="*" Binding="{Binding Result.Uvar, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Uвар допуст, В" Width="*" Binding="{Binding Config.Uvar, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Iпр, В" Width="*" Binding="{Binding Result.IReal, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Iобр, В" Width="*" Binding="{Binding Result.Iback, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Iвар, В" Width="*" Binding="{Binding Result.Ivar, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Iвар допуст, В" Width="*" Binding="{Binding Config.Ivar, UpdateSourceTrigger=PropertyChanged}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

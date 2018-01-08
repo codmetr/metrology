@@ -1,4 +1,6 @@
-﻿namespace PressureSensorData
+﻿using KipTM.Interfaces;
+
+namespace PressureSensorData
 {
     public class PressureSensorPointResult
     {
@@ -9,7 +11,7 @@
         /// <summary>
         /// Единицы измерения давления
         /// </summary>
-        public string PressureUnit { get; set; }
+        public Units PressureUnit { get; set; }
         /// <summary>
         /// Точка напряжения
         /// </summary>
@@ -17,7 +19,7 @@
         /// <summary>
         /// Единицы измерения напряжения
         /// </summary>
-        public string VoltageUnit { get; set; }
+        public Units VoltageUnit { get; set; }
 
         /// <summary>
         /// Результат: давление

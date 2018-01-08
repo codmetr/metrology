@@ -40,7 +40,7 @@ namespace KipTM.Checks.View
             if(prop == null)
                 return;
             var source = new ObservableDataSource<Point>();
-            source.AppendMany(prop.Select(el => new Point(el.TimeStamp.Ticks / 10000000000.0, el.U)));
+            source.AppendMany(prop.Select(el => new Point(el.TimeStamp.Ticks / 10000000000.0, el.I)));
             prop.CollectionChanged += (sen, args) =>
             {
                 if (args.Action == NotifyCollectionChangedAction.Add)
@@ -49,7 +49,7 @@ namespace KipTM.Checks.View
                     {
                         var el = args.NewItems[i] as MeasuringPoint;
                         if (el != null)
-                            source.AppendAsync(this.Dispatcher, new Point(el.TimeStamp.Ticks / 10000000000.0, el.U));
+                            source.AppendAsync(this.Dispatcher, new Point(el.TimeStamp.Ticks / 10000000000.0, el.I));
                     }
                 }
                 else if (args.Action == NotifyCollectionChangedAction.Reset)
@@ -57,7 +57,7 @@ namespace KipTM.Checks.View
                     source.Collection.Clear();
                 }
             };
-            var line = chart.AddLineGraph(source, Colors.Brown, 1, "U");
+            var line = chart.AddLineGraph(source, Colors.Brown, 1, "I");
         }
     }
 }

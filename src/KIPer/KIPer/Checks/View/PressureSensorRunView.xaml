@@ -44,8 +44,10 @@
                         <DataGridCheckBoxColumn Width="Auto" Binding="{Binding Result.IsCorrect, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Шаг" Width="*" Binding="{Binding Config, Converter={StaticResource PointConfigConverter}}"/>
                         <DataGridTextColumn Header="Pреал" Width="50" Binding="{Binding Result.PressureReal}"/>
-                        <DataGridTextColumn Header="Uреал" Width="50" Binding="{Binding Result.UReal}"/>
-                        <DataGridTextColumn Header="dUреал" Width="50" Binding="{Binding Result.dUReal}"/>
+                        <DataGridTextColumn Header="Iреал" Width="50" Binding="{Binding Result.IReal}"/>
+                        <DataGridTextColumn Header="Iобр" Width="50" Binding="{Binding Result.Iback}"/>
+                        <DataGridTextColumn Header="ΔI" Width="50" Binding="{Binding Result.dIReal}"/>
+                        <DataGridTextColumn Header="ΔIвар" Width="50" Binding="{Binding Result.dIvar}"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <Grid Grid.Row="2">
@@ -64,13 +66,13 @@
                     <TextBlock Grid.Column="0" Grid.ColumnSpan="4">Добавление точки:</TextBlock>
                     <TextBlock Grid.Column="0" Grid.Row="1">P:</TextBlock>
                     <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NewConfig.Pressure, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock Grid.Column="2" Grid.Row="1">мм рт.ст.</TextBlock>
-                    <TextBlock Grid.Column="0" Grid.Row="2">U:</TextBlock>
-                    <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding NewConfig.U, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock Grid.Column="2" Grid.Row="2">В</TextBlock>
-                    <TextBlock Grid.Column="0" Grid.Row="3">ΔU:</TextBlock>
-                    <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding NewConfig.dU, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock Grid.Column="2" Grid.Row="3">В</TextBlock>
+                    <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding PressureUnit, Converter={StaticResource UnitsStringConverter}}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2">I:</TextBlock>
+                    <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding NewConfig.I, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="2" Text="{Binding OutUnit, Converter={StaticResource UnitsStringConverter}}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="3">ΔI:</TextBlock>
+                    <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding NewConfig.dI, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="3" Text="{Binding OutUnit, Converter={StaticResource UnitsStringConverter}}"/>
                     <Button Grid.Row="1" Grid.Column="3" Grid.RowSpan="3" Command="{Binding AddPoint}">
                         <TextBlock FontSize="18" TextAlignment="Center">
                     Добавить<LineBreak/>точку
@@ -109,10 +111,10 @@
                 </TextBlock>
                 <TextBlock Grid.Column="0" Grid.Row="1">P:</TextBlock>
                 <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding LastMeasuredPoint.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Column="2" Grid.Row="1">кПа</TextBlock>
-                <TextBlock Grid.Column="3" Grid.Row="1">U:</TextBlock>
-                <TextBox Grid.Column="4" Grid.Row="1" Text="{Binding LastMeasuredPoint.U, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Column="5" Grid.Row="1">В</TextBlock>
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding PressureUnit, Converter={StaticResource UnitsStringConverter}}"/>
+                <TextBlock Grid.Column="3" Grid.Row="1">I:</TextBlock>
+                <TextBox Grid.Column="4" Grid.Row="1" Text="{Binding LastMeasuredPoint.I, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding OutUnit, Converter={StaticResource UnitsStringConverter}}"/>
                 <!--<WindowsFormsHost Name="WFHost" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300">
                 <zedGraph:ZedGraphControl x:Name="zChart" Height="300" Width="300"/>
             </WindowsFormsHost>-->
@@ -123,27 +125,27 @@
                             <d3:HorizontalTimeSpanAxis Name="xAxis"/>
                         </d3:ChartPlotter.HorizontalAxis>
                         <d3:ChartPlotter.VerticalAxis>
-                            <d3:VerticalIntegerAxis Name="yU"/>
+                            <d3:VerticalIntegerAxis Name="yI"/>
                         </d3:ChartPlotter.VerticalAxis>
                     </d3:ChartPlotter>
                 </d3:ViewportUIContainer>
                 <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
                 Мгновенная погрешность:
                 </TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="4">ΔU:</TextBlock>
-                <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding LastMeasuredPoint.dU, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Column="2" Grid.Row="4">В</TextBlock>
-                <TextBlock Grid.Column="3" Grid.Row="4">δU:</TextBlock>
-                <TextBox Grid.Column="4" Grid.Row="4" Text="{Binding LastMeasuredPoint.qU, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="0" Grid.Row="4">ΔI:</TextBlock>
+                <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding LastMeasuredPoint.dI, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="2" Grid.Row="4" Text="{Binding OutUnit, Converter={StaticResource UnitsStringConverter}}"/>
+                <TextBlock Grid.Column="3" Grid.Row="4">δI:</TextBlock>
+                <TextBox Grid.Column="4" Grid.Row="4" Text="{Binding LastMeasuredPoint.qI, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Column="5" Grid.Row="4">%</TextBlock>
                 <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}">
                 Допуск:
                 </TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="6">ΔU:</TextBlock>
-                <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding LastMeasuredPoint.dUn, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Column="2" Grid.Row="6">В</TextBlock>
-                <TextBlock Grid.Column="3" Grid.Row="6">δU:</TextBlock>
-                <TextBox Grid.Column="4" Grid.Row="6" Text="{Binding LastMeasuredPoint.qUn, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="0" Grid.Row="6">ΔI:</TextBlock>
+                <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding LastMeasuredPoint.dIn, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="2" Grid.Row="6" Text="{Binding OutUnit, Converter={StaticResource UnitsStringConverter}}"/>
+                <TextBlock Grid.Column="3" Grid.Row="6">δI:</TextBlock>
+                <TextBox Grid.Column="4" Grid.Row="6" Text="{Binding LastMeasuredPoint.qIn, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Column="5" Grid.Row="6">%</TextBlock>
                 <TextBlock Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="7" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TblHeaderStyle}" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontWeight="Bold" />
                 <ProgressBar Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="7" Height="20" LargeChange="3" BorderThickness="0"

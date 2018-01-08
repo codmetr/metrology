@@ -23,7 +23,6 @@ namespace PressureSensorCheck.Workflow
             DpiConfig = dpiConf;
         }
 
-
         /// <summary>
         /// Идентифитатор проверки
         /// </summary>
@@ -36,6 +35,22 @@ namespace PressureSensorCheck.Workflow
         /// Использовать на разметке экрана только в случае единственного места изменения, так как без INotifyPropertyChanged
         /// </remarks>
         public PressureSensorConfig Data { get; }
+
+        /// <summary>
+        /// Единицы измерения давления
+        /// </summary>
+        public Units PressUnit { get { return Data.Unit; }
+            set
+            {
+                if(value == Data.Unit)
+                    return;
+                Data.Unit = value;
+                foreach (var point in Config.Points)
+                {
+                    point.Unit = value;
+                }
+                OnPropertyChanged("PressUnit");
+            } }
 
         /// <summary>
         /// Конфигурация логики проверки
@@ -155,10 +170,7 @@ namespace PressureSensorCheck.Workflow
             Data.VpiMin = 0;
             Data.TolerancePercentVpi = 0.25;
             Points = new ObservableCollection<PointConfigViewModel>();
-            Units = new List<string>()
-            {
-                "мм рт.ст."
-            };
+            Units = UnitDict.GetUnitsForType(ChannelType.Pressure);
             Data.Unit = Units.FirstOrDefault();
             OutputRanges = new[]
             {
@@ -208,7 +220,7 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Единицы измерения
         /// </summary>
-        public IEnumerable<string> Units { get; set; }
+        public IEnumerable<Units> Units { get; set; }
 
         /// <summary>
         /// Допуск по проценту ВПИ
@@ -283,14 +295,14 @@ namespace PressureSensorCheck.Workflow
                 var sensPoint = new PressureSensorPoint()
                 {
                     PressurePoint = point,
-                    VoltagePoint = uPoint,
+                    OutPoint = uPoint,
                     PressureUnit = Data.Unit,
-                    VoltageUnit = "мА",
+                    OutUnit = KipTM.Interfaces.Units.mA,
                     Tollerance = tollerance
                 };
                 Data.Points.Add(sensPoint);
                 Points.Add(new PointConfigViewModel()//TODO добавить связь с sensPoint
-                { Pressure = point, U = uPoint, Unit = Data.Unit, dU = tollerance });
+                { Pressure = point, I = uPoint, Unit = Data.Unit, dI = tollerance });
             }
         }
 

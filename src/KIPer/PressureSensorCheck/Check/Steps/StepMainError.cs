@@ -71,13 +71,13 @@ namespace PressureSensorCheck.Check.Steps
             WaitHandle.WaitAny(new[] { wh, cancel.WaitHandle });
             if (cancel.IsCancellationRequested)
                 return;
-            var valueVoltage = _ethalonVoltage.GetEthalonValue(_point.VoltagePoint, cancel);
+            var valueVoltage = _ethalonVoltage.GetEthalonValue(_point.OutPoint, cancel);
             var valuePressure = _ethalonPressure.GetEthalonValue(_point.PressurePoint, cancel);
-            Log($"Received U = {valueVoltage} on P = {valuePressure}");
+            Log($"Received I = {valueVoltage} on P = {valuePressure}");
             _result.PressurePoint = _point.PressurePoint;
             _result.PressureUnit = _point.PressureUnit;
-            _result.VoltagePoint = _point.VoltagePoint;
-            _result.VoltageUnit = _point.VoltageUnit;
+            _result.VoltagePoint = _point.OutPoint;
+            _result.VoltageUnit = _point.OutUnit;
             _result.VoltageValue = valueVoltage;
             _result.PressureValue = valuePressure;
             _result.VoltageValueBack = valueVoltage;

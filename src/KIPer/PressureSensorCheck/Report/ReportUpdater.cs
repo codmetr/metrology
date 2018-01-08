@@ -47,6 +47,7 @@ namespace PressureSensorCheck.Report
             report.Humidity = config.Humidity.ToString("F0");
             report.Pressure = config.DayPressure.ToString("F0");
             report.Voltage = config.CommonVoltage.ToString("F0");
+            report.CheckLawBase = config.ChecklLawBase;
             report.VisualCheckResult = result.VisualCheckResult;
             report.LeakCheckResult = result.Leak;
             report.CommonResult = result.CommonResult;
@@ -66,12 +67,12 @@ namespace PressureSensorCheck.Report
             });
             ethalons.Add(new EthalonDto()
             {
-                Type = config.EthalonVoltage.SensorType,
-                Title = config.EthalonVoltage.Title,
-                RangeClass = config.EthalonVoltage.ErrorClass,
-                SerialNumber = config.EthalonVoltage.SerialNumber,
-                CheckCertificateDate = config.EthalonVoltage.Category,
-                CheckCertificateNumber = config.EthalonVoltage.RegNum,
+                Type = config.EthalonOut.SensorType,
+                Title = config.EthalonOut.Title,
+                RangeClass = config.EthalonOut.ErrorClass,
+                SerialNumber = config.EthalonOut.SerialNumber,
+                CheckCertificateDate = config.EthalonOut.Category,
+                CheckCertificateNumber = config.EthalonOut.RegNum,
             });
             report.Ethalons = ethalons.ToArray();
         }
@@ -88,7 +89,7 @@ namespace PressureSensorCheck.Report
                     mainAcPoint = new MainAccurancyPointDto()
                     {
                         PressurePoint = point.PressurePoint.ToString("F0"),
-                        Uet = point.VoltagePoint.ToString("F3"),
+                        Uet = point.OutPoint.ToString("F3"),
                         dUet = point.Tollerance.ToString("F3"),
                     };
                     mainAccur.Add(mainAcPoint);

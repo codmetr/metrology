@@ -21,7 +21,7 @@ namespace KipTM.Skins.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || targetType == typeof(string))
+            if (value == null)// || targetType != typeof(string)
                 return null;
             //    throw new InvalidOperationException("The target must be a string");
             if (value.GetType() != typeof(ChannelType))

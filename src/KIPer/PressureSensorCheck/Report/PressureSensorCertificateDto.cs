@@ -91,9 +91,14 @@ namespace PressureSensorCheck.Report
         public object Pressure { get; set; }
 
         /// <summary>
-        /// Проверку проводил
+        /// Поверитель
         /// </summary>
         public object User { get; set; }
+
+        /// <summary>
+        /// Руководитель лаборатории
+        /// </summary>
+        public object ChiefLab { get; set; }
 
         /// <summary>
         /// Дата поверки

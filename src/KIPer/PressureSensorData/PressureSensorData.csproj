@@ -47,6 +47,12 @@
     <Compile Include="PressureSensorResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
+      <Project>{B8DBF9E3-03D3-457D-B889-D45E1C5131E4}</Project>
+      <Name>KipTM.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

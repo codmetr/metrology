@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:archive="clr-namespace:CheckFrame.ViewModel.Archive;assembly=CheckFrame"
+             xmlns:archive1="clr-namespace:CheckFrame.ViewModel.Archive;assembly=KipTM.Interfaces"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -24,7 +25,7 @@
             </DataGridTemplateColumn>
             <DataGridTemplateColumn Header="Проверяемая точка">
                 <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="archive:IParameterResultViewModel">
+                    <DataTemplate DataType="archive1:IParameterResultViewModel">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding PointMeasuring}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                             <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>

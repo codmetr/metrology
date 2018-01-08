@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using PressureSensorCheck.Workflow;
+using KipTM.Interfaces;
 
 namespace KipTM.Checks.View
 {
@@ -15,7 +16,8 @@ namespace KipTM.Checks.View
             var conf = value as PointConfigViewModel;
             if (conf == null)
                 return string.Empty;
-            return $"{conf.Pressure} {conf.Unit}";
+            var unit = conf.Unit.ToStringLocalized(CultureInfo.CurrentUICulture);
+            return $"{conf.Pressure} {unit} (I = {conf.I} мА)";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

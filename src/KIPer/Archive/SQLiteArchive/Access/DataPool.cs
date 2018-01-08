@@ -69,7 +69,7 @@ namespace SQLiteArchive
         {
             var dp = target;
             dbPath = dbPath ?? Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonDocuments),
-                "KipTM\\db", Properties.Settings.Default.DBName);
+                "KTM\\KipTM\\Archive\\db", Properties.Settings.Default.DBName);
             dp._dataSource = new DataSource(dbPath, trace);
             dp._dataSource.Load();
             foreach (var repair in dp._dataSource.Checks)

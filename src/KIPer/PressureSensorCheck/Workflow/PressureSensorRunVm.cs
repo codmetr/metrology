@@ -8,7 +8,9 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ArchiveData.DTO;
 using DPI620Genii;
+using KipTM.Interfaces;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using NLog;
@@ -81,11 +83,6 @@ namespace PressureSensorCheck.Workflow
         public DateTime? LastResultTime { get; set; }
 
         /// <summary>
-        /// Единицы измерения давления
-        /// </summary>
-        public string PressureUnit { get; } = "мм рт.ст.";
-
-        /// <summary>
         /// Текущая выбранная точка
         /// </summary>
         public PointViewModel SelectedPoint { get; set; }
@@ -107,8 +104,8 @@ namespace PressureSensorCheck.Workflow
                 Config = new PointConfigViewModel()
                 {
                     Pressure = NewConfig.Pressure,
-                    U = NewConfig.U,
-                    dU = NewConfig.dU,
+                    I = NewConfig.I,
+                    dI = NewConfig.dI,
                     Unit = PressureUnit,
                 },
                 Result = new PointResultViewModel()
@@ -116,10 +113,10 @@ namespace PressureSensorCheck.Workflow
             _config.Points.Add(new PressureSensorPoint()
             {
                 PressurePoint = NewConfig.Pressure,
-                VoltagePoint = NewConfig.U,
-                Tollerance = NewConfig.dU,
+                OutPoint = NewConfig.I,
+                Tollerance = NewConfig.dI,
                 PressureUnit = PressureUnit,
-                VoltageUnit = "мА"
+                OutUnit = Units.mA
             });
         }
 
@@ -132,6 +129,34 @@ namespace PressureSensorCheck.Workflow
         /// Текущее значение измерение
         /// </summary>
         public MeasuringPoint LastMeasuredPoint { get; set; }
+
+        /// <summary>
+        /// Единицы измерения давления
+        /// </summary>
+        public Units PressureUnit
+        {
+            get
+            {
+                return _config.Unit;
+                //if (_dpiConf.Slot1.ChannelType == ChannelType.Pressure)
+                //    return _dpiConf.Slot1.SelectedUnit;
+                //return _dpiConf.Slot2.SelectedUnit;
+            }
+        }
+
+        /// <summary>
+        /// Единицы измерения напряжения
+        /// </summary>
+        public Units OutUnit
+        {
+            get
+            {
+                return Units.mA;
+                //if (_dpiConf.Slot1.ChannelType != ChannelType.Pressure)
+                //    return _dpiConf.Slot1.SelectedUnit;
+                //return _dpiConf.Slot2.SelectedUnit;
+            }
+        }
 
         /// <summary>
         /// Пояснение
@@ -223,7 +248,9 @@ namespace PressureSensorCheck.Workflow
                 _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
             
             // конфигурирование шагов проверки
-            var check = new PresSensorCheck(checkLogger, new DPI620Ethalon(_dpi620, inSlotNum), new DPI620Ethalon(_dpi620, outSlotNum), Result);
+            var check = new PresSensorCheck(checkLogger,
+                new DPI620Ethalon(_dpi620, inSlotNum, ChannelType.Pressure, inSlot.SelectedUnit, _config.Unit),
+                new DPI620Ethalon(_dpi620, outSlotNum, ChannelType.Current, outSlot.SelectedUnit, Units.mA), Result);
             check.ChConfig.UsrChannel = new PressureSensorUserChannel(this);
             check.FillSteps(_config);
 
@@ -278,11 +305,11 @@ namespace PressureSensorCheck.Workflow
                 if(point.Result == null)
                     point.Result = new PointResultViewModel();
                 point.Result.PressureReal = res.PressureValue;
-                point.Result.UReal = res.VoltageValue;
-                point.Result.Uback = res.VoltageValueBack;
-                point.Result.dUReal = res.VoltageValue - res.VoltagePoint;
-                point.Result.dUvar = Math.Abs(res.VoltageValue - res.VoltageValueBack);
-                point.Result.IsCorrect = point.Result.dUReal <= point.Config.dU;
+                point.Result.IReal = res.VoltageValue;
+                point.Result.Iback = res.VoltageValueBack;
+                point.Result.dIReal = res.VoltageValue - res.VoltagePoint;
+                point.Result.dIvar = Math.Abs(res.VoltageValue - res.VoltageValueBack);
+                point.Result.IsCorrect = point.Result.dIReal <= point.Config.dI;
             }
             LastResultTime = DateTime.Now;
         }
@@ -426,21 +453,21 @@ namespace PressureSensorCheck.Workflow
             {
                 while (!arg.Cancel.WaitHandle.WaitOne(arg.PeriodRepeat))
                 {
-                    var u = dpi620.GetValue(1);
+                    var outVal = dpi620.GetValue(1);
                     var pressure = dpi620.GetValue(2);
-                    var un = GetUForPressure(conf, pressure);
-                    var du = un - u;
-                    var qu = u / un - 1.0;
+                    var outPoint = GetOutForPressure(conf, pressure);
+                    var dOut = outPoint - outVal;
+                    var qu = outVal / outPoint - 1.0;
                     var item = new MeasuringPoint()
                     {
                         TimeStamp = DateTime.Now - arg.StartTime,
-                        U = u,
+                        I = outVal,
                         Pressure = pressure,
-                        dU = du,
-                        Un = GetUForPressure(conf, pressure),
-                        dUn = GetdUForU(conf, un),
-                        qU = qu,
-                        qUn = 0,
+                        dI = dOut,
+                        In = GetOutForPressure(conf, pressure),
+                        dIn = GetdOutForOut(conf, outPoint),
+                        qI = qu,
+                        qIn = 0,
                     };
                     Publish(item);
                     _logger.Trace($"Readed repeat: P:{item.Pressure}");
@@ -453,19 +480,19 @@ namespace PressureSensorCheck.Workflow
         }
 
 
-        private double GetUForPressure(PressureSensorConfig conf, double pressure)
+        private double GetOutForPressure(PressureSensorConfig conf, double pressure)
         {
             var percentVpi = (pressure - conf.VpiMin) / (conf.VpiMax - conf.VpiMin);
             if (pressure < conf.VpiMin)
                 percentVpi = 0;
-            double uMin = 0.0;
-            double uMax = 5.0;
+            double outMin = 0.0;
+            double outMax = 5.0;
             if (conf.OutputRange == OutGange.I4_20mA)
             {
-                uMin = 4;
-                uMax = 20;
+                outMin = 4;
+                outMax = 20;
             }
-            var val = uMin + (uMax - uMin) * percentVpi;
+            var val = outMin + (outMax - outMin) * percentVpi;
 
             return val;
         }
@@ -473,9 +500,9 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Получить допуск для конкретной точки напряжения
         /// </summary>
-        /// <param name="u"></param>
+        /// <param name="outVal"></param>
         /// <returns></returns>
-        private double GetdUForU(PressureSensorConfig conf, double u)
+        private double GetdOutForOut(PressureSensorConfig conf, double outVal)
         {
             return conf.ToleranceDelta;
         }
@@ -519,32 +546,32 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Текущее напряжение
         /// </summary>
-        public double U { get; set; }
+        public double I { get; set; }
 
         /// <summary>
         /// Нормативное напряжение соответствующее заданному давлению
         /// </summary>
-        public double Un { get; set; }
+        public double In { get; set; }
 
         /// <summary>
         /// Отклонение от нормативного напряжения на заданном давлении
         /// </summary>
-        public double dU { get; set; }
+        public double dI { get; set; }
 
         /// <summary>
         /// Допустимое отклонение от нормативного напряжения на заданном давлении
         /// </summary>
-        public double dUn { get; set; }
+        public double dIn { get; set; }
 
         /// <summary>
         /// Относительное отклонение от нормативного напряжения на заданном давлении
         /// </summary>
-        public double qU { get; set; }
+        public double qI { get; set; }
 
         /// <summary>
         /// Допустимое относительное отклонение от нормативного напряжения на заданном давлении
         /// </summary>
-        public double qUn { get; set; }
+        public double qIn { get; set; }
 
         /// <summary>
         /// Метка времени измерения
@@ -604,22 +631,22 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Единицы измерения давления
         /// </summary>
-        public string Unit { get; set; }
+        public Units Unit { get; set; }
 
         /// <summary>
-        /// Ожидаемое значение напряжения
+        /// Ожидаемое значение тока
         /// </summary>
-        public double U { get; set; }
+        public double I { get; set; }
 
         /// <summary>
-        /// Допуск по напряжению
+        /// Допуск по току
         /// </summary>
-        public double dU { get; set; }
+        public double dI { get; set; }
 
         /// <summary>
         /// Допуск по вариации напряжения
         /// </summary>
-        public double Uvar { get; set; }
+        public double Ivar { get; set; }
 
         #region INotifyPropertyChanged
 
@@ -647,27 +674,27 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Фактическое напряжение (прямой ход)
         /// </summary>
-        public double UReal { get; set; }
+        public double IReal { get; set; }
 
         /// <summary>
         /// Фактическая погрешность (прямой ход)
         /// </summary>
-        public double dUReal { get; set; }
+        public double dIReal { get; set; }
 
         /// <summary>
         /// Фактическое напряжение (обратный ход)
         /// </summary>
-        public double Uback { get; set; }
+        public double Iback { get; set; }
 
         /// <summary>
         /// Фактическая вариация
         /// </summary>
-        public double Uvar { get; set; }
+        public double Ivar { get; set; }
 
         /// <summary>
         /// Фактическая погрешность вариации
         /// </summary>
-        public double dUvar { get; set; }
+        public double dIvar { get; set; }
 
         /// <summary>
         /// Напряжение на заданной точке в допуске

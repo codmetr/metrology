@@ -68,6 +68,11 @@ namespace PressureSensorCheck.Report
         public object Voltage { get; set; }
 
         /// <summary>
+        /// Поверено в соответствии с
+        /// </summary>
+        public object CheckLawBase { get; set; }
+
+        /// <summary>
         /// Результат визуального осмотра
         /// </summary>
         public object VisualCheckResult { get; set; }
@@ -134,7 +139,7 @@ namespace PressureSensorCheck.Report
         public object Ur { get; set; }
 
         /// <summary>
-        /// dU, В
+        /// dI, В
         /// </summary>
         public object dU { get; set; }
 
@@ -165,7 +170,7 @@ namespace PressureSensorCheck.Report
         public object U { get; set; }
 
         /// <summary>
-        /// dU, В
+        /// dI, В
         /// </summary>
         public object dU { get; set; }
 

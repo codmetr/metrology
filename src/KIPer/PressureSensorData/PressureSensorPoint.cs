@@ -1,4 +1,6 @@
-﻿namespace PressureSensorData
+﻿using KipTM.Interfaces;
+
+namespace PressureSensorData
 {
     /// <summary>
     /// Точка проверки преобразования давления в напряжение
@@ -13,17 +15,17 @@
         /// <summary>
         /// Единицы измерения давления
         /// </summary>
-        public string PressureUnit { get; set; }
+        public Units PressureUnit { get; set; }
 
         /// <summary>
-        /// Точка напряжения
+        /// Точка выходного сигнала
         /// </summary>
-        public double VoltagePoint { get; set; }
+        public double OutPoint { get; set; }
 
         /// <summary>
-        /// Единицы измерения напряжения
+        /// Единицы измерения выходного сигнала
         /// </summary>
-        public string VoltageUnit { get; set; }
+        public Units OutUnit { get; set; }
 
         /// <summary>
         /// Допуск по напряжению

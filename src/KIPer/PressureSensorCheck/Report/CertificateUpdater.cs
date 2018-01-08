@@ -45,6 +45,7 @@ namespace PressureSensorCheck.Report
             report.Humidity = config.Humidity.ToString("F0");
             report.Pressure = config.DayPressure.ToString("F0");
             report.User = config.User;
+            report.ChiefLab = config.User;
             report.CheckDate = config.CertificateDate;
         }
 
@@ -53,7 +54,7 @@ namespace PressureSensorCheck.Report
             report.Ethalons = new[]
             {
                 ToDto(config.EthalonPressure),
-                ToDto(config.EthalonVoltage),
+                ToDto(config.EthalonOut),
             };
         }
 

@@ -56,12 +56,12 @@ namespace PressureSensorCheck.Workflow
             {
                 new SimpleWorkflowStep(configVm).SetOut(()=>UpdateRunByConf(configVm.Config, run, logger)),
                 new SimpleWorkflowStep(run).SetOut(()=>UpdateResultByRun(run, resultVm, logger)),
-                new SimpleWorkflowStep(resultVm).SetOut(()=>
+                new SimpleWorkflowStep(resultVm),
+                new SimpleWorkflowStep(reportVm).SetIn(()=>
                 {
                     reportUpdater.Update(conf, result, reportMain);
                     certificateUpdater.Update(id, conf, result, reportCertificate);
                 }),
-                new SimpleWorkflowStep(reportVm),
             };
 
             return new LineWorkflow(steps);
@@ -88,9 +88,9 @@ namespace PressureSensorCheck.Workflow
                     else
                     {
                         resPoint.Config.Unit = point.Unit;
-                        resPoint.Config.U = point.U;
-                        resPoint.Config.dU = point.dU;
-                        resPoint.Config.Uvar = point.Uvar;
+                        resPoint.Config.I = point.I;
+                        resPoint.Config.dI = point.dI;
+                        resPoint.Config.Ivar = point.Ivar;
                     }
                 }
             }
@@ -125,9 +125,9 @@ namespace PressureSensorCheck.Workflow
                     else
                     {
                         resPoint.Config.Unit = point.Config.Unit;
-                        resPoint.Config.U = point.Config.U;
-                        resPoint.Config.dU = point.Config.dU;
-                        resPoint.Config.Uvar = point.Config.Uvar;
+                        resPoint.Config.I = point.Config.I;
+                        resPoint.Config.dI = point.Config.dI;
+                        resPoint.Config.Ivar = point.Config.Ivar;
                     }
                 }
                 result.TimeStamp = run.LastResultTime;
