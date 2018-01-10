@@ -42,15 +42,19 @@
                       ItemsSource="{Binding Points}" SelectedItem="{Binding SelectedPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Columns>
                         <DataGridCheckBoxColumn Width="Auto" Binding="{Binding Result.IsCorrect, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Шаг" Width="*" Binding="{Binding Config, Converter={StaticResource PointConfigConverter}}"/>
-                        <DataGridTextColumn Header="Pреал" Width="50" Binding="{Binding Result.PressureReal}"/>
-                        <DataGridTextColumn Header="Iреал" Width="50" Binding="{Binding Result.IReal}"/>
+                        <DataGridTextColumn Width="*" Binding="{Binding Config, Converter={StaticResource PointConfigConverter}}">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Шаг" ToolTip="Column A Tooltip"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Pизм" Width="50" Binding="{Binding Result.PressureReal}"/>
+                        <DataGridTextColumn Header="Iпр" Width="50" Binding="{Binding Result.IReal}"/>
                         <DataGridTextColumn Header="Iобр" Width="50" Binding="{Binding Result.Iback}"/>
                         <DataGridTextColumn Header="ΔI" Width="50" Binding="{Binding Result.dIReal}"/>
                         <DataGridTextColumn Header="ΔIвар" Width="50" Binding="{Binding Result.dIvar}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid Grid.Row="2">
+                <Grid Grid.Row="2" Visibility="Collapsed">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="*"/>
