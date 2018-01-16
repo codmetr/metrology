@@ -188,6 +188,12 @@ namespace KipTM.ViewModel
             }
         }
 
+        public DocsViewModel Libs { get { return _lib; } }
+
+        public IArchivesViewModel Store { get { return _store; } }
+
+        public IEnumerable<IWorkflow> Checks { get { return _workflows.Values; } }
+
         /// <summary>
         /// Выбранная вкладка
         /// </summary>

@@ -7,7 +7,7 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="KipTM" Height="300" Width="300"
+        Title="KipTM" Height="600" Width="600"
                        x:Name="MainViewWindow">
     <controls:MetroWindow.Resources>
         <ResourceDictionary>
@@ -33,11 +33,14 @@
     </i:Interaction.Triggers>
     <Grid>
         <TabControl>
-            <TabItem Header="Преобразователь">
-                
+            <TabItem Header="Проверки">
+                <controls:FlipView ItemsSource="{Binding Checks}"></controls:FlipView>
             </TabItem>
             <TabItem Header="Архив">
-
+                <ContentPresenter Content="{Binding Store}"/>
+            </TabItem>
+            <TabItem Header="Документация">
+                <ContentPresenter Content="{Binding Libs}"/>
             </TabItem>
         </TabControl>
     </Grid>
