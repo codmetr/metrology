@@ -1,12 +1,18 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace KipTM.Workflow
 {
     /// <summary>
     /// Механизм перехода между состояниями
     /// </summary>
-    public interface IWorkflow
+    public interface IWorkflow: IEnumerable<IWorkflowStep>, IEnumerator<IWorkflowStep>
     {
+        /// <summary>
+        /// Шаги
+        /// </summary>
+        IEnumerable<IWorkflowStep> States { get; }
+
         /// <summary>
         /// Перейти к предыдущему состоянию
         /// </summary>

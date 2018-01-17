@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -36,7 +38,7 @@ namespace KipTM.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase, ISubscriber<EventCheckState>, ISubscriber<ErrorMessageEventArg>, ISubscriber<HelpMessageEventArg>
+    public class MainViewModel : ISubscriber<EventCheckState>, ISubscriber<ErrorMessageEventArg>, ISubscriber<HelpMessageEventArg>, INotifyPropertyChanged
     {
 
         #region Переменные
@@ -50,16 +52,12 @@ namespace KipTM.ViewModel
         
         private readonly ServiceViewModel _services;
         private readonly DocsViewModel _lib;
-        private IEnumerable<OneBtnDescriptor> _checkBtns;
 
         private readonly CheckWorkflowFactory _checkFactory;
 
 
-
-        private string _helpMessage;
-        private bool _isError;
         private object _selectedAction;
-        private bool _isActiveSwitchServices = true;
+
         #endregion
 
         #region Инициализация загрузка
@@ -118,7 +116,7 @@ namespace KipTM.ViewModel
             checkBtns.Add(new OneBtnDescriptor(PresSensorCheck.CheckKey, "Датчик давления", BitmapToImage(Resources.EHCerabarM),
                 BitmapToImage(Resources.EHCerabarM), SelectChecks));
             _workflows.Add(PresSensorCheck.CheckKey, new PressureSensorWorkflow().Make(_logger, new DataAccessor(dataPool)));
-            _checkBtns = checkBtns;
+            CheckBtns = checkBtns;
             _eventAggregator.Subscribe(this);
         }
 
@@ -130,6 +128,7 @@ namespace KipTM.ViewModel
             try
             {
                 SelectChecks.Execute(_workflows.Keys.FirstOrDefault());
+                OnPropertyChanged("Checks");
             }
             catch (Exception e)
             {
@@ -144,7 +143,7 @@ namespace KipTM.ViewModel
         public override void Cleanup()
         {
             _eventAggregator.Unsubscribe(this);
-            base.Cleanup();
+            //base.Cleanup();
             if (_workflows != null)
             {
                 foreach (var workflow in _workflows.Values)
@@ -177,13 +176,13 @@ namespace KipTM.ViewModel
                 return new CommandWrapper(
                     (mainView) =>
                     {
-                        Load();
-
                         var view = mainView as Window;
                         if (view == null)
                             return;
                         Tools.ViewViewmodelMatcher.AddMatch(view.Resources, ViewAttribute.CheckView,
                             ViewAttribute.CheckViewModelCashOnly);
+
+                        Load();
                     });
             }
         }
@@ -192,7 +191,7 @@ namespace KipTM.ViewModel
 
         public IArchivesViewModel Store { get { return _store; } }
 
-        public IEnumerable<IWorkflow> Checks { get { return _workflows.Values; } }
+        public IEnumerable<IWorkflowStep> Checks { get { return _workflows.Values.FirstOrDefault(); } }
 
         /// <summary>
         /// Выбранная вкладка
@@ -202,7 +201,8 @@ namespace KipTM.ViewModel
             get { return _selectedAction; }
             set
             {
-                Set(ref _selectedAction, value);
+                _selectedAction = value;
+                OnPropertyChanged("SelectedAction");
                 if (value is IWorkflow)
                     return;
                 foreach (var btn in CheckBtns)
@@ -215,11 +215,7 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Набор кнопок проверок
         /// </summary>
-        public IEnumerable<OneBtnDescriptor> CheckBtns
-        {
-            get { return _checkBtns; }
-            set { Set(ref _checkBtns, value); }
-        }
+        public IEnumerable<OneBtnDescriptor> CheckBtns { get; set; }
 
         /// <summary>
         /// Закрытие окна
@@ -336,29 +332,17 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Поясняющее сообщение 
         /// </summary>
-        public string HelpMessage
-        {
-            get { return _helpMessage; }
-            set { Set(ref _helpMessage, value); }
-        }
+        public string HelpMessage { get; set; }
 
         /// <summary>
         /// Сообшение - описание ошибки
         /// </summary>
-        public bool IsError
-        {
-            get { return _isError; }
-            set { Set(ref _isError, value); }
-        }
+        public bool IsError { get; set; }
 
         /// <summary>
         /// Доступность переключения сервисов
         /// </summary>
-        public bool IsActiveSwitchServices
-        {
-            get { return _isActiveSwitchServices; }
-            set { Set(ref _isActiveSwitchServices, value); }
-        }
+        public bool IsActiveSwitchServices { get; set; } = true;
 
         #endregion
 
@@ -421,5 +405,12 @@ namespace KipTM.ViewModel
         }
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

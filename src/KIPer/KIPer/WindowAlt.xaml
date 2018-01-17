@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:KipTM"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:workflow="clr-namespace:KipTM.Workflow;assembly=KipTM.Interfaces"
         mc:Ignorable="d"
         Title="KipTM" Height="600" Width="600"
                        x:Name="MainViewWindow">
@@ -34,7 +35,13 @@
     <Grid>
         <TabControl>
             <TabItem Header="Проверки">
-                <controls:FlipView ItemsSource="{Binding Checks}"></controls:FlipView>
+                <controls:FlipView ItemsSource="{Binding Checks}">
+                    <controls:FlipView.ItemTemplate>
+                        <DataTemplate DataType="workflow:IWorkflowStep">
+                            <ContentPresenter Content="{Binding ViewModel}"/>
+                        </DataTemplate>
+                    </controls:FlipView.ItemTemplate>
+                </controls:FlipView>
             </TabItem>
             <TabItem Header="Архив">
                 <ContentPresenter Content="{Binding Store}"/>

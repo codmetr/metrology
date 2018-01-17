@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -117,6 +118,14 @@ namespace CheckFrame.Workflow
             get { return new CommandWrapper(_back); }
         }
 
+        /// <summary>
+        /// Шаги
+        /// </summary>
+        public IEnumerable<IWorkflowStep> States
+        {
+            get { return _states; }
+        }
+
         #endregion
 
         #region Service
@@ -205,5 +214,49 @@ namespace CheckFrame.Workflow
         }
 
         #endregion
+
+        #region IEnumerable<IWorkflowStep>
+
+        private bool _isStart = true;
+
+        public IEnumerator<IWorkflowStep> GetEnumerator()
+        {
+            return this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this;
+        }
+
+        #endregion
+
+        public bool MoveNext()
+        {
+            if (_isStart)
+            {
+                _isStart = false;
+                return true;
+            }
+
+            if (!_nextAvailableByIndex)
+                return false;
+            _next();
+            return true;
+        }
+
+        public void Reset()
+        {
+            while (_backAvailableByIndex)
+                _back();
+            _isStart = true;
+        }
+
+        public IWorkflowStep Current { get { return CurrentState; } }
+
+        object IEnumerator.Current
+        {
+            get { return Current; }
+        }
     }
 }
