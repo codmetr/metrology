@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,8 @@ namespace Graphic
     /// </summary>
     public partial class UserControl1 : UserControl
     {
-        ObservableCollection<>
+        private INotifyCollectionChanged _collection;
+
         public UserControl1()
         {
             InitializeComponent();
@@ -29,7 +31,18 @@ namespace Graphic
 
         private void UserControl1_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            e.NewValue;
+            var newCollection = e.NewValue as INotifyCollectionChanged;
+            if (newCollection == null)
+                return;
+            if (_collection != null)
+                _collection.CollectionChanged -= _collection_CollectionChanged;
+            _collection = newCollection;
+            _collection.CollectionChanged += _collection_CollectionChanged;
+        }
+
+        private void _collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
