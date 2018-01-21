@@ -162,6 +162,9 @@
       <DependentUpon>EthalonConfigView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Checks\View\PointConfigConverter.cs" />
+    <Compile Include="Checks\View\PressureSensorCheckConfigViewAlt.xaml.cs">
+      <DependentUpon>PressureSensorCheckConfigViewAlt.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Checks\View\PressureSensorRunView.xaml.cs">
       <DependentUpon>PressureSensorRunView.xaml</DependentUpon>
     </Compile>
@@ -287,6 +290,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Checks\View\PressureSensorCheckConfigViewAlt.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Checks\View\PressureSensorRunView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -350,6 +357,10 @@
     <Page Include="Skins\ColorGray2Skin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Skins\ConvertersDict.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Skins\FluentSkin.xaml">
       <SubType>Designer</SubType>

@@ -1,13 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:converters="clr-namespace:KipTM.Skins.Converters">
-    <converters:BinToTextResultConverter x:Key="BinToTextResultConverter"/>
-    <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
-    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
-    <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
-    <converters:BoolToColorConverterSelected x:Key="BoolToColorConverterSelected"/>
-    <converters:UnitsStringConverter x:Key="UnitsStringConverter"/>
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ConvertersDict.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
     
     <Style TargetType="TextBlock" x:Key="TblBasicStyle">
         <Setter Property="FontSize" Value="14"/>

@@ -128,7 +128,9 @@ namespace KipTM.ViewModel
             try
             {
                 SelectChecks.Execute(_workflows.Keys.FirstOrDefault());
+                Checks = _workflows.Values.FirstOrDefault();
                 OnPropertyChanged("Checks");
+                OnPropertyChanged("Checks.ViewModel");
             }
             catch (Exception e)
             {
@@ -140,7 +142,7 @@ namespace KipTM.ViewModel
 
         #region Разрушение
 
-        public override void Cleanup()
+        public void Cleanup()
         {
             _eventAggregator.Unsubscribe(this);
             //base.Cleanup();
@@ -191,7 +193,7 @@ namespace KipTM.ViewModel
 
         public IArchivesViewModel Store { get { return _store; } }
 
-        public IEnumerable<IWorkflowStep> Checks { get { return _workflows.Values.FirstOrDefault(); } }
+        public IEnumerable<IWorkflowStep> Checks { get; set; }
 
         /// <summary>
         /// Выбранная вкладка

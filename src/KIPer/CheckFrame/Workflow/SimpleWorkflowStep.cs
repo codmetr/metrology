@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using KipTM.Workflow;
 
 namespace CheckFrame.Workflow
 {
-    public class SimpleWorkflowStep:IWorkflowStep
+    public class SimpleWorkflowStep:IWorkflowStep, INotifyPropertyChanged
     {
         private Action _stateIn = null;
         private Action _stateOut = null;
@@ -48,6 +50,13 @@ namespace CheckFrame.Workflow
         protected virtual void OnBackAvailabilityChanged(WorkflowStepChangeEvent e)
         {
             BackAvailabilityChanged?.Invoke(this, e);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

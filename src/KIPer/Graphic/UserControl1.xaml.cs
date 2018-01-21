@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,21 +11,25 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using KipTM.ViewModel;
-using MahApps.Metro.Controls;
 
-namespace KipTM
+namespace Graphic
 {
     /// <summary>
-    /// Interaction logic for WindowAlt.xaml
+    /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class WindowAlt : MetroWindow
+    public partial class UserControl1 : UserControl
     {
-        public WindowAlt()
+        ObservableCollection<>
+        public UserControl1()
         {
             InitializeComponent();
-            Closing += (s, e) => ViewModelLocator.Cleanup();
+        }
+
+        private void UserControl1_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            e.NewValue;
         }
     }
 }
