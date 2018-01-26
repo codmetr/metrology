@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -19,6 +20,7 @@ using PressureSensorCheck.Devices;
 using PressureSensorData;
 using Tools.View;
 using Tools.View.ModalContent;
+using Graphic;
 
 namespace PressureSensorCheck.Workflow
 {
@@ -46,6 +48,8 @@ namespace PressureSensorCheck.Workflow
 
         private ModalState _modalState = new ModalState();
         private AutoUpdater _autoupdater;
+        private List<LineDescriptor> _lines;
+        private ObservableCollection<PointData> _lineSource = new ObservableCollection<PointData>();
 
         /// <summary>
         /// Выпонение проверки
@@ -57,6 +61,13 @@ namespace PressureSensorCheck.Workflow
         public PressureSensorRunVm(PressureSensorConfig config, DPI620DriverCom dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result)
         {
             Measured = new ObservableCollection<MeasuringPoint>();
+            _lines = new List<LineDescriptor>() {new LineDescriptor()
+            {
+                Title = "I, mA",
+                LineColor = Color.Black,
+                LimitForLine = TimeSpan.FromSeconds(100),
+                Source = _lineSource
+            } };
             _dpi620 = dpi620;
             _dpiConf = dpiConf;
             _logger = NLog.LogManager.GetLogger("PressureSensorPointsConfigVm");
@@ -124,6 +135,8 @@ namespace PressureSensorCheck.Workflow
         /// Измерения
         /// </summary>
         public ObservableCollection<MeasuringPoint> Measured { get; set; }
+
+        public IEnumerable<LineDescriptor> Lines { get { return _lines; } }
 
         /// <summary>
         /// Текущее значение измерение
@@ -392,6 +405,7 @@ namespace PressureSensorCheck.Workflow
         public void OnNext(MeasuringPoint value)
         {
             Measured.Add(value);
+            
             LastMeasuredPoint = value;
             _logger.Trace($"Readed repeat: P:{value.Pressure} {PressureUnit}");
         }

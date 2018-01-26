@@ -6,8 +6,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:ignore="http://www.galasoft.ch/ignore"
              mc:Ignorable="d ignore"
-             StartupUri="WindowAlt.xaml">
-    <!--StartupUri="MainWindow.xaml">-->
+             StartupUri="MainWindow.xaml">
+             <!--StartupUri="WindowAlt.xaml">-->
     
     <Application.Resources>
         <ResourceDictionary>

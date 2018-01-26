@@ -132,6 +132,10 @@
       <Project>{5bc5e2f0-d45b-467f-944c-fc1a649ab1a4}</Project>
       <Name>DPI620Genii</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Graphic\Graphic.csproj">
+      <Project>{CB32E1A9-2B26-4356-B372-AEEB8B24F224}</Project>
+      <Name>Graphic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
       <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
       <Name>KipTM.Interfaces</Name>

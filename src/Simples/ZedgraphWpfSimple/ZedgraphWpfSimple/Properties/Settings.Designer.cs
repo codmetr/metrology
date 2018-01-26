@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Graphic.Properties {
+namespace ZedgraphWpfSimple.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

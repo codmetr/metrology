@@ -15,7 +15,7 @@ namespace CheckFrame.Checks
     public class CheckConfigFactory
     {
         /// <summary>
-        /// Сгенерировать конфигурацию для заданного типа прибота
+        /// Сгенерировать конфигурацию для заданного типа прибора
         /// </summary>
         /// <param name="key"></param>
         /// <param name="settings"></param>
