@@ -30,10 +30,11 @@ namespace Graphic
         public static LineHolder Hold(GraphPane pane, LineDescriptor line, Scaller scaller)
         {
             PointPairList list = new PointPairList();
-            // Создадим кривую с названием "Sinc", 
-            // которая будет рисоваться голубым цветом (Color.Blue),
-            // Опорные точки выделяться не будут (SymbolType.None)
+            var asix = pane.AddYAxis(line.AzixTitle);
             LineItem curve = pane.AddCurve(line.Title, list, line.LineColor, SymbolType.None);
+            curve.Line.Width = (float)line.Width;
+            curve.YAxisIndex = asix;
+            pane.YAxisList[asix].Title.FontSpec.FontColor = line.LineColor;
             var holder = new LineHolder(list, curve, line, pane, scaller);
             holder.Attach();
             return holder;
@@ -62,7 +63,7 @@ namespace Graphic
                 var point = item as PointData;
                 if(point == null)
                     continue;
-                _list.Add(new XDate(point.Time), point.Value);
+                _list.Add(new XDate(DateTime.MinValue + point.Time), point.Value);
                 _scaller.Update(point.Time, _line.LimitForLine);
             }
         }

@@ -13,24 +13,76 @@ namespace Graphic
     internal class Scaller
     {
         private ZedGraphControl _zGraph;
-        private DateTime _newest = DateTime.MinValue;
-        private DateTime _bigestStart = DateTime.MinValue;
+        private TimeSpan _newest = TimeSpan.MinValue;
+        private TimeSpan _bigestStart = TimeSpan.MinValue;
 
         public Scaller(ZedGraphControl zGraph)
         {
             _zGraph = zGraph;
+            
         }
 
-        public void Update(DateTime newTime, TimeSpan range)
+        public void Update(TimeSpan newTime, TimeSpan range)
         {
-            if (_bigestStart == DateTime.MinValue)
+            bool invalidate = CheckScale(newTime, range);
+
+            if (invalidate)
+                InvalidateScale(_bigestStart, _newest);
+
+            // Подпишемся на сообщение, уведомляющее о том,
+            // что пользователь изменяет масштаб графика
+            _zGraph.ZoomEvent += new ZedGraphControl.ZoomEventHandler(ZoomUserChanged);
+
+            // Вызываем метод AxisChange (), чтобы обновить данные об осях. 
+            _zGraph.AxisChange();
+
+            // Обновляем график
+            _zGraph.Invalidate();
+        }
+
+        private void ZoomUserChanged(ZedGraphControl sender, ZoomState oldstate, ZoomState newstate)
+        {
+
+            GraphPane pane = sender.GraphPane;
+
+            // Для простоты примера будем ограничивать масштабирование
+            // только в сторону уменьшения размера графика
+
+            // Проверим интервал для каждой оси и
+            // при необходимости скорректируем его
+
+            if (pane.XAxis.Scale.Min <= -100)
+            {
+                pane.XAxis.Scale.Min = -100;
+            }
+
+            if (pane.XAxis.Scale.Max >= 100)
+            {
+                pane.XAxis.Scale.Max = 100;
+            }
+
+            if (pane.YAxis.Scale.Min <= -1)
+            {
+                pane.YAxis.Scale.Min = -1;
+            }
+
+            if (pane.YAxis.Scale.Max >= 2)
+            {
+                pane.YAxis.Scale.Max = 2;
+            }
+        }
+
+        private bool CheckScale(TimeSpan newTime, TimeSpan range)
+        {
+            bool invalidate = false;
+            if (_bigestStart == TimeSpan.MinValue)
             {
                 _bigestStart = newTime;
                 _newest = newTime + range;
+                return true;
             }
 
             var start = newTime - range;
-            bool invalidate = false;
             if (_bigestStart < start)
             {
                 _bigestStart = start;
@@ -42,23 +94,17 @@ namespace Graphic
                 invalidate = true;
             }
 
-            if(invalidate)
-                InvalidateScale(_bigestStart, _newest);
-
-            // Вызываем метод AxisChange (), чтобы обновить данные об осях. 
-            _zGraph.AxisChange();
-
-            // Обновляем график
-            _zGraph.Invalidate();
+            return invalidate;
         }
 
-        private void InvalidateScale(DateTime start, DateTime end)
+        private void InvalidateScale(TimeSpan start, TimeSpan end)
         {
             // Получим панель для рисования
             GraphPane pane = _zGraph.GraphPane;
-
-            pane.XAxis.Scale.Min = new XDate(start);
-            pane.XAxis.Scale.Max = new XDate(start);
+            if(pane == null)
+                return;
+            pane.XAxis.Scale.Min = new XDate(DateTime.MinValue + start);
+            pane.XAxis.Scale.Max = new XDate(DateTime.MinValue + end);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace PressureSensorCheck.Workflow
     /// <summary>
     /// Выпонение проверки
     /// </summary>
-    public class PressureSensorRunVm : INotifyPropertyChanged, IObserver<MeasuringPoint>
+    public class PressureSensorRunVm : INotifyPropertyChanged, IObserver<MeasuringPoint>, IDisposable
     {
         //private double _minP = 0;
         //private double _maxP = 100;
@@ -49,7 +49,10 @@ namespace PressureSensorCheck.Workflow
         private ModalState _modalState = new ModalState();
         private AutoUpdater _autoupdater;
         private List<LineDescriptor> _lines;
-        private ObservableCollection<PointData> _lineSource = new ObservableCollection<PointData>();
+        private ObservableCollection<PointData> _lineIn = new ObservableCollection<PointData>();
+        private ObservableCollection<PointData> _lineOut = new ObservableCollection<PointData>();
+        private TimeSpan _periodViewGraphic = TimeSpan.FromSeconds(300);
+
 
         /// <summary>
         /// Выпонение проверки
@@ -62,12 +65,24 @@ namespace PressureSensorCheck.Workflow
         {
             Measured = new ObservableCollection<MeasuringPoint>();
             _lines = new List<LineDescriptor>() {new LineDescriptor()
-            {
-                Title = "I, mA",
-                LineColor = Color.Black,
-                LimitForLine = TimeSpan.FromSeconds(100),
-                Source = _lineSource
-            } };
+                {
+                    Title = "I",
+                    AzixTitle = "I, A",
+                    LineColor = Color.Black,
+                    LimitForLine = _periodViewGraphic,
+                    Source = _lineIn,
+                    Width = 1,
+                },
+                new LineDescriptor()
+                {
+                    Title = "P",
+                    AzixTitle = "P, mBar",
+                    LineColor = Color.Brown,
+                    LimitForLine = _periodViewGraphic,
+                    Source = _lineOut,
+                    Width = 2,
+                },
+            };
             _dpi620 = dpi620;
             _dpiConf = dpiConf;
             _logger = NLog.LogManager.GetLogger("PressureSensorPointsConfigVm");
@@ -405,7 +420,16 @@ namespace PressureSensorCheck.Workflow
         public void OnNext(MeasuringPoint value)
         {
             Measured.Add(value);
-            
+            _lineIn.Add(new PointData()
+            {
+                Time = value.TimeStamp,
+                Value = value.I
+            });
+            _lineOut.Add(new PointData()
+            {
+                Time = value.TimeStamp,
+                Value = value.Pressure
+            });
             LastMeasuredPoint = value;
             _logger.Trace($"Readed repeat: P:{value.Pressure} {PressureUnit}");
         }
@@ -421,6 +445,16 @@ namespace PressureSensorCheck.Workflow
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            if (IsRun)
+            {
+                _cancellation.Cancel();
+                _autorepeatWh.WaitOne();
+                _dpi620.Close();
+            }
+        }
     }
 
     public class AutoUpdater : IObservable<MeasuringPoint>

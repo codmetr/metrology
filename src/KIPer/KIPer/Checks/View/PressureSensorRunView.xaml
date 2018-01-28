@@ -7,6 +7,7 @@
              xmlns:view="clr-namespace:KipTM.Checks.View"
              xmlns:modalContent="clr-namespace:Tools.View.ModalContent;assembly=Tools.View"
              xmlns:workflow="clr-namespace:PressureSensorCheck.Workflow;assembly=PressureSensorCheck"
+             xmlns:graphic="clr-namespace:Graphic;assembly=Graphic"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000"
              d:DataContext="{d:DesignInstance workflow:PressureSensorRunVm}">
@@ -122,7 +123,9 @@
                 <!--<WindowsFormsHost Name="WFHost" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300">
                 <zedGraph:ZedGraphControl x:Name="zChart" Height="300" Width="300"/>
             </WindowsFormsHost>-->
-                <d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="200">
+                <graphic:TimeGraph Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300"
+                                   Lines="{Binding Lines}" Title="Измерения"/>
+                <!--<d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="200">
                     <d3:ChartPlotter Name="plotter" Margin="10,5,10,15" DataContextChanged="Plotter_OnDataContextChanged"
                                  DataContext="{Binding Measured, UpdateSourceTrigger=PropertyChanged}">
                         <d3:ChartPlotter.HorizontalAxis>
@@ -132,7 +135,7 @@
                             <d3:VerticalIntegerAxis Name="yI"/>
                         </d3:ChartPlotter.VerticalAxis>
                     </d3:ChartPlotter>
-                </d3:ViewportUIContainer>
+                </d3:ViewportUIContainer>-->
                 <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
                 Мгновенная погрешность:
                 </TextBlock>

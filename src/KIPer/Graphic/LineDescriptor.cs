@@ -13,10 +13,19 @@ namespace Graphic
     /// </summary>
     public class LineDescriptor
     {
+        public LineDescriptor()
+        {
+            Width = 1;
+        }
         /// <summary>
         /// Название линии
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Название шкалы
+        /// </summary>
+        public string AzixTitle { get; set; }
 
         /// <summary>
         /// Цвет линии
@@ -32,6 +41,11 @@ namespace Graphic
         /// Ограничения для линии
         /// </summary>
         public TimeSpan LimitForLine { get; set; }
+
+        /// <summary>
+        /// Ширина линии
+        /// </summary>
+        public double Width { get; set; }
     }
 
     /// <summary>
@@ -42,7 +56,7 @@ namespace Graphic
         /// <summary>
         /// Время
         /// </summary>
-        public DateTime Time { get; set; }
+        public TimeSpan Time { get; set; }
 
         /// <summary>
         /// Значение
