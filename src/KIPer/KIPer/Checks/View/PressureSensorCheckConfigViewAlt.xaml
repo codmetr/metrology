@@ -44,7 +44,7 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>-->
-            <TabItem Header="Средства измерения">
+            <TabItem Header="Данные о поверке">
                 <ScrollViewer>
                     <StackPanel Margin="20,0,20,0">
                         <TextBlock TextDecorations="Underline" Margin="3,10,3,3">
