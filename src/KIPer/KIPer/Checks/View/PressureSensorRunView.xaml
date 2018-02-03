@@ -102,12 +102,12 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto" MinHeight="60"/>
                 </Grid.RowDefinitions>
@@ -120,22 +120,8 @@
                 <TextBlock Grid.Column="3" Grid.Row="1">I:</TextBlock>
                 <TextBox Grid.Column="4" Grid.Row="1" Text="{Binding LastMeasuredPoint.I, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding OutUnit, Converter={StaticResource UnitsStringConverter}}"/>
-                <!--<WindowsFormsHost Name="WFHost" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300">
-                <zedGraph:ZedGraphControl x:Name="zChart" Height="300" Width="300"/>
-            </WindowsFormsHost>-->
-                <graphic:TimeGraph Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="300"
+                <graphic:TimeGraph Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" MinHeight="150"
                                    Lines="{Binding Lines}" Title="Измерения"/>
-                <!--<d3:ViewportUIContainer Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" Height="200">
-                    <d3:ChartPlotter Name="plotter" Margin="10,5,10,15" DataContextChanged="Plotter_OnDataContextChanged"
-                                 DataContext="{Binding Measured, UpdateSourceTrigger=PropertyChanged}">
-                        <d3:ChartPlotter.HorizontalAxis>
-                            <d3:HorizontalTimeSpanAxis Name="xAxis"/>
-                        </d3:ChartPlotter.HorizontalAxis>
-                        <d3:ChartPlotter.VerticalAxis>
-                            <d3:VerticalIntegerAxis Name="yI"/>
-                        </d3:ChartPlotter.VerticalAxis>
-                    </d3:ChartPlotter>
-                </d3:ViewportUIContainer>-->
                 <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
                 Мгновенная погрешность:
                 </TextBlock>
@@ -154,7 +140,9 @@
                 <TextBlock Grid.Column="3" Grid.Row="6">δI:</TextBlock>
                 <TextBox Grid.Column="4" Grid.Row="6" Text="{Binding LastMeasuredPoint.qIn, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Column="5" Grid.Row="6">%</TextBlock>
-                <TextBlock Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="7" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TblHeaderStyle}" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontWeight="Bold" />
+                <TextBlock Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="7" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}"
+                           Height="60"
+                           Style="{StaticResource TblHeaderStyle}" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontWeight="Bold" />
                 <ProgressBar Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="7" Height="20" LargeChange="3" BorderThickness="0"
                          Value="{Binding CheckProgress, UpdateSourceTrigger=PropertyChanged}">
                     <ProgressBar.Foreground>
@@ -164,7 +152,7 @@
                 <StackPanel Grid.Column="2" Grid.Row="9" Grid.ColumnSpan="5" Orientation="Horizontal" HorizontalAlignment="Right">
                     <StackPanel.Resources>
                         <Style TargetType="Button">
-                            <Setter Property="Height" Value="50"/>
+                            <Setter Property="Height" Value="40"/>
                             <Setter Property="Width" Value="150"/>
                             <Setter Property="FontSize" Value="18"/>
                             <Setter Property="Margin" Value="20,10,0,0"/>
