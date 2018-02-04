@@ -465,6 +465,12 @@
       <DependentUpon>ReportHost.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
+    <None Include="Manuals\DPI\DPI_620_методика_поверки.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Manuals\DPI\DPI_620G_описание_типа.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Manuals\DPI\DPI620_Genii_Help_KRU0541_ru.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
