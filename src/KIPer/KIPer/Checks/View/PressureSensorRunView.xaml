@@ -19,7 +19,8 @@
             <view:PointConfigConverter x:Key="PointConfigConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <modalContent:ModalContentPresenter IsModal="{Binding ModalState.IsShowModal, UpdateSourceTrigger=PropertyChanged}">
+    <modalContent:ModalContentPresenter IsModal="{Binding ModalState.IsShowModal, UpdateSourceTrigger=PropertyChanged}"
+                                        ModalContent="{Binding ModalState.CurrentModal, UpdateSourceTrigger=PropertyChanged}"> <!-- IsModal="True">-->
         <Grid Margin="20">
             <Grid.Resources>
                 <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}"/>
@@ -48,11 +49,11 @@
                                 <TextBlock Text="Шаг" ToolTip="Column A Tooltip"/>
                             </DataGridTextColumn.Header>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Pизм" Width="50" Binding="{Binding Result.PressureReal}"/>
-                        <DataGridTextColumn Header="Iпр" Width="50" Binding="{Binding Result.IReal}"/>
-                        <DataGridTextColumn Header="Iобр" Width="50" Binding="{Binding Result.Iback}"/>
-                        <DataGridTextColumn Header="ΔI" Width="50" Binding="{Binding Result.dIReal}"/>
-                        <DataGridTextColumn Header="ΔIвар" Width="50" Binding="{Binding Result.dIvar}"/>
+                        <DataGridTextColumn Header="Pизм" Width="50" Binding="{Binding Result.PressureReal}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Iпр" Width="50" Binding="{Binding Result.IReal}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Iобр" Width="50" Binding="{Binding Result.Iback}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="ΔI" Width="50" Binding="{Binding Result.dIReal}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="ΔIвар" Width="50" Binding="{Binding Result.dIvar}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <Grid Grid.Row="2" Visibility="Collapsed">
@@ -120,8 +121,8 @@
                 <TextBlock Grid.Column="3" Grid.Row="1">I:</TextBlock>
                 <TextBox Grid.Column="4" Grid.Row="1" Text="{Binding LastMeasuredPoint.I, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding OutUnit, Converter={StaticResource UnitsStringConverter}}"/>
-                <graphic:TimeGraph Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" MinHeight="150"
-                                   Lines="{Binding Lines}" Title="Измерения"/>
+                <graphic:TimeGraph Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" MinHeight="150" IsLock="{Binding ModalState.IsShowModal, UpdateSourceTrigger=PropertyChanged}"
+                                   Lines="{Binding Lines}" Title="Измерения" Claner="{Binding LineCleaner}"/>
                 <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
                 Мгновенная погрешность:
                 </TextBlock>
@@ -177,10 +178,8 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        <modalContent:ModalContentPresenter.ModalContent>
+        <!--<modalContent:ModalContentPresenter.ModalContent>
             <ContentPresenter Content="{Binding ModalState.CurrentModal, UpdateSourceTrigger=PropertyChanged}"/>
-            <!--<controls:WaitScreenKpk5 Note="{Binding ModalState.Note, UpdateSourceTrigger=PropertyChanged}"/>-->
-            <!--<controls:AskScreen/>-->
-        </modalContent:ModalContentPresenter.ModalContent>
+        </modalContent:ModalContentPresenter.ModalContent>-->
     </modalContent:ModalContentPresenter>
 </UserControl>

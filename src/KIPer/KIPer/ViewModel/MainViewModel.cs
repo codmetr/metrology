@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using ArchiveData;
 using ArchiveData.DTO;
 using CheckFrame;
@@ -38,7 +39,7 @@ namespace KipTM.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
-    public class MainViewModel : ISubscriber<EventCheckState>, ISubscriber<ErrorMessageEventArg>, ISubscriber<HelpMessageEventArg>, INotifyPropertyChanged
+    public class MainViewModel : ISubscriber<EventCheckState>, ISubscriber<ErrorMessageEventArg>, ISubscriber<HelpMessageEventArg>, ISubscriber<Action<Action>>, INotifyPropertyChanged
     {
 
         #region Переменные
@@ -57,6 +58,10 @@ namespace KipTM.ViewModel
 
 
         private object _selectedAction;
+        private Action<Action> _disp = (act) => act();
+        private string _helpMessage;
+        private bool _isError;
+        private bool _isActiveSwitchServices = true;
 
         #endregion
 
@@ -123,10 +128,12 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Загрузка всех состояний
         /// </summary>
-        public void Load()
+        /// <param name="viewDispatcher"></param>
+        public void Load(Dispatcher viewDispatcher)
         {
             try
             {
+                _eventAggregator.Post(new Action<Action>(viewDispatcher.Invoke));
                 SelectChecks.Execute(_workflows.Keys.FirstOrDefault());
                 Checks = _workflows.Values.FirstOrDefault();
                 OnPropertyChanged("Checks");
@@ -184,7 +191,7 @@ namespace KipTM.ViewModel
                         Tools.ViewViewmodelMatcher.AddMatch(view.Resources, ViewAttribute.CheckView,
                             ViewAttribute.CheckViewModelCashOnly);
 
-                        Load();
+                        Load(view.Dispatcher);
                     });
             }
         }
@@ -334,17 +341,41 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Поясняющее сообщение 
         /// </summary>
-        public string HelpMessage { get; set; }
+        public string HelpMessage
+        {
+            get { return _helpMessage; }
+            set
+            {
+                _helpMessage = value; 
+                _disp(()=>OnPropertyChanged());
+            }
+        }
 
         /// <summary>
         /// Сообшение - описание ошибки
         /// </summary>
-        public bool IsError { get; set; }
+        public bool IsError
+        {
+            get { return _isError; }
+            set
+            {
+                _isError = value;
+                _disp(() => OnPropertyChanged());
+            }
+        }
 
         /// <summary>
         /// Доступность переключения сервисов
         /// </summary>
-        public bool IsActiveSwitchServices { get; set; } = true;
+        public bool IsActiveSwitchServices
+        {
+            get { return _isActiveSwitchServices; }
+            set
+            {
+                _isActiveSwitchServices = value;
+                _disp(() => OnPropertyChanged());
+            }
+        }
 
         #endregion
 
@@ -367,6 +398,11 @@ namespace KipTM.ViewModel
             IsError = false;
         }
 
+
+        public void OnEvent(Action<Action> message)
+        {
+            _disp = message;
+        }
         #endregion
 
         #region Вспомогательные методы

@@ -60,6 +60,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="CleanerAct.cs" />
     <Compile Include="LineDescriptor.cs" />
     <Compile Include="LineHolder.cs" />
     <Compile Include="Scaller.cs" />

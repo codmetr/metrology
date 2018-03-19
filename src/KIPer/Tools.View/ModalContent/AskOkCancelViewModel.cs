@@ -11,7 +11,7 @@ namespace Tools.View.ModalContent
     /// <summary>
     /// Запрос пользователю
     /// </summary>
-    public class AskOkCancelViewModel:INotifyPropertyChanged
+    public class AskOkCancelViewModel:INotifyPropertyChanged, IAsk
     {
         private string _queston;
         private readonly EventWaitHandle _wh;

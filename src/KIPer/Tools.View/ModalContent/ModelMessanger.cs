@@ -60,13 +60,11 @@ namespace Tools.View.ModalContent
         /// Спросить у пользователя подтверждения
         /// </summary>
         /// <param name="msg"></param>
-        public bool AskOkCancel(string msg)
+        public IAsk AskOkCancel(string msg, EventWaitHandle wh)
         {
-            var wh = new ManualResetEvent(false);
             var ask = new AskOkCancelViewModel(wh){Queston = msg};
             CurrentModal = ask;
-            wh.WaitOne();
-            return ask.IsAgree;
+            return ask;
         }
 
         /// <summary>

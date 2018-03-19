@@ -1,6 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using ZedGraph;
 
 namespace Graphic
@@ -10,6 +17,11 @@ namespace Graphic
     /// </summary>
     public partial class TimeGraph : UserControl
     {
+        //If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
+        [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool DeleteObject([In] IntPtr hObject);
+
         public static readonly DependencyProperty LinesProperty = DependencyProperty.Register(
             "Lines", typeof(IEnumerable<LineDescriptor>), typeof(TimeGraph), new PropertyMetadata(default(IEnumerable<LineDescriptor>), LinesChanged));
 
@@ -35,6 +47,62 @@ namespace Graphic
             graph._zGraph.GraphPane.Title.Text = e.NewValue.ToString();
         }
 
+        public static readonly DependencyProperty ClanerProperty = DependencyProperty.Register(
+            "Claner", typeof(CleanerAct), typeof(TimeGraph), new PropertyMetadata(default(CleanerAct), UpdateCleaner));
+
+        private static void UpdateCleaner(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var graph = d as TimeGraph;
+            if (graph == null)
+                return;
+            var state = e.NewValue as CleanerAct;
+            if (state != null)
+                state.Clear += () => graph.Clear();
+        }
+
+        public static readonly DependencyProperty IsLockProperty = DependencyProperty.Register(
+            "IsLock", typeof(bool), typeof(TimeGraph), new PropertyMetadata(default(bool), UpdateIsLock));
+
+        private static void UpdateIsLock(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var val = (bool) e.NewValue;
+            var graph = d as TimeGraph;
+            graph.GraphHost.IsEnabled = !val;
+            graph.GraphHost.Child.Enabled = !val;
+            graph.GraphHost.Visibility = val ? Visibility.Collapsed : Visibility.Visible;
+
+            if (val)
+            {
+                Bitmap b = new Bitmap(graph.GraphHost.Child.Width, graph.GraphHost.Child.Height);
+                graph.GraphHost.Child.DrawToBitmap(b, new Rectangle(0, 0, b.Width, b.Height));
+
+                var handle = b.GetHbitmap();
+                try
+                {
+                    graph.GraphImmage.Source = Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero,
+                        Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                }
+                finally
+                {
+                    DeleteObject(handle);
+                }
+            }
+            graph.GraphImmage.Visibility = val ? Visibility.Visible : Visibility.Collapsed;
+            Debug.WriteLine($"IsLock:{val}");
+        }
+
+        public bool IsLock
+        {
+            get { return (bool) GetValue(IsLockProperty); }
+            set { SetValue(IsLockProperty, value); }
+        }
+
+        public CleanerAct Claner
+        {
+            get { return (CleanerAct) GetValue(ClanerProperty); }
+            set { SetValue(ClanerProperty, value); }
+        }
+
         public string Title
         {
             get { return (string) GetValue(TitleProperty); }
@@ -46,7 +114,6 @@ namespace Graphic
             get { return (IEnumerable<LineDescriptor>) GetValue(LinesProperty); }
             set { SetValue(LinesProperty, value); }
         }
-
 
         private IEnumerable<LineDescriptor> _collection;
         private List<LineHolder> _holders;
@@ -77,6 +144,11 @@ namespace Graphic
                 Detach(_collection);
             _collection = newCollection;
             Attach(_collection);
+        }
+
+        private void Clear()
+        {
+            _zGraph.GraphPane.CurveList.Clear();
         }
 
         private void Attach(IEnumerable<LineDescriptor> collection)
@@ -124,5 +196,6 @@ namespace Graphic
             }
             _zGraph.GraphPane.Y2AxisList.Clear();
         }
+
     }
 }

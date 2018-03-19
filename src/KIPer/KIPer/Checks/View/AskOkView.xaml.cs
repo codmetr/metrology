@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,21 +12,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using KipTM.Checks.ViewModel.Config;
-using Microsoft.Research.DynamicDataDisplay;
-using Microsoft.Research.DynamicDataDisplay.DataSources;
-using PressureSensorCheck.Workflow;
 using Tools.View;
+using Tools.View.ModalContent;
 
 namespace KipTM.Checks.View
 {
     /// <summary>
-    /// Interaction logic for PressureSensorRunView.xaml
+    /// Interaction logic for AskOkCancelView.xaml
     /// </summary>
-    [View(typeof(PressureSensorRunVm))]
-    public partial class PressureSensorRunView : UserControl
+    [View(typeof(AskViewModel))]
+    public partial class AskOkView : UserControl
     {
-        public PressureSensorRunView()
+        public AskOkView()
         {
             InitializeComponent();
         }

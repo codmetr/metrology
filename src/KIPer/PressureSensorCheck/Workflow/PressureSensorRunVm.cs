@@ -12,7 +12,6 @@ using System.Windows.Input;
 using ArchiveData.DTO;
 using DPI620Genii;
 using KipTM.Interfaces;
-using KipTM.Model.Channels;
 using KipTM.Model.Checks;
 using NLog;
 using PressureSensorCheck.Check;
@@ -21,13 +20,15 @@ using PressureSensorData;
 using Tools.View;
 using Tools.View.ModalContent;
 using Graphic;
+using KipTM.EventAggregator;
+using PressureSensorCheck.Report;
 
 namespace PressureSensorCheck.Workflow
 {
     /// <summary>
     /// Выпонение проверки
     /// </summary>
-    public class PressureSensorRunVm : INotifyPropertyChanged, IObserver<MeasuringPoint>, IDisposable
+    public class PressureSensorRunVm : INotifyPropertyChanged, IObserver<MeasuringPoint>, ISubscriber<Action<Action>>, IDisposable
     {
         //private double _minP = 0;
         //private double _maxP = 100;
@@ -52,6 +53,11 @@ namespace PressureSensorCheck.Workflow
         private ObservableCollection<PointData> _lineIn = new ObservableCollection<PointData>();
         private ObservableCollection<PointData> _lineOut = new ObservableCollection<PointData>();
         private TimeSpan _periodViewGraphic = TimeSpan.FromSeconds(300);
+        private Action<Action> _invoker = act => act();
+        private string _note;
+        private double _checkProgress;
+        private bool _isRun;
+        private bool _isAsk;
 
 
         /// <summary>
@@ -91,6 +97,7 @@ namespace PressureSensorCheck.Workflow
             _config = config;
             _autoupdater = new AutoUpdater(_logger);
             Result = result;
+            LineCleaner = new CleanerAct();
         }
 
         /// <summary>
@@ -153,6 +160,7 @@ namespace PressureSensorCheck.Workflow
 
         public IEnumerable<LineDescriptor> Lines { get { return _lines; } }
 
+        public CleanerAct LineCleaner { get; private set; }
         /// <summary>
         /// Текущее значение измерение
         /// </summary>
@@ -189,22 +197,54 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Пояснение
         /// </summary>
-        public string Note { get; set; }
+        public string Note
+        {
+            get { return _note; }
+            set
+            {
+                _note = value;
+                _invoker(() => OnPropertyChanged());
+            }
+        }
 
         /// <summary>
         /// Прогресс выполнения проверки
         /// </summary>
-        public double CheckProgress { get; set; }
+        public double CheckProgress
+        {
+            get { return _checkProgress; }
+            set
+            {
+                _checkProgress = value;
+                _invoker(() => OnPropertyChanged());
+            }
+        }
 
         /// <summary>
         /// Проверка выполняется
         /// </summary>
-        public bool IsRun { get; set; }
+        public bool IsRun
+        {
+            get { return _isRun; }
+            set
+            {
+                _isRun = value;
+                _invoker(() => OnPropertyChanged());
+            }
+        }
 
         /// <summary>
         /// Выполняется запрос с подтвержнелием
         /// </summary>
-        public bool IsAsk { get; set; }
+        public bool IsAsk
+        {
+            get { return _isAsk; }
+            set
+            {
+                _isAsk = value;
+                _invoker(() => OnPropertyChanged());
+            }
+        }
 
         /// <summary>
         /// Запустить проверку
@@ -220,15 +260,37 @@ namespace PressureSensorCheck.Workflow
 
         private void DoStart()
         {
-            IsRun = true;
             if (_startTime != null)
                 return;
+            IsRun = true;
             // подготовка внутрених переменных к старту проверки
             _startTime = DateTime.Now;
             var cancel = _cancellation.Token;
+            // запуск самой проверки
+            var task = new Task(() =>
+            {
+                try
+                {
+                    var conf = Config(cancel);
+                    if (conf == null)
+                        return;
+                    if (cancel.IsCancellationRequested)
+                        return;
+                    TryStart(cancel, conf);
+                }
+                finally
+                {
+                    IsRun = false;
+                }
+            });
+            task.Start(TaskScheduler.Default);
+        }
+
+        private PresSensorCheck Config(CancellationToken cancel)
+        {
             _autorepeatWh.Reset();
             Measured.Clear();
-            
+
             // выбор входных и выходных слотов
             DPI620GeniiConfig.DpiSlotConfig inSlot;
             DPI620GeniiConfig.DpiSlotConfig outSlot;
@@ -251,7 +313,7 @@ namespace PressureSensorCheck.Workflow
             else
             {
                 ShowMessage("Укажите конфигурацию DPI620Genii на вкладке \"Настройка\": укажите какие датчики в каких слотах", cancel);
-                return;
+                return null;
             }
 
             // попытка подключения к DPI 620
@@ -264,7 +326,7 @@ namespace PressureSensorCheck.Workflow
             {
                 Debug.WriteLine(ex.ToString());
                 ShowMessage("Не удалось связаться с DPI620Genii. Укажите конфигурацию DPI620Genii на вкладке \"Настройка\": укажите порт подключения", cancel);
-                return;
+                return null;
             }
 
             // запуск авточтения состояния
@@ -274,17 +336,16 @@ namespace PressureSensorCheck.Workflow
             tUpdate.Start(TaskScheduler.Default);
             var checkLogger = NLog.LogManager.GetLogger(string.Format("Check{0}",
                 _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
-            
+
             // конфигурирование шагов проверки
             var check = new PresSensorCheck(checkLogger,
                 new DPI620Ethalon(_dpi620, inSlotNum, ChannelType.Pressure, inSlot.SelectedUnit, _config.Unit),
                 new DPI620Ethalon(_dpi620, outSlotNum, ChannelType.Current, outSlot.SelectedUnit, Units.mA), Result);
             check.ChConfig.UsrChannel = new PressureSensorUserChannel(this);
             check.FillSteps(_config);
-
-            // запуск самой проверки
-            var task = new Task(() =>{TryStart(cancel, check);});
-            task.Start(TaskScheduler.Default);
+            _lineIn.Clear();
+            _lineOut.Clear();
+            return check;
         }
 
         /// <summary>
@@ -396,12 +457,18 @@ namespace PressureSensorCheck.Workflow
         /// <param name="msg"></param>
         /// <param name="cancel"></param>
         /// <returns></returns>
-        private bool AskModal(string title, string msg, CancellationToken cancel)
+        private void AskModal(string title, string msg, CancellationToken cancel)
         {
             ModalState.IsShowModal = true;
-            var res = ModalState.AskOkCancel(string.Format("{0}\n\n{1}", title, msg));
+            var wh = new ManualResetEvent(false);
+            _invoker(()=>ModalState.Ask(string.IsNullOrEmpty(title)? msg: $"{title}\n{msg}", wh));
+            var whs = new[] {wh, cancel.WaitHandle};
+            WaitHandle.WaitAny(whs);
             ModalState.IsShowModal = false;
-            return res;
+        }
+        public void OnEvent(Action<Action> message)
+        {
+            _invoker = message;
         }
 
         #region INotifyPropertyChanged
@@ -454,349 +521,6 @@ namespace PressureSensorCheck.Workflow
                 _autorepeatWh.WaitOne();
                 _dpi620.Close();
             }
-        }
-    }
-
-    public class AutoUpdater : IObservable<MeasuringPoint>
-    {
-
-        internal class AutoreadState
-        {
-            public AutoreadState(CancellationToken cancel, TimeSpan periodRepeat, DateTime startTime, EventWaitHandle autoreadWh)
-            {
-                Cancel = cancel;
-                PeriodRepeat = periodRepeat;
-                StartTime = startTime;
-                AutoreadWh = autoreadWh;
-            }
-
-            public CancellationToken Cancel { get; }
-
-            public TimeSpan PeriodRepeat { get; }
-
-            public DateTime StartTime { get; }
-
-            public EventWaitHandle AutoreadWh { get; }
-        }
-
-        public AutoUpdater(Logger logger)
-        {
-            _logger = logger;
-            observers = new List<IObserver<MeasuringPoint>>();
-        }
-
-        private readonly Logger _logger;
-        private List<IObserver<MeasuringPoint>> observers;
-
-        public IDisposable Subscribe(IObserver<MeasuringPoint> observer)
-        {
-            if (!observers.Contains(observer))
-                observers.Add(observer);
-            return new Unsubscriber(observers, observer);
-        }
-
-        internal void Start(DPI620DriverCom dpi620, AutoreadState arg, PressureSensorConfig conf)
-        {
-            try
-            {
-                while (!arg.Cancel.WaitHandle.WaitOne(arg.PeriodRepeat))
-                {
-                    var outVal = dpi620.GetValue(1);
-                    var pressure = dpi620.GetValue(2);
-                    var outPoint = GetOutForPressure(conf, pressure);
-                    var dOut = outPoint - outVal;
-                    var qu = outVal / outPoint - 1.0;
-                    var item = new MeasuringPoint()
-                    {
-                        TimeStamp = DateTime.Now - arg.StartTime,
-                        I = outVal,
-                        Pressure = pressure,
-                        dI = dOut,
-                        In = GetOutForPressure(conf, pressure),
-                        dIn = GetdOutForOut(conf, outPoint),
-                        qI = qu,
-                        qIn = 0,
-                    };
-                    Publish(item);
-                    _logger.Trace($"Readed repeat: P:{item.Pressure}");
-                }
-            }
-            finally
-            {
-                arg.AutoreadWh.Set();
-            }
-        }
-
-
-        private double GetOutForPressure(PressureSensorConfig conf, double pressure)
-        {
-            var percentVpi = (pressure - conf.VpiMin) / (conf.VpiMax - conf.VpiMin);
-            if (pressure < conf.VpiMin)
-                percentVpi = 0;
-            double outMin = 0.0;
-            double outMax = 5.0;
-            if (conf.OutputRange == OutGange.I4_20mA)
-            {
-                outMin = 4;
-                outMax = 20;
-            }
-            var val = outMin + (outMax - outMin) * percentVpi;
-
-            return val;
-        }
-
-        /// <summary>
-        /// Получить допуск для конкретной точки напряжения
-        /// </summary>
-        /// <param name="outVal"></param>
-        /// <returns></returns>
-        private double GetdOutForOut(PressureSensorConfig conf, double outVal)
-        {
-            return conf.ToleranceDelta;
-        }
-
-        private void Publish(MeasuringPoint data)
-        {
-            if (observers == null)
-                return;
-            foreach (var observer in observers)
-            {
-                observer.OnNext(data);
-            }
-        }
-
-        private class Unsubscriber : IDisposable
-        {
-            private List<IObserver<MeasuringPoint>> _observers;
-            private IObserver<MeasuringPoint> _observer;
-
-            public Unsubscriber(List<IObserver<MeasuringPoint>> observers, IObserver<MeasuringPoint> observer)
-            {
-                this._observers = observers;
-                this._observer = observer;
-            }
-
-            public void Dispose()
-            {
-                if (_observer != null && _observers.Contains(_observer))
-                    _observers.Remove(_observer);
-            }
-        }
-    }
-
-    public class MeasuringPoint : INotifyPropertyChanged
-    {
-        /// <summary>
-        /// Текущее давление
-        /// </summary>
-        public double Pressure { get; set; }
-
-        /// <summary>
-        /// Текущее напряжение
-        /// </summary>
-        public double I { get; set; }
-
-        /// <summary>
-        /// Нормативное напряжение соответствующее заданному давлению
-        /// </summary>
-        public double In { get; set; }
-
-        /// <summary>
-        /// Отклонение от нормативного напряжения на заданном давлении
-        /// </summary>
-        public double dI { get; set; }
-
-        /// <summary>
-        /// Допустимое отклонение от нормативного напряжения на заданном давлении
-        /// </summary>
-        public double dIn { get; set; }
-
-        /// <summary>
-        /// Относительное отклонение от нормативного напряжения на заданном давлении
-        /// </summary>
-        public double qI { get; set; }
-
-        /// <summary>
-        /// Допустимое относительное отклонение от нормативного напряжения на заданном давлении
-        /// </summary>
-        public double qIn { get; set; }
-
-        /// <summary>
-        /// Метка времени измерения
-        /// </summary>
-        public TimeSpan TimeStamp { get; set; }
-
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// Описатель одной точки проверки
-    /// </summary>
-    public class PointViewModel : INotifyPropertyChanged
-    {
-        /// <summary>
-        /// Номер точки
-        /// </summary>
-        public int Index { get; set; }
-
-        public PointConfigViewModel Config { get; set; }
-
-        public PointResultViewModel Result { get; set; }
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-
-    }
-
-    /// <summary>
-    /// Конфигурация точки
-    /// </summary>
-    public class PointConfigViewModel : INotifyPropertyChanged
-    {
-        /// <summary>
-        /// Проверяемая точка давления
-        /// </summary>
-        public double Pressure { get; set; }
-
-        /// <summary>
-        /// Единицы измерения давления
-        /// </summary>
-        public Units Unit { get; set; }
-
-        /// <summary>
-        /// Ожидаемое значение тока
-        /// </summary>
-        public double I { get; set; }
-
-        /// <summary>
-        /// Допуск по току
-        /// </summary>
-        public double dI { get; set; }
-
-        /// <summary>
-        /// Допуск по вариации напряжения
-        /// </summary>
-        public double Ivar { get; set; }
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-
-    }
-
-    /// <summary>
-    /// Результат на точке
-    /// </summary>
-    public class PointResultViewModel : INotifyPropertyChanged
-    {
-        /// <summary>
-        /// Фактическое давление
-        /// </summary>
-        public double PressureReal { get; set; }
-
-        /// <summary>
-        /// Фактическое напряжение (прямой ход)
-        /// </summary>
-        public double IReal { get; set; }
-
-        /// <summary>
-        /// Фактическая погрешность (прямой ход)
-        /// </summary>
-        public double dIReal { get; set; }
-
-        /// <summary>
-        /// Фактическое напряжение (обратный ход)
-        /// </summary>
-        public double Iback { get; set; }
-
-        /// <summary>
-        /// Фактическая вариация
-        /// </summary>
-        public double Ivar { get; set; }
-
-        /// <summary>
-        /// Фактическая погрешность вариации
-        /// </summary>
-        public double dIvar { get; set; }
-
-        /// <summary>
-        /// Напряжение на заданной точке в допуске
-        /// </summary>
-        public bool IsCorrect { get; set; }
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-
-    }
-
-    public class PressureSensorUserChannel : IUserChannel
-    {
-        private readonly PressureSensorRunVm _vm;
-
-        public PressureSensorUserChannel(PressureSensorRunVm vm)
-        {
-            _vm = vm;
-        }
-
-        public UserQueryType QueryType { get; }
-        public string Message { get { return _vm.Note; } set { _vm.Note = value; } }
-        public bool AcceptValue { get; set; }
-        public double RealValue { get; set; }
-        public bool AgreeValue { get; set; }
-        public void NeedQuery(UserQueryType queryType, EventWaitHandle wh)
-        {
-            _vm.IsAsk = true;
-            _vm.DoAccept = () => ConfigQuery(wh);
-        }
-
-        private void ConfigQuery(EventWaitHandle wh)
-        {
-            wh.Set();
-            _vm.DoAccept = () => { };
-            Message = "";
-            _vm.IsAsk = false;
-        }
-
-        public event EventHandler QueryStarted;
-
-        public void Clear()
-        {
-            _vm.DoAccept = () => { };
-            Message = "";
-            _vm.IsAsk = false;
         }
     }
 }

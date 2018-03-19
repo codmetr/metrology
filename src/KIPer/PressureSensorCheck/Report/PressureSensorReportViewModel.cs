@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using CrystalDecisions.CrystalReports.Engine;
 using KipTM.Report.PressureSensor;
 
@@ -7,7 +8,7 @@ namespace PressureSensorCheck.Report
     /// <summary>
     /// Визуальная модель отчетов
     /// </summary>
-    public class PressureSensorReportViewModel
+    public class PressureSensorReportViewModel:IDisposable
     {
         private readonly PressureSensorReportDto _mainReportDto;
         private readonly PressureSensorCertificateDto _certificateDto;
@@ -65,6 +66,12 @@ namespace PressureSensorCheck.Report
                 _certificateReportDate.Subreports["ethalonsSubRep"].SetDataSource(_certificateDto.Ethalons);
                 return _certificateReportDate;
             }
+        }
+
+        public void Dispose()
+        {
+            _mainReportData?.Dispose();
+            _certificateReportDate?.Dispose();
         }
     }
 }

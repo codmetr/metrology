@@ -46,6 +46,8 @@
     <Compile Include="DTO\CustomDeviceTypes\ConverterTypeDescriptor.cs" />
     <Compile Include="DTO\DataAccessor.cs" />
     <Compile Include="DTO\DeviceWithChannel.cs" />
+    <Compile Include="DTO\Dictionary\Combination.cs" />
+    <Compile Include="DTO\Dictionary\FieldKey.cs" />
     <Compile Include="DTO\ResultsArchive.cs" />
     <Compile Include="DTO\DeviceDescriptor.cs" />
     <Compile Include="DTO\DeviceTypeDescriptor.cs" />

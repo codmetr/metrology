@@ -12,7 +12,7 @@ namespace CheckFrame.Workflow
     /// <summary>
     /// Конвейер - механизм линейного перехода между состояниями
     /// </summary>
-    public class LineWorkflow : INotifyPropertyChanged, IWorkflow, IDisposable
+    public class LineWorkflow : INotifyPropertyChanged, IWorkflow
     {
         #region Поля
 
@@ -207,9 +207,10 @@ namespace CheckFrame.Workflow
             if (_states != null)
                 foreach (var step in _states)
                 {
-                    var dispStep = step.ViewModel as IDisposable;
-                    if (dispStep != null)
-                        dispStep.Dispose();
+                    (step as IDisposable)?.Dispose();
+                    //var dispStep = step.ViewModel as IDisposable;
+                    //if (dispStep != null)
+                    //    dispStep.Dispose();
                 }
         }
 

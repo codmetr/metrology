@@ -63,6 +63,7 @@
     <Compile Include="InvokeTool.cs" />
     <Compile Include="ModalContent\AskOkCancelViewModel.cs" />
     <Compile Include="ModalContent\AskViewModel.cs" />
+    <Compile Include="ModalContent\IAsk.cs" />
     <Compile Include="ModalContent\ModalContentCommands.cs" />
     <Compile Include="ModalContent\ModalContentPresenter.cs" />
     <Compile Include="ModalContent\ModelMessanger.cs" />

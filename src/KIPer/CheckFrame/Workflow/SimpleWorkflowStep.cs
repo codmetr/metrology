@@ -5,7 +5,7 @@ using KipTM.Workflow;
 
 namespace CheckFrame.Workflow
 {
-    public class SimpleWorkflowStep:IWorkflowStep, INotifyPropertyChanged
+    public class SimpleWorkflowStep:IWorkflowStep, INotifyPropertyChanged, IDisposable
     {
         private Action _stateIn = null;
         private Action _stateOut = null;
@@ -57,6 +57,11 @@ namespace CheckFrame.Workflow
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Dispose()
+        {
+            (ViewModel as IDisposable)?.Dispose();
         }
     }
 }

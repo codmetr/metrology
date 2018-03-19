@@ -10,5 +10,6 @@
         <WindowsFormsHost HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="GraphHost">
             <zedGraph:ZedGraphControl />
         </WindowsFormsHost>
+        <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="GraphImmage"/>
     </Grid>
 </UserControl>

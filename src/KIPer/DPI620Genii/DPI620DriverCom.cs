@@ -135,6 +135,7 @@ namespace DPI620Genii
             catch (Exception e)
             {
                 Log(e.ToString());
+                throw;
             }
         }
 

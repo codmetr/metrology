@@ -113,10 +113,18 @@
     <Compile Include="Report\CertificateUpdater.cs" />
     <Compile Include="Report\ReportFactory.cs" />
     <Compile Include="Report\ReportUpdater.cs" />
-    <Compile Include="Workflow\Dpi620StateMoq.cs" />
+    <Compile Include="Workflow\Content\CheckPressureLogicConfigVm.cs" />
+    <Compile Include="Workflow\Content\AutoUpdater.cs" />
+    <Compile Include="Workflow\Content\Dpi620StateMoq.cs" />
+    <Compile Include="Workflow\Content\MeasuringPoint.cs" />
+    <Compile Include="Workflow\Content\PointConfigViewModel.cs" />
+    <Compile Include="Workflow\Content\PointViewModel.cs" />
+    <Compile Include="Workflow\Content\DPI620GeniiConfig.cs" />
+    <Compile Include="Workflow\Content\PointResultViewModel.cs" />
     <Compile Include="Workflow\PressureSensorCheckConfigVM.cs" />
     <Compile Include="Workflow\PressureSensorResultVM.cs" />
     <Compile Include="Workflow\PressureSensorRunVm.cs" />
+    <Compile Include="Workflow\Content\PressureSensorUserChannel.cs" />
     <Compile Include="Workflow\PressureSensorWorkflow.cs" />
   </ItemGroup>
   <ItemGroup>
