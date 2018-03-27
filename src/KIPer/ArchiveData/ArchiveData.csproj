@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\BaseCheckData.cs" />
     <Compile Include="DTO\ChannelDescriptor.cs" />
     <Compile Include="DTO\ChannelOrder.cs" />
     <Compile Include="DTO\ChannelTypes.cs" />

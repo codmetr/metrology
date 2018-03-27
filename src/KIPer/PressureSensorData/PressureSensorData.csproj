@@ -48,6 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
+      <Project>{26676346-c100-4cc9-869f-80175b33df76}</Project>
+      <Name>ArchiveData</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
       <Project>{B8DBF9E3-03D3-457D-B889-D45E1C5131E4}</Project>
       <Name>KipTM.Interfaces</Name>
