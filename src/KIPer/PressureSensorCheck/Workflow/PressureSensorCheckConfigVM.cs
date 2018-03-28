@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel;
+using System.Windows.Input;
 using ArchiveData.DTO;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.Interfaces;
 using PressureSensorData;
+using Tools.View;
 
 namespace PressureSensorCheck.Workflow
 {
@@ -11,6 +13,10 @@ namespace PressureSensorCheck.Workflow
     /// </summary>
     public class PressureSensorCheckConfigVm : INotifyPropertyChanged
     {
+        private ObservableCollection<BaseCheckData> _templates;
+        private BaseCheckData _selectedTemplate;
+        private bool _isTemplatePreview;
+
         public PressureSensorCheckConfigVm(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf)
         {
             Data = configData;
@@ -35,7 +41,8 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Единицы измерения давления
         /// </summary>
-        public Units PressUnit { get { return Data.Unit; }
+        public Units PressUnit {
+            get { return Data.Unit; }
             set
             {
                 if(value == Data.Unit)
@@ -46,7 +53,8 @@ namespace PressureSensorCheck.Workflow
                     point.Unit = value;
                 }
                 OnPropertyChanged("PressUnit");
-            } }
+            }
+        }
 
         /// <summary>
         /// Конфигурация логики проверки
@@ -57,6 +65,50 @@ namespace PressureSensorCheck.Workflow
         /// Конфигурация DPI620
         /// </summary>
         public DPI620GeniiConfig DpiConfig { get; set; }
+
+        /// <summary>
+        /// Набор доступных шаблонов
+        /// </summary>
+        public ObservableCollection<BaseCheckData> Templates { get { return _templates; } }
+
+        /// <summary>
+        /// Выюраный шаблон
+        /// </summary>
+        public BaseCheckData SelectedTemplate
+        {
+            get { return _selectedTemplate; }
+            set
+            {
+                _selectedTemplate = value; 
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Применить выбранный шаблон
+        /// </summary>
+        public ICommand ApplyTemplate
+        {
+            get { return new CommandWrapper(OnApplyTemplate); }
+        }
+
+        /// <summary>
+        /// Показывать представление выбранных шаблонов
+        /// </summary>
+        public bool IsTemplatePreview
+        {
+            get { return _isTemplatePreview; }
+            set
+            {
+                _isTemplatePreview = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void OnApplyTemplate()
+        {
+            throw new NotImplementedException();
+        }
 
         #region INotifyPropertyChanged
 

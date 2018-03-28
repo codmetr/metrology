@@ -7,7 +7,8 @@
              xmlns:local="clr-namespace:KipTM.Checks.View"
              xmlns:attachedCommandBehavior="clr-namespace:AttachedCommandBehavior;assembly=Tools.View"
              xmlns:pressureSensor="clr-namespace:KipTM.Report.PressureSensor"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance pressureSensor:PressureSensorReportViewModel}"
+             xmlns:report="clr-namespace:PressureSensorCheck.Report;assembly=PressureSensorCheck"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance report:PressureSensorReportViewModel}"
              d:DesignHeight="600" d:DesignWidth="1000" Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -16,7 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="20">
+    <Grid Margin="20,20,20,0">
         <TabControl TabStripPlacement="Left">
             <TabControl.Resources>
                 <DataTemplate x:Key="DtTabHeader"  DataType="TabItem">

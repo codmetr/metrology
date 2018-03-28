@@ -21,7 +21,7 @@
     </UserControl.Resources>
     <modalContent:ModalContentPresenter IsModal="{Binding ModalState.IsShowModal, UpdateSourceTrigger=PropertyChanged}"
                                         ModalContent="{Binding ModalState.CurrentModal, UpdateSourceTrigger=PropertyChanged}"> <!-- IsModal="True">-->
-        <Grid Margin="20">
+        <Grid Margin="20,20,20,0">
             <Grid.Resources>
                 <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}"/>
                 <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}"/>
