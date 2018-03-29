@@ -640,6 +640,8 @@ COPY "$(SolutionDir)VisaChannelView\bin\Debug\VisaChannelView.dll" "$(TargetDir)
 echo ----ADTS----
 echo copy ReportAdts.dll
 COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.dll" "$(TargetDir)Libs\ReportAdts.dll"
+echo copy ReportAdts.pdb
+COPY "$(SolutionDir)Reports\ReportAdts\bin\Debug\ReportAdts.pdb" "$(TargetDir)Libs\ReportAdts.pdb"
 echo copy ADTSChecks.dll
 COPY "$(SolutionDir)ADTSChecks\bin\Debug\ADTSChecks.dll" "$(TargetDir)Libs\ADTSChecks.dll"
 echo copy ADTSView.dll

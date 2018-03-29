@@ -12,7 +12,7 @@
     <Property Id="Shortcut" Value="$(var.ProductName).lnk" />
     <Feature Id="ProductFeature" Title="KipTM" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
-      <ComponentGroupRef Id="ReportsComponents" />
+      <ComponentGroupRef Id="LibsComponents" />
       <ComponentGroupRef Id="x64Components" />
       <ComponentGroupRef Id="x86Components" />
       <ComponentRef Id="Shortcuts" />
@@ -28,9 +28,11 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="ManufacturerFolder" Name="$(var.Manufacturer)">
           <Directory Id="ApplicationFolder" Name="$(var.ProductName)">
-            <Directory Id="ReportFolder" Name="Reports"/>
+            <Directory Id="LibsFolder" Name="Libs"/>
             <Directory Id="x64Folder" Name="x64"/>
             <Directory Id="x86Folder" Name="x86"/>
+            <Directory Id="ManualsFolder" Name="Manuals"/>
+            <Directory Id="ruFolder" Name="ru"/>
           </Directory>
         </Directory>
         <Directory Id="ProgramMenuFolder">
@@ -66,7 +68,7 @@
         <File Name="$(var.KipTM.TargetFileName)" Source="$(var.KipTM.TargetPath)" KeyPath="yes" />
         <File Name="$(var.KipTM.TargetName).pdb" Source="$(var.KipTM.TargetDir)$(var.KipTM.TargetName).pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="$(var.KipTM.TargetFileName).config" Source="$(var.KipTM.TargetDir)$(var.KipTM.TargetFileName).config" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="icon-metrology.png" Source="$(var.KipTM.TargetDir)Content\icon-metrology.png" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <!--<File Name="icon-metrology.png" Source="$(var.KipTM.TargetDir)Content\icon-metrology.png" CompanionFile="$(var.KipTM.TargetFileName)"/>-->
         <File Name="System.Windows.Interactivity.dll" Source="$(var.KipTM.TargetDir)System.Windows.Interactivity.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="StructureMap.dll" Source="$(var.KipTM.TargetDir)StructureMap.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="Microsoft.Practices.ServiceLocation.dll" Source="$(var.KipTM.TargetDir)Microsoft.Practices.ServiceLocation.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
@@ -166,10 +168,10 @@
     </ComponentGroup>
   </Fragment>
   <Fragment>
-    <ComponentGroup Id="ReportsComponents" Directory="ReportFolder">
+    <ComponentGroup Id="LibsComponents" Directory="LibsFolder">
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B284D5A3A">
-        <File Name="$(var.ReportAdts.TargetFileName)" Source="$(var.KipTM.TargetDir)Reports\$(var.ReportAdts.TargetFileName)" KeyPath="yes" />
-        <File Name="$(var.ReportAdts.TargetName).pdb" Source="$(var.KipTM.TargetDir)Reports\$(var.ReportAdts.TargetName).pdb" CompanionFile="$(var.ReportAdts.TargetFileName)"/>
+        <File Name="$(var.ReportAdts.TargetFileName)" Source="$(var.KipTM.TargetDir)Libs\$(var.ReportAdts.TargetFileName)" KeyPath="yes" />
+        <File Name="$(var.ReportAdts.TargetName).pdb" Source="$(var.KipTM.TargetDir)Libs\$(var.ReportAdts.TargetName).pdb" CompanionFile="$(var.ReportAdts.TargetFileName)"/>
       </Component>
     </ComponentGroup>
   </Fragment>
