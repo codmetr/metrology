@@ -58,7 +58,7 @@ namespace PressureSensorCheck.Report
             {
                 if (_certificateReportDate == null)
                 {
-                    _certificateReportDate = new PressureSensorСertificate();
+                    _certificateReportDate = new PressureSensorCertificate();
                     _certificateReportDate.FileName = Path.Combine("Report", _certificateReportDate.ResourceName);
                     _certificateReportDate.Load();
                 }

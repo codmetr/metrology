@@ -16,14 +16,14 @@ namespace PressureSensorCheck.Report {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class PressureSensorСertificate : ReportClass {
+    public class PressureSensorCertificate : ReportClass {
         
-        public PressureSensorСertificate() {
+        public PressureSensorCertificate() {
         }
         
         public override string ResourceName {
             get {
-                return "PressureSensorСertificate.rpt";
+                return "PressureSensorCertificate.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace PressureSensorCheck.Report {
         
         public override string FullResourceName {
             get {
-                return "PressureSensorCheck.Report.PressureSensorСertificate.rpt";
+                return "PressureSensorCheck.Report.PressureSensorCertificate.rpt";
             }
             set {
                 // Do nothing
@@ -106,9 +106,9 @@ namespace PressureSensorCheck.Report {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedPressureSensorСertificate : Component, ICachedReport {
+    public class CachedPressureSensorCertificate : Component, ICachedReport {
         
-        public CachedPressureSensorСertificate() {
+        public CachedPressureSensorCertificate() {
         }
         
         [Browsable(false)]
@@ -145,7 +145,7 @@ namespace PressureSensorCheck.Report {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            PressureSensorСertificate rpt = new PressureSensorСertificate();
+            PressureSensorCertificate rpt = new PressureSensorCertificate();
             rpt.Site = this.Site;
             return rpt;
         }

@@ -13,8 +13,24 @@
     <Feature Id="ProductFeature" Title="KipTM" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
       <ComponentGroupRef Id="LibsComponents" />
+      <ComponentGroupRef Id="ReportComponents" />
+      <ComponentGroupRef Id="DPIComponents" />
+      <ComponentGroupRef Id="PACEComponents" />
       <ComponentGroupRef Id="x64Components" />
       <ComponentGroupRef Id="x86Components" />
+      <ComponentGroupRef Id="ruComponents" />
+      <ComponentGroupRef Id="huComponents" />
+      <ComponentGroupRef Id="skComponents" />
+      <ComponentGroupRef Id="esComponents" />
+      <ComponentGroupRef Id="itComponents" />
+      <ComponentGroupRef Id="ptComponents" />
+      <ComponentGroupRef Id="svComponents" />
+      <ComponentGroupRef Id="deComponents" />
+      <ComponentGroupRef Id="frComponents" />
+      <ComponentGroupRef Id="jaComponents" />
+      <ComponentGroupRef Id="trComponents" />
+      <ComponentGroupRef Id="zh_cnComponents" />
+      <ComponentGroupRef Id="zh_twComponents" />
       <ComponentRef Id="Shortcuts" />
       <ComponentRef Id="DesktopShortcuts" />
     </Feature>
@@ -29,10 +45,26 @@
         <Directory Id="ManufacturerFolder" Name="$(var.Manufacturer)">
           <Directory Id="ApplicationFolder" Name="$(var.ProductName)">
             <Directory Id="LibsFolder" Name="Libs"/>
+            <Directory Id="ReportFolder" Name="Report"/>
             <Directory Id="x64Folder" Name="x64"/>
             <Directory Id="x86Folder" Name="x86"/>
-            <Directory Id="ManualsFolder" Name="Manuals"/>
+            <Directory Id="ManualsFolder" Name="Manuals">
+              <Directory Id="DPIFolder" Name="DPI"/>
+              <Directory Id="PACEFolder" Name="PACE"/>
+            </Directory>
             <Directory Id="ruFolder" Name="ru"/>
+            <Directory Id="huFolder" Name="hu"/>
+            <Directory Id="skFolder" Name="sk"/>
+            <Directory Id="esFolder" Name="es"/>
+            <Directory Id="itFolder" Name="it"/>
+            <Directory Id="ptFolder" Name="pt"/>
+            <Directory Id="svFolder" Name="sv"/>
+            <Directory Id="deFolder" Name="de"/>
+            <Directory Id="frFolder" Name="fr"/>
+            <Directory Id="jaFolder" Name="ja"/>
+            <Directory Id="trFolder" Name="tr"/>
+            <Directory Id="zh_cnFolder" Name="zh-cn"/>
+            <Directory Id="zh_twFolder" Name="zh-tw"/>
           </Directory>
         </Directory>
         <Directory Id="ProgramMenuFolder">
@@ -68,8 +100,71 @@
         <File Name="$(var.KipTM.TargetFileName)" Source="$(var.KipTM.TargetPath)" KeyPath="yes" />
         <File Name="$(var.KipTM.TargetName).pdb" Source="$(var.KipTM.TargetDir)$(var.KipTM.TargetName).pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="$(var.KipTM.TargetFileName).config" Source="$(var.KipTM.TargetDir)$(var.KipTM.TargetFileName).config" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <!--<File Name="icon-metrology.png" Source="$(var.KipTM.TargetDir)Content\icon-metrology.png" CompanionFile="$(var.KipTM.TargetFileName)"/>-->
+        <File Name="ControlzEx.dll" Source="$(var.KipTM.TargetDir)ControlzEx.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="ControlzEx.pdb" Source="$(var.KipTM.TargetDir)ControlzEx.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.CrystalReports.Engine.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.CrystalReports.Engine.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportAppServer.ClientDoc.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportAppServer.ClientDoc.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportAppServer.CommLayer.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportAppServer.CommLayer.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportAppServer.CommonControls.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportAppServer.CommonControls.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportAppServer.CommonObjectModel.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportAppServer.CommonObjectModel.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportAppServer.Controllers.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportAppServer.Controllers.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportAppServer.CubeDefModel.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportAppServer.CubeDefModel.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportAppServer.DataDefModel.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportAppServer.DataDefModel.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportAppServer.DataSetConversion.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportAppServer.DataSetConversion.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportAppServer.ObjectFactory.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportAppServer.ObjectFactory.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportAppServer.Prompting.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportAppServer.Prompting.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportAppServer.ReportDefModel.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportAppServer.ReportDefModel.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportAppServer.XmlSerialize.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportAppServer.XmlSerialize.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.ReportSource.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.ReportSource.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.Shared.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.Shared.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="CrystalDecisions.Windows.Forms.dll" Source="$(var.KipTM.TargetDir)CrystalDecisions.Windows.Forms.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Dapper.Contrib.dll" Source="$(var.KipTM.TargetDir)Dapper.Contrib.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Dapper.dll" Source="$(var.KipTM.TargetDir)Dapper.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Dapper.xml" Source="$(var.KipTM.TargetDir)Dapper.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="DynamicDataDisplay.dll" Source="$(var.KipTM.TargetDir)DynamicDataDisplay.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="FlashControlV71.dll" Source="$(var.KipTM.TargetDir)FlashControlV71.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="GalaSoft.MvvmLight.dll" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="GalaSoft.MvvmLight.Extras.dll" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Extras.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="GalaSoft.MvvmLight.Extras.pdb" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Extras.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="GalaSoft.MvvmLight.Extras.xml" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Extras.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="GalaSoft.MvvmLight.pdb" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="GalaSoft.MvvmLight.Platform.dll" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Platform.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="GalaSoft.MvvmLight.Platform.pdb" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Platform.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="GalaSoft.MvvmLight.Platform.xml" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Platform.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="GalaSoft.MvvmLight.xml" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Ivi.Visa.Interop.dll" Source="$(var.KipTM.TargetDir)Ivi.Visa.Interop.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="MahApps.Metro.dll" Source="$(var.KipTM.TargetDir)MahApps.Metro.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="MahApps.Metro.pdb" Source="$(var.KipTM.TargetDir)MahApps.Metro.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="MahApps.Metro.xml" Source="$(var.KipTM.TargetDir)MahApps.Metro.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Microsoft.Practices.ServiceLocation.dll" Source="$(var.KipTM.TargetDir)Microsoft.Practices.ServiceLocation.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Microsoft.Practices.ServiceLocation.pdb" Source="$(var.KipTM.TargetDir)Microsoft.Practices.ServiceLocation.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Microsoft.Practices.ServiceLocation.xml" Source="$(var.KipTM.TargetDir)Microsoft.Practices.ServiceLocation.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Microsoft.Practices.Unity.Configuration.dll" Source="$(var.KipTM.TargetDir)Microsoft.Practices.Unity.Configuration.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Microsoft.Practices.Unity.Configuration.xml" Source="$(var.KipTM.TargetDir)Microsoft.Practices.Unity.Configuration.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Microsoft.Practices.Unity.dll" Source="$(var.KipTM.TargetDir)Microsoft.Practices.Unity.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Microsoft.Practices.Unity.RegistrationByConvention.dll" Source="$(var.KipTM.TargetDir)Microsoft.Practices.Unity.RegistrationByConvention.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Microsoft.Practices.Unity.RegistrationByConvention.xml" Source="$(var.KipTM.TargetDir)Microsoft.Practices.Unity.RegistrationByConvention.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Microsoft.Practices.Unity.xml" Source="$(var.KipTM.TargetDir)Microsoft.Practices.Unity.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Microsoft.Windows.Shell.dll" Source="$(var.KipTM.TargetDir)Microsoft.Windows.Shell.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Microsoft.Windows.Shell.pdb" Source="$(var.KipTM.TargetDir)Microsoft.Windows.Shell.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Microsoft.Windows.Shell.xml" Source="$(var.KipTM.TargetDir)Microsoft.Windows.Shell.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="Nlog.config" Source="$(var.KipTM.TargetDir)Nlog.config" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="NLog.dll" Source="$(var.KipTM.TargetDir)NLog.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="NLog.xml" Source="$(var.KipTM.TargetDir)NLog.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="RibbonControlsLibrary.dll" Source="$(var.KipTM.TargetDir)RibbonControlsLibrary.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="RibbonControlsLibrary.pdb" Source="$(var.KipTM.TargetDir)RibbonControlsLibrary.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="RibbonControlsLibrary.xml" Source="$(var.KipTM.TargetDir)RibbonControlsLibrary.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="SAPBusinessObjects.WPF.Viewer.dll" Source="$(var.KipTM.TargetDir)SAPBusinessObjects.WPF.Viewer.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="SAPBusinessObjects.WPF.ViewerShared.dll" Source="$(var.KipTM.TargetDir)SAPBusinessObjects.WPF.ViewerShared.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="ShockwaveFlashObjects.dll" Source="$(var.KipTM.TargetDir)ShockwaveFlashObjects.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="stdole.dll" Source="$(var.KipTM.TargetDir)stdole.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="StructureMap.dll" Source="$(var.KipTM.TargetDir)StructureMap.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="StructureMap.xml" Source="$(var.KipTM.TargetDir)StructureMap.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="System.Windows.Interactivity.dll" Source="$(var.KipTM.TargetDir)System.Windows.Interactivity.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="ZedGraph.dll" Source="$(var.KipTM.TargetDir)ZedGraph.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="ZedGraph.xml" Source="$(var.KipTM.TargetDir)ZedGraph.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        
+        <!--<File Name="System.Windows.Interactivity.dll" Source="$(var.KipTM.TargetDir)System.Windows.Interactivity.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="StructureMap.dll" Source="$(var.KipTM.TargetDir)StructureMap.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="Microsoft.Practices.ServiceLocation.dll" Source="$(var.KipTM.TargetDir)Microsoft.Practices.ServiceLocation.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="Microsoft.Practices.ServiceLocation.pdb" Source="$(var.KipTM.TargetDir)Microsoft.Practices.ServiceLocation.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
@@ -80,70 +175,85 @@
         <File Name="Ivi.Visa.Interop.dll" Source="$(var.KipTM.TargetDir)Ivi.Visa.Interop.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="Nlog.config" Source="$(var.KipTM.TargetDir)Nlog.config" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="NLog.dll" Source="$(var.KipTM.TargetDir)NLog.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="NLog.xml" Source="$(var.KipTM.TargetDir)NLog.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
-      </Component>
-      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A2A">
-        <File Name="$(var.ADTS.TargetFileName)" Source="$(var.ADTS.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.ADTS.TargetName).pdb" Source="$(var.ADTS.TargetDir)$(var.ADTS.TargetName).pdb" CompanionFile="$(var.ADTS.TargetFileName)"/>
-      </Component>
-      <Component Guid="2E1987B5-D7E6-47E2-AF5B-924B28DD5A2A">
-        <File Name="$(var.ADTSData.TargetFileName)" Source="$(var.ADTSData.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.ADTSData.TargetName).pdb" Source="$(var.ADTSData.TargetDir)$(var.ADTSData.TargetName).pdb" CompanionFile="$(var.ADTSData.TargetFileName)"/>
+        <File Name="NLog.xml" Source="$(var.KipTM.TargetDir)NLog.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>-->
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A3A">
         <File Name="$(var.ArchiveData.TargetFileName)" Source="$(var.ArchiveData.TargetPath)" KeyPath="yes" />
         <File Name="$(var.ArchiveData.TargetName).pdb" Source="$(var.ArchiveData.TargetDir)$(var.ArchiveData.TargetName).pdb" CompanionFile="$(var.ArchiveData.TargetFileName)"/>
       </Component>
-      <!--<Component Guid="2E1987B5-D7E6-47E7-AF5B-924B284D5A3A">
-        <File Name="$(var.ReportAdts.TargetFileName)" Source="$(var.KipTM.TargetDir)Reports\$(var.ReportAdts.TargetFileName)" KeyPath="yes" />
-        <File Name="$(var.ReportAdts.TargetName).pdb" Source="$(var.KipTM.TargetDir)Reports\$(var.ReportAdts.TargetName).pdb" CompanionFile="$(var.ReportAdts.TargetFileName)"/>
-      </Component>-->
-      <Component Guid="2E1987B5-D7E6-47E7-AF5B-324B28DD5A3A">
-        <File Name="$(var.ReportService.TargetFileName)" Source="$(var.ReportService.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.ReportService.TargetName).pdb" Source="$(var.ReportService.TargetDir)$(var.ReportService.TargetName).pdb" CompanionFile="$(var.ReportService.TargetFileName)"/>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-134B28DD5B2A">
+        <File Name="$(var.CheckFrame.TargetFileName)" Source="$(var.CheckFrame.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.CheckFrame.TargetName).pdb" Source="$(var.CheckFrame.TargetDir)$(var.CheckFrame.TargetName).pdb" CompanionFile="$(var.CheckFrame.TargetFileName)"/>
       </Component>
-      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A4A">
-        <File Name="$(var.IEEE488.TargetFileName)" Source="$(var.IEEE488.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.IEEE488.TargetName).pdb" Source="$(var.IEEE488.TargetDir)$(var.IEEE488.TargetName).pdb" CompanionFile="$(var.IEEE488.TargetFileName)"/>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-124B38DD5B2A">
+        <File Name="$(var.DPI620Genii.TargetFileName)" Source="$(var.DPI620Genii.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.DPI620Genii.TargetName).pdb" Source="$(var.DPI620Genii.TargetDir)$(var.DPI620Genii.TargetName).pdb" CompanionFile="$(var.DPI620Genii.TargetFileName)"/>
       </Component>
-      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A6A">
-        <File Name="$(var.VisaDriver.TargetFileName)" Source="$(var.VisaDriver.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.VisaDriver.TargetName).pdb" Source="$(var.VisaDriver.TargetDir)$(var.VisaDriver.TargetName).pdb" CompanionFile="$(var.VisaDriver.TargetFileName)"/>
+      <Component Guid="2E1987B5-D7E6-47E7-A15B-924B28DD5A4A">
+        <File Id="IEEE488.dll" Name="$(var.IEEE488.TargetFileName)" Source="$(var.IEEE488.TargetPath)" KeyPath="yes" />
+        <File Id="IEEE488.pdb" Name="$(var.IEEE488.TargetName).pdb" Source="$(var.IEEE488.TargetDir)$(var.IEEE488.TargetName).pdb" CompanionFile="$(var.IEEE488.TargetFileName)"/>
       </Component>
-      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Name="$(var.SQLiteArchive.TargetFileName)" Source="$(var.SQLiteArchive.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.SQLiteArchive.TargetName).pdb" Source="$(var.SQLiteArchive.TargetDir)$(var.SQLiteArchive.TargetName).pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="System.Data.SQLite.Linq.dll" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.Linq.dll" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="System.Data.SQLite.Linq.pdb" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.Linq.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
-        <File Name="System.Data.SQLite.Linq.xml" Source="$(var.SQLiteArchive.TargetDir)System.Data.SQLite.Linq.xml" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-124B28D35A2A">
+        <File Name="$(var.Graphic.TargetFileName)" Source="$(var.Graphic.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.Graphic.TargetName).pdb" Source="$(var.Graphic.TargetDir)$(var.Graphic.TargetName).pdb" CompanionFile="$(var.Graphic.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-164B23DD5A2A">
+        <File Name="$(var.KipTM.Interfaces.TargetFileName)" Source="$(var.KipTM.Interfaces.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.KipTM.Interfaces.TargetName).pdb" Source="$(var.KipTM.Interfaces.TargetDir)$(var.KipTM.Interfaces.TargetName).pdb" CompanionFile="$(var.KipTM.Interfaces.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D8E6-47E7-AF5B-164B23DD5A2A">
+        <File Name="$(var.MarkerService.TargetFileName)" Source="$(var.MarkerService.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.MarkerService.TargetName).pdb" Source="$(var.MarkerService.TargetDir)$(var.MarkerService.TargetName).pdb" CompanionFile="$(var.MarkerService.TargetFileName)"/>
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A1A">
         <File Name="$(var.MainLoop.TargetFileName)" Source="$(var.MainLoop.TargetPath)" KeyPath="yes" />
         <File Name="$(var.MainLoop.TargetName).pdb" Source="$(var.MainLoop.TargetDir)$(var.MainLoop.TargetName).pdb" CompanionFile="$(var.MainLoop.TargetFileName)"/>
       </Component>
-      <Component Guid="2E1987B5-D7E6-47E7-AF5B-124B28DD5A2A">
-        <File Name="$(var.Tools.TargetFileName)" Source="$(var.Tools.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.Tools.TargetName).pdb" Source="$(var.Tools.TargetDir)$(var.Tools.TargetName).pdb" CompanionFile="$(var.Tools.TargetFileName)"/>
-      </Component>
-      <Component Guid="2E1987B5-D7E6-47E7-AF5B-127B28DD5A2A">
-        <File Name="$(var.ADTSChecks.TargetFileName)" Source="$(var.ADTSChecks.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.ADTSChecks.TargetName).pdb" Source="$(var.ADTSChecks.TargetDir)$(var.ADTSChecks.TargetName).pdb" CompanionFile="$(var.ADTSChecks.TargetFileName)"/>
-      </Component>
-      <Component Guid="2E1987B5-D7E6-47E7-AF5B-124B28DD5B2A">
-        <File Name="$(var.CheckFrame.TargetFileName)" Source="$(var.CheckFrame.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.CheckFrame.TargetName).pdb" Source="$(var.CheckFrame.TargetDir)$(var.CheckFrame.TargetName).pdb" CompanionFile="$(var.CheckFrame.TargetFileName)"/>
-      </Component>
-      <Component Guid="2E1987B5-D7E6-47E7-AF5B-164B28DD5A2A">
-        <File Name="$(var.MarkerService.TargetFileName)" Source="$(var.MarkerService.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.MarkerService.TargetName).pdb" Source="$(var.MarkerService.TargetDir)$(var.MarkerService.TargetName).pdb" CompanionFile="$(var.MarkerService.TargetFileName)"/>
+      <Component Guid="F3764C78-E33A-449D-8A42-781341CC1156">
+        <File Name="$(var.PACESeries.TargetFileName)" Source="$(var.PACESeries.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.PACESeries.TargetName).pdb" Source="$(var.PACESeries.TargetDir)$(var.PACESeries.TargetName).pdb" CompanionFile="$(var.PACESeries.TargetFileName)"/>
       </Component>
       <Component Guid="44623CF8-CAEF-474A-AC50-21020572B436">
         <File Name="$(var.PressureElementControls.TargetFileName)" Source="$(var.PressureElementControls.TargetPath)" KeyPath="yes" />
         <File Name="$(var.PressureElementControls.TargetName).pdb" Source="$(var.PressureElementControls.TargetDir)$(var.PressureElementControls.TargetName).pdb" CompanionFile="$(var.PressureElementControls.TargetFileName)"/>
       </Component>
-      <Component Guid="F3764C78-E33A-449D-8A42-781341CC1156">
-        <File Name="$(var.PACESeries.TargetFileName)" Source="$(var.PACESeries.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.PACESeries.TargetName).pdb" Source="$(var.PACESeries.TargetDir)$(var.PACESeries.TargetName).pdb" CompanionFile="$(var.PACESeries.TargetFileName)"/>
+      <Component Guid="F3764C78-E33A-449D-8A42-781343CC1156">
+        <File Name="$(var.PressureSensorCheck.TargetFileName)" Source="$(var.PressureSensorCheck.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.PressureSensorCheck.TargetName).pdb" Source="$(var.PressureSensorCheck.TargetDir)$(var.PressureSensorCheck.TargetName).pdb" CompanionFile="$(var.PressureSensorCheck.TargetFileName)"/>
+      </Component>
+      <Component Guid="F3764C78-E33A-449D-8A42-7813418C1156">
+        <File Name="$(var.PressureSensorData.TargetFileName)" Source="$(var.PressureSensorData.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.PressureSensorData.TargetName).pdb" Source="$(var.PressureSensorData.TargetDir)$(var.PressureSensorData.TargetName).pdb" CompanionFile="$(var.PressureSensorData.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-324B28DD5A3A">
+        <File Name="$(var.ReportService.TargetFileName)" Source="$(var.ReportService.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.ReportService.TargetName).pdb" Source="$(var.ReportService.TargetDir)$(var.ReportService.TargetName).pdb" CompanionFile="$(var.ReportService.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Name="$(var.SQLiteArchive.TargetFileName)" Source="$(var.SQLiteArchive.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.SQLiteArchive.TargetName).pdb" Source="$(var.SQLiteArchive.TargetDir)$(var.SQLiteArchive.TargetName).pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+        <File Name="System.Data.SQLite.dll" Source="$(var.KipTM.TargetDir)System.Data.SQLite.dll" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+        <File Name="System.Data.SQLite.Linq.dll" Source="$(var.KipTM.TargetDir)System.Data.SQLite.Linq.dll" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+        <File Name="System.Data.SQLite.Linq.pdb" Source="$(var.KipTM.TargetDir)System.Data.SQLite.Linq.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+        <File Name="System.Data.SQLite.Linq.xml" Source="$(var.KipTM.TargetDir)System.Data.SQLite.Linq.xml" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+        <File Name="System.Data.SQLite.pdb" Source="$(var.KipTM.TargetDir)System.Data.SQLite.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+        <File Name="System.Data.SQLite.xml" Source="$(var.KipTM.TargetDir)System.Data.SQLite.xml" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-124B28DD5A2A">
+        <File Name="$(var.Tools.TargetFileName)" Source="$(var.Tools.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.Tools.TargetName).pdb" Source="$(var.Tools.TargetDir)$(var.Tools.TargetName).pdb" CompanionFile="$(var.Tools.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF0B-124B28DD5A2A">
+        <File Name="$(var.Tools.View.TargetFileName)" Source="$(var.Tools.View.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.Tools.View.TargetName).pdb" Source="$(var.Tools.View.TargetDir)$(var.Tools.View.TargetName).pdb" CompanionFile="$(var.Tools.View.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD536A">
+        <File Name="$(var.VisaDriver.TargetFileName)" Source="$(var.VisaDriver.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.VisaDriver.TargetName).pdb" Source="$(var.VisaDriver.TargetDir)$(var.VisaDriver.TargetName).pdb" CompanionFile="$(var.VisaDriver.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A6A">
+        <File Name="$(var.WpfCommonStyles.TargetFileName)" Source="$(var.WpfCommonStyles.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.WpfCommonStyles.TargetName).pdb" Source="$(var.WpfCommonStyles.TargetDir)$(var.WpfCommonStyles.TargetName).pdb" CompanionFile="$(var.WpfCommonStyles.TargetFileName)"/>
       </Component>
       <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
       <!-- <Component Id="ProductComponent"> -->
@@ -152,26 +262,162 @@
     </ComponentGroup>
   </Fragment>
   <Fragment>
+    <ComponentGroup Id="ReportComponents" Directory="ReportFolder">
+      <Component Guid="6E1987B5-D7E6-47E7-AF5B-924B28DD5A71">
+        <File Name="BlankReport.rpt" Source="$(var.KipTM.TargetDir)Report\BlankReport.rpt" KeyPath="yes"/>
+        <File Name="PressureSensorReport.rpt" Source="$(var.KipTM.TargetDir)Report\PressureSensorReport.rpt" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="PressureSensorCertificate.rpt" Source="$(var.KipTM.TargetDir)Report\PressureSensorCertificate.rpt" CompanionFile="$(var.KipTM.TargetFileName)"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
     <ComponentGroup Id="x64Components" Directory="x64Folder">
       <Component Guid="6E1987B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Name="x64SQLite.Interop.dll" Source="$(var.SQLiteArchive.TargetDir)x64\SQLite.Interop.dll" KeyPath="yes"/>
-        <File Name="x64SQLite.Interop.pdb" Source="$(var.SQLiteArchive.TargetDir)x64\SQLite.Interop.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+        <File Id="x64SQLite.Interop.dll" Name="SQLite.Interop.dll" Source="$(var.SQLiteArchive.TargetDir)x64\SQLite.Interop.dll" KeyPath="yes"/>
+        <File Id="x64SQLite.Interop.pdb" Name="SQLite.Interop.pdb" Source="$(var.SQLiteArchive.TargetDir)x64\SQLite.Interop.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
       </Component>
     </ComponentGroup>
   </Fragment>
   <Fragment>
     <ComponentGroup Id="x86Components" Directory="x86Folder">
       <Component Guid="2E1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Name="x86SQLite.Interop.dll" Source="$(var.SQLiteArchive.TargetDir)x86\SQLite.Interop.dll" KeyPath="yes"/>
-        <File Name="x86SQLite.Interop.pdb" Source="$(var.SQLiteArchive.TargetDir)x86\SQLite.Interop.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
+        <File Id="x86SQLite.Interop.dll" Name="SQLite.Interop.dll" Source="$(var.SQLiteArchive.TargetDir)x86\SQLite.Interop.dll" KeyPath="yes"/>
+        <File Id="x86SQLite.Interop.pdb" Name="SQLite.Interop.pdb" Source="$(var.SQLiteArchive.TargetDir)x86\SQLite.Interop.pdb" CompanionFile="$(var.SQLiteArchive.TargetFileName)"/>
       </Component>
     </ComponentGroup>
   </Fragment>
   <Fragment>
     <ComponentGroup Id="LibsComponents" Directory="LibsFolder">
-      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B284D5A3A">
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A2A">
+        <File Name="$(var.ADTS.TargetFileName)" Source="$(var.ADTS.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.ADTS.TargetName).pdb" Source="$(var.ADTS.TargetDir)$(var.ADTS.TargetName).pdb" CompanionFile="$(var.ADTS.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-127B28DD5A2A">
+        <File Name="$(var.ADTSChecks.TargetFileName)" Source="$(var.ADTSChecks.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.ADTSChecks.TargetName).pdb" Source="$(var.ADTSChecks.TargetDir)$(var.ADTSChecks.TargetName).pdb" CompanionFile="$(var.ADTSChecks.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-127428DD5A2A">
+        <File Name="$(var.ADTSView.TargetFileName)" Source="$(var.ADTSView.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.ADTSView.TargetName).pdb" Source="$(var.ADTSView.TargetDir)$(var.ADTSView.TargetName).pdb" CompanionFile="$(var.ADTSView.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E2-AF5B-924B28DD5A2A">
+        <File Name="$(var.ADTSData.TargetFileName)" Source="$(var.ADTSData.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.ADTSData.TargetName).pdb" Source="$(var.ADTSData.TargetDir)$(var.ADTSData.TargetName).pdb" CompanionFile="$(var.ADTSData.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-227B28DD5A2A">
+        <File Name="$(var.PACEChecks.TargetFileName)" Source="$(var.PACEChecks.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.PACEChecks.TargetName).pdb" Source="$(var.PACEChecks.TargetDir)$(var.PACEChecks.TargetName).pdb" CompanionFile="$(var.PACEChecks.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-227428DD5A2A">
+        <File Name="$(var.PACEView.TargetFileName)" Source="$(var.PACEView.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.PACEView.TargetName).pdb" Source="$(var.PACEView.TargetDir)$(var.PACEView.TargetName).pdb" CompanionFile="$(var.PACEView.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E2-AF5B-224B28DD5A2A">
+        <File Name="$(var.PACEData.TargetFileName)" Source="$(var.PACEData.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.PACEData.TargetName).pdb" Source="$(var.PACEData.TargetDir)$(var.PACEData.TargetName).pdb" CompanionFile="$(var.PACEData.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF2B-924B28DD5A4A">
+        <File Id="LibIEEE488.dll" Name="$(var.IEEE488.TargetFileName)" Source="$(var.IEEE488.TargetPath)" KeyPath="yes" />
+        <File Id="LibIEEE488.pdb" Name="$(var.IEEE488.TargetName).pdb" Source="$(var.IEEE488.TargetDir)$(var.IEEE488.TargetName).pdb" CompanionFile="$(var.IEEE488.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B286D5A6A">
+        <File Name="$(var.VisaChannel.TargetFileName)" Source="$(var.VisaChannel.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.VisaChannel.TargetName).pdb" Source="$(var.VisaChannel.TargetDir)$(var.VisaChannel.TargetName).pdb" CompanionFile="$(var.VisaChannel.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-824B286D5A6A">
+        <File Name="$(var.VisaChannelView.TargetFileName)" Source="$(var.VisaChannelView.TargetPath)" KeyPath="yes" />
+        <File Name="$(var.VisaChannelView.TargetName).pdb" Source="$(var.VisaChannelView.TargetDir)$(var.VisaChannelView.TargetName).pdb" CompanionFile="$(var.VisaChannelView.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-824B284D5A3B">
         <File Name="$(var.ReportAdts.TargetFileName)" Source="$(var.KipTM.TargetDir)Libs\$(var.ReportAdts.TargetFileName)" KeyPath="yes" />
         <File Name="$(var.ReportAdts.TargetName).pdb" Source="$(var.KipTM.TargetDir)Libs\$(var.ReportAdts.TargetName).pdb" CompanionFile="$(var.ReportAdts.TargetFileName)"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+      <ComponentGroup Id="DPIComponents" Directory="DPIFolder">
+        <Component Guid="213287B5-D7E6-47E7-AF5B-924B28DD5A73">
+          <File Name="DPI620_Genii_Help_KRU0541_ru.pdf" Source="$(var.KipTM.TargetDir)Manuals\DPI\DPI620_Genii_Help_KRU0541_ru.pdf" KeyPath="yes"/>
+          <File Name="dpi620_genii_quick_start_manual_k0542_rev_2.pdf" Source="$(var.KipTM.TargetDir)Manuals\DPI\dpi620_genii_quick_start_manual_k0542_rev_2.pdf"/>
+          <File Name="dpi_620_genii_brochure_russian.pdf" Source="$(var.KipTM.TargetDir)Manuals\DPI\dpi_620_genii_brochure_russian.pdf"/>
+          <File Name="DPI_620_CheckManual.pdf" Source="$(var.KipTM.TargetDir)Manuals\DPI\DPI_620_CheckManual.pdf"/>
+          <File Name="DPI_620G_TypeDescription.pdf" Source="$(var.KipTM.TargetDir)Manuals\DPI\DPI_620G_TypeDescription.pdf"/>
+          <File Name="GE_DPI620_Manual_K0449.pdf" Source="$(var.KipTM.TargetDir)Manuals\DPI\GE_DPI620_Manual_K0449.pdf"/>
+        </Component>
+      </ComponentGroup>
+      <ComponentGroup Id="PACEComponents" Directory="PACEFolder">
+        <Component Guid="213287B5-D7E6-47E7-AF5B-924B28DD5A72">
+          <File Name="pace5000_pace6000_safety_instructions_k0447_rev_a.pdf" Source="$(var.KipTM.TargetDir)Manuals\PACE\pace5000_pace6000_safety_instructions_k0447_rev_a.pdf" KeyPath="yes"/>
+          <File Name="pace5000_pace6000_user_manual_k0443_en.pdf" Source="$(var.KipTM.TargetDir)Manuals\PACE\pace5000_pace6000_user_manual_k0443_en.pdf"/>
+          <File Name="pace5000_pace6000_user_manual_k0443_ru.pdf" Source="$(var.KipTM.TargetDir)Manuals\PACE\pace5000_pace6000_user_manual_k0443_ru.pdf"/>
+          <File Name="pace_scpi_manual_k0472_rev_a5.pdf" Source="$(var.KipTM.TargetDir)Manuals\PACE\pace_scpi_manual_k0472_rev_a5.pdf"/>
+        </Component>
+      </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="ruComponents" Directory="ruFolder">
+      <Component Guid="213287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="ruZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)ru\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="huComponents" Directory="huFolder">
+      <Component Guid="221287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="huZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)hu\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="skComponents" Directory="skFolder">
+      <Component Guid="231287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="skZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)sk\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="esComponents" Directory="esFolder">
+      <Component Guid="241287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="esZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)es\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="itComponents" Directory="itFolder">
+      <Component Guid="251287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="itZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)it\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="ptComponents" Directory="ptFolder">
+      <Component Guid="261287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="ptZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)pt\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="svComponents" Directory="svFolder">
+      <Component Guid="271287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="svZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)sv\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="deComponents" Directory="deFolder">
+      <Component Guid="281287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="deZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)de\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="frComponents" Directory="frFolder">
+      <Component Guid="291287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="frZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)fr\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="jaComponents" Directory="jaFolder">
+      <Component Guid="2A1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="jaZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)ja\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="trComponents" Directory="trFolder">
+      <Component Guid="2B1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="trZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)tr\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="zh_cnComponents" Directory="zh_cnFolder">
+      <Component Guid="2C1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="zh_cnZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)zh-cn\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="zh_twComponents" Directory="zh_twFolder">
+      <Component Guid="2D1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="zh_twFolderZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)zh-tw\ZedGraph.resources.dll" KeyPath="yes"/>
       </Component>
     </ComponentGroup>
   </Fragment>

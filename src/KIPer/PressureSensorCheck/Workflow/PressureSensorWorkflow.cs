@@ -6,7 +6,6 @@ using ArchiveData.DTO;
 using CheckFrame.Workflow;
 using DPI620Genii;
 using KipTM.Workflow;
-using Moq;
 using NLog;
 using PressureSensorCheck.Check;
 using PressureSensorCheck.Report;
@@ -139,21 +138,5 @@ namespace PressureSensorCheck.Workflow
                 throw;
             }
         }
-
-        private static IDPI620Driver GetMoq()
-        {
-            var moq = new Moq.Mock<IDPI620Driver>();
-
-            moq.Setup(drv => drv.Open()).Callback(() => { Dpi620StateMoq.Instance.Start(); });
-            moq.Setup(drv => drv.Close()).Callback(() => { Dpi620StateMoq.Instance.Stop(); });
-
-            //moq.Setup(drv => drv.SetUnits(It.IsAny<int>(), It.IsAny<string>())).Callback(
-            //    (int slotId, string unitCode) => { Dpi620StateMoq.Instance.SetUnit(slotId, unitCode); });
-
-            moq.Setup(drv => drv.GetValue(It.IsAny<int>()))
-                .Returns((int slotId) => Dpi620StateMoq.Instance.GetValue(slotId));
-            return moq.Object;
-        }
-
     }
 }

@@ -40,6 +40,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\ADTSView\ADTSView.csproj">
+      <Name>ADTSView</Name>
+      <Project>{eed0ad86-3041-4357-bdb8-d6fc2590151e}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\ADTS\ADTS.csproj">
       <Name>ADTS</Name>
       <Project>{e032255a-ad56-44cd-8525-87293538e958}</Project>
@@ -80,6 +88,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\DPI620Genii\DPI620Genii.csproj">
+      <Name>DPI620Genii</Name>
+      <Project>{5bc5e2f0-d45b-467f-944c-fc1a649ab1a4}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\Drivers\PACESeries\PACESeries.csproj">
       <Name>PACESeries</Name>
       <Project>{3d3db0eb-5b92-4d8f-8547-82ff7184c59a}</Project>
@@ -104,6 +120,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\Graphic\Graphic.csproj">
+      <Name>Graphic</Name>
+      <Project>{cb32e1a9-2b26-4356-b372-aeeb8b24f224}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\IEEE488Transport\IEEE488.csproj">
       <Name>IEEE488</Name>
       <Project>{3fec76c3-b933-4461-aa8d-85360d3f41c4}</Project>
@@ -115,6 +139,14 @@
     <ProjectReference Include="..\KIPer\KipTM.csproj">
       <Name>KipTM</Name>
       <Project>{0d103f16-f896-4e97-9d92-aedc7ab12f9d}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
+      <Name>KipTM.Interfaces</Name>
+      <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
@@ -136,6 +168,46 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\PACEChecks\PACEChecks.csproj">
+      <Name>PACEChecks</Name>
+      <Project>{d15379fe-8bfc-4daf-b730-8fee929db5bb}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\PACEData\PACEData.csproj">
+      <Name>PACEData</Name>
+      <Project>{bd216c8b-921b-4499-85f3-9ba9a014029e}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\PACEView\PACEView.csproj">
+      <Name>PACEView</Name>
+      <Project>{5d4a7ded-2bf2-4384-abdd-03b10b3edc25}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\PressureSensorCheck\PressureSensorCheck.csproj">
+      <Name>PressureSensorCheck</Name>
+      <Project>{b39fc5b2-8d9b-49a9-9189-76ba124ae522}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\PressureSensorData\PressureSensorData.csproj">
+      <Name>PressureSensorData</Name>
+      <Project>{3a880679-b67b-4d02-a6ff-75857cef1369}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\Reports\ReportAdts\ReportAdts.csproj">
       <Name>ReportAdts</Name>
       <Project>{6e898c9f-dc50-452f-a3bb-1c5002f3d74b}</Project>
@@ -152,9 +224,41 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\Tools.View\Tools.View.csproj">
+      <Name>Tools.View</Name>
+      <Project>{69ab619c-5b3a-4ee7-9318-73d92e75f812}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\Tools\Tools.csproj">
       <Name>Tools</Name>
       <Project>{e53085f8-5740-43b1-b564-fae5ef4c900a}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\VisaChannelView\VisaChannelView.csproj">
+      <Name>VisaChannelView</Name>
+      <Project>{e4ea5262-7701-442c-ba02-0e65fc725b95}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\VisaChannel\VisaChannel.csproj">
+      <Name>VisaChannel</Name>
+      <Project>{82e6c917-c316-4664-b858-401f8c08514f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfCommonStyles\WpfCommonStyles.csproj">
+      <Name>WpfCommonStyles</Name>
+      <Project>{4eb0e1a6-d266-4f92-97a2-53efe2ad51f0}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
