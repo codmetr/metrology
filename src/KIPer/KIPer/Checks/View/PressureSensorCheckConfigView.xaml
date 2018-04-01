@@ -79,15 +79,15 @@
                                 <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.ReportNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Grid.Row="1" Grid.Column="3">Дата протокола:</TextBlock>
                                 <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding Data.ReportDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Grid.Row="2" Grid.Column="0">Номер сертификата:</TextBlock>
+                                <TextBlock Grid.Row="2" Grid.Column="0">Номер свидетельства:</TextBlock>
                                 <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.CertificateNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Grid.Row="2" Grid.Column="3">Дата сертификата:</TextBlock>
+                                <TextBlock Grid.Row="2" Grid.Column="3">Дата свидетельства:</TextBlock>
                                 <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding Data.CertificateDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Grid.Row="3" Grid.Column="3">Время действия свидетельства:</TextBlock>
+                                <TextBlock Grid.Row="3" Grid.Column="3">Интервал между поверками:</TextBlock>
                                 <TextBox Grid.Row="3" Grid.Column="4" Text="{Binding Data.Validity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                             <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
-                        Преобразователь давления:
+                                Средство измерений: Датчик давления:
                             </TextBlock>
                             <Grid>
                                 <Grid.Resources>
@@ -126,8 +126,7 @@
                                 <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Identificator.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                 <TextBlock Grid.Row="0" Grid.Column="3" Grid.RowSpan="2">
-                            Регистрационный номер в Федеральном информационном фонде<LineBreak/>
-                            по обеспечению единства измерений:</TextBlock>
+                                    Номер в Госреестре СИ:</TextBlock>
                                 <TextBox Grid.Row="0" Grid.Column="4" Grid.RowSpan="2" Text="{Binding Data.RegNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Grid.Row="2" Grid.Column="3" Grid.RowSpan="2">
                             Серия и номер знака предыдущей проверки<LineBreak/>
