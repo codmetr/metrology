@@ -102,6 +102,7 @@
     <Compile Include="Report\CertificateUpdater.cs" />
     <Compile Include="Report\ReportFactory.cs" />
     <Compile Include="Report\ReportUpdater.cs" />
+    <Compile Include="Workflow\Content\CheckPointVm.cs" />
     <Compile Include="Workflow\Content\CheckPressureLogicConfigVm.cs" />
     <Compile Include="Workflow\Content\AutoUpdater.cs" />
     <Compile Include="Workflow\Content\Dpi620StateMoq.cs" />

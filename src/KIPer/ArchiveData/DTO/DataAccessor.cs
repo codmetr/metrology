@@ -87,7 +87,7 @@ namespace ArchiveData.DTO
         /// <param name="data"></param>
         public void Save<T>(TestResultID check, T data)
         {
-            if (!_dataPool.Repairs.ContainsKey(check))
+            if (!_dataPool.Repairs.Any(el=>el.Key.Id.HasValue && el.Key.Id == check.Id))
                 throw new IndexOutOfRangeException(string.Format("Try save result for not added RepeirId({0})", check.Id));
             _dataPool.Repairs[check] = data;
             _dataPool.UpdateResult(check, data);

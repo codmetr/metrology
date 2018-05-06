@@ -414,7 +414,7 @@ namespace KipTM.ViewModel
         /// <returns></returns>
         private string GetDbPath(string dbName)
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "KipTM\\Db", dbName);
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "KTM\\KipTM\\Archive\\db", dbName);
         }
 
         /// <summary>

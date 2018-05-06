@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using ArchiveData.DTO;
 using KipTM.Interfaces;
+using PressureSensorCheck.Workflow.Content;
 using PressureSensorData;
 
 namespace PressureSensorCheck.Workflow
@@ -30,6 +31,7 @@ namespace PressureSensorCheck.Workflow
                 OutGange.I0_5mA,
             };
             Data.OutputRange = OutputRanges.FirstOrDefault();
+            PointCalculator = new CheckPointVm();
             UpdatePoints();
         }
 
@@ -75,6 +77,20 @@ namespace PressureSensorCheck.Workflow
         public IEnumerable<Units> Units { get; set; }
 
         /// <summary>
+        /// Допуск по приведенной погрешности
+        /// </summary>
+        public double TolerancePercentSigma
+        {
+            get { return Data.TolerancePercentSigma; }
+            set
+            {
+                Data.TolerancePercentSigma = value;
+                UpdatePoints();
+                //OnPropertyChanged("TolerancePercentSigma");
+            }
+        }
+
+        /// <summary>
         /// Допуск по проценту ВПИ
         /// </summary>
         public double TolerancePercentVpi
@@ -84,7 +100,7 @@ namespace PressureSensorCheck.Workflow
             {
                 Data.TolerancePercentVpi = value;
                 UpdatePoints();
-                OnPropertyChanged("TolerancePercentVpi");
+                //OnPropertyChanged("TolerancePercentVpi");
             }
         }
 
@@ -113,6 +129,8 @@ namespace PressureSensorCheck.Workflow
         /// Точки проверки
         /// </summary>
         public ObservableCollection<PointConfigViewModel> Points { get; set; }
+
+        public CheckPointVm PointCalculator { get; set; }
 
         /// <summary>
         /// Перерассчитать точки
@@ -156,6 +174,13 @@ namespace PressureSensorCheck.Workflow
                 Points.Add(new PointConfigViewModel()//TODO добавить связь с sensPoint
                     { Pressure = point, I = uPoint, Unit = Data.Unit, dI = tollerance });
             }
+            PointCalculator.TolerancePercentVpi = TolerancePercentVpi;
+            PointCalculator.TolerancePercentSigma = TolerancePercentSigma;
+            PointCalculator.Imax = uMax;
+            PointCalculator.Imin = uMin;
+            PointCalculator.Pmax = max;
+            PointCalculator.Pmin = min;
+            PointCalculator.UpdateFormulas();
         }
 
         #region INotifyPropertyChanged

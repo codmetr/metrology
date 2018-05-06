@@ -174,7 +174,10 @@
                         Visibility="{Binding IsRun, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
                         Пауза
                     </Button>
-                    <Button Command="{Binding StopCheck}">Стоп</Button>
+                    <Button Command="{Binding StopCheck}"
+                            Visibility="{Binding IsRun, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        Стоп
+                    </Button>
                 </StackPanel>
             </Grid>
         </Grid>

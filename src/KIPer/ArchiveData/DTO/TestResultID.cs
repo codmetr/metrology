@@ -76,7 +76,7 @@ namespace ArchiveData.DTO
 
             public int GetHashCode(TestResultID obj)
             {
-                return obj.Id.GetHashCode();
+                return obj.Id.HasValue? obj.Id.Value.GetHashCode():obj.Id.GetHashCode();
             }
         }
     }

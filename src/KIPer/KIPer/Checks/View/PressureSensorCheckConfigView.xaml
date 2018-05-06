@@ -9,6 +9,7 @@
              xmlns:pressureSensorData="clr-namespace:PressureSensorData;assembly=PressureSensorData"
              xmlns:dto="clr-namespace:ArchiveData.DTO;assembly=ArchiveData"
              xmlns:interfaces="clr-namespace:KipTM.Interfaces;assembly=KipTM.Interfaces"
+             xmlns:controls="clr-namespace:WpfMath.Controls;assembly=WpfMath"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000"
              d:DataContext="{d:DesignInstance workflow:PressureSensorCheckConfigVm}">
@@ -296,6 +297,10 @@
                         <ColumnDefinition Width="20"/>
                         <ColumnDefinition Width="200"/>
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="310"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
                     <StackPanel Grid.Column="0">
                         <StackPanel.Resources>
                             <!--<Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
@@ -329,10 +334,10 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </Grid>
-                        <TextBlock Style="{StaticResource TblHeaderStyle}">Погрешности:</TextBlock>
+                        <TextBlock Style="{StaticResource TblHeaderStyle}">Нормируемая погрешность:</TextBlock>
                         <Grid Margin="10,0,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="240"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
@@ -341,19 +346,13 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">Абсолютная погрешность</TextBlock>
-                            <TextBlock Grid.Column="0" Grid.Row="1">% ВПИ:</TextBlock>
-                            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Config.TolerancePercentVpi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Grid.Column="2" Grid.Row="1">%</TextBlock>
-                            <TextBlock Grid.Column="0" Grid.Row="2">Δ:</TextBlock>
-                            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Data.ToleranceDelta, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Grid.Column="2" Grid.Row="2" Text="мА"/>
-                            <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">Относительная погрешность</TextBlock>
-                            <TextBlock Grid.Column="0" Grid.Row="4">δ:</TextBlock>
-                            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Data.TolerancePercentSigma, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Grid.Column="2" Grid.Row="4">%</TextBlock>
+                            <TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="Wrap">Предел допускаемой основной приведенной погрешности (γ), %</TextBlock>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Config.TolerancePercentSigma, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap">
+                                <Run Text="Предел допускаемой основной приведенной погрешности к ВПИ (γ"/><Run Text="vpi" FontSize="10" BaselineAlignment="Subscript" /><Run Text="), %:"/>
+                            </TextBlock>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Config.TolerancePercentVpi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
                         </Grid>
                         <TextBlock Style="{StaticResource TblHeaderStyle}">Выходной сигнал:</TextBlock>
                         <Grid Margin="10,0,0,0">
@@ -430,6 +429,29 @@
                             <TextBox Grid.Row="7" Grid.Column="0" Text="{Binding Data.CommonVoltage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </Grid>
                     </StackPanel>
+                    <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource TblHeaderStyle}">Итоговая формула:</TextBlock>
+                            <controls:FormulaControl Margin="10,0,0,0" Formula="\delta(P) = (I_{max}-I_{min})\times\gamma_{vpi} + (I_{max}-I_{min})\times\frac{P-P_{min}}{P_{max}-P_{min}}\times\frac{\gamma}{100\%}"/>
+                            <controls:FormulaControl Margin="10,0,0,0" Formula="{Binding Path=Config.PointCalculator.FormulaFinalyError, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Style="{StaticResource TblHeaderStyle}">Пример рассчета:</TextBlock>
+                            <StackPanel Margin="10,0,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock >Для точки:</TextBlock>
+                                    <TextBox Width="100"></TextBox>
+                                    <TextBlock >Измеренное значение:</TextBlock>
+                                    <TextBox Width="100"></TextBox>
+                                </StackPanel>
+                                <TextBlock >Рассчетное значение:</TextBlock>
+                                <controls:FormulaControl Formula="I(P) = I_{min} + (I_{max}-I_{min})\times\frac{P-P_{min}}{P_{max}-P_{min}}"/>
+                                <controls:FormulaControl Formula="{Binding Path=Config.PointCalculator.FormulaOutSignal, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock >Рассчетная погрешность:</TextBlock>
+                                <controls:FormulaControl Formula="{Binding Path=Config.PointCalculator.FormulaOutSignalTolerance, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock >Измеренная погрешность:</TextBlock>
+                                <controls:FormulaControl Formula="{Binding Path=Config.PointCalculator.FormulaOutSignalError, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
                 </Grid>
             </TabItem>
             <TabItem Header="Настройки">

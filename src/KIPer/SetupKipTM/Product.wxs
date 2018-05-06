@@ -163,6 +163,8 @@
         <File Name="System.Windows.Interactivity.dll" Source="$(var.KipTM.TargetDir)System.Windows.Interactivity.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="ZedGraph.dll" Source="$(var.KipTM.TargetDir)ZedGraph.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="ZedGraph.xml" Source="$(var.KipTM.TargetDir)ZedGraph.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="WpfMath.dll" Source="$(var.KipTM.TargetDir)WpfMath.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
+        <File Name="WpfMath.pdb" Source="$(var.KipTM.TargetDir)WpfMath.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
         
         <!--<File Name="System.Windows.Interactivity.dll" Source="$(var.KipTM.TargetDir)System.Windows.Interactivity.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="StructureMap.dll" Source="$(var.KipTM.TargetDir)StructureMap.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>

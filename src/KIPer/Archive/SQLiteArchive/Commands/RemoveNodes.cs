@@ -35,7 +35,7 @@ namespace SQLiteArchive.Commands
             if (!_nodes.Any())
                 return;
             var sqlSb = new StringBuilder();
-            string sqldelete = string.Format(@"DELETE [{0}]", _table) + " WHERE Id = '{0}' AND RepairId = '{1}'";
+            string sqldelete = string.Format(@"DELETE FROM [{0}]", _table) + " WHERE Id = '{0}' AND RepairId = '{1}'";
             foreach (var node in _nodes)
             {
                 if (node == null || node.IsNew)
