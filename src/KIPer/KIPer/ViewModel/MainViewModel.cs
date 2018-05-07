@@ -10,11 +10,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using ArchiveData;
 using ArchiveData.DTO;
 using CheckFrame;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using KipTM.Interfaces;
 using KipTM.Model;
 using KipTM.Workflow.States;
@@ -33,12 +30,6 @@ using Tools.View;
 
 namespace KipTM.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// See http://www.mvvmlight.net
-    /// </para>
-    /// </summary>
     public class MainViewModel : ISubscriber<EventCheckState>, ISubscriber<ErrorMessageEventArg>, ISubscriber<HelpMessageEventArg>, ISubscriber<Action<Action>>, INotifyPropertyChanged
     {
 
@@ -231,7 +222,7 @@ namespace KipTM.ViewModel
         /// </summary>
         public ICommand Close
         {
-            get { return new RelayCommand(() => { Application.Current.MainWindow.Close(); }); }
+            get { return new CommandWrapper(() => { Application.Current.MainWindow.Close(); }); }
         }
 
         /// <summary>
@@ -241,7 +232,7 @@ namespace KipTM.ViewModel
         {
             get
             {
-                return new RelayCommand<object>(
+                return new CommandWrapper(
                     (url) =>
                     {
                         var strUrl = url as string;
@@ -258,14 +249,15 @@ namespace KipTM.ViewModel
         {
             get
             {
-                return new RelayCommand<string>((string opt) =>
+                return new CommandWrapper((opt) =>
                 {
-                    if(SelectedAction == _workflows[opt])
+                    var arg = (string) opt;
+                    if(SelectedAction == _workflows[arg])
                         return;
-                    SelectedAction = _workflows[opt];
+                    SelectedAction = _workflows[arg];
                     foreach (var btnDescripto in CheckBtns)
                     {
-                        btnDescripto.IsSelected = btnDescripto.Key == opt;
+                        btnDescripto.IsSelected = btnDescripto.Key == arg;
                     }
                     SetHelpMessage("Выполнение поверки");
                 });
@@ -280,7 +272,7 @@ namespace KipTM.ViewModel
         {
             get
             {
-                return new RelayCommand(() =>
+                return new CommandWrapper(() =>
                 {
                     SelectedAction = _lib;
                     SetHelpMessage("Документация: список доступной документации по приборам");
@@ -296,7 +288,7 @@ namespace KipTM.ViewModel
         {
             get
             {
-                return new RelayCommand(() =>
+                return new CommandWrapper(() =>
                 {
                     SelectedAction = _store; //todo установить выбор соответсвующего ViewModel
                     SetHelpMessage("Архив Проверок: список пойденных поверок");
@@ -311,7 +303,7 @@ namespace KipTM.ViewModel
         {
             get
             {
-                return new RelayCommand(() =>
+                return new CommandWrapper(() =>
                 {
                     SelectedAction = "Здесь будут элементы управления настройками приложения"; //todo установить выбор соответсвующего ViewModel
                     SetHelpMessage("Настройки приложения");
@@ -326,7 +318,7 @@ namespace KipTM.ViewModel
         {
             get
             {
-                return new RelayCommand<object>((arg) =>
+                return new CommandWrapper((arg) =>
                 {
                     var serveseKey = arg as string;
                     if (serveseKey == null)

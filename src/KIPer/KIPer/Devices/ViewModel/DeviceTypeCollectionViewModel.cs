@@ -1,19 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using KipTM.ViewModel.DeviceTypes;
+using Tools.View;
 
 namespace KipTM.Devices.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class DeviceTypeCollectionViewModel : ViewModelBase, IDeviceTypesViewModel
+    public class DeviceTypeCollectionViewModel : INotifyPropertyChanged, IDeviceTypesViewModel
     {
         private ObservableCollection<object> _types;
 
@@ -36,9 +31,17 @@ namespace KipTM.Devices.ViewModel
         public ObservableCollection<object> Types
         {
             get { return _types; }
-            set { Set(ref _types, value); }
+            set { _types = value;
+                OnPropertyChanged();
+            }
         }
 
-        public ICommand AddType { get{return new RelayCommand(()=>Types.Add(new DeviceTypeViewModel()));} }
+        public ICommand AddType { get{return new CommandWrapper(()=>Types.Add(new DeviceTypeViewModel()));} }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

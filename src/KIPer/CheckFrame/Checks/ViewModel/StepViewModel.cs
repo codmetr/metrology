@@ -1,16 +1,10 @@
-﻿using CheckFrame.Model.Checks.Steps;
-using GalaSoft.MvvmLight;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using KipTM.Model.Checks;
 
 namespace CheckFrame.ViewModel.Checks
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class StepViewModel : ViewModelBase
+    public class StepViewModel : INotifyPropertyChanged
     {
         private readonly ITestStep _step;
         private string _title;
@@ -45,25 +39,35 @@ namespace CheckFrame.ViewModel.Checks
         public string Title
         {
             get { return _title; }
-            set { Set(ref _title, value); }
+            set
+            {
+                _title = value;
+                OnPropertyChanged();
+            }
         }
 
         public double Progress
         {
             get { return _progress; }
-            set { Set(ref _progress, value); }
+            set { _progress = value;
+                OnPropertyChanged();
+            }
         }
 
         public int State
         {
             get { return (int)_state; }
-            set { Set(ref _state, (StepState)value); }
+            set { _state = (StepState)value;
+                OnPropertyChanged();
+            }
         }
 
         public string Note
         {
             get { return _note; }
-            set { Set(ref _note, value); }
+            set { _note = value;
+                OnPropertyChanged();
+            }
         }
 
         void _step_ProgressChanged(object sender, EventArgProgress e)
@@ -90,14 +94,19 @@ namespace CheckFrame.ViewModel.Checks
             Note = "";
         }
 
-        public override void Cleanup()
+        public virtual void Cleanup()
         {
             _step.Started -= _step_Started;
             _step.End -= _step_End;
             _step.Error -= _step_Error;
             _step.ProgressChanged -= _step_ProgressChanged;
+        }
 
-            base.Cleanup();
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

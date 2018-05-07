@@ -1,26 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using ArchiveData.DTO;
-using GalaSoft.MvvmLight;
 
 namespace KipTM.ViewModel.DeviceTypes
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class EtalonTypeViewModel : ViewModelBase
+    public class EtalonTypeViewModel : INotifyPropertyChanged
     {
         private IDeviceTypeDescriptor _device;
         private IEnumerable<string> _typesEtalonParameters;
-
-        /// <summary>
-        /// Initializes a new instance of the EtalonDeviceTypeViewModel class.
-        /// </summary>
-        public EtalonTypeViewModel()
-        {
-        }
 
         /// <summary>
         /// Тип устройства
@@ -28,7 +16,9 @@ namespace KipTM.ViewModel.DeviceTypes
         public IDeviceTypeDescriptor Device
         {
             get { return _device; }
-            set { Set(ref _device, value); }
+            set { _device = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -37,7 +27,16 @@ namespace KipTM.ViewModel.DeviceTypes
         public IEnumerable<string> TypesEtalonParameters
         {
             get { return _typesEtalonParameters; }
-            set { Set(ref _typesEtalonParameters, value); }
+            set { _typesEtalonParameters = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

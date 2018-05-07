@@ -1,18 +1,13 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using ArchiveData.DTO;
 using CheckFrame.Checks;
-using GalaSoft.MvvmLight;
 using ReportService;
 
 namespace KipTM.ViewModel.Report
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class ReportViewModel : ViewModelBase, IReportViewModel, IDisposable
+    public class ReportViewModel : INotifyPropertyChanged, IReportViewModel, IDisposable
     {
         private object _reportSource;
 
@@ -29,23 +24,29 @@ namespace KipTM.ViewModel.Report
         public object ReportSource
         {
             get { return _reportSource; }
-            set { Set(ref _reportSource, value); }
+            set { _reportSource = value;
+                OnPropertyChanged();
+            }
         }
 
-        public override void Cleanup()
+        public virtual void Cleanup()
         {
-            base.Cleanup();
             var disp = _reportSource as IDisposable;
-            if(disp!=null)
-                disp.Dispose();
+            disp?.Dispose();
         }
 
         public void Dispose()
         {
             var reportDispose = ReportSource as IDisposable;
-            if (reportDispose != null)
-                reportDispose.Dispose();
+            reportDispose?.Dispose();
             Cleanup();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

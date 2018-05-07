@@ -1,19 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
 using KipTM.Interfaces;
 using Tools.View;
 
 namespace KipTM.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class ServiceViewModel : ViewModelBase
+    public class ServiceViewModel : INotifyPropertyChanged
     {
         private IService _selectedService;
         private bool _isCanConnect;
@@ -41,7 +36,8 @@ namespace KipTM.ViewModel
             get { return _selectedService; }
             set
             {
-                Set(ref _selectedService, value);
+                _selectedService = value;
+                OnPropertyChanged();
                 ShowedService = SelectedService;
             }
         }
@@ -49,7 +45,9 @@ namespace KipTM.ViewModel
         public IService ShowedService
         {
             get { return _showedService; }
-            set { Set(ref _showedService, value); }
+            set { _showedService = value;
+                OnPropertyChanged();
+            }
         }
 
         public SelectChannelViewModel Channel { get; private set; }
@@ -61,13 +59,17 @@ namespace KipTM.ViewModel
         public bool IsCanConnect
         {
             get { return _isCanConnect; }
-            set { Set(ref _isCanConnect, value); }
+            set { _isCanConnect = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool IsCanNotConnect
         {
             get { return _isCanNoConnect; }
-            set { Set(ref _isCanNoConnect, value); }
+            set { _isCanNoConnect = value;
+                OnPropertyChanged();
+            }
         }
 
         private void _connect()
@@ -86,6 +88,13 @@ namespace KipTM.ViewModel
 
             ShowedService.Stop();
             //ShowedService = null;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -1,16 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using ArchiveData.DTO;
-using GalaSoft.MvvmLight;
 
 namespace KipTM.ViewModel.DeviceTypes
 {
     /// <summary>
     /// Комплексный описатель типа устройства
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
     /// </summary>
-    public class DeviceTypeViewModel : ViewModelBase
+    public class DeviceTypeViewModel : INotifyPropertyChanged
     {
         private IDeviceTypeDescriptor _device;
         private IEnumerable<IMethodicViewModel> _methodics;
@@ -29,7 +27,9 @@ namespace KipTM.ViewModel.DeviceTypes
         public IDeviceTypeDescriptor Device
         {
             get { return _device; }
-            set { Set(ref _device, value); }
+            set { _device = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -38,7 +38,9 @@ namespace KipTM.ViewModel.DeviceTypes
         public IEnumerable<IMethodicViewModel> Methodics
         {
             get { return _methodics; }
-            set { Set(ref _methodics, value); }
+            set { _methodics = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -47,7 +49,16 @@ namespace KipTM.ViewModel.DeviceTypes
         public IMethodicViewModel SelectedMethodic
         {
             get { return _selectedMethodic; }
-            set { Set(ref _selectedMethodic, value); }
+            set { _selectedMethodic = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

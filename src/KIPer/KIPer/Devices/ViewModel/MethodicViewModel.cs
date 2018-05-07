@@ -1,26 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using CheckFrame.ViewModel.Archive;
-using GalaSoft.MvvmLight;
 using KipTM.Model.Devices;
 using KipTM.ViewModel.DeviceTypes;
 
 namespace KipTM.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class MethodicViewModel : ViewModelBase, IMethodicViewModel
+    public class MethodicViewModel : INotifyPropertyChanged, IMethodicViewModel
     {
-        /// <summary>
-        /// Initializes a new instance of the MethodicViewModel class.
-        /// </summary>
-        public MethodicViewModel()
-        {
-        }
-
         /// <summary>
         ///  Название методики
         /// </summary>
@@ -39,6 +27,13 @@ namespace KipTM.ViewModel
         /// <summary>
         /// типы требуемых эталонных параметров
         /// </summary>
-        public IEnumerable<string> TypesEtalonParameters { get; set; } 
+        public IEnumerable<string> TypesEtalonParameters { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

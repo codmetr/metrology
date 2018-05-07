@@ -8,7 +8,6 @@ using ArchiveData.DTO;
 using CheckFrame;
 using CheckFrame.Checks;
 using CheckFrame.ViewModel.Archive;
-using GalaSoft.MvvmLight;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.DataService;
 using KipTM.Design;
@@ -36,7 +35,7 @@ namespace KipTM.IOC
         public static UnityContainer Config(UnityContainer unityContainer)
         {
             //unityContainer.RegisterTypes(pluginsTypes);
-            if (ViewModelBase.IsInDesignModeStatic)
+            if (false)
             {
                 unityContainer.RegisterType<IDataService, DesignDataService>();
             }

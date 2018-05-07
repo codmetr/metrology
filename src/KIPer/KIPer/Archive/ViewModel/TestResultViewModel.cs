@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using ArchiveData.DTO;
 using CheckFrame.ViewModel.Archive;
-using GalaSoft.MvvmLight;
 using System.Windows.Input;
 using ArchiveData;
 using CheckFrame.Checks;
-using KipTM.Archive;
 using Tools.View;
 
 namespace KipTM.ViewModel
@@ -16,7 +16,7 @@ namespace KipTM.ViewModel
     /// <summary>
     /// Описатель результата проверок конкретного прибора
     /// </summary>
-    public class TestResultViewModel : ViewModelBase, ITestResultViewModel
+    public class TestResultViewModel : INotifyPropertyChanged, ITestResultViewModel
     {
         private string _user;
         private DateTime _time;
@@ -34,7 +34,7 @@ namespace KipTM.ViewModel
         public TestResultViewModel(TestResultID result, CheckConfigData data, IEnumerable<IParameterResultViewModel> parameters, IDataAccessor accessor)
         {
             _result = result;
-            if (IsInDesignMode)
+            if (false)
             {
                 #region Design
                 TestType = "поверка";
@@ -93,7 +93,9 @@ namespace KipTM.ViewModel
         public string TestType
         {
             get { return _testType; }
-            set { Set(ref _testType, value); }
+            set { _testType = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -102,7 +104,9 @@ namespace KipTM.ViewModel
         public string User
         {
             get { return _user; }
-            set { Set(ref _user, value); }
+            set { _user = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -111,7 +115,9 @@ namespace KipTM.ViewModel
         public DateTime Time
         {
             get { return _time; }
-            set { Set(ref _time, value); }
+            set { _time = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -120,7 +126,9 @@ namespace KipTM.ViewModel
         public IDeviceViewModel Device
         {
             get { return _device; }
-            set { Set(ref _device, value); }
+            set { _device = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -129,7 +137,9 @@ namespace KipTM.ViewModel
         public ObservableCollection<IParameterResultViewModel> Parameters
         {
             get { return _parameters; }
-            set { Set(ref _parameters, value); }
+            set { _parameters = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -138,7 +148,9 @@ namespace KipTM.ViewModel
         public ObservableCollection<IDeviceViewModel> Etalons
         {
             get { return _etalons; }
-            set { Set(ref _etalons, value); }
+            set { _etalons = value;
+                OnPropertyChanged();
+            }
         }
 
         public ICommand Save { get { return new CommandWrapper(DoSave); } }
@@ -146,6 +158,13 @@ namespace KipTM.ViewModel
         private void DoSave()
         {
             _save.Save(_result, _parameters);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

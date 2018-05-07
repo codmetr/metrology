@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using ArchiveData.DTO;
 using CheckFrame.ViewModel.Checks;
-using GalaSoft.MvvmLight;
 using KipTM.Checks;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.Interfaces.Channels;
@@ -13,7 +14,7 @@ namespace KipTM.ViewModel.Checks.Config
     /// <summary>
     /// Визуальная модель шага конфигурации системы
     /// </summary>
-    public class CheckConfigViewModel : ViewModelBase
+    public class CheckConfigViewModel : INotifyPropertyChanged
     {
         private readonly CheckConfigDevice _model;
         private readonly CustomConfigFactory _customConfigFactory;
@@ -65,9 +66,9 @@ namespace KipTM.ViewModel.Checks.Config
         /// <param name="e"></param>
         private void ModelSelectedMethodChanged(object sender, EventArgs e)
         {
-            RaisePropertyChanged("SelectedCheckType");
-            RaisePropertyChanged("SelectedChannel");
-            RaisePropertyChanged("CheckDeviceChanel");
+            OnPropertyChanged("SelectedCheckType");
+            OnPropertyChanged("SelectedChannel");
+            OnPropertyChanged("CheckDeviceChanel");
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace KipTM.ViewModel.Checks.Config
         /// <param name="e"></param>
         private void _model_SelectedChannelChanged(object sender, EventArgs e)
         {
-            RaisePropertyChanged("SelectedChannel");
+            OnPropertyChanged("SelectedChannel");
         }
 
         #endregion
@@ -107,7 +108,7 @@ namespace KipTM.ViewModel.Checks.Config
             set
             {
                 _model.CheckDateTime = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -120,7 +121,7 @@ namespace KipTM.ViewModel.Checks.Config
             set
             {
                 _model.AtmospherePressure = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -133,7 +134,7 @@ namespace KipTM.ViewModel.Checks.Config
             set
             {
                 _model.Temperature = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -146,7 +147,7 @@ namespace KipTM.ViewModel.Checks.Config
             set
             {
                 _model.Humidity = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         #endregion
@@ -170,7 +171,7 @@ namespace KipTM.ViewModel.Checks.Config
             set
             {
                 _model.Client = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -191,7 +192,7 @@ namespace KipTM.ViewModel.Checks.Config
             set
             {
                 _model.SerialNumber = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -204,7 +205,7 @@ namespace KipTM.ViewModel.Checks.Config
             set
             {
                 _model.PreviousCheckTime = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -218,7 +219,7 @@ namespace KipTM.ViewModel.Checks.Config
             {
                 _model.SelectedMethodKey = value;
                 CustomSetiings = _customConfigFactory.GetCustomSettings(_model.CustomSettings);
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -233,8 +234,8 @@ namespace KipTM.ViewModel.Checks.Config
                 _model.SelectedChannel = value;
                 _model.EthalonTransportChannel = EthalonOneCh.EthalonChanel.SelectedChannel;
                 CustomSetiings = _customConfigFactory.GetCustomSettings(_model.CustomSettings);
-                RaisePropertyChanged();
-                RaisePropertyChanged("EthalonOneCh");
+                OnPropertyChanged();
+                OnPropertyChanged("EthalonOneCh");
             }
         }
 
@@ -268,7 +269,8 @@ namespace KipTM.ViewModel.Checks.Config
             get { return _customSetiings; }
             set
             {
-                Set(ref _customSetiings, value);
+                _customSetiings = value;
+                OnPropertyChanged();
                 IsCustomSettingsAvailable = _customSetiings != null;
             }
         }
@@ -279,21 +281,29 @@ namespace KipTM.ViewModel.Checks.Config
         public bool IsCustomSettingsAvailable
         {
             get { return _isCustomSettingsAvailable; }
-            set { Set(ref _isCustomSettingsAvailable, value); }
+            set { _isCustomSettingsAvailable = value;
+                OnPropertyChanged();
+            }
         }
 
         #endregion
 
         #region Разрушение, отчистка ресурсов
 
-        public override void Cleanup()
+        public virtual void Cleanup()
         {
             _checkDeviceChanel.ChannelTypeChanget -= _checkDeviceChanel_ChannelTypeChanget;
             _model.SelectedChannelChanged -= _model_SelectedChannelChanged;
             _model.SelectedMethodChanged -= ModelSelectedMethodChanged;
-            base.Cleanup();
         }
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

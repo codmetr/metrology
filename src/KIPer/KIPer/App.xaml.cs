@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows;
-using GalaSoft.MvvmLight.Threading;
 using NLog;
 
 namespace KipTM
@@ -13,10 +12,10 @@ namespace KipTM
     {
         private Logger _logger;
 
-        static App()
-        {
-            DispatcherHelper.Initialize();
-        }
+        //static App():base()
+        //{
+        //    //DispatcherHelper.Initialize();
+        //}
 
         #region Overrides of Application
 

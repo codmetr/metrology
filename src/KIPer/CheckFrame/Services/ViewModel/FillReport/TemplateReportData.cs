@@ -1,20 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using CheckFrame.Services.ViewModel.FillReport;
-using GalaSoft.MvvmLight;
 
 namespace KipTM.Services.ViewModel.FillReport
 {
-    public class TemplateReportData : ViewModelBase
+    public class TemplateReportData : INotifyPropertyChanged
     {
+        private string _name;
+        private ParameterGroup _selectedGroup;
+
         /// <summary>
         /// Название шаблона
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Список именованых параметров
@@ -29,7 +36,21 @@ namespace KipTM.Services.ViewModel.FillReport
         /// <summary>
         /// Выбранная группа параметров
         /// </summary>
-        public ParameterGroup SelectedGroup { get; set; }
+        public ParameterGroup SelectedGroup
+        {
+            get { return _selectedGroup; }
+            set
+            {
+                _selectedGroup = value;
+                OnPropertyChanged();
+            }
+        }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

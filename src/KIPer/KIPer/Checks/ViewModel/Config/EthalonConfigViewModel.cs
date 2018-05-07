@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using ArchiveData.DTO;
 using CheckFrame.Channels;
-using GalaSoft.MvvmLight;
 using KipTM.Model.TransportChannels;
 using KipTM.ViewModel;
 
 namespace KipTM.Checks.ViewModel.Config
 {
-    public class EthalonConfigViewModel : ViewModelBase
+    public class EthalonConfigViewModel : INotifyPropertyChanged
     {
         private readonly DeviceWithChannel _ethalon;
         private readonly IDictionary<ChannelDescriptor, DeviceTypeDescriptor> _dicChannels;
@@ -42,7 +43,7 @@ namespace KipTM.Checks.ViewModel.Config
                 _ethalon.Channel = value;
                 _ethalon.Device.DeviceType = _dicChannels[value];
                 IsAnalog = value.Key == UserEthalonChannel.Key;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -52,8 +53,8 @@ namespace KipTM.Checks.ViewModel.Config
             set
             {
                 _isAnalog = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("IsNoAnalog");
+                OnPropertyChanged();
+                OnPropertyChanged("IsNoAnalog");
             }
         }
 
@@ -71,7 +72,7 @@ namespace KipTM.Checks.ViewModel.Config
             set
             {
                 _ethalon.Device.DeviceType.Model = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -84,7 +85,7 @@ namespace KipTM.Checks.ViewModel.Config
             set
             {
                 _ethalon.Device.DeviceType.Manufacturer = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -97,7 +98,7 @@ namespace KipTM.Checks.ViewModel.Config
             set
             {
                 _ethalon.Device.SerialNumber = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -110,7 +111,7 @@ namespace KipTM.Checks.ViewModel.Config
             set
             {
                 _ethalon.Device.PreviousCheckTime = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -121,6 +122,13 @@ namespace KipTM.Checks.ViewModel.Config
         {
             get { return _ethalonChanel; }
             set { _ethalonChanel = value; }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

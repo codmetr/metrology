@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using KipTM.Services.ViewModel.FillReport;
 
 namespace KipTM.Services.ViewModel
 {
-    public class FillReportViewModel : ViewModelBase
+    public class FillReportViewModel : INotifyPropertyChanged
     {
+        private IFormulaDescriptor _selectedFormula;
+        private TemplateReportData _selectedTemplate;
+
         /// <summary>
         /// Набор доступных шаблонов
         /// </summary>
@@ -19,7 +18,15 @@ namespace KipTM.Services.ViewModel
         /// <summary>
         /// Выбранный шаблон
         /// </summary>
-        public TemplateReportData SelectedTemplate { get; set; }
+        public TemplateReportData SelectedTemplate
+        {
+            get { return _selectedTemplate; }
+            set
+            {
+                _selectedTemplate = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Список доступных формул
@@ -29,6 +36,21 @@ namespace KipTM.Services.ViewModel
         /// <summary>
         /// Выбранная формула
         /// </summary>
-        public IFormulaDescriptor SelectedFormula { get; set; }
+        public IFormulaDescriptor SelectedFormula
+        {
+            get { return _selectedFormula; }
+            set
+            {
+                _selectedFormula = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

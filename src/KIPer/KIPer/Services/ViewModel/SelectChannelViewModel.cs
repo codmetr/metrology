@@ -1,25 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using KipTM.Interfaces;
-using KipTM.Model;
-using KipTM.Model.Devices;
 using KipTM.Model.TransportChannels;
 
 namespace KipTM.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class SelectChannelViewModel : ViewModelBase
+    public class SelectChannelViewModel : INotifyPropertyChanged
     {
         private ITransportChannelType _selectedChannel;
         private readonly IEnumerable<ITransportChannelType> _channels;
@@ -43,7 +31,8 @@ namespace KipTM.ViewModel
             get { return _selectedChannel; }
             set
             {
-                Set(ref _selectedChannel, value);
+                _selectedChannel = value;
+                OnPropertyChanged();
                 OnChannelTypeChanget();
             }
         }
@@ -64,6 +53,13 @@ namespace KipTM.ViewModel
         {
             EventHandler handler = ChannelTypeChanget;
             if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
