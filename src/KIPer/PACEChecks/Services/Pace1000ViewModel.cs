@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
 using KipTM.Interfaces;
 using KipTM.Model;
 using KipTM.Model.Devices;
@@ -16,13 +17,7 @@ using Tools.View;
 
 namespace PACEChecks.Services
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class Pace1000ViewModel : ViewModelBase, IService
+    public class Pace1000ViewModel : INotifyPropertyChanged, IService
     {
         private IDeviceManager _deviceManager;
         private PACE1000Model _model;
@@ -61,14 +56,13 @@ namespace PACEChecks.Services
             SelectedUnit = _avalableUnits.First();
         }
 
-        public override void Cleanup()
+        public virtual void Cleanup()
         {
             if (_model != null)
             {
                 _model.PressureChanged -= _model_PressureChanged;
                 _model.PressureUnitChanged -= _model_PressureUnitChanged;
             }
-            base.Cleanup();
         }
 
         public string Title { get { return PACE1000Model.Model; } }
@@ -95,7 +89,8 @@ namespace PACEChecks.Services
             get { return _pressure; }
             private set
             {
-                Set(ref _pressure, value);
+               _pressure = value;
+                OnPropertyChanged();
             }
         }
         #endregion
@@ -105,7 +100,9 @@ namespace PACEChecks.Services
         public string Unit
         {
             get { return _unit; }
-            private set { Set(ref _unit, value); }
+            private set { _unit = value;
+                OnPropertyChanged();
+            }
         }
 
         public IEnumerable<UnitDescriptor<PressureUnits>> AvalableUnits
@@ -116,7 +113,9 @@ namespace PACEChecks.Services
         public UnitDescriptor<PressureUnits> SelectedUnit
         {
             get { return _selectedUnit; }
-            set { Set(ref _selectedUnit, value); }
+            set { _selectedUnit = value;
+                OnPropertyChanged();
+            }
         }
         #endregion
 
@@ -138,7 +137,8 @@ namespace PACEChecks.Services
             {
                 if(value == _isAutoRead)
                     return;
-                Set(ref _isAutoRead, value);
+                _isAutoRead = value;
+                OnPropertyChanged();
                 if (_isAutoRead)
                 {
                     _model.StartAutoread(_autoreadPeriod);
@@ -157,7 +157,8 @@ namespace PACEChecks.Services
             {
                 if (value == _autoreadPeriod)
                     return;
-                Set(ref _autoreadPeriod, value);
+                _autoreadPeriod = value;
+                OnPropertyChanged();
                 _model.SetAutoreadPeriod(_autoreadPeriod);
             }
         }
@@ -232,5 +233,12 @@ namespace PACEChecks.Services
             return string.Empty;
         }
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

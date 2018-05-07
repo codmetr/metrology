@@ -1,20 +1,15 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using ADTSChecks.Checks.Data;
 using CheckFrame.ViewModel.Checks;
-using GalaSoft.MvvmLight;
 using Tools.View;
 
 namespace ADTSChecks.Checks.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class AdtsCheckConfVm : ViewModelBase, ICustomSettingsViewModel
+    public class AdtsCheckConfVm : INotifyPropertyChanged, ICustomSettingsViewModel
     {
         private ADTSParameters _customConf;
         private ObservableCollection<ADTSPoint> _points;
@@ -52,7 +47,9 @@ namespace ADTSChecks.Checks.ViewModel
         public ADTSPoint SelectedPoint
         {
             get { return _selectedPoint; }
-            set { Set(ref _selectedPoint, value); }
+            set { _selectedPoint = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -61,7 +58,9 @@ namespace ADTSChecks.Checks.ViewModel
         public double NewPressure
         {
             get { return _newPressure; }
-            set { Set(ref _newPressure, value); }
+            set { _newPressure = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -70,7 +69,9 @@ namespace ADTSChecks.Checks.ViewModel
         public double NewTolerance
         {
             get { return _newTolerance; }
-            set { Set(ref _newTolerance, value); }
+            set { _newTolerance = value;
+                OnPropertyChanged();
+            }
         }
 
         public ICommand AddPoint { get { return _addPoint; } }
@@ -146,5 +147,11 @@ namespace ADTSChecks.Checks.ViewModel
             _customConf.Points.Insert(index, point);
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

@@ -7,9 +7,6 @@ using CheckFrame.Channels;
 using CheckFrame.Model.Channels;
 using CheckFrame.ViewModel.Checks;
 using CheckFrame.ViewModel.Checks.Channels;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using KipTM.Archive;
 using KipTM.EventAggregator;
 using KipTM.Interfaces.Channels;
 using KipTM.Model;
@@ -20,9 +17,11 @@ using KipTM.ViewModel.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -34,7 +33,7 @@ namespace ADTSChecks.Checks.ViewModel
     /// <summary>
     /// Базовый класс визуальной модели проверки
     /// </summary>
-    public abstract class CheckBaseViewModel : ViewModelBase, IMethodViewModel
+    public abstract class CheckBaseViewModel : INotifyPropertyChanged, IMethodViewModel
     {
         #region Members
 
@@ -188,22 +187,22 @@ namespace ADTSChecks.Checks.ViewModel
         /// <summary>
         /// Запустить проверку
         /// </summary>
-        public ICommand Start { get { return new GalaSoft.MvvmLight.Command.RelayCommand(() => _currentAction()); } }
+        public ICommand Start { get { return new CommandWrapper(() => _currentAction()); } }
 
         /// <summary>
         /// Остановит проверку
         /// </summary>
-        public ICommand Stop { get { return new GalaSoft.MvvmLight.Command.RelayCommand(DoCancel); } }
+        public ICommand Stop { get { return new CommandWrapper(DoCancel); } }
 
         /// <summary>
         /// Подтверждение установки точки
         /// </summary>
-        public ICommand Accept { get { return new RelayCommand(DoAccept); } }
+        public ICommand Accept { get { return new CommandWrapper(DoAccept); } }
 
         /// <summary>
         /// Остановит проверку
         /// </summary>
-        public ICommand PauseResume { get { return new GalaSoft.MvvmLight.Command.RelayCommand(DoPauseResume); } }
+        public ICommand PauseResume { get { return new CommandWrapper(DoPauseResume); } }
 
         /// <summary>
         /// Эталонное значение
@@ -211,7 +210,9 @@ namespace ADTSChecks.Checks.ViewModel
         public double RealValue
         {
             get { return _realValue; }
-            set { Set(ref _realValue, value); }
+            set { _realValue = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -220,7 +221,9 @@ namespace ADTSChecks.Checks.ViewModel
         public bool AcceptEnabled
         {
             get { return _accept; }
-            set { Set(ref _accept, value); }
+            set { _accept = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -229,7 +232,9 @@ namespace ADTSChecks.Checks.ViewModel
         public bool StopEnabled
         {
             get { return _stopEnabled; }
-            set { Set(ref _stopEnabled, value); }
+            set { _stopEnabled = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -238,7 +243,9 @@ namespace ADTSChecks.Checks.ViewModel
         public bool PauseEnabled
         {
             get { return _pauseEnabled; }
-            set { Set(ref _pauseEnabled, value); }
+            set { _pauseEnabled = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -247,7 +254,9 @@ namespace ADTSChecks.Checks.ViewModel
         public bool IsPaused
         {
             get { return _isPaused; }
-            set { Set(ref _isPaused, value); }
+            set { _isPaused = value;
+                OnPropertyChanged();
+            }
         }
 
         #endregion
@@ -263,7 +272,8 @@ namespace ADTSChecks.Checks.ViewModel
             get { return _ethalonChannel; }
             set
             {
-                Set(ref _ethalonChannel, value);
+                _ethalonChannel = value;
+                OnPropertyChanged();
                 if (_ethalonTypeKey == UserEthalonChannel.Key)
                     State.EthalonChannelViewModel = null;
                 else
@@ -578,14 +588,20 @@ namespace ADTSChecks.Checks.ViewModel
             model.PauseAvailableChanged -= model_PauseAvailableChanged;
         }
 
-        public override void Cleanup()
+        public virtual void Cleanup()
         {
             if (Method != null)
                 DetachEvent(Method);
             if (_userChannel != null)
                 _userChannel.QueryStarted -= OnQueryStarted;
-            base.Cleanup();
         }
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

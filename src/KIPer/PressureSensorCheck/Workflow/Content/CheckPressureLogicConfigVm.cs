@@ -153,8 +153,8 @@ namespace PressureSensorCheck.Workflow
             var max = Data.VpiMax;
             var min = Data.VpiMin;
             var tollerance = Data.TolerancePercentVpi;
-            if (tollerance <= 0)
-                return;
+            //if (tollerance <= 0)
+            //    return;
             if (min >= max)
                 return;
 
@@ -174,18 +174,21 @@ namespace PressureSensorCheck.Workflow
             for (double i = 0; i < _pointsOnRange; i++)
             {
                 var point = min + (i * step);
+
+                var pointOut = CheckPointVm.CalcRes(point, min, max, uMin, uMax, Data.TolerancePercentVpi,
+                    Data.TolerancePercentSigma);
                 var uPoint = uMin + (i * uStep);
                 var sensPoint = new PressureSensorPoint()
                 {
                     PressurePoint = point,
-                    OutPoint = uPoint,
+                    OutPoint = pointOut.Ip,// uPoint,
                     PressureUnit = Data.Unit,
                     OutUnit = KipTM.Interfaces.Units.mA,
-                    Tollerance = tollerance
+                    Tollerance = pointOut.dIp,// tollerance
                 };
                 Data.Points.Add(sensPoint);
                 Points.Add(new PointConfigViewModel()//TODO добавить связь с sensPoint
-                    { Pressure = point, I = uPoint, Unit = Data.Unit, dI = tollerance });
+                    { Pressure = point, I = pointOut.Ip/*uPoint*/, Unit = Data.Unit, dI = pointOut.dIp/*tollerance*/ });
             }
             PointCalculator.TolerancePercentVpi = Data.TolerancePercentVpi;
             PointCalculator.TolerancePercentSigma = Data.TolerancePercentSigma;

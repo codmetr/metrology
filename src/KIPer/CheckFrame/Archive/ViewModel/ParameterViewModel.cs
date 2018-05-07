@@ -1,8 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace CheckFrame.ViewModel.Archive
 {
-    public class ParameterViewModel : ViewModelBase, IParameterViewModel
+    public class ParameterViewModel : INotifyPropertyChanged, IParameterViewModel
     {
         private string _unit;
         private string _pointMeasuring;
@@ -15,7 +16,9 @@ namespace CheckFrame.ViewModel.Archive
         public string NameParameter
         {
             get { return _nameParameter; }
-            set { Set(ref _nameParameter, value); }
+            set { _nameParameter = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -24,7 +27,9 @@ namespace CheckFrame.ViewModel.Archive
         public string Unit
         {
             get { return _unit; }
-            set { Set(ref _unit, value); }
+            set { _unit = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -33,7 +38,9 @@ namespace CheckFrame.ViewModel.Archive
         public string PointMeasuring
         {
             get { return _pointMeasuring; }
-            set { Set(ref _pointMeasuring, value); }
+            set { _pointMeasuring = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -42,7 +49,18 @@ namespace CheckFrame.ViewModel.Archive
         public string Tolerance
         {
             get { return _tolerance; }
-            set { Set(ref _tolerance, value); }
+            set
+            {
+                _tolerance = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -1,14 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace PACEChecks.Channels.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class PaceEthalonChannelViewModel : ViewModelBase
+    public class PaceEthalonChannelViewModel : INotifyPropertyChanged
     {
         private PACEEthalonChannel _model;
         private bool _isActive;
@@ -31,7 +26,9 @@ namespace PACEChecks.Channels.ViewModel
         public bool IsActive
         {
             get { return _isActive; }
-            set { Set(ref _isActive, value); }
+            set { _isActive = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -40,7 +37,9 @@ namespace PACEChecks.Channels.ViewModel
         public string Pressure
         {
             get { return _pressure; }
-            set { Set(ref _pressure, value); }
+            set { _pressure = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -49,7 +48,11 @@ namespace PACEChecks.Channels.ViewModel
         public string PressureUnit
         {
             get { return _pressureUnit; }
-            set { Set(ref _pressureUnit, value); }
+            set
+            {
+                _pressureUnit = value;
+                OnPropertyChanged();
+            }
         }
 
         void _model_StateUpdated(object sender, System.EventArgs e)
@@ -63,11 +66,17 @@ namespace PACEChecks.Channels.ViewModel
             IsActive = _model.IsActive;
         }
 
-        public override void Cleanup()
+        public virtual void Cleanup()
         {
             _model.ActiveStateChange -= _model_ActiveStateChange;
             _model.StateUpdated -= _model_StateUpdated;
-            base.Cleanup();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

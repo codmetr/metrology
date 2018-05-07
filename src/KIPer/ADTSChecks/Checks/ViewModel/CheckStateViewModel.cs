@@ -1,19 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using ADTSChecks.ViewModel.Services;
 using CheckFrame.ViewModel.Checks;
-using GalaSoft.MvvmLight;
 using KipTM.Model.Checks;
 
 namespace ADTSChecks.Checks.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class CheckStateViewModel : ViewModelBase
+    public class CheckStateViewModel : INotifyPropertyChanged
     {
         #region Members
         private string _titleSteps;
@@ -41,7 +36,9 @@ namespace ADTSChecks.Checks.ViewModel
         public string TitleSteps
         {
             get { return _titleSteps; }
-            set { Set(ref _titleSteps, value); }
+            set { _titleSteps = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -50,7 +47,9 @@ namespace ADTSChecks.Checks.ViewModel
         public ADTSViewModel ADTS
         {
             get { return _adtsViewModel; }
-            set { Set(ref _adtsViewModel, value); }
+            set { _adtsViewModel = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool IsUserChannel
@@ -58,8 +57,9 @@ namespace ADTSChecks.Checks.ViewModel
             get { return _isUserChannel; }
             set
             {
-                Set(ref _isUserChannel, value);
-                RaisePropertyChanged("IsNotUserChannel");
+                _isUserChannel = value;
+                OnPropertyChanged();
+                OnPropertyChanged("IsNotUserChannel");
             }
         }
 
@@ -74,7 +74,9 @@ namespace ADTSChecks.Checks.ViewModel
         public IEnumerable<StepViewModel> Steps
         {
             get { return _steps; }
-            set { Set(ref _steps, value); }
+            set { _steps = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -83,7 +85,9 @@ namespace ADTSChecks.Checks.ViewModel
         public object EthalonChannelViewModel
         {
             get { return _ethalonChannelViewModel; }
-            set { Set(ref _ethalonChannelViewModel, value); }
+            set { _ethalonChannelViewModel = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -92,7 +96,9 @@ namespace ADTSChecks.Checks.ViewModel
         public string TitleBtnNext
         {
             get { return _titleBtnNext; }
-            set { Set(ref _titleBtnNext, value); }
+            set { _titleBtnNext = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -101,7 +107,9 @@ namespace ADTSChecks.Checks.ViewModel
         public string Note
         {
             get { return _note; }
-            set { Set(ref _note, value); }
+            set { _note = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -110,7 +118,9 @@ namespace ADTSChecks.Checks.ViewModel
         public bool WaitUserReaction
         {
             get { return _waitUserReaction; }
-            set { Set(ref _waitUserReaction, value); }
+            set { _waitUserReaction = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -119,7 +129,16 @@ namespace ADTSChecks.Checks.ViewModel
         public ObservableCollection<EventArgTestStepResult> ResultsLog
         {
             get { return _resultsLog; }
-            set { Set(ref _resultsLog, value); }
+            set { _resultsLog = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -1,12 +1,6 @@
 ﻿
 namespace CheckFrame.ViewModel.Archive
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
     public class ParameterResultViewModel : ParameterViewModel, IParameterResultViewModel
     {
         private string _error;
@@ -25,7 +19,9 @@ namespace CheckFrame.ViewModel.Archive
         public string Error
         {
             get { return _error; }
-            set { Set(ref _error, value); }
+            set { _error = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -34,7 +30,9 @@ namespace CheckFrame.ViewModel.Archive
         public string ErrorUnit
         {
             get { return _errorUnit; }
-            set { Set(ref _errorUnit, value); }
+            set { _errorUnit = value;
+                OnPropertyChanged();
+            }
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Input;
 using ADTS;
 using ADTSChecks.Devices;
-using GalaSoft.MvvmLight;
 using KipTM.Interfaces;
 using KipTM.Model;
 using KipTM.Model.Devices;
@@ -14,13 +15,7 @@ using Tools.View;
 
 namespace ADTSChecks.ViewModel.Services
 {
-    /// <summary>
-    /// This class contains properties that a View can data bind to.
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class ADTSViewModel : ViewModelBase, IService
+    public class ADTSViewModel : INotifyPropertyChanged, IService
     {
         private ADTSModel _model;
         private string _stateAdts;
@@ -160,7 +155,9 @@ namespace ADTSChecks.ViewModel.Services
         public bool IsControlMode
         {
             get { return _isControlMode; }
-            set { Set(ref _isControlMode, value); }
+            set { _isControlMode = value;
+                OnPropertyChanged();
+            }
         }
 
         #region State
@@ -170,7 +167,9 @@ namespace ADTSChecks.ViewModel.Services
         public bool IsStableAtAimValue
         {
             get { return _isStableAtAimValue; }
-            set { Set(ref _isStableAtAimValue, value); }
+            set { _isStableAtAimValue = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -179,7 +178,9 @@ namespace ADTSChecks.ViewModel.Services
         public bool IsSafeAtGround
         {
             get { return _isSafeAtGround; }
-            set { Set(ref _isSafeAtGround, value); }
+            set { _isSafeAtGround = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -188,7 +189,9 @@ namespace ADTSChecks.ViewModel.Services
         public bool IsRamping
         {
             get { return _isRamping; }
-            set { Set(ref _isRamping, value); }
+            set { _isRamping = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -197,7 +200,9 @@ namespace ADTSChecks.ViewModel.Services
         public bool IsPsAtSetPointAndInControlMode
         {
             get { return _isPsAtSetPointAndInControlMode; }
-            set { Set(ref _isPsAtSetPointAndInControlMode, value); }
+            set { _isPsAtSetPointAndInControlMode = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -206,7 +211,9 @@ namespace ADTSChecks.ViewModel.Services
         public bool IsPsRampingAndAchievingRate
         {
             get { return _isPsRampingAndAchievingRate; }
-            set { Set(ref _isPsRampingAndAchievingRate, value); }
+            set { _isPsRampingAndAchievingRate = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -215,7 +222,9 @@ namespace ADTSChecks.ViewModel.Services
         public bool IsPtAtSetPointAndInControlMode
         {
             get { return _isPtAtSetPointAndInControlMode; }
-            set { Set(ref _isPtAtSetPointAndInControlMode, value); }
+            set { _isPtAtSetPointAndInControlMode = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -224,13 +233,17 @@ namespace ADTSChecks.ViewModel.Services
         public bool IsPtRampingAndAchievingRate
         {
             get { return _isPtRampingAndAchievingRate; }
-            set { Set(ref _isPtRampingAndAchievingRate, value); }
+            set { _isPtRampingAndAchievingRate = value;
+                OnPropertyChanged();
+            }
         }
 
         public string StateADTS
         {
             get { return _stateAdts; }
-            private set { Set(ref _stateAdts, value); }
+            private set { _stateAdts = value;
+                OnPropertyChanged();
+            }
         }
         #endregion
 
@@ -238,7 +251,9 @@ namespace ADTSChecks.ViewModel.Services
         public string Pressure
         {
             get { return _pressure; }
-            private set { Set(ref _pressure, value); }
+            private set { _pressure = value;
+                OnPropertyChanged();
+            }
         }
         #endregion
 
@@ -247,7 +262,9 @@ namespace ADTSChecks.ViewModel.Services
         public double PressureAim
         {
             get { return _pressureAim; }
-            set { Set(ref _pressureAim, value); }
+            set { _pressureAim = value;
+                OnPropertyChanged();
+            }
         }
 
         #endregion
@@ -257,7 +274,9 @@ namespace ADTSChecks.ViewModel.Services
         public double PressureRateAim
         {
             get { return _pressureRateAim; }
-            set { Set(ref _pressureRateAim, value); }
+            set { _pressureRateAim = value;
+                OnPropertyChanged();
+            }
         }
 
         #endregion
@@ -266,7 +285,9 @@ namespace ADTSChecks.ViewModel.Services
         public string Pitot
         {
             get { return _pitot; }
-            private set { Set(ref _pitot, value); }
+            private set { _pitot = value;
+                OnPropertyChanged();
+            }
         }
         #endregion
 
@@ -275,7 +296,9 @@ namespace ADTSChecks.ViewModel.Services
         public double PitotAim
         {
             get { return _pitotAim; }
-            set { Set(ref _pitotAim, value); }
+            set { _pitotAim = value;
+                OnPropertyChanged();
+            }
         }
 
         #endregion
@@ -285,7 +308,9 @@ namespace ADTSChecks.ViewModel.Services
         public double PitotRateAim
         {
             get { return _pitotRateAim; }
-            set { Set(ref _pitotRateAim, value); }
+            set { _pitotRateAim = value;
+                OnPropertyChanged();
+            }
         }
 
         #endregion
@@ -299,13 +324,17 @@ namespace ADTSChecks.ViewModel.Services
         public UnitDescriptor<PressureUnits> SelectedUnit
         {
             get { return _selectedUnit; }
-            set { Set(ref _selectedUnit, value); }
+            set {  _selectedUnit = value;
+                OnPropertyChanged();
+            }
         }
 
         public string PressureUnit
         {
             get { return _pressureUnit; }
-            set { Set(ref _pressureUnit, value); }
+            set { _pressureUnit = value;
+                OnPropertyChanged();
+            }
         }
         #endregion
 
@@ -448,5 +477,12 @@ namespace ADTSChecks.ViewModel.Services
             _model.SetRate(Parameters.PT, PitotRateAim, _cancellation.Token);
         }
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

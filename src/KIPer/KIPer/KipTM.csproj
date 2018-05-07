@@ -96,10 +96,6 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PropertyChanged, Version=2.1.4.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
-      <HintPath>..\packages\PropertyChanged.Fody.2.1.4\lib\netstandard1.0\PropertyChanged.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="RibbonControlsLibrary">
       <HintPath>..\Lib\RibbonControlsLibrary.dll</HintPath>
     </Reference>
@@ -654,7 +650,6 @@ COPY "$(SolutionDir)PACEView\bin\Debug\PACEView.dll" "$(TargetDir)Libs\PACEView.
 echo copy PACEData.dll
 COPY "$(SolutionDir)PACEData\bin\Debug\PACEData.dll" "$(TargetDir)Libs\PACEData.dll"</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\Fody.2.0.0\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.2.0.0\build\dotnet\Fody.targets')" />
   <!--<Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
