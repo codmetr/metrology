@@ -55,6 +55,7 @@ namespace SQLiteArchive.Db
                     }
                     catch (Exception ex)
                     {
+                        Debug.WriteLine(ex.ToString());
                         transaction.Rollback();
                         throw;
                     }

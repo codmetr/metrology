@@ -11,8 +11,10 @@ namespace PressureSensorCheck.Workflow.Content
     public class CheckPointVm : INotifyPropertyChanged
     {
         private string _formulaFinalyError;
-        private double _P;
-        private double _I;
+        private double _P = 0.0;
+        private string _Pstr = 0.0.ToString();
+        private double _I = 0.0;
+        private string _Istr = 0.0.ToString();
         private string _formulaOutSignal = string.Empty;
         private string _formulaOutSignalTolerance = string.Empty;
         private string _formulaOutSignalError = string.Empty;
@@ -53,9 +55,10 @@ namespace PressureSensorCheck.Workflow.Content
         /// </summary>
         public string P
         {
-            get { return _P.ToString("F2"); }
+            get { return _Pstr; }
             set
             {
+                _Pstr = value;
                 double dval;
                 if(!double.TryParse(value.Replace(',','.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
                     return;
@@ -69,9 +72,10 @@ namespace PressureSensorCheck.Workflow.Content
         /// </summary>
         public string I
         {
-            get { return _I.ToString("F2"); }
+            get { return _Istr; }
             set
             {
+                _Istr = value;
                 double dval;
                 if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
                     return;
@@ -122,21 +126,37 @@ namespace PressureSensorCheck.Workflow.Content
         public void UpdateFormulas()
         {
             var sb = new StringBuilder();
-            //@"\delta(P) = (I_{max}-I_{min})\times\gamma_{vpi} + (I_{max}-I_{min})\times\frac{P-P_{min}}{P_{max}-P_{min}}\times\frac{\gamma}{100\%}"
-            var strRes = sb.Append(@"\delta(P) = (").Append(Imax).Append("-").Append(Imin).Append(@")\times")
+            //@"\Delta I(P) = (I_{max}-I_{min})\times\frac{\gamma_{vpi}}{100\%} + (I_{max}-I_{min})\times\frac{P-P_{min}}{P_{max}-P_{min}}\times\frac{\gamma}{100\%}"
+            var strRes = sb.Append(@"\Delta I(P) = (").Append(Imax).Append("-").Append(Imin).Append(@")\times\frac{")
                 .Append(TolerancePercentVpi.ToString())
-                .Append(@" + (").Append(Imax).Append("-").Append(Imin).Append(@")\times\frac{P-").Append(Pmin)
+                .Append(@"}{100\%} + (").Append(Imax).Append("-").Append(Imin).Append(@")\times\frac{P-").Append(Pmin)
                 .Append(@"}{").Append(Pmax).Append("-").Append(Pmin).Append(@"}\times\frac{")
                 .Append(TolerancePercentSigma.ToString()).Append(@"}{100\%}").ToString();
 
             FormulaFinalyError = strRes;
 
             //@"I(P) = I_{min} + (I_{max}-I_{min})\times\frac{P-P_{min}}{P_{max}-P_{min}}"
-            var _Ip = Imin + ((Imax - Imin) * (_P - Pmin) / (Pmax - Pmin));
-            var IpRes = double.IsNaN(_Ip) ? "Nan" : double.IsInfinity(_Ip) ? @"/infinity" : _Ip.ToString("F3");
-            strRes = sb.Clear().Append(@"I(").Append(P).Append(@") = ").Append(Imin).Append("+(").Append(Imax).Append("-").Append(Imin).Append(@")\times\frac{")
-                .Append(P).Append("-").Append(Pmin).Append(@"}{").Append(P).Append("-").Append(Pmin).Append(@"}=").Append(IpRes).ToString();
+            var Ip = Imin + ((Imax - Imin) * (_P - Pmin) / (Pmax - Pmin));
+            var IpRes = double.IsNaN(Ip) ? "Nan" : double.IsInfinity(Ip) ? @"/infinity" : Ip.ToString("F3");
+            strRes = sb.Clear().Append(@"I(").Append(_P.ToString()).Append(@") = ").Append(Imin).Append("+(").Append(Imax).Append("-").Append(Imin).Append(@")\times\frac{")
+                .Append(P).Append("-").Append(Pmin).Append(@"}{").Append(_P.ToString()).Append("-").Append(Pmin).Append(@"}=").Append(IpRes).ToString();
             FormulaOutSignal = strRes;
+
+            //@"\Delta I(P) = (I_{max}-I_{min})\times\gamma_{vpi} + (I_{max}-I_{min})\times\frac{P-P_{min}}{P_{max}-P_{min}}\times\frac{\gamma}{100\%}"
+            var dIp = (Imax - Imin) * TolerancePercentVpi/100.0 + ((TolerancePercentSigma/100.0)*(Imax - Imin) * (_P - Pmin) / (Pmax - Pmin));
+            var dIpRes = double.IsNaN(dIp) ? "Nan" : double.IsInfinity(dIp) ? @"/infinity" : dIp.ToString("F3");
+            strRes = sb.Clear().Append(@"\Delta(").Append(_P.ToString()).Append(") = (").Append(Imax).Append("-").Append(Imin).Append(@")\times\frac{")
+                .Append(TolerancePercentVpi.ToString())
+                .Append(@"}{100\%} + (").Append(Imax).Append("-").Append(Imin).Append(@")\times\frac{").Append(_P.ToString()).Append("-").Append(Pmin)
+                .Append(@"}{").Append(Pmax).Append("-").Append(Pmin).Append(@"}\times\frac{")
+                .Append(TolerancePercentSigma.ToString()).Append(@"}{100\%} = ").Append(dIpRes).ToString();
+            FormulaOutSignalTolerance = strRes;
+
+            //@"\Delta I = I-I(P)"
+            var dI = _I - Ip;
+            var dIRes = double.IsNaN(dI) ? "Nan" : double.IsInfinity(dI) ? @"/infinity" : dI.ToString("F3");
+            strRes = sb.Clear().Append(@"\Delta I = I-I(P) = ").Append(_I.ToString("F3")).Append(" - ").Append(IpRes).Append("=").Append(dIRes).ToString();
+            FormulaOutSignalError = strRes;
         }
 
         #region INotifyPropertyChanged

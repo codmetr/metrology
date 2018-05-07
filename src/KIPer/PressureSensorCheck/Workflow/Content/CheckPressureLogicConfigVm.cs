@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using ArchiveData.DTO;
 using KipTM.Interfaces;
@@ -14,6 +15,8 @@ namespace PressureSensorCheck.Workflow
     /// </summary>
     public class CheckPressureLogicConfigVm : INotifyPropertyChanged
     {
+        private string _tolerancePercentSigma;
+        private string _tolerancePercentVpi;
         private double _pointsOnRange = 5;
 
         public CheckPressureLogicConfigVm(PressureSensorConfig data)
@@ -31,6 +34,8 @@ namespace PressureSensorCheck.Workflow
                 OutGange.I0_5mA,
             };
             Data.OutputRange = OutputRanges.FirstOrDefault();
+            _tolerancePercentSigma = Data.TolerancePercentSigma.ToString();
+            _tolerancePercentVpi = Data.TolerancePercentVpi.ToString();
             PointCalculator = new CheckPointVm();
             UpdatePoints();
         }
@@ -79,12 +84,16 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Допуск по приведенной погрешности
         /// </summary>
-        public double TolerancePercentSigma
+        public string TolerancePercentSigma
         {
-            get { return Data.TolerancePercentSigma; }
+            get { return _tolerancePercentSigma; }
             set
             {
-                Data.TolerancePercentSigma = value;
+                _tolerancePercentSigma = value;
+                double dval;
+                if(!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
+                    return;
+                Data.TolerancePercentSigma = dval;
                 UpdatePoints();
                 //OnPropertyChanged("TolerancePercentSigma");
             }
@@ -93,12 +102,16 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Допуск по проценту ВПИ
         /// </summary>
-        public double TolerancePercentVpi
+        public string TolerancePercentVpi
         {
-            get { return Data.TolerancePercentVpi; }
+            get { return _tolerancePercentVpi; }
             set
             {
-                Data.TolerancePercentVpi = value;
+                _tolerancePercentVpi = value;
+                double dval;
+                if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
+                    return;
+                Data.TolerancePercentVpi = dval;
                 UpdatePoints();
                 //OnPropertyChanged("TolerancePercentVpi");
             }
@@ -174,8 +187,8 @@ namespace PressureSensorCheck.Workflow
                 Points.Add(new PointConfigViewModel()//TODO добавить связь с sensPoint
                     { Pressure = point, I = uPoint, Unit = Data.Unit, dI = tollerance });
             }
-            PointCalculator.TolerancePercentVpi = TolerancePercentVpi;
-            PointCalculator.TolerancePercentSigma = TolerancePercentSigma;
+            PointCalculator.TolerancePercentVpi = Data.TolerancePercentVpi;
+            PointCalculator.TolerancePercentSigma = Data.TolerancePercentSigma;
             PointCalculator.Imax = uMax;
             PointCalculator.Imin = uMin;
             PointCalculator.Pmax = max;

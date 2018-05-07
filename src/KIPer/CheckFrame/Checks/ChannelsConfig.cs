@@ -54,6 +54,7 @@ namespace CheckFrame.Checks
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex.ToString());
                 if (_agregator != null)
                     _agregator.Post(new ErrorMessageEventArg("Не удалось подключить эталонный канал"));
                 throw;

@@ -432,15 +432,15 @@
                     <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" VerticalScrollBarVisibility="Auto">
                         <StackPanel>
                             <TextBlock Style="{StaticResource TblHeaderStyle}">Итоговая формула:</TextBlock>
-                            <controls:FormulaControl Margin="10,0,0,0" Formula="\delta(P) = (I_{max}-I_{min})\times\gamma_{vpi} + (I_{max}-I_{min})\times\frac{P-P_{min}}{P_{max}-P_{min}}\times\frac{\gamma}{100\%}"/>
+                            <controls:FormulaControl Margin="10,0,0,0" Formula="\Delta I(P) = (I_{max}-I_{min})\times\frac{\gamma_{vpi}}{100\%} + (I_{max}-I_{min})\times\frac{P-P_{min}}{P_{max}-P_{min}}\times\frac{\gamma}{100\%}"/>
                             <controls:FormulaControl Margin="10,0,0,0" Formula="{Binding Path=Config.PointCalculator.FormulaFinalyError, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Style="{StaticResource TblHeaderStyle}">Пример рассчета:</TextBlock>
                             <StackPanel Margin="10,0,0,0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock >Для точки:</TextBlock>
-                                    <TextBox Width="100"></TextBox>
+                                    <TextBox Width="100" Text="{Binding Path=Config.PointCalculator.P, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock >Измеренное значение:</TextBlock>
-                                    <TextBox Width="100"></TextBox>
+                                    <TextBox Width="100" Text="{Binding Path=Config.PointCalculator.I, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                                 <TextBlock >Рассчетное значение:</TextBlock>
                                 <controls:FormulaControl Formula="I(P) = I_{min} + (I_{max}-I_{min})\times\frac{P-P_{min}}{P_{max}-P_{min}}"/>
