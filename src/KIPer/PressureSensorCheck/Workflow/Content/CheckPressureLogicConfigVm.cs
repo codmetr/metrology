@@ -150,16 +150,12 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         private void UpdatePoints()
         {
-            var max = Data.VpiMax;
-            var min = Data.VpiMin;
-            var tollerance = Data.TolerancePercentVpi;
-            //if (tollerance <= 0)
-            //    return;
-            if (min >= max)
+            var Pmax = Data.VpiMax;
+            var Pmin = Data.VpiMin;
+            if (Pmin >= Pmax)
                 return;
 
-            var step = (max - min) / (_pointsOnRange - 1);
-            var du = (max - min) * tollerance / 100.0;
+            var step = (Pmax - Pmin) / (_pointsOnRange - 1);
             double uMin = 0.0;
             double uMax = 5.0;
             if (Data.OutputRange == OutGange.I4_20mA)
@@ -167,35 +163,33 @@ namespace PressureSensorCheck.Workflow
                 uMin = 4;
                 uMax = 20;
             }
-            double uStep = (uMax - uMin) / (_pointsOnRange - 1);
 
             Points.Clear();
             Data.Points.Clear();
             for (double i = 0; i < _pointsOnRange; i++)
             {
-                var point = min + (i * step);
+                var point = Pmin + (i * step);
 
-                var pointOut = CheckPointVm.CalcRes(point, min, max, uMin, uMax, Data.TolerancePercentVpi,
+                var pointOut = CheckPointVm.CalcRes(point, Pmin, Pmax, uMin, uMax, Data.TolerancePercentVpi,
                     Data.TolerancePercentSigma);
-                var uPoint = uMin + (i * uStep);
                 var sensPoint = new PressureSensorPoint()
                 {
                     PressurePoint = point,
-                    OutPoint = pointOut.Ip,// uPoint,
+                    OutPoint = pointOut.Ip,
                     PressureUnit = Data.Unit,
                     OutUnit = KipTM.Interfaces.Units.mA,
-                    Tollerance = pointOut.dIp,// tollerance
+                    Tollerance = pointOut.dIp,
                 };
                 Data.Points.Add(sensPoint);
                 Points.Add(new PointConfigViewModel()//TODO добавить связь с sensPoint
-                    { Pressure = point, I = pointOut.Ip/*uPoint*/, Unit = Data.Unit, dI = pointOut.dIp/*tollerance*/ });
+                    { Pressure = point, I = pointOut.Ip, Unit = Data.Unit, dI = pointOut.dIp });
             }
             PointCalculator.TolerancePercentVpi = Data.TolerancePercentVpi;
             PointCalculator.TolerancePercentSigma = Data.TolerancePercentSigma;
             PointCalculator.Imax = uMax;
             PointCalculator.Imin = uMin;
-            PointCalculator.Pmax = max;
-            PointCalculator.Pmin = min;
+            PointCalculator.Pmax = Pmax;
+            PointCalculator.Pmin = Pmin;
             PointCalculator.UpdateFormulas();
         }
 

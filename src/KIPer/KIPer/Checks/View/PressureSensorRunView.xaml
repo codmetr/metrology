@@ -112,7 +112,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto" MinHeight="60"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
+                <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}">
                 Текущее значение
                 </TextBlock>
                 <TextBlock Grid.Column="0" Grid.Row="1">P:</TextBlock>
@@ -126,21 +126,21 @@
                 <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
                 Мгновенная погрешность:
                 </TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="4">ΔI:</TextBlock>
-                <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding LastMeasuredPoint.dI, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="0" Grid.Row="4">Абсолютное отклонение ΔI:</TextBlock>
+                <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding LastMeasuredPoint.dI, UpdateSourceTrigger=PropertyChanged, StringFormat={}{F4}}"/>
                 <TextBlock Grid.Column="2" Grid.Row="4" Text="{Binding OutUnit, Converter={StaticResource UnitsStringConverter}}"/>
-                <TextBlock Grid.Column="3" Grid.Row="4">δI:</TextBlock>
-                <TextBox Grid.Column="4" Grid.Row="4" Text="{Binding LastMeasuredPoint.qI, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="3" Grid.Row="4">Относительное отклонение δI:</TextBlock>
+                <TextBox Grid.Column="4" Grid.Row="4" Text="{Binding LastMeasuredPoint.qI, UpdateSourceTrigger=PropertyChanged, StringFormat={}{F4}}"/>
                 <TextBlock Grid.Column="5" Grid.Row="4">%</TextBlock>
                 <TextBlock Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}">
-                Допуск:
+                Рассчетные значения:
                 </TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="6">ΔI:</TextBlock>
-                <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding LastMeasuredPoint.dIn, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="0" Grid.Row="6">Нормативное значение I(P):</TextBlock>
+                <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding LastMeasuredPoint.dIn, UpdateSourceTrigger=PropertyChanged, StringFormat={}{F4}}"/>
                 <TextBlock Grid.Column="2" Grid.Row="6" Text="{Binding OutUnit, Converter={StaticResource UnitsStringConverter}}"/>
-                <TextBlock Grid.Column="3" Grid.Row="6">δI:</TextBlock>
-                <TextBox Grid.Column="4" Grid.Row="6" Text="{Binding LastMeasuredPoint.qIn, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Column="5" Grid.Row="6">%</TextBlock>
+                <TextBlock Grid.Column="3" Grid.Row="6">Допуск ΔI:</TextBlock>
+                <TextBox Grid.Column="4" Grid.Row="6" Text="{Binding LastMeasuredPoint.qIn, UpdateSourceTrigger=PropertyChanged, StringFormat={}{F4}}"/>
+                <TextBlock Grid.Column="5" Grid.Row="6" Text="{Binding OutUnit, Converter={StaticResource UnitsStringConverter}}"/>
                 <TextBlock Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="7" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}"
                            Height="60"
                            Style="{StaticResource TblHeaderStyle}" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontWeight="Bold" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using DPI620Genii;
 using NLog;
+using PressureSensorCheck.Workflow.Content;
 using PressureSensorData;
 
 namespace PressureSensorCheck.Workflow
@@ -53,18 +54,20 @@ namespace PressureSensorCheck.Workflow
                 {
                     var outVal = dpi620.GetValue(1);
                     var pressure = dpi620.GetValue(2);
-                    var outPoint = GetOutForPressure(conf, pressure);
-                    var dOut = outPoint - outVal;
-                    var qu = outVal / outPoint - 1.0;
+
+
+                    var outPoint = GetOutForPressure(conf, pressure, outVal);
+                    var dI = outVal - outPoint.Ip;
+                    var qI = dI / outVal * 100.0;
                     var item = new MeasuringPoint()
                     {
                         TimeStamp = DateTime.Now - arg.StartTime,
                         I = outVal,
                         Pressure = pressure,
-                        dI = dOut,
-                        In = GetOutForPressure(conf, pressure),
-                        dIn = GetdOutForOut(conf, outPoint),
-                        qI = qu,
+                        dI = dI,
+                        In = outPoint.Ip,
+                        dIn = outPoint.dIp,
+                        qI = qI,
                         qIn = 0,
                     };
                     Publish(item);
@@ -78,11 +81,8 @@ namespace PressureSensorCheck.Workflow
         }
 
 
-        private double GetOutForPressure(PressureSensorConfig conf, double pressure)
+        private CheckPointVm.PointRes GetOutForPressure(PressureSensorConfig conf, double pressure, double I)
         {
-            var percentVpi = (pressure - conf.VpiMin) / (conf.VpiMax - conf.VpiMin);
-            if (pressure < conf.VpiMin)
-                percentVpi = 0;
             double outMin = 0.0;
             double outMax = 5.0;
             if (conf.OutputRange == OutGange.I4_20mA)
@@ -90,9 +90,8 @@ namespace PressureSensorCheck.Workflow
                 outMin = 4;
                 outMax = 20;
             }
-            var val = outMin + (outMax - outMin) * percentVpi;
-
-            return val;
+            
+            return CheckPointVm.CalcRes(pressure,conf.VpiMin, conf.VpiMax, outMin, outMax, conf.TolerancePercentVpi, conf.TolerancePercentSigma);
         }
 
         /// <summary>
