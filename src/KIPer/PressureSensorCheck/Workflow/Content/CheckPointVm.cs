@@ -48,20 +48,20 @@ namespace PressureSensorCheck.Workflow.Content
         /// <summary>
         /// Допуск по приведенной погрешности
         /// </summary>
-        public double TolerancePercentSigma { get; set; }
+        internal double TolerancePercentSigma { get; set; }
 
         /// <summary>
         /// Допуск по проценту ВПИ
         /// </summary>
-        public double TolerancePercentVpi { get; set; }
+        internal double TolerancePercentVpi { get; set; }
 
-        public double Imax { get; set; }
+        internal double Imax { get; set; }
 
-        public double Imin { get; set; }
+        internal double Imin { get; set; }
 
-        public double Pmax { get; set; }
+        internal double Pmax { get; set; }
 
-        public double Pmin { get; set; }
+        internal double Pmin { get; set; }
 
         /// <summary>
         /// Итоговая формула

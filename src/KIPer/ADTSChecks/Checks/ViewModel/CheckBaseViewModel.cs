@@ -164,7 +164,9 @@ namespace ADTSChecks.Checks.ViewModel
         public string Title
         {
             get { return _title; }
-            protected set { _title = value; }
+            protected set { _title = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>

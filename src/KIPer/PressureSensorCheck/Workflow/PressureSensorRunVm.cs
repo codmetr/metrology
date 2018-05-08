@@ -58,6 +58,11 @@ namespace PressureSensorCheck.Workflow
         private double _checkProgress;
         private bool _isRun;
         private bool _isAsk;
+        private PressureSensorResult _result;
+        private DateTime? _lastResultTime;
+        private PointViewModel _selectedPoint;
+        private PointConfigViewModel _newConfig;
+        private MeasuringPoint _lastMeasuredPoint;
 
 
         /// <summary>
@@ -108,22 +113,48 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Текущий результат
         /// </summary>
-        public PressureSensorResult Result { get; set; }
+        public PressureSensorResult Result
+        {
+            get { return _result; }
+            set
+            {
+                _result = value;
+                _invoker(() => OnPropertyChanged());
+            }
+        }
 
         /// <summary>
         /// Время последних результатов
         /// </summary>
-        public DateTime? LastResultTime { get; set; }
+        public DateTime? LastResultTime
+        {
+            get { return _lastResultTime; }
+            set { _lastResultTime = value;
+                _invoker(() => OnPropertyChanged());
+            }
+        }
 
         /// <summary>
         /// Текущая выбранная точка
         /// </summary>
-        public PointViewModel SelectedPoint { get; set; }
+        public PointViewModel SelectedPoint
+        {
+            get { return _selectedPoint; }
+            set { _selectedPoint = value;
+                _invoker(() => OnPropertyChanged());
+            }
+        }
 
         /// <summary>
         /// Конфигурация для новой точки
         /// </summary>
-        public PointConfigViewModel NewConfig { get; set; }
+        public PointConfigViewModel NewConfig
+        {
+            get { return _newConfig; }
+            set { _newConfig = value;
+                _invoker(() => OnPropertyChanged());
+            }
+        }
 
         /// <summary>
         /// Добавить точку проверку
@@ -161,10 +192,17 @@ namespace PressureSensorCheck.Workflow
         public IEnumerable<LineDescriptor> Lines { get { return _lines; } }
 
         public CleanerAct LineCleaner { get; private set; }
+
         /// <summary>
         /// Текущее значение измерение
         /// </summary>
-        public MeasuringPoint LastMeasuredPoint { get; set; }
+        public MeasuringPoint LastMeasuredPoint
+        {
+            get { return _lastMeasuredPoint; }
+            set { _lastMeasuredPoint = value;
+                _invoker(() => OnPropertyChanged());
+            }
+        }
 
         /// <summary>
         /// Единицы измерения давления
@@ -447,7 +485,8 @@ namespace PressureSensorCheck.Workflow
         public ModalState ModalState
         {
             get { return _modalState; }
-            set { _modalState = value; }
+            set { _modalState = value;
+                _invoker(() => OnPropertyChanged()); }
         }
 
         /// <summary>

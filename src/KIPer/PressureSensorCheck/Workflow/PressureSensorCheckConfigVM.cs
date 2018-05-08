@@ -18,6 +18,8 @@ namespace PressureSensorCheck.Workflow
         private ObservableCollection<BaseCheckData> _templates;
         private BaseCheckData _selectedTemplate;
         private bool _isTemplatePreview;
+        private CheckPressureLogicConfigVm _config;
+        private DPI620GeniiConfig _dpiConfig;
 
         public PressureSensorCheckConfigVm(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf)
         {
@@ -61,12 +63,24 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Конфигурация логики проверки
         /// </summary>
-        public CheckPressureLogicConfigVm Config { get; set; }
+        public CheckPressureLogicConfigVm Config
+        {
+            get { return _config; }
+            set { _config = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Конфигурация DPI620
         /// </summary>
-        public DPI620GeniiConfig DpiConfig { get; set; }
+        public DPI620GeniiConfig DpiConfig
+        {
+            get { return _dpiConfig; }
+            set { _dpiConfig = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Набор доступных шаблонов

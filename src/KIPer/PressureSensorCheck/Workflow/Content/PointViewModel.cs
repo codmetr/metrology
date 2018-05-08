@@ -8,14 +8,36 @@ namespace PressureSensorCheck.Workflow
     /// </summary>
     public class PointViewModel : INotifyPropertyChanged
     {
+        private int _index;
+        private PointConfigViewModel _config;
+        private PointResultViewModel _result;
+
         /// <summary>
         /// Номер точки
         /// </summary>
-        public int Index { get; set; }
+        public int Index
+        {
+            get { return _index; }
+            set { _index = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public PointConfigViewModel Config { get; set; }
+        public PointConfigViewModel Config
+        {
+            get { return _config; }
+            set { _config = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public PointResultViewModel Result { get; set; }
+        public PointResultViewModel Result
+        {
+            get { return _result; }
+            set { _result = value;
+                OnPropertyChanged();
+            }
+        }
 
         #region INotifyPropertyChanged
 

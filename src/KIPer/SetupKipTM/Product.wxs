@@ -123,15 +123,6 @@
         <File Name="Dapper.xml" Source="$(var.KipTM.TargetDir)Dapper.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="DynamicDataDisplay.dll" Source="$(var.KipTM.TargetDir)DynamicDataDisplay.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="FlashControlV71.dll" Source="$(var.KipTM.TargetDir)FlashControlV71.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="GalaSoft.MvvmLight.dll" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="GalaSoft.MvvmLight.Extras.dll" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Extras.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="GalaSoft.MvvmLight.Extras.pdb" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Extras.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="GalaSoft.MvvmLight.Extras.xml" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Extras.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="GalaSoft.MvvmLight.pdb" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="GalaSoft.MvvmLight.Platform.dll" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Platform.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="GalaSoft.MvvmLight.Platform.pdb" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Platform.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="GalaSoft.MvvmLight.Platform.xml" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.Platform.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="GalaSoft.MvvmLight.xml" Source="$(var.KipTM.TargetDir)GalaSoft.MvvmLight.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="Ivi.Visa.Interop.dll" Source="$(var.KipTM.TargetDir)Ivi.Visa.Interop.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="MahApps.Metro.dll" Source="$(var.KipTM.TargetDir)MahApps.Metro.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="MahApps.Metro.pdb" Source="$(var.KipTM.TargetDir)MahApps.Metro.pdb" CompanionFile="$(var.KipTM.TargetFileName)"/>

@@ -57,6 +57,9 @@ namespace PressureSensorCheck.Workflow
             }
 
             private ChannelType _channelType;
+            private double _from;
+            private double _to;
+            private Units _selectedUnit;
 
             public IEnumerable<ChannelType> ChannelTypes { get; set; }
 
@@ -74,13 +77,31 @@ namespace PressureSensorCheck.Workflow
                 }
             }
 
-            public double From { get; set; }
+            public double From
+            {
+                get { return _from; }
+                set { _from = value;
+                    OnPropertyChanged();
+                }
+            }
 
-            public double To { get; set; }
+            public double To
+            {
+                get { return _to; }
+                set { _to = value;
+                    OnPropertyChanged();
+                }
+            }
 
             public IEnumerable<Units> UnitSet { get; set; }
 
-            public Units SelectedUnit { get; set; }
+            public Units SelectedUnit
+            {
+                get { return _selectedUnit; }
+                set { _selectedUnit = value;
+                    OnPropertyChanged();
+                }
+            }
 
             #region INotifyPropertyChanged
 

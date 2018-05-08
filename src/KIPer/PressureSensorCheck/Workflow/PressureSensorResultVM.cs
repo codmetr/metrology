@@ -20,6 +20,12 @@ namespace PressureSensorCheck.Workflow
         private readonly IDataAccessor _accessor;
 
         private PressureSensorConfig _conf;
+        private PressureSensorResult _data;
+        private string _assay;
+        private string _leak;
+        private string _commonResult;
+        private string _visualCheckResult;
+        private DateTime? _timeStamp;
 
         public PressureSensorResultVM(TestResultID checkResId, IDataAccessor accessor, PressureSensorResult result, PressureSensorConfig conf)
         {
@@ -33,7 +39,13 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Текущий результат проверки
         /// </summary>
-        public PressureSensorResult Data { get; set; }
+        public PressureSensorResult Data
+        {
+            get { return _data; }
+            set { _data = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Идентифитатор проверки
@@ -43,29 +55,59 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Результат опробирования
         /// </summary>
-        public string Assay { get; set; }
+        public string Assay
+        {
+            get { return _assay; }
+            set { _assay = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Результат проверки на герметичность
         /// </summary>
-        public string Leak { get; set; }
+        public string Leak
+        {
+            get { return _leak; }
+            set { _leak = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Общий результат поверки
         /// </summary>
-        public string CommonResult { get; set; }
+        public string CommonResult
+        {
+            get { return _commonResult; }
+            set { _commonResult = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Результат визуального осмотра
         /// </summary>
-        public string VisualCheckResult { get; set; }
+        public string VisualCheckResult
+        {
+            get { return _visualCheckResult; }
+            set { _visualCheckResult = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ObservableCollection<PointViewModel> PointResults { get; set; }
 
         /// <summary>
         /// Дата протокола
         /// </summary>
-        public DateTime? TimeStamp { get; set; }
+        public DateTime? TimeStamp
+        {
+            get { return _timeStamp; }
+            set { _timeStamp = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Сохранить
