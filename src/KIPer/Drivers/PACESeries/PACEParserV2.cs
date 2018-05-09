@@ -311,6 +311,62 @@ namespace PACESeries
         }
         #endregion
 
+        #region GetPressureAimRange ":SOUR:PRES:RANG?"
+        /// <summary>
+        /// Получить команду "Получение ограничение канала установки давления"
+        /// </summary>
+        /// <returns>Команда</returns>
+        public string GetCommandGetAimPressureRange()
+        {
+            return new LexNode<Codes>(Codes.SOUR).Add(Codes.PRESsure).Add(Codes.RANG).Get();
+        }
+
+        /// <summary>
+        /// Получить команду "Получение ограничение канала установки давления по каналу"
+        /// </summary>
+        /// <param name="channel">Канал</param>
+        /// <returns>Команда</returns>
+        public string GetCommandGetAimPressureRange(int channel)
+        {
+            return new LexNode<Codes>(Codes.SOUR).Add(channel).Add(Codes.PRESsure).Add(Codes.RANG).Get();
+        }
+
+        /// <summary>
+        /// Разобрать результат команды "Получение ограничение канала установки давления"
+        /// </summary>
+        /// <param name="message">Ответ</param>
+        /// <param name="value">Ограничение</param>
+        /// <returns>Удалось разобрать</returns>
+        public bool ParseGetAltPressureRange(string message, out string value)
+        {
+            value = null;
+            var answer = PaceSemanticRule.ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.String } });
+            value = (string)answer["value"];
+            return true;
+        }
+        #endregion
+
+        #region SetPressureAimRange ":SOUR:PRES:RANG"
+        /// <summary>
+        /// Получить команду "Установку ограничение канала установки давления"
+        /// </summary>
+        /// <returns>Команда</returns>
+        public string GetCommandSetPressureAimRange(string range)
+        {
+            return new LexNode<Codes>(Codes.SOUR).Add(Codes.PRESsure).Add(Codes.RANG).Set(range);
+        }
+
+        /// <summary>
+        /// Получить команду "Установку ограничение канала установки давления по каналу"
+        /// </summary>
+        /// <param name="channel">Канал</param>
+        /// <returns>Команда</returns>
+        public string GetCommandSetPressureAimRange(int channel, string range)
+        {
+            return new LexNode<Codes>(Codes.SOUR).Add(channel).Add(Codes.PRESsure).Add(Codes.RANG).Set(range);
+        }
+        #endregion
+
         #region GetAllRanges ":INST:CAT:ALL?"
         /// <summary>
         /// Получить команду "Получение всех допустимых ограничений канала давления"

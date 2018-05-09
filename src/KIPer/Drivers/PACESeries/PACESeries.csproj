@@ -44,10 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnswerException.cs" />
+    <Compile Include="DefModelAttribute.cs" />
     <Compile Include="Enums\AeronauticalUnits.cs" />
     <Compile Include="Enums\PeremeterTypes.cs" />
     <Compile Include="Enums\PressureUnits.cs" />
     <Compile Include="Enums\TemperatureUnits.cs" />
+    <Compile Include="Model.cs" />
     <Compile Include="PACEParserV2.cs" />
     <Compile Include="PACEParser.cs" />
     <Compile Include="PACE1000Driver.cs" />

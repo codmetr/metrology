@@ -53,6 +53,7 @@ namespace PACESeries
         /// Получить идентификатор устройства
         /// </summary>
         /// <returns>Идентификатор</returns>
+        [DefModel(Model.PACE1000|Model.PACE5000|Model.PACE6000)]
         public string GetIdentificator()
         {
             var idn = string.Empty;
@@ -69,6 +70,7 @@ namespace PACESeries
         /// Получить текущее значение давления
         /// </summary>
         /// <returns>Значение давления</returns>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public double GetPressure()
         {
             Send(_parser.GetCommandGetPressure());
@@ -88,6 +90,7 @@ namespace PACESeries
         /// Получить текущую дату на приборе
         /// </summary>
         /// <returns>Дата на приборе</returns>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public DateTime? GetDate()
         {
             int year;
@@ -116,6 +119,7 @@ namespace PACESeries
         /// Получить диапазон измерения давления
         /// </summary>
         /// <returns>Диапазон давления</returns>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public string GetPressureRange()
         {
             Send(_parser.GetCommandGetPressureRange());
@@ -131,6 +135,7 @@ namespace PACESeries
         /// Получить допустимые диапазоны измерения давления
         /// </summary>
         /// <returns>Список поддерживаемых диапазонов</returns>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public IEnumerable<string> GetAllPressureRanges()
         {
             Send(_parser.GetCommandGetAllRanges());
@@ -147,6 +152,7 @@ namespace PACESeries
         /// </summary>
         /// <param name="range">Диапазон давления из списка <see cref="GetAllPressureRanges"/></param>
         /// <returns></returns>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public bool SetPressureRange(string range)
         {
             Send(_parser.GetCommandSetPressureRange(range));
@@ -159,6 +165,7 @@ namespace PACESeries
         /// Получить единицы измерения давления
         /// </summary>
         /// <returns>Единицы давления</returns>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public PressureUnits? GetPressureUnit()
         {
             PressureUnits? result;
@@ -176,6 +183,7 @@ namespace PACESeries
         /// </summary>
         /// <param name="unit">Единицы давления</param>
         /// <returns>Удалось установить единицы давления</returns>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public bool SetPressureUnit(PressureUnits unit)
         {
             Send(_parser.GetCommandSetPressureUnit(unit));
@@ -186,6 +194,7 @@ namespace PACESeries
         /// <summary>
         /// Установить блокировку изменения режима управления пользователем
         /// </summary>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public void SetLocalLockOutMode()
         {
             Send(_parser.GetCommandSetLocalLockOutMode());
@@ -194,6 +203,7 @@ namespace PACESeries
         /// <summary>
         /// Снять блокировку изменения режима управления пользователем
         /// </summary>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public void SetOffLocalLockOutMode()
         {
             Send(_parser.GetCommandSetOffLocalLockOutMode());
@@ -202,6 +212,7 @@ namespace PACESeries
         /// <summary>
         /// Переключить в ручной режим управления
         /// </summary>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public void SetLocal()
         {
             Send(_parser.GetCommandSetLocal());
@@ -210,6 +221,7 @@ namespace PACESeries
         /// <summary>
         /// Переключить в режим удаленного управления
         /// </summary>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public void SetRemote()
         {
             Send(_parser.GetCommandSetRemote());
@@ -219,6 +231,7 @@ namespace PACESeries
         /// Получить количество точек калибровки PACE
         /// </summary>
         /// <returns></returns>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public int? GetCountCalibrationPoints()
         {
             Send(_parser.GetCommandGetNumCalibrPoints());
@@ -234,6 +247,7 @@ namespace PACESeries
         /// Получить количество точек калибровки PACE по каналу
         /// </summary>
         /// <returns></returns>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public int? GetCountCalibrationPoints(int channel)
         {
             Send(_parser.GetCommandGetNumCalibrPoints(channel));
@@ -249,6 +263,7 @@ namespace PACESeries
         /// Получить значение точки калибровки PACE по каналу
         /// </summary>
         /// <returns></returns>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public double? GetCalibrationPointValue(int channel, int index)
         {
             Send(_parser.GetCommandGetCalibPointsValue(channel, index));
@@ -264,6 +279,7 @@ namespace PACESeries
         /// Установить значение точки калибровки PACE по каналу
         /// </summary>
         /// <returns></returns>
+        [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]
         public void SetCalibrationPointValue(int channel, int index, double val)
         {
             Send(_parser.GetCommandSetCalibValueEntered(channel, index, val));
