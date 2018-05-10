@@ -62,8 +62,24 @@
                       ItemsSource="{Binding PointResults, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№" Width="Auto" Binding="{Binding Index, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Pвх, кПа" Width="*" Binding="{Binding Config.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Iэт, В" Width="*" Binding="{Binding Config.I, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTemplateColumn Header="" Width="Auto" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType ="workflow:PointViewModel">
+                                <CheckBox IsChecked="{Binding Path=Result.IsCorrect, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Width="*" Binding="{Binding Config.Pressure, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate DataType="workflow:PointViewModel">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Pвх, "/>
+                                    <TextBlock Text="{Binding Config.Unit, Converter={StaticResource UnitsStringConverter}}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="I ном, В" Width="*" Binding="{Binding Config.I, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Iфакт, В" Width="*" Binding="{Binding Result.IReal, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="ΔI, В" Width="*" Binding="{Binding Result.dIReal, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="ΔIдопуст, В" Width="*" Binding="{Binding Config.dI, UpdateSourceTrigger=PropertyChanged}"/>
@@ -84,7 +100,23 @@
                       ItemsSource="{Binding PointResults, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№" Width="Auto" Binding="{Binding Index, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Pвх, кПа" Width="*" Binding="{Binding Config.Pressure, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTemplateColumn Header="" Width="Auto" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate DataType ="workflow:PointViewModel">
+                                <CheckBox IsChecked="{Binding Path=Result.IsCorrect, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Width="*" Binding="{Binding Config.Pressure, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate DataType="workflow:PressureSensorResultVM">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Pвх, "/>
+                                    <TextBlock Text="{Binding Conf.Unit, Converter={StaticResource UnitsStringConverter}}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
                     <DataGridTextColumn Header="Iпр, В" Width="*" Binding="{Binding Result.IReal, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Iобр, В" Width="*" Binding="{Binding Result.Iback, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Iвар, В" Width="*" Binding="{Binding Result.Ivar, UpdateSourceTrigger=PropertyChanged}"/>

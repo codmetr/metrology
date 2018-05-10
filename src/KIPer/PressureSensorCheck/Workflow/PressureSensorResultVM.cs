@@ -48,6 +48,14 @@ namespace PressureSensorCheck.Workflow
         }
 
         /// <summary>
+        /// Текущий результат проверки
+        /// </summary>
+        public PressureSensorConfig Conf
+        {
+            get { return _conf; }
+        }
+
+        /// <summary>
         /// Идентифитатор проверки
         /// </summary>
         public TestResultID Identificator { get; }

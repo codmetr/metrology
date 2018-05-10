@@ -84,7 +84,7 @@
                                 <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.CertificateNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Grid.Row="2" Grid.Column="3">Дата свидетельства:</TextBlock>
                                 <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding Data.CertificateDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Grid.Row="3" Grid.Column="3">Интервал между поверками:</TextBlock>
+                                <TextBlock Grid.Row="3" Grid.Column="3"><Span FontSize="14" FontFamily="Calibri"><Run Text="Интервал между поверками"/></Span><Run Text=":"/></TextBlock>
                                 <TextBox Grid.Row="3" Grid.Column="4" Text="{Binding Data.Validity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                             <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
@@ -181,7 +181,7 @@
                                 <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=Data.EthalonPressure.SensorType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Grid.Row="3" Grid.Column="0">Заводской номер:</TextBlock>
                                 <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=Data.EthalonPressure.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Grid.Row="4" Grid.Column="0">Регистрационный номер:</TextBlock>
+                                <TextBlock Grid.Row="4" Grid.Column="0">Номер в Госреестре СИ:</TextBlock>
                                 <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=Data.EthalonPressure.RegNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Grid.Row="5" Grid.Column="0">Разряд:</TextBlock>
                                 <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=Data.EthalonPressure.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -201,7 +201,7 @@
                                 <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding Path=Data.EthalonOut.SensorType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Grid.Row="3" Grid.Column="3">Заводской номер:</TextBlock>
                                 <TextBox Grid.Row="3" Grid.Column="4" Text="{Binding Path=Data.EthalonOut.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Grid.Row="4" Grid.Column="3">Регистрационный номер:</TextBlock>
+                                <TextBlock Grid.Row="4" Grid.Column="3">Номер в Госреестре СИ:</TextBlock>
                                 <TextBox Grid.Row="4" Grid.Column="4" Text="{Binding Path=Data.EthalonOut.RegNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Grid.Row="5" Grid.Column="3">Разряд:</TextBlock>
                                 <TextBox Grid.Row="5" Grid.Column="4" Text="{Binding Path=Data.EthalonOut.Category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -284,7 +284,7 @@
                     </Expander>
                 </Grid>
             </TabItem>
-            <TabItem Header="Точки проверки">
+            <TabItem Header="Точки поверки">
                 <Grid Margin="20,0,20,0">
                     <Grid.Resources>
                         <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}"/>
@@ -364,7 +364,7 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Токовая петля</TextBlock>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Токовая петля 24 В</TextBlock>
                             <TextBlock Grid.Row="1" Grid.Column="0">диапазон I:</TextBlock>
                             <ComboBox Grid.Row="1" Grid.Column="1" Style="{StaticResource CbBasicStyle}"
                                       ItemsSource="{Binding Config.OutputRanges}" SelectedItem="{Binding Config.OutputRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -381,16 +381,25 @@
                               CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
                               CanUserResizeRows="False" CanUserResizeColumns="False" CanUserSortColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Давление" Binding="{Binding Pressure}" FontSize="14" Width="*"/>
+                            <DataGridTemplateColumn Header="Давление" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="workflow:PointConfigViewModel">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Pressure}"/>
+                                            <TextBlock Text="{Binding Unit, Converter={StaticResource UnitsStringConverter}}" Margin="3,0,0,0"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <!--,&#10;мм рт.ст.-->
                             <DataGridTextColumn Header="Рассчетное значение&#10;выходного сигнала, мА" Binding="{Binding I}" Width="*"/>
-                            <DataGridTextColumn Header="Предел основной&#10;погрешности, %" Binding="{Binding dI}" Width="*"/>
-                            <DataGridTextColumn Header="Предел основной&#10;погрешности вариации, %" Binding="{Binding dI}" Width="*"/>
+                            <DataGridTextColumn Header="Предел основной&#10;погрешности, мА" Binding="{Binding dI}" Width="*"/>
+                            <DataGridTextColumn Header="Предел основной&#10;погрешности вариации, мА" Binding="{Binding dI}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Column="4">
                         <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
-                            Окружающая среда:
+                            Влияющие факторы:
                         </TextBlock>
                         <Grid>
                             <Grid.Resources>
@@ -419,10 +428,10 @@
                             <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Температура, °C:</TextBlock>
                             <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Data.Temperature, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                             <TextBlock Grid.Row="1" Grid.Column="1">23±2</TextBlock>
-                            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">Влажность, %:</TextBlock>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">Относительная влажность, %:</TextBlock>
                             <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Data.Humidity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                             <TextBlock Grid.Row="3" Grid.Column="1">от 30 до 80</TextBlock>
-                            <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">Давление дня, мм рт.ст.:</TextBlock>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">Давление, мм рт.ст.:</TextBlock>
                             <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding Data.DayPressure, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                             <TextBlock Grid.Row="5" Grid.Column="1">от 630 до 800</TextBlock>
                             <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">Напряжение питания, В:</TextBlock>

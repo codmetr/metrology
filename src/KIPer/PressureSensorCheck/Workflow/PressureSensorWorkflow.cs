@@ -116,8 +116,11 @@ namespace PressureSensorCheck.Workflow
             {
                 result.Data = run.Result;
                 result.PointResults.Clear();
+                var i = 1;
                 foreach (var point in run.Points)
                 {
+                    point.Index = i;
+                    i++;
                     var resPoint = result.PointResults.FirstOrDefault(el => Math.Abs(el.Config.Pressure - point.Config.Pressure) < Double.Epsilon);
                     if(resPoint == null)
                         result.PointResults.Add(point);
