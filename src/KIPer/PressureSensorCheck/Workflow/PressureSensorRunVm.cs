@@ -200,7 +200,7 @@ namespace PressureSensorCheck.Workflow
         {
             get { return _lastMeasuredPoint; }
             set { _lastMeasuredPoint = value;
-                _invoker(() => OnPropertyChanged());
+                OnPropertyChanged("LastMeasuredPoint");
             }
         }
 
