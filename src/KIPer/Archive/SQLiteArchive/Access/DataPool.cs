@@ -94,8 +94,6 @@ namespace SQLiteArchive
         {
             List<Node> resNodes = new List<Node>();
             List<Node> confNodes = new List<Node>();
-            Repairs.Add(check, res);
-            Configs.Add(check, conf);
             var checkDto = DescriptorToDto(check);
             // добавить запись о проверке
             _dataSource.Add(checkDto);
@@ -113,6 +111,8 @@ namespace SQLiteArchive
             // добавить данные о новой провреке
             _dataSource.AddData(resNodes, confNodes);
             check.Id = (int)checkDto.Id;
+            Repairs.Add(check, res);
+            Configs.Add(check, conf);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace SQLiteArchive
             List<Node> newNodes;
             List<Node> changedNodes;
             List<Node> lessNodes;
-            var isTreeNoChanged = AnilizeNodes(chDto, res, _dataSource.NodesConf, out newNodes, out changedNodes, out lessNodes);
+            var isTreeNoChanged = AnilizeNodes(chDto, res, _dataSource.NodesRes, out newNodes, out changedNodes, out lessNodes);
             _dataSource.UpdateRes(chDto, newNodes, lessNodes, changedNodes);
         }
 

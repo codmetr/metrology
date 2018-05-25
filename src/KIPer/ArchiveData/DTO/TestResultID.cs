@@ -65,6 +65,11 @@ namespace ArchiveData.DTO
         /// </summary>
         public string Note { get; set; }
 
+        public override int GetHashCode()
+        {
+            return ComparrerId.GetHashVal(this);
+        }
+
         public class ComparrerId:IEqualityComparer<TestResultID>
         {
             public bool Equals(TestResultID x, TestResultID y)
@@ -76,7 +81,12 @@ namespace ArchiveData.DTO
 
             public int GetHashCode(TestResultID obj)
             {
-                return obj.Id.HasValue? obj.Id.Value.GetHashCode():obj.Id.GetHashCode();
+                return GetHashVal(obj);
+            }
+
+            public static int GetHashVal(TestResultID obj)
+            {
+                return obj.Id.HasValue ? obj.Id.Value : obj.Id.GetHashCode();
             }
         }
     }
