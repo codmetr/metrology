@@ -5,6 +5,7 @@ using ArchiveData;
 using ArchiveData.DTO;
 using CheckFrame.Workflow;
 using DPI620Genii;
+using KipTM.EventAggregator;
 using KipTM.Workflow;
 using NLog;
 using PressureSensorCheck.Check;
@@ -15,7 +16,7 @@ namespace PressureSensorCheck.Workflow
 {
     public class PressureSensorWorkflow
     {
-        public IWorkflow Make(Logger logger, IDataAccessor accessor, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null)
+        public IWorkflow Make(Logger logger, IDataAccessor accessor, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null, IEventAggregator agregator = null)
         {
             id = id ?? new TestResultID()
             {
@@ -42,9 +43,9 @@ namespace PressureSensorCheck.Workflow
                 dpiConf.SelectPort = ports.FirstOrDefault();
             var res = new PressureSensorResult();
 
-            var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf);
-            var run = new PressureSensorRunVm(conf, new DPI620DriverCom(), dpiConf, result);
-            var resultVm = new PressureSensorResultVM(id, accessor, res, conf);
+            var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf, agregator);
+            var run = new PressureSensorRunVm(conf, new DPI620DriverCom(), dpiConf, result, agregator);
+            var resultVm = new PressureSensorResultVM(id, accessor, res, conf, agregator);
 
             var reportUpdater =new ReportUpdater();
             var certificateUpdater = new CertificateUpdater();

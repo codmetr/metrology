@@ -63,7 +63,7 @@ namespace PressureSensorCheck.Workflow
         private PointViewModel _selectedPoint;
         private PointConfigViewModel _newConfig;
         private MeasuringPoint _lastMeasuredPoint;
-
+        private readonly IEventAggregator _agregator;
 
         /// <summary>
         /// Выпонение проверки
@@ -72,7 +72,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="dpi620">драйвер DPI620Genii</param>
         /// <param name="dpiConf">контейнер конфигурации DPI620</param>
         /// <param name="result"></param>
-        public PressureSensorRunVm(PressureSensorConfig config, DPI620DriverCom dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result)
+        public PressureSensorRunVm(PressureSensorConfig config, DPI620DriverCom dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator)
         {
             Measured = new ObservableCollection<MeasuringPoint>();
             _lines = new List<LineDescriptor>() {new LineDescriptor()
@@ -102,6 +102,7 @@ namespace PressureSensorCheck.Workflow
             _config = config;
             _autoupdater = new AutoUpdater(_logger);
             Result = result;
+            _agregator = agregator;
             LineCleaner = new CleanerAct();
         }
 

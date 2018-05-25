@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Windows.Input;
 using ArchiveData;
 using ArchiveData.DTO;
+using KipTM.EventAggregator;
+using KipTM.ViewModel.Events;
 using PressureSensorData;
 using Tools.View;
 
@@ -26,14 +28,17 @@ namespace PressureSensorCheck.Workflow
         private string _commonResult;
         private string _visualCheckResult;
         private DateTime? _timeStamp;
+        private readonly IEventAggregator _agregator;
+        private bool _isSaveEnable = true;
 
-        public PressureSensorResultVM(TestResultID checkResId, IDataAccessor accessor, PressureSensorResult result, PressureSensorConfig conf)
+        public PressureSensorResultVM(TestResultID checkResId, IDataAccessor accessor, PressureSensorResult result, PressureSensorConfig conf, IEventAggregator agregator)
         {
             Identificator = checkResId;
             _accessor = accessor;
             PointResults = new ObservableCollection<PointViewModel>();
             Data = result;
             _conf = conf;
+            _agregator = agregator;
         }
 
         /// <summary>
@@ -118,6 +123,19 @@ namespace PressureSensorCheck.Workflow
         }
 
         /// <summary>
+        /// Операция сохранения доступна
+        /// </summary>
+        public bool IsSaveEnable
+        {
+            get { return _isSaveEnable; }
+            set
+            {
+                _isSaveEnable = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// Сохранить
         /// </summary>
         public ICommand Save{ get { return new CommandWrapper(OnSave); } }
@@ -127,18 +145,28 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         private void OnSave()
         {
-            if (Identificator.Id == null)
+            IsSaveEnable = false;
+            try
             {
-                Identificator.CreateTime = DateTime.Now;
-                Identificator.Timestamp = DateTime.Now;
-                _accessor.Add(Identificator, Data, _conf);
+                _agregator?.Post(new HelpMessageEventArg("Сохранение.."));
+                if (Identificator.Id == null)
+                {
+                    Identificator.CreateTime = DateTime.Now;
+                    Identificator.Timestamp = DateTime.Now;
+                    _accessor.Add(Identificator, Data, _conf);
+                }
+                else
+                {
+                    Identificator.Timestamp = DateTime.Now;
+                    _accessor.Update(Identificator);
+                    _accessor.Save(Identificator, Data);
+                    _accessor.SaveConfig(Identificator, _conf);
+                }
+                _agregator?.Post(new HelpMessageEventArg("Сохранено"));
             }
-            else
+            finally
             {
-                Identificator.Timestamp = DateTime.Now;
-                _accessor.Update(Identificator);
-                _accessor.Save(Identificator, Data);
-                _accessor.SaveConfig(Identificator, _conf);
+                IsSaveEnable = true;
             }
         }
 

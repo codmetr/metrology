@@ -53,7 +53,7 @@
                 <TextBlock>Результат визуального осмотра:</TextBlock>
                 <TextBox Text="{Binding Data.VisualCheckResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
-            <Button DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Height="40" Command="{Binding Save}">
+            <Button DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Height="40" Command="{Binding Save}" IsEnabled="{Binding IsSaveEnable, UpdateSourceTrigger=PropertyChanged}">
                 <TextBlock Text="Сохранить" TextWrapping="Wrap" Style="{StaticResource TblHeaderStyle}" VerticalAlignment="Center"/>
             </Button>
         </DockPanel>

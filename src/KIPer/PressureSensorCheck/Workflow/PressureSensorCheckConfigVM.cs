@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Windows.Input;
 using ArchiveData.DTO;
 using KipTM.Checks.ViewModel.Config;
+using KipTM.EventAggregator;
 using KipTM.Interfaces;
+using KipTM.ViewModel.Events;
 using PressureSensorData;
 using Tools.View;
 
@@ -20,13 +22,15 @@ namespace PressureSensorCheck.Workflow
         private bool _isTemplatePreview;
         private CheckPressureLogicConfigVm _config;
         private DPI620GeniiConfig _dpiConfig;
+        private readonly IEventAggregator _agregator;
 
-        public PressureSensorCheckConfigVm(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf)
+        public PressureSensorCheckConfigVm(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf, IEventAggregator agregator)
         {
             Data = configData;
             Identificator = identificator;
             Config = new CheckPressureLogicConfigVm(configData);
             DpiConfig = dpiConf;
+            _agregator = agregator;
         }
 
         /// <summary>
@@ -88,7 +92,7 @@ namespace PressureSensorCheck.Workflow
         public ObservableCollection<BaseCheckData> Templates { get { return _templates; } }
 
         /// <summary>
-        /// Выюраный шаблон
+        /// Выбраный шаблон
         /// </summary>
         public BaseCheckData SelectedTemplate
         {
@@ -123,7 +127,7 @@ namespace PressureSensorCheck.Workflow
 
         private void OnApplyTemplate()
         {
-            throw new NotImplementedException();
+            _agregator?.Post(new HelpMessageEventArg("Применен шаблон:"));
         }
 
         #region INotifyPropertyChanged

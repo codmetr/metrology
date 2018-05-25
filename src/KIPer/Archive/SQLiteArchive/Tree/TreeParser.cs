@@ -335,8 +335,16 @@ namespace SQLiteArchive.Tree
             return true;
         }
 
-        private static bool CompareSimple(Node oldPropNode, object rlValue)
+        /// <summary>
+        /// Сравнение значения ноды простого типа с новым значенем
+        /// </summary>
+        /// <param name="node">нода</param>
+        /// <param name="rlValue">новое значение</param>
+        /// <returns></returns>
+        private static bool CompareSimple(Node node, object rlValue)
         {
+            if (rlValue == null)
+                return node.Val == null;
             //if (oldPropNode.TypeVal == (int) DbType.DateTime)
             //{
             //    var rdata = (DateTime) rlValue;
@@ -344,11 +352,21 @@ namespace SQLiteArchive.Tree
             //    return ldata == rdata;
             //}
             if(rlValue.GetType().IsEnum)
-                return oldPropNode.Val.Equals((int)rlValue);
-            return oldPropNode.Val.Equals(rlValue);
+                return node.Val.Equals((int)rlValue);
+            return node.Val.Equals(rlValue);
         }
 
-        private static Node SimpleToNode(IItemDescriptor descriptor, PropertyInfo property, object val, Node node, Type typeItem, long repairId)
+        /// <summary>
+        /// Формирование ноды из свойства простого типа
+        /// </summary>
+        /// <param name="descriptor">Вычеслитель ключей</param>
+        /// <param name="property">Свойство</param>
+        /// <param name="val">зачение</param>
+        /// <param name="parrent">родительская нода</param>
+        /// <param name="typeItem">Тип значения</param>
+        /// <param name="repairId">Id проверки</param>
+        /// <returns></returns>
+        private static Node SimpleToNode(IItemDescriptor descriptor, PropertyInfo property, object val, Node parrent, Type typeItem, long repairId)
         {
             var type = GetTypeValue(typeItem);
             //if (type == DbType.DateTime)
@@ -358,12 +376,17 @@ namespace SQLiteArchive.Tree
             {
                 Name = descriptor.GetKey(property),
                 Val = res,
-                Parrent = node,
+                Parrent = parrent,
                 TypeVal = (int)type,
                 RepairId = repairId,
             };
         }
 
+        /// <summary>
+        /// Получить значение их ноды простого типа
+        /// </summary>
+        /// <param name="item">нода</param>
+        /// <returns></returns>
         private static object GetSimpleValue(Node item)
         {
             //if (item.TypeVal == (int)DbType.DateTime)
@@ -371,6 +394,11 @@ namespace SQLiteArchive.Tree
             return item.Val;
         }
 
+        /// <summary>
+        /// Проверить что это простой тип
+        /// </summary>
+        /// <param name="type">тип</param>
+        /// <returns></returns>
         private static bool IsSimple(Type type)
         {
             return type == typeof(int) ||
