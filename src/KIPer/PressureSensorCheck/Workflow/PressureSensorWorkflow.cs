@@ -59,7 +59,7 @@ namespace PressureSensorCheck.Workflow
                 new SimpleWorkflowStep(resultVm),
                 new SimpleWorkflowStep(reportVm).SetIn(()=>
                 {
-                    reportUpdater.Update(conf, result, reportMain);
+                    reportUpdater.Update(id, conf, result, reportMain);
                     certificateUpdater.Update(id, conf, result, reportCertificate);
                 }),
             };

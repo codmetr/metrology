@@ -34,7 +34,7 @@ namespace PressureSensorCheck.Report
             var certificateUpdater = new CertificateUpdater();
             var reportMain = new PressureSensorReportDto();
             var reportCertificate = new PressureSensorCertificateDto();
-            reportUpdater.Update(conf, result, reportMain);
+            reportUpdater.Update(resultId, conf, result, reportMain);
             certificateUpdater.Update(resultId, conf, result, reportCertificate);
 
             var report = new PressureSensorReportViewModel(reportMain, reportCertificate);

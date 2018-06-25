@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ArchiveData.DTO;
+using KipTM.Interfaces;
 using PressureSensorData;
 
 namespace PressureSensorCheck.Report
@@ -15,13 +18,13 @@ namespace PressureSensorCheck.Report
         /// <summary>
         /// Обновить протокол поверки
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="config">конфигурация</param>
         /// <param name="result">результат</param>
         /// <param name="report">отчет</param>
-        public void Update(PressureSensorConfig config, PressureSensorResult result,
-            PressureSensorReportDto report)
+        public void Update(TestResultID id, PressureSensorConfig config, PressureSensorResult result, PressureSensorReportDto report)
         {
-            ApplyCommonData(config, result, report);
+            ApplyCommonData(id, config, result, report);
 
             ApplyEthalons(config, report);
 
@@ -32,7 +35,7 @@ namespace PressureSensorCheck.Report
             ApplyVariation(config, result, report);
         }
 
-        private static void ApplyCommonData(PressureSensorConfig config, PressureSensorResult result, PressureSensorReportDto report)
+        private static void ApplyCommonData(TestResultID id, PressureSensorConfig config, PressureSensorResult result, PressureSensorReportDto report)
         {
             report.User = config.User;
             report.CertificateNumber = config.CertificateNumber;
@@ -41,7 +44,11 @@ namespace PressureSensorCheck.Report
             report.ReportNumber = config.ReportNumber;
             report.ReportTime = config.ReportDate;
             report.TypeDevice = config.SensorType;
-            report.SerialNumber = config.SerialNumber;
+
+            report.InUnit = config.Unit.ToStringLocalized(CultureInfo.CurrentUICulture);
+            report.OutUnit = Units.mA.ToStringLocalized(CultureInfo.CurrentUICulture); //TODO: конфигурировать
+
+            report.SerialNumber = id.SerialNumber;
             report.Owner = config.Master;
             report.Temperature = config.Temperature.ToString("F0");
             report.Humidity = config.Humidity.ToString("F0");

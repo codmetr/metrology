@@ -116,6 +116,16 @@ namespace PressureSensorCheck.Report
         /// Проверку проводил
         /// </summary>
         public object User { get; set; }
+
+        /// <summary>
+        /// Единицы измерения входного сигнала
+        /// </summary>
+        public object InUnit { get; set; }
+
+        /// <summary>
+        /// Единицы измерения выходного сигнала
+        /// </summary>
+        public object OutUnit { get; set; }
     }
 
     /// <summary>

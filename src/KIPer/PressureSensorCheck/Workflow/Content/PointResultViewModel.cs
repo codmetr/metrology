@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace PressureSensorCheck.Workflow
@@ -9,6 +10,7 @@ namespace PressureSensorCheck.Workflow
     public class PointResultViewModel : INotifyPropertyChanged
     {
         private double _pressureReal;
+        private string _pressureRealStr;
         private double _real;
         private double _dIReal;
         private double _iback;
@@ -17,13 +19,31 @@ namespace PressureSensorCheck.Workflow
         private bool _isCorrect;
 
         /// <summary>
+        /// Фактическое давление (строка)
+        /// </summary>
+        public string PressureRealStr
+        {
+            get { return _pressureRealStr; }
+            set {
+                _pressureRealStr = value;
+                double dval;
+                if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
+                    return;
+                _pressureReal = dval;
+                OnPropertyChanged("PressureRealStr");
+            }
+        }
+
+        /// <summary>
         /// Фактическое давление
         /// </summary>
         public double PressureReal
         {
             get { return _pressureReal; }
             set { _pressureReal = value;
-                OnPropertyChanged();
+                _pressureRealStr = _pressureReal.ToString();
+                OnPropertyChanged("PressureRealStr");
+                OnPropertyChanged("PressureReal");
             }
         }
 
@@ -34,7 +54,7 @@ namespace PressureSensorCheck.Workflow
         {
             get { return _real; }
             set { _real = value;
-                OnPropertyChanged();
+                OnPropertyChanged("IReal");
             }
         }
 
@@ -45,7 +65,7 @@ namespace PressureSensorCheck.Workflow
         {
             get { return _dIReal; }
             set { _dIReal = value;
-                OnPropertyChanged();
+                OnPropertyChanged("dIReal");
             }
         }
 
@@ -56,7 +76,7 @@ namespace PressureSensorCheck.Workflow
         {
             get { return _iback; }
             set { _iback = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Iback");
             }
         }
 
@@ -67,7 +87,7 @@ namespace PressureSensorCheck.Workflow
         {
             get { return _ivar; }
             set { _ivar = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Ivar");
             }
         }
 
@@ -78,7 +98,7 @@ namespace PressureSensorCheck.Workflow
         {
             get { return _dIvar; }
             set { _dIvar = value;
-                OnPropertyChanged();
+                OnPropertyChanged("dIvar");
             }
         }
 
@@ -89,7 +109,7 @@ namespace PressureSensorCheck.Workflow
         {
             get { return _isCorrect; }
             set { _isCorrect = value;
-                OnPropertyChanged();
+                OnPropertyChanged("IsCorrect");
             }
         }
 

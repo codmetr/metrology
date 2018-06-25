@@ -320,11 +320,17 @@ namespace PressureSensorCheck.Workflow
                 finally
                 {
                     IsRun = false;
+                    _startTime = null;
                 }
             });
             task.Start(TaskScheduler.Default);
         }
 
+        /// <summary>
+        /// Конфигурация оборудования
+        /// </summary>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
         private PresSensorCheck Config(CancellationToken cancel)
         {
             _autorepeatWh.Reset();
@@ -407,7 +413,6 @@ namespace PressureSensorCheck.Workflow
             finally
             {
                 check.ResultUpdated -= CheckOnResultUpdated;
-                IsRun = false;
             }
         }
 
@@ -462,7 +467,7 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         private void DoPause()
         {
-            IsRun = false;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -558,7 +563,7 @@ namespace PressureSensorCheck.Workflow
             if (IsRun)
             {
                 _cancellation.Cancel();
-                _autorepeatWh.WaitOne();
+                _autorepeatWh.WaitOne(TimeSpan.FromSeconds(10));
                 _dpi620.Close();
             }
         }

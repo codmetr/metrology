@@ -321,9 +321,9 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0">от:</TextBlock>
-                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Config.VpiMin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Config.VpiMinStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="0" Grid.Column="2">до:</TextBlock>
-                            <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Config.VpiMax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Config.VpiMaxStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">единицы измерения:</TextBlock>
                             <ComboBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Style="{StaticResource CbBasicStyle}"
                                       ItemsSource="{Binding Config.Units}" SelectedItem="{Binding PressUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">

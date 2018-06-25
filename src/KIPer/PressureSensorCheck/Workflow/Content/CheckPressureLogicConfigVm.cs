@@ -19,6 +19,9 @@ namespace PressureSensorCheck.Workflow
         private string _tolerancePercentVpi;
         private double _pointsOnRange = 5;
 
+        private string _vpiMinStr;
+        private string _vpiMaxStr;
+
         public CheckPressureLogicConfigVm(PressureSensorConfig data)
         {
             Data = data;
@@ -37,6 +40,8 @@ namespace PressureSensorCheck.Workflow
             _tolerancePercentSigma = Data.TolerancePercentSigma.ToString();
             _tolerancePercentVpi = Data.TolerancePercentVpi.ToString();
             PointCalculator = new CheckPointVm();
+            _vpiMinStr = Data.VpiMin.ToString();
+            _vpiMaxStr = Data.VpiMax.ToString();
             UpdatePoints();
         }
 
@@ -47,6 +52,40 @@ namespace PressureSensorCheck.Workflow
         /// Использовать на разметке экрана только в случае единственного места изменения, так как без INotifyPropertyChanged
         /// </remarks>
         public PressureSensorConfig Data { get; }
+
+        /// <summary>
+        /// Минимум диапазона
+        /// </summary>
+        public string VpiMinStr
+        {
+            get { return _vpiMinStr; }
+            set
+            {
+                _vpiMinStr = value;
+                double dval;
+                if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
+                    return;
+                VpiMin = dval;
+                OnPropertyChanged("VpiMinStr");
+            }
+        }
+
+        /// <summary>
+        /// Максимум диапазона
+        /// </summary>
+        public string VpiMaxStr
+        {
+            get { return _vpiMaxStr; }
+            set
+            {
+                _vpiMaxStr = value;
+                double dval;
+                if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
+                    return;
+                VpiMax = dval;
+                OnPropertyChanged("VpiMaxStr");
+            }
+        }
 
         /// <summary>
         /// Максимум диапазона

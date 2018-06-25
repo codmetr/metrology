@@ -33,6 +33,17 @@ namespace PressureSensorCheck.Workflow
             _agregator = agregator;
         }
 
+        public string SerialNumber
+        {
+            get { return Identificator.SerialNumber; }
+            set
+            {
+                Identificator.SerialNumber = value;
+                Config.Data.SerialNumber = value;
+                OnPropertyChanged("SerialNumber");
+            }
+        }
+
         /// <summary>
         /// Идентифитатор проверки
         /// </summary>
