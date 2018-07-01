@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
              xmlns:view="clr-namespace:KipTM.Checks.View"
              xmlns:modalContent="clr-namespace:Tools.View.ModalContent;assembly=Tools.View"
              xmlns:workflow="clr-namespace:PressureSensorCheck.Workflow;assembly=PressureSensorCheck"
@@ -50,10 +49,10 @@
                             </DataGridTextColumn.Header>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Pэт" Width="50" Binding="{Binding Result.PressureRealStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False"/>
-                        <DataGridTextColumn Header="Iпр" Width="50" Binding="{Binding Result.IReal, StringFormat={}{0:F4}}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Iобр" Width="50" Binding="{Binding Result.Iback, StringFormat={}{0:F4}}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="ΔI" Width="50" Binding="{Binding Result.dIReal, StringFormat={}{0:F4}}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="ΔIвар" Width="50" Binding="{Binding Result.dIvar, StringFormat={}{0:F4}}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Iпр" Width="50" Binding="{Binding Result.IReal, StringFormat={}{0:F4}, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Iобр" Width="50" Binding="{Binding Result.Iback, StringFormat={}{0:F4}, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="ΔI" Width="50" Binding="{Binding Result.dIReal, StringFormat={}{0:F4}, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="ΔIвар" Width="50" Binding="{Binding Result.dIvar, StringFormat={}{0:F4}, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <Grid Grid.Row="2" Visibility="Collapsed">

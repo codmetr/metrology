@@ -310,12 +310,12 @@ namespace PressureSensorCheck.Workflow
             {
                 try
                 {
-                    var conf = Config(cancel);
-                    if (conf == null)
+                    var check = Config(cancel);
+                    if (check == null)
                         return;
                     if (cancel.IsCancellationRequested)
                         return;
-                    TryStart(cancel, conf);
+                    TryStart(check, cancel);
                 }
                 finally
                 {
@@ -396,9 +396,9 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Выполнение проверки с гарантированым снятием признака запуска проверки
         /// </summary>
-        /// <param name="cancel"></param>
         /// <param name="check"></param>
-        private void TryStart(CancellationToken cancel, PresSensorCheck check)
+        /// <param name="cancel"></param>
+        private void TryStart(PresSensorCheck check, CancellationToken cancel)
         {
             try
             {

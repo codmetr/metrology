@@ -1,20 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using ArchiveData.DTO;
-using ArchiveData.DTO.Params;
-using CheckFrame.Model.Checks.Steps;
-using KipTM.Archive;
-using KipTM.EventAggregator;
-using KipTM.Interfaces.Channels;
-using KipTM.Interfaces.Checks;
-using KipTM.Model.Channels;
+﻿using System.Threading;
 using KipTM.Model.Checks;
-using KipTM.Model.Checks.Steps;
-using KipTM.Model.TransportChannels;
-using KipTM.ViewModel.Events;
 using NLog;
 
 namespace CheckFrame.Checks
