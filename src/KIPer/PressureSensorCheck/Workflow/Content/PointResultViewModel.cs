@@ -11,11 +11,11 @@ namespace PressureSensorCheck.Workflow
     {
         private double _pressureReal;
         private string _pressureRealStr;
-        private double _real;
-        private double _dIReal;
-        private double _iback;
-        private double _ivar;
-        private double _dIvar;
+        private double? _Ireal;
+        private double? _dIReal;
+        private double? _iback;
+        private double? _ivar;
+        private double? _dIvar;
         private bool _isCorrect;
 
         /// <summary>
@@ -50,10 +50,10 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Фактическое напряжение (прямой ход)
         /// </summary>
-        public double IReal
+        public double? IReal
         {
-            get { return _real; }
-            set { _real = value;
+            get { return _Ireal; }
+            set { _Ireal = value;
                 OnPropertyChanged("IReal");
             }
         }
@@ -61,7 +61,7 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Фактическая погрешность (прямой ход)
         /// </summary>
-        public double dIReal
+        public double? dIReal
         {
             get { return _dIReal; }
             set { _dIReal = value;
@@ -72,7 +72,7 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Фактическое напряжение (обратный ход)
         /// </summary>
-        public double Iback
+        public double? Iback
         {
             get { return _iback; }
             set { _iback = value;
@@ -83,7 +83,7 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Фактическая вариация
         /// </summary>
-        public double Ivar
+        public double? Ivar
         {
             get { return _ivar; }
             set { _ivar = value;
@@ -94,7 +94,7 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Фактическая погрешность вариации
         /// </summary>
-        public double dIvar
+        public double? dIvar
         {
             get { return _dIvar; }
             set { _dIvar = value;

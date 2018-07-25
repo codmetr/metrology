@@ -9,8 +9,10 @@ using KipTM.EventAggregator;
 using KipTM.Workflow;
 using NLog;
 using PressureSensorCheck.Check;
+using PressureSensorCheck.Devices;
 using PressureSensorCheck.Report;
 using PressureSensorData;
+using Tools;
 
 namespace PressureSensorCheck.Workflow
 {
@@ -44,7 +46,10 @@ namespace PressureSensorCheck.Workflow
             var res = new PressureSensorResult();
 
             var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf, agregator);
-            var run = new PressureSensorRunVm(conf, new DPI620DriverCom(), dpiConf, result, agregator);
+            var dpi = AppVersionHelper.CurrentAppVersionType == AppVersionHelper.AppVersionType.Emulation?
+                (IDPI620Driver)new DPI620Emulation():
+                (IDPI620Driver)new DPI620DriverCom();
+            var run = new PressureSensorRunVm(conf, dpi, dpiConf, result, agregator);
             var resultVm = new PressureSensorResultVM(id, accessor, res, conf, agregator);
 
             var reportUpdater =new ReportUpdater();
@@ -84,7 +89,7 @@ namespace PressureSensorCheck.Workflow
                 {
                     var resPoint = run.Points.FirstOrDefault(el => Math.Abs(el.Config.Pressure - point.Pressure) < Double.Epsilon);
                     if (resPoint == null)
-                        run.Points.Add(new PointViewModel() { Config = point});
+                        run.Points.Add(new PointViewModel() { Config = point, Result = new PointResultViewModel()});
                     else
                     {
                         resPoint.Config.Unit = point.Unit;

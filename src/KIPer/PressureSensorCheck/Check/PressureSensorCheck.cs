@@ -72,6 +72,7 @@ namespace PressureSensorCheck.Check
                 var point = backStepPoints[i].Item1;
                 var res = backStepPoints[i].Item2;
                 var step = new StepMainErrorBack(point, res, ChConfig.UsrChannel, _pressure, _voltage, _logger);
+                step.SetBuffer(_dataBuffer);
                 steps.Add(new CheckStepConfig(step, false));
                 AttachStep(step);
             }

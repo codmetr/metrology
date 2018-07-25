@@ -34,7 +34,7 @@ namespace PressureSensorCheck.Workflow
         //private double _maxP = 100;
         //private double _minU = 2;
         //private double _maxU = 5;
-        private readonly DPI620DriverCom _dpi620;
+        private readonly IDPI620Driver _dpi620;
         private DPI620GeniiConfig _dpiConf;
         private readonly Logger _logger;
 
@@ -72,7 +72,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="dpi620">драйвер DPI620Genii</param>
         /// <param name="dpiConf">контейнер конфигурации DPI620</param>
         /// <param name="result"></param>
-        public PressureSensorRunVm(PressureSensorConfig config, DPI620DriverCom dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator)
+        public PressureSensorRunVm(PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator)
         {
             Measured = new ObservableCollection<MeasuringPoint>();
             _lines = new List<LineDescriptor>() {new LineDescriptor()
@@ -290,7 +290,22 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public ICommand Accept { get { return new CommandWrapper(DoAccept); } }
 
-        internal Action DoAccept { get; set; } = () => { };
+        internal Action DoAccept { get { return () => { this._doAccept(); }; } }
+        internal Action _doAccept = () => { };
+
+        /// <summary>
+        /// Установить действие на подтверждение 
+        /// </summary>
+        /// <param name="accept"></param>
+        internal void SetAcceptAction(Action accept)
+        {
+            _doAccept = accept;
+        }
+
+        internal void ResetSetAcceptAction()
+        {
+            _doAccept = () => { };
+        }
 
         /// <summary>
         /// Запустить проверку
@@ -327,7 +342,7 @@ namespace PressureSensorCheck.Workflow
         }
 
         /// <summary>
-        /// Конфигурация оборудования
+        /// Конфигурация оборудования и запуск автоопроса
         /// </summary>
         /// <param name="cancel"></param>
         /// <returns></returns>
@@ -364,7 +379,11 @@ namespace PressureSensorCheck.Workflow
             // попытка подключения к DPI 620
             try
             {
-                _dpi620.SetPort(_dpiConf.SelectPort);
+                var dpiCom = _dpi620 as DPI620DriverCom;
+                if (dpiCom != null)
+                {
+                    dpiCom.SetPort(_dpiConf.SelectPort);
+                }
                 _dpi620.Open();
             }
             catch (Exception ex)
@@ -405,6 +424,7 @@ namespace PressureSensorCheck.Workflow
                 using (_autoupdater.Subscribe(this))
                 {
                     check.ResultUpdated +=CheckOnResultUpdated;
+                    check.EndMethod += CheckOnEndMethod;
                     if (check.Start(cancel))
                         if (!cancel.IsCancellationRequested)
                             UpdateResult(check.Result);
@@ -413,7 +433,18 @@ namespace PressureSensorCheck.Workflow
             finally
             {
                 check.ResultUpdated -= CheckOnResultUpdated;
+                check.EndMethod += CheckOnEndMethod;
             }
+        }
+
+        private void CheckOnEndMethod(object sender, EventArgs eventArgs)
+        {
+            _invoker(() =>
+            {
+                ResetSetAcceptAction();
+                Note = "";
+                IsAsk = false;
+            });
         }
 
         private void CheckOnResultUpdated(object sender, EventArgs eventArgs)
@@ -437,12 +468,18 @@ namespace PressureSensorCheck.Workflow
                     continue;
                 if(point.Result == null)
                     point.Result = new PointResultViewModel();
-                point.Result.PressureReal = res.PressureValue;
-                point.Result.IReal = res.VoltageValue;
-                point.Result.Iback = res.VoltageValueBack;
-                point.Result.dIReal = res.VoltageValue - res.VoltagePoint;
-                point.Result.dIvar = Math.Abs(res.VoltageValue - res.VoltageValueBack);
-                point.Result.IsCorrect = point.Result.dIReal <= point.Config.dI;
+                
+                if (double.IsNaN(res.VoltageValueBack))
+                { // прямой ход
+                    point.Result.IReal = res.VoltageValue;
+                    point.Result.dIReal = res.VoltageValue - res.VoltagePoint;
+                    point.Result.IsCorrect = point.Result.dIReal <= point.Config.dI;
+                }
+                else
+                { // обратный ход
+                    point.Result.Iback = res.VoltageValueBack;
+                    point.Result.dIvar = Math.Abs(res.VoltageValue - res.VoltageValueBack);
+                }
             }
             LastResultTime = DateTime.Now;
         }
@@ -502,7 +539,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="msg"></param>
         /// <param name="cancel"></param>
         /// <returns></returns>
-        private void AskModal(string title, string msg, CancellationToken cancel)
+        internal void AskModal(string title, string msg, CancellationToken cancel)
         {
             ModalState.IsShowModal = true;
             var wh = new ManualResetEvent(false);

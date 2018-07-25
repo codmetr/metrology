@@ -12,7 +12,7 @@ namespace PressureSensorCheck.Check.Steps
     /// <summary>
     /// Шаг обратного хода поверки датчика давления
     /// </summary>
-    internal class StepMainErrorBack : TestStepBase
+    internal class StepMainErrorBack : TestStepWithBuffer
     {
         /// <summary>
         /// Ключь шага
@@ -48,7 +48,7 @@ namespace PressureSensorCheck.Check.Steps
         /// </summary>
         public StepMainErrorBack(PressureSensorPoint point, PressureSensorPointResult result, IUserChannel userChannel, IEthalonChannel ethalonPressure, IEthalonChannel ethalonVoltage, Logger logger)
         {
-            Name = $"Проверка основной погрешности обратного хода на точке {point.PressurePoint} {point.PressureUnit}";
+            Name = $"Проверка основной погрешности обратного хода на точке {point.PressurePoint} {point.PressureUnit} и нажмите \"Далее\"";
             _point = point;
             _result = result;
             _userChannel = userChannel;
@@ -75,6 +75,12 @@ namespace PressureSensorCheck.Check.Steps
             var valuePressure = _ethalonPressure.GetEthalonValue(_point.PressurePoint, cancel);
             Log($"Received I = {valueVoltage} on P = {valuePressure}");
             _result.VoltageValueBack = valueVoltage;
+
+            if (_buffer != null)
+            {
+                Log("save result point to buffer");
+                _buffer.Append(_result);
+            }
             OnEnd(new EventArgEnd(KeyStep, true));
         }
 

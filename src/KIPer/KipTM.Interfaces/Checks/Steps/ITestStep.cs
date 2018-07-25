@@ -57,4 +57,9 @@ namespace KipTM.Model.Checks
         /// </summary>
         event EventHandler<EventArgEnd> End;
     }
+
+    /// <summary>
+    /// Завершающий шаг
+    /// </summary>
+    public interface IFinalizeStep { }
 }

@@ -46,7 +46,7 @@ namespace PressureSensorCheck.Workflow
             return new Unsubscriber(observers, observer);
         }
 
-        internal void Start(DPI620DriverCom dpi620, AutoreadState arg, PressureSensorConfig conf)
+        internal void Start(IDPI620Driver dpi620, AutoreadState arg, PressureSensorConfig conf)
         {
             try
             {

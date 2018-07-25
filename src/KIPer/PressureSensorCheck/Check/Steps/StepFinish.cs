@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CheckFrame.Checks.Steps;
 using KipTM.Interfaces.Checks.Steps;
 using KipTM.Model.Channels;
+using KipTM.Model.Checks;
 using PressureSensorData;
 
 namespace PressureSensorCheck.Check.Steps
@@ -14,7 +15,7 @@ namespace PressureSensorCheck.Check.Steps
     /// <summary>
     /// Финальный шаг проверки
     /// </summary>
-    class StepFinish: TestStepBase
+    class StepFinish: TestStepBase, IFinalizeStep
     {
         /// <summary>
         /// Базовая точка
@@ -34,10 +35,8 @@ namespace PressureSensorCheck.Check.Steps
 
         public override void Start(CancellationToken cancel)
         {
-            _userChannel.Message = $"Установите на эталонном источнике давления значение {_pointBase.PressurePoint} {_pointBase.PressureUnit}";
-            var wh = new ManualResetEvent(false);
-            _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
-            WaitHandle.WaitAny(new[] { wh, cancel.WaitHandle });
+            var msg = $"Установите на эталонном источнике давления значение {_pointBase.PressurePoint} {_pointBase.PressureUnit}";
+            _userChannel.ShowModal("Нормализация давления", msg, cancel);
             if (cancel.IsCancellationRequested)
                 return;
         }

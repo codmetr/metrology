@@ -44,6 +44,14 @@ namespace KipTM.Model.Channels
         void NeedQuery(UserQueryType queryType, EventWaitHandle wh);
 
         /// <summary>
+        /// Показать модальное сообщение пользователю
+        /// </summary>
+        /// <param name="title">заголовок</param>
+        /// <param name="msg">сообщение</param>
+        /// <param name="cancel">отменятор</param>
+        void ShowModal(string title, string msg, CancellationToken cancel);
+
+        /// <summary>
         /// Поступил запрос на действие пользователя
         /// </summary>
         event EventHandler QueryStarted;

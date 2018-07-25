@@ -53,14 +53,6 @@ namespace CheckFrame.Model.Channels
         /// <summary>
         /// Запрос на получение эталонного значение параметра от пользователя
         /// </summary>
-        public void NeedQuey(UserQueryType queryType)
-        {
-            NeedQuery(queryType, null);
-        }
-
-        /// <summary>
-        /// Запрос на получение эталонного значение параметра от пользователя
-        /// </summary>
         /// <param name="wh">Симофор по которому можно будет понять, что пользователь подтвердил ввод</param>
         public void NeedQuery(UserQueryType queryType, EventWaitHandle wh)
         {
@@ -70,6 +62,17 @@ namespace CheckFrame.Model.Channels
             AgreeValue = false;
             AcceptValue = false;
             OnQueryStarted();
+        }
+
+        /// <summary>
+        /// Показать модальное сообщение пользователю
+        /// </summary>
+        /// <param name="title">заголовок</param>
+        /// <param name="msg">сообщение</param>
+        /// <param name="cancel">отменятор</param>
+        public void ShowModal(string title, string msg, CancellationToken cancel)
+        {
+            //_vm.AskModal(title, msg, cancel);
         }
 
         /// <summary>

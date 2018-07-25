@@ -106,12 +106,20 @@ namespace CheckFrame.Checks
                 OnEndMethod(null);
                 return false;
             }
-
+            ITestStep currentStep = null;
             try
             {
                 foreach (var testStep in Steps)
                 {
                     var step = testStep;
+                    if (step == null || step.Step == null)
+                    {
+                        Log(string.Format("[WARNING] Step is Null"));
+                        continue;
+                    }
+                    currentStep = step.Step;
+                    if (step.Step is IFinalizeStep)
+                        continue;
                     if (!step.Enabled)
                         continue;
                     PrepareStartStep(step.Step);
@@ -133,7 +141,7 @@ namespace CheckFrame.Checks
                         });
                         break;
                     }
-                    AfterEndStep(testStep.Step);
+                    AfterEndStep(step.Step);
                     if (cancel.IsCancellationRequested)
                         break;
                 }
@@ -141,6 +149,56 @@ namespace CheckFrame.Checks
             finally
             {
                 SetCurrentPause(null);
+                //Инициативный запуск финализирующих шагов
+                try
+                {
+                    Log("Runing finalizing step");
+                    foreach (var step in Steps)
+                    {
+                        if (step == null || step.Step == null)
+                        {
+                            Log(string.Format("[WARNING] Step is Null"));
+                            continue;
+                        }
+                        if (!(step.Step is IFinalizeStep))
+                            continue;
+                        currentStep = step.Step;
+                        PrepareStartStep(step.Step);
+                        string error = string.Empty;
+                        try
+                        {
+                            step.Step.Start(cancel);
+                        }
+                        catch (Exception ex)
+                        {
+                            error = ex.Message;
+                        }
+
+                        if (error != string.Empty)
+                        {
+                            OnError(new EventArgError()
+                            {
+                                ErrorString = string.Format("На шаге \"{0}\" возникла ошибка: {1}", step.Step.Name, error) // TODO Локализовать
+                            });
+                            break;
+                        }
+                        AfterEndStep(step.Step);
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OnError(new EventArgError()
+                        {
+                            ErrorString = String.Format("Шаг \"{0}\" окончен по ошибке: {1}", currentStep.Name, ex.Message) // TODO Локализовать
+                    });
+                    Log(string.Format("On time step {0} throwed {1}", currentStep.Name, ex.ToString()));
+                    throw;
+                }
+                finally
+                {
+                    Log("Finalizing steps End");
+                }
                 ToBaseAction();
                 EndCheck();
             }
@@ -350,6 +408,11 @@ namespace CheckFrame.Checks
                 whStep.Reset();
                 end.Step.Start(CancellationToken.None);
             }
+        }
+
+        protected void Log(string msg)
+        {
+            _logger.Trace(msg);
         }
     }
 }

@@ -58,6 +58,7 @@
     <Compile Include="Check\Steps\StepInit.cs" />
     <Compile Include="Check\Steps\StepMainErrorBack.cs" />
     <Compile Include="Check\Steps\StepMainError.cs" />
+    <Compile Include="Devices\DPI620Emulation.cs" />
     <Compile Include="Devices\DPI620Factory.cs" />
     <Compile Include="Devices\DPI620Model.cs" />
     <Compile Include="Devices\DPI620ModelFactory.cs" />

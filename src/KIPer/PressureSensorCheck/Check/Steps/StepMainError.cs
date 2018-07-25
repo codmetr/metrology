@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using CheckFrame.Checks.Steps;
 using KipTM.Interfaces.Channels;
 using KipTM.Model.Channels;
@@ -65,7 +66,7 @@ namespace PressureSensorCheck.Check.Steps
         {
             OnStarted();
             Log($"Wait set {_point.PressurePoint} {_point.PressureUnit}");
-            _userChannel.Message = $"Установите на эталонном источнике давления значение {_point.PressurePoint} {_point.PressureUnit}";
+            _userChannel.Message = $"Установите на эталонном источнике давления значение {_point.PressurePoint} {_point.PressureUnit}, задайте реальное значение давления в графе Pэт и нажмите \"Далее\"";
             var wh = new ManualResetEvent(false);
             _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
             WaitHandle.WaitAny(new[] { wh, cancel.WaitHandle });
@@ -80,7 +81,7 @@ namespace PressureSensorCheck.Check.Steps
             _result.VoltageUnit = _point.OutUnit;
             _result.VoltageValue = valueVoltage;
             _result.PressureValue = valuePressure;
-            _result.VoltageValueBack = valueVoltage;
+            _result.VoltageValueBack = Double.NaN;
 
             if (_buffer != null)
             {
