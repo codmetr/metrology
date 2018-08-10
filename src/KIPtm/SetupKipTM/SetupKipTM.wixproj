@@ -136,17 +136,17 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\KIPer\KipTM.csproj">
-      <Name>KipTM</Name>
-      <Project>{0d103f16-f896-4e97-9d92-aedc7ab12f9d}</Project>
+    <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
+      <Name>KipTM.Interfaces</Name>
+      <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\KipTM.Interfaces\KipTM.Interfaces.csproj">
-      <Name>KipTM.Interfaces</Name>
-      <Project>{b8dbf9e3-03d3-457d-b889-d45e1c5131e4}</Project>
+    <ProjectReference Include="..\KipTM\KipTM.csproj">
+      <Name>KipTM</Name>
+      <Project>{0d103f16-f896-4e97-9d92-aedc7ab12f9d}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
@@ -269,11 +269,8 @@
     <BootstrapperFile Include="Prerequisites\Microsoft.Windows.Installer.3.1">
       <ProductName>Windows Installer 3.1</ProductName>
     </BootstrapperFile>
-    <BootstrapperFile Include="Prerequisites\.NETFramework,Version=v4.0">
+    <BootstrapperFile Include="Prerequisites\Microsoft.Net.Framework.3.5">
       <ProductName>.NET Framework 2.0 - 3.5</ProductName>
-    </BootstrapperFile>
-    <BootstrapperFile Include="Prerequisites\SAP.CrystalReports14.NET.2.0">
-      <ProductName>Crystal Reports</ProductName>
     </BootstrapperFile>
     <BootstrapperFile Include="Prerequisites\SAP.CrystalReports14.NET.2.0">
       <ProductName>Crystal Reports</ProductName>
