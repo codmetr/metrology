@@ -131,6 +131,7 @@
     <Compile Include="Archive\ViewModel\TestResultViewModelFactory.cs" />
     <Compile Include="Checks\ViewModel\CheckPool.cs" />
     <Compile Include="Checks\ViewModel\Config\EthalonConfigViewModel.cs" />
+    <Compile Include="Checks\ViewModel\SaveVM.cs" />
     <Compile Include="Checks\View\AskOkView.xaml.cs">
       <DependentUpon>AskOkView.xaml</DependentUpon>
     </Compile>
@@ -152,6 +153,9 @@
     </Compile>
     <Compile Include="Checks\View\PressureSensorResultsView.xaml.cs">
       <DependentUpon>PressureSensorResultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Checks\View\SaveView.xaml.cs">
+      <DependentUpon>SaveView.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataService\DeviceCacheKey.cs" />
     <Compile Include="Design\DesignDataService.cs" />
@@ -283,6 +287,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Checks\View\PressureSensorResultsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Checks\View\SaveView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -584,6 +592,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\save-icon-9.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

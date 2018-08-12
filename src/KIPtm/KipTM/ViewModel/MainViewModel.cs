@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using ArchiveData.DTO;
 using CheckFrame;
+using KipTM.Checks.ViewModel;
 using KipTM.Interfaces;
 using KipTM.Model;
 using KipTM.Workflow.States;
@@ -53,7 +54,9 @@ namespace KipTM.ViewModel
         private string _helpMessage;
         private bool _isError;
         private bool _isActiveSwitchServices = true;
-
+        //private List<object> _fastTools = new List<object>();
+        private SaveVM _save;
+        
         #endregion
 
         #region Инициализация загрузка
@@ -109,6 +112,9 @@ namespace KipTM.ViewModel
             //        BitmapToImage(keyCheck.SmallImg), SelectChecks));
             //    _workflows.Add(keyCheck.Key.TypeKey, _checkFactory.GetNew(keyCheck.Key));
             //}
+
+            _save = new SaveVM(_eventAggregator);
+            //_fastTools.Add(_save);
             checkBtns.Add(new OneBtnDescriptor(PresSensorCheck.CheckKey, "Датчик давления", BitmapToImage(Resources.EHCerabarM),
                 BitmapToImage(Resources.EHCerabarM), SelectChecks));
             _workflows.Add(PresSensorCheck.CheckKey, new PressureSensorWorkflow().Make(_logger, new DataAccessor(dataPool), agregator:_eventAggregator));
@@ -204,7 +210,11 @@ namespace KipTM.ViewModel
                 _selectedAction = value;
                 OnPropertyChanged("SelectedAction");
                 if (value is IWorkflow)
+                {
+                    _save.ComonAvailable(true);
                     return;
+                }
+                _save.ComonAvailable(false);
                 foreach (var btn in CheckBtns)
                 {
                     btn.IsSelected = false;
@@ -329,6 +339,17 @@ namespace KipTM.ViewModel
                 });
             }
         }
+
+        //public List<object> FastTools
+        //{
+        //    get { return _fastTools; }
+        //}
+
+        public SaveVM Save
+        {
+            get { return _save; }
+        }
+
 
         /// <summary>
         /// Поясняющее сообщение 

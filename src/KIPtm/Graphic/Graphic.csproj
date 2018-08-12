@@ -63,6 +63,7 @@
     <Compile Include="CleanerAct.cs" />
     <Compile Include="LineDescriptor.cs" />
     <Compile Include="LineHolder.cs" />
+    <Compile Include="LinesViewModel.cs" />
     <Compile Include="Scaller.cs" />
     <Compile Include="TimeGraph.xaml.cs">
       <DependentUpon>TimeGraph.xaml</DependentUpon>

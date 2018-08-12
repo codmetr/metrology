@@ -30,7 +30,7 @@ namespace KipTM.Interfaces.Checks.Steps
         /// <summary>
         /// Шаг запущен
         /// </summary>
-        public event EventHandler<EventArgs> Started;
+        public event EventHandler<System.EventArgs> Started;
 
         /// <summary>
         /// Изменение прогресса шага (0-100 %)
@@ -56,8 +56,8 @@ namespace KipTM.Interfaces.Checks.Steps
 
         protected virtual void OnStarted()
         {
-            EventHandler<EventArgs> handler = Started;
-            if (handler != null) handler(this, EventArgs.Empty);
+            EventHandler<System.EventArgs> handler = Started;
+            if (handler != null) handler(this, System.EventArgs.Empty);
         }
 
         protected virtual void OnProgressChanged(EventArgProgress e)

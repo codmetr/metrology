@@ -11,6 +11,7 @@ using NLog;
 using PressureSensorCheck.Check;
 using PressureSensorCheck.Devices;
 using PressureSensorCheck.Report;
+using PressureSensorCheck.Workflow.Content;
 using PressureSensorData;
 using Tools;
 

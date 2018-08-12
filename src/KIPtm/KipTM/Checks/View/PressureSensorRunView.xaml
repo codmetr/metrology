@@ -120,8 +120,9 @@
                 <TextBlock Grid.Column="3" Grid.Row="1">I:</TextBlock>
                 <TextBox Grid.Column="4" Grid.Row="1" Text="{Binding LastMeasuredPoint.I, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F4}}"/>
                 <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding OutUnit, Converter={StaticResource UnitsStringConverter}}"/>
-                <graphic:TimeGraph Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" MinHeight="150" IsLock="{Binding ModalState.IsShowModal, UpdateSourceTrigger=PropertyChanged}"
-                                   Lines="{Binding Lines}" Title="Измерения" Claner="{Binding LineCleaner}"/>
+                <graphic:TimeGraph Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" MinHeight="150" Title="Измерения"
+                                   IsLock="{Binding ModalState.IsShowModal, UpdateSourceTrigger=PropertyChanged}"
+                                   Lines="{Binding Lines.Lines}" Claner="{Binding Lines.LineCleaner}"/>
                 <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
                 Мгновенная погрешность:
                 </TextBlock>

@@ -5,6 +5,7 @@ using System.Windows.Input;
 using ArchiveData;
 using ArchiveData.DTO;
 using KipTM.EventAggregator;
+using KipTM.Model.Checks;
 using KipTM.ViewModel.Events;
 using PressureSensorData;
 using Tools.View;
@@ -14,7 +15,7 @@ namespace PressureSensorCheck.Workflow
     /// <summary>
     /// Визуальная модель результата поверки датчика давления
     /// </summary>
-    public class PressureSensorResultVM:INotifyPropertyChanged
+    public class PressureSensorResultVM:INotifyPropertyChanged, ISubscriber<EventArgSave>
     {
         /// <summary>
         /// Хранилище результата для конкретной проверки
@@ -39,6 +40,7 @@ namespace PressureSensorCheck.Workflow
             Data = result;
             _conf = conf;
             _agregator = agregator;
+            _agregator.Subscribe(this);
         }
 
         /// <summary>
@@ -182,6 +184,11 @@ namespace PressureSensorCheck.Workflow
         }
 
         #endregion
+
+        public void OnEvent(EventArgSave message)
+        {
+            OnSave();
+        }
     }
 }
 

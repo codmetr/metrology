@@ -267,13 +267,13 @@
   </ItemGroup>
   <ItemGroup>
     <BootstrapperFile Include="Prerequisites\Microsoft.Windows.Installer.3.1">
-      <ProductName>Windows Installer 3.1</ProductName>
+      <ProductName>Microsoft.Windows.Installer.3.1</ProductName>
     </BootstrapperFile>
     <BootstrapperFile Include="Prerequisites\Microsoft.Net.Framework.3.5">
-      <ProductName>.NET Framework 2.0 - 3.5</ProductName>
+      <ProductName>Microsoft.Net.Framework.3.5</ProductName>
     </BootstrapperFile>
     <BootstrapperFile Include="Prerequisites\SAP.CrystalReports14.NET.2.0">
-      <ProductName>Crystal Reports</ProductName>
+      <ProductName>SAP.CrystalReports14.NET.2.0</ProductName>
     </BootstrapperFile>
   </ItemGroup>
   <ItemGroup>

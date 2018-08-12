@@ -22,6 +22,7 @@ using Tools.View.ModalContent;
 using Graphic;
 using KipTM.EventAggregator;
 using PressureSensorCheck.Report;
+using PressureSensorCheck.Workflow.Content;
 
 namespace PressureSensorCheck.Workflow
 {
@@ -49,9 +50,7 @@ namespace PressureSensorCheck.Workflow
 
         private ModalState _modalState = new ModalState();
         private AutoUpdater _autoupdater;
-        private List<LineDescriptor> _lines;
-        private ObservableCollection<PointData> _lineIn = new ObservableCollection<PointData>();
-        private ObservableCollection<PointData> _lineOut = new ObservableCollection<PointData>();
+        private LinesInOutViewModel _inOutLines;
         private TimeSpan _periodViewGraphic = TimeSpan.FromSeconds(300);
         private Action<Action> _invoker = act => act();
         private string _note;
@@ -75,25 +74,7 @@ namespace PressureSensorCheck.Workflow
         public PressureSensorRunVm(PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator)
         {
             Measured = new ObservableCollection<MeasuringPoint>();
-            _lines = new List<LineDescriptor>() {new LineDescriptor()
-                {
-                    Title = "I",
-                    AzixTitle = "I, A",
-                    LineColor = Color.Black,
-                    LimitForLine = _periodViewGraphic,
-                    Source = _lineIn,
-                    Width = 1,
-                },
-                new LineDescriptor()
-                {
-                    Title = "P",
-                    AzixTitle = "P, mBar",
-                    LineColor = Color.Brown,
-                    LimitForLine = _periodViewGraphic,
-                    Source = _lineOut,
-                    Width = 2,
-                },
-            };
+            _inOutLines = new LinesInOutViewModel("I", "I, A", Color.Black, 1, _periodViewGraphic, "P", "P, mBar", Color.Brown, 2, _periodViewGraphic);
             _dpi620 = dpi620;
             _dpiConf = dpiConf;
             _logger = NLog.LogManager.GetLogger("PressureSensorPointsConfigVm");
@@ -103,7 +84,6 @@ namespace PressureSensorCheck.Workflow
             _autoupdater = new AutoUpdater(_logger);
             Result = result;
             _agregator = agregator;
-            LineCleaner = new CleanerAct();
         }
 
         /// <summary>
@@ -130,7 +110,9 @@ namespace PressureSensorCheck.Workflow
         public DateTime? LastResultTime
         {
             get { return _lastResultTime; }
-            set { _lastResultTime = value;
+            set
+            {
+                _lastResultTime = value;
                 _invoker(() => OnPropertyChanged());
             }
         }
@@ -141,7 +123,9 @@ namespace PressureSensorCheck.Workflow
         public PointViewModel SelectedPoint
         {
             get { return _selectedPoint; }
-            set { _selectedPoint = value;
+            set
+            {
+                _selectedPoint = value;
                 _invoker(() => OnPropertyChanged());
             }
         }
@@ -152,7 +136,9 @@ namespace PressureSensorCheck.Workflow
         public PointConfigViewModel NewConfig
         {
             get { return _newConfig; }
-            set { _newConfig = value;
+            set
+            {
+                _newConfig = value;
                 _invoker(() => OnPropertyChanged());
             }
         }
@@ -190,9 +176,10 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public ObservableCollection<MeasuringPoint> Measured { get; set; }
 
-        public IEnumerable<LineDescriptor> Lines { get { return _lines; } }
-
-        public CleanerAct LineCleaner { get; private set; }
+        /// <summary>
+        /// Линии на графике
+        /// </summary>
+        public LinesInOutViewModel Lines { get { return _inOutLines; } }
 
         /// <summary>
         /// Текущее значение измерение
@@ -200,7 +187,9 @@ namespace PressureSensorCheck.Workflow
         public MeasuringPoint LastMeasuredPoint
         {
             get { return _lastMeasuredPoint; }
-            set { _lastMeasuredPoint = value;
+            set
+            {
+                _lastMeasuredPoint = value;
                 OnPropertyChanged("LastMeasuredPoint");
             }
         }
@@ -213,9 +202,6 @@ namespace PressureSensorCheck.Workflow
             get
             {
                 return _config.Unit;
-                //if (_dpiConf.Slot1.ChannelType == ChannelType.Pressure)
-                //    return _dpiConf.Slot1.SelectedUnit;
-                //return _dpiConf.Slot2.SelectedUnit;
             }
         }
 
@@ -227,9 +213,6 @@ namespace PressureSensorCheck.Workflow
             get
             {
                 return Units.mA;
-                //if (_dpiConf.Slot1.ChannelType != ChannelType.Pressure)
-                //    return _dpiConf.Slot1.SelectedUnit;
-                //return _dpiConf.Slot2.SelectedUnit;
             }
         }
 
@@ -407,8 +390,7 @@ namespace PressureSensorCheck.Workflow
                 new DPI620Ethalon(_dpi620, outSlotNum, ChannelType.Current, outSlot.SelectedUnit, Units.mA), Result);
             check.ChConfig.UsrChannel = new PressureSensorUserChannel(this);
             check.FillSteps(_config);
-            _lineIn.Clear();
-            _lineOut.Clear();
+            _inOutLines.CLearAllLines();
             return check;
         }
 
@@ -423,8 +405,9 @@ namespace PressureSensorCheck.Workflow
             {
                 using (_autoupdater.Subscribe(this))
                 {
-                    check.ResultUpdated +=CheckOnResultUpdated;
+                    check.ResultUpdated += CheckOnResultUpdated;
                     check.EndMethod += CheckOnEndMethod;
+                    _agregator.Send(new EventArgRunState(true));
                     if (check.Start(cancel))
                         if (!cancel.IsCancellationRequested)
                             UpdateResult(check.Result);
@@ -432,6 +415,7 @@ namespace PressureSensorCheck.Workflow
             }
             finally
             {
+                _agregator.Send(new EventArgRunState(false));
                 check.ResultUpdated -= CheckOnResultUpdated;
                 check.EndMethod += CheckOnEndMethod;
             }
@@ -450,7 +434,7 @@ namespace PressureSensorCheck.Workflow
         private void CheckOnResultUpdated(object sender, EventArgs eventArgs)
         {
             var check = sender as PresSensorCheck;
-            if(check!=null)
+            if (check != null)
                 UpdateResult(check.Result);
         }
 
@@ -464,11 +448,11 @@ namespace PressureSensorCheck.Workflow
             foreach (var point in Points)
             {
                 var res = checkResult.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.Config.Pressure) < double.Epsilon);
-                if(res == null)
+                if (res == null)
                     continue;
-                if(point.Result == null)
+                if (point.Result == null)
                     point.Result = new PointResultViewModel();
-                
+
                 if (double.IsNaN(res.VoltageValueBack))
                 { // прямой ход
                     point.Result.IReal = res.VoltageValue;
@@ -528,8 +512,11 @@ namespace PressureSensorCheck.Workflow
         public ModalState ModalState
         {
             get { return _modalState; }
-            set { _modalState = value;
-                _invoker(() => OnPropertyChanged()); }
+            set
+            {
+                _modalState = value;
+                _invoker(() => OnPropertyChanged());
+            }
         }
 
         /// <summary>
@@ -543,8 +530,8 @@ namespace PressureSensorCheck.Workflow
         {
             ModalState.IsShowModal = true;
             var wh = new ManualResetEvent(false);
-            _invoker(()=>ModalState.Ask(string.IsNullOrEmpty(title)? msg: $"{title}\n{msg}", wh));
-            var whs = new[] {wh, cancel.WaitHandle};
+            _invoker(() => ModalState.Ask(string.IsNullOrEmpty(title) ? msg : $"{title}\n{msg}", wh));
+            var whs = new[] { wh, cancel.WaitHandle };
             WaitHandle.WaitAny(whs);
             ModalState.IsShowModal = false;
         }
@@ -569,16 +556,7 @@ namespace PressureSensorCheck.Workflow
         public void OnNext(MeasuringPoint value)
         {
             Measured.Add(value);
-            _lineIn.Add(new PointData()
-            {
-                Time = value.TimeStamp,
-                Value = value.I
-            });
-            _lineOut.Add(new PointData()
-            {
-                Time = value.TimeStamp,
-                Value = value.Pressure
-            });
+            _inOutLines.AddPoint(value.TimeStamp, value.I, value.Pressure);
             LastMeasuredPoint = value;
             _logger.Trace($"Readed repeat: P:{value.Pressure} {PressureUnit}");
         }
@@ -597,12 +575,11 @@ namespace PressureSensorCheck.Workflow
 
         public void Dispose()
         {
-            if (IsRun)
-            {
-                _cancellation.Cancel();
-                _autorepeatWh.WaitOne(TimeSpan.FromSeconds(10));
-                _dpi620.Close();
-            }
+            if (!IsRun)
+                return;
+            _cancellation.Cancel();
+            _autorepeatWh.WaitOne(TimeSpan.FromSeconds(10));
+            _dpi620.Close();
         }
     }
 }

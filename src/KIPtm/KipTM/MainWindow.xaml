@@ -7,6 +7,7 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:ribbon="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon"
         xmlns:viewModel="clr-namespace:KipTM.ViewModel"
+        xmlns:view="clr-namespace:KipTM.Checks.View"
         mc:Ignorable="d ignore"
         d:DesignHeight="800" d:DesignWidth="840"
         Title="КипТМ" Icon="Content/icon.png"
@@ -41,9 +42,26 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ribbon:Ribbon Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" IsEnabled="{Binding IsActiveSwitchServices, UpdateSourceTrigger=PropertyChanged}">
+        <ribbon:Ribbon Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"  x:Name="Ribbon"
+                       IsEnabled="{Binding IsActiveSwitchServices, UpdateSourceTrigger=PropertyChanged}">
+            <ribbon:Ribbon.HelpPaneContent>
+                <StackPanel Orientation="Horizontal">
+                    <!--<ItemsControl ItemsSource="{Binding FastTools, UpdateSourceTrigger=PropertyChanged}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate><ContentPresenter Content="{Binding}"/></DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>-->
+                    <view:SaveView DataContext="{Binding Save}"/>
+                    <ToggleButton Content=" ^ " Checked="ToggleButton_Checked" Unchecked="ToggleButton_Unchecked"/>
+                </StackPanel>
+            </ribbon:Ribbon.HelpPaneContent>
             <ribbon:Ribbon.ApplicationMenu>
-                <ribbon:RibbonApplicationMenu CanUserResizeVertically="True" Label="KipTM"
+                <ribbon:RibbonApplicationMenu CanUserResizeVertically="True" Label="KipTM" Visibility="Collapsed"
                     LargeImageSource="Content/icon.png"
                     SmallImageSource="Content/icon.png">
                     <ribbon:RibbonApplicationMenuItem Header="КТМ" ImageSource="Content/icon.png">
