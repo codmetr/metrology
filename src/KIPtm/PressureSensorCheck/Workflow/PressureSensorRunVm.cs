@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -74,7 +75,9 @@ namespace PressureSensorCheck.Workflow
         public PressureSensorRunVm(PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator)
         {
             Measured = new ObservableCollection<MeasuringPoint>();
-            _inOutLines = new LinesInOutViewModel("I", "I, A", Color.Black, 1, _periodViewGraphic, "P", "P, mBar", Color.Brown, 2, _periodViewGraphic);
+            _inOutLines = new LinesInOutViewModel(
+                "I", $"I, {OutUnit.ToStringLocalized(CultureInfo.CurrentUICulture)}", Color.Black, 1, _periodViewGraphic,
+                "P", $"P,  {config.Unit.ToStringLocalized(CultureInfo.CurrentUICulture)}", Color.Brown, 2, _periodViewGraphic);
             _dpi620 = dpi620;
             _dpiConf = dpiConf;
             _logger = NLog.LogManager.GetLogger("PressureSensorPointsConfigVm");

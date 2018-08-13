@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:workflow="clr-namespace:PressureSensorCheck.Workflow;assembly=PressureSensorCheck"
+             xmlns:view="clr-namespace:KipTM.Checks.View"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance workflow:PressureSensorResultVM}"
              d:DesignHeight="600" d:DesignWidth="1000">
     <UserControl.Resources>
@@ -11,10 +12,12 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Skins/FluentSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <DataTemplate x:Key="HeaderPin">
+            <DataTemplate x:Key="HeaderPin" DataType="workflow:PointViewModel">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Pвх, "/>
-                    <TextBlock Text="бар"/><!--todo: bind to Unit: {Binding Conf.Unit, Converter={StaticResource UnitsStringConverter}}-->
+                    <TextBlock>
+                        <Run Text="Pвх, "/>
+                        <Run Text="{Binding DataContext.Conf.Unit, Converter={StaticResource UnitsStringConverter}, RelativeSource={RelativeSource AncestorType={x:Type view:PressureSensorResultsView}}}"/>
+                    </TextBlock>
                 </StackPanel>
             </DataTemplate>
             <DataTemplate x:Key="ColumnIsCorrect">

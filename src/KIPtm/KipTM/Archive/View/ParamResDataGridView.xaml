@@ -35,7 +35,7 @@
             </DataGridTemplateColumn>
             <DataGridTemplateColumn Header="Допуск">
                 <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="archive:IParameterResultViewModel">
+                    <DataTemplate DataType="archive1:IParameterResultViewModel">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding Tolerance}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                             <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
@@ -45,7 +45,7 @@
             </DataGridTemplateColumn>
             <DataGridTemplateColumn Header="Результат">
                 <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate DataType="archive:IParameterResultViewModel">
+                    <DataTemplate DataType="archive1:IParameterResultViewModel">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,5,0">
                             <TextBlock Text="{Binding Error}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
                             <TextBlock Text="{Binding Unit}" Style="{StaticResource ItemedValueTextBoxStyle}"/>
