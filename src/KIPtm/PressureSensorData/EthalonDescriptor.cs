@@ -7,6 +7,24 @@ namespace PressureSensorData
     /// </summary>
     public class EthalonDescriptor
     {
+        /// <summary>
+        /// Копия
+        /// </summary>
+        /// <returns></returns>
+        public EthalonDescriptor DeepCopy()
+        {
+            return new EthalonDescriptor()
+            {
+                Title = Title,
+                SensorType = SensorType,
+                SerialNumber = SerialNumber,
+                RegNum = RegNum,
+                Category = Category,
+                ErrorClass = ErrorClass,
+                CheckCertificateNumber = CheckCertificateNumber,
+                CheckCertificateDate = CheckCertificateDate,
+            };
+        }
 
         /// <summary>
         /// Наименование:

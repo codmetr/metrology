@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ArchiveData.DTO;
 using KipTM.Interfaces;
 
@@ -8,7 +9,7 @@ namespace PressureSensorData
     /// <summary>
     /// Внутренний контейнер конфигурации проверки
     /// </summary>
-    public class PressureSensorConfig:BaseCheckData
+    public class PressureSensorConfig : BaseCheckData
     {
         public PressureSensorConfig()
         {
@@ -46,7 +47,34 @@ namespace PressureSensorData
                     SensorType = "Вольтметр",
                     Title = "[Наименование]"
                 },
-        };
+            };
+        }
+
+        protected PressureSensorConfig FillCopy(PressureSensorConfig data)
+        {
+            FillCopy((BaseCheckData)data);
+            data.ReportNumber = ReportNumber;
+            data.ReportDate = ReportDate;
+            data.CertificateNumber = CertificateNumber;
+            data.CertificateDate = CertificateDate;
+            data.EthalonPressure = EthalonPressure.DeepCopy();
+            data.EthalonOut = EthalonOut.DeepCopy();
+            data.Points = Points.Select(el => el.DeepCopy()).ToList();
+            data.VpiMax = VpiMax;
+            data.VpiMin = VpiMin;
+            data.Unit = Unit;
+            data.TolerancePercentVpi = TolerancePercentVpi;
+            data.ToleranceDelta = ToleranceDelta;
+            data.TolerancePercentSigma = TolerancePercentSigma;
+            data.OutputRange = OutputRange;
+            return data;
+        }
+
+        public PressureSensorConfig DeepCopy()
+        {
+            var data = new PressureSensorConfig();
+            FillCopy(data);
+            return data;
         }
 
         /// <summary>

@@ -7,6 +7,18 @@ namespace PressureSensorData
     /// </summary>
     public class PressureSensorPoint
     {
+        public PressureSensorPoint DeepCopy()
+        {
+            return new PressureSensorPoint()
+            {
+                PressurePoint = PressurePoint,
+                PressureUnit = PressureUnit,
+                OutPoint = OutPoint,
+                OutUnit = OutUnit,
+                Tollerance = Tollerance,
+            };
+        }
+
         /// <summary>
         /// Точка давления
         /// </summary>

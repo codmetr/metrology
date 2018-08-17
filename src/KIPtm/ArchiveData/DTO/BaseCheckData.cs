@@ -10,6 +10,36 @@ namespace ArchiveData.DTO
     /// </summary>
     public class BaseCheckData
     {
+        protected void FillCopy(BaseCheckData data)
+        {
+            data.User = User;
+            data.ChiefLab = ChiefLab;
+            data.Validity = Validity;
+            data.Master = Master;
+            data.Name = Name;
+            data.SensorType = SensorType;
+            data.SensorModel = SensorModel;
+            data.RegNum = RegNum;
+            data.NumberLastCheck = NumberLastCheck;
+            data.SerialNumber = SerialNumber;
+            data.CheckedParameters = CheckedParameters;
+            data.ChecklLawBase = ChecklLawBase;
+            data.Company = Company;
+            data.Temperature = Temperature;
+            data.Humidity = Humidity;
+            data.DayPressure = DayPressure;
+            data.CommonVoltage = CommonVoltage;
+        }
+
+
+        public BaseCheckData DeepCopy()
+        {
+            var data = new BaseCheckData();
+            FillCopy(data);
+            return data;
+        }
+
+
         /// <summary>
         /// Поверитель:
         /// </summary>
