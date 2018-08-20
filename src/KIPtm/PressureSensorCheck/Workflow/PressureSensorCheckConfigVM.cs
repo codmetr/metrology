@@ -7,6 +7,7 @@ using KipTM.Checks.ViewModel.Config;
 using KipTM.EventAggregator;
 using KipTM.Interfaces;
 using KipTM.ViewModel.Events;
+using PressureSensorCheck.Workflow.Content;
 using PressureSensorData;
 using Tools.View;
 
@@ -17,12 +18,11 @@ namespace PressureSensorCheck.Workflow
     /// </summary>
     public class PressureSensorCheckConfigVm : INotifyPropertyChanged
     {
-        private ObservableCollection<BaseCheckData> _templates;
-        private BaseCheckData _selectedTemplate;
         private bool _isTemplatePreview;
         private CheckPressureLogicConfigVm _config;
         private DPI620GeniiConfig _dpiConfig;
         private readonly IEventAggregator _agregator;
+        private readonly TemplateStore<PressureSensorConfig> _templates;
 
         public PressureSensorCheckConfigVm(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf, IEventAggregator agregator)
         {
@@ -31,6 +31,7 @@ namespace PressureSensorCheck.Workflow
             Config = new CheckPressureLogicConfigVm(configData);
             DpiConfig = dpiConf;
             _agregator = agregator;
+            _templates = new TemplateStore<PressureSensorConfig>();
         }
 
         public string SerialNumber
@@ -98,29 +99,11 @@ namespace PressureSensorCheck.Workflow
         }
 
         /// <summary>
-        /// Набор доступных шаблонов
+        /// Набор шаблон настроек
         /// </summary>
-        public ObservableCollection<BaseCheckData> Templates { get { return _templates; } }
-
-        /// <summary>
-        /// Выбраный шаблон
-        /// </summary>
-        public BaseCheckData SelectedTemplate
+        public TemplateStore<PressureSensorConfig> Templates
         {
-            get { return _selectedTemplate; }
-            set
-            {
-                _selectedTemplate = value; 
-                OnPropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Применить выбранный шаблон
-        /// </summary>
-        public ICommand ApplyTemplate
-        {
-            get { return new CommandWrapper(OnApplyTemplate); }
+            get { return _templates; }
         }
 
         /// <summary>
@@ -134,11 +117,6 @@ namespace PressureSensorCheck.Workflow
                 _isTemplatePreview = value;
                 OnPropertyChanged();
             }
-        }
-
-        private void OnApplyTemplate()
-        {
-            _agregator?.Post(new HelpMessageEventArg("Применен шаблон:"));
         }
 
         #region INotifyPropertyChanged
