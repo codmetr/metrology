@@ -24,14 +24,14 @@ namespace PressureSensorCheck.Workflow
         private readonly IEventAggregator _agregator;
         private readonly TemplateStore<PressureSensorConfig> _templates;
 
-        public PressureSensorCheckConfigVm(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf, IEventAggregator agregator)
+        public PressureSensorCheckConfigVm(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf, IEventAggregator agregator, ITamplateArchive<PressureSensorConfig> archive)
         {
             Data = configData;
             Identificator = identificator;
             Config = new CheckPressureLogicConfigVm(configData);
             DpiConfig = dpiConf;
             _agregator = agregator;
-            _templates = new TemplateStore<PressureSensorConfig>();
+            _templates = new TemplateStore<PressureSensorConfig>(archive);
         }
 
         public string SerialNumber

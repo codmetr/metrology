@@ -46,7 +46,8 @@ namespace PressureSensorCheck.Workflow
                 dpiConf.SelectPort = ports.FirstOrDefault();
             var res = new PressureSensorResult();
 
-            var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf, agregator);
+            var configArchive = new TemplateArchive<PressureSensorConfig>();
+            var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf, agregator, configArchive);
             var dpi = AppVersionHelper.CurrentAppVersionType == AppVersionHelper.AppVersionType.Emulation?
                 (IDPI620Driver)new DPI620Emulation():
                 (IDPI620Driver)new DPI620DriverCom();

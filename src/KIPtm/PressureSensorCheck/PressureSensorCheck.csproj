@@ -115,6 +115,7 @@
     <Compile Include="Workflow\PressureSensorRunVm.cs" />
     <Compile Include="Workflow\Content\PressureSensorUserChannel.cs" />
     <Compile Include="Workflow\PressureSensorWorkflow.cs" />
+    <Compile Include="Workflow\Content\TemplateArchive.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArchiveData\ArchiveData.csproj">
