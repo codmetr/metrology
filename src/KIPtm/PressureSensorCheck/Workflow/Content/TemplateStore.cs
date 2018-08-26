@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,19 +12,22 @@ namespace PressureSensorCheck.Workflow.Content
     /// <summary>
     /// Коллекция шаблонов настройки
     /// </summary>
-    public class TemplateStore<T>:INotifyPropertyChanged
+    public class TemplateStore<T>: INotifyPropertyChanged where T : class
+
     {
         private TemplateViewModel<T> _selectedTemplate;
+        private ITamplateArchive<T> _archive;
+        private T _currentDate;
 
         public TemplateStore(ITamplateArchive<T> archive)
         {
+            _archive = archive;
             Templates = new ObservableCollection<TemplateViewModel<T>>();
+            foreach (var item in _archive.GetArchive())
+            {
+                Templates.Add(new TemplateViewModel<T>() { Name = item.Key, Data = item.Value });
+            }
         }
-
-        //public TemplateStore()
-        //{
-        //    Templates = new ObservableCollection<TemplateViewModel<T>>();
-        //}
 
         /// <summary>
         /// Коллекция шаблонов настроек
@@ -31,14 +35,14 @@ namespace PressureSensorCheck.Workflow.Content
         public ObservableCollection<TemplateViewModel<T>> Templates { get; private set; }
 
         /// <summary>
-        /// Выбранный шаблон
+        /// Выбранный из списка шаблон
         /// </summary>
         public TemplateViewModel<T> SelectedTemplate
         {
             get { return _selectedTemplate; }
             set
             {
-                if(value == _selectedTemplate)
+                if (value == _selectedTemplate)
                     return;
                 _selectedTemplate = value;
                 OnPropertyChanged();
@@ -46,18 +50,25 @@ namespace PressureSensorCheck.Workflow.Content
         }
 
         /// <summary>
-        /// Добавить в коллекцию шаблон
+        /// Текущее состояние настроек
         /// </summary>
-        /// <param name="template"></param>
-        public void RemoveTemplate(TemplateViewModel<T> template)
+        public T LastData
         {
-            Templates.Remove(template);
+            get { return _currentDate; }
+            set
+            {
+                if (value == _currentDate)
+                    return;
+                _currentDate = value;
+                OnUpdatedTemplate(value);
+                OnPropertyChanged();
+            }
         }
 
-        public bool Validate(TemplateViewModel<T> template)
-        {
-            return Templates.Any(el => el.Name == template.Name);
-        }
+        /// <summary>
+        /// Обновлен шаблон
+        /// </summary>
+        public event Action<T> UpdatedTemplate;
 
         /// <summary>
         /// Применить выбранный шаблон
@@ -77,13 +88,33 @@ namespace PressureSensorCheck.Workflow.Content
         /// </summary>
         public ICommand AddTemplate
         {
-            get { return new CommandWrapper(OnApplyTemplate); }
+            get { return new CommandWrapper(OnAddTemplate); }
         }
 
+        /// <summary>
+        /// Применить шаблон
+        /// </summary>
         private void OnApplyTemplate()
         {
-            Templates.Add(SelectedTemplate);
+            LastData = SelectedTemplate.Data;
             //_agregator?.Post(new HelpMessageEventArg("Применен шаблон:"));
+        }
+
+        /// <summary>
+        /// Добавить шаблон
+        /// </summary>
+        private void OnAddTemplate()
+        {
+            Templates.Add(new TemplateViewModel<T>() { Name = NameTemplate, Data = LastData });
+        }
+
+        /// <summary>
+        /// Вызвать событие о том, что шаблон был обновлен
+        /// </summary>
+        /// <param name="obj"></param>
+        protected virtual void OnUpdatedTemplate(T obj)
+        {
+            UpdatedTemplate?.Invoke(obj);
         }
 
         #region INotifyPropertyChanged

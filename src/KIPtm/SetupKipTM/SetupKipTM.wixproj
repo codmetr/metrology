@@ -265,17 +265,17 @@
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <BootstrapperFile Include="Prerequisites\Microsoft.Windows.Installer.3.1">
-      <ProductName>Microsoft.Windows.Installer.3.1</ProductName>
-    </BootstrapperFile>
-    <BootstrapperFile Include="Prerequisites\Microsoft.Net.Framework.3.5">
-      <ProductName>Microsoft.Net.Framework.3.5</ProductName>
-    </BootstrapperFile>
-    <BootstrapperFile Include="Prerequisites\SAP.CrystalReports14.NET.2.0">
-      <ProductName>SAP.CrystalReports14.NET.2.0</ProductName>
-    </BootstrapperFile>
-  </ItemGroup>
+  <!-- <ItemGroup> -->
+    <!-- <BootstrapperFile Include="Prerequisites\Microsoft.Windows.Installer.3.1"> -->
+      <!-- <ProductName>Microsoft.Windows.Installer.3.1</ProductName> -->
+    <!-- </BootstrapperFile> -->
+    <!-- <BootstrapperFile Include="Prerequisites\Microsoft.Net.Framework.3.5"> -->
+      <!-- <ProductName>Microsoft.Net.Framework.3.5</ProductName> -->
+    <!-- </BootstrapperFile> -->
+    <!-- <BootstrapperFile Include="Prerequisites\SAP.CrystalReports14.NET.2.0"> -->
+      <!-- <ProductName>SAP.CrystalReports14.NET.2.0</ProductName> -->
+    <!-- </BootstrapperFile> -->
+  <!-- </ItemGroup> -->
   <ItemGroup>
     <Folder Include="Prerequisites" />
   </ItemGroup>
@@ -302,7 +302,7 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
-  <Target Name="AfterBuild">
-    <GenerateBootstrapper ApplicationFile="$(TargetFileName)" ApplicationName="KipTm" BootstrapperItems="@(BootstrapperFile)" ComponentsLocation="Relative" CopyComponents="true" OutputPath="$(OutputPath)" Path="$(ProjectDir)..\Bootstrappers\" />
-  </Target>
+  <!-- <Target Name="AfterBuild"> -->
+    <!-- <GenerateBootstrapper ApplicationFile="$(TargetFileName)" ApplicationName="KipTm" BootstrapperItems="@(BootstrapperFile)" ComponentsLocation="Relative" CopyComponents="true" OutputPath="$(OutputPath)" Path="$(ProjectDir)..\Bootstrappers\" /> -->
+  <!-- </Target> -->
 </Project>

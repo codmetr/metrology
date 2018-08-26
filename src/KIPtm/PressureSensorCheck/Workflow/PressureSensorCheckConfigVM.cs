@@ -16,22 +16,39 @@ namespace PressureSensorCheck.Workflow
     /// <summary>
     /// Конфигурация проверки
     /// </summary>
-    public class PressureSensorCheckConfigVm : INotifyPropertyChanged
+    public class PressureSensorCheckConfigVm : INotifyPropertyChanged, IDisposable
     {
         private bool _isTemplatePreview;
         private CheckPressureLogicConfigVm _config;
         private DPI620GeniiConfig _dpiConfig;
         private readonly IEventAggregator _agregator;
         private readonly TemplateStore<PressureSensorConfig> _templates;
+        private readonly ITamplateArchive<PressureSensorConfig> _confArch;
+        private PressureSensorConfig _data;
 
-        public PressureSensorCheckConfigVm(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf, IEventAggregator agregator, ITamplateArchive<PressureSensorConfig> archive)
+        public PressureSensorCheckConfigVm(
+            TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf,
+            IEventAggregator agregator, ITamplateArchive<PressureSensorConfig> archive)
         {
             Data = configData;
             Identificator = identificator;
             Config = new CheckPressureLogicConfigVm(configData);
             DpiConfig = dpiConf;
             _agregator = agregator;
+            _confArch = archive;
             _templates = new TemplateStore<PressureSensorConfig>(archive);
+            _templates.LastData = configData;
+            _templates.UpdatedTemplate += TemplatesOnUpdatedTemplate;
+        }
+
+        /// <summary>
+        /// Обновлен применяемый шаблон настроек
+        /// </summary>
+        /// <param name="pressureSensorConfig"></param>
+        private void TemplatesOnUpdatedTemplate(PressureSensorConfig pressureSensorConfig)
+        {
+            Data.SetCopy(pressureSensorConfig);
+            OnPropertyChanged(nameof(Data));
         }
 
         public string SerialNumber
@@ -56,16 +73,25 @@ namespace PressureSensorCheck.Workflow
         /// <remarks>
         /// Использовать на разметке экрана только в случае единственного места изменения, так как без INotifyPropertyChanged
         /// </remarks>
-        public PressureSensorConfig Data { get; }
+        public PressureSensorConfig Data
+        {
+            get { return _data; }
+            private set
+            {
+                _data = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Единицы измерения давления
         /// </summary>
-        public Units PressUnit {
+        public Units PressUnit
+        {
             get { return Data.Unit; }
             set
             {
-                if(value == Data.Unit)
+                if (value == Data.Unit)
                     return;
                 Data.Unit = value;
                 foreach (var point in Config.Points)
@@ -82,7 +108,9 @@ namespace PressureSensorCheck.Workflow
         public CheckPressureLogicConfigVm Config
         {
             get { return _config; }
-            set { _config = value;
+            set
+            {
+                _config = value;
                 OnPropertyChanged();
             }
         }
@@ -93,7 +121,9 @@ namespace PressureSensorCheck.Workflow
         public DPI620GeniiConfig DpiConfig
         {
             get { return _dpiConfig; }
-            set { _dpiConfig = value;
+            set
+            {
+                _dpiConfig = value;
                 OnPropertyChanged();
             }
         }
@@ -129,5 +159,10 @@ namespace PressureSensorCheck.Workflow
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            _confArch.SetLast(Data);
+        }
     }
 }

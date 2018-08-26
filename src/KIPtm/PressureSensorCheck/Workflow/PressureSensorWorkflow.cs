@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using ArchiveData;
 using ArchiveData.DTO;
@@ -33,11 +34,23 @@ namespace PressureSensorCheck.Workflow
                 CommonResult = "пригоден",
                 VisualCheckResult = "без видимых дефектов",
             };
-            if (conf == null)
+            var configArchive = new TemplateArchive<PressureSensorConfig>();
+            try
             {
-                conf = PressureSensorConfig.GetDefault();
-                conf.CertificateNumber = Properties.Settings.Default.CertificateNumber.ToString();
-                conf.ReportNumber = Properties.Settings.Default.ReportNumber.ToString();
+                conf = configArchive.GetLast();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"On load config throwed exception: {e.ToString()}");
+            }
+            finally
+            {
+                if (conf == null)
+                {
+                    conf = PressureSensorConfig.GetDefault();
+                    conf.CertificateNumber = Properties.Settings.Default.CertificateNumber.ToString();
+                    conf.ReportNumber = Properties.Settings.Default.ReportNumber.ToString();
+                }
             }
 
             var ports = System.IO.Ports.SerialPort.GetPortNames();
@@ -46,7 +59,6 @@ namespace PressureSensorCheck.Workflow
                 dpiConf.SelectPort = ports.FirstOrDefault();
             var res = new PressureSensorResult();
 
-            var configArchive = new TemplateArchive<PressureSensorConfig>();
             var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf, agregator, configArchive);
             var dpi = AppVersionHelper.CurrentAppVersionType == AppVersionHelper.AppVersionType.Emulation?
                 (IDPI620Driver)new DPI620Emulation():

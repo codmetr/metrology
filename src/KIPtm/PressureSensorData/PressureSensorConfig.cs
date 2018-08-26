@@ -77,6 +77,11 @@ namespace PressureSensorData
             return data;
         }
 
+        public void SetCopy(PressureSensorConfig data)
+        {
+            data.FillCopy(this);
+        }
+
         /// <summary>
         /// Номер протокола:
         /// </summary>
