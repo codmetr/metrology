@@ -318,6 +318,10 @@ namespace PressureSensorCheck.Workflow
                         return;
                     TryStart(check, cancel);
                 }
+                catch (Exception ex)
+                {
+                    Log($"Config error: {ex.ToString()}");
+                }
                 finally
                 {
                     IsRun = false;
@@ -374,7 +378,7 @@ namespace PressureSensorCheck.Workflow
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.ToString());
+                Log($"OpenPort (_dpiConf.SelectPort) error: {ex.ToString()}");
                 ShowMessage("Не удалось связаться с DPI620Genii. Укажите конфигурацию DPI620Genii на вкладке \"Настройка\": укажите порт подключения", cancel);
                 return null;
             }
@@ -415,6 +419,10 @@ namespace PressureSensorCheck.Workflow
                         if (!cancel.IsCancellationRequested)
                             UpdateResult(check.Result);
                 }
+            }
+            catch (Exception ex)
+            {
+                Log($"TryStart exception: {ex.ToString()}");
             }
             finally
             {
@@ -543,6 +551,13 @@ namespace PressureSensorCheck.Workflow
             _invoker = message;
         }
 
+        private void Log(string msg)
+        {
+            if(_logger == null)
+                return;
+            _logger.Trace(msg);
+        }
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -561,7 +576,7 @@ namespace PressureSensorCheck.Workflow
             Measured.Add(value);
             _inOutLines.AddPoint(value.TimeStamp, value.I, value.Pressure);
             LastMeasuredPoint = value;
-            _logger.Trace($"Readed repeat: P:{value.Pressure} {PressureUnit}");
+            Log($"Readed repeat: P:{value.Pressure} {PressureUnit}");
         }
 
         public void OnError(Exception error)

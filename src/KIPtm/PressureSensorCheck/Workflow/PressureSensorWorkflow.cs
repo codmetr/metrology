@@ -60,9 +60,10 @@ namespace PressureSensorCheck.Workflow
             var res = new PressureSensorResult();
 
             var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf, agregator, configArchive);
+            var dpiLog = NLog.LogManager.GetLogger("Dpi620");
+            var dpiCom = new DPI620DriverCom().Setlog((msg) => dpiLog.Trace(msg));
             var dpi = AppVersionHelper.CurrentAppVersionType == AppVersionHelper.AppVersionType.Emulation?
-                (IDPI620Driver)new DPI620Emulation():
-                (IDPI620Driver)new DPI620DriverCom();
+                (IDPI620Driver)new DPI620Emulation():dpiCom;
             var run = new PressureSensorRunVm(conf, dpi, dpiConf, result, agregator);
             var resultVm = new PressureSensorResultVM(id, accessor, res, conf, agregator);
 

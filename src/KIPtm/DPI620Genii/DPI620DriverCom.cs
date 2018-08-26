@@ -34,7 +34,13 @@ namespace DPI620Genii
         private SerialPort _serial;
         private StreamWriter _writer;
         private StreamReader _reader;
-        private Action<string> _toLog = s => {};
+        private Action<string> _toLog = s => { };
+
+        /// <summary>
+        /// Начало опроса портов 0/1 - с нулевого или первого номера
+        /// </summary>
+        private int _startIndex = 0;
+
         //public void Open(string portName)
         //{
         //    _serial = new SerialPort(portName);
@@ -56,7 +62,7 @@ namespace DPI620Genii
         //        Thread.Sleep(100);
 
         //        Write("*ri?\r\n");
-                
+
         //        Thread.Sleep(400);
         //        string readedLine;
         //        while ((readedLine = Read()).Length > 0) {
@@ -106,6 +112,7 @@ namespace DPI620Genii
             _serial.RtsEnable = false;
             _serial.DtrEnable = true;
             _serial.ReadTimeout = 1000;
+            _serial.WriteTimeout = 1000;
             Log("Set port: " + portName);
         }
 
@@ -120,12 +127,18 @@ namespace DPI620Genii
                 Write("*km=r\r\n");
                 Write("*su3=1\r\n");
                 Write("*km=r\r\n");
-                Write("*ir2?\r\n");
-                Read();
-                Read();
-                Read();
-                Read();
-                Read();
+                //Write("*ri?\r\n");
+                var dpiType = Read();
+                if (dpiType.Contains("DPI"))
+                {
+                    var tName = dpiType.Split('=')[1];
+                    Log($"Device {tName} connected");
+                }
+                ReadConf();
+                //Read();
+                //Read();
+                //Read();
+                //Read();
             }
             catch (IOException ex)
             {
@@ -137,6 +150,99 @@ namespace DPI620Genii
                 Log(e.ToString());
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Прочитать конфигацию
+        /// </summary>
+        /// <remarks>
+        /// *pc?                                    //конфигурация по текущему каналу?
+        /// !PC=0.000000,20.000000,10,10.000000,    //
+        /// *re?                                    //последняя ошибка?
+        /// !RE=00000000                            //нет ошибок        
+        /// *pc0?                                   //конфигурация по каналу 0?
+        /// !PC=0.000000,20.000000,10,10.000000,    //
+        /// *re?                                    //последняя ошибка?                                        
+        /// !RE=00000000                            //                                        
+        /// *pc1?                                   //конфигурация по каналу 1?    
+        /// !PC=0.000000,0.000000,0,0.000000,       //
+        /// *re?                                    //последняя ошибка?                       
+        /// !RE=00000000                            //                                        
+        /// *pc2?                                   //конфигурация по каналу 2?       
+        ///     * re?                                    //последняя ошибка?                       
+        /// !RE=00000002                            //что-то вроде "недопустимая команда"
+        /// *re?                                    //последняя ошибка?
+        /// !RE=00000000                            //                       
+        /// *pc2?                                   //                                        
+        ///     * re?                                    //последняя ошибка?                       
+        /// !RE=00000002                            //что-то вроде "недопустимая команда"
+        /// 
+        /// этот лог обозначает - настроены каналы 0,1, канал 2 - не задействован(видимо источник)
+        /// </remarks>
+        private void ReadConf()
+        {
+            // канал 0
+            Write("*pr0?\r\n");
+            try
+            {
+                var ch0Descr = Read();//TODO: parce
+                _startIndex = 0;
+            }
+            catch (Exception e)
+            {
+                Log($"On read config channel 0 error: {e.ToString()}");
+                _startIndex = 1;
+            }
+
+            // канал 1
+            Write("*pr1?\r\n");
+            try
+            {
+                var ch1Descr = Read();//TODO: parce
+            }
+            catch (Exception e)
+            {
+                Log($"On read config channel 1 error: {e.ToString()}");
+            }
+
+            // канал 2
+            Write("*pr2?\r\n");
+            try
+            {
+                var ch2Descr = Read();//TODO: parce
+            }
+            catch (Exception e)
+            {
+                Log($"On read config channel 2 error: {e.ToString()}");
+            }
+        }
+
+        /// <summary>
+        /// Проверка связи
+        /// </summary>
+        /// <returns></returns>
+        public bool Ping()
+        {
+            try
+            {
+                Write("*ri?\r\n");
+                var dpiType = Read();
+                if (dpiType.Contains("DPI"))
+                {
+                    var tName = dpiType.Split('=')[1];
+                    Log($"Ping: {tName} Ok");
+                    return true;
+                }
+            }
+            catch (IOException ex)
+            {
+                Log(ex.ToString());
+            }
+            catch (Exception e)
+            {
+                Log(e.ToString());
+            }
+            return false;
         }
 
         //public void SetUnits(int slotId, String unitCode)
@@ -165,14 +271,8 @@ namespace DPI620Genii
             try
             {
                 //if (("UCMA" == unitCode) || ("UVVO" == unitCode) || ("UVMV" == unitCode))
-                if(slotId == 1)
-                {
-                    Write("*ir1?\r\n");
-                }
-                else
-                {
-                    Write("*ir2?\r\n");
-                }
+                var slotindex = _startIndex + slotId - 1;
+                Write($"*ir{slotindex}?\r\n");
                 Read();
                 var sb = Read();
                 //Log("RAW620: " + unitCode + " " + sb);
@@ -213,7 +313,7 @@ namespace DPI620Genii
             var sb = new StringBuilder();
             foreach (char c in str)
             {
-                sb.Append(((byte) c).ToString("X2"));
+                sb.Append(((byte)c).ToString("X2"));
                 sb.Append(" ");
             }
             return sb.ToString();
