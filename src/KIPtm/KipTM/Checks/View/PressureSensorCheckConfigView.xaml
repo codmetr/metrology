@@ -545,6 +545,35 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </Grid>
+                    <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
+                        Внешний источник давления/разряжения:
+                    </TextBlock>
+                    <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
+                                <Setter Property="TextWrapping" Value="Wrap"/>
+                            </Style>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}">
+                                <Setter Property="TextWrapping" Value="Wrap"/>
+                            </Style>
+                            <Style TargetType="ComboBox" BasedOn="{StaticResource CbBasicStyle}"/>
+                        </Grid.Resources>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="250"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource TblBasicStyle}">Тип источника:</TextBlock>
+                        <ComboBox Grid.Row="0" Grid.Column="1" SelectedItem="{Binding SelectPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Ports}"/>
+                    </Grid>
                 </StackPanel>
             </TabItem>
         </TabControl>
