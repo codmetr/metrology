@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading;
 using CheckFrame.Checks;
 using KipTM.Archive;
+using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
 using KipTM.Model.Checks;
 using NLog;
+using PressureSensorCheck.Channels;
 using PressureSensorCheck.Check.Steps;
 using PressureSensorData;
 
@@ -18,16 +20,18 @@ namespace PressureSensorCheck.Check
         public static string CheckName = "Поверка датчика давления";
         private SimpleDataBuffer _dataBuffer = new SimpleDataBuffer();
 
-        private IEthalonChannel _pressure;
-        private IEthalonChannel _voltage;
+        private readonly IEthalonSourceChannel<Units> _pressureSrc;
+        private readonly IEthalonChannel _pressure;
+        private readonly IEthalonChannel _voltage;
 
         private PressureSensorPointResult _resultPoint = null;
         private PressureSensorResult _result = null;
 
 
-        public PresSensorCheck(Logger logger, IEthalonChannel pressure, IEthalonChannel voltage, PressureSensorResult result) : base(logger)
+        public PresSensorCheck(Logger logger, IEthalonSourceChannel<Units> pressureSrc, IEthalonChannel pressure, IEthalonChannel voltage, PressureSensorResult result) : base(logger)
         {
             _result = result;
+            _pressureSrc = pressureSrc;
             _pressure = pressure;
             _voltage = voltage;
         }
@@ -57,9 +61,10 @@ namespace PressureSensorCheck.Check
             var count = pressureConverterConfig.Points.Count;
             var backStepPoints = new Tuple<PressureSensorPoint, PressureSensorPointResult>[count];
             var i = 0;
+            var presSourceUch = new UChPresSource(ChConfig.UsrChannel);
             foreach (var point in pressureConverterConfig.Points)
             {
-                var step = new StepMainError(point, ChConfig.UsrChannel, _pressure, _voltage, _logger);//TODO: добавить эталоны
+                var step = new StepMainError(point, ChConfig.UsrChannel, _pressureSrc?? presSourceUch, _pressure, _voltage, _logger);//TODO: добавить эталоны
                 backStepPoints[i] = new Tuple<PressureSensorPoint, PressureSensorPointResult>(point, step.Result);
                 step.SetBuffer(_dataBuffer);
                 steps.Add(new CheckStepConfig(step, false));

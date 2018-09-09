@@ -9,6 +9,6 @@ namespace KipTM.Interfaces.Channels
 
         void Stop();
 
-        double GetEthalonValue(double point, CancellationToken calcel);
+        double GetEthalonValue(double point, CancellationToken cancel);
     }
 }

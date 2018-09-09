@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using CheckFrame.Checks.Steps;
+using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
 using KipTM.Model.Channels;
 using KipTM.Model.Checks;
@@ -36,6 +37,10 @@ namespace PressureSensorCheck.Check.Steps
         /// </summary>
         private readonly IUserChannel _userChannel;
         /// <summary>
+        /// Эталонный источника давления
+        /// </summary>
+        private readonly IEthalonSourceChannel<Units> _ethalonPressureSource;
+        /// <summary>
         /// Эталонный измеритель давления
         /// </summary>
         private readonly IEthalonChannel _ethalonPressure;
@@ -47,12 +52,14 @@ namespace PressureSensorCheck.Check.Steps
         /// <summary>
         /// Шаг прямого хода поверки датчика давления
         /// </summary>
-        public StepMainError(PressureSensorPoint point, IUserChannel userChannel, IEthalonChannel ethalonPressure, IEthalonChannel ethalonVoltage, Logger logger)
+        public StepMainError(PressureSensorPoint point, IUserChannel userChannel,
+            IEthalonSourceChannel<Units> ethalonPressureSource, IEthalonChannel ethalonPressure, IEthalonChannel ethalonVoltage, Logger logger)
         {
             Name = $"Проверка основной погрешности на точке {point.PressurePoint} {point.PressureUnit}";
             _point = point;
             _result = new PressureSensorPointResult();
             _userChannel = userChannel;
+            _ethalonPressureSource = ethalonPressureSource;
             _ethalonPressure = ethalonPressure;
             _ethalonVoltage = ethalonVoltage;
             _logger = logger;
@@ -66,10 +73,12 @@ namespace PressureSensorCheck.Check.Steps
         {
             OnStarted();
             Log($"Wait set {_point.PressurePoint} {_point.PressureUnit}");
-            _userChannel.Message = $"Установите на эталонном источнике давления значение {_point.PressurePoint} {_point.PressureUnit}, задайте реальное значение давления в графе Pэт и нажмите \"Далее\"";
-            var wh = new ManualResetEvent(false);
-            _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
-            WaitHandle.WaitAny(new[] { wh, cancel.WaitHandle });
+
+            _ethalonPressureSource.SetEthalonValue(_point.PressurePoint, _point.PressureUnit, cancel);
+            //_userChannel.Message = $"Установите на эталонном источнике давления значение {_point.PressurePoint} {_point.PressureUnit}, задайте реальное значение давления в графе Pэт и нажмите \"Далее\"";
+            //var wh = new ManualResetEvent(false);
+            //_userChannel.NeedQuery(UserQueryType.GetAccept, wh);
+            //WaitHandle.WaitAny(new[] { wh, cancel.WaitHandle });
             if (cancel.IsCancellationRequested)
                 return;
             var valueVoltage = _ethalonVoltage.GetEthalonValue(_point.OutPoint, cancel);

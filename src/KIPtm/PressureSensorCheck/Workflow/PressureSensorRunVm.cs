@@ -30,7 +30,7 @@ namespace PressureSensorCheck.Workflow
     /// <summary>
     /// Выпонение проверки
     /// </summary>
-    public class PressureSensorRunVm : INotifyPropertyChanged, IObserver<MeasuringPoint>, ISubscriber<Action<Action>>, IDisposable
+    public class PressureSensorRunVm : INotifyPropertyChanged, IObserver<MeasuringPoint>, ISubscriber<Action<Action>>, IDisposable, IUserVmAsk
     {
         //private double _minP = 0;
         //private double _maxP = 100;
@@ -151,29 +151,6 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public ICommand AddPoint => new CommandWrapper(DoAddPoint);
 
-        private void DoAddPoint()
-        {
-            Points.Add(new PointViewModel()
-            {
-                Config = new PointConfigViewModel()
-                {
-                    Pressure = NewConfig.Pressure,
-                    I = NewConfig.I,
-                    dI = NewConfig.dI,
-                    Unit = PressureUnit,
-                },
-                Result = new PointResultViewModel()
-            });
-            _config.Points.Add(new PressureSensorPoint()
-            {
-                PressurePoint = NewConfig.Pressure,
-                OutPoint = NewConfig.I,
-                Tollerance = NewConfig.dI,
-                PressureUnit = PressureUnit,
-                OutUnit = Units.mA
-            });
-        }
-
         /// <summary>
         /// Измерения
         /// </summary>
@@ -274,7 +251,58 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Запустить проверку
         /// </summary>
+        public ICommand StartCheck { get { return new CommandWrapper(DoStart); } }
+
+        /// <summary>
+        /// Запустить проверку
+        /// </summary>
         public ICommand Accept { get { return new CommandWrapper(DoAccept); } }
+
+        /// <summary>
+        /// Приостановить проверку
+        /// </summary>
+        public ICommand PauseCheck { get { return new CommandWrapper(DoPause); } }
+
+        /// <summary>
+        /// Остановить проверку
+        /// </summary>
+        public ICommand StopCheck { get { return new CommandWrapper(DoStop); } }
+
+        /// <summary>
+        /// Состояние модального окна
+        /// </summary>
+        public ModalState ModalState
+        {
+            get { return _modalState; }
+            set
+            {
+                _modalState = value;
+                _invoker(() => OnPropertyChanged());
+            }
+        }
+
+        private void DoAddPoint()
+        {
+            Points.Add(new PointViewModel()
+            {
+                Config = new PointConfigViewModel()
+                {
+                    Pressure = NewConfig.Pressure,
+                    I = NewConfig.I,
+                    dI = NewConfig.dI,
+                    Unit = PressureUnit,
+                },
+                Result = new PointResultViewModel()
+            });
+            _config.Points.Add(new PressureSensorPoint()
+            {
+                PressurePoint = NewConfig.Pressure,
+                OutPoint = NewConfig.I,
+                Tollerance = NewConfig.dI,
+                PressureUnit = PressureUnit,
+                OutUnit = Units.mA
+            });
+        }
 
         internal Action DoAccept { get { return () => { this._doAccept(); }; } }
         internal Action _doAccept = () => { };
@@ -283,20 +311,15 @@ namespace PressureSensorCheck.Workflow
         /// Установить действие на подтверждение 
         /// </summary>
         /// <param name="accept"></param>
-        internal void SetAcceptAction(Action accept)
+        public void SetAcceptAction(Action accept)
         {
             _doAccept = accept;
         }
 
-        internal void ResetSetAcceptAction()
+        public void ResetSetAcceptAction()
         {
             _doAccept = () => { };
         }
-
-        /// <summary>
-        /// Запустить проверку
-        /// </summary>
-        public ICommand StartCheck { get { return new CommandWrapper(DoStart); } }
 
         private void DoStart()
         {
@@ -392,7 +415,7 @@ namespace PressureSensorCheck.Workflow
                 _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
 
             // конфигурирование шагов проверки
-            var check = new PresSensorCheck(checkLogger,
+            var check = new PresSensorCheck(checkLogger, null,
                 new DPI620Ethalon(_dpi620, inSlotNum, ChannelType.Pressure, inSlot.SelectedUnit, _config.Unit),
                 new DPI620Ethalon(_dpi620, outSlotNum, ChannelType.Current, outSlot.SelectedUnit, Units.mA), Result);
             check.ChConfig.UsrChannel = new PressureSensorUserChannel(this);
@@ -492,20 +515,10 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Приостановить проверку
         /// </summary>
-        public ICommand PauseCheck { get { return new CommandWrapper(DoPause); } }
-
-        /// <summary>
-        /// Приостановить проверку
-        /// </summary>
         private void DoPause()
         {
             throw new NotImplementedException();
         }
-
-        /// <summary>
-        /// Остановить проверку
-        /// </summary>
-        public ICommand StopCheck { get { return new CommandWrapper(DoStop); } }
 
         private void DoStop()
         {
@@ -518,26 +531,13 @@ namespace PressureSensorCheck.Workflow
         }
 
         /// <summary>
-        /// Состояние модального окна
-        /// </summary>
-        public ModalState ModalState
-        {
-            get { return _modalState; }
-            set
-            {
-                _modalState = value;
-                _invoker(() => OnPropertyChanged());
-            }
-        }
-
-        /// <summary>
         /// Вызов модального окна
         /// </summary>
         /// <param name="title"></param>
         /// <param name="msg"></param>
         /// <param name="cancel"></param>
         /// <returns></returns>
-        internal void AskModal(string title, string msg, CancellationToken cancel)
+        public void AskModal(string title, string msg, CancellationToken cancel)
         {
             ModalState.IsShowModal = true;
             var wh = new ManualResetEvent(false);

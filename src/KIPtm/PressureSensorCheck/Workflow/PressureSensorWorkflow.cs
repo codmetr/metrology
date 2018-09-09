@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using ArchiveData;
 using ArchiveData.DTO;
 using CheckFrame.Workflow;
 using DPI620Genii;
 using KipTM.EventAggregator;
+using KipTM.Interfaces;
 using KipTM.Workflow;
 using NLog;
 using PressureSensorCheck.Check;
@@ -60,11 +62,14 @@ namespace PressureSensorCheck.Workflow
             var res = new PressureSensorResult();
 
             var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf, agregator, configArchive);
+
             var dpiLog = NLog.LogManager.GetLogger("Dpi620");
             var dpiCom = new DPI620DriverCom().Setlog((msg) => dpiLog.Trace(msg));
             var dpi = AppVersionHelper.CurrentAppVersionType == AppVersionHelper.AppVersionType.Emulation?
                 (IDPI620Driver)new DPI620Emulation():dpiCom;
-            var run = new PressureSensorRunVm(conf, dpi, dpiConf, result, agregator);
+            //var run = new PressureSensorRunVm(conf, dpi, dpiConf, result, agregator);
+            var run = new PressureSensorRunVm1(conf.Unit.ToStringLocalized(CultureInfo.CurrentUICulture));
+            var runPresenter = new PressureSensorRunPresenter(run, agregator);
             var resultVm = new PressureSensorResultVM(id, accessor, res, conf, agregator);
 
             var reportUpdater =new ReportUpdater();
@@ -74,8 +79,8 @@ namespace PressureSensorCheck.Workflow
             var reportVm = new PressureSensorReportViewModel(reportMain, reportCertificate);
             var steps = new List<IWorkflowStep>()
             {
-                new SimpleWorkflowStep(configVm).SetOut(()=>UpdateRunByConf(configVm.Config, run, logger)),
-                new SimpleWorkflowStep(run).SetOut(()=>UpdateResultByRun(run, resultVm, logger)),
+                new SimpleWorkflowStep(configVm).SetOut(()=>UpdateRunByConf(configVm.Config, runPresenter, logger)),
+                new SimpleWorkflowStep(run).SetOut(()=>UpdateResultByRun(runPresenter, resultVm, logger)).AppendDisposable(runPresenter),
                 new SimpleWorkflowStep(resultVm),
                 new SimpleWorkflowStep(reportVm).SetIn(()=>
                 {
@@ -93,26 +98,13 @@ namespace PressureSensorCheck.Workflow
         /// <param name="config">конфигурация</param>
         /// <param name="run">выполнение проверки</param>
         /// <param name="logger">логгер</param>
-        private void UpdateRunByConf(CheckPressureLogicConfigVm config, PressureSensorRunVm run, Logger logger)
+        private void UpdateRunByConf(CheckPressureLogicConfigVm config, PressureSensorRunPresenter run, Logger logger)
         {
             try
             {
                 if (run.IsRun)
                     return;
-                run.Points.Clear();
-                foreach (var point in config.Points)
-                {
-                    var resPoint = run.Points.FirstOrDefault(el => Math.Abs(el.Config.Pressure - point.Pressure) < Double.Epsilon);
-                    if (resPoint == null)
-                        run.Points.Add(new PointViewModel() { Config = point, Result = new PointResultViewModel()});
-                    else
-                    {
-                        resPoint.Config.Unit = point.Unit;
-                        resPoint.Config.I = point.I;
-                        resPoint.Config.dI = point.dI;
-                        resPoint.Config.Ivar = point.Ivar;
-                    }
-                }
+                run.UpdatePoint(config.Points);
             }
             catch (Exception e)
             {
@@ -128,7 +120,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="run">проверка</param>
         /// <param name="result">результат</param>
         /// <param name="logger">логгер</param>
-        private void UpdateResultByRun(PressureSensorRunVm run, PressureSensorResultVM result, Logger logger)
+        private void UpdateResultByRun(PressureSensorRunPresenter run, PressureSensorResultVM result, Logger logger)
         {
             //if(run.IsRun)
             //    return;

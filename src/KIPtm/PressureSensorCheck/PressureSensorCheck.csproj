@@ -62,6 +62,7 @@
     <Compile Include="Check\Steps\StepInit.cs" />
     <Compile Include="Check\Steps\StepMainErrorBack.cs" />
     <Compile Include="Check\Steps\StepMainError.cs" />
+    <Compile Include="Channels\UChPresSource.cs" />
     <Compile Include="Devices\DPI620Emulation.cs" />
     <Compile Include="Devices\DPI620Factory.cs" />
     <Compile Include="Devices\DPI620Model.cs" />
@@ -114,8 +115,11 @@
     <Compile Include="Workflow\Content\PointResultViewModel.cs" />
     <Compile Include="Workflow\Content\TemplateStore.cs" />
     <Compile Include="Workflow\Content\TemplateViewModel.cs" />
+    <Compile Include="Workflow\IUserVmAsk.cs" />
     <Compile Include="Workflow\PressureSensorCheckConfigVM.cs" />
     <Compile Include="Workflow\PressureSensorResultVM.cs" />
+    <Compile Include="Workflow\PressureSensorRunPresenter.cs" />
+    <Compile Include="Workflow\PressureSensorRunVm1.cs" />
     <Compile Include="Workflow\PressureSensorRunVm.cs" />
     <Compile Include="Workflow\Content\PressureSensorUserChannel.cs" />
     <Compile Include="Workflow\PressureSensorWorkflow.cs" />

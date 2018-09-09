@@ -6,9 +6,9 @@ namespace PressureSensorCheck.Workflow
 {
     public class PressureSensorUserChannel : IUserChannel
     {
-        private readonly PressureSensorRunVm _vm;
+        private readonly IUserVmAsk _vm;
 
-        public PressureSensorUserChannel(PressureSensorRunVm vm)
+        public PressureSensorUserChannel(IUserVmAsk vm)
         {
             _vm = vm;
         }
