@@ -35,9 +35,10 @@ namespace PressureSensorCheck.Workflow
         private DateTime? _lastResultTime;
         private readonly IEventAggregator _agregator;
         private bool _isRun;
+        private readonly IContext _context;
 
 
-        public PressureSensorRunPresenter(PressureSensorRunVm1 vm, IEventAggregator agregator)
+        public PressureSensorRunPresenter(PressureSensorRunVm1 vm, IEventAggregator agregator, IContext context)
         {
             _vm = vm;
             _vm.CallAddPoint += VmOnCallAddPoint;
@@ -45,6 +46,7 @@ namespace PressureSensorCheck.Workflow
             _vm.CallStartCheck += VmOnCallStartCheck;
             _vm.CallStopCheck += VmOnCallStopCheck;
             _agregator = agregator;
+            _context = context;
         }
 
         private void VmOnCallAddPoint()

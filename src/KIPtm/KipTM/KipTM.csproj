@@ -199,6 +199,7 @@
     <Compile Include="Skins\Converters\InverseBooleanConverter.cs" />
     <Compile Include="Skins\Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModel\OneBtnDescriptor.cs" />
+    <Compile Include="ViewModel\WpfContext.cs" />
     <Compile Include="WindowAlt.xaml.cs">
       <DependentUpon>WindowAlt.xaml</DependentUpon>
     </Compile>

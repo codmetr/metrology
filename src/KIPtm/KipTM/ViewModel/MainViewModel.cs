@@ -31,7 +31,7 @@ using Tools.View;
 
 namespace KipTM.ViewModel
 {
-    public class MainViewModel : ISubscriber<EventCheckState>, ISubscriber<ErrorMessageEventArg>, ISubscriber<HelpMessageEventArg>, ISubscriber<Action<Action>>, INotifyPropertyChanged
+    public class MainViewModel : WpfContext, ISubscriber<EventCheckState>, ISubscriber<ErrorMessageEventArg>, ISubscriber<HelpMessageEventArg>, INotifyPropertyChanged
     {
 
         #region Переменные
@@ -50,7 +50,6 @@ namespace KipTM.ViewModel
 
 
         private object _selectedAction;
-        private Action<Action> _disp = (act) => act();
         private string _helpMessage;
         private bool _isError;
         private bool _isActiveSwitchServices = true;
@@ -117,7 +116,7 @@ namespace KipTM.ViewModel
             //_fastTools.Add(_save);
             checkBtns.Add(new OneBtnDescriptor(PresSensorCheck.CheckKey, "Датчик давления", BitmapToImage(Resources.EHCerabarM),
                 BitmapToImage(Resources.EHCerabarM), SelectChecks));
-            _workflows.Add(PresSensorCheck.CheckKey, new PressureSensorWorkflow().Make(_logger, new DataAccessor(dataPool), agregator:_eventAggregator));
+            _workflows.Add(PresSensorCheck.CheckKey, new PressureSensorWorkflow().Make(_logger, new DataAccessor(dataPool), this, agregator:_eventAggregator));
             CheckBtns = checkBtns;
             _eventAggregator.Subscribe(this);
         }
@@ -130,7 +129,6 @@ namespace KipTM.ViewModel
         {
             try
             {
-                _eventAggregator.Post(new Action<Action>(viewDispatcher.Invoke));
                 SelectChecks.Execute(_workflows.Keys.FirstOrDefault());
                 Checks = _workflows.Values.FirstOrDefault();
                 OnPropertyChanged("Checks");
@@ -360,7 +358,7 @@ namespace KipTM.ViewModel
             set
             {
                 _helpMessage = value; 
-                _disp(()=>OnPropertyChanged());
+                Invoke(()=>OnPropertyChanged());
             }
         }
 
@@ -373,7 +371,7 @@ namespace KipTM.ViewModel
             set
             {
                 _isError = value;
-                _disp(() => OnPropertyChanged());
+                Invoke(() => OnPropertyChanged());
             }
         }
 
@@ -386,7 +384,7 @@ namespace KipTM.ViewModel
             set
             {
                 _isActiveSwitchServices = value;
-                _disp(() => OnPropertyChanged());
+                Invoke(() => OnPropertyChanged());
             }
         }
 
@@ -411,11 +409,6 @@ namespace KipTM.ViewModel
             IsError = false;
         }
 
-
-        public void OnEvent(Action<Action> message)
-        {
-            _disp = message;
-        }
         #endregion
 
         #region Вспомогательные методы

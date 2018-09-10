@@ -22,7 +22,7 @@ namespace PressureSensorCheck.Workflow
 {
     public class PressureSensorWorkflow
     {
-        public IWorkflow Make(Logger logger, IDataAccessor accessor, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null, IEventAggregator agregator = null)
+        public IWorkflow Make(Logger logger, IDataAccessor accessor, IContext context, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null, IEventAggregator agregator = null)
         {
             id = id ?? new TestResultID()
             {
@@ -69,7 +69,7 @@ namespace PressureSensorCheck.Workflow
                 (IDPI620Driver)new DPI620Emulation():dpiCom;
             //var run = new PressureSensorRunVm(conf, dpi, dpiConf, result, agregator);
             var run = new PressureSensorRunVm1(conf.Unit.ToStringLocalized(CultureInfo.CurrentUICulture));
-            var runPresenter = new PressureSensorRunPresenter(run, agregator);
+            var runPresenter = new PressureSensorRunPresenter(run, agregator, context);
             var resultVm = new PressureSensorResultVM(id, accessor, res, conf, agregator);
 
             var reportUpdater =new ReportUpdater();

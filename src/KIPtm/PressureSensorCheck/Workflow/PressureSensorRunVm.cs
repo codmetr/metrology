@@ -30,7 +30,7 @@ namespace PressureSensorCheck.Workflow
     /// <summary>
     /// Выпонение проверки
     /// </summary>
-    public class PressureSensorRunVm : INotifyPropertyChanged, IObserver<MeasuringPoint>, ISubscriber<Action<Action>>, IDisposable, IUserVmAsk
+    public class PressureSensorRunVm : INotifyPropertyChanged, IObserver<MeasuringPoint>, IDisposable, IUserVmAsk
     {
         //private double _minP = 0;
         //private double _maxP = 100;
@@ -53,7 +53,7 @@ namespace PressureSensorCheck.Workflow
         private AutoUpdater _autoupdater;
         private LinesInOutViewModel _inOutLines;
         private TimeSpan _periodViewGraphic = TimeSpan.FromSeconds(300);
-        private Action<Action> _invoker = act => act();
+        private readonly IContext _context;
         private string _note;
         private double _checkProgress;
         private bool _isRun;
@@ -72,7 +72,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="dpi620">драйвер DPI620Genii</param>
         /// <param name="dpiConf">контейнер конфигурации DPI620</param>
         /// <param name="result"></param>
-        public PressureSensorRunVm(PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator)
+        public PressureSensorRunVm(PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator, IContext context)
         {
             Measured = new ObservableCollection<MeasuringPoint>();
             _inOutLines = new LinesInOutViewModel(
@@ -87,6 +87,7 @@ namespace PressureSensorCheck.Workflow
             _autoupdater = new AutoUpdater(_logger);
             Result = result;
             _agregator = agregator;
+            _context = context;
         }
 
         /// <summary>
@@ -103,7 +104,7 @@ namespace PressureSensorCheck.Workflow
             set
             {
                 _result = value;
-                _invoker(() => OnPropertyChanged());
+                _context.Invoke(() => OnPropertyChanged());
             }
         }
 
@@ -116,7 +117,7 @@ namespace PressureSensorCheck.Workflow
             set
             {
                 _lastResultTime = value;
-                _invoker(() => OnPropertyChanged());
+                _context.Invoke(() => OnPropertyChanged());
             }
         }
 
@@ -129,7 +130,7 @@ namespace PressureSensorCheck.Workflow
             set
             {
                 _selectedPoint = value;
-                _invoker(() => OnPropertyChanged());
+                _context.Invoke(() => OnPropertyChanged());
             }
         }
 
@@ -142,7 +143,7 @@ namespace PressureSensorCheck.Workflow
             set
             {
                 _newConfig = value;
-                _invoker(() => OnPropertyChanged());
+                _context.Invoke(() => OnPropertyChanged());
             }
         }
 
@@ -205,7 +206,7 @@ namespace PressureSensorCheck.Workflow
             set
             {
                 _note = value;
-                _invoker(() => OnPropertyChanged());
+                _context.Invoke(() => OnPropertyChanged());
             }
         }
 
@@ -218,7 +219,7 @@ namespace PressureSensorCheck.Workflow
             set
             {
                 _checkProgress = value;
-                _invoker(() => OnPropertyChanged());
+                _context.Invoke(() => OnPropertyChanged());
             }
         }
 
@@ -231,7 +232,7 @@ namespace PressureSensorCheck.Workflow
             set
             {
                 _isRun = value;
-                _invoker(() => OnPropertyChanged());
+                _context.Invoke(() => OnPropertyChanged());
             }
         }
 
@@ -244,7 +245,7 @@ namespace PressureSensorCheck.Workflow
             set
             {
                 _isAsk = value;
-                _invoker(() => OnPropertyChanged());
+                _context.Invoke(() => OnPropertyChanged());
             }
         }
 
@@ -277,7 +278,7 @@ namespace PressureSensorCheck.Workflow
             set
             {
                 _modalState = value;
-                _invoker(() => OnPropertyChanged());
+                _context.Invoke(() => OnPropertyChanged());
             }
         }
 
@@ -457,7 +458,7 @@ namespace PressureSensorCheck.Workflow
 
         private void CheckOnEndMethod(object sender, EventArgs eventArgs)
         {
-            _invoker(() =>
+            _context.Invoke(() =>
             {
                 ResetSetAcceptAction();
                 Note = "";
@@ -541,16 +542,12 @@ namespace PressureSensorCheck.Workflow
         {
             ModalState.IsShowModal = true;
             var wh = new ManualResetEvent(false);
-            _invoker(() => ModalState.Ask(string.IsNullOrEmpty(title) ? msg : $"{title}\n{msg}", wh));
+            _context.Invoke(() => ModalState.Ask(string.IsNullOrEmpty(title) ? msg : $"{title}\n{msg}", wh));
             var whs = new[] { wh, cancel.WaitHandle };
             WaitHandle.WaitAny(whs);
             ModalState.IsShowModal = false;
         }
-        public void OnEvent(Action<Action> message)
-        {
-            _invoker = message;
-        }
-
+        
         private void Log(string msg)
         {
             if(_logger == null)
