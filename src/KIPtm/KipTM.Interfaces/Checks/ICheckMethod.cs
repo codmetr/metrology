@@ -28,13 +28,13 @@ namespace KipTM.Interfaces.Checks
         object GetCustomConfig(IPropertyPool propertyPool);
 
         /// <summary>
-        /// Инициализация 
+        /// Инициализация по измененным настройкам
         /// </summary>
         /// <returns></returns>
         bool Init(object customConf);
 
         /// <summary>
-        /// Запуск калибровки
+        /// Запуск проверки
         /// </summary>
         /// <returns></returns>
         bool Start(CancellationToken cancel);

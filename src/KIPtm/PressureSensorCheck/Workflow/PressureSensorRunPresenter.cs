@@ -37,37 +37,22 @@ namespace PressureSensorCheck.Workflow
         private readonly IContext _context;
 
 
-        public PressureSensorRunPresenter(PressureSensorRunVm1 vm, IEventAggregator agregator, IContext context)
+        public PressureSensorRunPresenter(PressureSensorRunVm1 vm, PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator, IContext context)
         {
             _vm = vm;
-            _vm.CallAddPoint += VmOnCallAddPoint;
-            _vm.CallPauseCheck += VmOnCallPauseCheck;
-            _vm.CallStartCheck += VmOnCallStartCheck;
-            _vm.CallStopCheck += VmOnCallStopCheck;
+            _vm.CallAddPoint += DoAddPoint;
+            _vm.CallPauseCheck += DoPause;
+            _vm.CallStartCheck += DoStart;
+            _vm.CallStopCheck += DoStop;
+            _config = config;
+            _dpi620 = dpi620;
+            _dpiConf = dpiConf;
             _agregator = agregator;
             _context = context;
-        }
 
-        private void VmOnCallAddPoint()
-        {
-            DoAddPoint();
+            _logger = NLog.LogManager.GetLogger("PressureSensorRun");
+            _autoupdater = new AutoUpdater(_logger);
         }
-
-        private void VmOnCallStartCheck()
-        {
-            DoStart();
-        }
-
-        private void VmOnCallPauseCheck()
-        {
-            //throw new NotImplementedException();
-        }
-
-        private void VmOnCallStopCheck()
-        {
-            DoStop();
-        }
-
 
         /// <summary>
         /// Текущий результат
@@ -76,7 +61,6 @@ namespace PressureSensorCheck.Workflow
         {
             get { return _result; }
         }
-
 
         /// <summary>
         /// Время последних результатов
@@ -87,7 +71,52 @@ namespace PressureSensorCheck.Workflow
         }
 
         /// <summary>
-        /// Доббавление точки
+        /// Признак "Проверка запущена"
+        /// </summary>
+        public bool IsRun
+        {
+            get { return _isRun; }
+            private set
+            {
+                _isRun = value;
+                _context.Invoke(()=>_vm.IsRun = value);
+            }
+        }
+
+        /// <summary>
+        /// Точки проверки с результатом
+        /// </summary>
+        public IEnumerable<PointViewModel> Points { get { return _vm.Points; } }
+
+        /// <summary>
+        /// Обновить набор точек в проверке по конфигурации
+        /// </summary>
+        /// <param name="points"></param>
+        public void UpdatePoint(IEnumerable<PointConfigViewModel> points)
+        {
+            _context.Invoke(() =>
+            {
+                _vm.Points.Clear();
+                foreach (var point in points)
+                {
+                    _vm.Points.Add(new PointViewModel() { Config = point, Result = new PointResultViewModel() });
+                    //TODO разобраться с тем почему не сравнивается старый конфиг с новым и убрать _vm.Points.Clear(); с пересчетом результатов по измененным точкам
+                    //var resPoint = _vm.Points.FirstOrDefault(el => Math.Abs(el.Config.Pressure - point.Pressure) < Double.Epsilon);
+                    //if (resPoint == null)
+                    //    _vm.Points.Add(new PointViewModel() { Config = point, Result = new PointResultViewModel() });
+                    //else
+                    //{
+                    //    resPoint.Config.Unit = point.Unit;
+                    //    resPoint.Config.I = point.I;
+                    //    resPoint.Config.dI = point.dI;
+                    //    resPoint.Config.Ivar = point.Ivar;
+                    //}
+                }
+            });
+        }
+
+        /// <summary>
+        /// Добавление точки
         /// </summary>
         private void DoAddPoint()
         {
@@ -156,24 +185,6 @@ namespace PressureSensorCheck.Workflow
             });
             task.Start(TaskScheduler.Default);
         }
-
-        /// <summary>
-        /// Признак "Проверка запущена"
-        /// </summary>
-        public bool IsRun
-        {
-            get { return _isRun; }
-            private set
-            {
-                _isRun = value;
-                _context.Invoke(()=>_vm.IsRun = value);
-            }
-        }
-
-        /// <summary>
-        /// Точки проверки с результатом
-        /// </summary>
-        public IEnumerable<PointViewModel> Points { get { return _vm.Points; } }
 
         /// <summary>
         /// Конфигурация оборудования и запуск автоопроса
@@ -275,6 +286,11 @@ namespace PressureSensorCheck.Workflow
             }
         }
 
+        /// <summary>
+        /// Обработчик окончания проверки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
         private void CheckOnEndMethod(object sender, EventArgs eventArgs)
         {
             _context.Invoke(() =>
@@ -285,6 +301,11 @@ namespace PressureSensorCheck.Workflow
             });
         }
 
+        /// <summary>
+        /// Обработчик обновления результата
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
         private void CheckOnResultUpdated(object sender, EventArgs eventArgs)
         {
             var check = sender as PresSensorCheck;
@@ -335,7 +356,10 @@ namespace PressureSensorCheck.Workflow
             _context.Invoke(() => _vm.AskModal("", msg, cancel));
         }
 
-
+        /// <summary>
+        /// Лог
+        /// </summary>
+        /// <param name="msg"></param>
         private void Log(string msg)
         {
             _logger?.Trace(msg);
@@ -349,6 +373,9 @@ namespace PressureSensorCheck.Workflow
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Остановить проверку
+        /// </summary>
         private void DoStop()
         {
             IsRun = false;
@@ -383,6 +410,8 @@ namespace PressureSensorCheck.Workflow
 
         #endregion
 
+        #region IDisposable
+
         public void Dispose()
         {
             if (!IsRun)
@@ -392,31 +421,6 @@ namespace PressureSensorCheck.Workflow
             _dpi620.Close();
         }
 
-        /// <summary>
-        /// Обновить набор точек в проверке по конфигурации
-        /// </summary>
-        /// <param name="points"></param>
-        public void UpdatePoint(IEnumerable<PointConfigViewModel> points)
-        {
-            _context.Invoke(() =>
-            {
-                _vm.Points.Clear();
-                foreach (var point in points)
-                {
-                    _vm.Points.Add(new PointViewModel() { Config = point, Result = new PointResultViewModel() });
-                    //TODO разобраться с тем почему не сравнивается старый конфиг с новым и убрать _vm.Points.Clear(); с пересчетом результатов по измененным точкам
-                    //var resPoint = _vm.Points.FirstOrDefault(el => Math.Abs(el.Config.Pressure - point.Pressure) < Double.Epsilon);
-                    //if (resPoint == null)
-                    //    _vm.Points.Add(new PointViewModel() { Config = point, Result = new PointResultViewModel() });
-                    //else
-                    //{
-                    //    resPoint.Config.Unit = point.Unit;
-                    //    resPoint.Config.I = point.I;
-                    //    resPoint.Config.dI = point.dI;
-                    //    resPoint.Config.Ivar = point.Ivar;
-                    //}
-                }
-            });
-        }
+        #endregion
     }
 }

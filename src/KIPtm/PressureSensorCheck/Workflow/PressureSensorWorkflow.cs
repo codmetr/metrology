@@ -80,7 +80,7 @@ namespace PressureSensorCheck.Workflow
                 (IDPI620Driver)new DPI620Emulation():dpiCom;
             //var run = new PressureSensorRunVm(conf, dpi, dpiConf, result, agregator);
             var run = new PressureSensorRunVm1(conf.Unit.ToStringLocalized(CultureInfo.CurrentUICulture));
-            var runPresenter = new PressureSensorRunPresenter(run, agregator, context);
+            var runPresenter = new PressureSensorRunPresenter(run, conf, dpi, dpiConf, result, agregator, context);
             var resultVm = new PressureSensorResultVM(id, accessor, res, conf, agregator);
 
             var reportUpdater =new ReportUpdater();
