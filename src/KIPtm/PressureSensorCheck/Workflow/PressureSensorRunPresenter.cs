@@ -18,19 +18,18 @@ using Tools.View.ModalContent;
 
 namespace PressureSensorCheck.Workflow
 {
-    public class PressureSensorRunPresenter:IObserver<MeasuringPoint>, IDisposable
+    public class PressureSensorRunPresenter : IObserver<MeasuringPoint>, IDisposable
     {
         private readonly PressureSensorRunVm1 _vm;
-        private readonly IDPI620Driver _dpi620;
-        private DPI620GeniiConfig _dpiConf;
-        private readonly Logger _logger;
+        private readonly IDPI620Driver _dpi620; //TODO Init
+        private DPI620GeniiConfig _dpiConf; //TODO Init
+        private readonly Logger _logger; //TODO Init
         private CancellationTokenSource _cancellation = new CancellationTokenSource();
         private DateTime? _startTime = null;
         private readonly ManualResetEvent _autorepeatWh = new ManualResetEvent(true);
         private readonly TimeSpan _periodAutoread = TimeSpan.FromMilliseconds(100);
-        private readonly PressureSensorConfig _config;
-        private AutoUpdater _autoupdater;
-        private Action<Action> _invoker = act => act();
+        private readonly PressureSensorConfig _config; //TODO Init
+        private AutoUpdater _autoupdater; //TODO Init
         private PressureSensorResult _result;
         private DateTime? _lastResultTime;
         private readonly IEventAggregator _agregator;
@@ -87,29 +86,44 @@ namespace PressureSensorCheck.Workflow
             get { return _lastResultTime; }
         }
 
+        /// <summary>
+        /// Доббавление точки
+        /// </summary>
         private void DoAddPoint()
         {
-            _vm.Points.Add(new PointViewModel()
+            PointConfigViewModel newPointConf = null;
+
+            _context.Invoke(() => newPointConf = _vm.NewConfig);
+
+            var pointRes = new PointViewModel()
             {
                 Config = new PointConfigViewModel()
                 {
-                    Pressure = _vm.NewConfig.Pressure,
-                    I = _vm.NewConfig.I,
-                    dI = _vm.NewConfig.dI,
+                    Pressure = newPointConf.Pressure,
+                    I = newPointConf.I,
+                    dI = newPointConf.dI,
                     Unit = _config.Unit,
                 },
                 Result = new PointResultViewModel()
-            });
-            _config.Points.Add(new PressureSensorPoint()
+            };
+            var pointConf = new PressureSensorPoint()
             {
                 PressurePoint = _vm.NewConfig.Pressure,
                 OutPoint = _vm.NewConfig.I,
                 Tollerance = _vm.NewConfig.dI,
                 PressureUnit = _config.Unit,
                 OutUnit = Units.mA
+            };
+            _context.Invoke(() =>
+            {
+                _vm.Points.Add(pointRes);
             });
+            _config.Points.Add(pointConf);
         }
 
+        /// <summary>
+        /// Запуск проверки
+        /// </summary>
         private void DoStart()
         {
             if (_startTime != null)
@@ -143,13 +157,16 @@ namespace PressureSensorCheck.Workflow
             task.Start(TaskScheduler.Default);
         }
 
+        /// <summary>
+        /// Признак "Проверка запущена"
+        /// </summary>
         public bool IsRun
         {
             get { return _isRun; }
             private set
             {
                 _isRun = value;
-                _vm.IsRun = value;
+                _context.Invoke(()=>_vm.IsRun = value);
             }
         }
 
@@ -221,9 +238,9 @@ namespace PressureSensorCheck.Workflow
             var check = new PresSensorCheck(checkLogger, null,
                 new DPI620Ethalon(_dpi620, inSlotNum, ChannelType.Pressure, inSlot.SelectedUnit, _config.Unit),
                 new DPI620Ethalon(_dpi620, outSlotNum, ChannelType.Current, outSlot.SelectedUnit, Units.mA), _result);
-            check.ChConfig.UsrChannel = new PressureSensorUserChannel(_vm);
+            check.ChConfig.UsrChannel = new PressureSensorUserChannel(_vm, _context);
             check.FillSteps(_config);
-            _vm.CLearAllLines();
+            _context.Invoke(()=>_vm.CLearAllLines());
             return check;
         }
 
@@ -260,7 +277,7 @@ namespace PressureSensorCheck.Workflow
 
         private void CheckOnEndMethod(object sender, EventArgs eventArgs)
         {
-            _invoker(() =>
+            _context.Invoke(() =>
             {
                 _vm.ResetSetAcceptAction();
                 _vm.Note = "";
@@ -282,26 +299,29 @@ namespace PressureSensorCheck.Workflow
         private void UpdateResult(PressureSensorResult checkResult)
         {
             _result = checkResult;
-            foreach (var point in _vm.Points)
+            _context.Invoke(() =>
             {
-                var res = checkResult.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.Config.Pressure) < double.Epsilon);
-                if (res == null)
-                    continue;
-                if (point.Result == null)
-                    point.Result = new PointResultViewModel();
+                foreach (var point in _vm.Points)
+                {
+                    var res = checkResult.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.Config.Pressure) < double.Epsilon);
+                    if (res == null)
+                        continue;
+                    if (point.Result == null)
+                        point.Result = new PointResultViewModel();
 
-                if (double.IsNaN(res.VoltageValueBack))
-                { // прямой ход
-                    point.Result.IReal = res.VoltageValue;
-                    point.Result.dIReal = res.VoltageValue - res.VoltagePoint;
-                    point.Result.IsCorrect = point.Result.dIReal <= point.Config.dI;
+                    if (double.IsNaN(res.VoltageValueBack))
+                    { // прямой ход
+                        point.Result.IReal = res.VoltageValue;
+                        point.Result.dIReal = res.VoltageValue - res.VoltagePoint;
+                        point.Result.IsCorrect = point.Result.dIReal <= point.Config.dI;
+                    }
+                    else
+                    { // обратный ход
+                        point.Result.Iback = res.VoltageValueBack;
+                        point.Result.dIvar = Math.Abs(res.VoltageValue - res.VoltageValueBack);
+                    }
                 }
-                else
-                { // обратный ход
-                    point.Result.Iback = res.VoltageValueBack;
-                    point.Result.dIvar = Math.Abs(res.VoltageValue - res.VoltageValueBack);
-                }
-            }
+            });
             _lastResultTime = DateTime.Now;
         }
 
@@ -312,7 +332,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="cancel"></param>
         private void ShowMessage(string msg, CancellationToken cancel)
         {
-            _vm.AskModal("", msg, cancel);
+            _context.Invoke(() => _vm.AskModal("", msg, cancel));
         }
 
 
@@ -343,8 +363,11 @@ namespace PressureSensorCheck.Workflow
 
         public void OnNext(MeasuringPoint value)
         {
-            _vm.AddToLine(value.TimeStamp, value.I, value.Pressure);
-            _vm.LastMeasuredPoint = value;
+            _context.Invoke(() =>
+            {
+                _vm.AddToLine(value.TimeStamp, value.I, value.Pressure);
+                _vm.LastMeasuredPoint = value;
+            });
             Log($"Readed repeat: P:{value.Pressure} {_config.Unit}");
         }
 
@@ -375,20 +398,25 @@ namespace PressureSensorCheck.Workflow
         /// <param name="points"></param>
         public void UpdatePoint(IEnumerable<PointConfigViewModel> points)
         {
-            _vm.Points.Clear();
-            foreach (var point in points)
+            _context.Invoke(() =>
             {
-                var resPoint = _vm.Points.FirstOrDefault(el => Math.Abs(el.Config.Pressure - point.Pressure) < Double.Epsilon);
-                if (resPoint == null)
-                    _vm.Points.Add(new PointViewModel() { Config = point, Result = new PointResultViewModel() });
-                else
+                _vm.Points.Clear();
+                foreach (var point in points)
                 {
-                    resPoint.Config.Unit = point.Unit;
-                    resPoint.Config.I = point.I;
-                    resPoint.Config.dI = point.dI;
-                    resPoint.Config.Ivar = point.Ivar;
+                    _vm.Points.Add(new PointViewModel() { Config = point, Result = new PointResultViewModel() });
+                    //TODO разобраться с тем почему не сравнивается старый конфиг с новым и убрать _vm.Points.Clear(); с пересчетом результатов по измененным точкам
+                    //var resPoint = _vm.Points.FirstOrDefault(el => Math.Abs(el.Config.Pressure - point.Pressure) < Double.Epsilon);
+                    //if (resPoint == null)
+                    //    _vm.Points.Add(new PointViewModel() { Config = point, Result = new PointResultViewModel() });
+                    //else
+                    //{
+                    //    resPoint.Config.Unit = point.Unit;
+                    //    resPoint.Config.I = point.I;
+                    //    resPoint.Config.dI = point.dI;
+                    //    resPoint.Config.Ivar = point.Ivar;
+                    //}
                 }
-            }
+            });
         }
     }
 }

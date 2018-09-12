@@ -419,7 +419,7 @@ namespace PressureSensorCheck.Workflow
             var check = new PresSensorCheck(checkLogger, null,
                 new DPI620Ethalon(_dpi620, inSlotNum, ChannelType.Pressure, inSlot.SelectedUnit, _config.Unit),
                 new DPI620Ethalon(_dpi620, outSlotNum, ChannelType.Current, outSlot.SelectedUnit, Units.mA), Result);
-            check.ChConfig.UsrChannel = new PressureSensorUserChannel(this);
+            check.ChConfig.UsrChannel = new PressureSensorUserChannel(this, _context);
             check.FillSteps(_config);
             _inOutLines.CLearAllLines();
             return check;

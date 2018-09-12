@@ -22,7 +22,18 @@ namespace PressureSensorCheck.Workflow
 {
     public class PressureSensorWorkflow
     {
-        public IWorkflow Make(Logger logger, IDataAccessor accessor, IContext context, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null, IEventAggregator agregator = null)
+        /// <summary>
+        /// Создание стратегии переходов между экранами
+        /// </summary>
+        /// <param name="accessor">Доступ к хранилищу</param>
+        /// <param name="context">Контекст UI</param>
+        /// <param name="logger">логгер</param>
+        /// <param name="id">ID проверки(если это продолжение проверки)</param>
+        /// <param name="result">результат проверки(если это продолжение проверки)</param>
+        /// <param name="conf">конфигурация проверки(если это продолжение проверки)</param>
+        /// <param name="agregator">агрегатор событий</param>
+        /// <returns>Стратегия переходов с состояниями</returns>
+        public IWorkflow Make(IDataAccessor accessor, IContext context, Logger logger, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null, IEventAggregator agregator = null)
         {
             id = id ?? new TestResultID()
             {
