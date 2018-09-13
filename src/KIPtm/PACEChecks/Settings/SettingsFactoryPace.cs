@@ -6,7 +6,7 @@ using PACEChecks.Devices;
 
 namespace PACEChecks.Settings
 {
-    public class SettingsFactoryPace : /*IDeviceSettingsFactory,*/ IEthalonSettingsFactory, IDeviceTypeSettingsFactory
+    public class SettingsFactoryPace : /*IDeviceSettingsFactory,*/ IEtalonSettingsFactory, IDeviceTypeSettingsFactory
     {
         /// <summary>
         /// Типы проверяемых устройств и их измерительные каналы
@@ -31,7 +31,7 @@ namespace PACEChecks.Settings
         /// Настройки подключения эталона по умолчанию
         /// </summary>
         /// <returns></returns>
-        DeviceSettings IEthalonSettingsFactory.GetDefault()
+        DeviceSettings IEtalonSettingsFactory.GetDefault()
         {
             return new DeviceSettings()
             {

@@ -6,21 +6,21 @@ namespace KipTM.Interfaces.Channels
     /// <summary>
     /// Эталонный канал-источник
     /// </summary>
-    public interface IEthalonSourceChannel
+    public interface IEtalonSourceChannel
     {
         bool Activate(ITransportChannelType transport);
 
         void Stop();
 
-        bool SetEthalonValue(double aim, CancellationToken cancel);
+        bool SetEtalonValue(double aim, CancellationToken cancel);
     }
 
     /// <summary>
     /// Эталонный канал-источник
     /// </summary>
     /// <typeparam name="T">Единицы измерения</typeparam>
-    public interface IEthalonSourceChannel<in T>:IEthalonSourceChannel
+    public interface IEtalonSourceChannel<in T>:IEtalonSourceChannel
     {
-        bool SetEthalonValue(double aim, T unit, CancellationToken cancel);
+        bool SetEtalonValue(double aim, T unit, CancellationToken cancel);
     }
 }

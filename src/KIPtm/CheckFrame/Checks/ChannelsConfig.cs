@@ -17,7 +17,7 @@ namespace CheckFrame.Checks
         private IEventAggregator _agregator;
 
         protected ChannelDescriptor _calibChan;
-        protected IEthalonChannel _ethalonChannel;
+        protected IEtalonChannel EtalonChannel;
         protected IUserChannel _userChannel;
 
 
@@ -25,10 +25,10 @@ namespace CheckFrame.Checks
             get { return _calibChan; }
             set { _calibChan = value; } }
 
-        public IEthalonChannel EthChannel
+        public IEtalonChannel EthChannel
         {
-            get { return _ethalonChannel; }
-            set { _ethalonChannel = value; }
+            get { return EtalonChannel; }
+            set { EtalonChannel = value; }
         }
 
         public IUserChannel UsrChannel
@@ -49,8 +49,8 @@ namespace CheckFrame.Checks
         {
             try
             {
-                if (!_ethalonChannel.Activate(EthalonChannelType))
-                    throw new Exception(string.Format("Can not Activate ethalon channel: {0}", _ethalonChannel));
+                if (!EtalonChannel.Activate(EtalonChannelType))
+                    throw new Exception(string.Format("Can not Activate etalon channel: {0}", EtalonChannel));
             }
             catch (Exception ex)
             {
@@ -63,8 +63,8 @@ namespace CheckFrame.Checks
 
         public void Stop()
         {
-            if(_ethalonChannel!=null)
-                _ethalonChannel.Stop();
+            if(EtalonChannel!=null)
+                EtalonChannel.Stop();
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace CheckFrame.Checks
         /// <summary>
         /// Описатель канала подключения к эталонному устройству
         /// </summary>
-        public ITransportChannelType EthalonChannelType;
+        public ITransportChannelType EtalonChannelType;
 
 
         /// <summary>
@@ -89,18 +89,18 @@ namespace CheckFrame.Checks
         /// <summary>
         /// Задать канал эталона
         /// </summary>
-        /// <param name="ethalonChannel"></param>
+        /// <param name="etalonChannel"></param>
         /// <param name="transport"></param>
-        public void SetEthalonChannel(IEnumerable<CheckStepConfig> steps, IEthalonChannel ethalonChannel, ITransportChannelType transport)
+        public void SetEtalonChannel(IEnumerable<CheckStepConfig> steps, IEtalonChannel etalonChannel, ITransportChannelType transport)
         {
-            _ethalonChannel = ethalonChannel;
-            EthalonChannelType = transport;
+            EtalonChannel = etalonChannel;
+            EtalonChannelType = transport;
             foreach (var testStep in steps)
             {
-                var step = testStep.Step as ISettedEthalonChannel;
+                var step = testStep.Step as ISettedEtalonChannel;
                 if (step == null)
                     continue;
-                step.SetEthalonChannel(ethalonChannel);
+                step.SetEtalonChannel(etalonChannel);
             }
         }
 

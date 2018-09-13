@@ -38,7 +38,7 @@ namespace KipTM.Checks
         /// <summary>
         /// Доступные типы эталоннных устройств
         /// </summary>
-        private IDictionary<ChannelDescriptor, DeviceTypeDescriptor> _avalableEthalonTypes;
+        private IDictionary<ChannelDescriptor, DeviceTypeDescriptor> _avalableEtalonTypes;
         /// <summary>
         /// Доступные измерительные каналы
         /// </summary>
@@ -101,12 +101,12 @@ namespace KipTM.Checks
             _channels = _channelKeys.Keys;
             _data.TargetDevice.Channel = _channels.FirstOrDefault();
 
-            _avalableEthalonTypes = GetAvailableEthalons(_data.TargetDevice.Device.DeviceType, propertyPool, _data.TargetDevice.Channel, _allDeviceTypes);
-            var ethalon = _avalableEthalonTypes.FirstOrDefault();
-            _data.Ethalons.Add(_data.TargetDevice.Channel, new DeviceWithChannel()
+            _avalableEtalonTypes = GetAvailableEtalons(_data.TargetDevice.Device.DeviceType, propertyPool, _data.TargetDevice.Channel, _allDeviceTypes);
+            var etalon = _avalableEtalonTypes.FirstOrDefault();
+            _data.Etalons.Add(_data.TargetDevice.Channel, new DeviceWithChannel()
             {
-                Device = new DeviceDescriptor(ethalon.Value),
-                Channel = ethalon.Key//TODO реализовать выбор канала
+                Device = new DeviceDescriptor(etalon.Value),
+                Channel = etalon.Key//TODO реализовать выбор канала
             });
             UpdateCustomMethodSettings(_data.TargetDevice.Channel);
         }
@@ -133,7 +133,7 @@ namespace KipTM.Checks
         /// <summary>
         /// Доступные типы эталоных каналов (со всех доступных устройств)
         /// </summary>
-        public IEnumerable<ChannelDescriptor> EthalonChannels { get { return _avalableEthalonTypes.Keys; } }
+        public IEnumerable<ChannelDescriptor> EtalonChannels { get { return _avalableEtalonTypes.Keys; } }
 
         #endregion
 
@@ -277,23 +277,23 @@ namespace KipTM.Checks
         /// </summary>
         /// <param name="targetCgannel">Измерительный канал целевого устройства</param>
         /// <returns></returns>
-        public IDictionary<ChannelDescriptor, DeviceTypeDescriptor> GetAvailableEthalons(ChannelDescriptor targetCgannel)
+        public IDictionary<ChannelDescriptor, DeviceTypeDescriptor> GetAvailableEtalons(ChannelDescriptor targetCgannel)
         {
-            return GetAvailableEthalons(SelectedDeviceType, _propertyPool, targetCgannel, _allDeviceTypes);
+            return GetAvailableEtalons(SelectedDeviceType, _propertyPool, targetCgannel, _allDeviceTypes);
         }
 
         /// <summary>
         /// Эталоны
         /// </summary>
-        public Dictionary<ChannelDescriptor, DeviceWithChannel> EthalonWithCh
+        public Dictionary<ChannelDescriptor, DeviceWithChannel> EtalonWithCh
         {
-            get { return _data.Ethalons; }
+            get { return _data.Etalons; }
         }
 
         /// <summary>
         /// Канал подключения к эталону
         /// </summary>
-        public ITransportChannelType EthalonTransportChannel { get; set; }
+        public ITransportChannelType EtalonTransportChannel { get; set; }
 
         #endregion
 
@@ -325,19 +325,19 @@ namespace KipTM.Checks
         }
 
 
-        public event EventHandler AvailableEthalonTypeChanged;
+        public event EventHandler AvailableEtalonTypeChanged;
 
-        protected virtual void OnAvailableEthalonTypeChanged()
+        protected virtual void OnAvailableEtalonTypeChanged()
         {
-            EventHandler handler = AvailableEthalonTypeChanged;
+            EventHandler handler = AvailableEtalonTypeChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        public event EventHandler SelectedEthalonTypeChanged;
+        public event EventHandler SelectedEtalonTypeChanged;
 
-        protected virtual void OnSelectedEthalonTypeChanged()
+        protected virtual void OnSelectedEtalonTypeChanged()
         {
-            EventHandler handler = SelectedEthalonTypeChanged;
+            EventHandler handler = SelectedEtalonTypeChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
@@ -409,10 +409,10 @@ namespace KipTM.Checks
         /// <param name="selectedChannel">выбраный канал</param>
         /// <param name="allTypes"></param>
         /// <returns>Коллекцию формата (ключ изметительного канала - описатель устройства-носителя канала)</returns>
-        private static IDictionary<ChannelDescriptor, DeviceTypeDescriptor> GetAvailableEthalons(DeviceTypeDescriptor targetDev, IPropertyPool propertyPool,
+        private static IDictionary<ChannelDescriptor, DeviceTypeDescriptor> GetAvailableEtalons(DeviceTypeDescriptor targetDev, IPropertyPool propertyPool,
             ChannelDescriptor selectedChannel, IEnumerable<DeviceTypeDescriptor> allTypes) //IMainSettings settings, 
         {
-            var avalableEthalonTypes = new Dictionary<ChannelDescriptor, DeviceTypeDescriptor>();
+            var avalableEtalonTypes = new Dictionary<ChannelDescriptor, DeviceTypeDescriptor>();
             foreach (var dev in allTypes)
             {// выбираем очередное устройство
                 //исключить проверяемое устройство
@@ -422,36 +422,36 @@ namespace KipTM.Checks
                 var channels = GetChannelsKeys(propertyPool, dev);
                 foreach (var channel in channels)
                 {// перебираем каналы выбранного устройства
-                    if (!CheckEthalonChannel(selectedChannel, channel.Key))
+                    if (!CheckEtalonChannel(selectedChannel, channel.Key))
                         continue;
 
-                    avalableEthalonTypes.Add(channel.Key, dev);
+                    avalableEtalonTypes.Add(channel.Key, dev);
                 }
             }
-            avalableEthalonTypes.Add(UserEthalonChannel.Channel, UserEthalonChannel.Descriptor);
-            return avalableEthalonTypes;
+            avalableEtalonTypes.Add(UserEtalonChannel.Channel, UserEtalonChannel.Descriptor);
+            return avalableEtalonTypes;
         }
 
         /// <summary>
         /// Проверить подходит ли эталонный канал выбранному
         /// </summary>
         /// <param name="selectedChannel">Выбранный канал</param>
-        /// <param name="ethalonChannel">Эталонный канал</param>
+        /// <param name="etalonChannel">Эталонный канал</param>
         /// <returns>True - подходит</returns>
-        private static bool CheckEthalonChannel(ChannelDescriptor selectedChannel, ChannelDescriptor ethalonChannel)
+        private static bool CheckEtalonChannel(ChannelDescriptor selectedChannel, ChannelDescriptor etalonChannel)
         {
             //проверка типа измерительного канала
-            if (selectedChannel.TypeChannel != ethalonChannel.TypeChannel)
+            if (selectedChannel.TypeChannel != etalonChannel.TypeChannel)
                 return false;
             //проверка нарпавленности измерительного канала
-            if (selectedChannel.Order == ethalonChannel.Order)
+            if (selectedChannel.Order == etalonChannel.Order)
                 return false;
             //проверка диапазона измерительного канала
-            if (selectedChannel.Min < ethalonChannel.Min || selectedChannel.Max > ethalonChannel.Max)
+            if (selectedChannel.Min < etalonChannel.Min || selectedChannel.Max > etalonChannel.Max)
                 return false;
 
             //проверка допуска измерительного канала
-            if (selectedChannel.Error < ethalonChannel.Error)
+            if (selectedChannel.Error < etalonChannel.Error)
                 return false;
             return true;
         }

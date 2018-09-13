@@ -53,10 +53,10 @@ namespace ADTSChecks.Checks
         /// <param name="customSettings"></param>
         /// <param name="resultSet"></param>
         /// <param name="checkDeviceChanel"></param>
-        /// <param name="ethalonChanel"></param>
+        /// <param name="etalonChanel"></param>
         /// <returns></returns>
         public IMethodViewModel GetViewModel(object method, CheckConfigData checkConfig, object customSettings,
-            TestResultID resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
+            TestResultID resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType etalonChanel)
         {
             if(_deviceManager == null)
                 throw new NullReferenceException("Not defined _deviceManager");
@@ -65,7 +65,7 @@ namespace ADTSChecks.Checks
                 throw new NullReferenceException("Not defined _propertyPool");
 
             return ConfigAdtsMethod(method as CheckBaseADTS, checkConfig, customSettings as ADTSParameters,
-                resultSet, checkDeviceChanel, ethalonChanel);
+                resultSet, checkDeviceChanel, etalonChanel);
         }
 
         /// <summary>
@@ -76,20 +76,20 @@ namespace ADTSChecks.Checks
         /// <param name="customSettings"></param>
         /// <param name="resultSet"></param>
         /// <param name="checkDeviceChanel"></param>
-        /// <param name="ethalonChanel"></param>
+        /// <param name="etalonChanel"></param>
         /// <returns></returns>
         private IMethodViewModel ConfigAdtsMethod(CheckBaseADTS method, CheckConfigData checkConfig, ADTSParameters customSettings,
-            TestResultID resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel)
+            TestResultID resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType etalonChanel)
         {
             IMethodViewModel result = null;
             method.SetADTS(_deviceManager.GetModel<ADTSModel>());
             method.ChConfig.ChannelType = checkDeviceChanel;
             var devType = checkConfig.TargetDevice.Device.DeviceType.TypeKey;
-            var ethalonChannel = checkConfig.Ethalons.FirstOrDefault().Value.Channel;
-            //if (ethalonChannel.Key == UserEthalonChannel.Channel.Key)
-            //    method.SetEthalonChannel(null, null);
+            var etalonChannel = checkConfig.Etalons.FirstOrDefault().Value.Channel;
+            //if (etalonChannel.Key == UserEtalonChannel.Channel.Key)
+            //    method.SetEtalonChannel(null, null);
             //else
-            //    method.SetEthalonChannel(_deviceManager.GetEthalonChannel(ethalonChannel.Key), ethalonChanel);
+            //    method.SetEtalonChannel(_deviceManager.GetEtalonChannel(etalonChannel.Key), ethalonChanel);
 
             if (method is Calibration)
             {
@@ -103,13 +103,13 @@ namespace ADTSChecks.Checks
                 result = new TestViewModel(adtsMethodic, ADTSCheckConfig.GetDefault(),
                     _deviceManager, resultSet, customSettings);
             }
-            //if (ethalonChannel.Key == UserEthalonChannel.Channel.Key)
-            //    result.SetEthalonChannel(null, null);
+            //if (etalonChannel.Key == UserEtalonChannel.Channel.Key)
+            //    result.SetEtalonChannel(null, null);
             //else
-            //    result.SetEthalonChannel(ethalonChannel.Key, ethalonChanel);
+            //    result.SetEtalonChannel(etalonChannel.Key, etalonChanel);
             if (result != null)
             {
-                result.SetEthalonChannel(ethalonChannel.Key, ethalonChanel);
+                result.SetEtalonChannel(etalonChannel.Key, etalonChanel);
             }
             return result;
         }

@@ -67,7 +67,7 @@
     <Compile Include="Devices\DPI620Factory.cs" />
     <Compile Include="Devices\DPI620Model.cs" />
     <Compile Include="Devices\DPI620ModelFactory.cs" />
-    <Compile Include="Devices\DPI620Ethalon.cs" />
+    <Compile Include="Devices\Dpi620Etalon.cs" />
     <Compile Include="PressureSensorMethodFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

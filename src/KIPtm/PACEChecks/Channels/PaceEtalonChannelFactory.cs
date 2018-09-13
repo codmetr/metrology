@@ -9,16 +9,16 @@ namespace PACEChecks.Channels
     /// <summary>
     /// Фабрика эталонного канала PACE1000
     /// </summary>
-    public class PACEEthalonChannelFactory : IEthalonCannelFactory
+    public class PaceEtalonChannelFactory : IEtalonCannelFactory
     {
         /// <summary>
         /// Получить эталонный канал PACE1000
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public IEthalonChannel GetChanel(object model)
+        public IEtalonChannel GetChanel(object model)
         {
-            return new PACEEthalonChannel(model as PACE1000Model);
+            return new PaceEtalonChannel(model as PACE1000Model);
         }
 
         /// <summary>
@@ -26,11 +26,11 @@ namespace PACEChecks.Channels
         /// </summary>
         /// <param name="channel"></param>
         /// <returns></returns>
-        public object GetChanelViewModel(IEthalonChannel channel)
+        public object GetChanelViewModel(IEtalonChannel channel)
         {
-            if (channel is PACEEthalonChannel)
+            if (channel is PaceEtalonChannel)
             {
-                return new PaceEthalonChannelViewModel(channel as PACEEthalonChannel);
+                return new PaceEthalonChannelViewModel(channel as PaceEtalonChannel);
             }
             return null;
         }

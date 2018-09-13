@@ -23,18 +23,18 @@ namespace CheckFrame.Checks
         /// <summary>
         /// Ключ типа эталона
         /// </summary>
-        public string EthalonTypeKey;
+        public string EtalonTypeKey;
         /// <summary>
         /// Тип эталона
         /// </summary>
-        public DeviceTypeDescriptor EthalonType;
+        public DeviceTypeDescriptor EtalonType;
         /// <summary>
         /// Описатель эталона
         /// </summary>
-        public DeviceDescriptor Ethalon;
+        public DeviceDescriptor Etalon;
         /// <summary>
         /// Эталон - устройство без аппаратного интерфейса
         /// </summary>
-        public bool IsAnalogEthalon;
+        public bool IsAnalogEtalon;
     }
 }

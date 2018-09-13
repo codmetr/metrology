@@ -26,7 +26,7 @@ namespace ReportAdts
 
         public object GetReport(TestResultID resultId, CheckConfigData conf, object result)
         {
-            var ethalon = conf.Ethalons.FirstOrDefault().Value;
+            var etalon = conf.Etalons.FirstOrDefault().Value;
             var commonData = new AdtsCommonReportData()
             {
                 CheckDate = resultId.Timestamp.ToString("d"),
@@ -38,11 +38,11 @@ namespace ReportAdts
                 Temperature = conf.Temperature,
                 ReportNumber = "123"
             };
-            if (ethalon != null)
+            if (etalon != null)
             {
-                commonData.EthalonDeviceType = ethalon.Device.DeviceType;
-                commonData.EthalonError = getErrorFromType(ethalon.Device.DeviceType);
-                commonData.EthalonChannelRange = getRangeFromType(ethalon.Device.DeviceType);
+                commonData.EtalonDeviceType = etalon.Device.DeviceType;
+                commonData.EtalonError = getErrorFromType(etalon.Device.DeviceType);
+                commonData.EtalonChannelRange = getRangeFromType(etalon.Device.DeviceType);
             }
 
             var staticResults = new List<AdtsReportData>();

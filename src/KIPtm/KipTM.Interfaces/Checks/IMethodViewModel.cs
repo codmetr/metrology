@@ -20,7 +20,7 @@ namespace CheckFrame.ViewModel.Checks.Channels
         /// </summary>
         /// <param name="ethalonTypeKey"></param>
         /// <param name="settings"></param>
-        void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings);
+        void SetEtalonChannel(string ethalonTypeKey, ITransportChannelType settings);
 
         /// <summary>
         /// Текущий результат

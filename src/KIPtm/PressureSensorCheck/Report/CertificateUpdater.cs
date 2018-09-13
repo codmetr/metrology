@@ -25,7 +25,7 @@ namespace PressureSensorCheck.Report
         {
             ApplyCommonData(id, config, result, report);
 
-            ApplyEthalons(config, report);
+            ApplyEtalons(config, report);
         }
 
         private static void ApplyCommonData(TestResultID id, PressureSensorConfig config, PressureSensorResult result, PressureSensorCertificateDto report)
@@ -49,18 +49,18 @@ namespace PressureSensorCheck.Report
             report.CheckDate = config.CertificateDate;
         }
 
-        private void ApplyEthalons(PressureSensorConfig config, PressureSensorCertificateDto report)
+        private void ApplyEtalons(PressureSensorConfig config, PressureSensorCertificateDto report)
         {
-            report.Ethalons = new[]
+            report.Etalons = new[]
             {
-                ToDto(config.EthalonPressure),
-                ToDto(config.EthalonOut),
+                ToDto(config.EtalonPressure),
+                ToDto(config.EtalonOut),
             };
         }
 
-        private EthalonDto ToDto(EthalonDescriptor descr)
+        private EtalonDto ToDto(EtalonDescriptor descr)
         {
-            return new EthalonDto()
+            return new EtalonDto()
             {
                 Title = descr.Title,
                 Type = $"тип {descr.SensorType}, разряд {descr.Category}",

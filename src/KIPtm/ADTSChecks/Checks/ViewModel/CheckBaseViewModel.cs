@@ -39,7 +39,7 @@ namespace ADTSChecks.Checks.ViewModel
 
         private IEventAggregator _agregator;
         protected IUserChannel _userChannel;
-        protected UserEthalonChannel _userEchalonChannel;
+        protected UserEtalonChannel _userEchalonChannel;
         protected ADTSCheckConfig _property;
         private ITransportChannelType _connection;
         private double _realValue;
@@ -47,11 +47,11 @@ namespace ADTSChecks.Checks.ViewModel
         protected Action _currentAction;
         protected Dispatcher _dispatcher;
         protected IDeviceManager _deviceManager;
-        private string _ethalonTypeKey;
+        private string _etalonTypeKey;
         protected TestResultID _resultId;
         protected List<TestStepResult> _resPoints = new List<TestStepResult>();
-        private object _ethalonChannel;
-        private ITransportChannelType _ethalonChannelType;
+        private object _etalonChannel;
+        private ITransportChannelType _etalonChannelType;
         private bool _stopEnabled = false;
 
         private CancellationTokenSource _cancellation;
@@ -85,10 +85,10 @@ namespace ADTSChecks.Checks.ViewModel
             _userChannel.QueryStarted += OnQueryStarted;
             _currentAction = DoStart;
             _dispatcher = Dispatcher.CurrentDispatcher;
-            _userEchalonChannel = new UserEthalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
-            //if (Method.EthalonChannelType == null)
+            _userEchalonChannel = new UserEtalonChannel(_userChannel, TimeSpan.FromMilliseconds(100));
+            //if (Method.EtalonChannelType == null)
             //{
-            //    Method.SetEthalonChannel(_userEchalonChannel, null);
+            //    Method.SetEtalonChannel(_userEchalonChannel, null);
             //}
 
             Title = "ADTS";
@@ -121,23 +121,23 @@ namespace ADTSChecks.Checks.ViewModel
         /// <summary>
         /// Установить эталонный канал
         /// </summary>
-        /// <param name="ethalonTypeKey"></param>
+        /// <param name="etalonTypeKey"></param>
         /// <param name="settings"></param>
-        public void SetEthalonChannel(string ethalonTypeKey, ITransportChannelType settings)
+        public void SetEtalonChannel(string etalonTypeKey, ITransportChannelType settings)
         {
-            if (string.IsNullOrEmpty(ethalonTypeKey) || ethalonTypeKey == UserEthalonChannel.Key || settings == null)
+            if (string.IsNullOrEmpty(etalonTypeKey) || etalonTypeKey == UserEtalonChannel.Key || settings == null)
             {
-                Method.ChConfig.SetEthalonChannel(Method.Steps, _userEchalonChannel, null);
-                _ethalonTypeKey = UserEthalonChannel.Key;
-                _ethalonChannelType = null;
+                Method.ChConfig.SetEtalonChannel(Method.Steps, _userEchalonChannel, null);
+                _etalonTypeKey = UserEtalonChannel.Key;
+                _etalonChannelType = null;
                 State.IsUserChannel = true;
-                EthalonChannel = _userEchalonChannel;
+                EtalonChannel = _userEchalonChannel;
                 return;
             }
-            _ethalonTypeKey = ethalonTypeKey;
-            _ethalonChannelType = settings;
-            State.IsUserChannel = _ethalonTypeKey == null || _ethalonTypeKey == UserEthalonChannel.Key;
-            EthalonChannel = _deviceManager.GetEthalonChannel(_ethalonTypeKey);
+            _etalonTypeKey = etalonTypeKey;
+            _etalonChannelType = settings;
+            State.IsUserChannel = _etalonTypeKey == null || _etalonTypeKey == UserEtalonChannel.Key;
+            EtalonChannel = _deviceManager.GetEtalonChannel(_etalonTypeKey);
         }
 
         /// <summary>
@@ -269,17 +269,17 @@ namespace ADTSChecks.Checks.ViewModel
         /// <summary>
         /// Эталонный канал
         /// </summary>
-        private object EthalonChannel
+        private object EtalonChannel
         {
-            get { return _ethalonChannel; }
+            get { return _etalonChannel; }
             set
             {
-                _ethalonChannel = value;
+                _etalonChannel = value;
                 OnPropertyChanged();
-                if (_ethalonTypeKey == UserEthalonChannel.Key)
-                    State.EthalonChannelViewModel = null;
+                if (_etalonTypeKey == UserEtalonChannel.Key)
+                    State.EtalonChannelViewModel = null;
                 else
-                    State.EthalonChannelViewModel = _deviceManager.GetEthalonChannelViewModel(_ethalonTypeKey, _ethalonChannel as IEthalonChannel);
+                    State.EtalonChannelViewModel = _deviceManager.GetEtalonChannelViewModel(_etalonTypeKey, _etalonChannel as IEtalonChannel);
             }
         }
 
@@ -341,11 +341,11 @@ namespace ADTSChecks.Checks.ViewModel
             }
             // Задаем эталон
 
-            if (_ethalonTypeKey != null && _ethalonChannelType != null)
+            if (_etalonTypeKey != null && _etalonChannelType != null)
             {
                 try
                 {
-                    Method.ChConfig.SetEthalonChannel(Method.Steps, _deviceManager.GetEthalonChannel(_ethalonTypeKey), _ethalonChannelType);
+                    Method.ChConfig.SetEtalonChannel(Method.Steps, _deviceManager.GetEtalonChannel(_etalonTypeKey), _etalonChannelType);
                 }
                 catch (Exception ex) //todo поймать ошибку подключения
                 {
@@ -358,7 +358,7 @@ namespace ADTSChecks.Checks.ViewModel
                 }
             }
             else
-                Method.ChConfig.SetEthalonChannel(Method.Steps, _userEchalonChannel, null);
+                Method.ChConfig.SetEtalonChannel(Method.Steps, _userEchalonChannel, null);
             // Запускаем
             _currentToken = _cancellation.Token;
             Task.Run(() =>

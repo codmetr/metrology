@@ -37,23 +37,23 @@ namespace PressureSensorCheck.Check.Steps
         /// <summary>
         /// Эталонный измеритель давления
         /// </summary>
-        private readonly IEthalonChannel _ethalonPressure;
+        private readonly IEtalonChannel _etalonPressure;
         /// <summary>
         /// Эталонный измеритель напряжения
         /// </summary>
-        private readonly IEthalonChannel _ethalonVoltage;
+        private readonly IEtalonChannel _etalonVoltage;
 
         /// <summary>
         /// Шаг обратного хода поверки датчика давления
         /// </summary>
-        public StepMainErrorBack(PressureSensorPoint point, PressureSensorPointResult result, IUserChannel userChannel, IEthalonChannel ethalonPressure, IEthalonChannel ethalonVoltage, Logger logger)
+        public StepMainErrorBack(PressureSensorPoint point, PressureSensorPointResult result, IUserChannel userChannel, IEtalonChannel etalonPressure, IEtalonChannel etalonVoltage, Logger logger)
         {
             Name = $"Проверка основной погрешности обратного хода на точке {point.PressurePoint} {point.PressureUnit} и нажмите \"Далее\"";
             _point = point;
             _result = result;
             _userChannel = userChannel;
-            _ethalonPressure = ethalonPressure;
-            _ethalonVoltage = ethalonVoltage;
+            _etalonPressure = etalonPressure;
+            _etalonVoltage = etalonVoltage;
             _logger = logger;
         }
 
@@ -71,8 +71,8 @@ namespace PressureSensorCheck.Check.Steps
             WaitHandle.WaitAny(new[] { wh, cancel.WaitHandle });
             if (cancel.IsCancellationRequested)
                 return;
-            var valueVoltage = _ethalonVoltage.GetEthalonValue(_point.OutPoint, cancel);
-            var valuePressure = _ethalonPressure.GetEthalonValue(_point.PressurePoint, cancel);
+            var valueVoltage = _etalonVoltage.GetEtalonValue(_point.OutPoint, cancel);
+            var valuePressure = _etalonPressure.GetEtalonValue(_point.PressurePoint, cancel);
             Log($"Received I = {valueVoltage} on P = {valuePressure}");
             _result.VoltageValueBack = valueVoltage;
 

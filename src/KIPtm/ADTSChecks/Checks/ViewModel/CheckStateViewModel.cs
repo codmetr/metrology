@@ -17,7 +17,7 @@ namespace ADTSChecks.Checks.ViewModel
         private string _note;
         protected ADTSViewModel _adtsViewModel;
         private bool _isUserChannel;
-        private object _ethalonChannelViewModel;
+        private object _etalonChannelViewModel;
         private IEnumerable<StepViewModel> _steps;
         private ObservableCollection<EventArgTestStepResult> _resultsLog;
 
@@ -82,10 +82,10 @@ namespace ADTSChecks.Checks.ViewModel
         /// <summary>
         /// Представление Эталонного канала
         /// </summary>
-        public object EthalonChannelViewModel
+        public object EtalonChannelViewModel
         {
-            get { return _ethalonChannelViewModel; }
-            set { _ethalonChannelViewModel = value;
+            get { return _etalonChannelViewModel; }
+            set { _etalonChannelViewModel = value;
                 OnPropertyChanged();
             }
         }

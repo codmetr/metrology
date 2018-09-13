@@ -43,7 +43,7 @@ namespace KipTM.Checks.ViewModel
             if (factory != null)
             {
                 check = factory.GetViewModel(_checkConfig.SelectedMethod, _checkConfig.Data, _checkConfig.CustomSettings, _result,
-                    _checkConfig.TargetTransportChannel, _checkConfig.EthalonTransportChannel);
+                    _checkConfig.TargetTransportChannel, _checkConfig.EtalonTransportChannel);
                 if (check!=null)
                     check.SetAggregator(_eventAggregator);
             }

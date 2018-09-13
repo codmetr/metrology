@@ -13,7 +13,7 @@ using KipTM.Model.TransportChannels;
 
 namespace PressureSensorCheck.Devices
 {
-    public class DPI620Ethalon: IEthalonChannel
+    public class Dpi620Etalon: IEtalonChannel
     {
         private readonly IDPI620Driver _dpi620;
         private readonly int _slotId;
@@ -29,7 +29,7 @@ namespace PressureSensorCheck.Devices
         /// <param name="channelType">тип канала</param>
         /// <param name="unitFrom">тип канала</param>
         /// <param name="unitTo">ожидаемые единицы измерения</param>
-        public DPI620Ethalon(IDPI620Driver dpi620, int slotId, ChannelType channelType, Units unitFrom, Units unitTo)
+        public Dpi620Etalon(IDPI620Driver dpi620, int slotId, ChannelType channelType, Units unitFrom, Units unitTo)
         {
             _dpi620 = dpi620;
             _slotId = slotId;
@@ -57,7 +57,7 @@ namespace PressureSensorCheck.Devices
             _dpi620.Close();
         }
 
-        public double GetEthalonValue(double point, CancellationToken calcel)
+        public double GetEtalonValue(double point, CancellationToken calcel)
         {
             var val = _dpi620.GetValue(_slotId);
             var realVal = UnitDict.Convert(_channelType, val, _unitFrom, _unitTo);

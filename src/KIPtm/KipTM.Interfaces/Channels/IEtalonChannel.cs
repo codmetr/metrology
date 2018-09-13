@@ -3,12 +3,12 @@ using KipTM.Model.TransportChannels;
 
 namespace KipTM.Interfaces.Channels
 {
-    public interface IEthalonChannel
+    public interface IEtalonChannel
     {
         bool Activate(ITransportChannelType transport);
 
         void Stop();
 
-        double GetEthalonValue(double point, CancellationToken cancel);
+        double GetEtalonValue(double point, CancellationToken cancel);
     }
 }

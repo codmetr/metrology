@@ -36,9 +36,9 @@ namespace KipTM.Interfaces.Checks
         /// <param name="customSettings">Специазизированная настройка</param>
         /// <param name="resultSet">Контейнер результата</param>
         /// <param name="checkDeviceChanel">Канал проверяемого устройства</param>
-        /// <param name="ethalonChanel"></param>
+        /// <param name="etalonChanel"></param>
         /// <returns></returns>
         IMethodViewModel GetViewModel(object method, CheckConfigData checkConfig, object customSettings,
-            TestResultID resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType ethalonChanel);
+            TestResultID resultSet, ITransportChannelType checkDeviceChanel, ITransportChannelType etalonChanel);
     }
 }

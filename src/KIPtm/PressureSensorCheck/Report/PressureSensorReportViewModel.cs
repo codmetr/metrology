@@ -42,7 +42,7 @@ namespace PressureSensorCheck.Report
                     _mainReportData.Load();
                 }
                 _mainReportData.SetDataSource(new[] { _mainReportDto });
-                _mainReportData.Subreports["EthalonRep"].SetDataSource(_mainReportDto.Ethalons);
+                _mainReportData.Subreports["EthalonRep"].SetDataSource(_mainReportDto.Etalons);
                 _mainReportData.Subreports["MainError"].SetDataSource(_mainReportDto.MainAccurancy);
                 _mainReportData.Subreports["VariationReport"].SetDataSource(_mainReportDto.VariationAccurancy);
                 return _mainReportData;
@@ -63,7 +63,7 @@ namespace PressureSensorCheck.Report
                     _certificateReportDate.Load();
                 }
                 _certificateReportDate.SetDataSource(new[] { _certificateDto });
-                _certificateReportDate.Subreports["ethalonsSubRep"].SetDataSource(_certificateDto.Ethalons);
+                _certificateReportDate.Subreports["ethalonsSubRep"].SetDataSource(_certificateDto.Etalons);
                 return _certificateReportDate;
             }
         }

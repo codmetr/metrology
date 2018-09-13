@@ -5,15 +5,15 @@ namespace PressureSensorData
     /// <summary>
     /// Описатель эталона
     /// </summary>
-    public class EthalonDescriptor
+    public class EtalonDescriptor
     {
         /// <summary>
         /// Копия
         /// </summary>
         /// <returns></returns>
-        public EthalonDescriptor DeepCopy()
+        public EtalonDescriptor DeepCopy()
         {
-            return new EthalonDescriptor()
+            return new EtalonDescriptor()
             {
                 Title = Title,
                 SensorType = SensorType,

@@ -26,7 +26,7 @@ namespace PressureSensorCheck.Report
         {
             ApplyCommonData(id, config, result, report);
 
-            ApplyEthalons(config, report);
+            ApplyEtalons(config, report);
 
             // Заполнение результатов проверки основной погрешности
             ApplyMainAccurancy(config, result, report);
@@ -60,28 +60,28 @@ namespace PressureSensorCheck.Report
             report.CommonResult = result.CommonResult;
         }
 
-        private void ApplyEthalons(PressureSensorConfig config, PressureSensorReportDto report)
+        private void ApplyEtalons(PressureSensorConfig config, PressureSensorReportDto report)
         {
-            var ethalons = new List<EthalonDto>();
-            ethalons.Add(new EthalonDto()
+            var etalons = new List<EtalonDto>();
+            etalons.Add(new EtalonDto()
             {
-                Type = config.EthalonPressure.SensorType,
-                Title = config.EthalonPressure.Title,
-                RangeClass = config.EthalonPressure.ErrorClass,
-                SerialNumber = config.EthalonPressure.SerialNumber,
-                CheckCertificateDate = config.EthalonPressure.Category,
-                CheckCertificateNumber = config.EthalonPressure.RegNum,
+                Type = config.EtalonPressure.SensorType,
+                Title = config.EtalonPressure.Title,
+                RangeClass = config.EtalonPressure.ErrorClass,
+                SerialNumber = config.EtalonPressure.SerialNumber,
+                CheckCertificateDate = config.EtalonPressure.Category,
+                CheckCertificateNumber = config.EtalonPressure.RegNum,
             });
-            ethalons.Add(new EthalonDto()
+            etalons.Add(new EtalonDto()
             {
-                Type = config.EthalonOut.SensorType,
-                Title = config.EthalonOut.Title,
-                RangeClass = config.EthalonOut.ErrorClass,
-                SerialNumber = config.EthalonOut.SerialNumber,
-                CheckCertificateDate = config.EthalonOut.Category,
-                CheckCertificateNumber = config.EthalonOut.RegNum,
+                Type = config.EtalonOut.SensorType,
+                Title = config.EtalonOut.Title,
+                RangeClass = config.EtalonOut.ErrorClass,
+                SerialNumber = config.EtalonOut.SerialNumber,
+                CheckCertificateDate = config.EtalonOut.Category,
+                CheckCertificateNumber = config.EtalonOut.RegNum,
             });
-            report.Ethalons = ethalons.ToArray();
+            report.Etalons = etalons.ToArray();
         }
 
         private static void ApplyMainAccurancy(PressureSensorConfig config, PressureSensorResult result, PressureSensorReportDto report)

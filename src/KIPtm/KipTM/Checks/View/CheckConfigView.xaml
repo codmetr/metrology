@@ -70,14 +70,14 @@
         <StackPanel Grid.Column="1" Grid.Row="0">
             <!--Настройки эталона-->
             <GroupBox Header="Настройки эталона:">
-                <ContentPresenter Content="{Binding EthalonOneCh}">
+                <ContentPresenter Content="{Binding EtalonOneCh}">
                     <!--<ContentPresenter.ContentTemplate>
-                        <DataTemplate DataType="config1:EthalonConfigViewModel">
-                            --><!--x:Key="DtEthalon" x:Name="dasd">--><!--
+                        <DataTemplate DataType="config1:EtalonConfigViewModel">
+                            --><!--x:Key="DtEtalon" x:Name="dasd">--><!--
                             <StackPanel>
                                 <TextBlock><Run Text="Тип СИ:"/></TextBlock>
                                 <ComboBox ItemsSource="{Binding Channels}" VerticalContentAlignment="Stretch"
-                                          SelectedItem="{Binding SelectedEthalonType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                          SelectedItem="{Binding SelectedEtalonType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate DataType="dto:ChannelDescriptor">
                                             <TextBlock Text="{Binding Name}" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -109,19 +109,19 @@
                                     </TextBox.Style>
                                 </TextBox>
                                 <TextBlock><Run Text="Заводской номер:"/></TextBlock>
-                                <TextBox Text="{Binding EthalonSerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox Text="{Binding EtalonSerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock><Run Text="Дата предыдущей поверки:"/></TextBlock>
-                                <DatePicker FirstDayOfWeek="Monday" DisplayDate="{Binding EthalonPreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <DatePicker FirstDayOfWeek="Monday" DisplayDate="{Binding EtalonPreviousCheckTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <Expander Header="Настройки подключения" IsExpanded="True"
                                           Visibility="{Binding IsNoAnalog, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
                                     <StackPanel>
-                                        <ContentPresenter Content="{Binding EthalonChanel}"/>
+                                        <ContentPresenter Content="{Binding EtalonChanel}"/>
                                     </StackPanel>
                                 </Expander>
                             </StackPanel>
                         </DataTemplate>
                     </ContentPresenter.ContentTemplate>-->
-                </ContentPresenter> <!--ContentTemplate="{StaticResource DtEthalon}"/>-->
+                </ContentPresenter> <!--ContentTemplate="{StaticResource DtEtalon}"/>-->
             </GroupBox>
             <!--Настройки эталона-->
         </StackPanel>

@@ -81,7 +81,7 @@ namespace KipTM.ViewModel
                 _user = data.User;
                 _time = _result.Timestamp;
                 _device = new DeviceViewModel(data.TargetDevice.Device);
-                _etalons = new ObservableCollection<IDeviceViewModel>(data.Ethalons.Values.Select(el => new DeviceViewModel(el.Device)));
+                _etalons = new ObservableCollection<IDeviceViewModel>(data.Etalons.Values.Select(el => new DeviceViewModel(el.Device)));
                 Parameters = new ObservableCollection<IParameterResultViewModel>(parameters);
                 _save = accessor;
             }

@@ -38,7 +38,7 @@ namespace KipTM.Model
         /// <summary>
         /// Список типов поддерживаемых эталонов
         /// </summary>
-        private readonly List<IDeviceTypeDescriptor> _ethalonTypes;
+        private readonly List<IDeviceTypeDescriptor> _etalonTypes;
         /// <summary>
         /// Набор сконфигурированных эталонов
         /// </summary>
@@ -50,15 +50,15 @@ namespace KipTM.Model
             _archive = archive;
             _settings = settings;
             _deviceTypes = new List<IDeviceTypeDescriptor>();
-            _ethalonTypes = new List<IDeviceTypeDescriptor>();
+            _etalonTypes = new List<IDeviceTypeDescriptor>();
             _etalons = new List<DeviceDescriptor>();
             _resultsArchive = new ResultsArchive();
         }
 
-        public void FillDeviceList(IEnumerable<DeviceTypeDescriptor> deviceTypes, IEnumerable<DeviceTypeDescriptor> ethalonTypes)
+        public void FillDeviceList(IEnumerable<DeviceTypeDescriptor> deviceTypes, IEnumerable<DeviceTypeDescriptor> etalonTypes)
         {
             _deviceTypes.AddRange(deviceTypes);
-            _ethalonTypes.AddRange(ethalonTypes);
+            _etalonTypes.AddRange(etalonTypes);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace KipTM.Model
         /// </summary>
         public IEnumerable<IDeviceTypeDescriptor> EtalonTypes
         {
-            get { return _ethalonTypes; }
+            get { return _etalonTypes; }
         }
 
         /// <summary>

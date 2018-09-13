@@ -7,14 +7,14 @@ using KipTM.Interfaces.Channels;
 
 namespace PressureSensorCheck.Channels
 {
-    public class DPI620PressChannelFactory : IEthalonCannelFactory
+    public class DPI620PressChannelFactory : IEtalonCannelFactory
     {
-        public IEthalonChannel GetChanel(object model)
+        public IEtalonChannel GetChanel(object model)
         {
             return new Dpi620PressChannel();
         }
 
-        public object GetChanelViewModel(IEthalonChannel channel)
+        public object GetChanelViewModel(IEtalonChannel channel)
         {
             throw new NotImplementedException();
         }

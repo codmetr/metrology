@@ -15,7 +15,7 @@ using Tools;
 
 namespace ADTSChecks.Model.Steps.ADTSCalibration
 {
-    public class DoPointStep : TestStepWithBuffer, IStoppedOnPoint, ISettedEthalonChannel
+    public class DoPointStep : TestStepWithBuffer, IStoppedOnPoint, ISettedEtalonChannel
     {
         public const string KeyStep = "DoPointStep";
         public const string KeyPressure = "Pressure";
@@ -25,7 +25,7 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
         private readonly ADTSPoint _point;
         private readonly double _rate;
         private readonly PressureUnits _unit;
-        private IEthalonChannel _ethalonChannel;
+        private IEtalonChannel EtalonChannel;
         private IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
         private AdtsPointResult _result;
@@ -33,7 +33,7 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
 
         public DoPointStep(
             string name, ADTSModel adts, Parameters param, ADTSPoint point, double rate,
-            PressureUnits unit, IEthalonChannel ethalonChannel, IUserChannel userChannel, Logger logger)
+            PressureUnits unit, IEtalonChannel etalonChannel, IUserChannel userChannel, Logger logger)
         {
             Name = name;
             _adts = adts;
@@ -42,7 +42,7 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             _rate = rate;
             _unit = unit;
             _logger = logger;
-            _ethalonChannel = ethalonChannel;
+            EtalonChannel = etalonChannel;
             _userChannel = userChannel;
             _result = new AdtsPointResult();
         }
@@ -99,7 +99,7 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             }
 
             // Получить эталонное значение
-            var realValue = _ethalonChannel.GetEthalonValue(point, cancel);
+            var realValue = EtalonChannel.GetEtalonValue(point, cancel);
             if (IsCancel(cancel))
             {
                 return;
@@ -140,9 +140,9 @@ namespace ADTSChecks.Model.Steps.ADTSCalibration
             return;
         }
 
-        public void SetEthalonChannel(IEthalonChannel ehalon)
+        public void SetEtalonChannel(IEtalonChannel ehalon)
         {
-            _ethalonChannel = ehalon;
+            EtalonChannel = ehalon;
         }
 
 

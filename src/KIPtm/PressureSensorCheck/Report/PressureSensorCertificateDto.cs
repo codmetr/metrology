@@ -12,7 +12,7 @@ namespace PressureSensorCheck.Report
         /// </summary>
         public PressureSensorCertificateDto()
         {
-            Ethalons = new EthalonDto[0];
+            Etalons = new EtalonDto[0];
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace PressureSensorCheck.Report
         /// <summary>
         /// Эталоны
         /// </summary>
-        public IEnumerable<EthalonDto> Ethalons { get; set; }
+        public IEnumerable<EtalonDto> Etalons { get; set; }
 
         /// <summary>
         /// Температура

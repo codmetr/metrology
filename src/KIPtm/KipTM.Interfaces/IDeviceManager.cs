@@ -13,7 +13,7 @@ namespace KipTM.Model
         /// </summary>
         /// <param name="deviceKey"></param>
         /// <returns></returns>
-        IEthalonChannel GetEthalonChannel(string deviceKey);
+        IEtalonChannel GetEtalonChannel(string deviceKey);
 
         /// <summary>
         /// Получить визуальную модель для канала
@@ -21,7 +21,7 @@ namespace KipTM.Model
         /// <param name="deviceKey">Ключь типа канала</param>
         /// <param name="channel">Канал</param>
         /// <returns></returns>
-        object GetEthalonChannelViewModel(string deviceKey, IEthalonChannel channel);
+        object GetEtalonChannelViewModel(string deviceKey, IEtalonChannel channel);
 
         /// <summary>
         /// Получить драйвер устройства

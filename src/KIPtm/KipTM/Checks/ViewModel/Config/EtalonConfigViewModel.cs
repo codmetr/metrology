@@ -9,22 +9,22 @@ using KipTM.ViewModel;
 
 namespace KipTM.Checks.ViewModel.Config
 {
-    public class EthalonConfigViewModel : INotifyPropertyChanged
+    public class EtalonConfigViewModel : INotifyPropertyChanged
     {
-        private readonly DeviceWithChannel _ethalon;
+        private readonly DeviceWithChannel _etalon;
         private readonly IDictionary<ChannelDescriptor, DeviceTypeDescriptor> _dicChannels;
-        private SelectChannelViewModel _ethalonChanel;
+        private SelectChannelViewModel _etalonChanel;
         private bool _isAnalog;
 
         /// <summary>
         /// Визуальная модель конфигурации конкретного типа проверки
         /// </summary>
-        public EthalonConfigViewModel(DeviceWithChannel ethalon, IDictionary<ChannelDescriptor, DeviceTypeDescriptor> dicChannels, IEnumerable<ITransportChannelType> channels)
+        public EtalonConfigViewModel(DeviceWithChannel etalon, IDictionary<ChannelDescriptor, DeviceTypeDescriptor> dicChannels, IEnumerable<ITransportChannelType> channels)
         {
-            _ethalon = ethalon;
+            _etalon = etalon;
             _dicChannels = dicChannels;
             _isAnalog = false;
-            EthalonChanel = new SelectChannelViewModel(channels);
+            EtalonChanel = new SelectChannelViewModel(channels);
         }
 
         /// <summary>
@@ -35,14 +35,14 @@ namespace KipTM.Checks.ViewModel.Config
         /// <summary>
         /// Тип устройства
         /// </summary>
-        public ChannelDescriptor SelectedEthalonType
+        public ChannelDescriptor SelectedEtalonType
         {
-            get { return _ethalon.Channel; }
+            get { return _etalon.Channel; }
             set
             {
-                _ethalon.Channel = value;
-                _ethalon.Device.DeviceType = _dicChannels[value];
-                IsAnalog = value.Key == UserEthalonChannel.Key;
+                _etalon.Channel = value;
+                _etalon.Device.DeviceType = _dicChannels[value];
+                IsAnalog = value.Key == UserEtalonChannel.Key;
                 OnPropertyChanged();
             }
         }
@@ -68,10 +68,10 @@ namespace KipTM.Checks.ViewModel.Config
         /// </summary>
         public string AnalogEthDevType
         {
-            get { return _ethalon.Device.DeviceType.Model; }
+            get { return _etalon.Device.DeviceType.Model; }
             set
             {
-                _ethalon.Device.DeviceType.Model = value;
+                _etalon.Device.DeviceType.Model = value;
                 OnPropertyChanged();
             }
         }
@@ -79,12 +79,12 @@ namespace KipTM.Checks.ViewModel.Config
         /// <summary>
         /// Производитель эталона
         /// </summary>
-        public string EthalonManufacturer
+        public string EtalonManufacturer
         {
-            get { return _ethalon.Device.DeviceType.Manufacturer; }
+            get { return _etalon.Device.DeviceType.Manufacturer; }
             set
             {
-                _ethalon.Device.DeviceType.Manufacturer = value;
+                _etalon.Device.DeviceType.Manufacturer = value;
                 OnPropertyChanged();
             }
         }
@@ -92,12 +92,12 @@ namespace KipTM.Checks.ViewModel.Config
         /// <summary>
         /// Серийный номер
         /// </summary>
-        public string EthalonSerialNumber
+        public string EtalonSerialNumber
         {
-            get { return _ethalon.Device.SerialNumber; }
+            get { return _etalon.Device.SerialNumber; }
             set
             {
-                _ethalon.Device.SerialNumber = value;
+                _etalon.Device.SerialNumber = value;
                 OnPropertyChanged();
             }
         }
@@ -105,12 +105,12 @@ namespace KipTM.Checks.ViewModel.Config
         /// <summary>
         /// Дата предыдущей поверки/калибровки
         /// </summary>
-        public DateTime EthalonPreviousCheckTime
+        public DateTime EtalonPreviousCheckTime
         {
-            get { return _ethalon.Device.PreviousCheckTime; }
+            get { return _etalon.Device.PreviousCheckTime; }
             set
             {
-                _ethalon.Device.PreviousCheckTime = value;
+                _etalon.Device.PreviousCheckTime = value;
                 OnPropertyChanged();
             }
         }
@@ -118,10 +118,10 @@ namespace KipTM.Checks.ViewModel.Config
         /// <summary>
         /// Настройки канала эталона
         /// </summary>
-        public SelectChannelViewModel EthalonChanel
+        public SelectChannelViewModel EtalonChanel
         {
-            get { return _ethalonChanel; }
-            set { _ethalonChanel = value; }
+            get { return _etalonChanel; }
+            set { _etalonChanel = value; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

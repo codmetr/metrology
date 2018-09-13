@@ -17,11 +17,11 @@ namespace ReportAdts
 
         public object CheckDate { get; set; }
 
-        public object EthalonDeviceType { get; set; }
+        public object EtalonDeviceType { get; set; }
 
-        public object EthalonError { get; set; }
+        public object EtalonError { get; set; }
 
-        public object EthalonChannelRange { get; set; }
+        public object EtalonChannelRange { get; set; }
 
         public object CheckMethod { get; set; }
 

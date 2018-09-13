@@ -20,7 +20,7 @@ namespace ADTSChecks
             {
                 ADTSModel.Descriptor
             };
-            EthalonTypes = new List<DeviceTypeDescriptor>()
+            EtalonTypes = new List<DeviceTypeDescriptor>()
             {
             };
             Models = new Dictionary<Type, IDeviceModelFactory>()
@@ -38,7 +38,7 @@ namespace ADTSChecks
             driversConf.AddRange(factoriesVisa.GetDevicesConfig());
             DeviceConfigs = driversConf;
 
-            EthalonChannels = new List<KeyValuePair<string, IEthalonCannelFactory>>()
+            EtalonChannels = new List<KeyValuePair<string, IEtalonCannelFactory>>()
             {
             };
         }
@@ -50,7 +50,7 @@ namespace ADTSChecks
         /// <summary>
         /// Типы устройств для использования в качестве эталона
         /// </summary>
-        public IEnumerable<DeviceTypeDescriptor> EthalonTypes { get; private set; }
+        public IEnumerable<DeviceTypeDescriptor> EtalonTypes { get; private set; }
         /// <summary>
         /// Фабрика каналов
         /// </summary>
@@ -70,7 +70,7 @@ namespace ADTSChecks
         /// <summary>
         /// Фабрики каналов эталонов
         /// </summary>
-        public IEnumerable<KeyValuePair<string, IEthalonCannelFactory>> EthalonChannels { get; private set; }
+        public IEnumerable<KeyValuePair<string, IEtalonCannelFactory>> EtalonChannels { get; private set; }
         /// <summary>
         /// Получить набор поддерживаемых типов проверок по типам устройств
         /// </summary>

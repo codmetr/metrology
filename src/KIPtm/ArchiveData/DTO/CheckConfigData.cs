@@ -11,7 +11,7 @@ namespace CheckFrame.Checks
         public CheckConfigData()
         {
             TargetDevice = new DeviceWithChannel() {Device = new DeviceDescriptor()};
-            Ethalons = new Dictionary<ChannelDescriptor, DeviceWithChannel>();
+            Etalons = new Dictionary<ChannelDescriptor, DeviceWithChannel>();
         }
         /// <summary>
         /// Ключ типа методики проверки
@@ -30,12 +30,12 @@ namespace CheckFrame.Checks
         /// ключь - измерительный канал целевого устройства
         /// значение - описатель выбранного устройства и
         /// </remarks>
-        public Dictionary<ChannelDescriptor, DeviceWithChannel> Ethalons { get; set; }
+        public Dictionary<ChannelDescriptor, DeviceWithChannel> Etalons { get; set; }
 
         /// <summary>
         /// Эталон - устройство без аппаратного интерфейса
         /// </summary>
-        public bool IsAnalogEthalon;
+        public bool IsAnalogEtalon;
 
         /// <summary>
         /// Тип поверки

@@ -16,7 +16,7 @@ namespace KipTM.DataService
 
         private readonly ILoops _loops;
 
-        private readonly IDictionary<string, IEthalonCannelFactory> _ethalonChannels;
+        private readonly IDictionary<string, IEtalonCannelFactory> _etalonChannels;
 
         private IDictionary<Type, IDeviceModelFactory> _modelFactories;
 
@@ -55,7 +55,7 @@ namespace KipTM.DataService
                 _loops.AddLocker(feature.Key, new object());
             }
 
-            _ethalonChannels = features.EthalonChannels.ToDictionary(el => el.Key, el => el.Value);
+            _etalonChannels = features.EtalonChannels.ToDictionary(el => el.Key, el => el.Value);
         }
 
         #region IDeviceManager
@@ -64,10 +64,10 @@ namespace KipTM.DataService
         /// </summary>
         /// <param name="deviceKey"></param>
         /// <returns></returns>
-        public IEthalonChannel GetEthalonChannel(string deviceKey)
+        public IEtalonChannel GetEtalonChannel(string deviceKey)
         {
-            var model = GetModel(_ethalonChannels[deviceKey].ModelType);
-            return _ethalonChannels[deviceKey].GetChanel(model);
+            var model = GetModel(_etalonChannels[deviceKey].ModelType);
+            return _etalonChannels[deviceKey].GetChanel(model);
         }
 
         /// <summary>
@@ -76,9 +76,9 @@ namespace KipTM.DataService
         /// <param name="deviceKey">Ключь типа канала</param>
         /// <param name="channel">Канал</param>
         /// <returns></returns>
-        public object GetEthalonChannelViewModel(string deviceKey, IEthalonChannel channel)
+        public object GetEtalonChannelViewModel(string deviceKey, IEtalonChannel channel)
         {
-            return _ethalonChannels[deviceKey].GetChanelViewModel(channel);
+            return _etalonChannels[deviceKey].GetChanelViewModel(channel);
         }
 
         public T GetModel<T>()

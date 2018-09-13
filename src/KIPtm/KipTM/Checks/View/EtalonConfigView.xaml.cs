@@ -18,12 +18,12 @@ using Tools.View;
 namespace KipTM.Checks.View
 {
     /// <summary>
-    /// Interaction logic for EthalonConfigView.xaml
+    /// Interaction logic for EtalonConfigView.xaml
     /// </summary>
-    [View(typeof(EthalonConfigViewModel))]
-    public partial class EthalonConfigView : UserControl
+    [View(typeof(EtalonConfigViewModel))]
+    public partial class EtalonConfigView : UserControl
     {
-        public EthalonConfigView()
+        public EtalonConfigView()
         {
             InitializeComponent();
         }

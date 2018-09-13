@@ -130,7 +130,7 @@
     </ApplicationDefinition>
     <Compile Include="Archive\ViewModel\TestResultViewModelFactory.cs" />
     <Compile Include="Checks\ViewModel\CheckPool.cs" />
-    <Compile Include="Checks\ViewModel\Config\EthalonConfigViewModel.cs" />
+    <Compile Include="Checks\ViewModel\Config\EtalonConfigViewModel.cs" />
     <Compile Include="Checks\ViewModel\SaveVM.cs" />
     <Compile Include="Checks\View\AskOkView.xaml.cs">
       <DependentUpon>AskOkView.xaml</DependentUpon>
@@ -138,8 +138,8 @@
     <Compile Include="Checks\View\ChannelDescriptorView.xaml.cs">
       <DependentUpon>ChannelDescriptorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Checks\View\EthalonConfigView.xaml.cs">
-      <DependentUpon>EthalonConfigView.xaml</DependentUpon>
+    <Compile Include="Checks\View\EtalonConfigView.xaml.cs">
+      <DependentUpon>EtalonConfigView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Checks\View\PointConfigConverter.cs" />
     <Compile Include="Checks\View\PressureSensorRunView.xaml.cs">
@@ -271,7 +271,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Checks\View\EthalonConfigView.xaml">
+    <Page Include="Checks\View\EtalonConfigView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

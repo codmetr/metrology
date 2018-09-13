@@ -7,7 +7,7 @@ using KipTM.Model.TransportChannels;
 
 namespace CheckFrame.Channels
 {
-    public class UserEthalonChannel : IEthalonChannel
+    public class UserEtalonChannel : IEtalonChannel
     {
 
         public static string Key = "Пользовательский канал";
@@ -20,7 +20,7 @@ namespace CheckFrame.Channels
         private readonly IUserChannel _userChannel;
         private readonly TimeSpan _waitPeriod;
 
-        public UserEthalonChannel(IUserChannel userChannel, TimeSpan waitPeriod)
+        public UserEtalonChannel(IUserChannel userChannel, TimeSpan waitPeriod)
         {
             _userChannel = userChannel;
             _waitPeriod = waitPeriod;
@@ -35,7 +35,7 @@ namespace CheckFrame.Channels
         {
         }
 
-        public double GetEthalonValue(double point, CancellationToken cancel)
+        public double GetEtalonValue(double point, CancellationToken cancel)
         {
             var result = double.NaN;
             _userChannel.Message = string.Format("Укажите эталонное значение");

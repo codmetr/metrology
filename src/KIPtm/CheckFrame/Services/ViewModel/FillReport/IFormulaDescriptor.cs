@@ -19,18 +19,18 @@ namespace KipTM.Services.ViewModel.FillReport
         /// <summary>
         /// Получение величины фактической ошибки
         /// </summary>
-        /// <param name="ethalon"></param>
+        /// <param name="etalon"></param>
         /// <param name="measured"></param>
         /// <returns></returns>
-        double GetError(double ethalon, double measured);
+        double GetError(double etalon, double measured);
 
         /// <summary>
         /// Поллучение оценки корректности измеренного значения
         /// </summary>
-        /// <param name="ethalon"></param>
+        /// <param name="etalon"></param>
         /// <param name="measured"></param>
         /// <returns></returns>
-        bool IsCorrect(double ethalon, double measured);
+        bool IsCorrect(double etalon, double measured);
 
     }
 }

@@ -16,14 +16,14 @@ namespace KipTM.Services.ViewModel.FillReport
 
         public string Name { get { return "Комплексная погрешность"; } }
 
-        public double GetError(double ethalon, double measured)
+        public double GetError(double etalon, double measured)
         {
-            return Math.Abs(measured) - Math.Abs(ethalon);
+            return Math.Abs(measured) - Math.Abs(etalon);
         }
 
-        public bool IsCorrect(double ethalon, double measured)
+        public bool IsCorrect(double etalon, double measured)
         {
-            return Math.Abs(measured) - Math.Abs(ethalon) < TolleranceAbs + Math.Abs(ethalon)*TolleranceMultipl;
+            return Math.Abs(measured) - Math.Abs(etalon) < TolleranceAbs + Math.Abs(etalon)*TolleranceMultipl;
         }
     }
 }

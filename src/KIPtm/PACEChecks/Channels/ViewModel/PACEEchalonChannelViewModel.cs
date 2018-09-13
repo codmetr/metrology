@@ -5,7 +5,7 @@ namespace PACEChecks.Channels.ViewModel
 {
     public class PaceEthalonChannelViewModel : INotifyPropertyChanged
     {
-        private PACEEthalonChannel _model;
+        private PaceEtalonChannel _model;
         private bool _isActive;
         private string _pressure;
         private string _pressureUnit;
@@ -13,7 +13,7 @@ namespace PACEChecks.Channels.ViewModel
         /// <summary>
         /// Initializes a new instance of the PACEEchalonChannelViewModel class.
         /// </summary>
-        public PaceEthalonChannelViewModel(PACEEthalonChannel model)
+        public PaceEthalonChannelViewModel(PaceEtalonChannel model)
         {
             _model = model;
             _model.ActiveStateChange += _model_ActiveStateChange;

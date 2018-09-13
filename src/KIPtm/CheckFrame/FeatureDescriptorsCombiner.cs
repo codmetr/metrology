@@ -21,13 +21,13 @@ namespace CheckFrame
         {
             _features = features;
             DeviceTypes = _features.SelectMany(el => el.DeviceTypes);
-            EthalonTypes = _features.SelectMany(el => el.EthalonTypes);
+            EtalonTypes = _features.SelectMany(el => el.EtalonTypes);
             Models = _features.SelectMany(el => el.Models);
             Devices = _features.SelectMany(el => el.Devices);
             DeviceConfigs = UnionByKey(_features, f => f.DeviceConfigs, (ch1, ch2) => ch1.Key == ch2.Key);
             //ChannelFactories = _features.Select(el => el.ChannelFactories);
             ChannelFactories = new ChannelFactoryCombiner(_features);
-            EthalonChannels = UnionByKey(_features, f=>f.EthalonChannels, (ch1, ch2)=>ch1.Key == ch2.Key);
+            EtalonChannels = UnionByKey(_features, f=>f.EtalonChannels, (ch1, ch2)=>ch1.Key == ch2.Key);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace CheckFrame
         /// <summary>
         /// Описатель поддерживаемых типов эталонов
         /// </summary>
-        public IEnumerable<DeviceTypeDescriptor> EthalonTypes { get; private set; }
+        public IEnumerable<DeviceTypeDescriptor> EtalonTypes { get; private set; }
         /// <summary>
         /// Фабрика каналов
         /// </summary>
@@ -57,7 +57,7 @@ namespace CheckFrame
         /// <summary>
         /// Фабрики каналов эталонов
         /// </summary>
-        public IEnumerable<KeyValuePair<string, IEthalonCannelFactory>> EthalonChannels { get; private set; }
+        public IEnumerable<KeyValuePair<string, IEtalonCannelFactory>> EtalonChannels { get; private set; }
         /// <summary>
         /// Получить набор поддерживаемых типов проверок по типам устройств
         /// </summary>

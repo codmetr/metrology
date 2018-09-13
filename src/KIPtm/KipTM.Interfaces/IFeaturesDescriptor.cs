@@ -21,7 +21,7 @@ namespace KipTM.Interfaces
         /// <summary>
         /// Описатель поддерживаемых типов эталонов
         /// </summary>
-        IEnumerable<DeviceTypeDescriptor> EthalonTypes { get; }
+        IEnumerable<DeviceTypeDescriptor> EtalonTypes { get; }
         /// <summary>
         /// Фабрика каналов
         /// </summary>
@@ -41,7 +41,7 @@ namespace KipTM.Interfaces
         /// <summary>
         /// Фабрики каналов эталонов
         /// </summary>
-        IEnumerable<KeyValuePair<string, IEthalonCannelFactory>> EthalonChannels { get; }
+        IEnumerable<KeyValuePair<string, IEtalonCannelFactory>> EtalonChannels { get; }
         /// <summary>
         /// Получить набор поддерживаемых типов проверок по типам устройств
         /// </summary>

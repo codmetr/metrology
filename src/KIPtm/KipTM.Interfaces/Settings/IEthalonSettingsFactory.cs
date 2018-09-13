@@ -3,7 +3,7 @@
     /// <summary>
     /// Фабрика настроек эталона по умолчанию
     /// </summary>
-    public interface IEthalonSettingsFactory
+    public interface IEtalonSettingsFactory
     {
         /// <summary>
         /// Получить настройки эталона по умолчанию

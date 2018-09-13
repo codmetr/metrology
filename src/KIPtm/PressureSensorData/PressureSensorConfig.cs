@@ -17,8 +17,8 @@ namespace PressureSensorData
             Humidity = 50;
             DayPressure = 760;
             CommonVoltage = 220;
-            EthalonPressure = new EthalonDescriptor();
-            EthalonOut = new EthalonDescriptor();
+            EtalonPressure = new EtalonDescriptor();
+            EtalonOut = new EtalonDescriptor();
             Points = new List<PressureSensorPoint>();
         }
 
@@ -37,12 +37,12 @@ namespace PressureSensorData
                 CheckedParameters = "абсолютное давление в диапазоне [диапазон]",
                 ChecklLawBase = "[документ с методикой поверки]", //"Федеральный закон от 26 июня 2008 г. № 102-ФЗ \"Об обеспечении единства измерений\"",
                 Company = "[Организация]",
-                EthalonPressure = new EthalonDescriptor()
+                EtalonPressure = new EtalonDescriptor()
                 {
                     SensorType = "Датчик давления",
                     Title = "[Наименование]"
                 },
-                EthalonOut = new EthalonDescriptor()
+                EtalonOut = new EtalonDescriptor()
                 {
                     SensorType = "Вольтметр",
                     Title = "[Наименование]"
@@ -57,8 +57,8 @@ namespace PressureSensorData
             data.ReportDate = ReportDate;
             data.CertificateNumber = CertificateNumber;
             data.CertificateDate = CertificateDate;
-            data.EthalonPressure = EthalonPressure.DeepCopy();
-            data.EthalonOut = EthalonOut.DeepCopy();
+            data.EtalonPressure = EtalonPressure.DeepCopy();
+            data.EtalonOut = EtalonOut.DeepCopy();
             data.Points = Points.Select(el => el.DeepCopy()).ToList();
             data.VpiMax = VpiMax;
             data.VpiMin = VpiMin;
@@ -105,12 +105,12 @@ namespace PressureSensorData
         /// <summary>
         /// Эталон давления
         /// </summary>
-        public EthalonDescriptor EthalonPressure { get; set; }
+        public EtalonDescriptor EtalonPressure { get; set; }
 
         /// <summary>
         /// Эталон выходного сигнала
         /// </summary>
-        public EthalonDescriptor EthalonOut { get; set; }
+        public EtalonDescriptor EtalonOut { get; set; }
 
         /// <summary>
         /// Точки проверки

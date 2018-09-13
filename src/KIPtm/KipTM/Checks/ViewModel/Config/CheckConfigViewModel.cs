@@ -21,7 +21,7 @@ namespace KipTM.ViewModel.Checks.Config
         private SelectChannelViewModel _checkDeviceChanel;
         private ICustomSettingsViewModel _customSetiings;
         private bool _isCustomSettingsAvailable;
-        public Dictionary<ChannelDescriptor, EthalonConfigViewModel> _ethalons;
+        public Dictionary<ChannelDescriptor, EtalonConfigViewModel> _etalons;
 
         /// <summary>
         /// Визуальная модель конфигурации конкретного типа проверки
@@ -38,13 +38,13 @@ namespace KipTM.ViewModel.Checks.Config
             _checkDeviceChanel = new SelectChannelViewModel(channelFactory.GetChannels());
             _checkDeviceChanel.ChannelTypeChanget += _checkDeviceChanel_ChannelTypeChanget;
 
-            var echalon = _model.EthalonWithCh;
-            _ethalons = _model.Channels.ToDictionary(elKey => elKey,
-                elV => new EthalonConfigViewModel(echalon.Values.FirstOrDefault(), _model.GetAvailableEthalons(elV),
+            var echalon = _model.EtalonWithCh;
+            _etalons = _model.Channels.ToDictionary(elKey => elKey,
+                elV => new EtalonConfigViewModel(echalon.Values.FirstOrDefault(), _model.GetAvailableEtalons(elV),
                     channelFactory.GetChannels()));
 
             _model.TargetTransportChannel = _checkDeviceChanel.SelectedChannel;
-            _model.EthalonTransportChannel = _ethalons[_model.SelectedChannel].EthalonChanel.SelectedChannel;
+            _model.EtalonTransportChannel = _etalons[_model.SelectedChannel].EtalonChanel.SelectedChannel;
         }
 
         #region Обработка событий изменения конфигурации
@@ -232,10 +232,10 @@ namespace KipTM.ViewModel.Checks.Config
             set
             {
                 _model.SelectedChannel = value;
-                _model.EthalonTransportChannel = EthalonOneCh.EthalonChanel.SelectedChannel;
+                _model.EtalonTransportChannel = EtalonOneCh.EtalonChanel.SelectedChannel;
                 CustomSetiings = _customConfigFactory.GetCustomSettings(_model.CustomSettings);
                 OnPropertyChanged();
-                OnPropertyChanged("EthalonOneCh");
+                OnPropertyChanged("EtalonOneCh");
             }
         }
 
@@ -255,7 +255,7 @@ namespace KipTM.ViewModel.Checks.Config
 
         #region Настройки эталона
 
-        public EthalonConfigViewModel EthalonOneCh { get { return _ethalons[SelectedChannel]; } }
+        public EtalonConfigViewModel EtalonOneCh { get { return _etalons[SelectedChannel]; } }
 
         #endregion
 

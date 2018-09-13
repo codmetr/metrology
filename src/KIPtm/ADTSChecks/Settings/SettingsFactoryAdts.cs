@@ -10,7 +10,7 @@ using KipTM.Settings;
 
 namespace ADTSChecks.Settings
 {
-    public class SettingsFactoryAdts : IDeviceSettingsFactory, /*IEthalonSettingsFactory,*/ IDeviceTypeSettingsFactory
+    public class SettingsFactoryAdts : IDeviceSettingsFactory, /*IEtalonSettingsFactory,*/ IDeviceTypeSettingsFactory
     {
         /// <summary>
         /// Типы проверяемых устройств и их измерительные каналы
@@ -55,7 +55,7 @@ namespace ADTSChecks.Settings
         ///// Настройки подключения эталона по умолчанию
         ///// </summary>
         ///// <returns></returns>
-        //DeviceSettings IEthalonSettingsFactory.GetDefault()
+        //DeviceSettings IEtalonSettingsFactory.GetDefault()
         //{
         //    return new DeviceSettings()
         //    {

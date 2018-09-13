@@ -61,9 +61,10 @@
     <Compile Include="Archive\ViewModel\ITestResultViewModel.cs" />
     <Compile Include="Channels\IChannelsFactory.cs" />
     <Compile Include="Channels\IDeviceConfig.cs" />
-    <Compile Include="Channels\IEthalonCannelFactory.cs" />
-    <Compile Include="Channels\IEthalonSourceChannel.cs" />
-    <Compile Include="Channels\IEthalonChannel.cs" />
+    <Compile Include="Channels\IEtalonSourceCannelFactory.cs" />
+    <Compile Include="Channels\IEtalonCannelFactory.cs" />
+    <Compile Include="Channels\IEtalonSourceChannel.cs" />
+    <Compile Include="Channels\IEtalonChannel.cs" />
     <Compile Include="Channels\IUserChannel.cs" />
     <Compile Include="Channels\UserQueryType.cs" />
     <Compile Include="Checks\CheckStepConfig.cs" />

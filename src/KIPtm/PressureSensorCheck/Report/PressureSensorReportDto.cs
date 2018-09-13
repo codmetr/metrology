@@ -12,7 +12,7 @@ namespace PressureSensorCheck.Report
         /// </summary>
         public PressureSensorReportDto()
         {
-            Ethalons = new EthalonDto[0];
+            Etalons = new EtalonDto[0];
             MainAccurancy = new MainAccurancyPointDto[0];
             VariationAccurancy = new VariationAccurancyPointDto[0];
         }
@@ -45,7 +45,7 @@ namespace PressureSensorCheck.Report
         /// <summary>
         /// Эталоны
         /// </summary>
-        public IEnumerable<EthalonDto> Ethalons { get; set; }
+        public IEnumerable<EtalonDto> Etalons { get; set; }
 
         /// <summary>
         /// Температура
@@ -193,7 +193,7 @@ namespace PressureSensorCheck.Report
     /// <summary>
     /// Описатель эталона
     /// </summary>
-    public class EthalonDto
+    public class EtalonDto
     {
         /// <summary>
         /// Название прибора

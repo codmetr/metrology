@@ -115,7 +115,7 @@
             </GroupBox>
             <GroupBox Header="Эталонный канал" Grid.Column="1" Grid.Row="1" 
                       Visibility="{Binding State.IsNotUserChannel, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <ContentPresenter Content="{Binding State.EthalonChannelViewModel, UpdateSourceTrigger=PropertyChanged}"/><!-- IsEnabled="{Binding State.WaitUserReaction}"-->
+                <ContentPresenter Content="{Binding State.EtalonChannelViewModel, UpdateSourceTrigger=PropertyChanged}"/><!-- IsEnabled="{Binding State.WaitUserReaction}"-->
             </GroupBox>
             <TextBlock Name="tbNoteMsg" Grid.Column="1" Grid.Row="2"
                        VerticalAlignment="Bottom" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Margin="5"

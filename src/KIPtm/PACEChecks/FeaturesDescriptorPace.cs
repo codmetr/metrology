@@ -19,7 +19,7 @@ namespace PACEChecks
             {
                 //todo добавить устройство, когда будет методика проверки
             };
-            EthalonTypes = new List<DeviceTypeDescriptor>()
+            EtalonTypes = new List<DeviceTypeDescriptor>()
             {
                 PACE1000Model.Descriptor
             };
@@ -38,9 +38,9 @@ namespace PACEChecks
             driversConf.AddRange(factoriesVisa.GetDevicesConfig());
             DeviceConfigs = driversConf;
 
-            EthalonChannels = new List<KeyValuePair<string, IEthalonCannelFactory>>()
+            EtalonChannels = new List<KeyValuePair<string, IEtalonCannelFactory>>()
             {
-                new KeyValuePair<string, IEthalonCannelFactory>(PACEData.KeysDic.PACE1000Pressure, new PACEEthalonChannelFactory())
+                new KeyValuePair<string, IEtalonCannelFactory>(PACEData.KeysDic.PACE1000Pressure, new PaceEtalonChannelFactory())
             };
         }
         
@@ -51,7 +51,7 @@ namespace PACEChecks
         /// <summary>
         /// Описатель поддерживаемых типов эталонов
         /// </summary>
-        public IEnumerable<DeviceTypeDescriptor> EthalonTypes { get; private set; }
+        public IEnumerable<DeviceTypeDescriptor> EtalonTypes { get; private set; }
         /// <summary>
         /// Фабрика каналов
         /// </summary>
@@ -71,7 +71,7 @@ namespace PACEChecks
         /// <summary>
         /// Фабрики каналов эталонов
         /// </summary>
-        public IEnumerable<KeyValuePair<string, IEthalonCannelFactory>> EthalonChannels { get; private set; }
+        public IEnumerable<KeyValuePair<string, IEtalonCannelFactory>> EtalonChannels { get; private set; }
         /// <summary>
         /// Получить набор поддерживаемых типов проверок по типам устройств
         /// </summary>

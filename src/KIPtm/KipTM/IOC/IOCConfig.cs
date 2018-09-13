@@ -57,7 +57,7 @@ namespace KipTM.IOC
                 new DeviceManager(unityContainer.Resolve<FeatureDescriptorsCombiner>()));
 
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IDeviceSettingsFactory>());
-            unityContainer.RegisterInstance(unityContainer.ResolveAll<IEthalonSettingsFactory>());
+            unityContainer.RegisterInstance(unityContainer.ResolveAll<IEtalonSettingsFactory>());
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IDeviceTypeSettingsFactory>());
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IMethodFactory>());
             unityContainer.RegisterInstance(unityContainer.ResolveAll<IService>());
@@ -129,8 +129,8 @@ namespace KipTM.IOC
             {
                 if (typeof (IDeviceSettingsFactory).IsAssignableFrom(type))
                     unityContainer.RegisterType(typeof (IDeviceSettingsFactory), type, type.Name);
-                if (typeof (IEthalonSettingsFactory).IsAssignableFrom(type))
-                    unityContainer.RegisterType(typeof (IEthalonSettingsFactory), type, type.Name);
+                if (typeof (IEtalonSettingsFactory).IsAssignableFrom(type))
+                    unityContainer.RegisterType(typeof (IEtalonSettingsFactory), type, type.Name);
                 if (typeof (IDeviceTypeSettingsFactory).IsAssignableFrom(type))
                     unityContainer.RegisterType(typeof (IDeviceTypeSettingsFactory), type, type.Name);
                 if (typeof (IMethodFactory).IsAssignableFrom(type))

@@ -20,15 +20,15 @@ namespace PressureSensorCheck.Check
         public static string CheckName = "Поверка датчика давления";
         private SimpleDataBuffer _dataBuffer = new SimpleDataBuffer();
 
-        private readonly IEthalonSourceChannel<Units> _pressureSrc;
-        private readonly IEthalonChannel _pressure;
-        private readonly IEthalonChannel _voltage;
+        private readonly IEtalonSourceChannel<Units> _pressureSrc;
+        private readonly IEtalonChannel _pressure;
+        private readonly IEtalonChannel _voltage;
 
         private PressureSensorPointResult _resultPoint = null;
         private PressureSensorResult _result = null;
 
 
-        public PresSensorCheck(Logger logger, IEthalonSourceChannel<Units> pressureSrc, IEthalonChannel pressure, IEthalonChannel voltage, PressureSensorResult result) : base(logger)
+        public PresSensorCheck(Logger logger, IEtalonSourceChannel<Units> pressureSrc, IEtalonChannel pressure, IEtalonChannel voltage, PressureSensorResult result) : base(logger)
         {
             _result = result;
             _pressureSrc = pressureSrc;

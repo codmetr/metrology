@@ -16,7 +16,7 @@ using Tools;
 
 namespace ADTSChecks.Model.Steps.ADTSTest
 {
-    public class DoPointStep : TestStepWithBuffer, IStoppedOnPoint, ISettedEthalonChannel, IPausedStep, ISettedUserChannel
+    public class DoPointStep : TestStepWithBuffer, IStoppedOnPoint, ISettedEtalonChannel, IPausedStep, ISettedUserChannel
     {
         #region members
         public const string KeyStep = "DoPointStep";
@@ -27,7 +27,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
         private readonly ADTSPoint _point;
         private readonly double _rate;
         private readonly PressureUnits _unit;
-        private IEthalonChannel _ethalonChannel;
+        private IEtalonChannel EtalonChannel;
         private IUserChannel _userChannel;
         private readonly NLog.Logger _logger;
         private readonly ManualResetEvent _setCurrentValueAsPoint = new ManualResetEvent(false);
@@ -39,7 +39,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
 
         public DoPointStep(string name, ADTSModel adts,
             Parameters param, ADTSPoint point, double rate, PressureUnits unit,
-            IEthalonChannel ethalonChannel, IUserChannel userChannel, Logger logger)
+            IEtalonChannel etalonChannel, IUserChannel userChannel, Logger logger)
         {
             Name = name;
             _adts = adts;
@@ -49,7 +49,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
             _unit = unit;
             _logger = logger;
             _userChannel = userChannel;
-            _ethalonChannel = ethalonChannel;
+            EtalonChannel = etalonChannel;
             _result = new AdtsPointResult();
         }
 
@@ -117,7 +117,7 @@ namespace ADTSChecks.Model.Steps.ADTSTest
                 return;
             }
             // Получить эталонное значение
-            var realValue = _ethalonChannel.GetEthalonValue(point, cancel);
+            var realValue = EtalonChannel.GetEtalonValue(point, cancel);
 
             _userChannel.Message = string.Format( "Установлено на точке {0} {1} полученно эталонное значение {2} {3}. Для продолжения нажмите ",
                     point.ToString("F2"), _unit.ToStr(), realValue.ToString("F2"), _unit.ToStr()) + "\"{0}\"";
@@ -157,14 +157,14 @@ namespace ADTSChecks.Model.Steps.ADTSTest
 
         #endregion
 
-        #region ISettedEthalonChannel
+        #region ISettedEtalonChannel
         /// <summary>
         /// Установить эталонный канал
         /// </summary>
         /// <param name="ehalon">эталонный канал</param>
-        public void SetEthalonChannel(IEthalonChannel ehalon)
+        public void SetEtalonChannel(IEtalonChannel ehalon)
         {
-            _ethalonChannel = ehalon;
+            EtalonChannel = ehalon;
         }
 
         #endregion

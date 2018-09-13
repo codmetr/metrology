@@ -8,7 +8,7 @@ using PACEChecks.Devices;
 
 namespace PACEChecks.Channels
 {
-    public class PaceEtalonChannel : IEtalonChannel
+    public class PACEEtalonSourceChannel : IEtalonChannel
     {
         public static string Key = "PACEChannel";
 
@@ -19,7 +19,7 @@ namespace PACEChecks.Channels
         private bool _isActive;
         private bool _isConnected;
 
-        public PaceEtalonChannel(PACE1000Model paseModel)
+        public PACEEtalonSourceChannel(PACE1000Model paseModel)
         {
             _paseModel = paseModel;
             _paseModel.PressureChanged += _paseModel_PressureChanged;

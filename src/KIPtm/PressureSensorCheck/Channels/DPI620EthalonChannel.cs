@@ -9,7 +9,7 @@ using KipTM.Model.TransportChannels;
 
 namespace PressureSensorCheck.Channels
 {
-    public class Dpi620PressChannel : IEthalonChannel
+    public class Dpi620PressChannel : IEtalonChannel
     {
         public bool Activate(ITransportChannelType transport)
         {
@@ -21,7 +21,7 @@ namespace PressureSensorCheck.Channels
             throw new NotImplementedException();
         }
 
-        public double GetEthalonValue(double point, CancellationToken calcel)
+        public double GetEtalonValue(double point, CancellationToken calcel)
         {
             throw new NotImplementedException();
         }

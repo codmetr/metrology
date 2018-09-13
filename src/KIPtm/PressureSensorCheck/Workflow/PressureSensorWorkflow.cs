@@ -9,6 +9,7 @@ using CheckFrame.Workflow;
 using DPI620Genii;
 using KipTM.EventAggregator;
 using KipTM.Interfaces;
+using KipTM.Interfaces.Channels;
 using KipTM.Workflow;
 using NLog;
 using PressureSensorCheck.Check;
@@ -27,13 +28,14 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         /// <param name="accessor">Доступ к хранилищу</param>
         /// <param name="context">Контекст UI</param>
+        /// <param name="presSources"></param>
         /// <param name="logger">логгер</param>
         /// <param name="id">ID проверки(если это продолжение проверки)</param>
         /// <param name="result">результат проверки(если это продолжение проверки)</param>
         /// <param name="conf">конфигурация проверки(если это продолжение проверки)</param>
         /// <param name="agregator">агрегатор событий</param>
         /// <returns>Стратегия переходов с состояниями</returns>
-        public IWorkflow Make(IDataAccessor accessor, IContext context, Logger logger, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null, IEventAggregator agregator = null)
+        public IWorkflow Make(IDataAccessor accessor, IContext context, IEnumerable<IEtalonSourceCannelFactory<double>> presSources, Logger logger, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null, IEventAggregator agregator = null)
         {
             id = id ?? new TestResultID()
             {
