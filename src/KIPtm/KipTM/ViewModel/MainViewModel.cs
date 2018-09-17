@@ -22,6 +22,7 @@ using KipTM.Manuals.ViewModel;
 using KipTM.ViewModel.Events;
 using KipTM.Workflow;
 using KipTM.Workflow.States.Events;
+using PACEChecks.Channels;
 using PressureSensorCheck.Check;
 using PressureSensorCheck.Workflow;
 using PressureSensorData;
@@ -116,7 +117,8 @@ namespace KipTM.ViewModel
             //_fastTools.Add(_save);
             checkBtns.Add(new OneBtnDescriptor(PresSensorCheck.CheckKey, "Датчик давления", BitmapToImage(Resources.EHCerabarM),
                 BitmapToImage(Resources.EHCerabarM), SelectChecks));
-            _workflows.Add(PresSensorCheck.CheckKey, new PressureSensorWorkflow().Make(new DataAccessor(dataPool), this, TODO, _logger, agregator: _eventAggregator));
+            _workflows.Add(PresSensorCheck.CheckKey, new PressureSensorWorkflow().Make(
+                new DataAccessor(dataPool), this, new [] { new PaceEtalonSourceCannelFactory() }, _logger, agregator: _eventAggregator));
             CheckBtns = checkBtns;
             _eventAggregator.Subscribe(this);
         }

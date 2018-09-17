@@ -9,6 +9,11 @@ namespace KipTM.Interfaces.Channels
     public interface IEtalonSourceCannelFactory
     {
         /// <summary>
+        /// Название типа эталона
+        /// </summary>
+        string TypeName { get; }
+
+        /// <summary>
         /// Получить эталонный канал
         /// </summary>
         /// <returns></returns>
@@ -26,6 +31,11 @@ namespace KipTM.Interfaces.Channels
     /// </summary>
     public interface IEtalonSourceCannelFactory<in T>
     {
+        /// <summary>
+        /// Название типа эталона
+        /// </summary>
+        string TypeName { get; }
+        
         /// <summary>
         /// Получить эталонный канал
         /// </summary>

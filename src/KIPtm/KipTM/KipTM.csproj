@@ -527,6 +527,10 @@
       <Project>{fa8f1885-a429-4f3a-93b7-cb3fcef61072}</Project>
       <Name>MainLoop</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PACEChecks\PACEChecks.csproj">
+      <Project>{D15379FE-8BFC-4DAF-B730-8FEE929DB5BB}</Project>
+      <Name>PACEChecks</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PressureSensorCheck\PressureSensorCheck.csproj">
       <Project>{b39fc5b2-8d9b-49a9-9189-76ba124ae522}</Project>
       <Name>PressureSensorCheck</Name>
