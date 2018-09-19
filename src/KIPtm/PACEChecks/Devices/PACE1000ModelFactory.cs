@@ -13,4 +13,6 @@ namespace PACEChecks.Devices
             return new PACE1000Model(PACE1000Model.Model, loops, deviceManager);
         }
     }
+
+    public 
 }

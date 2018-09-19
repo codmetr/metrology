@@ -92,6 +92,7 @@
     <Compile Include="Devices\PressureUnitDescriptor.cs" />
     <Compile Include="DeviceViewDescriptor.cs" />
     <Compile Include="EventAggregator\IEventAggregator.cs" />
+    <Compile Include="Exceptions\TranspotrTypeNotAvailableException.cs" />
     <Compile Include="IContext.cs" />
     <Compile Include="IDataService.cs" />
     <Compile Include="IDeviceManager.cs" />

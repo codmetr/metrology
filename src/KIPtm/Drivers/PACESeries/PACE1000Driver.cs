@@ -192,6 +192,21 @@ namespace PACESeries
         }
 
         /// <summary>
+        /// Установить целевой точки давления
+        /// </summary>
+        /// <param name="value">Целевая точка давления</param>
+        /// <returns>Удалось установить целевую точку давления</returns>
+        [DefModel(Model.PACE6000)]
+        public bool SetPressure(double value)
+        {
+            Send(_parser.GetCommandSetAimPressure(value));
+            return true;
+            //TODO реализовать проверку установки цели
+            //var resUnit = GetPressureUnit();
+            //return resUnit != null && resUnit == unit;
+        }
+
+        /// <summary>
         /// Установить блокировку изменения режима управления пользователем
         /// </summary>
         [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]

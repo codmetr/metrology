@@ -49,6 +49,7 @@
     <Compile Include="Channels\PaceEtalonChannelFactory.cs" />
     <Compile Include="Channels\PaceEtalonSourceCannelFactory.cs" />
     <Compile Include="Channels\ViewModel\PACEEchalonChannelViewModel.cs" />
+    <Compile Include="Channels\ViewModel\PaseConfigViewModel.cs" />
     <Compile Include="Checks\Calibration\Calibration.cs" />
     <Compile Include="Checks\Calibration\Steps\InitStep.cs" />
     <Compile Include="Checks\CheckPACE.cs" />

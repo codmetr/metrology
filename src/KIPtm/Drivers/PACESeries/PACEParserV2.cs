@@ -311,6 +311,29 @@ namespace PACESeries
         }
         #endregion
 
+        #region SetPressureAim ":SOUR:PRES"
+        /// <summary>
+        /// Получить команду "Установка целевого давления"
+        /// </summary>
+        /// <param name="val">целевое давление</param>
+        /// <returns>Команда</returns>
+        public string GetCommandSetAimPressure(double val)
+        {
+            return new LexNode<Codes>(Codes.SOUR).Add(Codes.PRESsure).Set(val.ToString("f2"));
+        }
+
+        /// <summary>
+        /// Получить команду "Установка целевого давления по каналу"
+        /// </summary>
+        /// <param name="channel">Канал</param>
+        /// <param name="val">целевое давление</param>
+        /// <returns>Команда</returns>
+        public string GetCommandGetAimPressureRange(int channel, double val)
+        {
+            return new LexNode<Codes>(Codes.SOUR).Add(channel).Add(Codes.PRESsure).Add(Codes.RANG).Set(val.ToString("f2"));
+        }
+        #endregion
+
         #region GetPressureAimRange ":SOUR:PRES:RANG?"
         /// <summary>
         /// Получить команду "Получение ограничение канала установки давления"

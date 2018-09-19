@@ -3,7 +3,7 @@
 namespace PACESeries
 {
     [Flags]
-    internal enum Model
+    public enum Model
     {
         PACE1000 = 1 >> 0,
         PACE5000 = 1 >> 1,
