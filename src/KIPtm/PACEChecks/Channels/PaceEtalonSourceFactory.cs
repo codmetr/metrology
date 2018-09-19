@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
 using PACEChecks.Channels.ViewModel;
 
@@ -11,13 +12,14 @@ namespace PACEChecks.Channels
     /// <summary>
     /// Фабрика конфигурации PACE для эталонного канала-источника
     /// </summary>
-    public class PaceEtalonSourceCannelFactory: IEtalonSourceCannelFactory<double>, IEtalonSourceCannelFactory
+    public class PaceEtalonSourceFactory: IEtalonSourceCannelFactory<Units>, IEtalonSourceCannelFactory
     {
-        private const string Name = "PACE5000/6000";
+        private readonly PaceConfigViewModel _configViewModel;
+        private const string Name = "PACE 6000";
 
-        public PaceEtalonSourceCannelFactory()
+        public PaceEtalonSourceFactory()
         {
-            ConfigViewModel = new PaseConfigViewModel();
+            _configViewModel = new PaceConfigViewModel();
         }
 
         /// <summary>
@@ -29,9 +31,10 @@ namespace PACEChecks.Channels
         /// Измерительный канал-источник
         /// </summary>
         /// <returns></returns>
-        public IEtalonSourceChannel<double> GetChanel()
+        public IEtalonSourceChannel<Units> GetChanel()
         {
-            throw new NotImplementedException();
+            //TODO реализовать зависимость от модели
+            return new PaceEtalonSource(_configViewModel.Address);
         }
 
         /// <summary>
@@ -46,6 +49,9 @@ namespace PACEChecks.Channels
         /// <summary>
         /// ViewModel конфигурирования измерительного канала
         /// </summary>
-        public object ConfigViewModel { get; }
+        public object ConfigViewModel
+        {
+            get { return _configViewModel; }
+        }
     }
 }

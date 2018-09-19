@@ -44,10 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveDefaultFactoryPace.cs" />
-    <Compile Include="Channels\PACEEchalonSourceChannel.cs" />
+    <Compile Include="Channels\PaceEtalonSource.cs" />
     <Compile Include="Channels\PACEEchalonChannel.cs" />
     <Compile Include="Channels\PaceEtalonChannelFactory.cs" />
-    <Compile Include="Channels\PaceEtalonSourceCannelFactory.cs" />
+    <Compile Include="Channels\PaceEtalonSourceFactory.cs" />
     <Compile Include="Channels\ViewModel\PACEEchalonChannelViewModel.cs" />
     <Compile Include="Channels\ViewModel\PaseConfigViewModel.cs" />
     <Compile Include="Checks\Calibration\Calibration.cs" />

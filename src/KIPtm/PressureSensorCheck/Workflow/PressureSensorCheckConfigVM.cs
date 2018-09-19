@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using ArchiveData.DTO;
 using KipTM.Checks.ViewModel.Config;
 using KipTM.EventAggregator;
 using KipTM.Interfaces;
+using KipTM.Interfaces.Channels;
 using KipTM.ViewModel.Events;
 using PressureSensorCheck.Workflow.Content;
 using PressureSensorData;
@@ -25,10 +28,13 @@ namespace PressureSensorCheck.Workflow
         private readonly TemplateStore<PressureSensorConfig> _templates;
         private readonly ITamplateArchive<PressureSensorConfig> _confArch;
         private PressureSensorConfig _data;
+        private Dictionary<string, IEtalonSourceCannelFactory<Units>> _ethalonsSources;
+        private string _selectedSourceName;
+        private object _selectedSourceViewModel;
 
         public PressureSensorCheckConfigVm(
             TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf,
-            IEventAggregator agregator, ITamplateArchive<PressureSensorConfig> archive)
+            IEventAggregator agregator, ITamplateArchive<PressureSensorConfig> archive, Dictionary<string, IEtalonSourceCannelFactory<Units>> ethalonsSources)
         {
             Data = configData;
             Identificator = identificator;
@@ -39,6 +45,11 @@ namespace PressureSensorCheck.Workflow
             _templates = new TemplateStore<PressureSensorConfig>(archive);
             _templates.LastData = configData;
             _templates.UpdatedTemplate += TemplatesOnUpdatedTemplate;
+            _ethalonsSources = ethalonsSources;
+            SourceNames = _ethalonsSources.Keys;
+            _selectedSourceName = SourceNames.FirstOrDefault();
+            var confVmTemplate = _ethalonsSources[_selectedSourceName];
+            SelectedSourceViewModel = confVmTemplate?.ConfigViewModel;
         }
 
         /// <summary>
@@ -49,6 +60,33 @@ namespace PressureSensorCheck.Workflow
         {
             Data.SetCopy(pressureSensorConfig);
             OnPropertyChanged(nameof(Data));
+        }
+
+        /// <summary>
+        /// Список 
+        /// </summary>
+        public IEnumerable<string> SourceNames { get; private set; }
+
+        public string SelectedSourceName
+        {
+            get { return _selectedSourceName; }
+            set
+            {
+                _selectedSourceName = value;
+                OnPropertyChanged();
+                var confVmTemplate = _ethalonsSources[_selectedSourceName];
+                SelectedSourceViewModel = confVmTemplate?.ConfigViewModel;
+            }
+        }
+
+        public object SelectedSourceViewModel
+        {
+            get { return _selectedSourceViewModel; }
+            set
+            {
+                _selectedSourceViewModel = value; 
+                OnPropertyChanged();
+            }
         }
 
         public string SerialNumber

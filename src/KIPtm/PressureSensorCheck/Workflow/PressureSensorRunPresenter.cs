@@ -9,6 +9,7 @@ using ArchiveData.DTO;
 using DPI620Genii;
 using KipTM.EventAggregator;
 using KipTM.Interfaces;
+using KipTM.Interfaces.Channels;
 using KipTM.Model.Checks;
 using NLog;
 using PressureSensorCheck.Check;
@@ -35,6 +36,7 @@ namespace PressureSensorCheck.Workflow
         private readonly IEventAggregator _agregator;
         private bool _isRun;
         private readonly IContext _context;
+        private IEtalonSourceChannel<Units> _pressureSrc;
 
 
         public PressureSensorRunPresenter(PressureSensorRunVm1 vm, PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator, IContext context)
@@ -52,6 +54,7 @@ namespace PressureSensorCheck.Workflow
 
             _logger = NLog.LogManager.GetLogger("PressureSensorRun");
             _autoupdater = new AutoUpdater(_logger);
+            _pressureSrc = null;
         }
 
         /// <summary>
@@ -87,6 +90,15 @@ namespace PressureSensorCheck.Workflow
         /// Точки проверки с результатом
         /// </summary>
         public IEnumerable<PointViewModel> Points { get { return _vm.Points; } }
+
+        /// <summary>
+        /// Обновить этолонный канал
+        /// </summary>
+        /// <param name="pressureSrc"></param>
+        public void UpdateSourceChannel(IEtalonSourceChannel<Units> pressureSrc)
+        {
+            _pressureSrc = pressureSrc;
+        }
 
         /// <summary>
         /// Обновить набор точек в проверке по конфигурации
@@ -246,7 +258,7 @@ namespace PressureSensorCheck.Workflow
                 _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
 
             // конфигурирование шагов проверки
-            var check = new PresSensorCheck(checkLogger, null,
+            var check = new PresSensorCheck(checkLogger, _pressureSrc,
                 new Dpi620Etalon(_dpi620, inSlotNum, ChannelType.Pressure, inSlot.SelectedUnit, _config.Unit),
                 new Dpi620Etalon(_dpi620, outSlotNum, ChannelType.Current, outSlot.SelectedUnit, Units.mA), _result);
             check.ChConfig.UsrChannel = new PressureSensorUserChannel(_vm, _context);

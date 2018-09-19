@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using IEEE488;
+using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
 using KipTM.Interfaces.Exceptions;
 using KipTM.Model.Channels;
@@ -10,17 +12,19 @@ using PACESeries;
 
 namespace PACEChecks.Channels
 {
-    public class PACEEtalonSourceChannel : IEtalonSourceChannel<double>
+    public class PaceEtalonSource : IEtalonSourceChannel<Units>
     {
-        private readonly PACE1000Driver _paseModel;
+        private PACE1000Driver _paseModel = null;
+        private readonly int _address = 0;
 
-        public PACEEtalonSourceChannel(PACE1000Driver paseModel)
+        public PaceEtalonSource(int address)
         {
-            _paseModel = paseModel;
+            _address = address;
         }
 
-        public bool SetEtalonValue(double aim, double unit, CancellationToken cancel)
+        public bool SetEtalonValue(double aim, Units unit, CancellationToken cancel)
         {
+            //TODO реализовать установку единиц измерения
             return _paseModel.SetPressure(aim);
         }
 
@@ -29,6 +33,7 @@ namespace PACEChecks.Channels
             if (transport.Key != VisaChannelDescriptor.KeyType)
                 throw new TranspotrTypeNotAvailableException(string.Format("Channel {0} not available for PACE",
                     transport.Key));
+            _paseModel = new PACE1000Driver(_address, new VisaIEEE488());
             return _paseModel.Open();
         }
 
@@ -39,7 +44,7 @@ namespace PACEChecks.Channels
 
         public bool SetEtalonValue(double aim, CancellationToken cancel)
         {
-            throw new NotImplementedException();
+            return _paseModel.SetPressure(aim);
         }
     }
 }

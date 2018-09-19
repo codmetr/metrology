@@ -35,7 +35,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="conf">конфигурация проверки(если это продолжение проверки)</param>
         /// <param name="agregator">агрегатор событий</param>
         /// <returns>Стратегия переходов с состояниями</returns>
-        public IWorkflow Make(IDataAccessor accessor, IContext context, IEnumerable<IEtalonSourceCannelFactory<double>> presSources, Logger logger, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null, IEventAggregator agregator = null)
+        public IWorkflow Make(IDataAccessor accessor, IContext context, IEnumerable<IEtalonSourceCannelFactory<Units>> presSources, Logger logger, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null, IEventAggregator agregator = null)
         {
             id = id ?? new TestResultID()
             {
@@ -74,6 +74,13 @@ namespace PressureSensorCheck.Workflow
                 dpiConf.SelectPort = ports.FirstOrDefault();
             var res = new PressureSensorResult();
 
+            var dictConf = new Dictionary<string, IEtalonSourceCannelFactory<Units>>();
+            foreach (var presSource in presSources)
+            {
+                dictConf.Add(presSource.TypeName, presSource);
+            }
+            var userKey = "Без удаленного управления";//TODO локализовать
+            dictConf.Add(userKey, null);
             var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf, agregator, configArchive);
 
             var dpiLog = NLog.LogManager.GetLogger("Dpi620");
@@ -117,6 +124,7 @@ namespace PressureSensorCheck.Workflow
             {
                 if (run.IsRun)
                     return;
+                run.UpdateSourceChannel(config.);
                 run.UpdatePoint(config.Points);
             }
             catch (Exception e)

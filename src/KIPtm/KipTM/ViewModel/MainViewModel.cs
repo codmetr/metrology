@@ -118,7 +118,7 @@ namespace KipTM.ViewModel
             checkBtns.Add(new OneBtnDescriptor(PresSensorCheck.CheckKey, "Датчик давления", BitmapToImage(Resources.EHCerabarM),
                 BitmapToImage(Resources.EHCerabarM), SelectChecks));
             _workflows.Add(PresSensorCheck.CheckKey, new PressureSensorWorkflow().Make(
-                new DataAccessor(dataPool), this, new [] { new PaceEtalonSourceCannelFactory() }, _logger, agregator: _eventAggregator));
+                new DataAccessor(dataPool), this, new [] { new PaceEtalonSourceFactory() }, _logger, agregator: _eventAggregator));
             CheckBtns = checkBtns;
             _eventAggregator.Subscribe(this);
         }

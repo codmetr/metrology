@@ -10,31 +10,39 @@ using PACESeries;
 
 namespace PACEChecks.Channels.ViewModel
 {
-    public class PaseConfigViewModel:INotifyPropertyChanged
+    /// <summary>
+    /// VM описания модели
+    /// </summary>
+    public class ModelDescriptor
     {
-        public class ModelDescriptor
-        {
-            public readonly string Name;
-            internal readonly PACESeries.Model Id;
+        public readonly string Name;
+        internal readonly PACESeries.Model Id;
 
-            public ModelDescriptor(Model id, string name)
-            {
-                Id = id;
-                Name = name;
-            }
+        public ModelDescriptor(Model id, string name)
+        {
+            Id = id;
+            Name = name;
         }
+    }
+
+    /// <summary>
+    /// VM конфигурации подключения PACE
+    /// </summary>
+    public class PaceConfigViewModel : INotifyPropertyChanged
+    {
 
         private ModelDescriptor _selectedModel;
         private int _address;
 
-        public PaseConfigViewModel()
+        public PaceConfigViewModel()
         {
             Models = new List<ModelDescriptor>()
             {
-                new ModelDescriptor(Model.PACE1000, "PACE 1000"/*TODO Локализовать*/),
-                new ModelDescriptor(Model.PACE5000, "PACE 5000"/*TODO Локализовать*/),
+                //new ModelDescriptor(Model.PACE1000, "PACE 1000"/*TODO Локализовать*/),
+                //new ModelDescriptor(Model.PACE5000, "PACE 5000"/*TODO Локализовать*/),
                 new ModelDescriptor(Model.PACE6000, "PACE 6000"/*TODO Локализовать*/)
             };
+            _selectedModel = Models.FirstOrDefault();
         }
 
         /// <summary>
@@ -50,17 +58,20 @@ namespace PACEChecks.Channels.ViewModel
             get { return _selectedModel; }
             set
             {
-                _selectedModel = value; 
+                _selectedModel = value;
                 OnPropertyChanged();
             }
         }
 
+        /// <summary>
+        /// Адрес
+        /// </summary>
         public int Address
         {
             get { return _address; }
             set
             {
-                _address = value; 
+                _address = value;
                 OnPropertyChanged();
             }
         }
