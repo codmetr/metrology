@@ -475,105 +475,112 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Настройки">
-                <StackPanel DataContext="{Binding DpiConfig}">
-                    <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
+                <StackPanel>
+                    <StackPanel DataContext="{Binding DpiConfig}">
+                        <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
                         Настройки DPI620Genii:
-                    </TextBlock>
-                    <Grid>
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
-                                <Setter Property="TextWrapping" Value="Wrap"/>
-                            </Style>
-                            <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}">
-                                <Setter Property="TextWrapping" Value="Wrap"/>
-                            </Style>
-                            <Style TargetType="ComboBox" BasedOn="{StaticResource CbBasicStyle}"/>
-                        </Grid.Resources>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="250"/>
-                            <ColumnDefinition Width="40"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="250"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource TblBasicStyle}">Порт подклчения:</TextBlock>
-                        <ComboBox Grid.Row="0" Grid.Column="1" SelectedItem="{Binding SelectPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Ports}"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0">Тип датчика в слоте 1:</TextBlock>
-                        <ComboBox Grid.Row="1" Grid.Column="1"
+                        </TextBlock>
+                        <Grid>
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                </Style>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                </Style>
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource CbBasicStyle}"/>
+                            </Grid.Resources>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="250"/>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="250"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource TblBasicStyle}">Порт подклчения:</TextBlock>
+                            <ComboBox Grid.Row="0" Grid.Column="1" SelectedItem="{Binding SelectPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Ports}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0">Тип датчика в слоте 1:</TextBlock>
+                            <ComboBox Grid.Row="1" Grid.Column="1"
                                   ItemsSource="{Binding Slot1.ChannelTypes, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedItem="{Binding Slot1.ChannelType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate DataType="dto:ChannelType">
-                                    <ContentPresenter Content="{Binding Converter={StaticResource ChannelTypeStringConverter}}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <TextBlock Grid.Row="1" Grid.Column="3">Тип датчика в слоте 2:</TextBlock>
-                        <ComboBox Grid.Row="1" Grid.Column="4"
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="dto:ChannelType">
+                                        <ContentPresenter Content="{Binding Converter={StaticResource ChannelTypeStringConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBlock Grid.Row="1" Grid.Column="3">Тип датчика в слоте 2:</TextBlock>
+                            <ComboBox Grid.Row="1" Grid.Column="4"
                                  ItemsSource="{Binding Slot2.ChannelTypes, UpdateSourceTrigger=PropertyChanged}"
                                  SelectedItem="{Binding Slot2.ChannelType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate DataType="dto:ChannelType">
-                                    <ContentPresenter Content="{Binding Converter={StaticResource ChannelTypeStringConverter}}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <TextBlock Grid.Row="2" Grid.Column="0">Едницы измерения для датчика в слоте 1:</TextBlock>
-                        <ComboBox Grid.Row="2" Grid.Column="1"
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="dto:ChannelType">
+                                        <ContentPresenter Content="{Binding Converter={StaticResource ChannelTypeStringConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBlock Grid.Row="2" Grid.Column="0">Едницы измерения для датчика в слоте 1:</TextBlock>
+                            <ComboBox Grid.Row="2" Grid.Column="1"
                                   ItemsSource="{Binding Slot1.UnitSet, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedItem="{Binding Slot1.SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate DataType="dto:ChannelType">
-                                    <ContentPresenter Content="{Binding Converter={StaticResource UnitsStringConverter}}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <TextBlock Grid.Row="2" Grid.Column="3">Едницы измерения для датчика в слоте 2:</TextBlock>
-                        <ComboBox Grid.Row="2" Grid.Column="4"
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="dto:ChannelType">
+                                        <ContentPresenter Content="{Binding Converter={StaticResource UnitsStringConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBlock Grid.Row="2" Grid.Column="3">Едницы измерения для датчика в слоте 2:</TextBlock>
+                            <ComboBox Grid.Row="2" Grid.Column="4"
                                  ItemsSource="{Binding Slot2.UnitSet, UpdateSourceTrigger=PropertyChanged}"
                                  SelectedItem="{Binding Slot2.SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate DataType="dto:ChannelType">
-                                    <ContentPresenter Content="{Binding Converter={StaticResource UnitsStringConverter}}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </Grid>
-                    <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="dto:ChannelType">
+                                        <ContentPresenter Content="{Binding Converter={StaticResource UnitsStringConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
                         Внешний источник давления/разряжения:
-                    </TextBlock>
-                    <Grid>
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
-                                <Setter Property="TextWrapping" Value="Wrap"/>
-                            </Style>
-                            <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}">
-                                <Setter Property="TextWrapping" Value="Wrap"/>
-                            </Style>
-                            <Style TargetType="ComboBox" BasedOn="{StaticResource CbBasicStyle}"/>
-                        </Grid.Resources>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="250"/>
-                            <ColumnDefinition Width="40"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="250"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource TblBasicStyle}">Тип источника:</TextBlock>
-                        <ComboBox Grid.Row="0" Grid.Column="1" SelectedItem="{Binding SelectPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Ports}"/>
-                    </Grid>
+                        </TextBlock>
+                        <Grid>
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource TblBasicStyle}">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                </Style>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource TbxBasicStyle}">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                </Style>
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource CbBasicStyle}"/>
+                            </Grid.Resources>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="250"/>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="250"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource TblBasicStyle}">Тип источника:</TextBlock>
+                            <ComboBox Grid.Row="0" Grid.Column="1"
+                                      ItemsSource="{Binding SourceNames}"
+                                      SelectedItem="{Binding SelectedSourceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <ContentPresenter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"
+                                Content="{Binding SelectedSourceViewModel}"/>
+                        </Grid>
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
         </TabControl>

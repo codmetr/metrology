@@ -531,6 +531,11 @@ namespace PressureSensorCheck.Workflow
             _startTime = null;
         }
 
+        public IDisposable ShowModalAsk(string title, string msg, EventWaitHandle wh)
+        {
+            return ModalState.AskModal(string.IsNullOrEmpty(title) ? msg : $"{title}\n{msg}", wh);
+        }
+
         /// <summary>
         /// Вызов модального окна
         /// </summary>

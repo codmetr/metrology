@@ -45,11 +45,14 @@ namespace PressureSensorCheck.Workflow
         /// Выпонение проверки
         /// </summary>
         /// <param name="unit">Единицы измерения</param>
-        public PressureSensorRunVm1(string unit)
+        /// <param name="outUnit"></param>
+        public PressureSensorRunVm1(Units unit, Units outUnit)
         {
+            _pUnit = unit;
+            _outUnit = outUnit;
             _inOutLines = new LinesInOutViewModel(
-                "I", $"I, {OutUnit.ToStringLocalized(CultureInfo.CurrentUICulture)}", Color.Black, 1, _periodViewGraphic,
-                "P", $"P,  {unit}", Color.Brown, 2, _periodViewGraphic);
+                "I", $"I, {outUnit.ToStringLocalized(CultureInfo.CurrentUICulture)}", Color.Black, 1, _periodViewGraphic,
+                "P", $"P,  {unit.ToStringLocalized(CultureInfo.CurrentUICulture)}", Color.Brown, 2, _periodViewGraphic);
             Points = new ObservableCollection<PointViewModel>();
             NewConfig = new PointConfigViewModel();
         }
@@ -226,6 +229,12 @@ namespace PressureSensorCheck.Workflow
         {
             _doAccept = () => { };
         }
+
+        public IDisposable ShowModalAsk(string title, string msg, EventWaitHandle wh)
+        {
+            return ModalState.AskModal(string.IsNullOrEmpty(title) ? msg : $"{title}\n{msg}", wh);
+        }
+        
 
         public void AskModal(string title, string msg, CancellationToken cancel)
         {//TODO вынести или упростить

@@ -56,6 +56,18 @@ namespace Tools.View.ModalContent
             CurrentModal = ask;
         }
 
+
+        /// <summary>
+        /// Спросить у пользователя подтверждения
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="wh"></param>
+        public IDisposable AskModal(string msg, EventWaitHandle wh)
+        {
+            Ask(msg, wh);
+            return ModalAsk.Show(this);
+        }
+
         /// <summary>
         /// Спросить у пользователя подтверждения
         /// </summary>
@@ -77,6 +89,28 @@ namespace Tools.View.ModalContent
             {
                 _currentModal = value;
                 OnPropertyChanged("CurrentModal");
+            }
+        }
+
+        private class ModalAsk:IDisposable
+        {
+            private ModalState _state;
+
+            private ModalAsk(ModalState state)
+            {
+                _state = state;
+            }
+
+            public static IDisposable Show(ModalState state)
+            {
+                var disp = new ModalAsk(state);
+                state.IsShowModal = true;
+                return disp;
+            }
+
+            public void Dispose()
+            {
+                _state.IsShowModal = false;
             }
         }
 

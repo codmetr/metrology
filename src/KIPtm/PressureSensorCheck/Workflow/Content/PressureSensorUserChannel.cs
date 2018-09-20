@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using KipTM.Interfaces;
 using KipTM.Model.Channels;
@@ -65,7 +66,31 @@ namespace PressureSensorCheck.Workflow
         /// <param name="cancel">отменятор</param>
         public void ShowModal(string title, string msg, CancellationToken cancel)
         {
-            Invoke(() => _vm.AskModal(title, msg, cancel));
+            var wh = new ManualResetEvent(false);
+            IDisposable modal = null;
+
+            try
+            {
+                _context.Invoke(() =>
+                {
+                    try
+                    {
+                        modal = _vm.ShowModalAsk("", msg, wh);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e);
+                        wh.Set();
+                        throw;
+                    }
+                });
+                WaitHandle.WaitAny(new[] { cancel.WaitHandle, wh });
+            }
+            finally
+            {
+                if (modal != null)
+                    modal.Dispose();
+            }
         }
 
         /// <summary>

@@ -36,5 +36,13 @@ namespace PressureSensorCheck.Workflow
         /// <param name="msg">Сообщение</param>
         /// <param name="cancel">Отмена</param>
         void AskModal(string title, string msg, CancellationToken cancel);
+
+        /// <summary>
+        /// Показать модальное сообщение пользователю
+        /// </summary>
+        /// <param name="title">заголовок</param>
+        /// <param name="msg">сообщение</param>
+        /// <param name="wh">синхронизация подтверждения</param>
+        IDisposable ShowModalAsk(string title, string msg, EventWaitHandle wh);
     }
 }

@@ -75,20 +75,20 @@ namespace PressureSensorCheck.Workflow
             var res = new PressureSensorResult();
 
             var dictConf = new Dictionary<string, IEtalonSourceCannelFactory<Units>>();
+            var userKey = "Без удаленного управления";//TODO локализовать
+            dictConf.Add(userKey, null);
             foreach (var presSource in presSources)
             {
                 dictConf.Add(presSource.TypeName, presSource);
             }
-            var userKey = "Без удаленного управления";//TODO локализовать
-            dictConf.Add(userKey, null);
-            var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf, agregator, configArchive);
+            var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf, agregator, configArchive, dictConf);
 
             var dpiLog = NLog.LogManager.GetLogger("Dpi620");
             var dpiCom = new DPI620DriverCom().Setlog((msg) => dpiLog.Trace(msg));
             var dpi = AppVersionHelper.CurrentAppVersionType == AppVersionHelper.AppVersionType.Emulation?
                 (IDPI620Driver)new DPI620Emulation():dpiCom;
             //var run = new PressureSensorRunVm(conf, dpi, dpiConf, result, agregator);
-            var run = new PressureSensorRunVm1(conf.Unit.ToStringLocalized(CultureInfo.CurrentUICulture));
+            var run = new PressureSensorRunVm1(conf.Unit, Units.mA);
             var runPresenter = new PressureSensorRunPresenter(run, conf, dpi, dpiConf, result, agregator, context);
             var resultVm = new PressureSensorResultVM(id, accessor, res, conf, agregator);
 
@@ -99,7 +99,7 @@ namespace PressureSensorCheck.Workflow
             var reportVm = new PressureSensorReportViewModel(reportMain, reportCertificate);
             var steps = new List<IWorkflowStep>()
             {
-                new SimpleWorkflowStep(configVm).SetOut(()=>UpdateRunByConf(configVm.Config, runPresenter, logger)),
+                new SimpleWorkflowStep(configVm).SetOut(()=>UpdateRunByConf(configVm.Config, dictConf[configVm.SelectedSourceName], runPresenter, logger)),
                 new SimpleWorkflowStep(run).SetOut(()=>UpdateResultByRun(runPresenter, resultVm, logger)).AppendDisposable(runPresenter),
                 new SimpleWorkflowStep(resultVm),
                 new SimpleWorkflowStep(reportVm).SetIn(()=>
@@ -116,15 +116,16 @@ namespace PressureSensorCheck.Workflow
         /// Обновление визуальной модели выполнения по конфигурации
         /// </summary>
         /// <param name="config">конфигурация</param>
+        /// <param name="etalonSourceFactory"></param>
         /// <param name="run">выполнение проверки</param>
         /// <param name="logger">логгер</param>
-        private void UpdateRunByConf(CheckPressureLogicConfigVm config, PressureSensorRunPresenter run, Logger logger)
+        private void UpdateRunByConf(CheckPressureLogicConfigVm config, IEtalonSourceCannelFactory<Units> etalonSourceFactory, PressureSensorRunPresenter run, Logger logger)
         {
             try
             {
                 if (run.IsRun)
                     return;
-                run.UpdateSourceChannel(config.);
+                run.UpdateSourceChannel(etalonSourceFactory?.GetChanel());
                 run.UpdatePoint(config.Points);
             }
             catch (Exception e)

@@ -63,10 +63,13 @@ namespace PressureSensorCheck.Workflow
         }
 
         /// <summary>
-        /// Список 
+        /// Список названий эталонных источников
         /// </summary>
         public IEnumerable<string> SourceNames { get; private set; }
 
+        /// <summary>
+        /// Выбранный эталонный источник
+        /// </summary>
         public string SelectedSourceName
         {
             get { return _selectedSourceName; }
@@ -78,7 +81,10 @@ namespace PressureSensorCheck.Workflow
                 SelectedSourceViewModel = confVmTemplate?.ConfigViewModel;
             }
         }
-
+        
+        /// <summary>
+        /// VM выбранного эталонного источника
+        /// </summary>
         public object SelectedSourceViewModel
         {
             get { return _selectedSourceViewModel; }
@@ -89,6 +95,9 @@ namespace PressureSensorCheck.Workflow
             }
         }
 
+        /// <summary>
+        /// Серийный номер
+        /// </summary>
         public string SerialNumber
         {
             get { return Identificator.SerialNumber; }
