@@ -50,6 +50,7 @@ namespace PressureSensorCheck.Workflow
             _config = config;
             _dpi620 = dpi620;
             _dpiConf = dpiConf;
+            _result = result;
             _agregator = agregator;
             _context = context;
 
