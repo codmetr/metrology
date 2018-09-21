@@ -578,7 +578,7 @@
                                       ItemsSource="{Binding SourceNames}"
                                       SelectedItem="{Binding SelectedSourceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <ContentPresenter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"
-                                Content="{Binding SelectedSourceViewModel}"/>
+                                Content="{Binding SelectedSourceViewModel}" HorizontalAlignment="Left"/>
                         </Grid>
                     </StackPanel>
                 </StackPanel>

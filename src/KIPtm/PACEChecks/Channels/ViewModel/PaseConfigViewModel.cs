@@ -15,7 +15,7 @@ namespace PACEChecks.Channels.ViewModel
     /// </summary>
     public class ModelDescriptor
     {
-        public readonly string Name;
+        public string Name { get; private set; }
         internal readonly PACESeries.Model Id;
 
         public ModelDescriptor(Model id, string name)
