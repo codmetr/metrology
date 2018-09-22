@@ -346,6 +346,11 @@ namespace PressureSensorCheck.Workflow
 
                     if (double.IsNaN(res.VoltageValueBack))
                     { // прямой ход
+                        if (_pressureSrc == null)
+                        {
+                            //если источник давления управвляем - результат уже заполнен.
+                            point.Result.PressureReal = res.PressureValue;
+                        }
                         point.Result.IReal = res.VoltageValue;
                         point.Result.dIReal = res.VoltageValue - res.VoltagePoint;
                         point.Result.IsCorrect = point.Result.dIReal <= point.Config.dI;

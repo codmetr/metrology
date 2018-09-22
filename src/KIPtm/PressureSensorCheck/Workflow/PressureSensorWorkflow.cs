@@ -35,7 +35,8 @@ namespace PressureSensorCheck.Workflow
         /// <param name="conf">конфигурация проверки(если это продолжение проверки)</param>
         /// <param name="agregator">агрегатор событий</param>
         /// <returns>Стратегия переходов с состояниями</returns>
-        public IWorkflow Make(IDataAccessor accessor, IContext context, IEnumerable<IEtalonSourceCannelFactory<Units>> presSources, Logger logger, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null, IEventAggregator agregator = null)
+        public IWorkflow Make(IDataAccessor accessor, IContext context, IEnumerable<IEtalonSourceCannelFactory<Units>> presSources,
+            Logger logger, TestResultID id = null, PressureSensorResult result = null, PressureSensorConfig conf = null, IEventAggregator agregator = null)
         {
             id = id ?? new TestResultID()
             {
