@@ -12,20 +12,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PACESeriesUtil.VM;
 using Tools.View;
 
-namespace PACESeriesUtil
+namespace PACESeriesUtil.Viewes
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for PaceControlView.xaml
     /// </summary>
-    public partial class MainWindow //: Window
+    [View(typeof(PaceControlViewModel))]
+    public partial class PaceControlView : UserControl
     {
-        public MainWindow()
+        public PaceControlView()
         {
             InitializeComponent();
-            ViewViewmodelMatcher.AddMatch(this.Resources, ViewAttribute.CheckView, ViewAttribute.CheckViewModelCashOnly);
-            DataContext = new PaceViewModel();
         }
     }
 }

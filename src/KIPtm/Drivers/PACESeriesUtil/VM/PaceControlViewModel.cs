@@ -6,9 +6,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PACESeriesUtil
+namespace PACESeriesUtil.VM
 {
-    public class PaceViewModel:INotifyPropertyChanged
+    /// <summary>
+    /// Управление PACE
+    /// </summary>
+    public class PaceControlViewModel:INotifyPropertyChanged
     {
 
 
