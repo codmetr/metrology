@@ -70,23 +70,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Viewes\PaceControlView.xaml.cs">
+    <Compile Include="IContext.cs" />
+    <Compile Include="PacePresenter.cs" />
+    <Compile Include="PaceControl\PaceControlView.xaml.cs">
       <DependentUpon>PaceControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Viewes\PaceMeasuringView.xaml.cs">
+    <Compile Include="Measuring\PaceMeasuringView.xaml.cs">
       <DependentUpon>PaceMeasuringView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Viewes\PaceTraceView.xaml.cs">
+    <Compile Include="Trace\PaceTraceView.xaml.cs">
       <DependentUpon>PaceTraceView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VM\Data\ChannelDiscriptor.cs" />
-    <Compile Include="VM\Data\ColorDescriptor.cs" />
-    <Compile Include="VM\Data\ModelDescriptor.cs" />
-    <Compile Include="VM\TraceViewModel.cs" />
-    <Compile Include="VM\PaceMeasuringViewModel.cs" />
-    <Compile Include="VM\PaceControlViewModel.cs" />
-    <Compile Include="VM\SettingsViewModel.cs" />
-    <Compile Include="VM\Data\ThemeDescriptor.cs" />
+    <Compile Include="Config\ChannelDiscriptor.cs" />
+    <Compile Include="Settings\ColorDescriptor.cs" />
+    <Compile Include="Config\ModelDescriptor.cs" />
+    <Compile Include="Trace\TraceViewModel.cs" />
+    <Compile Include="Measuring\PaceMeasuringViewModel.cs" />
+    <Compile Include="PaceControl\PaceControlViewModel.cs" />
+    <Compile Include="Settings\SettingsViewModel.cs" />
+    <Compile Include="Settings\ThemeDescriptor.cs" />
+    <Compile Include="VM\WpfContext.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -99,7 +102,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Viewes\PACEConfigView.xaml">
+    <Page Include="Config\PACEConfigView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -111,32 +114,32 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Viewes\PaceControlView.xaml">
+    <Page Include="PaceControl\PaceControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Viewes\PaceMeasuringView.xaml">
+    <Page Include="Measuring\PaceMeasuringView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Viewes\PaceTraceView.xaml">
+    <Page Include="Trace\PaceTraceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Viewes\SettingsView.xaml">
+    <Page Include="Settings\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Viewes\PACEConfigView.xaml.cs">
+    <Compile Include="Config\PACEConfigView.xaml.cs">
       <DependentUpon>PACEConfigView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Viewes\SettingsView.xaml.cs">
+    <Compile Include="Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="VM\PaceViewModel.cs" />
-    <Compile Include="VM\PaseConfigViewModel.cs" />
+    <Compile Include="Config\PaseConfigViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -166,6 +169,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\IEEE488Transport\IEEE488.csproj">
+      <Project>{3fec76c3-b933-4461-aa8d-85360d3f41c4}</Project>
+      <Name>IEEE488</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools.View\Tools.View.csproj">
       <Project>{69ab619c-5b3a-4ee7-9318-73d92e75f812}</Project>
       <Name>Tools.View</Name>
@@ -173,6 +180,14 @@
     <ProjectReference Include="..\PACESeries\PACESeries.csproj">
       <Project>{3D3DB0EB-5B92-4D8F-8547-82FF7184C59A}</Project>
       <Name>PACESeries</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QueryLoop\QueryLoop.csproj">
+      <Project>{fd5500e5-ded6-4b90-ab2a-cb6c5494e2b3}</Project>
+      <Name>QueryLoop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisaDriver\VisaDriver.csproj">
+      <Project>{cbea7a6c-2ea6-4329-99ee-4290a9801a0a}</Project>
+      <Name>VisaDriver</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

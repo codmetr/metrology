@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IEEE488", "..\..\IEEE488Tra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tools.View", "..\..\Tools.View\Tools.View.csproj", "{69AB619C-5B3A-4EE7-9318-73D92E75F812}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryLoop", "..\QueryLoop\QueryLoop.csproj", "{FD5500E5-DED6-4B90-AB2A-CB6C5494E2B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{69AB619C-5B3A-4EE7-9318-73D92E75F812}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69AB619C-5B3A-4EE7-9318-73D92E75F812}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69AB619C-5B3A-4EE7-9318-73D92E75F812}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD5500E5-DED6-4B90-AB2A-CB6C5494E2B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD5500E5-DED6-4B90-AB2A-CB6C5494E2B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD5500E5-DED6-4B90-AB2A-CB6C5494E2B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD5500E5-DED6-4B90-AB2A-CB6C5494E2B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

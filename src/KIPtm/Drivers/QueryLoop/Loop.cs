@@ -1,0 +1,226 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+
+namespace QueryLoop
+{
+    public class Loops : ILoops
+    {
+        /// <summary>
+        /// Коллекция разделяемых ресурсов
+        /// </summary>
+        /// <remarks>
+        /// Такими ресурсами в цикле опроса могут быть порты
+        /// </remarks>
+        private readonly IDictionary<string, LoopDescriptor> _lockers;
+
+        /// <summary>
+        /// Набор потоков работы с разделяемыми ресурсами (1 поток на каждый ресурс)
+        /// </summary>
+        private readonly IDictionary<string, Thread> _threads;
+
+        /// <summary>
+        /// Набор жетонов отмены для потоков работы с ремурсами
+        /// </summary>
+        private readonly IDictionary<string, CancellationTokenSource> _cancelThreadCollection;
+
+        private readonly TimeSpan _maxWaitWithoutCancel = TimeSpan.FromMilliseconds(50);
+
+        /// <summary>
+        /// Базовый конструктор
+        /// </summary>
+        public Loops()
+        {
+            _lockers = new Dictionary<string, LoopDescriptor>();
+            _cancelThreadCollection = new Dictionary<string, CancellationTokenSource>();
+            _threads = new Dictionary<string, Thread>();
+        }
+
+        /// <summary>
+        /// Добавить разделяемый ресурс и его ключ
+        /// </summary>
+        /// <param name="key">ключ ресурса</param>
+        /// <param name="locker">разделяемый ресурс</param>
+        /// <param name="initAction">метод инициализации локера (если он необходим)</param>
+        /// <param name="loopPeriod">задержка между циклами опроса очереди</param>
+        public void AddLocker(string key, object locker, Action<object> initAction, TimeSpan? loopPeriod = null) 
+        {
+            var cancel = new CancellationTokenSource();
+            var parameter = new LoopDescriptor(locker, cancel.Token, initAction, loopPeriod);
+            _lockers.Add(key, parameter);
+            _cancelThreadCollection.Add(key, cancel);
+            var thread = new Thread(WorkLoop);
+            thread.Start(parameter);
+            _threads.Add(key, thread);
+        }
+
+        /// <summary>
+        /// Добавить разделяемый ресурс и его ключ
+        /// </summary>
+        /// <param name="key">ключ ресурса</param>
+        /// <param name="locker">разделяемый ресурс</param>
+        /// <param name="loopPeriod">задержка между циклами опроса очереди</param>
+        public void AddLocker(string key, object locker, TimeSpan loopPeriod) 
+        {
+            AddLocker(key, locker, null, loopPeriod);
+        }
+
+        /// <summary>
+        /// Добавить разделяемый ресурс и его ключ
+        /// </summary>
+        /// <param name="key">ключ ресурса</param>
+        /// <param name="locker">разделяемый ресурс</param>
+        public void AddLocker(string key, object locker)
+        {
+            AddLocker(key, locker, null);
+        }
+
+        /// <summary>
+        /// Добавить действие в очередь важных действий
+        /// </summary>
+        /// <param name="key">Ключ локера</param>
+        /// <param name="action">действие</param>
+        public void StartImportantAction(string key, Action<object> action)
+        {
+            if (!_threads.ContainsKey(key))
+                throw new InvalidProgramException(string.Format("key({0}) not found", key));
+            _lockers[key].AddImportant(action);
+        }
+
+        /// <summary>
+        /// Добавить действие в очередь действий средней важности
+        /// </summary>
+        /// <param name="key">Ключ локера</param>
+        /// <param name="action">действие</param>
+        public void StartMiddleAction(string key, Action<object> action)
+        {
+            if (!_threads.ContainsKey(key))
+                throw new InvalidProgramException(string.Format("key({0}) not found", key));
+            _lockers[key].AddMiddle(action);
+        }
+
+        /// <summary>
+        /// Добавить действие в очередь неважных действий
+        /// </summary>
+        /// <param name="key">Ключ локера</param>
+        /// <param name="action">действие</param>
+        public void StartUnimportantAction(string key, Action<object> action)
+        {
+            if (!_threads.ContainsKey(key))
+                throw new InvalidProgramException(string.Format("key({0}) not found", key));
+            _lockers[key].AddUnimportant(action);
+        }
+
+        /// <summary>
+        /// Отмена по одному из локеров
+        /// </summary>
+        /// <param name="key"></param>
+        public void Cancel(string key) 
+        {
+            _threads.Remove(key);
+            _cancelThreadCollection[key].Cancel();
+            _cancelThreadCollection.Remove(key);
+            _lockers.Remove(key);
+        }
+
+        /// <summary>
+        /// Рабочий цикл для локера
+        /// </summary>
+        /// <param name="parameter">descripdor</param>
+        private void WorkLoop(object parameter)
+        {
+            var def = parameter as LoopDescriptor;
+            if (def == null)
+                return;
+            while (!def.IsCancel)
+            {
+
+                #region important actions
+
+                var important = def.GetImportant();
+                if (important != null)
+                {
+                    lock (def.Locker)
+                    {
+                        if (def.IsNeedInit)
+                            def.Init();
+                        important(def.Locker);
+                    }
+                    Wait(def);
+                    continue;
+                }
+
+                #endregion
+
+                #region Middle actions
+
+                var middle = def.GetMiddle();
+                if (middle != null)
+                {
+                    lock (def.Locker)
+                    {
+                        if (def.IsNeedInit)
+                            def.Init();
+                        middle(def.Locker);
+                    }
+                    Wait(def);
+                    continue;
+                }
+
+                #endregion
+
+                #region Unimportant actions
+
+                var unimportant = def.GetUnimportant();
+                if (unimportant != null)
+                {
+                    lock (def.Locker)
+                    {
+                        if (def.IsNeedInit)
+                            def.Init();
+                        unimportant(def.Locker);
+                    }
+                    Wait(def);
+                    continue;
+                }
+
+                #endregion
+
+                #region waiting
+
+                Wait(def);
+                #endregion
+
+            }
+        }
+
+        private void Wait(LoopDescriptor def) 
+        {
+            var waitLast = def.Waiting;
+            while (waitLast > _maxWaitWithoutCancel)
+            {
+                Thread.Sleep(waitLast);
+                if (def.IsCancel)
+                    break;
+                waitLast = waitLast - _maxWaitWithoutCancel;
+            }
+            if (!def.IsCancel)
+                Thread.Sleep(waitLast);
+        }
+
+        #region Implementation of IDisposable
+
+        /// <summary>
+        /// Выполняет определяемые приложением задачи, связанные с удалением, высвобождением или сбросом неуправляемых ресурсов.
+        /// </summary>
+        public void Dispose()
+        {
+            foreach (var cancellationTokenSource in _cancelThreadCollection.Values)
+            {
+                cancellationTokenSource.Cancel();
+            }
+        }
+
+        #endregion
+    }
+}

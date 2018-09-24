@@ -48,7 +48,14 @@
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Content" Value="Подключение"/>
-                    <
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsConnected}" Value="FALSE">
+                            <Setter Property="Content" Value="Подключение"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsConnected}" Value="TRUE">
+                            <Setter Property="Content" Value="Отключение"/>
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
             </Button.Style>
         </Button>
