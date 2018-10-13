@@ -70,7 +70,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\Ext.cs" />
     <Compile Include="IContext.cs" />
+    <Compile Include="PaceControl\PressureUnitsToStringConverter.cs" />
     <Compile Include="PacePresenter.cs" />
     <Compile Include="PaceControl\PaceControlView.xaml.cs">
       <DependentUpon>PaceControlView.xaml</DependentUpon>
@@ -90,6 +92,10 @@
     <Compile Include="Settings\SettingsViewModel.cs" />
     <Compile Include="Settings\ThemeDescriptor.cs" />
     <Compile Include="VM\WpfContext.cs" />
+    <Page Include="CommonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PACESeriesUtil.Properties
-{
-
-
+namespace PACESeriesUtil.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -22,49 +22,176 @@ namespace PACESeriesUtil.Properties
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources
-    {
-
+    internal class Resources {
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources()
-        {
+        internal Resources() {
         }
-
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if ((resourceMan == null))
-                {
+        internal static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PACESeriesUtil.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        internal static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to атм..
+        /// </summary>
+        internal static string PressureUnits_ATM {
+            get {
+                return ResourceManager.GetString("PressureUnits_ATM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Бар.
+        /// </summary>
+        internal static string PressureUnits_Bar {
+            get {
+                return ResourceManager.GetString("PressureUnits_Bar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to гПа.
+        /// </summary>
+        internal static string PressureUnits_hPa {
+            get {
+                return ResourceManager.GetString("PressureUnits_hPa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to дюйм вод.ст..
+        /// </summary>
+        internal static string PressureUnits_inH2O {
+            get {
+                return ResourceManager.GetString("PressureUnits_inH2O", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to дюйм вод.ст. 4С.
+        /// </summary>
+        internal static string PressureUnits_inH2O4 {
+            get {
+                return ResourceManager.GetString("PressureUnits_inH2O4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to дюйм вод.ст. 60F.
+        /// </summary>
+        internal static string PressureUnits_inH2O60F {
+            get {
+                return ResourceManager.GetString("PressureUnits_inH2O60F", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to дюйм рт.ст..
+        /// </summary>
+        internal static string PressureUnits_inHg {
+            get {
+                return ResourceManager.GetString("PressureUnits_inHg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to кг.см2.
+        /// </summary>
+        internal static string PressureUnits_KgCm2 {
+            get {
+                return ResourceManager.GetString("PressureUnits_KgCm2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to кПа.
+        /// </summary>
+        internal static string PressureUnits_kPa {
+            get {
+                return ResourceManager.GetString("PressureUnits_kPa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to МБар.
+        /// </summary>
+        internal static string PressureUnits_MBar {
+            get {
+                return ResourceManager.GetString("PressureUnits_MBar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to мм вод.ст. 4С.
+        /// </summary>
+        internal static string PressureUnits_mmH2O4 {
+            get {
+                return ResourceManager.GetString("PressureUnits_mmH2O4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to мм рт.ст..
+        /// </summary>
+        internal static string PressureUnits_mmHg {
+            get {
+                return ResourceManager.GetString("PressureUnits_mmHg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не выбран.
+        /// </summary>
+        internal static string PressureUnits_None {
+            get {
+                return ResourceManager.GetString("PressureUnits_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Па.
+        /// </summary>
+        internal static string PressureUnits_Pa {
+            get {
+                return ResourceManager.GetString("PressureUnits_Pa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to psi.
+        /// </summary>
+        internal static string PressureUnits_psi {
+            get {
+                return ResourceManager.GetString("PressureUnits_psi", resourceCulture);
             }
         }
     }

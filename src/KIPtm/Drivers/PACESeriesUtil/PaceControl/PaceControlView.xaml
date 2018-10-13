@@ -7,7 +7,39 @@
              xmlns:vm="clr-namespace:PACESeriesUtil.VM"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:PaceControlViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../CommonStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Grid.Row="0">
+            <TextBlock>Единицы измерения:</TextBlock>
+            <ComboBox ItemsSource="{Binding Units}" SelectedItem="{Binding Unit}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate >
+                        <TextBlock Style="{StaticResource {x:Type TextBlock}}" Text="{Binding Converter={StaticResource PressureUnitsToStringConverter}}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <!--<TextBox Text="{Binding UnitStr}"/>-->
+            <Button Command="{Binding SetUnit}" Content="Установить единицы измерения"/>
+            <TextBlock>Давление:</TextBlock>
+            <TextBox Text="{Binding PressureStr}"/>
+            <Button Command="{Binding SetPressure}" Content="Установить давление"/>
+            <TextBlock>Ограничение:</TextBlock>
+            <TextBox Text="{Binding LimitsStr}"/>
+            <Button Command="{Binding SetLimit}" Content="Установить ограничение"/>
+        </StackPanel>
     </Grid>
 </UserControl>

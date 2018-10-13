@@ -9,15 +9,15 @@ using PACESeriesUtil.VM;
 
 namespace PACESeriesUtil
 {
-    public class PaceViewModel:INotifyPropertyChanged
+    public class PaceViewModel : WpfContext, INotifyPropertyChanged
     {
-        private PaceConfigViewModel _config;
-        private SettingsViewModel _settings;
-        private TraceViewModel _trace;
-        private PaceMeasuringViewModel _measuring;
-        private PaceControlViewModel _controlState;
+        private readonly PaceConfigViewModel _config;
+        private readonly SettingsViewModel _settings;
+        private readonly TraceViewModel _trace;
+        private readonly PaceMeasuringViewModel _measuring;
+        private readonly PaceControlViewModel _controlState;
 
-        public PaceViewModel()
+        public PaceViewModel():base()
         {
             _config = new PaceConfigViewModel();
             _settings = new SettingsViewModel();
@@ -40,11 +40,11 @@ namespace PACESeriesUtil
         public SettingsViewModel Settings
         {
             get { return _settings; }
-            set
-            {
-                _settings = value;
-                OnPropertyChanged();
-            }
+            //set
+            //{
+            //    _settings = value;
+            //    OnPropertyChanged();
+            //}
         }
 
         /// <summary>
@@ -53,11 +53,11 @@ namespace PACESeriesUtil
         public PaceMeasuringViewModel MeasuringState
         {
             get { return _measuring; }
-            set
-            {
-                _measuring = value; 
-                OnPropertyChanged();
-            }
+            //set
+            //{
+            //    _measuring = value; 
+            //    OnPropertyChanged();
+            //}
         }
 
         /// <summary>
@@ -66,11 +66,11 @@ namespace PACESeriesUtil
         public PaceControlViewModel ControlState
         {
             get { return _controlState; }
-            set
-            {
-                _controlState = value; 
-                OnPropertyChanged();
-            }
+            //set
+            //{
+            //    _controlState = value; 
+            //    OnPropertyChanged();
+            //}
         }
 
         /// <summary>
@@ -79,11 +79,11 @@ namespace PACESeriesUtil
         public TraceViewModel Trace
         {
             get { return _trace; }
-            set
-            {
-                _trace = value; 
-                OnPropertyChanged();
-            }
+            //set
+            //{
+            //    _trace = value; 
+            //    OnPropertyChanged();
+            //}
         }
 
         #region INotifyPropertyChanged

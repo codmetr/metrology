@@ -46,7 +46,7 @@
         </ComboBox>
         <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding ConnectDisconnect}">
             <Button.Style>
-                <Style TargetType="Button">
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Content" Value="Подключение"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsConnected}" Value="FALSE">

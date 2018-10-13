@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:PACESeriesUtil"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d" d:DataContext="{local:PaceViewModel}"
-        Title="PACE" Height="350" Width="525">
+        Title="PACE" Height="350" Width="525" Closing="MetroWindow_Closing">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

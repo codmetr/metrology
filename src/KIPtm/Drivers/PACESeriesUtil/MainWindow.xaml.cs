@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PACESeriesUtil.VM;
 using Tools.View;
 
 namespace PACESeriesUtil
@@ -21,11 +22,20 @@ namespace PACESeriesUtil
     /// </summary>
     public partial class MainWindow //: Window
     {
+        private readonly PacePresenter _peresenter;
+
         public MainWindow()
         {
             InitializeComponent();
             ViewViewmodelMatcher.AddMatch(this.Resources, ViewAttribute.CheckView, ViewAttribute.CheckViewModelCashOnly);
-            DataContext = new PaceViewModel();
+            var vm = new PaceViewModel();
+            _peresenter = new PacePresenter(vm, vm);
+            DataContext = vm;
+        }
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _peresenter.Dispose();
         }
     }
 }
