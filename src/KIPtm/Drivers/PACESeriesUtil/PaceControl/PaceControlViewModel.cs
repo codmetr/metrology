@@ -20,6 +20,7 @@ namespace PACESeriesUtil.VM
         private string _limitsStr;
         private PressureUnits _unit;
         private IEnumerable<PressureUnits> _units;
+        private bool _outState;
 
         /// <summary>
         /// Единицы измерения
@@ -71,6 +72,24 @@ namespace PACESeriesUtil.VM
         public ICommand SetPressure { get { return new CommandWrapper(DoSetPressure);} }
 
         /// <summary>
+        /// Целевое значение состояния выхода
+        /// </summary>
+        public bool OutState
+        {
+            get { return _outState; }
+            set
+            {
+                _outState = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Установить состояния выхода
+        /// </summary>
+        public ICommand SetOutput { get { return new CommandWrapper(DoSetOut); } }
+
+        /// <summary>
         /// Ограничение
         /// </summary>
         public string LimitsStr
@@ -99,6 +118,11 @@ namespace PACESeriesUtil.VM
         public event Action<string> EvSetPress;
 
         /// <summary>
+        /// Запрошена установка состояния выхода
+        /// </summary>
+        public event Action<bool> EvSetOutput;
+
+        /// <summary>
         /// Запрошена установка единиц измерения
         /// </summary>
         public event Action<PressureUnits> EvSetUnit;
@@ -111,6 +135,11 @@ namespace PACESeriesUtil.VM
         private void DoSetPressure()
         {
             OnEvSetPress(_pressureStr);
+        }
+
+        private void DoSetOut()
+        {
+            OnEvSetOut(_outState);
         }
 
         private void DoSetUnit()
@@ -126,6 +155,11 @@ namespace PACESeriesUtil.VM
         protected virtual void OnEvSetPress(string obj)
         {
             EvSetPress?.Invoke(obj);
+        }
+
+        protected virtual void OnEvSetOut(bool obj)
+        {
+            EvSetOutput?.Invoke(obj);
         }
 
         protected virtual void OnEvSetUnit(PressureUnits obj)

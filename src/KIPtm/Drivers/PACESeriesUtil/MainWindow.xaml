@@ -12,6 +12,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
+                <ResourceDictionary Source="Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <iconPacks:PackIconModern x:Key="SettingsIcon" Kind="Settings" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </ResourceDictionary>

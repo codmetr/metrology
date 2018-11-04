@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PACESeriesUtil.Viewes"
              xmlns:vm="clr-namespace:PACESeriesUtil.VM"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:PaceControlViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -37,6 +38,9 @@
             <TextBlock>Давление:</TextBlock>
             <TextBox Text="{Binding PressureStr}"/>
             <Button Command="{Binding SetPressure}" Content="Установить давление"/>
+            <mah:ToggleSwitch Header="Состояние выхода:" IsChecked="{Binding OutState, Mode=OneWay}"
+                              OnLabel="Контроль" OffLabel="Измерение"/>
+            <Button Command="{Binding SetOutput}" Content="Установить состояние выхода"/>
             <TextBlock>Ограничение:</TextBlock>
             <TextBox Text="{Binding LimitsStr}"/>
             <Button Command="{Binding SetLimit}" Content="Установить ограничение"/>

@@ -207,6 +207,20 @@ namespace PACESeries
         }
 
         /// <summary>
+        /// Установка режима контроля по каналу
+        /// </summary>
+        /// <param name="channel">канал</param>
+        /// <param name="state">состояние</param>
+        /// <returns></returns>
+        [DefModel(Model.PACE5000 | Model.PACE6000)]
+        public bool SetOutputState(int channel, bool state)
+        {
+            Send(_parser.GetCommandSetOutputState(channel, state));
+            return true;
+            //TODO реализовать проверку установки состояния канала
+        }
+
+        /// <summary>
         /// Установить блокировку изменения режима управления пользователем
         /// </summary>
         [DefModel(Model.PACE1000 | Model.PACE5000 | Model.PACE6000)]

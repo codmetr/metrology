@@ -21,6 +21,7 @@ namespace PACESeriesUtil
         private ILoops _syncPort;
         private string _lockKey = "IEE488";
         private ITransportIEEE488 _transport;
+        private int _channel = 0;
 
         public PacePresenter(IContext context, PaceViewModel vm)
         {
@@ -35,6 +36,7 @@ namespace PACESeriesUtil
             _vm.Config.Connect += Config_Connect;
             _vm.Config.Disсonnect += Config_Disсonnect;
             _vm.ControlState.EvSetLimit += ControlState_EvSetLimit;
+            _vm.ControlState.EvSetOutput += ControlState_EvSetOutput;
             _vm.ControlState.EvSetPress += ControlState_EvSetPress;
             _vm.ControlState.EvSetUnit += ControlState_EvSetUnit;
         }
@@ -54,6 +56,12 @@ namespace PACESeriesUtil
             if(!double.TryParse(obj, NumberStyles.Any, CultureInfo.CurrentUICulture, out press))
                 return;
             _syncPort.StartImportantAction(_lockKey, (arg) => SetPress(press, token));
+        }
+
+        private void ControlState_EvSetOutput(bool state)
+        {
+            var token = _cancellation.Token;
+            _syncPort.StartImportantAction(_lockKey, (arg) => SetOutput(_channel, state, token));
         }
 
         private void ControlState_EvSetLimit(string obj)
@@ -78,6 +86,19 @@ namespace PACESeriesUtil
         {
             token.ThrowIfCancellationRequested();
             _pase.SetPressure(press);
+        }
+
+        /// <summary>
+        /// Установка режима контроля по каналу
+        /// </summary>
+        /// <param name="channel">канал</param>
+        /// <param name="state">состояние</param>
+        /// <param name="token">отмена</param>
+        /// <returns></returns>
+        private void SetOutput(int channel, bool state, CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            _pase.SetOutputState(channel, state);
         }
 
         #endregion
