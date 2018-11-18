@@ -6,7 +6,7 @@
              xmlns:viewModel="clr-namespace:KipTM.ViewModel"
              xmlns:dto="clr-namespace:ArchiveData.DTO;assembly=ArchiveData"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModel:ArchivesViewModel}">
+             d:DesignHeight="300" d:DesignWidth="600" d:DataContext="{d:DesignInstance viewModel:ArchivesViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

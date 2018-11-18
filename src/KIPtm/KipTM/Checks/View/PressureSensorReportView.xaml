@@ -4,9 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewer="clr-namespace:SAPBusinessObjects.WPF.Viewer;assembly=SAPBusinessObjects.WPF.Viewer"
-             xmlns:local="clr-namespace:KipTM.Checks.View"
-             xmlns:attachedCommandBehavior="clr-namespace:AttachedCommandBehavior;assembly=Tools.View"
-             xmlns:pressureSensor="clr-namespace:KipTM.Report.PressureSensor"
              xmlns:report="clr-namespace:PressureSensorCheck.Report;assembly=PressureSensorCheck"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance report:PressureSensorReportViewModel}"
              d:DesignHeight="600" d:DesignWidth="1000" Loaded="UserControl_Loaded">

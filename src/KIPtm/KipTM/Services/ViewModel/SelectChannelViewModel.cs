@@ -7,6 +7,9 @@ using KipTM.Model.TransportChannels;
 
 namespace KipTM.ViewModel
 {
+    /// <summary>
+    /// Выбор каналов
+    /// </summary>
     public class SelectChannelViewModel : INotifyPropertyChanged
     {
         private ITransportChannelType _selectedChannel;

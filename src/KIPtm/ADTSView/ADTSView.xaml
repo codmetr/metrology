@@ -7,7 +7,7 @@
              xmlns:services="clr-namespace:ADTSChecks.ViewModel.Services;assembly=ADTSChecks"
              xmlns:res="clr-namespace:WpfCommonStyles;assembly=WpfCommonStyles"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="400" d:DataContext="{d:DesignInstance services:ADTSViewModel}">
+             d:DesignHeight="600" d:DesignWidth="600" d:DataContext="{d:DesignInstance services:ADTSViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="pressureElementControls:DiscretInputHorisontalControl">
@@ -15,14 +15,23 @@
                 <Setter Property="Width" Value="150"/>
                 <Setter Property="Margin" Value="3"/>
             </Style>
-            <Style TargetType="TextBlock" x:Key="ValueStyle"></Style>
-             
+            <!--<Style TargetType="TextBlock" x:Key="ValueStyle"></Style>-->
+            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Margin" Value="3"/>
+            </Style>
+            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Margin" Value="3"/>
+            </Style>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                <Setter Property="Margin" Value="3"/>
+            </Style>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -33,7 +42,7 @@
         <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Top" Background="White">
             <Image Source="Content/adts405.jpg" Height="100" Width="100"/>
         </Border>
-        <GroupBox Header="Состояние ADTS" Grid.Column="1" Grid.Row="0">
+        <GroupBox Header="Состояние ADTS" Grid.Column="2" Grid.Row="0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1.5*"/>
@@ -42,11 +51,11 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}">Давление PS:</TextBlock>
                 <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Pressure}" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=ValueStyle}}"/>
@@ -107,7 +116,7 @@
                 </UniformGrid>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Управление ADTS" Grid.Column="1" Grid.Row="1"
+        <GroupBox Header="Управление ADTS" Grid.Column="2" Grid.Row="1"
                   Visibility="{Binding IsControlMode, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -117,20 +126,20 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type res:CustomResources}, ResourceId=TitleStyle}}"
                            VerticalAlignment="Center" TextWrapping="Wrap">Ед. измерения:</TextBlock>

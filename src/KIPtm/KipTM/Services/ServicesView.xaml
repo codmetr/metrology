@@ -10,6 +10,18 @@
     <!--<UserControl.Resources><ResourceDictionary><ResourceDictionary.MergedDictionaries><ResourceDictionary Source="../../Skins/MainSkin.xaml"/></ResourceDictionary.MergedDictionaries></ResourceDictionary></UserControl.Resources>-->
     <UserControl.Resources>
         <!--<ResourceDictionary Source="../../Skins/MainSkin.xaml"/>-->
+        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="Margin" Value="3"/>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -32,7 +44,7 @@
             </DockPanel>-->
             <ContentPresenter Content="{Binding ShowedService, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsCanNotConnect, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
-        <StackPanel Grid.Column="1">
+        <StackPanel Grid.Column="1" Margin="5">
             <ContentPresenter Content="{Binding Channel}"/>
             <Button Command="{Binding Connect}" IsEnabled="{Binding IsCanConnect}">Поключиться</Button>
             <Button Command="{Binding Disconnect}" IsEnabled="{Binding IsCanNotConnect}">Отключиться</Button>

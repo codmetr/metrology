@@ -13,6 +13,8 @@ namespace KipTM.ViewModel
         private readonly IDataPool _dataPool;
         private TestResultID _selectedTest;
         private readonly Dictionary<string, IReportFactory> _reportFactories;
+        private object _result;
+        private bool _isBuzy;
 
         /// <summary>
         /// Initializes a new instance of the TestsViewModel class.
@@ -61,12 +63,28 @@ namespace KipTM.ViewModel
         /// <summary>
         /// Представление результата
         /// </summary>
-        public object Result { get; set; }
+        public object Result
+        {
+            get { return _result; }
+            set
+            {
+                _result = value;
+                OnPropertyChanged("Result");
+            }
+        }
 
         /// <summary>
         /// Выполняетс длительная операция
         /// </summary>
-        public bool IsBuzy { get; set; }
+        public bool IsBuzy
+        {
+            get { return _isBuzy; }
+            set
+            {
+                _isBuzy = value;
+                OnPropertyChanged("IsBuzy");
+            }
+        }
 
         /// <summary>
         /// Обновить состояние результата по заданному тесту
