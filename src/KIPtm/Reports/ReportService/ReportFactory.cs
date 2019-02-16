@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ArchiveData.DTO;
 using CheckFrame.Checks;
-using StructureMap;
 using Tools;
 
 namespace ReportService

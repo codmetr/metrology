@@ -15,12 +15,16 @@ namespace KipTM.Manuals.ViewModel
             var basePath = Path.Combine(Path.GetFullPath(Environment.CurrentDirectory), "Manuals");
             var path = Path.Combine(basePath, @"DPI\DPI620_Genii_Help_KRU0541_ru.pdf");
             books.Add(new BookViewModel() { Title = "DPI620Genii Руководство пользователя(RU)", Path = path });
-            path = Path.Combine(basePath, @"DPI\DPI_620G_описание_типа.pdf");
+
+            path = Path.Combine(basePath, @"DPI\DPI_620G_TypeDescription.pdf");
             books.Add(new BookViewModel() { Title = "DPI620 Описание типа", Path = path });
-            path = Path.Combine(basePath, @"DPI\DPI_620_методика_поверки.pdf");
+
+            path = Path.Combine(basePath, @"DPI\DPI_620_CheckManual.pdf");
             books.Add(new BookViewModel() { Title = "DPI620 Методика поверки", Path = path });
+
             path = Path.Combine(basePath, @"PACE\pace5000_pace6000_user_manual_k0443_ru.pdf");
             books.Add(new BookViewModel() { Title = "PACE Руководство пользователя(RU)", Path = path });
+
             path = Path.Combine(basePath, @"PACE\pace5000_pace6000_user_manual_k0443_en.pdf");
             books.Add(new BookViewModel() { Title = "PACE Руководство пользователя(EN)", Path = path });
             return books;

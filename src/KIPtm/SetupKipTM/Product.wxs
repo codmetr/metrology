@@ -12,24 +12,28 @@
     <Property Id="Shortcut" Value="$(var.ProductName).lnk" />
     <Feature Id="ProductFeature" Title="KipTM" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
-      <ComponentGroupRef Id="LibsComponents" />
-      <ComponentGroupRef Id="ReportComponents" />
       <ComponentGroupRef Id="DPIComponents" />
       <ComponentGroupRef Id="PACEComponents" />
       <ComponentGroupRef Id="x64Components" />
       <ComponentGroupRef Id="x86Components" />
-      <ComponentGroupRef Id="ruComponents" />
-      <ComponentGroupRef Id="huComponents" />
-      <ComponentGroupRef Id="skComponents" />
-      <ComponentGroupRef Id="esComponents" />
-      <ComponentGroupRef Id="itComponents" />
-      <ComponentGroupRef Id="ptComponents" />
-      <ComponentGroupRef Id="svComponents" />
       <ComponentGroupRef Id="deComponents" />
+      <ComponentGroupRef Id="enComponents" />
+      <ComponentGroupRef Id="esComponents" />
       <ComponentGroupRef Id="frComponents" />
+      <ComponentGroupRef Id="huComponents" />
+      <ComponentGroupRef Id="itComponents" />
       <ComponentGroupRef Id="jaComponents" />
+      <ComponentGroupRef Id="koComponents" />
+      <ComponentGroupRef Id="LibsComponents" />
+      <ComponentGroupRef Id="ptComponents" />
+      <ComponentGroupRef Id="ReportComponents" />
+      <ComponentGroupRef Id="ruComponents" />
+      <ComponentGroupRef Id="skComponents" />
+      <ComponentGroupRef Id="svComponents" />
       <ComponentGroupRef Id="trComponents" />
       <ComponentGroupRef Id="zh_cnComponents" />
+      <ComponentGroupRef Id="zh_HansComponents" />
+      <ComponentGroupRef Id="zh_HantComponents" />
       <ComponentGroupRef Id="zh_twComponents" />
       <ComponentRef Id="Shortcuts" />
       <ComponentRef Id="DesktopShortcuts" />
@@ -44,26 +48,30 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="ManufacturerFolder" Name="$(var.Manufacturer)">
           <Directory Id="ApplicationFolder" Name="$(var.ProductName)">
+            <Directory Id="deFolder" Name="de"/>
+            <Directory Id="enFolder" Name="en"/>
+            <Directory Id="esFolder" Name="es"/>
+            <Directory Id="frFolder" Name="fr"/>
+            <Directory Id="huFolder" Name="hu"/>
+            <Directory Id="itFolder" Name="it"/>
+            <Directory Id="jaFolder" Name="ja"/>
+            <Directory Id="koFolder" Name="ko"/>
             <Directory Id="LibsFolder" Name="Libs"/>
-            <Directory Id="ReportFolder" Name="Report"/>
-            <Directory Id="x64Folder" Name="x64"/>
-            <Directory Id="x86Folder" Name="x86"/>
             <Directory Id="ManualsFolder" Name="Manuals">
               <Directory Id="DPIFolder" Name="DPI"/>
               <Directory Id="PACEFolder" Name="PACE"/>
             </Directory>
-            <Directory Id="ruFolder" Name="ru"/>
-            <Directory Id="huFolder" Name="hu"/>
-            <Directory Id="skFolder" Name="sk"/>
-            <Directory Id="esFolder" Name="es"/>
-            <Directory Id="itFolder" Name="it"/>
             <Directory Id="ptFolder" Name="pt"/>
+            <Directory Id="ReportFolder" Name="Report"/>
+            <Directory Id="ruFolder" Name="ru"/>
+            <Directory Id="skFolder" Name="sk"/>
             <Directory Id="svFolder" Name="sv"/>
-            <Directory Id="deFolder" Name="de"/>
-            <Directory Id="frFolder" Name="fr"/>
-            <Directory Id="jaFolder" Name="ja"/>
             <Directory Id="trFolder" Name="tr"/>
+            <Directory Id="x64Folder" Name="x64"/>
+            <Directory Id="x86Folder" Name="x86"/>
             <Directory Id="zh_cnFolder" Name="zh-cn"/>
+            <Directory Id="zh_HansFolder" Name="zh-Hans"/>
+            <Directory Id="zh_HantFolder" Name="zh-Hant"/>
             <Directory Id="zh_twFolder" Name="zh-tw"/>
           </Directory>
         </Directory>
@@ -149,8 +157,6 @@
         <File Name="SAPBusinessObjects.WPF.ViewerShared.dll" Source="$(var.KipTM.TargetDir)SAPBusinessObjects.WPF.ViewerShared.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="ShockwaveFlashObjects.dll" Source="$(var.KipTM.TargetDir)ShockwaveFlashObjects.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="stdole.dll" Source="$(var.KipTM.TargetDir)stdole.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="StructureMap.dll" Source="$(var.KipTM.TargetDir)StructureMap.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
-        <File Name="StructureMap.xml" Source="$(var.KipTM.TargetDir)StructureMap.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="System.Windows.Interactivity.dll" Source="$(var.KipTM.TargetDir)System.Windows.Interactivity.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="ZedGraph.dll" Source="$(var.KipTM.TargetDir)ZedGraph.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="ZedGraph.xml" Source="$(var.KipTM.TargetDir)ZedGraph.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>
@@ -171,6 +177,10 @@
         <File Name="Nlog.config" Source="$(var.KipTM.TargetDir)Nlog.config" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="NLog.dll" Source="$(var.KipTM.TargetDir)NLog.dll" CompanionFile="$(var.KipTM.TargetFileName)"/>
         <File Name="NLog.xml" Source="$(var.KipTM.TargetDir)NLog.xml" CompanionFile="$(var.KipTM.TargetFileName)"/>-->
+      </Component>
+      <Component Guid="2E198723-D7E6-47E7-AF5B-924B28DD5A3A">
+        <File Id="ADTS.dll" Name="$(var.ADTS.TargetFileName)" Source="$(var.ADTS.TargetPath)" KeyPath="yes" />
+        <File Id="ADTS.pdb" Name="$(var.ADTS.TargetName).pdb" Source="$(var.ADTS.TargetDir)$(var.ADTS.TargetName).pdb" CompanionFile="$(var.ADTS.TargetFileName)"/>
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A3A">
         <File Name="$(var.ArchiveData.TargetFileName)" Source="$(var.ArchiveData.TargetPath)" KeyPath="yes" />
@@ -203,6 +213,10 @@
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A1A">
         <File Name="$(var.MainLoop.TargetFileName)" Source="$(var.MainLoop.TargetPath)" KeyPath="yes" />
         <File Name="$(var.MainLoop.TargetName).pdb" Source="$(var.MainLoop.TargetDir)$(var.MainLoop.TargetName).pdb" CompanionFile="$(var.MainLoop.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D236-47E7-AF5B-227B28DD5A2A">
+        <File Id="PACEChecks.dll" Name="$(var.PACEChecks.TargetFileName)" Source="$(var.PACEChecks.TargetPath)" KeyPath="yes" />
+        <File Id="PACEChecks.pdb" Name="$(var.PACEChecks.TargetName).pdb" Source="$(var.PACEChecks.TargetDir)$(var.PACEChecks.TargetName).pdb" CompanionFile="$(var.PACEChecks.TargetFileName)"/>
       </Component>
       <Component Guid="F3764C78-E33A-449D-8A42-781341CC1156">
         <File Name="$(var.PACESeries.TargetFileName)" Source="$(var.PACESeries.TargetPath)" KeyPath="yes" />
@@ -241,6 +255,10 @@
       <Component Guid="2E1987B5-D7E6-47E7-AF0B-124B28DD5A2A">
         <File Name="$(var.Tools.View.TargetFileName)" Source="$(var.Tools.View.TargetPath)" KeyPath="yes" />
         <File Name="$(var.Tools.View.TargetName).pdb" Source="$(var.Tools.View.TargetDir)$(var.Tools.View.TargetName).pdb" CompanionFile="$(var.Tools.View.TargetFileName)"/>
+      </Component>
+      <Component Guid="2E1987B5-D7E6-47E7-AF5B-922B286D5A6A">
+        <File Id="VisaChannel.dll" Name="$(var.VisaChannel.TargetFileName)" Source="$(var.VisaChannel.TargetPath)" KeyPath="yes" />
+        <File Id="VisaChannel.pdb" Name="$(var.VisaChannel.TargetName).pdb" Source="$(var.VisaChannel.TargetDir)$(var.VisaChannel.TargetName).pdb" CompanionFile="$(var.VisaChannel.TargetFileName)"/>
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD536A">
         <File Name="$(var.VisaDriver.TargetFileName)" Source="$(var.VisaDriver.TargetPath)" KeyPath="yes" />
@@ -284,8 +302,8 @@
   <Fragment>
     <ComponentGroup Id="LibsComponents" Directory="LibsFolder">
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B28DD5A2A">
-        <File Name="$(var.ADTS.TargetFileName)" Source="$(var.ADTS.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.ADTS.TargetName).pdb" Source="$(var.ADTS.TargetDir)$(var.ADTS.TargetName).pdb" CompanionFile="$(var.ADTS.TargetFileName)"/>
+        <File Id="LibsADTS.dll" Name="$(var.ADTS.TargetFileName)" Source="$(var.ADTS.TargetPath)" KeyPath="yes" />
+        <File Id="LibsADTS.pdb" Name="$(var.ADTS.TargetName).pdb" Source="$(var.ADTS.TargetDir)$(var.ADTS.TargetName).pdb" CompanionFile="$(var.ADTS.TargetFileName)"/>
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-127B28DD5A2A">
         <File Name="$(var.ADTSChecks.TargetFileName)" Source="$(var.ADTSChecks.TargetPath)" KeyPath="yes" />
@@ -300,8 +318,8 @@
         <File Name="$(var.ADTSData.TargetName).pdb" Source="$(var.ADTSData.TargetDir)$(var.ADTSData.TargetName).pdb" CompanionFile="$(var.ADTSData.TargetFileName)"/>
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-227B28DD5A2A">
-        <File Name="$(var.PACEChecks.TargetFileName)" Source="$(var.PACEChecks.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.PACEChecks.TargetName).pdb" Source="$(var.PACEChecks.TargetDir)$(var.PACEChecks.TargetName).pdb" CompanionFile="$(var.PACEChecks.TargetFileName)"/>
+        <File Id="LibsPACEChecks.dll" Name="$(var.PACEChecks.TargetFileName)" Source="$(var.PACEChecks.TargetPath)" KeyPath="yes" />
+        <File Id="LibsPACEChecks.pdb" Name="$(var.PACEChecks.TargetName).pdb" Source="$(var.PACEChecks.TargetDir)$(var.PACEChecks.TargetName).pdb" CompanionFile="$(var.PACEChecks.TargetFileName)"/>
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-227428DD5A2A">
         <File Name="$(var.PACEView.TargetFileName)" Source="$(var.PACEView.TargetPath)" KeyPath="yes" />
@@ -316,8 +334,8 @@
         <File Id="LibIEEE488.pdb" Name="$(var.IEEE488.TargetName).pdb" Source="$(var.IEEE488.TargetDir)$(var.IEEE488.TargetName).pdb" CompanionFile="$(var.IEEE488.TargetFileName)"/>
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-924B286D5A6A">
-        <File Name="$(var.VisaChannel.TargetFileName)" Source="$(var.VisaChannel.TargetPath)" KeyPath="yes" />
-        <File Name="$(var.VisaChannel.TargetName).pdb" Source="$(var.VisaChannel.TargetDir)$(var.VisaChannel.TargetName).pdb" CompanionFile="$(var.VisaChannel.TargetFileName)"/>
+        <File Id="LibsVisaChannel.dll" Name="$(var.VisaChannel.TargetFileName)" Source="$(var.VisaChannel.TargetPath)" KeyPath="yes" />
+        <File Id="LibsVisaChannel.pdb" Name="$(var.VisaChannel.TargetName).pdb" Source="$(var.VisaChannel.TargetDir)$(var.VisaChannel.TargetName).pdb" CompanionFile="$(var.VisaChannel.TargetFileName)"/>
       </Component>
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-824B286D5A6A">
         <File Name="$(var.VisaChannelView.TargetFileName)" Source="$(var.VisaChannelView.TargetPath)" KeyPath="yes" />
@@ -326,6 +344,99 @@
       <Component Guid="2E1987B5-D7E6-47E7-AF5B-824B284D5A3B">
         <File Name="$(var.ReportAdts.TargetFileName)" Source="$(var.KipTM.TargetDir)Libs\$(var.ReportAdts.TargetFileName)" KeyPath="yes" />
         <File Name="$(var.ReportAdts.TargetName).pdb" Source="$(var.KipTM.TargetDir)Libs\$(var.ReportAdts.TargetName).pdb" CompanionFile="$(var.ReportAdts.TargetFileName)"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="deComponents" Directory="deFolder">
+      <Component Guid="281287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="deSystem.Windows.Interactivity.resources.dll" Name="System.Windows.Interactivity.resources.dll" Source="$(var.KipTM.TargetDir)de\System.Windows.Interactivity.resources.dll" KeyPath="yes"/>
+        <File Id="deZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)de\ZedGraph.resources.dll"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="enComponents" Directory="enFolder">
+      <Component Guid="241287B5-D7E6-4237-AF5B-924B28DD5A7A">
+        <File Id="enSystem.Windows.Interactivity.resources.dll" Name="System.Windows.Interactivity.resources.dll" Source="$(var.KipTM.TargetDir)en\System.Windows.Interactivity.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="esComponents" Directory="esFolder">
+      <Component Guid="241287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="esSystem.Windows.Interactivity.resources.dll" Name="System.Windows.Interactivity.resources.dll" Source="$(var.KipTM.TargetDir)es\System.Windows.Interactivity.resources.dll" KeyPath="yes"/>
+        <File Id="esZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)es\ZedGraph.resources.dll"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="frComponents" Directory="frFolder">
+      <Component Guid="291287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="frSystem.Windows.Interactivity.resources.dll" Name="System.Windows.Interactivity.resources.dll" Source="$(var.KipTM.TargetDir)fr\System.Windows.Interactivity.resources.dll" KeyPath="yes"/>
+        <File Id="frZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)fr\ZedGraph.resources.dll"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="huComponents" Directory="huFolder">
+      <Component Guid="221287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="huZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)hu\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="itComponents" Directory="itFolder">
+      <Component Guid="251287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="itSystem.Windows.Interactivity.resources.dll" Name="System.Windows.Interactivity.resources.dll" Source="$(var.KipTM.TargetDir)it\System.Windows.Interactivity.resources.dll" KeyPath="yes"/>
+        <File Id="itZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)it\ZedGraph.resources.dll"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="jaComponents" Directory="jaFolder">
+      <Component Guid="2A1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="jaSystem.Windows.Interactivity.resources.dll" Name="System.Windows.Interactivity.resources.dll" Source="$(var.KipTM.TargetDir)ja\System.Windows.Interactivity.resources.dll" KeyPath="yes"/>
+        <File Id="jaZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)ja\ZedGraph.resources.dll"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="koComponents" Directory="koFolder">
+      <Component Guid="2A1227B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="koSystem.Windows.Interactivity.resources.dll" Name="System.Windows.Interactivity.resources.dll" Source="$(var.KipTM.TargetDir)ko\System.Windows.Interactivity.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="ptComponents" Directory="ptFolder">
+      <Component Guid="261287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="ptZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)pt\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="ruComponents" Directory="ruFolder">
+      <Component Guid="213287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="ruSystem.Windows.Interactivity.resources.dll" Name="System.Windows.Interactivity.resources.dll" Source="$(var.KipTM.TargetDir)ru\System.Windows.Interactivity.resources.dll" KeyPath="yes"/>
+        <File Id="ruZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)ru\ZedGraph.resources.dll"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="skComponents" Directory="skFolder">
+      <Component Guid="231287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="skZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)sk\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="svComponents" Directory="svFolder">
+      <Component Guid="271287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="svZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)sv\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="trComponents" Directory="trFolder">
+      <Component Guid="2B1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="trZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)tr\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="zh_cnComponents" Directory="zh_cnFolder">
+      <Component Guid="2C1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="zh_cnZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)zh-cn\ZedGraph.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="zh_HansComponents" Directory="zh_HansFolder">
+      <Component Guid="2D1447B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="zh_HansSystem.Windows.Interactivity.resources.dll" Name="System.Windows.Interactivity.resources.dll" Source="$(var.KipTM.TargetDir)zh-Hans\System.Windows.Interactivity.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="zh_HantComponents" Directory="zh_HantFolder">
+      <Component Guid="2D1557B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="zh_HantSystem.Windows.Interactivity.resources.dll" Name="System.Windows.Interactivity.resources.dll" Source="$(var.KipTM.TargetDir)zh-Hant\System.Windows.Interactivity.resources.dll" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="zh_twComponents" Directory="zh_twFolder">
+      <Component Guid="2D1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
+        <File Id="zh_twZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)zh-tw\ZedGraph.resources.dll" KeyPath="yes"/>
       </Component>
     </ComponentGroup>
   </Fragment>
@@ -348,72 +459,5 @@
           <File Name="pace_scpi_manual_k0472_rev_a5.pdf" Source="$(var.KipTM.TargetDir)Manuals\PACE\pace_scpi_manual_k0472_rev_a5.pdf"/>
         </Component>
       </ComponentGroup>
-  </Fragment>
-  <Fragment>
-    <ComponentGroup Id="ruComponents" Directory="ruFolder">
-      <Component Guid="213287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="ruZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)ru\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="huComponents" Directory="huFolder">
-      <Component Guid="221287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="huZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)hu\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="skComponents" Directory="skFolder">
-      <Component Guid="231287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="skZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)sk\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="esComponents" Directory="esFolder">
-      <Component Guid="241287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="esZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)es\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="itComponents" Directory="itFolder">
-      <Component Guid="251287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="itZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)it\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="ptComponents" Directory="ptFolder">
-      <Component Guid="261287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="ptZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)pt\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="svComponents" Directory="svFolder">
-      <Component Guid="271287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="svZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)sv\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="deComponents" Directory="deFolder">
-      <Component Guid="281287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="deZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)de\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="frComponents" Directory="frFolder">
-      <Component Guid="291287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="frZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)fr\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="jaComponents" Directory="jaFolder">
-      <Component Guid="2A1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="jaZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)ja\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="trComponents" Directory="trFolder">
-      <Component Guid="2B1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="trZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)tr\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="zh_cnComponents" Directory="zh_cnFolder">
-      <Component Guid="2C1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="zh_cnZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)zh-cn\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="zh_twComponents" Directory="zh_twFolder">
-      <Component Guid="2D1287B5-D7E6-47E7-AF5B-924B28DD5A7A">
-        <File Id="zh_twFolderZedGraph.resources.dll" Name="ZedGraph.resources.dll" Source="$(var.KipTM.TargetDir)zh-tw\ZedGraph.resources.dll" KeyPath="yes"/>
-      </Component>
-    </ComponentGroup>
   </Fragment>
 </Wix>

@@ -40,14 +40,14 @@ namespace KipTM.IOC
         public static UnityContainer Config(UnityContainer unityContainer)
         {
             //unityContainer.RegisterTypes(pluginsTypes);
-            if (false)
-            {
-                unityContainer.RegisterType<IDataService, DesignDataService>();
-            }
-            else
-            {
+            //if (false)
+            //{
+            //    unityContainer.RegisterType<IDataService, DesignDataService>();
+            //}
+            //else
+            //{
                 unityContainer.RegisterType<IDataService, Model.DataService>();
-            }
+            //}
 
             RegistrePlugins(unityContainer);
 

@@ -34,49 +34,49 @@ namespace KipTM.ViewModel
         public TestResultViewModel(TestResultID result, CheckConfigData data, IEnumerable<IParameterResultViewModel> parameters, IDataAccessor accessor)
         {
             _result = result;
-            if (false)
-            {
-                #region Design
-                TestType = "поверка";
-                User = "Иван Иванович Иванов";
-                Time = DateTime.Parse("11/11/11");
-                Device = new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("UNIK 5000", "Датчик давления", "GE")) { SerialNumber = "111" });
-                Etalons = new ObservableCollection<IDeviceViewModel>(new IDeviceViewModel[]
-                {
-                    new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("PACE5000", "Датчик давления", "GE Druk")){SerialNumber = "222"}),
-                    new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("DPI 620", "Многофункциональный калибратор", "GE Druk")){SerialNumber = "333"}),
-                });
-                Parameters = new ObservableCollection<IParameterResultViewModel>(new IParameterResultViewModel[]
-                {
-                    new ParameterResultViewModel()
-                    {
-                        NameParameter = "Давление",
-                        Unit = "мБар",
-                        PointMeasuring = "1000",
-                        Tolerance = "0.1",
-                        Error = "0.01"
-                    },
-                    new ParameterResultViewModel()
-                    {
-                        NameParameter = "Давление",
-                        Unit = "мБар",
-                        PointMeasuring = "1100",
-                        Tolerance = "0.1",
-                        Error = "0.01"
-                    },
-                    new ParameterResultViewModel()
-                    {
-                        NameParameter = "Давление",
-                        Unit = "мБар",
-                        PointMeasuring = "1200",
-                        Tolerance = "0.1",
-                        Error = "0.01"
-                    },
-                });
-                #endregion
-            }
-            else
-            {
+            //if (false)
+            //{
+            //    #region Design
+            //    TestType = "поверка";
+            //    User = "Иван Иванович Иванов";
+            //    Time = DateTime.Parse("11/11/11");
+            //    Device = new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("UNIK 5000", "Датчик давления", "GE")) { SerialNumber = "111" });
+            //    Etalons = new ObservableCollection<IDeviceViewModel>(new IDeviceViewModel[]
+            //    {
+            //        new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("PACE5000", "Датчик давления", "GE Druk")){SerialNumber = "222"}),
+            //        new DeviceViewModel(new DeviceDescriptor(new DeviceTypeDescriptor("DPI 620", "Многофункциональный калибратор", "GE Druk")){SerialNumber = "333"}),
+            //    });
+            //    Parameters = new ObservableCollection<IParameterResultViewModel>(new IParameterResultViewModel[]
+            //    {
+            //        new ParameterResultViewModel()
+            //        {
+            //            NameParameter = "Давление",
+            //            Unit = "мБар",
+            //            PointMeasuring = "1000",
+            //            Tolerance = "0.1",
+            //            Error = "0.01"
+            //        },
+            //        new ParameterResultViewModel()
+            //        {
+            //            NameParameter = "Давление",
+            //            Unit = "мБар",
+            //            PointMeasuring = "1100",
+            //            Tolerance = "0.1",
+            //            Error = "0.01"
+            //        },
+            //        new ParameterResultViewModel()
+            //        {
+            //            NameParameter = "Давление",
+            //            Unit = "мБар",
+            //            PointMeasuring = "1200",
+            //            Tolerance = "0.1",
+            //            Error = "0.01"
+            //        },
+            //    });
+            //    #endregion
+            //}
+            //else
+            //{
                 _testType = result.DeviceType;
                 _user = data.User;
                 _time = _result.Timestamp;
@@ -84,7 +84,7 @@ namespace KipTM.ViewModel
                 _etalons = new ObservableCollection<IDeviceViewModel>(data.Etalons.Values.Select(el => new DeviceViewModel(el.Device)));
                 Parameters = new ObservableCollection<IParameterResultViewModel>(parameters);
                 _save = accessor;
-            }
+            //}
         }
 
         /// <summary>

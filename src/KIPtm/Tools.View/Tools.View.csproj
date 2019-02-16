@@ -53,6 +53,7 @@
     <Compile Include="AttachedCommandBehavior\CommandBehaviorCollection.cs" />
     <Compile Include="AttachedCommandBehavior\EventHandlerGenerator.cs" />
     <Compile Include="AttachedCommandBehavior\ExecutionStrategy.cs" />
+    <Compile Include="BaseVm.cs" />
     <Compile Include="Busy\IBusy.cs" />
     <Compile Include="Busy\LockControl.cs" />
     <Compile Include="CommandWrapper.cs" />

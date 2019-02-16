@@ -91,9 +91,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\SAPBusinessObjects.WPF.ViewerShared.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\Lib\StructureMap.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -439,10 +436,10 @@
       <DependentUpon>ReportHost.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
-    <None Include="Manuals\DPI\DPI_620_методика_поверки.pdf">
+    <None Include="Manuals\DPI\DPI_620_CheckManual.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Manuals\DPI\DPI_620G_описание_типа.pdf">
+    <None Include="Manuals\DPI\DPI_620G_TypeDescription.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Manuals\DPI\DPI620_Genii_Help_KRU0541_ru.pdf">

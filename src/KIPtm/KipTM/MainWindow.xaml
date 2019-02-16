@@ -30,7 +30,7 @@
             <i:InvokeCommandAction Command="{Binding LoadView}" CommandParameter="{Binding ElementName=MainViewWindow}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Grid x:Name="LayoutRoot" Margin="3">
+    <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
