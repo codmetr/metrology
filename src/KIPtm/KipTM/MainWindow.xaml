@@ -22,7 +22,6 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ribbon:RibbonWindow.Resources>
-
     <ribbon:RibbonWindow.DataContext>
         <Binding Path="Main" Source="{StaticResource Locator}"/>
     </ribbon:RibbonWindow.DataContext>
@@ -31,8 +30,7 @@
             <i:InvokeCommandAction Command="{Binding LoadView}" CommandParameter="{Binding ElementName=MainViewWindow}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-
-    <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot" Margin="3">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>

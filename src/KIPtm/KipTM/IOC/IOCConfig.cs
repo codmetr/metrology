@@ -32,6 +32,11 @@ namespace KipTM.IOC
 {
     internal static class IOCConfig
     {
+        /// <summary>
+        /// Конфигурация IOC
+        /// </summary>
+        /// <param name="unityContainer"></param>
+        /// <returns></returns>
         public static UnityContainer Config(UnityContainer unityContainer)
         {
             //unityContainer.RegisterTypes(pluginsTypes);
@@ -44,7 +49,7 @@ namespace KipTM.IOC
                 unityContainer.RegisterType<IDataService, Model.DataService>();
             }
 
-            RegustrPlugins(unityContainer);
+            RegistrePlugins(unityContainer);
 
             unityContainer.RegisterType<IEventAggregator, EventAggregator.EventAggregator>();
             unityContainer.RegisterType<IArchive, ArchiveXML>();
@@ -122,7 +127,11 @@ namespace KipTM.IOC
             return unityContainer;
         }
 
-        private static void RegustrPlugins(UnityContainer unityContainer)
+        /// <summary>
+        /// Регистрация плагинов
+        /// </summary>
+        /// <param name="unityContainer"></param>
+        private static void RegistrePlugins(UnityContainer unityContainer)
         {
             var pluginsTypes = GetPluginsTypes();
             foreach (var type in pluginsTypes)
@@ -151,6 +160,10 @@ namespace KipTM.IOC
             }
         }
 
+        /// <summary>
+        /// Загрузка плагинов
+        /// </summary>
+        /// <returns></returns>
         private static IEnumerable<Type> GetPluginsTypes()
         {
             var path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Libs");
