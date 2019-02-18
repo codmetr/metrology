@@ -51,15 +51,17 @@ namespace PressureSensorCheck.Workflow
 
         public class DpiSlotConfig:INotifyPropertyChanged
         {
-            public DpiSlotConfig()
-            {
-                ChannelTypes = Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>();
-            }
-
             private ChannelType _channelType;
             private double _from;
             private double _to;
             private Units _selectedUnit;
+            private IEnumerable<Units> _unitSet;
+            private int _selectedSlotIndex;
+
+            public DpiSlotConfig()
+            {
+                ChannelTypes = Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>();
+            }
 
             public IEnumerable<ChannelType> ChannelTypes { get; set; }
 
@@ -81,7 +83,7 @@ namespace PressureSensorCheck.Workflow
             {
                 get { return _from; }
                 set { _from = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged("From");
                 }
             }
 
@@ -89,17 +91,49 @@ namespace PressureSensorCheck.Workflow
             {
                 get { return _to; }
                 set { _to = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged("To");
                 }
             }
 
-            public IEnumerable<Units> UnitSet { get; set; }
+            /// <summary>
+            /// Варианты единиц измерения
+            /// </summary>
+            public IEnumerable<Units> UnitSet
+            {
+                get { return _unitSet; }
+                set
+                {
+                    _unitSet = value;
+                    OnPropertyChanged("UnitSet");
+                }
+            }
 
+            /// <summary>
+            /// Выбраные единицы измерения
+            /// </summary>
             public Units SelectedUnit
             {
                 get { return _selectedUnit; }
                 set { _selectedUnit = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged("SelectedUnit");
+                }
+            }
+
+            /// <summary>
+            /// Варианты слотов 
+            /// </summary>
+            public IEnumerable<int> SlotIndexes { get; private set; }
+
+            /// <summary>
+            /// Выбраный слот
+            /// </summary>
+            public int SelectedSlotIndex
+            {
+                get { return _selectedSlotIndex; }
+                set
+                {
+                    _selectedSlotIndex = value;
+                    OnPropertyChanged("SelectedSlotIndex");
                 }
             }
 
@@ -107,7 +141,7 @@ namespace PressureSensorCheck.Workflow
 
             public event PropertyChangedEventHandler PropertyChanged;
 
-            protected virtual void OnPropertyChanged(string propertyName = null)
+            protected virtual void OnPropertyChanged(string propertyName)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }

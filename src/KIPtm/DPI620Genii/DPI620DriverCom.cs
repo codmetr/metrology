@@ -191,7 +191,7 @@ namespace DPI620Genii
             catch (Exception e)
             {
                 Log($"On read config channel 0 error: {e.ToString()}");
-                _startIndex = 1;
+                //_startIndex = 1;
             }
 
             // канал 1

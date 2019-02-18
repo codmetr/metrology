@@ -501,12 +501,27 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource TblBasicStyle}">Порт подклчения:</TextBlock>
                             <ComboBox Grid.Row="0" Grid.Column="1" SelectedItem="{Binding SelectPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Ports}"/>
-                            <TextBlock Grid.Row="1" Grid.Column="0">Тип датчика в слоте 1:</TextBlock>
+                            <TextBlock Grid.Row="1" Grid.Column="0">Номер входного слота:</TextBlock>
                             <ComboBox Grid.Row="1" Grid.Column="1"
+                                      ItemsSource="{Binding Slot1.SlotIndexes, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding Slot1.SelectedSlotIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="3">Номер выходного слота:</TextBlock>
+                            <ComboBox Grid.Row="1" Grid.Column="4"
+                                      ItemsSource="{Binding Slot2.SlotIndexes, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding Slot2.SelectedSlotIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="dto:ChannelType">
+                                        <ContentPresenter Content="{Binding Converter={StaticResource ChannelTypeStringConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBlock Grid.Row="2" Grid.Column="0">Тип входного слота:</TextBlock>
+                            <ComboBox Grid.Row="2" Grid.Column="1"
                                   ItemsSource="{Binding Slot1.ChannelTypes, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedItem="{Binding Slot1.ChannelType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.ItemTemplate>
@@ -515,8 +530,8 @@
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                            <TextBlock Grid.Row="1" Grid.Column="3">Тип датчика в слоте 2:</TextBlock>
-                            <ComboBox Grid.Row="1" Grid.Column="4"
+                            <TextBlock Grid.Row="2" Grid.Column="3">Тип выходного слота:</TextBlock>
+                            <ComboBox Grid.Row="2" Grid.Column="4"
                                  ItemsSource="{Binding Slot2.ChannelTypes, UpdateSourceTrigger=PropertyChanged}"
                                  SelectedItem="{Binding Slot2.ChannelType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.ItemTemplate>
@@ -525,8 +540,8 @@
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                            <TextBlock Grid.Row="2" Grid.Column="0">Едницы измерения для датчика в слоте 1:</TextBlock>
-                            <ComboBox Grid.Row="2" Grid.Column="1"
+                            <TextBlock Grid.Row="3" Grid.Column="0">Едницы измерения входного слота:</TextBlock>
+                            <ComboBox Grid.Row="3" Grid.Column="1"
                                   ItemsSource="{Binding Slot1.UnitSet, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedItem="{Binding Slot1.SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.ItemTemplate>
@@ -535,8 +550,8 @@
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                            <TextBlock Grid.Row="2" Grid.Column="3">Едницы измерения для датчика в слоте 2:</TextBlock>
-                            <ComboBox Grid.Row="2" Grid.Column="4"
+                            <TextBlock Grid.Row="3" Grid.Column="3">Едницы измерения выходного слота:</TextBlock>
+                            <ComboBox Grid.Row="3" Grid.Column="4"
                                  ItemsSource="{Binding Slot2.UnitSet, UpdateSourceTrigger=PropertyChanged}"
                                  SelectedItem="{Binding Slot2.SelectedUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.ItemTemplate>

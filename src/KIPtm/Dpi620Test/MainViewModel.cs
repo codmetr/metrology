@@ -19,6 +19,7 @@ namespace Dpi620Test
         private readonly LogViewModel _logViewModel;
         private readonly Logger _logger;
         private readonly Dpi620Presenter _dpi620;
+        private bool _isConnected;
 
         public MainViewModel(IDPI620Driver dpi620, SettingsViewModel settings, Dispatcher disp, Action prepareDpi)
         {
@@ -32,7 +33,7 @@ namespace Dpi620Test
                 Units = _dpi620.UnitsSlot1,
                 SelectedUnit = ""//_dpi620.UnitsSlot1.FirstOrDefault()
             };
-            Slot2 = new SlotViewModel("Слот 2", Settings, dpi620, 2, _logger, this)
+            Slot2 = new SlotViewModel("Слот 2", Settings, dpi620, 3, _logger, this)
             {
                 Units = _dpi620.UnitsSlot2,
                 SelectedUnit = ""//_dpi620.UnitsSlot2.FirstOrDefault()
@@ -44,7 +45,15 @@ namespace Dpi620Test
         /// <summary>
         /// Подключено
         /// </summary>
-        public bool IsConnected { get; set; }
+        public bool IsConnected
+        {
+            get { return _isConnected; }
+            set
+            {
+                _isConnected = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Интерфейс занят
@@ -86,5 +95,10 @@ namespace Dpi620Test
         public LogViewModel Log { get { return _logViewModel; } }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
