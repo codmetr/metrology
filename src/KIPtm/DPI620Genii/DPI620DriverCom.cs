@@ -36,11 +36,6 @@ namespace DPI620Genii
         private StreamReader _reader;
         private Action<string> _toLog = s => { };
 
-        /// <summary>
-        /// Начало опроса портов 0/1 - с нулевого или первого номера
-        /// </summary>
-        private int _startIndex = 0;
-
         //public void Open(string portName)
         //{
         //    _serial = new SerialPort(portName);
@@ -186,7 +181,6 @@ namespace DPI620Genii
             try
             {
                 var ch0Descr = Read();//TODO: parce
-                _startIndex = 0;
             }
             catch (Exception e)
             {
@@ -271,7 +265,7 @@ namespace DPI620Genii
             try
             {
                 //if (("UCMA" == unitCode) || ("UVVO" == unitCode) || ("UVMV" == unitCode))
-                var slotindex = _startIndex + slotId - 1;
+                var slotindex = slotId;
                 Write($"*ir{slotindex}?\r\n");
                 Read();
                 var sb = Read();
