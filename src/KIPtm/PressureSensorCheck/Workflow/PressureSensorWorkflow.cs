@@ -89,7 +89,7 @@ namespace PressureSensorCheck.Workflow
             var dpi = AppVersionHelper.CurrentAppVersionType == AppVersionHelper.AppVersionType.Emulation?
                 (IDPI620Driver)new DPI620Emulation():dpiCom;
             //var run = new PressureSensorRunVm(conf, dpi, dpiConf, result, agregator);
-            var run = new PressureSensorRunVm1(conf.Unit, Units.mA);
+            var run = new PressureSensorRunVm1(conf.Unit, Units.mA, context);
             var runPresenter = new PressureSensorRunPresenter(run, conf, dpi, dpiConf, result, agregator, context);
             var resultVm = new PressureSensorResultVM(id, accessor, res, conf, agregator);
 

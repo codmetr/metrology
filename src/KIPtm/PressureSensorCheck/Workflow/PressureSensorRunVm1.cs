@@ -40,16 +40,20 @@ namespace PressureSensorCheck.Workflow
         private MeasuringPoint _lastMeasuredPoint;
         private Units _pUnit;
         private Units _outUnit;
+        private readonly IContext _context;
+
 
         /// <summary>
         /// Выпонение проверки
         /// </summary>
         /// <param name="unit">Единицы измерения</param>
         /// <param name="outUnit"></param>
-        public PressureSensorRunVm1(Units unit, Units outUnit)
+        /// <param name="context"></param>
+        public PressureSensorRunVm1(Units unit, Units outUnit, IContext context)
         {
             _pUnit = unit;
             _outUnit = outUnit;
+            _context = context;
             _inOutLines = new LinesInOutViewModel(
                 "I", $"I, {outUnit.ToStringLocalized(CultureInfo.CurrentUICulture)}", Color.Black, 1, _periodViewGraphic,
                 "P", $"P,  {unit.ToStringLocalized(CultureInfo.CurrentUICulture)}", Color.Brown, 2, _periodViewGraphic);

@@ -36,6 +36,11 @@ namespace DPI620Genii
         private StreamReader _reader;
         private Action<string> _toLog = s => { };
 
+        public DPI620DriverCom()
+        {
+            
+        }
+
         //public void Open(string portName)
         //{
         //    _serial = new SerialPort(portName);
