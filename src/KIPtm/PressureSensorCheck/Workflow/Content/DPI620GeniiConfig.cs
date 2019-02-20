@@ -10,15 +10,15 @@ namespace PressureSensorCheck.Workflow
     /// <summary>
     /// Конфигурация DPI620
     /// </summary>
-    public class DPI620GeniiConfig : INotifyPropertyChanged
+    public class DPI620GeniiConfigVm : INotifyPropertyChanged
     {
         /// <summary>
         /// Конфигурация DPI620
         /// </summary>
-        public DPI620GeniiConfig()
+        public DPI620GeniiConfigVm()
         {
-            Slot1 = new DpiSlotConfig() { ChannelType = ChannelType.Pressure };
-            Slot2 = new DpiSlotConfig() { ChannelType = ChannelType.Current };
+            Slot1 = new DpiSlotConfigVm() { ChannelType = ChannelType.Pressure };
+            Slot2 = new DpiSlotConfigVm() { ChannelType = ChannelType.Current };
         }
         public IEnumerable<string> Ports { get; set; }
 
@@ -34,9 +34,9 @@ namespace PressureSensorCheck.Workflow
             }
         }
 
-        public DpiSlotConfig Slot1 { get; set; }
+        public DpiSlotConfigVm Slot1 { get; set; }
 
-        public DpiSlotConfig Slot2 { get; set; }
+        public DpiSlotConfigVm Slot2 { get; set; }
 
         #region INotifyPropertyChanged
 
@@ -49,7 +49,7 @@ namespace PressureSensorCheck.Workflow
 
         #endregion
 
-        public class DpiSlotConfig:INotifyPropertyChanged
+        public class DpiSlotConfigVm:INotifyPropertyChanged
         {
             private ChannelType _channelType;
             private double _from;
@@ -58,7 +58,7 @@ namespace PressureSensorCheck.Workflow
             private IEnumerable<Units> _unitSet;
             private int _selectedSlotIndex;
 
-            public DpiSlotConfig()
+            public DpiSlotConfigVm()
             {
                 ChannelTypes = Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>();
             }

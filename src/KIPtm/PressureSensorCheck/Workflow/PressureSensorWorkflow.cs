@@ -70,7 +70,7 @@ namespace PressureSensorCheck.Workflow
             }
 
             var ports = System.IO.Ports.SerialPort.GetPortNames();
-            var dpiConf = new DPI620GeniiConfig() {Ports = ports};
+            var dpiConf = new DPI620GeniiConfigVm() {Ports = ports};
             if (!dpiConf.Ports.Contains(dpiConf.SelectPort))
                 dpiConf.SelectPort = ports.FirstOrDefault();
             var res = new PressureSensorResult();

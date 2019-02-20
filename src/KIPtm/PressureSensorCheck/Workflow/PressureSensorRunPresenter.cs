@@ -24,7 +24,7 @@ namespace PressureSensorCheck.Workflow
     {
         private readonly PressureSensorRunVm1 _vm;
         private readonly IDPI620Driver _dpi620; //TODO Init
-        private DPI620GeniiConfig _dpiConf; //TODO Init
+        private DPI620GeniiConfigVm _dpiConf; //TODO Init
         private readonly Logger _logger; //TODO Init
         private CancellationTokenSource _cancellation = new CancellationTokenSource();
         private DateTime? _startTime = null;
@@ -40,7 +40,7 @@ namespace PressureSensorCheck.Workflow
         private IEtalonSourceChannel<Units> _pressureSrc;
 
 
-        public PressureSensorRunPresenter(PressureSensorRunVm1 vm, PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator, IContext context)
+        public PressureSensorRunPresenter(PressureSensorRunVm1 vm, PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfigVm dpiConf, PressureSensorResult result, IEventAggregator agregator, IContext context)
         {
             _vm = vm;
             _vm.CallAddPoint += DoAddPoint;
@@ -210,8 +210,8 @@ namespace PressureSensorCheck.Workflow
             _autorepeatWh.Reset();
 
             // выбор входных и выходных слотов
-            DPI620GeniiConfig.DpiSlotConfig inSlot;
-            DPI620GeniiConfig.DpiSlotConfig outSlot;
+            DPI620GeniiConfigVm.DpiSlotConfigVm inSlot;
+            DPI620GeniiConfigVm.DpiSlotConfigVm outSlot;
             int inSlotNum;
             int outSlotNum;
             if (_dpiConf.Slot1.ChannelType == ArchiveData.DTO.ChannelType.Pressure)

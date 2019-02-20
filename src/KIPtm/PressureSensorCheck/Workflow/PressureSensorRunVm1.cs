@@ -239,7 +239,6 @@ namespace PressureSensorCheck.Workflow
             return ModalState.AskModal(string.IsNullOrEmpty(title) ? msg : $"{title}\n{msg}", wh);
         }
         
-
         public void AskModal(string title, string msg, CancellationToken cancel)
         {//TODO вынести или упростить
             ModalState.IsShowModal = true;
@@ -313,6 +312,12 @@ namespace PressureSensorCheck.Workflow
         {
             CallStopCheck?.Invoke();
         }
+
+        public void AddPoint()
+        {
+            
+        }
+
 
         internal void AddToLine(TimeSpan time, double inVal, double outVal)
         {

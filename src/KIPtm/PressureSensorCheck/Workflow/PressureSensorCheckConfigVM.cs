@@ -23,7 +23,7 @@ namespace PressureSensorCheck.Workflow
     {
         private bool _isTemplatePreview;
         private CheckPressureLogicConfigVm _config;
-        private DPI620GeniiConfig _dpiConfig;
+        private DPI620GeniiConfigVm _dpiConfig;
         private readonly IEventAggregator _agregator;
         private readonly TemplateStore<PressureSensorConfig> _templates;
         private readonly ITamplateArchive<PressureSensorConfig> _confArch;
@@ -33,7 +33,7 @@ namespace PressureSensorCheck.Workflow
         private object _selectedSourceViewModel;
 
         public PressureSensorCheckConfigVm(
-            TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf,
+            TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfigVm dpiConf,
             IEventAggregator agregator, ITamplateArchive<PressureSensorConfig> archive, Dictionary<string, IEtalonSourceCannelFactory<Units>> ethalonsSources)
         {
             Data = configData;
@@ -165,7 +165,7 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Конфигурация DPI620
         /// </summary>
-        public DPI620GeniiConfig DpiConfig
+        public DPI620GeniiConfigVm DpiConfig
         {
             get { return _dpiConfig; }
             set
