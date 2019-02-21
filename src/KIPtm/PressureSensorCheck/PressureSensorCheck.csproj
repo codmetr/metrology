@@ -108,11 +108,12 @@
     <Compile Include="Workflow\Content\CheckPointVm.cs" />
     <Compile Include="Workflow\Content\CheckPressureLogicConfigVm.cs" />
     <Compile Include="Workflow\Content\AutoUpdater.cs" />
+    <Compile Include="Workflow\Content\DPI620GeniiConfig.cs" />
     <Compile Include="Workflow\Content\Dpi620StateMoq.cs" />
     <Compile Include="Workflow\Content\MeasuringPoint.cs" />
     <Compile Include="Workflow\Content\PointConfigViewModel.cs" />
     <Compile Include="Workflow\Content\PointViewModel.cs" />
-    <Compile Include="Workflow\Content\DPI620GeniiConfig.cs" />
+    <Compile Include="Workflow\Content\DPI620GeniiConfigVm.cs" />
     <Compile Include="Workflow\Content\PointResultViewModel.cs" />
     <Compile Include="Workflow\Content\TemplateStore.cs" />
     <Compile Include="Workflow\Content\TemplateViewModel.cs" />

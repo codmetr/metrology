@@ -2,151 +2,146 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ArchiveData.DTO;
 using KipTM.Interfaces;
 
-namespace PressureSensorCheck.Workflow
+namespace PressureSensorCheck.Workflow.Content
 {
     /// <summary>
-    /// Конфигурация DPI620
+    /// Настройка подключения DPI
     /// </summary>
-    public class DPI620GeniiConfigVm : INotifyPropertyChanged
+    class DPI620GeniiConfig
     {
-        /// <summary>
-        /// Конфигурация DPI620
-        /// </summary>
-        public DPI620GeniiConfigVm()
+        private DPI620GeniiConfigVm _vm;
+        private readonly IEnumerable<string> _ports;
+
+        public DPI620GeniiConfig(DPI620GeniiConfigVm vm, IEnumerable<string> ports)
         {
-            Slot1 = new DpiSlotConfigVm() { ChannelType = ChannelType.Pressure };
-            Slot2 = new DpiSlotConfigVm() { ChannelType = ChannelType.Current };
+            _vm = vm;
+            _ports = ports;
+            Slot1 = new DpiSlotConfig(_vm.Slot1);
+            Slot2 = new DpiSlotConfig(_vm.Slot2);
+            _vm.SetPortCollection(_ports);
+            _vm.SetSelectedPort(Properties.Settings.Default.PortName);
+            _vm.SelectedPortCanged += VmOnSelectedPortCanged;
         }
-        public IEnumerable<string> Ports { get; set; }
+
+        private void VmOnSelectedPortCanged(string port)
+        {
+            SelectPort = port;
+        }
 
         public string SelectPort
         {
             get { return Properties.Settings.Default.PortName; }
             set
             {
-                if(value == Properties.Settings.Default.PortName)
+                if (value == Properties.Settings.Default.PortName)
                     return;
                 Properties.Settings.Default.PortName = value;
                 Properties.Settings.Default.Save();
             }
         }
 
-        public DpiSlotConfigVm Slot1 { get; set; }
+        public DpiSlotConfig Slot1 { get; set; }
 
-        public DpiSlotConfigVm Slot2 { get; set; }
+        public DpiSlotConfig Slot2 { get; set; }
+    }
 
-        #region INotifyPropertyChanged
+    /// <summary>
+    /// Настройка слота DPI
+    /// </summary>
+    public class DpiSlotConfig
+    {
+        private DPI620GeniiConfigVm.DpiSlotConfigVm _vm;
+        private ChannelType _channelType;
+        private double _from;
+        private double _to;
+        private Units _selectedUnit;
+        private IEnumerable<Units> _unitSet;
+        private int _selectedSlotIndex;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        public DpiSlotConfig(DPI620GeniiConfigVm.DpiSlotConfigVm vm)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            _vm = vm;
+            ChannelTypes = Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>();
+            SlotIndexes = Enumerable.Range(0, 3);
         }
 
-        #endregion
+        public IEnumerable<ChannelType> ChannelTypes { get; set; }
 
-        public class DpiSlotConfigVm:INotifyPropertyChanged
+        public ChannelType ChannelType
         {
-            private ChannelType _channelType;
-            private double _from;
-            private double _to;
-            private Units _selectedUnit;
-            private IEnumerable<Units> _unitSet;
-            private int _selectedSlotIndex;
-
-            public DpiSlotConfigVm()
+            get { return _channelType; }
+            set
             {
-                ChannelTypes = Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>();
+                if (value == _channelType)
+                    return;
+                _channelType = value;
+                UnitSet = UnitDict.GetUnitsForType(_channelType);
+                SelectedUnit = UnitSet.FirstOrDefault();
             }
+        }
 
-            public IEnumerable<ChannelType> ChannelTypes { get; set; }
-
-            public ChannelType ChannelType
+        public double From
+        {
+            get { return _from; }
+            set
             {
-                get { return _channelType; }
-                set
-                {
-                    if(value == _channelType)
-                        return;
-                    _channelType = value;
-                    UnitSet = UnitDict.GetUnitsForType(_channelType);
-                    SelectedUnit = UnitSet.FirstOrDefault();
-                    OnPropertyChanged("ChannelType");
-                }
+                _from = value;
             }
+        }
 
-            public double From
+        public double To
+        {
+            get { return _to; }
+            set
             {
-                get { return _from; }
-                set { _from = value;
-                    OnPropertyChanged("From");
-                }
+                _to = value;
             }
+        }
 
-            public double To
+        /// <summary>
+        /// Варианты единиц измерения
+        /// </summary>
+        public IEnumerable<Units> UnitSet
+        {
+            get { return _unitSet; }
+            set
             {
-                get { return _to; }
-                set { _to = value;
-                    OnPropertyChanged("To");
-                }
+                _unitSet = value;
             }
+        }
 
-            /// <summary>
-            /// Варианты единиц измерения
-            /// </summary>
-            public IEnumerable<Units> UnitSet
+        /// <summary>
+        /// Выбраные единицы измерения
+        /// </summary>
+        public Units SelectedUnit
+        {
+            get { return _selectedUnit; }
+            set
             {
-                get { return _unitSet; }
-                set
-                {
-                    _unitSet = value;
-                    OnPropertyChanged("UnitSet");
-                }
+                _selectedUnit = value;
             }
+        }
 
-            /// <summary>
-            /// Выбраные единицы измерения
-            /// </summary>
-            public Units SelectedUnit
+        /// <summary>
+        /// Варианты слотов 
+        /// </summary>
+        public IEnumerable<int> SlotIndexes { get; private set; }
+
+        /// <summary>
+        /// Выбраный слот
+        /// </summary>
+        public int SelectedSlotIndex
+        {
+            get { return _selectedSlotIndex; }
+            set
             {
-                get { return _selectedUnit; }
-                set { _selectedUnit = value;
-                    OnPropertyChanged("SelectedUnit");
-                }
+                _selectedSlotIndex = value;
             }
-
-            /// <summary>
-            /// Варианты слотов 
-            /// </summary>
-            public IEnumerable<int> SlotIndexes { get; private set; }
-
-            /// <summary>
-            /// Выбраный слот
-            /// </summary>
-            public int SelectedSlotIndex
-            {
-                get { return _selectedSlotIndex; }
-                set
-                {
-                    _selectedSlotIndex = value;
-                    OnPropertyChanged("SelectedSlotIndex");
-                }
-            }
-
-            #region INotifyPropertyChanged
-
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            protected virtual void OnPropertyChanged(string propertyName)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-
-            #endregion
         }
     }
 }

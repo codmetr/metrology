@@ -19,6 +19,15 @@ namespace PressureSensorCheck.Workflow
         private readonly Dictionary<string, IEtalonSourceCannelFactory<Units>> _ethalonsSources;
         private readonly PressureSensorCheckConfigVm _vm;
 
+        /// <summary>
+        /// Кофигурация проверки датчика давления
+        /// </summary>
+        /// <param name="identificator"></param>
+        /// <param name="configData"></param>
+        /// <param name="dpiConf"></param>
+        /// <param name="archive"></param>
+        /// <param name="ethalonsSources"></param>
+        /// <param name="vm"></param>
         public PressureSensorCheckConfig(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfigVm dpiConf,
             ITamplateArchive<PressureSensorConfig> archive, Dictionary<string, IEtalonSourceCannelFactory<Units>> ethalonsSources, PressureSensorCheckConfigVm vm)
         {
@@ -31,16 +40,25 @@ namespace PressureSensorCheck.Workflow
 
         }
 
+        /// <summary>
+        /// Идентификатор проверки
+        /// </summary>
         public TestResultID Identificator
         {
             get { return _identificator; }
         }
 
+        /// <summary>
+        /// Общая информаия о проверке
+        /// </summary>
         public PressureSensorConfig ConfigData
         {
             get { return _configData; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public DPI620GeniiConfigVm DpiConf
         {
             get { return _dpiConf; }
