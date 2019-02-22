@@ -12,18 +12,16 @@ namespace PressureSensorCheck.Workflow.Content
     /// <summary>
     /// Настройка подключения DPI
     /// </summary>
-    class DPI620GeniiConfig
+    public class DPI620GeniiConfig
     {
-        private DPI620GeniiConfigVm _vm;
-        private readonly IEnumerable<string> _ports;
+        private readonly DPI620GeniiConfigVm _vm;
 
         public DPI620GeniiConfig(DPI620GeniiConfigVm vm, IEnumerable<string> ports)
         {
             _vm = vm;
-            _ports = ports;
-            Slot1 = new DpiSlotConfig(_vm.Slot1);
-            Slot2 = new DpiSlotConfig(_vm.Slot2);
-            _vm.SetPortCollection(_ports);
+            Slot1 = new DpiSlotConfig(_vm.Slot1, ChannelType.Current);
+            Slot2 = new DpiSlotConfig(_vm.Slot2, ChannelType.Pressure);
+            _vm.SetPortCollection(ports);
             _vm.SetSelectedPort(Properties.Settings.Default.PortName);
             _vm.SelectedPortCanged += VmOnSelectedPortCanged;
         }
@@ -55,7 +53,7 @@ namespace PressureSensorCheck.Workflow.Content
     /// </summary>
     public class DpiSlotConfig
     {
-        private DPI620GeniiConfigVm.DpiSlotConfigVm _vm;
+        private readonly DpiSlotConfigVm _vm;
         private ChannelType _channelType;
         private double _from;
         private double _to;
@@ -63,11 +61,36 @@ namespace PressureSensorCheck.Workflow.Content
         private IEnumerable<Units> _unitSet;
         private int _selectedSlotIndex;
 
-        public DpiSlotConfig(DPI620GeniiConfigVm.DpiSlotConfigVm vm)
+        public DpiSlotConfig(DpiSlotConfigVm vm, ChannelType type)
         {
             _vm = vm;
             ChannelTypes = Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>();
             SlotIndexes = Enumerable.Range(0, 3);
+            ChannelType = type;
+            _vm.SetChannels(ChannelTypes);
+            _vm.SetSelectedChannel(ChannelType);
+            _vm.SetUnits(UnitSet);
+            _vm.SetSelectedUnit(SelectedUnit);
+            _vm.SetSlotIndexes(Enumerable.Range(0,2));
+            _vm.SetSelectedSlotIndex(0);
+            _vm.SelectedChannel += VmOnSelectedChannel;
+            _vm.SelectedUnut += VmOnSelectedUnut;
+            _vm.SelectedIndex += VmOnSelectedIndex;
+        }
+
+        private void VmOnSelectedIndex(int slotIndex)
+        {
+            SelectedSlotIndex = slotIndex;
+        }
+
+        private void VmOnSelectedUnut(Units unit)
+        {
+            SelectedUnit = unit;
+        }
+
+        private void VmOnSelectedChannel(ChannelType channelType)
+        {
+            ChannelType = channelType;
         }
 
         public IEnumerable<ChannelType> ChannelTypes { get; set; }

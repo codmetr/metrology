@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ArchiveData.DTO;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
+using PressureSensorCheck.Workflow.Content;
 using PressureSensorData;
 
 namespace PressureSensorCheck.Workflow
@@ -14,7 +15,7 @@ namespace PressureSensorCheck.Workflow
     {
         private readonly TestResultID _identificator;
         private readonly PressureSensorConfig _configData;
-        private readonly DPI620GeniiConfigVm _dpiConf;
+        private readonly DPI620GeniiConfig _dpiConf;
         private readonly ITamplateArchive<PressureSensorConfig> _archive;
         private readonly Dictionary<string, IEtalonSourceCannelFactory<Units>> _ethalonsSources;
         private readonly PressureSensorCheckConfigVm _vm;
@@ -28,7 +29,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="archive"></param>
         /// <param name="ethalonsSources"></param>
         /// <param name="vm"></param>
-        public PressureSensorCheckConfig(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfigVm dpiConf,
+        public PressureSensorCheckConfig(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf,
             ITamplateArchive<PressureSensorConfig> archive, Dictionary<string, IEtalonSourceCannelFactory<Units>> ethalonsSources, PressureSensorCheckConfigVm vm)
         {
             _identificator = identificator;
@@ -59,7 +60,7 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// 
         /// </summary>
-        public DPI620GeniiConfigVm DpiConf
+        public DPI620GeniiConfig DpiConf
         {
             get { return _dpiConf; }
         }

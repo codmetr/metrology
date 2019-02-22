@@ -37,7 +37,7 @@ namespace PressureSensorCheck.Workflow
         //private double _minU = 2;
         //private double _maxU = 5;
         private readonly IDPI620Driver _dpi620;
-        private DPI620GeniiConfigVm _dpiConf;
+        private DPI620GeniiConfig _dpiConf;
         private readonly Logger _logger;
 
         private CancellationTokenSource _cancellation = new CancellationTokenSource();
@@ -72,7 +72,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="dpi620">драйвер DPI620Genii</param>
         /// <param name="dpiConf">контейнер конфигурации DPI620</param>
         /// <param name="result"></param>
-        public PressureSensorRunVm(PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfigVm dpiConf, PressureSensorResult result, IEventAggregator agregator, IContext context)
+        public PressureSensorRunVm(PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator, IContext context)
         {
             Measured = new ObservableCollection<MeasuringPoint>();
             _inOutLines = new LinesInOutViewModel(
@@ -366,8 +366,8 @@ namespace PressureSensorCheck.Workflow
             Measured.Clear();
 
             // выбор входных и выходных слотов
-            DPI620GeniiConfigVm.DpiSlotConfigVm inSlot;
-            DPI620GeniiConfigVm.DpiSlotConfigVm outSlot;
+            DpiSlotConfig inSlot;
+            DpiSlotConfig outSlot;
             int inSlotNum;
             int outSlotNum;
             if (_dpiConf.Slot1.ChannelType == ArchiveData.DTO.ChannelType.Pressure)
