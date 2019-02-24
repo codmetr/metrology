@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO.Ports;
 using System.Linq;
 using ArchiveData;
 using ArchiveData.DTO;
@@ -28,7 +29,7 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         /// <param name="accessor">Доступ к хранилищу</param>
         /// <param name="context">Контекст UI</param>
-        /// <param name="presSources"></param>
+        /// <param name="presSources">набор фабрик эталонных каналов</param>
         /// <param name="logger">логгер</param>
         /// <param name="id">ID проверки(если это продолжение проверки)</param>
         /// <param name="result">результат проверки(если это продолжение проверки)</param>
@@ -70,12 +71,11 @@ namespace PressureSensorCheck.Workflow
             }
 
             var ports = System.IO.Ports.SerialPort.GetPortNames();
-            var dpiConfVm = new DPI620GeniiConfigVm();
-            var dpiConf = new DPI620GeniiConfigVm() {Ports = ports};
-            if (!dpiConf.Ports.Contains(dpiConf.SelectPort))
-                dpiConf.SelectPort = ports.FirstOrDefault();
+            var dpiConfVm = new DPI620GeniiConfigVm(context);
+            var dpiConf = new DPI620GeniiConfig(dpiConfVm, ports);
             var res = new PressureSensorResult();
 
+            //набор фабрик эталонных каналов
             var dictConf = new Dictionary<string, IEtalonSourceCannelFactory<Units>>();
             var userKey = "Без удаленного управления";//TODO локализовать
             dictConf.Add(userKey, null);
@@ -83,7 +83,8 @@ namespace PressureSensorCheck.Workflow
             {
                 dictConf.Add(presSource.TypeName, presSource);
             }
-            var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConf, agregator, configArchive, dictConf);
+            var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConfVm, agregator, configArchive, dictConf);
+            var configurator = new PressureSensorCheckConfigurator(id, conf, dpiConf, configArchive, dictConf, configVm);
 
             var dpiLog = NLog.LogManager.GetLogger("Dpi620");
             var dpiCom = new DPI620DriverCom().Setlog((msg) => dpiLog.Trace(msg));

@@ -22,6 +22,9 @@ namespace PressureSensorCheck.Workflow
         private string _vpiMinStr;
         private string _vpiMaxStr;
 
+        /// <summary>
+        /// Конфигурация логики проверки
+        /// </summary>
         public CheckPressureLogicConfigVm(PressureSensorConfig data)
         {
             Data = data;

@@ -11,7 +11,10 @@ using PressureSensorData;
 
 namespace PressureSensorCheck.Workflow
 {
-    public class PressureSensorCheckConfig
+    /// <summary>
+    /// Модель конфигурирования проверки
+    /// </summary>
+    public class PressureSensorCheckConfigurator
     {
         private readonly TestResultID _identificator;
         private readonly PressureSensorConfig _configData;
@@ -29,7 +32,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="archive"></param>
         /// <param name="ethalonsSources"></param>
         /// <param name="vm"></param>
-        public PressureSensorCheckConfig(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf,
+        public PressureSensorCheckConfigurator(TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfig dpiConf,
             ITamplateArchive<PressureSensorConfig> archive, Dictionary<string, IEtalonSourceCannelFactory<Units>> ethalonsSources, PressureSensorCheckConfigVm vm)
         {
             _identificator = identificator;
@@ -38,7 +41,25 @@ namespace PressureSensorCheck.Workflow
             _archive = archive;
             _ethalonsSources = ethalonsSources;
             _vm = vm;
+            _vm.SetSourceNames(_ethalonsSources.Keys);
+            var selected = _ethalonsSources.Keys.FirstOrDefault();
+            _vm.SetSelectedSourceNames(selected, _ethalonsSources[selected].ConfigViewModel);
+            _vm.SetSerialNumber(_identificator.SerialNumber);
 
+            _vm.SelectedSource += VmOnSelectedSource;
+            _vm.SerialNumberCanged += VmOnSerialNumberCanged;
+        }
+
+        private void VmOnSerialNumberCanged(string s)
+        {
+            _identificator.SerialNumber = s;
+            //TODO избавиться от дублирования
+            _configData.SerialNumber = s;
+        }
+
+        private void VmOnSelectedSource(string s)
+        {
+            _vm.SetSelectedSourceNames(s, _ethalonsSources[s].ConfigViewModel);
         }
 
         /// <summary>

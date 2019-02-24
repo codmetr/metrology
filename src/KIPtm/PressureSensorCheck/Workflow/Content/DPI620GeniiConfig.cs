@@ -16,13 +16,20 @@ namespace PressureSensorCheck.Workflow.Content
     {
         private readonly DPI620GeniiConfigVm _vm;
 
+        /// <summary>
+        /// Настройка подключения DPI
+        /// </summary>
         public DPI620GeniiConfig(DPI620GeniiConfigVm vm, IEnumerable<string> ports)
         {
             _vm = vm;
             Slot1 = new DpiSlotConfig(_vm.Slot1, ChannelType.Current);
             Slot2 = new DpiSlotConfig(_vm.Slot2, ChannelType.Pressure);
-            _vm.SetPortCollection(ports);
-            _vm.SetSelectedPort(Properties.Settings.Default.PortName);
+            var availablePorts = ports.ToArray();
+            _vm.SetPortCollection(availablePorts);
+            if (availablePorts.Contains(Properties.Settings.Default.PortName))
+                _vm.SetSelectedPort(Properties.Settings.Default.PortName);
+            else
+                _vm.SetSelectedPort(availablePorts.FirstOrDefault());
             _vm.SelectedPortCanged += VmOnSelectedPortCanged;
         }
 
@@ -71,7 +78,7 @@ namespace PressureSensorCheck.Workflow.Content
             _vm.SetSelectedChannel(ChannelType);
             _vm.SetUnits(UnitSet);
             _vm.SetSelectedUnit(SelectedUnit);
-            _vm.SetSlotIndexes(Enumerable.Range(0,2));
+            _vm.SetSlotIndexes(Enumerable.Range(0, 2));
             _vm.SetSelectedSlotIndex(0);
             _vm.SelectedChannel += VmOnSelectedChannel;
             _vm.SelectedUnut += VmOnSelectedUnut;

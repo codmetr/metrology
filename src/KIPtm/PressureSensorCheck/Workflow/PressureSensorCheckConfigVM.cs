@@ -24,6 +24,7 @@ namespace PressureSensorCheck.Workflow
         private bool _isTemplatePreview;
         private CheckPressureLogicConfigVm _config;
         private DPI620GeniiConfigVm _dpiConfig;
+        private readonly IContext _context;
         private readonly IEventAggregator _agregator;
         private readonly TemplateStore<PressureSensorConfig> _templates;
         private readonly ITamplateArchive<PressureSensorConfig> _confArch;
@@ -31,15 +32,22 @@ namespace PressureSensorCheck.Workflow
         private Dictionary<string, IEtalonSourceCannelFactory<Units>> _ethalonsSources;
         private string _selectedSourceName;
         private object _selectedSourceViewModel;
+        private string _serialNumber;
+        private PressureSensorConfigVm _sensorConfig;
 
-        public PressureSensorCheckConfigVm(
+        /// <summary>
+        /// Конфигурация проверки
+        /// </summary>
+        public PressureSensorCheckConfigVm(IContext context,
             TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfigVm dpiConf,
-            IEventAggregator agregator, ITamplateArchive<PressureSensorConfig> archive, Dictionary<string, IEtalonSourceCannelFactory<Units>> ethalonsSources)
+            IEventAggregator agregator, ITamplateArchive<PressureSensorConfig> archive,
+            Dictionary<string, IEtalonSourceCannelFactory<Units>> ethalonsSources)
         {
             Data = configData;
             Identificator = identificator;
             Config = new CheckPressureLogicConfigVm(configData);
             DpiConfig = dpiConf;
+            _context = context;
             _agregator = agregator;
             _confArch = archive;
             _templates = new TemplateStore<PressureSensorConfig>(archive);
@@ -50,6 +58,8 @@ namespace PressureSensorCheck.Workflow
             _selectedSourceName = SourceNames.FirstOrDefault();
             var confVmTemplate = _ethalonsSources[_selectedSourceName];
             SelectedSourceViewModel = confVmTemplate?.ConfigViewModel;
+
+            _sensorConfig = new PressureSensorConfigVm(context);
         }
 
         /// <summary>
@@ -77,8 +87,9 @@ namespace PressureSensorCheck.Workflow
             {
                 _selectedSourceName = value;
                 OnPropertyChanged();
-                var confVmTemplate = _ethalonsSources[_selectedSourceName];
-                SelectedSourceViewModel = confVmTemplate?.ConfigViewModel;
+                OnSelectedSource(_selectedSourceName);
+                //var confVmTemplate = _ethalonsSources[_selectedSourceName];
+                //SelectedSourceViewModel = confVmTemplate?.ConfigViewModel;
             }
         }
         
@@ -100,13 +111,18 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public string SerialNumber
         {
-            get { return Identificator.SerialNumber; }
+            get { return _serialNumber; }
             set
             {
-                Identificator.SerialNumber = value;
-                Config.Data.SerialNumber = value;
-                OnPropertyChanged("SerialNumber");
+                _serialNumber = value;
+                OnPropertyChanged(nameof(SerialNumber));
+                OnSerialNumberCanged(_serialNumber);
             }
+        }
+
+        public PressureSensorConfigVm SensorConfig
+        {
+            get { return _sensorConfig; }
         }
 
         /// <summary>
@@ -146,6 +162,7 @@ namespace PressureSensorCheck.Workflow
                     point.Unit = value;
                 }
                 OnPropertyChanged("PressUnit");
+                OnSelectedUnit(Data.Unit);
             }
         }
 
@@ -210,6 +227,46 @@ namespace PressureSensorCheck.Workflow
         public void Dispose()
         {
             _confArch.SetLast(Data);
+        }
+
+        public void SetSourceNames(IEnumerable<string> ethalons)
+        {
+            _context.Invoke(()=>SourceNames = ethalons);
+        }
+
+        public void SetSelectedSourceNames(string selectedEthalon, object ethalonConfVm)
+        {
+            _context.Invoke(() =>
+            {
+                SelectedSourceName = selectedEthalon;
+                SelectedSourceViewModel = ethalonConfVm;
+            });
+        }
+
+        public void SetSerialNumber(string serial)
+        {
+            _context.Invoke(() => SerialNumber = serial);
+        }
+
+        public event Action<string> SelectedSource;
+
+        public event Action<Units> SelectedUnit;
+
+        public event Action<string> SerialNumberCanged;
+
+        protected virtual void OnSelectedSource(string obj)
+        {
+            SelectedSource?.Invoke(obj);
+        }
+
+        protected virtual void OnSelectedUnit(Units obj)
+        {
+            SelectedUnit?.Invoke(obj);
+        }
+
+        protected virtual void OnSerialNumberCanged(string obj)
+        {
+            SerialNumberCanged?.Invoke(obj);
         }
     }
 }
