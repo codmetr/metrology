@@ -11,6 +11,56 @@ namespace PressureSensorCheck.Workflow.Content
 {
     public class PressureSensorConfigVm:INotifyPropertyChanged
     {
+        internal struct PressureSensorConfigData
+        {
+            public readonly string User;
+            public readonly string ChiefLab;
+            public readonly string ReportNumber;
+            public readonly string ReportDate;
+            public readonly string CertificateNumber;
+            public readonly string CertificateDate;
+            public readonly string Validity;
+            public readonly string Master;
+            public readonly string Name;
+            public readonly string RegNum;
+            public readonly string SensorType;
+            public readonly string SensorModel;
+            public readonly string NumberLastCheck;
+            public readonly string SerialNumber;
+            public readonly string ChecklLawBase;
+            public readonly string CheckedParameters;
+            public readonly string Company;
+            public readonly double Temperature;
+            public readonly double Humidity;
+            public readonly double DayPressure;
+            public readonly double CommonVoltage;
+
+            public PressureSensorConfigData(string user, string chiefLab, string reportNumber, string reportDate, string certificateNumber, string certificateDate, string validity, string master, string name, string regNum, string sensorType, string sensorModel, string numberLastCheck, string serialNumber, string checklLawBase, string checkedParameters, string company, double temperature, double humidity, double dayPressure, double commonVoltage)
+            {
+                User = user;
+                ChiefLab = chiefLab;
+                ReportNumber = reportNumber;
+                ReportDate = reportDate;
+                CertificateNumber = certificateNumber;
+                CertificateDate = certificateDate;
+                Validity = validity;
+                Master = master;
+                Name = name;
+                RegNum = regNum;
+                SensorType = sensorType;
+                SensorModel = sensorModel;
+                NumberLastCheck = numberLastCheck;
+                SerialNumber = serialNumber;
+                ChecklLawBase = checklLawBase;
+                CheckedParameters = checkedParameters;
+                Company = company;
+                Temperature = temperature;
+                Humidity = humidity;
+                DayPressure = dayPressure;
+                CommonVoltage = commonVoltage;
+            }
+        }
+
         private readonly IContext _context;
         private string _user;
         private string _chiefLab;
@@ -52,7 +102,7 @@ namespace PressureSensorCheck.Workflow.Content
             set
             {
                 _user = value;
-                OnPropertyChanged(nameof(User));
+                OnPropertyChanged();
             }
         }
 
@@ -63,7 +113,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _chiefLab; }
             set { _chiefLab = value;
-                OnPropertyChanged(nameof(ChiefLab));
+                OnPropertyChanged();
             }
         }
 
@@ -74,7 +124,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _reportNumber; }
             set { _reportNumber = value;
-                OnPropertyChanged(nameof(ReportNumber));
+                OnPropertyChanged();
             }
         }
 
@@ -85,7 +135,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _reportDate; }
             set { _reportDate = value;
-                OnPropertyChanged(nameof(ReportDate));
+                OnPropertyChanged();
             }
         }
 
@@ -96,7 +146,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _certificateNumber; }
             set { _certificateNumber = value;
-                OnPropertyChanged(nameof(CertificateNumber));
+                OnPropertyChanged();
             }
         }
 
@@ -107,7 +157,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _certificateDate; }
             set { _certificateDate = value;
-                OnPropertyChanged(nameof(CertificateDate));
+                OnPropertyChanged();
             }
         }
 
@@ -118,7 +168,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _validity; }
             set { _validity = value;
-                OnPropertyChanged(nameof(Validity));
+                OnPropertyChanged();
             }
         }
 
@@ -129,7 +179,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _master; }
             set { _master = value;
-                OnPropertyChanged(nameof(Master));
+                OnPropertyChanged();
             }
         }
 
@@ -140,7 +190,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _name; }
             set { _name = value;
-                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged();
             }
         }
 
@@ -152,7 +202,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _regNum; }
             set { _regNum = value;
-                OnPropertyChanged(nameof(RegNum));
+                OnPropertyChanged();
             }
         }
 
@@ -163,7 +213,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _sensorType; }
             set { _sensorType = value;
-                OnPropertyChanged(nameof(SensorType));
+                OnPropertyChanged();
             }
         }
 
@@ -174,7 +224,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _sensorModel; }
             set { _sensorModel = value;
-                OnPropertyChanged(nameof(SensorModel));
+                OnPropertyChanged();
             }
         }
 
@@ -185,7 +235,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _numberLastCheck; }
             set { _numberLastCheck = value;
-                OnPropertyChanged(nameof(NumberLastCheck));
+                OnPropertyChanged();
             }
         }
 
@@ -196,7 +246,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _serialNumber; }
             set { _serialNumber = value;
-                OnPropertyChanged(nameof(SerialNumber));
+                OnPropertyChanged();
             }
         }
 
@@ -210,7 +260,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _checklLawBase; }
             set { _checklLawBase = value;
-                OnPropertyChanged(nameof(ChecklLawBase));
+                OnPropertyChanged();
             }
         }
 
@@ -224,7 +274,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _checkedParameters; }
             set { _checkedParameters = value;
-                OnPropertyChanged(nameof(CheckedParameters));
+                OnPropertyChanged();
             }
         }
 
@@ -254,7 +304,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _company; }
             set { _company = value;
-                OnPropertyChanged(nameof(Company));
+                OnPropertyChanged();
             }
         }
 
@@ -265,7 +315,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _temperature; }
             set { _temperature = value;
-                OnPropertyChanged(nameof(Temperature));
+                OnPropertyChanged();
             }
         }
 
@@ -276,7 +326,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _humidity; }
             set { _humidity = value;
-                OnPropertyChanged(nameof(Humidity));
+                OnPropertyChanged();
             }
         }
 
@@ -287,7 +337,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _dayPressure; }
             set { _dayPressure = value;
-                OnPropertyChanged(nameof(DayPressure));
+                OnPropertyChanged();
             }
         }
 
@@ -298,10 +348,42 @@ namespace PressureSensorCheck.Workflow.Content
         {
             get { return _commonVoltage; }
             set { _commonVoltage = value;
-                OnPropertyChanged(nameof(CommonVoltage));
+                OnPropertyChanged();
             }
         }
 
+        internal void SetAllValues(PressureSensorConfigData data)
+        {
+            _context.Invoke(() =>
+            {
+                User = data.User;
+                ChiefLab = data.ChiefLab;
+                ReportNumber = data.ReportNumber;
+                ReportDate = data.ReportDate;
+                CertificateNumber = data.CertificateNumber;
+                CertificateDate = data.CertificateDate;
+                Validity = data.Validity;
+                Master = data.Master;
+                Name = data.Name;
+                RegNum = data.RegNum;
+                SensorType = data.SensorType;
+                SensorModel = data.SensorModel;
+                NumberLastCheck = data.NumberLastCheck;
+                SerialNumber = data.SerialNumber;
+                ChecklLawBase = data.ChecklLawBase;
+                CheckedParameters = data.CheckedParameters;
+                Company = data.Company;
+                Temperature = data.Temperature;
+                Humidity = data.Humidity;
+                DayPressure = data.DayPressure;
+                CommonVoltage = data.CommonVoltage;
+            });
+        }
+
+        /// <summary>
+        /// Настройки изменены
+        /// </summary>
+        internal event Action<PressureSensorConfigData> ConfigChanged; 
 
         #region INotifyPropertyChanged
 
@@ -310,129 +392,21 @@ namespace PressureSensorCheck.Workflow.Content
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            OnConfigChanged();
         }
 
         #endregion
-    }
 
-
-    public class EthalonDescriptorVm:INotifyPropertyChanged
-    {
-        private readonly IContext _context;
-        private string _title;
-        private string _sensorType;
-        private string _serialNumber;
-        private string _regNum;
-        private string _category;
-        private string _errorClass;
-        private string _checkCertificateNumber;
-        private string _checkCertificateDate;
-
-        public EthalonDescriptorVm(IContext context)
+        protected virtual void OnConfigChanged()
         {
-            _context = context;
+            ConfigChanged?.Invoke(GetCurentValue());
         }
 
-        /// <summary>
-        /// Наименование:
-        /// </summary>
-        public string Title
+        private PressureSensorConfigData GetCurentValue()
         {
-            get { return _title; }
-            set { _title = value;
-                OnPropertyChanged(nameof(Title));
-            }
+            return new PressureSensorConfigData(User, ChiefLab, ReportNumber, ReportDate, CertificateNumber,
+                CertificateDate, Validity, Master, Name, RegNum, SensorType, SensorModel, NumberLastCheck, SerialNumber,
+                ChecklLawBase, CheckedParameters, Company, Temperature, Humidity, DayPressure, CommonVoltage);
         }
-
-        /// <summary>
-        /// Тип:
-        /// </summary>
-        /// <remarks>
-        /// Обобщенное название типа прибора
-        /// </remarks>
-        public string SensorType
-        {
-            get { return _sensorType; }
-            set { _sensorType = value;
-                OnPropertyChanged(nameof(SensorType));
-            }
-        }
-
-        /// <summary>
-        /// Заводской номер (номера):
-        /// </summary>
-        public string SerialNumber
-        {
-            get { return _serialNumber; }
-            set { _serialNumber = value;
-                OnPropertyChanged(nameof(SerialNumber));
-            }
-        }
-
-        /// <summary>
-        /// Регистрационный номер:
-        /// </summary>
-        public string RegNum
-        {
-            get { return _regNum; }
-            set { _regNum = value;
-                OnPropertyChanged(nameof(RegNum));
-            }
-        }
-
-        /// <summary>
-        /// Разряд:
-        /// </summary>
-        public string Category
-        {
-            get { return _category; }
-            set { _category = value;
-                OnPropertyChanged(nameof(Category));
-            }
-        }
-
-        /// <summary>
-        /// Класс или погрешность:
-        /// </summary>
-        public string ErrorClass
-        {
-            get { return _errorClass; }
-            set { _errorClass = value;
-                OnPropertyChanged(nameof(ErrorClass));
-            }
-        }
-
-        /// <summary>
-        /// Номер свидетельства о поверке:
-        /// </summary>
-        public string CheckCertificateNumber
-        {
-            get { return _checkCertificateNumber; }
-            set { _checkCertificateNumber = value;
-                OnPropertyChanged(nameof(CheckCertificateNumber));
-            }
-        }
-
-        /// <summary>
-        /// Дата выдачи свидетельства о поверке:
-        /// </summary>
-        public string CheckCertificateDate
-        {
-            get { return _checkCertificateDate; }
-            set { _checkCertificateDate = value;
-                OnPropertyChanged(nameof(CheckCertificateDate));
-            }
-        }
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
     }
 }

@@ -83,7 +83,7 @@ namespace PressureSensorCheck.Workflow
             {
                 dictConf.Add(presSource.TypeName, presSource);
             }
-            var configVm = new PressureSensorCheckConfigVm(id, conf, dpiConfVm, agregator, configArchive, dictConf);
+            var configVm = new PressureSensorCheckConfigVm(context, id, conf, dpiConfVm, agregator, configArchive, dictConf);
             var configurator = new PressureSensorCheckConfigurator(id, conf, dpiConf, configArchive, dictConf, configVm);
 
             var dpiLog = NLog.LogManager.GetLogger("Dpi620");

@@ -110,6 +110,7 @@
     <Compile Include="Workflow\Content\AutoUpdater.cs" />
     <Compile Include="Workflow\Content\DPI620GeniiConfig.cs" />
     <Compile Include="Workflow\Content\Dpi620StateMoq.cs" />
+    <Compile Include="Workflow\Content\EthalonDescriptorVm.cs" />
     <Compile Include="Workflow\Content\MeasuringPoint.cs" />
     <Compile Include="Workflow\Content\PointConfigViewModel.cs" />
     <Compile Include="Workflow\Content\PointViewModel.cs" />

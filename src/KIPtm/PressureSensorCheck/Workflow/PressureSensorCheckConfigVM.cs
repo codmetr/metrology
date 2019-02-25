@@ -63,19 +63,11 @@ namespace PressureSensorCheck.Workflow
         }
 
         /// <summary>
-        /// Обновлен применяемый шаблон настроек
-        /// </summary>
-        /// <param name="pressureSensorConfig"></param>
-        private void TemplatesOnUpdatedTemplate(PressureSensorConfig pressureSensorConfig)
-        {
-            Data.SetCopy(pressureSensorConfig);
-            OnPropertyChanged(nameof(Data));
-        }
-
-        /// <summary>
         /// Список названий эталонных источников
         /// </summary>
         public IEnumerable<string> SourceNames { get; private set; }
+
+        public PressureSensorConfigVm CommonData { get { return _sensorConfig; } }
 
         /// <summary>
         /// Выбранный эталонный источник
@@ -92,7 +84,7 @@ namespace PressureSensorCheck.Workflow
                 //SelectedSourceViewModel = confVmTemplate?.ConfigViewModel;
             }
         }
-        
+
         /// <summary>
         /// VM выбранного эталонного источника
         /// </summary>
@@ -253,6 +245,16 @@ namespace PressureSensorCheck.Workflow
         public event Action<Units> SelectedUnit;
 
         public event Action<string> SerialNumberCanged;
+
+        /// <summary>
+        /// Обновлен применяемый шаблон настроек
+        /// </summary>
+        /// <param name="pressureSensorConfig"></param>
+        private void TemplatesOnUpdatedTemplate(PressureSensorConfig pressureSensorConfig)
+        {
+            Data.SetCopy(pressureSensorConfig);
+            OnPropertyChanged(nameof(Data));
+        }
 
         protected virtual void OnSelectedSource(string obj)
         {
