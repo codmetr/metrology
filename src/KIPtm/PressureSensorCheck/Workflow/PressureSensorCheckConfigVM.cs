@@ -33,7 +33,7 @@ namespace PressureSensorCheck.Workflow
         private string _selectedSourceName;
         private object _selectedSourceViewModel;
         private string _serialNumber;
-        private PressureSensorConfigVm _sensorConfig;
+        private PressureSensorOrgVm _sensorConfig;
 
         /// <summary>
         /// Конфигурация проверки
@@ -59,7 +59,7 @@ namespace PressureSensorCheck.Workflow
             var confVmTemplate = _ethalonsSources[_selectedSourceName];
             SelectedSourceViewModel = confVmTemplate?.ConfigViewModel;
 
-            _sensorConfig = new PressureSensorConfigVm(context);
+            _sensorConfig = new PressureSensorOrgVm(context);
         }
 
         /// <summary>
@@ -67,7 +67,10 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public IEnumerable<string> SourceNames { get; private set; }
 
-        public PressureSensorConfigVm CommonData { get { return _sensorConfig; } }
+        /// <summary>
+        /// Конфиг
+        /// </summary>
+        public PressureSensorOrgVm CommonData { get { return _sensorConfig; } }
 
         /// <summary>
         /// Выбранный эталонный источник
@@ -112,7 +115,7 @@ namespace PressureSensorCheck.Workflow
             }
         }
 
-        public PressureSensorConfigVm SensorConfig
+        public PressureSensorOrgVm SensorConfig
         {
             get { return _sensorConfig; }
         }

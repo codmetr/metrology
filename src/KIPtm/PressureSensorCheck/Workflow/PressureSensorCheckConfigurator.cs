@@ -55,7 +55,7 @@ namespace PressureSensorCheck.Workflow
             vm.SerialNumberCanged += VmOnSerialNumberCanged;
         }
 
-        private void FillCommonData(PressureSensorConfigVm vmCommonData, PressureSensorConfig configData)
+        private void FillCommonData(PressureSensorOrgVm vmCommonData, PressureSensorConfig configData)
         {
             vmCommonData.SetAllValues(GetCurentValue(configData));
             vmCommonData.EthalonPressure.SetAllValues(GetCurentValue(configData.EtalonPressure));
@@ -88,9 +88,9 @@ namespace PressureSensorCheck.Workflow
             conf.CheckCertificateDate = data.CheckCertificateDate;
         }
 
-        private PressureSensorConfigVm.PressureSensorConfigData GetCurentValue(PressureSensorConfig configData)
+        private PressureSensorOrgVm.PressureSensorOrgData GetCurentValue(PressureSensorConfig configData)
         {
-            return new PressureSensorConfigVm.PressureSensorConfigData(configData.User, configData.ChiefLab,
+            return new PressureSensorOrgVm.PressureSensorOrgData(configData.User, configData.ChiefLab,
                 configData.ReportNumber, configData.ReportDate, configData.CertificateNumber,
                 configData.CertificateDate, configData.Validity, configData.Master, configData.Name, configData.RegNum,
                 configData.SensorType, configData.SensorModel, configData.NumberLastCheck, configData.SerialNumber,
@@ -105,7 +105,7 @@ namespace PressureSensorCheck.Workflow
         }
 
 
-        private void UpdateFromCommonData(PressureSensorConfigVm.PressureSensorConfigData data)
+        private void UpdateFromCommonData(PressureSensorOrgVm.PressureSensorOrgData data)
         {
             _configData.User = data.User;
             _configData.ChiefLab = data.ChiefLab;

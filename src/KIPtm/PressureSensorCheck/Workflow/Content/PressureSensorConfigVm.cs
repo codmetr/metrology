@@ -9,9 +9,9 @@ using KipTM.Interfaces;
 
 namespace PressureSensorCheck.Workflow.Content
 {
-    public class PressureSensorConfigVm:INotifyPropertyChanged
+    public class PressureSensorOrgVm:INotifyPropertyChanged
     {
-        internal struct PressureSensorConfigData
+        internal struct PressureSensorOrgData
         {
             public readonly string User;
             public readonly string ChiefLab;
@@ -35,7 +35,7 @@ namespace PressureSensorCheck.Workflow.Content
             public readonly double DayPressure;
             public readonly double CommonVoltage;
 
-            public PressureSensorConfigData(string user, string chiefLab, string reportNumber, string reportDate, string certificateNumber, string certificateDate, string validity, string master, string name, string regNum, string sensorType, string sensorModel, string numberLastCheck, string serialNumber, string checklLawBase, string checkedParameters, string company, double temperature, double humidity, double dayPressure, double commonVoltage)
+            public PressureSensorOrgData(string user, string chiefLab, string reportNumber, string reportDate, string certificateNumber, string certificateDate, string validity, string master, string name, string regNum, string sensorType, string sensorModel, string numberLastCheck, string serialNumber, string checklLawBase, string checkedParameters, string company, double temperature, double humidity, double dayPressure, double commonVoltage)
             {
                 User = user;
                 ChiefLab = chiefLab;
@@ -86,7 +86,7 @@ namespace PressureSensorCheck.Workflow.Content
         private double _dayPressure;
         private double _commonVoltage;
 
-        public PressureSensorConfigVm(IContext context)
+        public PressureSensorOrgVm(IContext context)
         {
             _context = context;
             _ethalonPressure = new EthalonDescriptorVm(context);
@@ -352,7 +352,7 @@ namespace PressureSensorCheck.Workflow.Content
             }
         }
 
-        internal void SetAllValues(PressureSensorConfigData data)
+        internal void SetAllValues(PressureSensorOrgData data)
         {
             _context.Invoke(() =>
             {
@@ -383,7 +383,7 @@ namespace PressureSensorCheck.Workflow.Content
         /// <summary>
         /// Настройки изменены
         /// </summary>
-        internal event Action<PressureSensorConfigData> ConfigChanged; 
+        internal event Action<PressureSensorOrgData> ConfigChanged; 
 
         #region INotifyPropertyChanged
 
@@ -402,9 +402,9 @@ namespace PressureSensorCheck.Workflow.Content
             ConfigChanged?.Invoke(GetCurentValue());
         }
 
-        private PressureSensorConfigData GetCurentValue()
+        private PressureSensorOrgData GetCurentValue()
         {
-            return new PressureSensorConfigData(User, ChiefLab, ReportNumber, ReportDate, CertificateNumber,
+            return new PressureSensorOrgData(User, ChiefLab, ReportNumber, ReportDate, CertificateNumber,
                 CertificateDate, Validity, Master, Name, RegNum, SensorType, SensorModel, NumberLastCheck, SerialNumber,
                 ChecklLawBase, CheckedParameters, Company, Temperature, Humidity, DayPressure, CommonVoltage);
         }
