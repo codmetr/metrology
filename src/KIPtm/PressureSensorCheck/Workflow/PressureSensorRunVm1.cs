@@ -313,12 +313,6 @@ namespace PressureSensorCheck.Workflow
             CallStopCheck?.Invoke();
         }
 
-        public void AddPoint()
-        {
-            
-        }
-
-
         internal void AddToLine(TimeSpan time, double inVal, double outVal)
         {
             _inOutLines.AddPoint(time, inVal, outVal);

@@ -44,6 +44,13 @@ namespace PressureSensorCheck.Workflow
             FillVM(_vm, configData, archive, ethalonsSources);
         }
 
+        /// <summary>
+        /// Заполнить визуальную модель базовыми 
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <param name="configData"></param>
+        /// <param name="archive"></param>
+        /// <param name="ethalonsSources"></param>
         private void FillVM(PressureSensorCheckConfigVm vm, PressureSensorConfig configData, ITamplateArchive<PressureSensorConfig> archive, Dictionary<string, IEtalonSourceCannelFactory<Units>> ethalonsSources)
         {
             vm.SetSourceNames(_ethalonsSources.Keys);
@@ -55,6 +62,11 @@ namespace PressureSensorCheck.Workflow
             vm.SerialNumberCanged += VmOnSerialNumberCanged;
         }
 
+        /// <summary>
+        /// Заполнить базовые не технические данные поверки
+        /// </summary>
+        /// <param name="vmCommonData"></param>
+        /// <param name="configData"></param>
         private void FillCommonData(PressureSensorOrgVm vmCommonData, PressureSensorConfig configData)
         {
             vmCommonData.SetAllValues(GetCurentValue(configData));
@@ -65,16 +77,29 @@ namespace PressureSensorCheck.Workflow
             vmCommonData.EthalonOutSignal.ConfigChanged += EthalonOutSignalOnConfigChanged;
         }
 
+        /// <summary>
+        /// Пользователем обновлена конфигурация эталона давления
+        /// </summary>
+        /// <param name="ethalonDescriptorData"></param>
         private void EthalonPressureOnConfigChanged(EthalonDescriptorVm.EthalonDescriptorData ethalonDescriptorData)
         {
             UpdateEthalon(_configData.EtalonPressure, ethalonDescriptorData);
         }
 
+        /// <summary>
+        /// Пользователем обновлена конфигурация эталона выходного сигнала
+        /// </summary>
+        /// <param name="ethalonDescriptorData"></param>
         private void EthalonOutSignalOnConfigChanged(EthalonDescriptorVm.EthalonDescriptorData ethalonDescriptorData)
         {
             UpdateEthalon(_configData.EtalonOut, ethalonDescriptorData);
         }
 
+        /// <summary>
+        /// Пользователем обновлена конфигурация эталона
+        /// </summary>
+        /// <param name="conf"></param>
+        /// <param name="data"></param>
         private void UpdateEthalon(EtalonDescriptor conf,
             EthalonDescriptorVm.EthalonDescriptorData data)
         {
@@ -88,6 +113,11 @@ namespace PressureSensorCheck.Workflow
             conf.CheckCertificateDate = data.CheckCertificateDate;
         }
 
+        /// <summary>
+        /// Преобразовать конфигурацию проверки в транспортные данные для VM
+        /// </summary>
+        /// <param name="configData"></param>
+        /// <returns></returns>
         private PressureSensorOrgVm.PressureSensorOrgData GetCurentValue(PressureSensorConfig configData)
         {
             return new PressureSensorOrgVm.PressureSensorOrgData(configData.User, configData.ChiefLab,
@@ -95,16 +125,24 @@ namespace PressureSensorCheck.Workflow
                 configData.CertificateDate, configData.Validity, configData.Master, configData.Name, configData.RegNum,
                 configData.SensorType, configData.SensorModel, configData.NumberLastCheck, configData.SerialNumber,
                 configData.ChecklLawBase, configData.CheckedParameters, configData.Company, configData.Temperature,
-                configData.Humidity, configData.DayPressure, configData.CommonVoltage);
+                configData.Humidity, configData.DayPressure, configData.CommonVoltage, configData.Note);
         }
 
+        /// <summary>
+        /// Преобразовать конфигурацию эталонов в транспортные данные для VM
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         private EthalonDescriptorVm.EthalonDescriptorData GetCurentValue(EtalonDescriptor data)
         {
             return new EthalonDescriptorVm.EthalonDescriptorData(data.Title, data.SensorType, data.SerialNumber,
                 data.RegNum, data.Category, data.ErrorClass, data.CheckCertificateNumber, data.CheckCertificateDate);
         }
 
-
+        /// <summary>
+        /// Изменены данные пользователем
+        /// </summary>
+        /// <param name="data"></param>
         private void UpdateFromCommonData(PressureSensorOrgVm.PressureSensorOrgData data)
         {
             _configData.User = data.User;
@@ -128,6 +166,11 @@ namespace PressureSensorCheck.Workflow
             _configData.ChecklLawBase = data.ChecklLawBase;
             _configData.CheckedParameters = data.CheckedParameters;
             _configData.Company = data.Company;
+
+            _identificator.Note = data.Note;
+            //TODO избавиться от дублирования
+            _configData.Note = data.Note;
+
             _configData.Temperature = data.Temperature;
             _configData.Humidity = data.Humidity;
             _configData.DayPressure = data.DayPressure;

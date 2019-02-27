@@ -9,8 +9,15 @@ using KipTM.Interfaces;
 
 namespace PressureSensorCheck.Workflow.Content
 {
+    /// <summary>
+    /// Базовые не технические данные повеки (Визуальная модель)
+    /// </summary>
     public class PressureSensorOrgVm:INotifyPropertyChanged
     {
+
+        /// <summary>
+        /// Базовые не технические данные повеки
+        /// </summary>
         internal struct PressureSensorOrgData
         {
             public readonly string User;
@@ -34,8 +41,13 @@ namespace PressureSensorCheck.Workflow.Content
             public readonly double Humidity;
             public readonly double DayPressure;
             public readonly double CommonVoltage;
+            public readonly string Note;
 
-            public PressureSensorOrgData(string user, string chiefLab, string reportNumber, string reportDate, string certificateNumber, string certificateDate, string validity, string master, string name, string regNum, string sensorType, string sensorModel, string numberLastCheck, string serialNumber, string checklLawBase, string checkedParameters, string company, double temperature, double humidity, double dayPressure, double commonVoltage)
+
+            /// <summary>
+            /// Базовые не технические данные повеки (данные)
+            /// </summary>
+            public PressureSensorOrgData(string user, string chiefLab, string reportNumber, string reportDate, string certificateNumber, string certificateDate, string validity, string master, string name, string regNum, string sensorType, string sensorModel, string numberLastCheck, string serialNumber, string checklLawBase, string checkedParameters, string company, double temperature, double humidity, double dayPressure, double commonVoltage, string note)
             {
                 User = user;
                 ChiefLab = chiefLab;
@@ -58,6 +70,7 @@ namespace PressureSensorCheck.Workflow.Content
                 Humidity = humidity;
                 DayPressure = dayPressure;
                 CommonVoltage = commonVoltage;
+                Note = note;
             }
         }
 
@@ -85,6 +98,7 @@ namespace PressureSensorCheck.Workflow.Content
         private double _humidity;
         private double _dayPressure;
         private double _commonVoltage;
+        private string _note;
 
         public PressureSensorOrgVm(IContext context)
         {
@@ -309,6 +323,17 @@ namespace PressureSensorCheck.Workflow.Content
         }
 
         /// <summary>
+        /// Примечание
+        /// </summary>
+        public string Note
+        {
+            get { return _note; }
+            set { _note = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// Температура
         /// </summary>
         public double Temperature
@@ -373,6 +398,7 @@ namespace PressureSensorCheck.Workflow.Content
                 ChecklLawBase = data.ChecklLawBase;
                 CheckedParameters = data.CheckedParameters;
                 Company = data.Company;
+                Note = data.Note;
                 Temperature = data.Temperature;
                 Humidity = data.Humidity;
                 DayPressure = data.DayPressure;
@@ -406,7 +432,7 @@ namespace PressureSensorCheck.Workflow.Content
         {
             return new PressureSensorOrgData(User, ChiefLab, ReportNumber, ReportDate, CertificateNumber,
                 CertificateDate, Validity, Master, Name, RegNum, SensorType, SensorModel, NumberLastCheck, SerialNumber,
-                ChecklLawBase, CheckedParameters, Company, Temperature, Humidity, DayPressure, CommonVoltage);
+                ChecklLawBase, CheckedParameters, Company, Temperature, Humidity, DayPressure, CommonVoltage, Note);
         }
     }
 }

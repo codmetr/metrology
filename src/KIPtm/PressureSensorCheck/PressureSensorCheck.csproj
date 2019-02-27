@@ -106,6 +106,7 @@
     <Compile Include="Report\ReportFactory.cs" />
     <Compile Include="Report\ReportUpdater.cs" />
     <Compile Include="Workflow\Content\CheckPointVm.cs" />
+    <Compile Include="Workflow\Content\CheckPressureLogicConfig.cs" />
     <Compile Include="Workflow\Content\CheckPressureLogicConfigVm.cs" />
     <Compile Include="Workflow\Content\AutoUpdater.cs" />
     <Compile Include="Workflow\Content\DPI620GeniiConfig.cs" />

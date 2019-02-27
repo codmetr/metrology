@@ -121,6 +121,19 @@ namespace PressureSensorCheck.Workflow
         }
 
         /// <summary>
+        /// Конфигурация логики проверки
+        /// </summary>
+        public CheckPressureLogicConfigVm Config
+        {
+            get { return _config; }
+            set
+            {
+                _config = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// Идентифитатор проверки
         /// </summary>
         public TestResultID Identificator { get; }
@@ -158,19 +171,6 @@ namespace PressureSensorCheck.Workflow
                 }
                 OnPropertyChanged("PressUnit");
                 OnSelectedUnit(Data.Unit);
-            }
-        }
-
-        /// <summary>
-        /// Конфигурация логики проверки
-        /// </summary>
-        public CheckPressureLogicConfigVm Config
-        {
-            get { return _config; }
-            set
-            {
-                _config = value;
-                OnPropertyChanged();
             }
         }
 

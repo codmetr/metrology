@@ -28,6 +28,7 @@ namespace PressureSensorData
             {
                 ReportDate = DateTime.Now.ToString("dd.MM.yyyy"),
                 CertificateDate = DateTime.Now.ToString("dd.MM.yyyy"),
+                Note = "",
                 Master = "[Организация]",
                 Name = "[Наименование]",
                 SensorType = "[Тип]",
@@ -57,6 +58,7 @@ namespace PressureSensorData
             data.ReportDate = ReportDate;
             data.CertificateNumber = CertificateNumber;
             data.CertificateDate = CertificateDate;
+            data.Note = Note;
             data.EtalonPressure = EtalonPressure.DeepCopy();
             data.EtalonOut = EtalonOut.DeepCopy();
             data.Points = Points.Select(el => el.DeepCopy()).ToList();
@@ -101,6 +103,11 @@ namespace PressureSensorData
         /// Дата сертификата:
         /// </summary>
         public string CertificateDate { get; set; }
+
+        /// <summary>
+        /// Примечание
+        /// </summary>
+        public string Note { get; set; }
 
         /// <summary>
         /// Эталон давления
