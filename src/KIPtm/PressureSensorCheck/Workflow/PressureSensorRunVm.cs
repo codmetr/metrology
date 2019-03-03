@@ -72,8 +72,11 @@ namespace PressureSensorCheck.Workflow
         /// <param name="dpi620">драйвер DPI620Genii</param>
         /// <param name="dpiConf">контейнер конфигурации DPI620</param>
         /// <param name="result"></param>
+        /// <param name="agregator"></param>
+        /// <param name="context"></param>
         public PressureSensorRunVm(PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator, IContext context)
         {
+            _context = context;
             Measured = new ObservableCollection<MeasuringPoint>();
             _inOutLines = new LinesInOutViewModel(
                 "I", $"I, {OutUnit.ToStringLocalized(CultureInfo.CurrentUICulture)}", Color.Black, 1, _periodViewGraphic,
@@ -82,12 +85,11 @@ namespace PressureSensorCheck.Workflow
             _dpiConf = dpiConf;
             _logger = NLog.LogManager.GetLogger("PressureSensorPointsConfigVm");
             Points = new ObservableCollection<PointViewModel>();
-            NewConfig = new PointConfigViewModel();
+            NewConfig = new PointConfigViewModel(_context);
             _config = config;
             _autoupdater = new AutoUpdater(_logger);
             Result = result;
             _agregator = agregator;
-            _context = context;
         }
 
         /// <summary>
@@ -286,13 +288,7 @@ namespace PressureSensorCheck.Workflow
         {
             Points.Add(new PointViewModel()
             {
-                Config = new PointConfigViewModel()
-                {
-                    Pressure = NewConfig.Pressure,
-                    I = NewConfig.I,
-                    dI = NewConfig.dI,
-                    Unit = PressureUnit,
-                },
+                Config = new PointConfigViewModel(_context, NewConfig.Pressure, NewConfig.I, NewConfig.dI, PressureUnit),
                 Result = new PointResultViewModel()
             });
             _config.Points.Add(new PressureSensorPoint()

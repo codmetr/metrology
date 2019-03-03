@@ -6,12 +6,9 @@ using System.Linq;
 using System.Windows.Input;
 using ArchiveData.DTO;
 using KipTM.Checks.ViewModel.Config;
-using KipTM.EventAggregator;
 using KipTM.Interfaces;
-using KipTM.Interfaces.Channels;
 using KipTM.ViewModel.Events;
 using PressureSensorCheck.Workflow.Content;
-using PressureSensorData;
 using Tools.View;
 
 namespace PressureSensorCheck.Workflow
@@ -25,40 +22,25 @@ namespace PressureSensorCheck.Workflow
         private CheckPressureLogicConfigVm _config;
         private DPI620GeniiConfigVm _dpiConfig;
         private readonly IContext _context;
-        private readonly IEventAggregator _agregator;
-        private readonly TemplateStore<PressureSensorConfig> _templates;
-        private readonly ITamplateArchive<PressureSensorConfig> _confArch;
-        private PressureSensorConfig _data;
-        private Dictionary<string, IEtalonSourceCannelFactory<Units>> _ethalonsSources;
+
+        //private readonly TemplateStore<PressureSensorConfig> _templates;
         private string _selectedSourceName;
         private object _selectedSourceViewModel;
         private string _serialNumber;
-        private PressureSensorOrgVm _sensorConfig;
+        private readonly PressureSensorOrgVm _sensorConfig;
 
         /// <summary>
         /// Конфигурация проверки
         /// </summary>
-        public PressureSensorCheckConfigVm(IContext context,
-            TestResultID identificator, PressureSensorConfig configData, DPI620GeniiConfigVm dpiConf,
-            IEventAggregator agregator, ITamplateArchive<PressureSensorConfig> archive,
-            Dictionary<string, IEtalonSourceCannelFactory<Units>> ethalonsSources)
+        public PressureSensorCheckConfigVm(IContext context, CheckPressureLogicConfigVm configData, DPI620GeniiConfigVm dpiConf)
         {
-            Data = configData;
-            Identificator = identificator;
-            Config = new CheckPressureLogicConfigVm(configData);
+            Config = configData;
             DpiConfig = dpiConf;
             _context = context;
-            _agregator = agregator;
-            _confArch = archive;
-            _templates = new TemplateStore<PressureSensorConfig>(archive);
-            _templates.LastData = configData;
-            _templates.UpdatedTemplate += TemplatesOnUpdatedTemplate;
-            _ethalonsSources = ethalonsSources;
-            SourceNames = _ethalonsSources.Keys;
-            _selectedSourceName = SourceNames.FirstOrDefault();
-            var confVmTemplate = _ethalonsSources[_selectedSourceName];
-            SelectedSourceViewModel = confVmTemplate?.ConfigViewModel;
-
+            //_templates = new TemplateStore<PressureSensorConfig>(archive);
+            //_templates.LastData = configData;
+            //_templates.UpdatedTemplate += TemplatesOnUpdatedTemplate;
+            
             _sensorConfig = new PressureSensorOrgVm(context);
         }
 
@@ -115,11 +97,6 @@ namespace PressureSensorCheck.Workflow
             }
         }
 
-        public PressureSensorOrgVm SensorConfig
-        {
-            get { return _sensorConfig; }
-        }
-
         /// <summary>
         /// Конфигурация логики проверки
         /// </summary>
@@ -130,47 +107,6 @@ namespace PressureSensorCheck.Workflow
             {
                 _config = value;
                 OnPropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Идентифитатор проверки
-        /// </summary>
-        public TestResultID Identificator { get; }
-
-        /// <summary>
-        /// Фактические данные конфигурации
-        /// </summary>
-        /// <remarks>
-        /// Использовать на разметке экрана только в случае единственного места изменения, так как без INotifyPropertyChanged
-        /// </remarks>
-        public PressureSensorConfig Data
-        {
-            get { return _data; }
-            private set
-            {
-                _data = value;
-                OnPropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Единицы измерения давления
-        /// </summary>
-        public Units PressUnit
-        {
-            get { return Data.Unit; }
-            set
-            {
-                if (value == Data.Unit)
-                    return;
-                Data.Unit = value;
-                foreach (var point in Config.Points)
-                {
-                    point.Unit = value;
-                }
-                OnPropertyChanged("PressUnit");
-                OnSelectedUnit(Data.Unit);
             }
         }
 
@@ -187,26 +123,26 @@ namespace PressureSensorCheck.Workflow
             }
         }
 
-        /// <summary>
-        /// Набор шаблон настроек
-        /// </summary>
-        public TemplateStore<PressureSensorConfig> Templates
-        {
-            get { return _templates; }
-        }
+        ///// <summary>
+        ///// Набор шаблон настроек
+        ///// </summary>
+        //public TemplateStore<PressureSensorConfig> Templates
+        //{
+        //    get { return _templates; }
+        //}
 
-        /// <summary>
-        /// Показывать представление выбранных шаблонов
-        /// </summary>
-        public bool IsTemplatePreview
-        {
-            get { return _isTemplatePreview; }
-            set
-            {
-                _isTemplatePreview = value;
-                OnPropertyChanged();
-            }
-        }
+        ///// <summary>
+        ///// Показывать представление выбранных шаблонов
+        ///// </summary>
+        //public bool IsTemplatePreview
+        //{
+        //    get { return _isTemplatePreview; }
+        //    set
+        //    {
+        //        _isTemplatePreview = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
         #region INotifyPropertyChanged
 
@@ -221,14 +157,23 @@ namespace PressureSensorCheck.Workflow
 
         public void Dispose()
         {
-            _confArch.SetLast(Data);
+            //_confArch.SetLast(Data);
         }
 
+        /// <summary>
+        /// Задать список названий эталонных источников
+        /// </summary>
+        /// <param name="ethalons"></param>
         public void SetSourceNames(IEnumerable<string> ethalons)
         {
             _context.Invoke(()=>SourceNames = ethalons);
         }
 
+        /// <summary>
+        /// Задать выбранный эталонный источник
+        /// </summary>
+        /// <param name="selectedEthalon"></param>
+        /// <param name="ethalonConfVm"></param>
         public void SetSelectedSourceNames(string selectedEthalon, object ethalonConfVm)
         {
             _context.Invoke(() =>
@@ -238,6 +183,10 @@ namespace PressureSensorCheck.Workflow
             });
         }
 
+        /// <summary>
+        /// Затать серийный номер
+        /// </summary>
+        /// <param name="serial"></param>
         public void SetSerialNumber(string serial)
         {
             _context.Invoke(() => SerialNumber = serial);
@@ -249,15 +198,15 @@ namespace PressureSensorCheck.Workflow
 
         public event Action<string> SerialNumberCanged;
 
-        /// <summary>
-        /// Обновлен применяемый шаблон настроек
-        /// </summary>
-        /// <param name="pressureSensorConfig"></param>
-        private void TemplatesOnUpdatedTemplate(PressureSensorConfig pressureSensorConfig)
-        {
-            Data.SetCopy(pressureSensorConfig);
-            OnPropertyChanged(nameof(Data));
-        }
+        ///// <summary>
+        ///// Обновлен применяемый шаблон настроек
+        ///// </summary>
+        ///// <param name="pressureSensorConfig"></param>
+        //private void TemplatesOnUpdatedTemplate(PressureSensorConfig pressureSensorConfig)
+        //{
+        //    Data.SetCopy(pressureSensorConfig);
+        //    OnPropertyChanged(nameof(Data));
+        //}
 
         protected virtual void OnSelectedSource(string obj)
         {

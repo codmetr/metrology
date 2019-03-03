@@ -117,7 +117,7 @@
     <Compile Include="Workflow\Content\PointViewModel.cs" />
     <Compile Include="Workflow\Content\DPI620GeniiConfigVm.cs" />
     <Compile Include="Workflow\Content\PointResultViewModel.cs" />
-    <Compile Include="Workflow\Content\PressureSensorConfigVm.cs" />
+    <Compile Include="Workflow\Content\PressureSensorOrgVm.cs" />
     <Compile Include="Workflow\Content\TemplateStore.cs" />
     <Compile Include="Workflow\Content\TemplateViewModel.cs" />
     <Compile Include="Workflow\IUserVmAsk.cs" />

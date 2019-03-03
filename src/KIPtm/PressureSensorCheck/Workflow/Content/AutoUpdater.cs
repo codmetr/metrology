@@ -81,7 +81,7 @@ namespace PressureSensorCheck.Workflow
         }
 
 
-        private CheckPointVm.PointRes GetOutForPressure(PressureSensorConfig conf, double pressure, double I)
+        private CheckPressureLogicConfig.PointLimit GetOutForPressure(PressureSensorConfig conf, double pressure, double I)
         {
             double outMin = 0.0;
             double outMax = 5.0;
@@ -91,7 +91,7 @@ namespace PressureSensorCheck.Workflow
                 outMax = 20;
             }
             
-            return CheckPointVm.CalcRes(pressure,conf.VpiMin, conf.VpiMax, outMin, outMax, conf.TolerancePercentVpi, conf.TolerancePercentSigma);
+            return CheckPressureLogicConfig.CalcRes(pressure,conf.VpiMin, conf.VpiMax, outMin, outMax, conf.TolerancePercentVpi, conf.TolerancePercentSigma);
         }
 
         /// <summary>

@@ -141,13 +141,7 @@ namespace PressureSensorCheck.Workflow
 
             var pointRes = new PointViewModel()
             {
-                Config = new PointConfigViewModel()
-                {
-                    Pressure = newPointConf.Pressure,
-                    I = newPointConf.I,
-                    dI = newPointConf.dI,
-                    Unit = _config.Unit,
-                },
+                Config = new PointConfigViewModel(_context, newPointConf.Pressure, newPointConf.I, newPointConf.dI, _config.Unit),
                 Result = new PointResultViewModel()
             };
             var pointConf = new PressureSensorPoint()

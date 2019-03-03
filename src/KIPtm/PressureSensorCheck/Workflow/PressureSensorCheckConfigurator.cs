@@ -53,13 +53,19 @@ namespace PressureSensorCheck.Workflow
         /// <param name="ethalonsSources"></param>
         private void FillVM(PressureSensorCheckConfigVm vm, PressureSensorConfig configData, ITamplateArchive<PressureSensorConfig> archive, Dictionary<string, IEtalonSourceCannelFactory<Units>> ethalonsSources)
         {
-            vm.SetSourceNames(_ethalonsSources.Keys);
-            var selected = _ethalonsSources.Keys.FirstOrDefault();
-            vm.SetSelectedSourceNames(selected, _ethalonsSources[selected].ConfigViewModel);
+            vm.SetSourceNames(ethalonsSources.Keys);
+            var selected = ethalonsSources.Keys.FirstOrDefault();
+            vm.SetSelectedSourceNames(selected, ethalonsSources[selected].ConfigViewModel);
             vm.SetSerialNumber(_identificator.SerialNumber);
             FillCommonData(vm.CommonData, configData);
+            FillLogicConf(vm.Config, configData);
             vm.SelectedSource += VmOnSelectedSource;
             vm.SerialNumberCanged += VmOnSerialNumberCanged;
+        }
+
+        private void FillLogicConf(CheckPressureLogicConfigVm vmConfig, PressureSensorConfig configData)
+        {
+            var confLogic = new CheckPressureLogicConfig(configData, vmConfig);
         }
 
         /// <summary>
