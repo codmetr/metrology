@@ -58,7 +58,7 @@ namespace PressureSensorCheck.Workflow
                 "I", $"I, {outUnit.ToStringLocalized(CultureInfo.CurrentUICulture)}", Color.Black, 1, _periodViewGraphic,
                 "P", $"P,  {unit.ToStringLocalized(CultureInfo.CurrentUICulture)}", Color.Brown, 2, _periodViewGraphic);
             Points = new ObservableCollection<PointViewModel>();
-            NewConfig = new PointConfigViewModel();
+            NewConfig = new PointConfigViewModel(_context);
         }
 
         /// <summary>

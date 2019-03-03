@@ -11,41 +11,18 @@ using PressureSensorData;
 
 namespace PressureSensorCheck.Workflow.Content
 {
+    /// <summary>
+    /// Конфигурация логики проверки
+    /// </summary>
     class CheckPressureLogicConfig
     {
         private readonly CheckPressureLogicConfigVm _vm;
         private string _tolerancePercentSigma;
         private string _tolerancePercentVpi;
-        private double _pointsOnRange = 5;
+        private int _pointsOnRange = 5;
 
         private string _vpiMinStr;
         private string _vpiMaxStr;
-
-        /// <summary>
-        /// Конфигурация логики проверки
-        /// </summary>
-        public CheckPressureLogicConfig(PressureSensorConfig data, CheckPressureLogicConfigVm vm)
-        {
-            Data = data;
-            _vm = vm;
-            Data.VpiMax = 780;
-            Data.VpiMin = 0;
-            Data.TolerancePercentVpi = 0.25;
-            Units = UnitDict.GetUnitsForType(ChannelType.Pressure);
-            Data.Unit = Units.FirstOrDefault();
-            OutputRanges = new[]
-            {
-                OutGange.I4_20mA,
-                OutGange.I0_5mA,
-            };
-            Data.OutputRange = OutputRanges.FirstOrDefault();
-            _tolerancePercentSigma = Data.TolerancePercentSigma.ToString();
-            _tolerancePercentVpi = Data.TolerancePercentVpi.ToString();
-            PointCalculator = new CheckPointVm();
-            _vpiMinStr = Data.VpiMin.ToString();
-            _vpiMaxStr = Data.VpiMax.ToString();
-            UpdatePoints();
-        }
 
         /// <summary>
         /// Фактические данные конфигурации
@@ -53,172 +30,113 @@ namespace PressureSensorCheck.Workflow.Content
         /// <remarks>
         /// Использовать на разметке экрана только в случае единственного места изменения, так как без INotifyPropertyChanged
         /// </remarks>
-        public PressureSensorConfig Data { get; }
+        private PressureSensorConfig _data;
+
+        private Dictionary<int, PointConfigViewModel> _vmPoints = new Dictionary<int, PointConfigViewModel>();
 
         /// <summary>
-        /// Минимум диапазона
+        /// Конфигурация логики проверки
         /// </summary>
-        public string VpiMinStr
+        public CheckPressureLogicConfig(PressureSensorConfig data, CheckPressureLogicConfigVm vm)
         {
-            get { return _vpiMinStr; }
-            set
-            {
-                _vpiMinStr = value;
-                double dval;
-                if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
-                    return;
-                VpiMin = dval;
-            }
-        }
-
-        /// <summary>
-        /// Максимум диапазона
-        /// </summary>
-        public string VpiMaxStr
-        {
-            get { return _vpiMaxStr; }
-            set
-            {
-                _vpiMaxStr = value;
-                double dval;
-                if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
-                    return;
-                VpiMax = dval;
-            }
-        }
-
-        /// <summary>
-        /// Максимум диапазона
-        /// </summary>
-        public double VpiMax
-        {
-            get { return Data.VpiMax; }
-            set
-            {
-                Data.VpiMax = value;
-                UpdatePoints();
-            }
-        }
-
-        /// <summary>
-        /// Минимум диапазона
-        /// </summary>
-        public double VpiMin
-        {
-            get { return Data.VpiMin; }
-            set
-            {
-                Data.VpiMin = value;
-                UpdatePoints();
-            }
-        }
-
-        /// <summary>
-        /// Единицы измерения
-        /// </summary>
-        public IEnumerable<Units> Units { get; set; }
-
-        /// <summary>
-        /// Допуск по приведенной погрешности
-        /// </summary>
-        public string TolerancePercentSigma
-        {
-            get { return _tolerancePercentSigma; }
-            set
-            {
-                _tolerancePercentSigma = value;
-                double dval;
-                if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
-                    return;
-                Data.TolerancePercentSigma = dval;
-                UpdatePoints();
-                //OnPropertyChanged("TolerancePercentSigma");
-            }
-        }
-
-        /// <summary>
-        /// Допуск по проценту ВПИ
-        /// </summary>
-        public string TolerancePercentVpi
-        {
-            get { return _tolerancePercentVpi; }
-            set
-            {
-                _tolerancePercentVpi = value;
-                double dval;
-                if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
-                    return;
-                Data.TolerancePercentVpi = dval;
-                UpdatePoints();
-                //OnPropertyChanged("TolerancePercentVpi");
-            }
-        }
-
-        /// <summary>
-        /// Варианты выходного диапазона
-        /// </summary>
-        public IEnumerable<OutGange> OutputRanges { get; set; }
-
-        /// <summary>
-        /// Выбранный выходной диапазон
-        /// </summary>
-        public OutGange OutputRange
-        {
-            get { return Data.OutputRange; }
-            set
-            {
-                if (value == Data.OutputRange)
-                    return;
-                Data.OutputRange = value;
-                UpdatePoints();
-            }
-        }
-
-        public CheckPointVm PointCalculator { get; set; }
-
-        /// <summary>
-        /// Перерассчитать точки
-        /// </summary>
-        private void UpdatePoints()
-        {
-            var Pmax = Data.VpiMax;
-            var Pmin = Data.VpiMin;
-            if (Pmin >= Pmax)
-                return;
-
-            var step = (Pmax - Pmin) / (_pointsOnRange - 1);
-            double uMin = 0.0;
-            double uMax = 5.0;
-            if (Data.OutputRange == OutGange.I4_20mA)
+            _data = data;
+            _vm = vm;
+            var uMin = 0.0;
+            var uMax = 5.0;
+            if (_data.OutputRange == OutGange.I4_20mA)
             {
                 uMin = 4;
                 uMax = 20;
             }
+            _vm.SetBaseStates(_data.VpiMax, _data.VpiMin, UnitDict.GetUnitsForType(ChannelType.Pressure),
+                _data.Unit, new[]{OutGange.I4_20mA,OutGange.I0_5mA,}, _data.OutputRange,
+                _data.TolerancePercentSigma, _data.TolerancePercentVpi, uMin, uMax);
+            var points = RecalcPoints(_data.OutputRange, _data.VpiMax, _data.VpiMin, _pointsOnRange, _data.TolerancePercentVpi, _data.TolerancePercentSigma, _data.Unit).ToArray();
+            _data.Points.Clear();
+            for (var i = 0; i< points.Length; i++)
+            {
+                var point = points[i];
+                _data.Points.Add(point);
+                _vmPoints[i] = _vm.AddPoint(point.PressurePoint, point.OutPoint, point.Tollerance, point.PressureUnit);
+            }
+        }
+        
+        /// <summary>
+        /// Перерассчитать точки
+        /// </summary>
+        private IEnumerable<PressureSensorPoint> RecalcPoints(OutGange range, double Pmax, double Pmin, int countPoints, double toleranceVpi, double toleranceSigma, Units unit)
+        {
 
-            Data.Points.Clear();
-            for (double i = 0; i < _pointsOnRange; i++)
+            var uMin = 0.0;
+            var uMax = 5.0;
+            if (range == OutGange.I4_20mA)
+            {
+                uMin = 4;
+                uMax = 20;
+            }
+            if (Pmin >= Pmax)
+                yield break;
+
+            var step = (Pmax - Pmin) / (countPoints - 1);
+            for (double i = 0; i < countPoints; i++)
             {
                 var point = Pmin + (i * step);
 
-                var pointOut = CheckPointVm.CalcRes(point, Pmin, Pmax, uMin, uMax, Data.TolerancePercentVpi,
-                    Data.TolerancePercentSigma);
-                var sensPoint = new PressureSensorPoint()
+                var pointOut = CalcRes(point, Pmin, Pmax, uMin, uMax, toleranceVpi, toleranceSigma);
+                yield return new PressureSensorPoint()
                 {
                     PressurePoint = point,
                     OutPoint = pointOut.Ip,
-                    PressureUnit = Data.Unit,
-                    OutUnit = KipTM.Interfaces.Units.mA,
+                    PressureUnit = unit,
+                    OutUnit = Units.mA,
                     Tollerance = pointOut.dIp,
                 };
-                Data.Points.Add(sensPoint);
             }
-            PointCalculator.TolerancePercentVpi = Data.TolerancePercentVpi;
-            PointCalculator.TolerancePercentSigma = Data.TolerancePercentSigma;
-            PointCalculator.Imax = uMax;
-            PointCalculator.Imin = uMin;
-            PointCalculator.Pmax = Pmax;
-            PointCalculator.Pmin = Pmin;
-            PointCalculator.UpdateFormulas();
+        }
+
+        /// <summary>
+        /// Результат рассчета на точке
+        /// </summary>
+        public struct PointLimit
+        {
+            /// <summary>
+            /// Рассчетное значение выходного сигнала для точки
+            /// </summary>
+            public readonly double Ip;
+            /// <summary>
+            /// Рассчетное значение погрешности выходного сигнала для точки
+            /// </summary>
+            public readonly double dIp;
+
+            /// <summary>
+            /// Результат рассчета на точке
+            /// </summary>
+            /// <param name="Ip">Рассчетное значение выходного сигнала для точки</param>
+            /// <param name="dIp">Рассчетное значение погрешности выходного сигнала для точки</param>
+            public PointLimit(double Ip, double dIp)
+            {
+                this.Ip = Ip;
+                this.dIp = dIp;
+            }
+        }
+
+
+        /// <summary>
+        /// Рассчитать погрешность и ожидаемую точку
+        /// </summary>
+        /// <param name="P">давлени (входной сигнал)</param>
+        /// <param name="Pmin">Минимум давления</param>
+        /// <param name="Pmax">Максимум давления</param>
+        /// <param name="Imin">Минимум тока</param>
+        /// <param name="Imax">Максимум тока</param>
+        /// <param name="tolerVpi">допуск от ВПИ</param>
+        /// <param name="tolerSigm">допуск приведенной погрешности</param>
+        /// <returns></returns>
+        public static PointLimit CalcRes(double P, double Pmin, double Pmax, double Imin, double Imax, double tolerVpi, double tolerSigm)
+        {
+            var Ip = Imin + ((Imax - Imin) * (P - Pmin) / (Pmax - Pmin));
+            var dIp = (Imax - Imin) * tolerVpi / 100.0 + ((tolerSigm / 100.0) * (Imax - Imin) * (P - Pmin) / (Pmax - Pmin));
+            return new PointLimit(Ip, dIp);
         }
     }
 }

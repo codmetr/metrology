@@ -256,7 +256,7 @@
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>
-                    <Expander Grid.Column="1" ExpandDirection="Right" IsExpanded="{Binding IsTemplatePreview}">
+                    <!--<Expander Grid.Column="1" ExpandDirection="Right" IsExpanded="{Binding IsTemplatePreview}">
                         <Expander.Header>
                             <TextBlock Text="Шаблоны">
                                 <TextBlock.LayoutTransform>
@@ -276,7 +276,7 @@
                                     <DataGridTemplateColumn Header="Название" IsReadOnly="True" Width="150" MaxWidth="150" MinWidth="150">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate >
-                                                <!--DataType="{x:Type content:TemplateViewModel, {x:Type pressureSensorData:PressureSensorConfig}}"-->
+                                                --><!--DataType="{x:Type content:TemplateViewModel, {x:Type pressureSensorData:PressureSensorConfig}}"--><!--
                                                 <TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
@@ -292,7 +292,7 @@
                                 </StackPanel>
                             </GroupBox>
                         </Grid>
-                    </Expander>
+                    </Expander>-->
                 </Grid>
             </TabItem>
             <TabItem Header="Точки поверки">
@@ -337,7 +337,7 @@
                             <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Config.VpiMaxStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">единицы измерения:</TextBlock>
                             <ComboBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Style="{StaticResource CbBasicStyle}"
-                                      ItemsSource="{Binding Config.Units}" SelectedItem="{Binding PressUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                      ItemsSource="{Binding Config.Units}" SelectedItem="{Binding Config.PressUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate DataType="interfaces:Units">
                                         <ContentPresenter Content="{Binding Converter={StaticResource UnitsStringConverter}}"/>

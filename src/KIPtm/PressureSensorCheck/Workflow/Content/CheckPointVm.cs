@@ -10,31 +10,6 @@ namespace PressureSensorCheck.Workflow.Content
 {
     public class CheckPointVm : INotifyPropertyChanged
     {
-        /// <summary>
-        /// Результат рассчета на точке
-        /// </summary>
-        public struct PointRes
-        {
-            /// <summary>
-            /// Рассчетное значение выходного сигнала для точки
-            /// </summary>
-            public readonly double Ip;
-            /// <summary>
-            /// Рассчетное значение погрешности выходного сигнала для точки
-            /// </summary>
-            public readonly double dIp;
-
-            /// <summary>
-            /// Результат рассчета на точке
-            /// </summary>
-            /// <param name="Ip">Рассчетное значение выходного сигнала для точки</param>
-            /// <param name="dIp">Рассчетное значение погрешности выходного сигнала для точки</param>
-            public PointRes(double Ip, double dIp)
-            {
-                this.Ip = Ip;
-                this.dIp = dIp;
-            }
-        }
 
         private string _formulaFinalyError;
         private double _P = 0.0;
@@ -161,7 +136,7 @@ namespace PressureSensorCheck.Workflow.Content
 
             FormulaFinalyError = strRes;
 
-            var res = CalcRes(_P, Pmin, Pmax, Imin, Imax, TolerancePercentVpi, TolerancePercentSigma);
+            var res = CheckPressureLogicConfig.CalcRes(_P, Pmin, Pmax, Imin, Imax, TolerancePercentVpi, TolerancePercentSigma);
 
             //@"I(P) = I_{min} + (I_{max}-I_{min})\times\frac{P-P_{min}}{P_{max}-P_{min}}"
             var IpRes = double.IsNaN(res.Ip) ? "Nan" : double.IsInfinity(res.Ip) ? @"/infinity" : res.Ip.ToString("F3");
@@ -183,24 +158,6 @@ namespace PressureSensorCheck.Workflow.Content
             var dIRes = double.IsNaN(dI) ? "Nan" : double.IsInfinity(dI) ? @"/infinity" : dI.ToString("F3");
             strRes = sb.Clear().Append(@"\Delta I = I-I(P) = ").Append(_I.ToString("F3")).Append(" - ").Append(IpRes).Append("=").Append(dIRes).ToString();
             FormulaOutSignalError = strRes;
-        }
-
-        /// <summary>
-        /// Рассчитать погрешность и ожидаемую точку
-        /// </summary>
-        /// <param name="P">давлени (входной сигнал)</param>
-        /// <param name="Pmin">Минимум давления</param>
-        /// <param name="Pmax">Максимум давления</param>
-        /// <param name="Imin">Минимум тока</param>
-        /// <param name="Imax">Максимум тока</param>
-        /// <param name="tolerVpi">допуск от ВПИ</param>
-        /// <param name="tolerSigm">допуск приведенной погрешности</param>
-        /// <returns></returns>
-        public static PointRes CalcRes(double P, double Pmin, double Pmax, double Imin, double Imax, double tolerVpi, double tolerSigm)
-        {
-            var Ip = Imin + ((Imax - Imin) * (P - Pmin) / (Pmax - Pmin));
-            var dIp = (Imax - Imin) * tolerVpi / 100.0 + ((tolerSigm / 100.0) * (Imax - Imin) * (P - Pmin) / (Pmax - Pmin));
-            return new PointRes(Ip, dIp);
         }
 
         #region INotifyPropertyChanged
