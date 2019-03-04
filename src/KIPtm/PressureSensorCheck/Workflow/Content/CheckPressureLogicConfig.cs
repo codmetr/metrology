@@ -59,7 +59,7 @@ namespace PressureSensorCheck.Workflow.Content
                 _data.Points.Add(point);
                 _vmPoints[i] = _vm.AddPoint(point.PressurePoint, point.OutPoint, point.Tollerance, point.PressureUnit);
             }
-            _vm.
+            _vm.SelectedRange
         }
         
         /// <summary>
