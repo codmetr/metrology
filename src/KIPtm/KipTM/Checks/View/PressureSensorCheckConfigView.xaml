@@ -11,6 +11,7 @@
              xmlns:interfaces="clr-namespace:KipTM.Interfaces;assembly=KipTM.Interfaces"
              xmlns:controls="clr-namespace:WpfMath.Controls;assembly=WpfMath"
              xmlns:content="clr-namespace:PressureSensorCheck.Workflow.Content;assembly=PressureSensorCheck"
+             xmlns:view="clr-namespace:KipTM.Checks.View"
              mc:Ignorable="d" 
              d:DesignHeight="2000" d:DesignWidth="1000"
              d:DataContext="{d:DesignInstance workflow:PressureSensorCheckConfigVm}">
@@ -21,7 +22,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:OutGangerStringConverter x:Key="OutGangerStringConverter"/>
             <converters:ChannelTypeStringConverter x:Key="ChannelTypeStringConverter"/>
-
+            <view:DoubleStringConverter x:Key="DoubleStringConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="20,20,20,0">
@@ -199,7 +200,7 @@
                                 <TextBlock Grid.Row="1" Grid.Column="3">Наименование:</TextBlock>
                                 <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding Path=CommonData.EthalonOutSignal.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Grid.Row="2" Grid.Column="3">Тип:</TextBlock>
-                                <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding Path=CommonData.EthalonOutSignal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding Path=CommonData.EthalonOutSignal.SensorType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Grid.Row="3" Grid.Column="3">Заводской номер:</TextBlock>
                                 <TextBox Grid.Row="3" Grid.Column="4" Text="{Binding Path=CommonData.EthalonOutSignal.SerialNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Grid.Row="4" Grid.Column="3">Номер в Госреестре СИ:</TextBlock>
@@ -214,7 +215,7 @@
                                 <TextBox Grid.Row="8" Grid.Column="4" Text="{Binding Path=CommonData.EthalonOutSignal.CheckCertificateDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                             <TextBlock Style="{StaticResource TblBasicStyle}" TextDecorations="Underline" Margin="3,10,3,3">
-                        Организация:
+                                Организация:
                             </TextBlock>
                             <Grid>
                                 <Grid.Resources>
@@ -332,9 +333,9 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0">от:</TextBlock>
-                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Config.VpiMinStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Config.VpiMin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleStringConverter}}"/>
                             <TextBlock Grid.Row="0" Grid.Column="2">до:</TextBlock>
-                            <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Config.VpiMaxStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Config.VpiMax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleStringConverter}}"/>
                             <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">единицы измерения:</TextBlock>
                             <ComboBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Style="{StaticResource CbBasicStyle}"
                                       ItemsSource="{Binding Config.Units}" SelectedItem="{Binding Config.PressUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -513,13 +514,7 @@
                             <TextBlock Grid.Row="1" Grid.Column="3">Номер выходного слота:</TextBlock>
                             <ComboBox Grid.Row="1" Grid.Column="4"
                                       ItemsSource="{Binding Slot2.SlotIndexes, UpdateSourceTrigger=PropertyChanged}"
-                                      SelectedItem="{Binding Slot2.SelectedSlotIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate DataType="dto:ChannelType">
-                                        <ContentPresenter Content="{Binding Converter={StaticResource ChannelTypeStringConverter}}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
+                                      SelectedItem="{Binding Slot2.SelectedSlotIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Row="2" Grid.Column="0">Тип входного слота:</TextBlock>
                             <ComboBox Grid.Row="2" Grid.Column="1"
                                   ItemsSource="{Binding Slot1.ChannelTypes, UpdateSourceTrigger=PropertyChanged}"

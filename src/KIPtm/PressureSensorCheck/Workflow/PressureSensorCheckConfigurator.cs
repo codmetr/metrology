@@ -55,7 +55,7 @@ namespace PressureSensorCheck.Workflow
         {
             vm.SetSourceNames(ethalonsSources.Keys);
             var selected = ethalonsSources.Keys.FirstOrDefault();
-            vm.SetSelectedSourceNames(selected, ethalonsSources[selected].ConfigViewModel);
+            vm.SetSelectedSourceNames(selected, ethalonsSources[selected]?.ConfigViewModel);
             vm.SetSerialNumber(_identificator.SerialNumber);
             FillCommonData(vm.CommonData, configData);
             FillLogicConf(vm.Config, configData);

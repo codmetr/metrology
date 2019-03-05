@@ -30,18 +30,6 @@ namespace PressureSensorCheck.Workflow
         private ConfData _data;
 
         private readonly IContext _context;
-        private string _tolerancePercentSigmaStr;
-        private double _tolerancePercentSigma;
-        private string _tolerancePercentVpiStr;
-        private double _tolerancePercentVpi;
-        private double _pointsOnRange = 5;
-
-        private string _vpiMinStr;
-        private string _vpiMaxStr;
-        private double _vpiMin;
-        private double _vpiMax;
-        private Units _pressureUnit;
-        private OutGange _outputRange;
 
         /// <summary>
         /// Конфигурация логики проверки
@@ -50,51 +38,7 @@ namespace PressureSensorCheck.Workflow
         {
             _context = context;
             _data = new ConfData();
-
-            
-            UpdatePoints();
-        }
-
-        /// <summary>
-        /// Фактические данные конфигурации
-        /// </summary>
-        /// <remarks>
-        /// Использовать на разметке экрана только в случае единственного места изменения, так как без INotifyPropertyChanged
-        /// </remarks>
-        public PressureSensorConfig Data { get; }
-
-        /// <summary>
-        /// Минимум диапазона
-        /// </summary>
-        public string VpiMinStr
-        {
-            get { return _data.VpiMin.ToString(); }
-            set
-            {
-                //_vpiMinStr = value;
-                double dval;
-                if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
-                    return;
-                _data.VpiMin = dval;
-                OnPropertyChanged(nameof(VpiMinStr));
-            }
-        }
-
-        /// <summary>
-        /// Максимум диапазона
-        /// </summary>
-        public string VpiMaxStr
-        {
-            get { return _data.VpiMax.ToString(); }
-            set
-            {
-                _vpiMaxStr = value;
-                double dval;
-                if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
-                    return;
-                VpiMax = dval;
-                OnPropertyChanged(nameof(VpiMaxStr));
-            }
+            Points = new ObservableCollection<PointConfigViewModel>();
         }
 
         /// <summary>
@@ -102,15 +46,12 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public double VpiMax
         {
-            get { return _vpiMax; }
+            get { return _data.VpiMax; }
             set
             {
-                _vpiMax = value;
-                OnSettedVpiMax(_vpiMax);
+                _data.VpiMax = value;
+                OnSettedData(_data);
                 OnPropertyChanged(nameof(VpiMax));
-
-                Data.VpiMax = _vpiMax;
-                UpdatePoints();
             }
         }
 
@@ -119,15 +60,12 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public double VpiMin
         {
-            get { return _vpiMin; }
+            get { return _data.VpiMin; }
             set
             {
-                _vpiMin = value;
-                OnSettedVpiMin(_vpiMin);
+                _data.VpiMin = value;
+                OnSettedData(_data);
                 OnPropertyChanged(nameof(VpiMin));
-
-                Data.VpiMin = _vpiMin;
-                UpdatePoints();
             }
         }
 
@@ -141,21 +79,14 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public Units PressUnit
         {
-            get { return _pressureUnit; }
+            get { return _data.PressureUnit; }
             set
             {
-                if (value == _pressureUnit)
+                if (value == _data.PressureUnit)
                     return;
-                _pressureUnit = value;
-                OnSelectedUnit(_pressureUnit);
+                _data.PressureUnit = value;
+                OnSettedData(_data);
                 OnPropertyChanged("PressUnit");
-
-
-                Data.Unit = _pressureUnit;
-                foreach (var point in Points)
-                {
-                    point.Unit = _pressureUnit;
-                }
             }
         }
 
@@ -164,17 +95,15 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public string TolerancePercentSigma
         {
-            get { return _tolerancePercentSigmaStr; }
+            get { return _data.TolerancePercentSigma.ToString(); }
             set
             {
-                _tolerancePercentSigmaStr = value;
                 double dval;
                 if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
                     return;
-                _tolerancePercentSigma = dval;
-                Data.TolerancePercentSigma = _tolerancePercentSigma;
-                UpdatePoints();
-                //OnPropertyChanged("TolerancePercentSigma");
+                _data.TolerancePercentSigma = dval;
+                OnSettedData(_data);
+                OnPropertyChanged("TolerancePercentSigma");
             }
         }
 
@@ -183,17 +112,15 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public string TolerancePercentVpi
         {
-            get { return _tolerancePercentVpiStr; }
+            get { return _data.TolerancePercentVpi.ToString(); }
             set
             {
-                _tolerancePercentVpiStr = value;
                 double dval;
                 if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
                     return;
-                _tolerancePercentVpi = dval;
-                Data.TolerancePercentVpi = _tolerancePercentVpi;
-                UpdatePoints();
-                //OnPropertyChanged("TolerancePercentVpi");
+                _data.TolerancePercentVpi = dval;
+                OnSettedData(_data);
+                OnPropertyChanged("TolerancePercentVpi");
             }
         }
 
@@ -207,17 +134,14 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public OutGange OutputRange
         {
-            get { return _outputRange; }
+            get { return _data.OutputRange; }
             set
             {
-                if (value == _outputRange)
+                if (value == _data.OutputRange)
                     return;
-                _outputRange = value;
-                OnSelectedRange(_outputRange);
+                _data.OutputRange = value;
+                OnSettedData(_data);
                 OnPropertyChanged(nameof(OutputRange));
-
-                Data.OutputRange = _outputRange;
-                UpdatePoints();
             }
         }
 
@@ -232,53 +156,6 @@ namespace PressureSensorCheck.Workflow
         public CheckPointVm PointCalculator { get; set; }
 
         /// <summary>
-        /// Перерассчитать точки
-        /// </summary>
-        private void UpdatePoints()
-        {
-            var Pmax = Data.VpiMax;
-            var Pmin = Data.VpiMin;
-            if (Pmin >= Pmax)
-                return;
-
-            var step = (Pmax - Pmin) / (_pointsOnRange - 1);
-            double uMin = 0.0;
-            double uMax = 5.0;
-            if (Data.OutputRange == OutGange.I4_20mA)
-            {
-                uMin = 4;
-                uMax = 20;
-            }
-
-            Points.Clear();
-            Data.Points.Clear();
-            for (double i = 0; i < _pointsOnRange; i++)
-            {
-                var point = Pmin + (i * step);
-
-                var pointOut = CheckPressureLogicConfig.CalcRes(point, Pmin, Pmax, uMin, uMax, Data.TolerancePercentVpi,
-                    Data.TolerancePercentSigma);
-                var sensPoint = new PressureSensorPoint()
-                {
-                    PressurePoint = point,
-                    OutPoint = pointOut.Ip,
-                    PressureUnit = Data.Unit,
-                    OutUnit = KipTM.Interfaces.Units.mA,
-                    Tollerance = pointOut.dIp,
-                };
-                Data.Points.Add(sensPoint);
-                Points.Add(new PointConfigViewModel(_context, point, pointOut.Ip, pointOut.dIp, Data.Unit));
-            }
-            PointCalculator.TolerancePercentVpi = Data.TolerancePercentVpi;
-            PointCalculator.TolerancePercentSigma = Data.TolerancePercentSigma;
-            PointCalculator.Imax = uMax;
-            PointCalculator.Imin = uMin;
-            PointCalculator.Pmax = Pmax;
-            PointCalculator.Pmin = Pmin;
-            PointCalculator.UpdateFormulas();
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="vpiMax"></param>
@@ -291,17 +168,17 @@ namespace PressureSensorCheck.Workflow
         /// <param name="toleranceVpi"></param>
         public void SetBaseStates(double vpiMax, double vpiMin, IEnumerable<Units> units, Units pressureUnit, IEnumerable<OutGange> outputRanges, OutGange range, double toleranceSigma, double toleranceVpi, double uMin, double uMax)
         {
-            _vpiMax = vpiMax;
-            _vpiMin = vpiMin;
+            _data.VpiMax = vpiMax;
+            _data.VpiMin = vpiMin;
             Units = units;
-            _pressureUnit = pressureUnit;
+            _data.PressureUnit = pressureUnit;
             OutputRanges = outputRanges;
-            _outputRange = range;
-            _tolerancePercentVpi = toleranceVpi;
-            _tolerancePercentSigma = toleranceSigma;
+            _data.OutputRange = range;
+            _data.TolerancePercentVpi = toleranceVpi;
+            _data.TolerancePercentSigma = toleranceSigma;
             PointCalculator = new CheckPointVm();
-            PointCalculator.TolerancePercentVpi = _tolerancePercentVpi;
-            PointCalculator.TolerancePercentSigma = _tolerancePercentSigma;
+            PointCalculator.TolerancePercentVpi = _data.TolerancePercentVpi;
+            PointCalculator.TolerancePercentSigma = _data.TolerancePercentSigma;
             PointCalculator.Imax = uMax;
             PointCalculator.Imin = uMin;
             PointCalculator.Pmax = vpiMax;
@@ -309,10 +186,7 @@ namespace PressureSensorCheck.Workflow
             PointCalculator.UpdateFormulas();
         }
 
-        public event Action<double> SettedVpiMax;
-        public event Action<double> SettedVpiMin;
-        public event Action<Units> SelectedUnit;
-        public event Action<OutGange> SelectedRange;
+        public event Action<ConfData> SettedData;
 
         #region INotifyPropertyChanged
 
@@ -325,24 +199,9 @@ namespace PressureSensorCheck.Workflow
 
         #endregion
 
-        protected virtual void OnSettedVpiMax(double obj)
+        protected virtual void OnSettedData(ConfData data)
         {
-            SettedVpiMax?.Invoke(obj);
-        }
-
-        protected virtual void OnSettedVpiMin(double obj)
-        {
-            SettedVpiMin?.Invoke(obj);
-        }
-
-        protected virtual void OnSelectedUnit(Units obj)
-        {
-            SelectedUnit?.Invoke(obj);
-        }
-
-        protected virtual void OnSelectedRange(OutGange obj)
-        {
-            SelectedRange?.Invoke(obj);
+            SettedData?.Invoke(data);
         }
 
         public PointConfigViewModel AddPoint(double pressure, double i, double di, Units unit)
