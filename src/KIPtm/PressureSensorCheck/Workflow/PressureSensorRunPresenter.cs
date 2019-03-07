@@ -23,7 +23,7 @@ namespace PressureSensorCheck.Workflow
 {
     public class PressureSensorRunPresenter : IObserver<MeasuringPoint>, IDisposable
     {
-        private readonly PressureSensorRunVm1 _vm;
+        private readonly PressureSensorRunVm _vm;
         private readonly IDPI620Driver _dpi620; //TODO Init
         private DPI620GeniiConfig _dpiConf; //TODO Init
         private readonly Logger _logger; //TODO Init
@@ -41,7 +41,7 @@ namespace PressureSensorCheck.Workflow
         private IEtalonSourceChannel<Units> _pressureSrc;
 
 
-        public PressureSensorRunPresenter(PressureSensorRunVm1 vm, PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator, IContext context)
+        public PressureSensorRunPresenter(PressureSensorRunVm vm, PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator, IContext context)
         {
             _vm = vm;
             _vm.CallAddPoint += DoAddPoint;

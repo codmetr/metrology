@@ -25,7 +25,7 @@ namespace KipTM.Checks.View
     /// <summary>
     /// Interaction logic for PressureSensorRunView.xaml
     /// </summary>
-    [View(typeof(PressureSensorRunVm1))]
+    [View(typeof(PressureSensorRunVm))]
     public partial class PressureSensorRunView : UserControl
     {
         public PressureSensorRunView()

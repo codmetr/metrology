@@ -3,29 +3,20 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using ArchiveData.DTO;
-using DPI620Genii;
 using KipTM.Interfaces;
-using KipTM.Model.Checks;
-using PressureSensorCheck.Check;
-using PressureSensorCheck.Devices;
-using PressureSensorData;
 using Tools.View;
 using Tools.View.ModalContent;
 using Graphic;
-using KipTM.EventAggregator;
 
 namespace PressureSensorCheck.Workflow
 {
     /// <summary>
     /// Выпонение проверки
     /// </summary>
-    public class PressureSensorRunVm1 : INotifyPropertyChanged, IUserVmAsk, IDisposable
+    public class PressureSensorRunVm : INotifyPropertyChanged, IUserVmAsk, IDisposable
     {
         private ModalState _modalState = new ModalState();
         private readonly LinesInOutViewModel _inOutLines;
@@ -49,7 +40,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="unit">Единицы измерения</param>
         /// <param name="outUnit"></param>
         /// <param name="context"></param>
-        public PressureSensorRunVm1(Units unit, Units outUnit, IContext context)
+        public PressureSensorRunVm(Units unit, Units outUnit, IContext context)
         {
             _pUnit = unit;
             _outUnit = outUnit;
