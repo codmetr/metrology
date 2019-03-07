@@ -126,7 +126,6 @@
     <Compile Include="Workflow\PressureSensorResultVM.cs" />
     <Compile Include="Workflow\PressureSensorRunPresenter.cs" />
     <Compile Include="Workflow\PressureSensorRunVm1.cs" />
-    <Compile Include="Workflow\PressureSensorRunVm.cs" />
     <Compile Include="Workflow\Content\PressureSensorUserChannel.cs" />
     <Compile Include="Workflow\PressureSensorWorkflow.cs" />
     <Compile Include="Workflow\Content\TemplateArchive.cs" />

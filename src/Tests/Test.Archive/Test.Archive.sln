@@ -5,11 +5,11 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Archive", "Test.Archive\Test.Archive.csproj", "{E44586BF-7293-4265-9FB8-56B44DF288AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchiveData", "..\..\KIPer\ArchiveData\ArchiveData.csproj", "{26676346-C100-4CC9-869F-80175B33DF76}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchiveData", "..\..\KIPtm\ArchiveData\ArchiveData.csproj", "{26676346-C100-4CC9-869F-80175B33DF76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressureSensorData", "..\..\KIPer\PressureSensorData\PressureSensorData.csproj", "{3A880679-B67B-4D02-A6FF-75857CEF1369}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PressureSensorData", "..\..\KIPtm\PressureSensorData\PressureSensorData.csproj", "{3A880679-B67B-4D02-A6FF-75857CEF1369}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteArchive", "..\..\KIPer\Archive\SQLiteArchive\SQLiteArchive.csproj", "{5DDFAB0D-1F66-4337-BD2F-ECE434D68794}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteArchive", "..\..\KIPtm\Archive\SQLiteArchive\SQLiteArchive.csproj", "{5DDFAB0D-1F66-4337-BD2F-ECE434D68794}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
