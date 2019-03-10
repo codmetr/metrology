@@ -32,6 +32,14 @@ namespace PressureSensorCheck.Workflow
         private readonly IEventAggregator _agregator;
         private bool _isSaveEnable = true;
 
+        /// <summary>
+        /// Визуальная модель результата поверки датчика давления
+        /// </summary>
+        /// <param name="checkResId"></param>
+        /// <param name="accessor"></param>
+        /// <param name="result"></param>
+        /// <param name="conf"></param>
+        /// <param name="agregator"></param>
         public PressureSensorResultVM(TestResultID checkResId, IDataAccessor accessor, PressureSensorResult result, PressureSensorConfig conf, IEventAggregator agregator)
         {
             Identificator = checkResId;

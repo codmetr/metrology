@@ -14,7 +14,7 @@ namespace PressureSensorCheck.Workflow.Content
     /// <summary>
     /// Конфигурация логики проверки
     /// </summary>
-    class CheckPressureLogicConfig
+    public class CheckPressureLogicConfig
     {
         private readonly CheckPressureLogicConfigVm _vm;
         private string _tolerancePercentSigma;

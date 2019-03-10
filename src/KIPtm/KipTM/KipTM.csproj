@@ -134,7 +134,7 @@
     <Compile Include="Checks\View\EtalonConfigView.xaml.cs">
       <DependentUpon>EtalonConfigView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Checks\View\DoubleStringConverter.cs" />
+    <Compile Include="Skins\Converters\DoubleStringConverter.cs" />
     <Compile Include="Checks\View\PointConfigConverter.cs" />
     <Compile Include="Checks\View\PressureSensorRunView.xaml.cs">
       <DependentUpon>PressureSensorRunView.xaml</DependentUpon>

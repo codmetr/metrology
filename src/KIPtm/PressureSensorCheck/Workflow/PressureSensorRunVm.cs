@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Input;
@@ -10,6 +12,7 @@ using KipTM.Interfaces;
 using Tools.View;
 using Tools.View.ModalContent;
 using Graphic;
+using PressureSensorData;
 
 namespace PressureSensorCheck.Workflow
 {
@@ -26,7 +29,7 @@ namespace PressureSensorCheck.Workflow
         private bool _isRun;
         private bool _isAsk;
         private PointViewModel _selectedPoint;
-        private PointConfigViewModel _newConfig;
+        //private PointConfigViewModel _newConfig;
         private readonly TimeSpan _periodViewGraphic = TimeSpan.FromSeconds(300);
         private MeasuringPoint _lastMeasuredPoint;
         private Units _pUnit;
@@ -49,7 +52,7 @@ namespace PressureSensorCheck.Workflow
                 "I", $"I, {outUnit.ToStringLocalized(CultureInfo.CurrentUICulture)}", Color.Black, 1, _periodViewGraphic,
                 "P", $"P,  {unit.ToStringLocalized(CultureInfo.CurrentUICulture)}", Color.Brown, 2, _periodViewGraphic);
             Points = new ObservableCollection<PointViewModel>();
-            NewConfig = new PointConfigViewModel(_context);
+            //NewConfig = new PointConfigViewModel(_context);
         }
 
         /// <summary>
@@ -71,19 +74,19 @@ namespace PressureSensorCheck.Workflow
             }
         }
 
-        /// <summary>
-        /// Конфигурация для новой точки
-        /// </summary>
-        public PointConfigViewModel NewConfig
-        {
-            get { return _newConfig; }
-            set
-            {
-                _newConfig = value;
-                OnPropertyChanged();
-                //_invoker(() => OnPropertyChanged());
-            }
-        }
+        ///// <summary>
+        ///// Конфигурация для новой точки
+        ///// </summary>
+        //public PointConfigViewModel NewConfig
+        //{
+        //    get { return _newConfig; }
+        //    set
+        //    {
+        //        _newConfig = value;
+        //        OnPropertyChanged();
+        //        //_invoker(() => OnPropertyChanged());
+        //    }
+        //}
 
         /// <summary>
         /// Линии на графике
@@ -227,9 +230,17 @@ namespace PressureSensorCheck.Workflow
 
         public IDisposable ShowModalAsk(string title, string msg, EventWaitHandle wh)
         {
-            return ModalState.AskModal(string.IsNullOrEmpty(title) ? msg : $"{title}\n{msg}", wh);
+            var whInv = new ManualResetEvent(false);
+            IDisposable disp = null;
+            _context.Invoke(() =>
+            {
+                disp = ModalState.AskModal(string.IsNullOrEmpty(title) ? msg : $"{title}\n{msg}", wh);
+                whInv.Set();
+            });
+            whInv.WaitOne();
+            return disp;
         }
-        
+
         public void AskModal(string title, string msg, CancellationToken cancel)
         {//TODO вынести или упростить
             ModalState.IsShowModal = true;
@@ -243,10 +254,91 @@ namespace PressureSensorCheck.Workflow
 
         #endregion
 
+        public void UpdatePoints(IEnumerable<PressureSensorPoint> points)
+        {
+            _context.Invoke(() =>
+            {
+                Points.Clear();
+                foreach (var point in points)
+                {
+                    var pointVm = new PointViewModel(_context) { Result = new PointResultViewModel() };
+                    pointVm.UpdateConf(point);
+                    Points.Add(pointVm);
+                }
+            });
+        }
+
         /// <summary>
-        /// Добавить точку проверку
+        /// Установка единицы измерения давления
         /// </summary>
-        public ICommand AddPoint => new CommandWrapper(OnCallAddPoint);
+        /// <param name="pressureUnit"></param>
+        public void SetPerssureUnit(Units pressureUnit)
+        {
+            _context.Invoke(() => PressureUnit = pressureUnit);
+        }
+
+        /// <summary>
+        /// Установка единицы измерения давления
+        /// </summary>
+        /// <param name="ourUnit"></param>
+        public void SetOutUnit(Units ourUnit)
+        {
+            _context.Invoke(() => OutUnit = ourUnit);
+        }
+
+        public void ToBaseState()
+        {
+            _context.Invoke(() =>
+            {
+                ResetSetAcceptAction();
+                Note = "";
+                IsAsk = false;
+            });
+        }
+
+        /// <summary>
+        /// Обновить состояние визуальной модели результата
+        /// </summary>
+        /// <param name="checkResult"></param>
+        /// <param name="isActivePresSrc"></param>
+        internal void UpdateResult(PressureSensorResult checkResult, bool isActivePresSrc)
+        {
+            _context.Invoke(() =>DoUpdateResult(checkResult, isActivePresSrc));
+        }
+
+        private void DoUpdateResult(PressureSensorResult checkResult, bool isActivePresSrc)
+        {
+            foreach (var point in Points)
+            {
+                var res = checkResult.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.Config.PressurePoint) < double.Epsilon);
+                if (res == null)
+                    continue;
+                if (point.Result == null)
+                    point.Result = new PointResultViewModel();
+
+                if (double.IsNaN(res.VoltageValueBack))
+                { // прямой ход
+                    if (isActivePresSrc)
+                    {
+                        //если источник давления управвляем - результат уже заполнен.
+                        point.Result.PressureReal = res.PressureValue;
+                    }
+                    point.Result.IReal = res.VoltageValue;
+                    point.Result.dIReal = res.VoltageValue - res.VoltagePoint;
+                    point.Result.IsCorrect = point.Result.dIReal <= point.Config.Tollerance;
+                }
+                else
+                { // обратный ход
+                    point.Result.Iback = res.VoltageValueBack;
+                    point.Result.dIvar = Math.Abs(res.VoltageValue - res.VoltageValueBack);
+                }
+            }
+        }
+
+        ///// <summary>
+        ///// Добавить точку проверку
+        ///// </summary>
+        //public ICommand AddPoint => new CommandWrapper(OnCallAddPoint);
 
         /// <summary>
         /// Запустить проверку
@@ -268,14 +360,14 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public ICommand StopCheck { get { return new CommandWrapper(OnCallStopCheck); } }
 
-        /// <summary>
-        /// Добавить точку проверку
-        /// </summary>
-        public event Action CallAddPoint;
-        protected virtual void OnCallAddPoint()
-        {
-            CallAddPoint?.Invoke();
-        }
+        ///// <summary>
+        ///// Добавить точку проверку
+        ///// </summary>
+        //public event Action CallAddPoint;
+        //protected virtual void OnCallAddPoint()
+        //{
+        //    CallAddPoint?.Invoke();
+        //}
 
         /// <summary>
         /// Запустить проверку
@@ -304,14 +396,31 @@ namespace PressureSensorCheck.Workflow
             CallStopCheck?.Invoke();
         }
 
-        internal void AddToLine(TimeSpan time, double inVal, double outVal)
+        /// <summary>
+        /// Добавить очередную измеренную точку
+        /// </summary>
+        /// <param name="value"></param>
+        internal void AddLastMeasured(MeasuringPoint value)
         {
-            _inOutLines.AddPoint(time, inVal, outVal);
+            _context.Invoke(() =>
+            {
+                _inOutLines.AddPoint(value.TimeStamp, value.I, value.Pressure);
+                LastMeasuredPoint = value;
+            });
         }
 
-        internal void CLearAllLines()
+        /// <summary>
+        /// Уствновить состояние выполнения
+        /// </summary>
+        /// <param name="isRun"></param>
+        internal void SetIsRun(bool isRun)
         {
-            _inOutLines.CLearAllLines();
+            _context.Invoke(() => IsRun = isRun);
+        }
+
+        internal void ClearAllLines()
+        {
+            _context.Invoke(() => _inOutLines.CLearAllLines());
         }
 
         internal Action DoAccept { get { return () => { this._doAccept(); }; } }

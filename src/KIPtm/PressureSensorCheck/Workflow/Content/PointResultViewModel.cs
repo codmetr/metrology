@@ -10,7 +10,6 @@ namespace PressureSensorCheck.Workflow
     public class PointResultViewModel : INotifyPropertyChanged
     {
         private double _pressureReal;
-        private string _pressureRealStr;
         private double? _Ireal;
         private double? _dIReal;
         private double? _iback;
@@ -19,30 +18,12 @@ namespace PressureSensorCheck.Workflow
         private bool _isCorrect;
 
         /// <summary>
-        /// Фактическое давление (строка)
-        /// </summary>
-        public string PressureRealStr
-        {
-            get { return _pressureRealStr; }
-            set {
-                _pressureRealStr = value;
-                double dval;
-                if (!double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out dval))
-                    return;
-                _pressureReal = dval;
-                OnPropertyChanged("PressureRealStr");
-            }
-        }
-
-        /// <summary>
         /// Фактическое давление
         /// </summary>
         public double PressureReal
         {
             get { return _pressureReal; }
             set { _pressureReal = value;
-                _pressureRealStr = _pressureReal.ToString();
-                OnPropertyChanged("PressureRealStr");
                 OnPropertyChanged("PressureReal");
             }
         }

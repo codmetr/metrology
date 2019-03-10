@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using KipTM.Interfaces;
+using PressureSensorData;
 
 namespace PressureSensorCheck.Workflow
 {
@@ -8,9 +10,19 @@ namespace PressureSensorCheck.Workflow
     /// </summary>
     public class PointViewModel : INotifyPropertyChanged
     {
+        private IContext _context;
         private int _index;
-        private PointConfigViewModel _config;
+        private PressureSensorPoint _config;
         private PointResultViewModel _result;
+
+        /// <summary>
+        /// Описатель одной точки проверки
+        /// </summary>
+        /// <param name="context"></param>
+        public PointViewModel(IContext context)
+        {
+            _context = context;
+        }
 
         /// <summary>
         /// Номер точки
@@ -23,10 +35,10 @@ namespace PressureSensorCheck.Workflow
             }
         }
 
-        public PointConfigViewModel Config
+        public PressureSensorPoint Config
         {
             get { return _config; }
-            set { _config = value;
+            private set { _config = value;
                 OnPropertyChanged();
             }
         }
@@ -37,6 +49,11 @@ namespace PressureSensorCheck.Workflow
             set { _result = value;
                 OnPropertyChanged();
             }
+        }
+
+        public void UpdateConf(PressureSensorPoint config)
+        {
+            _context.Invoke(()=>Config = config);
         }
 
         #region INotifyPropertyChanged

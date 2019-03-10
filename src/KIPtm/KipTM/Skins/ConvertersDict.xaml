@@ -9,4 +9,5 @@
     <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
     <converters:BoolToColorConverterSelected x:Key="BoolToColorConverterSelected"/>
     <converters:UnitsStringConverter x:Key="UnitsStringConverter"/>
+    <converters:DoubleStringConverter x:Key="DoubleStringConverter"/>
 </ResourceDictionary>

@@ -103,7 +103,7 @@ namespace PressureSensorCheck.Workflow
             var reportVm = new PressureSensorReportViewModel(reportMain, reportCertificate);
             var steps = new List<IWorkflowStep>()
             {
-                new SimpleWorkflowStep(configVm).SetOut(()=>UpdateRunByConf(configVm.Config, dictConf[configVm.SelectedSourceName], runPresenter, logger)),
+                new SimpleWorkflowStep(configVm).SetOut(()=>UpdateRunByConf(conf, dictConf[configVm.SelectedSourceName], runPresenter, logger)),
                 new SimpleWorkflowStep(run).SetOut(()=>UpdateResultByRun(runPresenter, resultVm, logger)).AppendDisposable(runPresenter),
                 new SimpleWorkflowStep(resultVm),
                 new SimpleWorkflowStep(reportVm).SetIn(()=>
@@ -123,7 +123,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="etalonSourceFactory"></param>
         /// <param name="run">выполнение проверки</param>
         /// <param name="logger">логгер</param>
-        private void UpdateRunByConf(CheckPressureLogicConfigVm config, IEtalonSourceCannelFactory<Units> etalonSourceFactory, PressureSensorRunPresenter run, Logger logger)
+        private void UpdateRunByConf(PressureSensorConfig config, IEtalonSourceCannelFactory<Units> etalonSourceFactory, PressureSensorRunPresenter run, Logger logger)
         {
             try
             {
@@ -160,12 +160,12 @@ namespace PressureSensorCheck.Workflow
                 {
                     point.Index = i;
                     i++;
-                    var resPoint = result.PointResults.FirstOrDefault(el => Math.Abs(el.Config.Pressure - point.Config.Pressure) < Double.Epsilon);
+                    var resPoint = result.PointResults.FirstOrDefault(el => Math.Abs(el.Config.PressurePoint - point.Config.PressurePoint) < Double.Epsilon);
                     if(resPoint == null)
                         result.PointResults.Add(point);
                     else
                     {
-                        resPoint.Config.Unit = point.Config.Unit;
+                        resPoint.Config.PressureUnit = point.Config.PressureUnit;
                         resPoint.Config.I = point.Config.I;
                         resPoint.Config.dI = point.Config.dI;
                         resPoint.Config.Ivar = point.Config.Ivar;

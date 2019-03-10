@@ -22,6 +22,7 @@ namespace PressureSensorCheck.Workflow
         private readonly ITamplateArchive<PressureSensorConfig> _archive;
         private readonly Dictionary<string, IEtalonSourceCannelFactory<Units>> _ethalonsSources;
         private readonly PressureSensorCheckConfigVm _vm;
+        private CheckPressureLogicConfig _logic;
 
         /// <summary>
         /// Кофигурация проверки датчика давления
@@ -65,7 +66,7 @@ namespace PressureSensorCheck.Workflow
 
         private void FillLogicConf(CheckPressureLogicConfigVm vmConfig, PressureSensorConfig configData)
         {
-            var confLogic = new CheckPressureLogicConfig(configData, vmConfig);
+            _logic = new CheckPressureLogicConfig(configData, vmConfig);
         }
 
         /// <summary>
@@ -222,6 +223,11 @@ namespace PressureSensorCheck.Workflow
         public ITamplateArchive<PressureSensorConfig> Archive
         {
             get { return _archive; }
+        }
+
+        public CheckPressureLogicConfig Logic
+        {
+            get { return _logic; }
         }
     }
 }

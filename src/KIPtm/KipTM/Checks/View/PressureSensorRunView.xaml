@@ -48,7 +48,7 @@
                                 <TextBlock Text="Шаг" ToolTip="Column A Tooltip"/>
                             </DataGridTextColumn.Header>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="60" Binding="{Binding Result.PressureRealStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False">
+                        <DataGridTextColumn Width="60" Binding="{Binding Result.PressureReal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleStringConverter}}" IsReadOnly="False">
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate DataType="workflow:PointViewModel">
                                     <StackPanel Orientation="Horizontal">
@@ -66,7 +66,7 @@
                         <DataGridTextColumn Header="ΔIвар" Width="50" Binding="{Binding Result.dIvar, StringFormat={}{0:F4}, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid Grid.Row="2" Visibility="Collapsed">
+                <!--<Grid Grid.Row="2" Visibility="Collapsed">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="*"/>
@@ -94,7 +94,7 @@
                     Добавить<LineBreak/>точку
                         </TextBlock>
                     </Button>
-                </Grid>
+                </Grid>-->
             </Grid>
             <Grid Grid.Column="2" IsSharedSizeScope="True">
                 <Grid.Resources>
@@ -134,7 +134,7 @@
                 <graphic:TimeGraph Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="2" MinHeight="150" Title="Измерения"
                                    IsLock="{Binding ModalState.IsShowModal, UpdateSourceTrigger=PropertyChanged}"
                                    Lines="{Binding Lines.Lines}" Claner="{Binding Lines.LineCleaner}"/>
-                <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}" Margin="3,3,3.643,3">
+                <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" Style="{StaticResource TblBasicStyle}">
                 Мгновенная погрешность:
                 </TextBlock>
                 <TextBlock Grid.Column="0" Grid.Row="4">Абсолютное отклонение ΔI:</TextBlock>

@@ -114,6 +114,8 @@ namespace PressureSensorCheck.Workflow
             _context.Invoke(()=> Ivar = val);
         }
 
+        
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;

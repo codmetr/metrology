@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace KipTM.Checks.View
+namespace KipTM.Skins.Converters
 {
     [ValueConversion(typeof(double), typeof(string))]
     public class DoubleStringConverter : IValueConverter
@@ -23,7 +23,10 @@ namespace KipTM.Checks.View
                 throw new InvalidOperationException("The target must be a double");
             if (value.GetType() != typeof(string))
                 return string.Empty;
-            var res = (string)value;
+            var resString = (string)value;
+            double res;
+            if (!double.TryParse(resString.Replace(".", ","), NumberStyles.Any, CultureInfo.InvariantCulture, out res))
+                return double.NaN;
             return res;
         }
     }

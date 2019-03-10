@@ -68,22 +68,9 @@ namespace PressureSensorCheck.Workflow
         {
             var wh = new ManualResetEvent(false);
             IDisposable modal = null;
-
             try
             {
-                _context.Invoke(() =>
-                {
-                    try
-                    {
-                        modal = _vm.ShowModalAsk("", msg, wh);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(e);
-                        wh.Set();
-                        throw;
-                    }
-                });
+                modal = _vm.ShowModalAsk("", msg, wh);
                 WaitHandle.WaitAny(new[] { cancel.WaitHandle, wh });
             }
             finally
