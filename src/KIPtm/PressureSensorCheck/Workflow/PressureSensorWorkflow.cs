@@ -147,7 +147,7 @@ namespace PressureSensorCheck.Workflow
         /// <param name="run">проверка</param>
         /// <param name="result">результат</param>
         /// <param name="logger">логгер</param>
-        private void UpdateResultByRun(PressureSensorRunPresenter run, PressureSensorResultVM result, Logger logger)
+        private void UpdateResultByRun(PressureSensorRunPresenter run, PressureSensorResultPresenter result, Logger logger)
         {
             //if(run.IsRun)
             //    return;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading;
 using System.Windows.Input;
 using ArchiveData;
 using ArchiveData.DTO;
@@ -158,6 +159,31 @@ namespace PressureSensorCheck.Workflow
         /// Вызвано сохранение
         /// </summary>
         public event Action OnSaveCalled;
+
+        /// <summary>
+        /// Очистить список точек
+        /// </summary>
+        public void CleanPoints()
+        {
+            _context.Invoke(() => PointResults.Clear());
+        }
+
+        /// <summary>
+        /// добавить точку
+        /// </summary>
+        /// <returns></returns>
+        public PointViewModel AddPointResult()
+        {
+            var point = new PointViewModel(_context);
+            var wh = new ManualResetEvent(false);
+            _context.Invoke(() =>
+            {
+                PointResults.Add(point);
+                wh.Set();
+            });
+            wh.WaitOne();
+            return point;
+        }
 
         /// <summary>
         /// Установить состояние 
