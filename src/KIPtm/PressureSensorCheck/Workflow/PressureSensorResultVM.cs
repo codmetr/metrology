@@ -5,6 +5,7 @@ using System.Windows.Input;
 using ArchiveData;
 using ArchiveData.DTO;
 using KipTM.EventAggregator;
+using KipTM.Interfaces;
 using KipTM.Model.Checks;
 using KipTM.ViewModel.Events;
 using PressureSensorData;
@@ -30,6 +31,7 @@ namespace PressureSensorCheck.Workflow
         private string _visualCheckResult;
         private DateTime? _timeStamp;
         private readonly IEventAggregator _agregator;
+        private readonly IContext _context;
         private bool _isSaveEnable = true;
 
         /// <summary>
@@ -40,7 +42,8 @@ namespace PressureSensorCheck.Workflow
         /// <param name="result"></param>
         /// <param name="conf"></param>
         /// <param name="agregator"></param>
-        public PressureSensorResultVM(TestResultID checkResId, IDataAccessor accessor, PressureSensorResult result, PressureSensorConfig conf, IEventAggregator agregator)
+        /// <param name="context"></param>
+        public PressureSensorResultVM(TestResultID checkResId, IDataAccessor accessor, PressureSensorResult result, PressureSensorConfig conf, IEventAggregator agregator, IContext context)
         {
             Identificator = checkResId;
             _accessor = accessor;
@@ -48,6 +51,7 @@ namespace PressureSensorCheck.Workflow
             Data = result;
             _conf = conf;
             _agregator = agregator;
+            _context = context;
             _agregator.Subscribe(this);
         }
 
@@ -148,36 +152,20 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Сохранить
         /// </summary>
-        public ICommand Save{ get { return new CommandWrapper(OnSave); } }
+        public ICommand Save{ get { return new CommandWrapper(OnOnSaveCalled); } }
 
         /// <summary>
-        /// Фактическое выполнение сохранение
+        /// Вызвано сохранение
         /// </summary>
-        private void OnSave()
+        public event Action OnSaveCalled;
+
+        /// <summary>
+        /// Установить состояние 
+        /// </summary>
+        /// <param name="isSaveEnable"></param>
+        public void SetIsSaveEnable(bool isSaveEnable)
         {
-            IsSaveEnable = false;
-            try
-            {
-                _agregator?.Post(new HelpMessageEventArg("Сохранение.."));
-                if (Identificator.Id == null)
-                {
-                    Identificator.CreateTime = DateTime.Now;
-                    Identificator.Timestamp = DateTime.Now;
-                    _accessor.Add(Identificator, Data, _conf);
-                }
-                else
-                {
-                    Identificator.Timestamp = DateTime.Now;
-                    _accessor.Update(Identificator);
-                    _accessor.Save(Identificator, Data);
-                    _accessor.SaveConfig(Identificator, _conf);
-                }
-                _agregator?.Post(new HelpMessageEventArg("Сохранено"));
-            }
-            finally
-            {
-                IsSaveEnable = true;
-            }
+            _context.Invoke(()=>IsSaveEnable = isSaveEnable);
         }
 
         #region INotifyPropertyChanged
@@ -193,9 +181,9 @@ namespace PressureSensorCheck.Workflow
 
         #endregion
 
-        public void OnEvent(EventArgSave message)
+        protected virtual void OnOnSaveCalled()
         {
-            OnSave();
+            OnSaveCalled?.Invoke();
         }
     }
 }

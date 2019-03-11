@@ -92,9 +92,10 @@ namespace PressureSensorCheck.Workflow
             var dpi = AppVersionHelper.CurrentAppVersionType == AppVersionHelper.AppVersionType.Emulation?
                 (IDPI620Driver)new DPI620Emulation():dpiCom;
             //var run = new PressureSensorRunVm(conf, dpi, dpiConf, result, agregator);
-            var run = new PressureSensorRunVm(conf.Unit, Units.mA, context);
-            var runPresenter = new PressureSensorRunPresenter(run, conf, dpi, dpiConf, result, agregator, context);
-            var resultVm = new PressureSensorResultVM(id, accessor, res, conf, agregator);
+            var runVm = new PressureSensorRunVm(conf.Unit, Units.mA, context);
+            var runPresenter = new PressureSensorRunPresenter(runVm, conf, dpi, dpiConf, result, agregator, context);
+            var resultVm = new PressureSensorResultVM(id, accessor, res, conf, agregator, context);
+            var resultPresenter = new PressureSensorResultPresenter(id, accessor, res, conf, agregator, resultVm);
 
             var reportUpdater =new ReportUpdater();
             var certificateUpdater = new CertificateUpdater();
@@ -104,7 +105,7 @@ namespace PressureSensorCheck.Workflow
             var steps = new List<IWorkflowStep>()
             {
                 new SimpleWorkflowStep(configVm).SetOut(()=>UpdateRunByConf(conf, dictConf[configVm.SelectedSourceName], runPresenter, logger)),
-                new SimpleWorkflowStep(run).SetOut(()=>UpdateResultByRun(runPresenter, resultVm, logger)).AppendDisposable(runPresenter),
+                new SimpleWorkflowStep(runVm).SetOut(()=>UpdateResultByRun(runPresenter, resultVm, logger)).AppendDisposable(runPresenter),
                 new SimpleWorkflowStep(resultVm),
                 new SimpleWorkflowStep(reportVm).SetIn(()=>
                 {

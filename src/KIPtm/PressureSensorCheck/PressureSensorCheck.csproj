@@ -123,6 +123,7 @@
     <Compile Include="Workflow\IUserVmAsk.cs" />
     <Compile Include="Workflow\PressureSensorCheckConfigurator.cs" />
     <Compile Include="Workflow\PressureSensorCheckConfigVM.cs" />
+    <Compile Include="Workflow\PressureSensorResultPresenter.cs" />
     <Compile Include="Workflow\PressureSensorResultVM.cs" />
     <Compile Include="Workflow\PressureSensorRunPresenter.cs" />
     <Compile Include="Workflow\PressureSensorRunVm.cs" />
