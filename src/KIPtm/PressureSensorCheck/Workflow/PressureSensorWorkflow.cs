@@ -94,7 +94,7 @@ namespace PressureSensorCheck.Workflow
             //var run = new PressureSensorRunVm(conf, dpi, dpiConf, result, agregator);
             var runVm = new PressureSensorRunVm(conf.Unit, Units.mA, context);
             var runPresenter = new PressureSensorRunPresenter(runVm, conf, dpi, dpiConf, result, agregator, context);
-            var resultVm = new PressureSensorResultVM(id, accessor, res, conf, agregator, context);
+            var resultVm = new PressureSensorResultVM(res, conf, context);
             var resultPresenter = new PressureSensorResultPresenter(id, accessor, res, conf, agregator, resultVm);
 
             var reportUpdater =new ReportUpdater();

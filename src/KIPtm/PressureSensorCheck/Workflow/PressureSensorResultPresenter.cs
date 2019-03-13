@@ -30,6 +30,7 @@ namespace PressureSensorCheck.Workflow
             _agregator = agregator;
             _resultVm = resultVm;
             _resultVm.OnSaveCalled += OnSave;
+            _agregator.Subscribe(this);
         }
 
         #region ISubscriber<EventArgSave>

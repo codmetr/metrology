@@ -4,9 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Input;
-using ArchiveData;
 using ArchiveData.DTO;
-using KipTM.EventAggregator;
 using KipTM.Interfaces;
 using KipTM.Model.Checks;
 using KipTM.ViewModel.Events;
@@ -20,41 +18,23 @@ namespace PressureSensorCheck.Workflow
     /// </summary>
     public class PressureSensorResultVM:INotifyPropertyChanged
     {
-        /// <summary>
-        /// Хранилище результата для конкретной проверки
-        /// </summary>
-        private readonly IDataAccessor _accessor;
-
         private PressureSensorConfig _conf;
         private PressureSensorResult _data;
-        private string _assay;
-        private string _leak;
-        private string _commonResult;
-        private string _visualCheckResult;
-        private DateTime? _timeStamp;
-        private readonly IEventAggregator _agregator;
         private readonly IContext _context;
         private bool _isSaveEnable = true;
 
         /// <summary>
         /// Визуальная модель результата поверки датчика давления
         /// </summary>
-        /// <param name="checkResId"></param>
-        /// <param name="accessor"></param>
         /// <param name="result"></param>
         /// <param name="conf"></param>
-        /// <param name="agregator"></param>
         /// <param name="context"></param>
-        public PressureSensorResultVM(TestResultID checkResId, IDataAccessor accessor, PressureSensorResult result, PressureSensorConfig conf, IEventAggregator agregator, IContext context)
+        public PressureSensorResultVM(PressureSensorResult result, PressureSensorConfig conf, IContext context)
         {
-            Identificator = checkResId;
-            _accessor = accessor;
             PointResults = new ObservableCollection<PointViewModel>();
             Data = result;
             _conf = conf;
-            _agregator = agregator;
             _context = context;
-            _agregator.Subscribe(this);
         }
 
         /// <summary>
@@ -76,67 +56,7 @@ namespace PressureSensorCheck.Workflow
             get { return _conf; }
         }
 
-        /// <summary>
-        /// Идентифитатор проверки
-        /// </summary>
-        public TestResultID Identificator { get; }
-
-        /// <summary>
-        /// Результат опробирования
-        /// </summary>
-        public string Assay
-        {
-            get { return _assay; }
-            set { _assay = value;
-                OnPropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Результат проверки на герметичность
-        /// </summary>
-        public string Leak
-        {
-            get { return _leak; }
-            set { _leak = value;
-                OnPropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Общий результат поверки
-        /// </summary>
-        public string CommonResult
-        {
-            get { return _commonResult; }
-            set { _commonResult = value;
-                OnPropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Результат визуального осмотра
-        /// </summary>
-        public string VisualCheckResult
-        {
-            get { return _visualCheckResult; }
-            set { _visualCheckResult = value;
-                OnPropertyChanged();
-            }
-        }
-
         public ObservableCollection<PointViewModel> PointResults { get; set; }
-
-        /// <summary>
-        /// Дата протокола
-        /// </summary>
-        public DateTime? TimeStamp
-        {
-            get { return _timeStamp; }
-            set { _timeStamp = value;
-                OnPropertyChanged();
-            }
-        }
 
         /// <summary>
         /// Операция сохранения доступна
@@ -215,7 +135,6 @@ namespace PressureSensorCheck.Workflow
                     pointVm.Result.IsCorrect = point.Result.IsCorrect;
                     PointResults.Add(pointVm);
                 }
-                TimeStamp = DateTime.Now;
                 wh.Set();
             });
             wh.WaitOne();
