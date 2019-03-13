@@ -254,7 +254,7 @@ namespace PressureSensorCheck.Workflow
 
         #endregion
 
-        public void UpdatePoints(IEnumerable<PressureSensorPoint> points)
+        public void UpdatePoints(IEnumerable<PressureSensorPointConf> points)
         {
             _context.Invoke(() =>
             {
@@ -310,27 +310,27 @@ namespace PressureSensorCheck.Workflow
         {
             foreach (var point in Points)
             {
-                var res = checkResult.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.Config.PressurePoint) < double.Epsilon);
+                var res = checkResult.Points.FirstOrDefault(el => el.Index == point.Index);
                 if (res == null)
                     continue;
                 if (point.Result == null)
                     point.Result = new PointResultViewModel();
 
-                if (double.IsNaN(res.VoltageValueBack))
+                if (double.IsNaN(res.Result.OutPutValueBack))
                 { // прямой ход
                     if (isActivePresSrc)
                     {
                         //если источник давления управвляем - результат уже заполнен.
-                        point.Result.PressureReal = res.PressureValue;
+                        point.Result.PressureReal = res.Result.PressureValue;
                     }
-                    point.Result.IReal = res.VoltageValue;
-                    point.Result.dIReal = res.VoltageValue - res.VoltagePoint;
-                    point.Result.IsCorrect = point.Result.dIReal <= point.Config.Tollerance;
+                    point.Result.IReal = res.Result.OutPutValue;
+                    point.Result.dIReal = res.Result.OutPutValue - res.Result.VoltagePoint;
+                    point.Result.IsCorrect = res.Result.IsCorrect;
                 }
                 else
                 { // обратный ход
-                    point.Result.Iback = res.VoltageValueBack;
-                    point.Result.dIvar = Math.Abs(res.VoltageValue - res.VoltageValueBack);
+                    point.Result.Iback = res.Result.OutPutValueBack;
+                    point.Result.dIvar = Math.Abs(res.Result.OutPutValue - res.Result.OutPutValueBack);
                 }
             }
         }

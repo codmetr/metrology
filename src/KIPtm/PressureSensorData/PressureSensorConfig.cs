@@ -19,7 +19,7 @@ namespace PressureSensorData
             CommonVoltage = 220;
             EtalonPressure = new EtalonDescriptor();
             EtalonOut = new EtalonDescriptor();
-            Points = new List<PressureSensorPoint>();
+            Points = new List<PressureSensorPointConf>();
         }
 
         public static PressureSensorConfig GetDefault()
@@ -122,7 +122,7 @@ namespace PressureSensorData
         /// <summary>
         /// Точки проверки
         /// </summary>
-        public List<PressureSensorPoint> Points { get; set; }
+        public List<PressureSensorPointConf> Points { get; set; }
 
         /// <summary>
         /// Максимум диапазона

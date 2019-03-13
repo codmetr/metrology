@@ -20,22 +20,22 @@ namespace PressureSensorCheck.Check.Steps
         /// <summary>
         /// Базовая точка
         /// </summary>
-        private readonly PressureSensorPoint _pointBase;
+        private readonly PressureSensorPointConf PointConfBase;
 
         /// <summary>
         /// Пользовательский канал
         /// </summary>
         private readonly IUserChannel _userChannel;
 
-        public StepFinish(PressureSensorPoint pointBase, IUserChannel userChannel)
+        public StepFinish(PressureSensorPointConf pointConfBase, IUserChannel userChannel)
         {
-            _pointBase = pointBase;
+            PointConfBase = pointConfBase;
             _userChannel = userChannel;
         }
 
         public override void Start(CancellationToken cancel)
         {
-            var msg = $"Установите на эталонном источнике давления значение {_pointBase.PressurePoint} {_pointBase.PressureUnit}";
+            var msg = $"Установите на эталонном источнике давления значение {PointConfBase.PressurePoint} {PointConfBase.PressureUnit}";
             _userChannel.ShowModal("Нормализация давления", msg, cancel);
             if (cancel.IsCancellationRequested)
                 return;

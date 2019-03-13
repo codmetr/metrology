@@ -29,10 +29,10 @@ namespace PressureSensorCheck.Report
             ApplyEtalons(config, report);
 
             // Заполнение результатов проверки основной погрешности
-            ApplyMainAccurancy(config, result, report);
+            ApplyMainAccurancy(result, report);
 
             // Заполнение результатов проверки вариации
-            ApplyVariation(config, result, report);
+            ApplyVariation(result, report);
         }
 
         private static void ApplyCommonData(TestResultID id, PressureSensorConfig config, PressureSensorResult result, PressureSensorReportDto report)
@@ -84,24 +84,25 @@ namespace PressureSensorCheck.Report
             report.Etalons = etalons.ToArray();
         }
 
-        private static void ApplyMainAccurancy(PressureSensorConfig config, PressureSensorResult result, PressureSensorReportDto report)
+        private static void ApplyMainAccurancy(PressureSensorResult result, PressureSensorReportDto report)
         {
             var mainAccur = (report.MainAccurancy ?? new List<MainAccurancyPointDto>()).ToList();
-            foreach (var point in config.Points)
+            foreach (var point in result.Points)
             {
                 var mainAcPoint = mainAccur.FirstOrDefault(
-                        el => el.PressurePoint.ToString() == point.PressurePoint.ToString("F0"));
+                        el => el.Index.ToString() == point.Index.ToString());
                 if (mainAcPoint == null)
                 {
                     mainAcPoint = new MainAccurancyPointDto()
                     {
-                        PressurePoint = point.PressurePoint.ToString("F0"),
-                        Uet = point.OutPoint.ToString("F3"),
-                        dUet = point.Tollerance.ToString("F3"),
+                        Index = point.Index.ToString(),
+                        PressurePoint = point.Config.PressurePoint.ToString("F0"),
+                        Uet = point.Config.OutPoint.ToString("F3"),
+                        dUet = point.Config.Tollerance.ToString("F3"),
                     };
                     mainAccur.Add(mainAcPoint);
                 }
-                var resPoint = result.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.PressurePoint) < double.Epsilon);
+                var resPoint = point.Result;
                 if (resPoint == null)
                 {
                     mainAcPoint.U = "";
@@ -109,31 +110,32 @@ namespace PressureSensorCheck.Report
                 }
                 else
                 {
-                    var dU = resPoint.VoltageValue - resPoint.VoltagePoint;
-                    mainAcPoint.U = resPoint.VoltageValue.ToString("F3");
+                    var dU = resPoint.OutPutValue - resPoint.VoltagePoint;
+                    mainAcPoint.U = resPoint.OutPutValue.ToString("F3");
                     mainAcPoint.dU = dU.ToString("F3");
                 }
             }
-            report.MainAccurancy = mainAccur.OrderBy(el => int.Parse(el.PressurePoint.ToString())).ToArray();
+            report.MainAccurancy = mainAccur.OrderBy(el => int.Parse(el.Index.ToString())).ToArray();
         }
 
-        private static void ApplyVariation(PressureSensorConfig config, PressureSensorResult result, PressureSensorReportDto report)
+        private static void ApplyVariation(PressureSensorResult result, PressureSensorReportDto report)
         {
             var varAccur = (report.VariationAccurancy ?? new List<VariationAccurancyPointDto>()).ToList();
-            foreach (var point in config.Points)
+            foreach (var point in result.Points)
             {
                 var varAcPoint = varAccur.FirstOrDefault(
-                    el => el.PressurePoint.ToString() == point.PressurePoint.ToString("F0"));
+                    el => el.Index.ToString() == point.Index.ToString());
                 if (varAcPoint == null)
                 {
                     varAcPoint = new VariationAccurancyPointDto()
                     {
-                        PressurePoint = point.PressurePoint.ToString("F0"),
-                        dUet = point.Tollerance.ToString("F3"),
+                        Index = point.Index.ToString(),
+                        PressurePoint = point.Config.PressurePoint.ToString("F0"),
+                        dUet = point.Config.Tollerance.ToString("F3"),
                     };
                     varAccur.Add(varAcPoint);
                 }
-                var resPoint = result.Points.FirstOrDefault(el => Math.Abs(el.PressurePoint - point.PressurePoint) < double.Epsilon);
+                var resPoint = point.Result;
                 if (resPoint == null)
                 {
                     varAcPoint.dU = "";
@@ -142,10 +144,10 @@ namespace PressureSensorCheck.Report
                 }
                 else
                 {
-                    var variation = Math.Abs(resPoint.VoltageValue - resPoint.VoltageValueBack);
+                    var variation = Math.Abs(resPoint.OutPutValue - resPoint.OutPutValueBack);
                     varAcPoint.dU = variation.ToString("F3");
-                    varAcPoint.Uf = resPoint.VoltageValue.ToString("F3");
-                    varAcPoint.Ur = resPoint.VoltageValueBack.ToString("F3");
+                    varAcPoint.Uf = resPoint.OutPutValue.ToString("F3");
+                    varAcPoint.Ur = resPoint.OutPutValueBack.ToString("F3");
                 }
             }
             report.VariationAccurancy = varAccur.OrderBy(el => int.Parse(el.PressurePoint.ToString())).ToArray();

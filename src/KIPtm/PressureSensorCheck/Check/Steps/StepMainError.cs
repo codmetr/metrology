@@ -27,11 +27,11 @@ namespace PressureSensorCheck.Check.Steps
         /// <summary>
         /// Точка проверки
         /// </summary>
-        private readonly PressureSensorPoint _point;
+        private readonly PressureSensorPointConf _pointConf;
         /// <summary>
         /// Результат проверки точки
         /// </summary>
-        private PressureSensorPointResult _result = null;
+        private PressureSensorPoint _result = null;
         /// <summary>
         /// Канал работы с пользователем
         /// </summary>
@@ -52,12 +52,12 @@ namespace PressureSensorCheck.Check.Steps
         /// <summary>
         /// Шаг прямого хода поверки датчика давления
         /// </summary>
-        public StepMainError(PressureSensorPoint point, IUserChannel userChannel,
+        public StepMainError(int index, PressureSensorPointConf pointConf, IUserChannel userChannel,
             IEtalonSourceChannel<Units> ethalonPressureSource, IEtalonChannel etalonPressure, IEtalonChannel etalonVoltage, Logger logger)
         {
-            Name = $"Проверка основной погрешности на точке {point.PressurePoint} {point.PressureUnit}";
-            _point = point;
-            _result = new PressureSensorPointResult();
+            Name = $"Проверка основной погрешности на точке {pointConf.PressurePoint} {pointConf.PressureUnit}";
+            _pointConf = pointConf;
+            _result = new PressureSensorPoint() { Index = index, Config = _pointConf };
             _userChannel = userChannel;
             _ethalonPressureSource = ethalonPressureSource;
             _etalonPressure = etalonPressure;
@@ -72,25 +72,27 @@ namespace PressureSensorCheck.Check.Steps
         public override void Start(CancellationToken cancel)
         {
             OnStarted();
-            Log($"Wait set {_point.PressurePoint} {_point.PressureUnit}");
+            Log($"Wait set {_pointConf.PressurePoint} {_pointConf.PressureUnit}");
 
-            _ethalonPressureSource.SetEtalonValue(_point.PressurePoint, _point.PressureUnit, cancel);
+            _ethalonPressureSource.SetEtalonValue(_pointConf.PressurePoint, _pointConf.PressureUnit, cancel);
             //_userChannel.Message = $"Установите на эталонном источнике давления значение {_point.PressurePoint} {_point.PressureUnit}, задайте реальное значение давления в графе Pэт и нажмите \"Далее\"";
             //var wh = new ManualResetEvent(false);
             //_userChannel.NeedQuery(UserQueryType.GetAccept, wh);
             //WaitHandle.WaitAny(new[] { wh, cancel.WaitHandle });
             if (cancel.IsCancellationRequested)
                 return;
-            var valueVoltage = _etalonVoltage.GetEtalonValue(_point.OutPoint, cancel);
-            var valuePressure = _etalonPressure.GetEtalonValue(_point.PressurePoint, cancel);
+            var valueVoltage = _etalonVoltage.GetEtalonValue(_pointConf.OutPoint, cancel);
+            var valuePressure = _etalonPressure.GetEtalonValue(_pointConf.PressurePoint, cancel);
             Log($"Received I = {valueVoltage} on P = {valuePressure}");
-            _result.PressurePoint = _point.PressurePoint;
-            _result.PressureUnit = _point.PressureUnit;
-            _result.VoltagePoint = _point.OutPoint;
-            _result.VoltageUnit = _point.OutUnit;
-            _result.VoltageValue = valueVoltage;
-            _result.PressureValue = valuePressure;
-            _result.VoltageValueBack = Double.NaN;
+            _result.Result.PressurePoint = _pointConf.PressurePoint;
+            _result.Result.PressureUnit = _pointConf.PressureUnit;
+            _result.Result.VoltagePoint = _pointConf.OutPoint;
+            _result.Result.VoltageUnit = _pointConf.OutUnit;
+            _result.Result.OutPutValue = valueVoltage;
+            _result.Result.IsCorrect = Math.Abs(valueVoltage - _pointConf.OutPoint) < _result.Config.Tollerance;
+            _result.Result.PressureValue = valuePressure;
+            _result.Result.OutPutValueBack = Double.NaN;
+            _result.Result.IsCorrectBack = true;
 
             if (_buffer != null)
             {
@@ -108,6 +110,6 @@ namespace PressureSensorCheck.Check.Steps
         /// <summary>
         /// Результат проверки точки
         /// </summary>
-        public PressureSensorPointResult Result { get { return _result; } }
+        public PressureSensorPoint Result { get { return _result; } }
     }
 }

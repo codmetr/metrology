@@ -107,7 +107,7 @@ namespace PressureSensorCheck.Workflow
         /// Обновить набор точек в проверке по конфигурации
         /// </summary>
         /// <param name="points"></param>
-        public void UpdatePoint(IEnumerable<PressureSensorPoint> points)
+        public void UpdatePoint(IEnumerable<PressureSensorPointConf> points)
         {
             _vm.UpdatePoints(points);
         }

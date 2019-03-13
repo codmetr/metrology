@@ -46,6 +46,7 @@
     <Compile Include="OutGange.cs" />
     <Compile Include="PressureSensorConfig.cs" />
     <Compile Include="PressureSensorPoint.cs" />
+    <Compile Include="PressureSensorPointConf.cs" />
     <Compile Include="PressureSensorPointResult.cs" />
     <Compile Include="PressureSensorResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

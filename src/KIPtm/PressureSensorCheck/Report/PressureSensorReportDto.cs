@@ -134,6 +134,11 @@ namespace PressureSensorCheck.Report
     public class VariationAccurancyPointDto
     {
         /// <summary>
+        /// Индекс точки
+        /// </summary>
+        public object Index { get; set; }
+
+        /// <summary>
         /// Pвх, кПа
         /// </summary>
         public object PressurePoint { get; set; }
@@ -164,6 +169,11 @@ namespace PressureSensorCheck.Report
     /// </summary>
     public class MainAccurancyPointDto
     {
+        /// <summary>
+        /// Индекс точки
+        /// </summary>
+        public object Index { get; set; }
+
         /// <summary>
         /// Pвх, кПа
         /// </summary>

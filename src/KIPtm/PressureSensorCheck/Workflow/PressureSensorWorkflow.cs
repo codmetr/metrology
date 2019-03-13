@@ -105,7 +105,7 @@ namespace PressureSensorCheck.Workflow
             var steps = new List<IWorkflowStep>()
             {
                 new SimpleWorkflowStep(configVm).SetOut(()=>UpdateRunByConf(conf, dictConf[configVm.SelectedSourceName], runPresenter, logger)),
-                new SimpleWorkflowStep(runVm).SetOut(()=>UpdateResultByRun(runPresenter, resultVm, logger)).AppendDisposable(runPresenter),
+                new SimpleWorkflowStep(runVm).SetOut(()=>UpdateResultByRun(runPresenter, resultPresenter, logger)).AppendDisposable(runPresenter),
                 new SimpleWorkflowStep(resultVm),
                 new SimpleWorkflowStep(reportVm).SetIn(()=>
                 {
@@ -154,25 +154,7 @@ namespace PressureSensorCheck.Workflow
 
             try
             {
-                result.Data = run.Result;
-                result.PointResults.Clear();
-                var i = 1;
-                foreach (var point in run.Points)
-                {
-                    point.Index = i;
-                    i++;
-                    var resPoint = result.PointResults.FirstOrDefault(el => Math.Abs(el.Config.PressurePoint - point.Config.PressurePoint) < Double.Epsilon);
-                    if(resPoint == null)
-                        result.PointResults.Add(point);
-                    else
-                    {
-                        resPoint.Config.PressureUnit = point.Config.PressureUnit;
-                        resPoint.Config.I = point.Config.I;
-                        resPoint.Config.dI = point.Config.dI;
-                        resPoint.Config.Ivar = point.Config.Ivar;
-                    }
-                }
-                result.TimeStamp = run.LastResultTime;
+                result.SetResult(run.Result);
             }
             catch (Exception e)
             {

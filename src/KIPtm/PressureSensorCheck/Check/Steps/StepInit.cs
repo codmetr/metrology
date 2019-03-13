@@ -22,7 +22,7 @@ namespace PressureSensorCheck.Check.Steps
         /// <summary>
         /// Базовая точка
         /// </summary>
-        public PressureSensorPoint _pointBase;
+        public PressureSensorPointConf PointConfBase;
 
         /// <summary>
         /// Пользовательский канал
@@ -36,7 +36,7 @@ namespace PressureSensorCheck.Check.Steps
 
         public override void Start(CancellationToken cancel)
         {
-            _userChannel.Message = $"Установите на эталонном источнике давления значение {_pointBase.PressurePoint} {_pointBase.PressureUnit}";
+            _userChannel.Message = $"Установите на эталонном источнике давления значение {PointConfBase.PressurePoint} {PointConfBase.PressureUnit}";
             var wh = new ManualResetEvent(false);
             _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
             WaitHandle.WaitAny(new[] {wh, cancel.WaitHandle});

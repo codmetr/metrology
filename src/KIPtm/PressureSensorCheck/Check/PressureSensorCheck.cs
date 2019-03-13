@@ -24,7 +24,7 @@ namespace PressureSensorCheck.Check
         private readonly IEtalonChannel _pressure;
         private readonly IEtalonChannel _voltage;
 
-        private PressureSensorPointResult _resultPoint = null;
+        private PressureSensorPoint _resultPoint = null;
         private PressureSensorResult _result = null;
 
 
@@ -59,13 +59,13 @@ namespace PressureSensorCheck.Check
             };
 
             var count = pressureConverterConfig.Points.Count;
-            var backStepPoints = new Tuple<PressureSensorPoint, PressureSensorPointResult>[count];
+            var backStepPoints = new PressureSensorPoint[count];
             var i = 0;
             var presSourceUch = new UChPresSource(ChConfig.UsrChannel);
             foreach (var point in pressureConverterConfig.Points)
             {
-                var step = new StepMainError(point, ChConfig.UsrChannel, _pressureSrc?? presSourceUch, _pressure, _voltage, _logger);//TODO: добавить эталоны
-                backStepPoints[i] = new Tuple<PressureSensorPoint, PressureSensorPointResult>(point, step.Result);
+                var step = new StepMainError(i, point, ChConfig.UsrChannel, _pressureSrc?? presSourceUch, _pressure, _voltage, _logger);//TODO: добавить эталоны
+                backStepPoints[i] = step.Result;
                 step.SetBuffer(_dataBuffer);
                 steps.Add(new CheckStepConfig(step, false));
                 AttachStep(step);
@@ -74,9 +74,8 @@ namespace PressureSensorCheck.Check
 
             for (i--; i >= 0; i--)
             {
-                var point = backStepPoints[i].Item1;
-                var res = backStepPoints[i].Item2;
-                var step = new StepMainErrorBack(point, res, ChConfig.UsrChannel, _pressure, _voltage, _logger);
+                var res = backStepPoints[i];
+                var step = new StepMainErrorBack(res, ChConfig.UsrChannel, _pressure, _voltage, _logger);
                 step.SetBuffer(_dataBuffer);
                 steps.Add(new CheckStepConfig(step, false));
                 AttachStep(step);
@@ -103,7 +102,14 @@ namespace PressureSensorCheck.Check
         {
             if (_dataBuffer.TryResolve(out _resultPoint))
             {
-                _result.Points.Add(_resultPoint);
+                var point = _result.Points.FirstOrDefault(el => el.Index == _resultPoint.Index);
+                if (point == null) // прямой ход
+                    _result.Points.Add(_resultPoint);
+                else
+                { // обратный ход
+                    point.Result.OutPutValueBack = _resultPoint.Result.OutPutValueBack;
+                    point.Result.IsCorrectBack = _resultPoint.Result.IsCorrectBack;
+                }
                 OnResultUpdated();
             }
             _dataBuffer.Clear();

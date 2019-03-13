@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using CheckFrame.Checks.Steps;
 using KipTM.Interfaces.Channels;
 using KipTM.Model.Channels;
@@ -25,11 +26,11 @@ namespace PressureSensorCheck.Check.Steps
         /// <summary>
         /// Точка проверки
         /// </summary>
-        private readonly PressureSensorPoint _point;
+        private readonly PressureSensorPointConf _pointConf;
         /// <summary>
         /// Результат проверки точки
         /// </summary>
-        private PressureSensorPointResult _result = null;
+        private PressureSensorPoint _result = null;
         /// <summary>
         /// Канал работы с пользователем
         /// </summary>
@@ -46,10 +47,10 @@ namespace PressureSensorCheck.Check.Steps
         /// <summary>
         /// Шаг обратного хода поверки датчика давления
         /// </summary>
-        public StepMainErrorBack(PressureSensorPoint point, PressureSensorPointResult result, IUserChannel userChannel, IEtalonChannel etalonPressure, IEtalonChannel etalonVoltage, Logger logger)
+        public StepMainErrorBack(PressureSensorPoint result, IUserChannel userChannel, IEtalonChannel etalonPressure, IEtalonChannel etalonVoltage, Logger logger)
         {
-            Name = $"Проверка основной погрешности обратного хода на точке {point.PressurePoint} {point.PressureUnit} и нажмите \"Далее\"";
-            _point = point;
+            Name = $"Проверка основной погрешности обратного хода на точке {result.Config.PressurePoint} {result.Config.PressureUnit} и нажмите \"Далее\"";
+            _pointConf = result.Config;
             _result = result;
             _userChannel = userChannel;
             _etalonPressure = etalonPressure;
@@ -64,17 +65,18 @@ namespace PressureSensorCheck.Check.Steps
         public override void Start(CancellationToken cancel)
         {
             OnStarted();
-            Log($"Wait set {_point.PressurePoint} {_point.PressureUnit}");
-            _userChannel.Message = $"Установите на эталонном источнике давления значение {_point.PressurePoint} {_point.PressureUnit}";
+            Log($"Wait set {_pointConf.PressurePoint} {_pointConf.PressureUnit}");
+            _userChannel.Message = $"Установите на эталонном источнике давления значение {_pointConf.PressurePoint} {_pointConf.PressureUnit}";
             var wh = new ManualResetEvent(false);
             _userChannel.NeedQuery(UserQueryType.GetAccept, wh);
             WaitHandle.WaitAny(new[] { wh, cancel.WaitHandle });
             if (cancel.IsCancellationRequested)
                 return;
-            var valueVoltage = _etalonVoltage.GetEtalonValue(_point.OutPoint, cancel);
-            var valuePressure = _etalonPressure.GetEtalonValue(_point.PressurePoint, cancel);
+            var valueVoltage = _etalonVoltage.GetEtalonValue(_pointConf.OutPoint, cancel);
+            var valuePressure = _etalonPressure.GetEtalonValue(_pointConf.PressurePoint, cancel);
             Log($"Received I = {valueVoltage} on P = {valuePressure}");
-            _result.VoltageValueBack = valueVoltage;
+            _result.Result.OutPutValueBack = valueVoltage;
+            _result.Result.IsCorrectBack = Math.Abs(valueVoltage - _result.Config.OutPoint) < _result.Config.Tollerance;
 
             if (_buffer != null)
             {

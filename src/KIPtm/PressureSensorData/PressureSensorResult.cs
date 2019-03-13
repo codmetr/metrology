@@ -12,7 +12,7 @@ namespace PressureSensorData
         /// </summary>
         public PressureSensorResult()
         {
-            Points = new List<PressureSensorPointResult>();
+            Points = new List<PressureSensorPoint>();
         }
         /// <summary>
         /// Результат опробирования
@@ -37,6 +37,6 @@ namespace PressureSensorData
         /// <summary>
         /// Результат проверки по точкам
         /// </summary>
-        public List<PressureSensorPointResult> Points { get; set; }
+        public List<PressureSensorPoint> Points { get; set; }
     }
 }

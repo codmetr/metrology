@@ -65,7 +65,7 @@ namespace PressureSensorCheck.Workflow.Content
         /// <summary>
         /// Перерассчитать точки
         /// </summary>
-        private IEnumerable<PressureSensorPoint> RecalcPoints(OutGange range, double Pmax, double Pmin, int countPoints, double toleranceVpi, double toleranceSigma, Units unit)
+        private IEnumerable<PressureSensorPointConf> RecalcPoints(OutGange range, double Pmax, double Pmin, int countPoints, double toleranceVpi, double toleranceSigma, Units unit)
         {
 
             var uMin = 0.0;
@@ -84,7 +84,7 @@ namespace PressureSensorCheck.Workflow.Content
                 var point = Pmin + (i * step);
 
                 var pointOut = CalcRes(point, Pmin, Pmax, uMin, uMax, toleranceVpi, toleranceSigma);
-                yield return new PressureSensorPoint()
+                yield return new PressureSensorPointConf()
                 {
                     PressurePoint = point,
                     OutPoint = pointOut.Ip,

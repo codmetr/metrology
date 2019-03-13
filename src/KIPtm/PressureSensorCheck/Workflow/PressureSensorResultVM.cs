@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
@@ -17,7 +18,7 @@ namespace PressureSensorCheck.Workflow
     /// <summary>
     /// Визуальная модель результата поверки датчика давления
     /// </summary>
-    public class PressureSensorResultVM:INotifyPropertyChanged, ISubscriber<EventArgSave>
+    public class PressureSensorResultVM:INotifyPropertyChanged
     {
         /// <summary>
         /// Хранилище результата для конкретной проверки
@@ -159,6 +160,66 @@ namespace PressureSensorCheck.Workflow
         /// Вызвано сохранение
         /// </summary>
         public event Action OnSaveCalled;
+
+        public void SetPoints(IEnumerable<PressureSensorPoint> points)
+        {
+            var wh = new ManualResetEvent(false);
+            _context.Invoke(() =>
+            {
+                PointResults.Clear();
+                var i = 0;
+                foreach (var point in points)
+                {
+                    var pointVm = new PointViewModel(_context)
+                    {
+                        Index = i++,
+                        Config =
+                        {
+                            PressureUnit = point.Result.PressureUnit,
+                            PressurePoint = point.Result.PressurePoint,
+                            OutUnit = point.Result.VoltageUnit,
+                            OutPoint = point.Result.VoltagePoint,
+                            Tollerance = point.Config.Tollerance
+                        },
+                        Result =new PointResultViewModel()
+                    };
+                    if (point.Result == null)
+                    {
+                        PointResults.Add(pointVm);
+                        continue;
+                    }
+                    pointVm.Result.PressureReal = point.Result.PressureValue;
+
+                    if (double.IsNaN(point.Result.OutPutValue))
+                    {
+                        pointVm.Result.IReal = null;
+                        pointVm.Result.dIReal = null;
+                        pointVm.Result.dIvar = null;
+                    }
+                    else
+                    {
+                        pointVm.Result.IReal = point.Result.OutPutValue;
+                        pointVm.Result.dIReal = point.Result.OutPutValue - point.Result.PressurePoint;
+                    }
+
+                    if (double.IsNaN(point.Result.OutPutValueBack))
+                    {
+                        pointVm.Result.Iback = null;
+                        pointVm.Result.dIvar = null;
+                    }
+                    else
+                    {
+                        pointVm.Result.Iback = point.Result.OutPutValueBack;
+                        pointVm.Result.dIvar = point.Result.OutPutValue - point.Result.OutPutValueBack;
+                    }
+                    pointVm.Result.IsCorrect = point.Result.IsCorrect;
+                    PointResults.Add(pointVm);
+                }
+                TimeStamp = DateTime.Now;
+                wh.Set();
+            });
+            wh.WaitOne();
+        }
 
         /// <summary>
         /// Очистить список точек

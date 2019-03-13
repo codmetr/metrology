@@ -16,7 +16,7 @@ namespace PressureSensorCheck.Workflow
     {
         private readonly TestResultID _checkResId;
         private readonly IDataAccessor _accessor;
-        private readonly PressureSensorResult _result;
+        private PressureSensorResult _result;
         private readonly PressureSensorConfig _conf;
         private readonly IEventAggregator _agregator;
         private readonly PressureSensorResultVM _resultVm;
@@ -32,11 +32,23 @@ namespace PressureSensorCheck.Workflow
             _resultVm.OnSaveCalled += OnSave;
         }
 
+        #region ISubscriber<EventArgSave>
+
+        /// <inheritdoc cref="ISubscriber&lt;EventArgSave&gt;"/>
         public void OnEvent(EventArgSave message)
         {
             OnSave();
         }
 
+        #endregion
+
+
+        public void SetResult(PressureSensorResult result)
+        {
+            _result = result;
+            _resultVm.SetPoints(result.Points);
+
+        }
 
         /// <summary>
         /// Фактическое выполнение сохранение

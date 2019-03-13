@@ -12,7 +12,7 @@ namespace PressureSensorCheck.Workflow
     {
         private IContext _context;
         private int _index;
-        private PressureSensorPoint _config;
+        private PressureSensorPointConf _config;
         private PointResultViewModel _result;
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace PressureSensorCheck.Workflow
             }
         }
 
-        public PressureSensorPoint Config
+        public PressureSensorPointConf Config
         {
             get { return _config; }
             private set { _config = value;
@@ -51,7 +51,7 @@ namespace PressureSensorCheck.Workflow
             }
         }
 
-        public void UpdateConf(PressureSensorPoint config)
+        public void UpdateConf(PressureSensorPointConf config)
         {
             _context.Invoke(()=>Config = config);
         }

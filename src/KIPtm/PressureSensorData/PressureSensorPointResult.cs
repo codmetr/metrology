@@ -2,8 +2,15 @@
 
 namespace PressureSensorData
 {
+    /// <summary>
+    /// Результат измерений на точке проверки
+    /// </summary>
     public class PressureSensorPointResult
     {
+        public PressureSensorPointResult()
+        {
+            
+        }
         /// <summary>
         /// Точка давления
         /// </summary>
@@ -28,10 +35,19 @@ namespace PressureSensorData
         /// <summary>
         /// Результат: напряжение
         /// </summary>
-        public double VoltageValue { get; set; }
+        public double OutPutValue { get; set; }
         /// <summary>
         /// Результат: напряжение на обратном ходе
         /// </summary>
-        public double VoltageValueBack { get; set; }
+        public double OutPutValueBack { get; set; }
+
+        /// <summary>
+        /// Результат: в допуске
+        /// </summary>
+        public bool IsCorrect { get; set; }
+        /// <summary>
+        /// Результат: в допуске на обратном ходе
+        /// </summary>
+        public bool IsCorrectBack { get; set; }
     }
 }
