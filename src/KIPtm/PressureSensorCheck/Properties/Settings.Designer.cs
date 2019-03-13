@@ -58,5 +58,53 @@ namespace PressureSensorCheck.Properties {
                 this["ReportNumber"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Current")]
+        public global::ArchiveData.DTO.ChannelType Slot1Type {
+            get {
+                return ((global::ArchiveData.DTO.ChannelType)(this["Slot1Type"]));
+            }
+            set {
+                this["Slot1Type"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Pressure")]
+        public global::ArchiveData.DTO.ChannelType Slot2Type {
+            get {
+                return ((global::ArchiveData.DTO.ChannelType)(this["Slot2Type"]));
+            }
+            set {
+                this["Slot2Type"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Slot1Index {
+            get {
+                return ((int)(this["Slot1Index"]));
+            }
+            set {
+                this["Slot1Index"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int Slot2Index {
+            get {
+                return ((int)(this["Slot2Index"]));
+            }
+            set {
+                this["Slot2Index"] = value;
+            }
+        }
     }
 }

@@ -62,6 +62,8 @@ namespace PressureSensorCheck.Workflow
             get { return _selectedSourceName; }
             set
             {
+                if(value == _selectedSourceName)
+                    return;
                 _selectedSourceName = value;
                 OnPropertyChanged();
                 OnSelectedSource(_selectedSourceName);
@@ -78,6 +80,8 @@ namespace PressureSensorCheck.Workflow
             get { return _selectedSourceViewModel; }
             set
             {
+                if (value == _selectedSourceViewModel)
+                    return;
                 _selectedSourceViewModel = value; 
                 OnPropertyChanged();
             }

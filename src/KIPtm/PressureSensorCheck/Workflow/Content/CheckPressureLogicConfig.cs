@@ -17,22 +17,17 @@ namespace PressureSensorCheck.Workflow.Content
     public class CheckPressureLogicConfig
     {
         private readonly CheckPressureLogicConfigVm _vm;
-        private string _tolerancePercentSigma;
-        private string _tolerancePercentVpi;
         private int _pointsOnRange = 5;
-
-        private string _vpiMinStr;
-        private string _vpiMaxStr;
-
+        
         /// <summary>
         /// Фактические данные конфигурации
         /// </summary>
         /// <remarks>
         /// Использовать на разметке экрана только в случае единственного места изменения, так как без INotifyPropertyChanged
         /// </remarks>
-        private PressureSensorConfig _data;
+        private readonly PressureSensorConfig _data;
 
-        private Dictionary<int, PointConfigViewModel> _vmPoints = new Dictionary<int, PointConfigViewModel>();
+        private readonly Dictionary<int, PointConfigViewModel> _vmPoints = new Dictionary<int, PointConfigViewModel>();
 
         /// <summary>
         /// Конфигурация логики проверки
@@ -49,19 +44,47 @@ namespace PressureSensorCheck.Workflow.Content
                 uMax = 20;
             }
             _vm.SetBaseStates(_data.VpiMax, _data.VpiMin, UnitDict.GetUnitsForType(ChannelType.Pressure),
-                _data.Unit, new[]{OutGange.I4_20mA,OutGange.I0_5mA,}, _data.OutputRange,
+                _data.Unit, new[] { OutGange.I4_20mA, OutGange.I0_5mA, }, _data.OutputRange,
                 _data.TolerancePercentSigma, _data.TolerancePercentVpi, uMin, uMax);
+            _vm.SettedData += VmOnSettedData;
             var points = RecalcPoints(_data.OutputRange, _data.VpiMax, _data.VpiMin, _pointsOnRange, _data.TolerancePercentVpi, _data.TolerancePercentSigma, _data.Unit).ToArray();
+            UpdatePoints(points);
+            //_vm.SelectedRange
+        }
+
+        private void UpdatePoints(PressureSensorPointConf[] points)
+        {
             _data.Points.Clear();
-            for (var i = 0; i< points.Length; i++)
+            for (var i = 0; i < points.Length; i++)
             {
                 var point = points[i];
                 _data.Points.Add(point);
-                _vmPoints[i] = _vm.AddPoint(point.PressurePoint, point.OutPoint, point.Tollerance, point.PressureUnit);
+                if (!_vmPoints.ContainsKey(i))
+                {
+                    _vmPoints[i] = _vm.AddPoint(point.PressurePoint, point.OutPoint, point.Tollerance,
+                        point.PressureUnit);
+                    continue;
+                }
+                _vmPoints[i].SetPressure(point.PressurePoint);
+                _vmPoints[i].SetI(point.OutPoint);
+                _vmPoints[i].SetdI(point.Tollerance);
+                _vmPoints[i].SetUnit(point.PressureUnit);
             }
-            //_vm.SelectedRange
         }
-        
+
+        private void VmOnSettedData(CheckPressureLogicConfigVm.ConfData confData)
+        {
+            _data.TolerancePercentSigma = confData.TolerancePercentSigma;
+            _data.TolerancePercentVpi = confData.TolerancePercentVpi;
+            _data.VpiMin = confData.VpiMin;
+            _data.VpiMax = confData.VpiMax;
+            _data.Unit = confData.PressureUnit;
+            _data.OutputRange = confData.OutputRange;
+
+            var points = RecalcPoints(_data.OutputRange, _data.VpiMax, _data.VpiMin, _pointsOnRange, _data.TolerancePercentVpi, _data.TolerancePercentSigma, _data.Unit).ToArray();
+            UpdatePoints(points);
+        }
+
         /// <summary>
         /// Перерассчитать точки
         /// </summary>

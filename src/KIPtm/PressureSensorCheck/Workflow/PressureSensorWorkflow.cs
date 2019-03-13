@@ -132,6 +132,7 @@ namespace PressureSensorCheck.Workflow
                     return;
                 run.UpdateSourceChannel(etalonSourceFactory?.GetChanel());
                 run.UpdatePoint(config.Points);
+                //TODO: Update All parts
             }
             catch (Exception e)
             {

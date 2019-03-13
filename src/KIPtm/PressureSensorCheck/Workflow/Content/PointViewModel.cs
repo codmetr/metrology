@@ -22,6 +22,7 @@ namespace PressureSensorCheck.Workflow
         public PointViewModel(IContext context)
         {
             _context = context;
+            _result = new PointResultViewModel();
         }
 
         /// <summary>

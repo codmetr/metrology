@@ -189,21 +189,15 @@ namespace PressureSensorCheck.Workflow
             // выбор входных и выходных слотов
             DpiSlotConfig inSlot;
             DpiSlotConfig outSlot;
-            int inSlotNum;
-            int outSlotNum;
             if (_dpiConf.Slot1.ChannelType == ArchiveData.DTO.ChannelType.Pressure)
             {
                 inSlot = _dpiConf.Slot1;
                 outSlot = _dpiConf.Slot2;
-                inSlotNum = 1;
-                outSlotNum = 2;
             }
             else if (_dpiConf.Slot2.ChannelType == ArchiveData.DTO.ChannelType.Pressure)
             {
                 inSlot = _dpiConf.Slot2;
                 outSlot = _dpiConf.Slot1;
-                inSlotNum = 2;
-                outSlotNum = 1;
             }
             else
             {
@@ -238,8 +232,8 @@ namespace PressureSensorCheck.Workflow
 
             // конфигурирование шагов проверки
             var check = new PresSensorCheck(checkLogger, _pressureSrc,
-                new Dpi620Etalon(_dpi620, inSlotNum, ChannelType.Pressure, inSlot.SelectedUnit, _config.Unit),
-                new Dpi620Etalon(_dpi620, outSlotNum, ChannelType.Current, outSlot.SelectedUnit, Units.mA), _result);
+                new Dpi620Etalon(_dpi620, inSlot.SelectedSlotIndex, ChannelType.Pressure, inSlot.SelectedUnit, _config.Unit),
+                new Dpi620Etalon(_dpi620, outSlot.SelectedSlotIndex, ChannelType.Current, outSlot.SelectedUnit, Units.mA), _result);
             check.ChConfig.UsrChannel = new PressureSensorUserChannel(_vm, _context);
             check.FillSteps(_config);
             _vm.ClearAllLines();

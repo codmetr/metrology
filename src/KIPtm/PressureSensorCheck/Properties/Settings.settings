@@ -11,5 +11,17 @@
     <Setting Name="ReportNumber" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="Slot1Type" Type="ArchiveData.DTO.ChannelType" Scope="User">
+      <Value Profile="(Default)">Current</Value>
+    </Setting>
+    <Setting Name="Slot2Type" Type="ArchiveData.DTO.ChannelType" Scope="User">
+      <Value Profile="(Default)">Pressure</Value>
+    </Setting>
+    <Setting Name="Slot1Index" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Slot2Index" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

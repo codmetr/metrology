@@ -141,7 +141,7 @@ namespace PressureSensorCheck.Workflow.Content
             //@"I(P) = I_{min} + (I_{max}-I_{min})\times\frac{P-P_{min}}{P_{max}-P_{min}}"
             var IpRes = double.IsNaN(res.Ip) ? "Nan" : double.IsInfinity(res.Ip) ? @"/infinity" : res.Ip.ToString("F3");
             strRes = sb.Clear().Append(@"I(").Append(_P.ToString()).Append(@") = ").Append(Imin).Append("+(").Append(Imax).Append("-").Append(Imin).Append(@")\times\frac{")
-                .Append(P).Append("-").Append(Pmin).Append(@"}{").Append(_P.ToString()).Append("-").Append(Pmin).Append(@"}=").Append(IpRes).ToString();
+                .Append(P).Append("-").Append(Pmin).Append(@"}{").Append(Pmax).Append("-").Append(Pmin).Append(@"}=").Append(IpRes).ToString();
             FormulaOutSignal = strRes;
 
             //@"\Delta I(P) = (I_{max}-I_{min})\times\gamma_{vpi} + (I_{max}-I_{min})\times\frac{P-P_{min}}{P_{max}-P_{min}}\times\frac{\gamma}{100\%}"

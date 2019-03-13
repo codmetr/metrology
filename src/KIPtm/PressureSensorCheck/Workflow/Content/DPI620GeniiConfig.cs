@@ -22,12 +22,25 @@ namespace PressureSensorCheck.Workflow.Content
         public DPI620GeniiConfig(DPI620GeniiConfigVm vm, IEnumerable<string> ports)
         {
             _vm = vm;
-            Slot1 = new DpiSlotConfig(_vm.Slot1, ChannelType.Current);
-            Slot2 = new DpiSlotConfig(_vm.Slot2, ChannelType.Pressure);
+            var settings = Properties.Settings.Default;
+            Slot1 = new DpiSlotConfig(_vm.Slot1, settings.Slot1Type, settings.Slot1Index);
+            _vm.Slot1.SelectedIndex += i =>
+            {   settings.Slot1Index = i;
+                settings.Save();};
+            _vm.Slot1.SelectedChannel += type =>
+            {   settings.Slot1Type = type;
+                settings.Save();};
+            Slot2 = new DpiSlotConfig(_vm.Slot2, settings.Slot2Type, settings.Slot2Index);
+            _vm.Slot2.SelectedIndex += i =>
+            {   settings.Slot2Index = i;
+                settings.Save();};
+            _vm.Slot2.SelectedChannel += type =>
+            {   settings.Slot2Type = type;
+                settings.Save();};
             var availablePorts = ports.ToArray();
             _vm.SetPortCollection(availablePorts);
-            if (availablePorts.Contains(Properties.Settings.Default.PortName))
-                _vm.SetSelectedPort(Properties.Settings.Default.PortName);
+            if (availablePorts.Contains(settings.PortName))
+                _vm.SetSelectedPort(settings.PortName);
             else
                 _vm.SetSelectedPort(availablePorts.FirstOrDefault());
             _vm.SelectedPortCanged += VmOnSelectedPortCanged;
@@ -68,7 +81,7 @@ namespace PressureSensorCheck.Workflow.Content
         private IEnumerable<Units> _unitSet;
         private int _selectedSlotIndex;
 
-        public DpiSlotConfig(DpiSlotConfigVm vm, ChannelType type)
+        public DpiSlotConfig(DpiSlotConfigVm vm, ChannelType type, int index)
         {
             _vm = vm;
             ChannelTypes = Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>();
@@ -79,7 +92,7 @@ namespace PressureSensorCheck.Workflow.Content
             _vm.SetUnits(UnitSet);
             _vm.SetSelectedUnit(SelectedUnit);
             _vm.SetSlotIndexes(SlotIndexes);
-            _vm.SetSelectedSlotIndex(0);
+            _vm.SetSelectedSlotIndex(index);
             _vm.SelectedChannel += VmOnSelectedChannel;
             _vm.SelectedUnut += VmOnSelectedUnut;
             _vm.SelectedIndex += VmOnSelectedIndex;

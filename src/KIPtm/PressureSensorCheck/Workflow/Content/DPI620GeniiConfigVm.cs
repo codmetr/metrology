@@ -22,8 +22,8 @@ namespace PressureSensorCheck.Workflow
         public DPI620GeniiConfigVm(IContext context)
         {
             _context = context;
-            Slot1 = new DpiSlotConfigVm(context) { ChannelType = ChannelType.Pressure };
-            Slot2 = new DpiSlotConfigVm(context) { ChannelType = ChannelType.Current };
+            Slot1 = new DpiSlotConfigVm(context) { ChannelType = ChannelType.Pressure, SelectedSlotIndex = 0};
+            Slot2 = new DpiSlotConfigVm(context) { ChannelType = ChannelType.Current, SelectedSlotIndex = 1};
         }
 
         public IEnumerable<string> Ports
