@@ -81,6 +81,10 @@ namespace PressureSensorCheck.Workflow
         /// </summary>
         public event Action OnSaveCalled;
 
+        /// <summary>
+        /// Устанвить набор точек
+        /// </summary>
+        /// <param name="points"></param>
         public void SetPoints(IEnumerable<PressureSensorPoint> points)
         {
             var wh = new ManualResetEvent(false);
