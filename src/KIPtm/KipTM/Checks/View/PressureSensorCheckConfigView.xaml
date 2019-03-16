@@ -506,6 +506,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource TblBasicStyle}">Порт подклчения:</TextBlock>
                             <ComboBox Grid.Row="0" Grid.Column="1" SelectedItem="{Binding SelectPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Ports}"/>
+                            <Button Grid.Column="3" Grid.ColumnSpan="2" Margin="3" Content="Проверить доступность каналов" Command="{Binding }"/>
                             <TextBlock Grid.Row="1" Grid.Column="0">Номер входного слота:</TextBlock>
                             <ComboBox Grid.Row="1" Grid.Column="1"
                                       ItemsSource="{Binding Slot1.SlotIndexes, UpdateSourceTrigger=PropertyChanged}"

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -39,6 +40,7 @@ namespace PressureSensorCheck.Workflow
         private bool _isRun;
         private readonly IContext _context;
         private IEtalonSourceChannel<Units> _pressureSrc;
+        private SerialPort _port = null;
 
 
         public PressureSensorRunPresenter(PressureSensorRunVm vm, PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator, IContext context)
@@ -209,10 +211,12 @@ namespace PressureSensorCheck.Workflow
             try
             {
                 var dpiCom = _dpi620 as DPI620DriverCom;
+                _port = new SerialPort(_dpiConf.SelectPort, 19200, Parity.None, 8, StopBits.One);
                 if (dpiCom != null)
                 {
-                    dpiCom.SetPort(_dpiConf.SelectPort);
+                    dpiCom.SetPort(_port);
                 }
+                _port.Open();
                 _dpi620.Open();
             }
             catch (Exception ex)
@@ -352,6 +356,8 @@ namespace PressureSensorCheck.Workflow
             _cancellation = new CancellationTokenSource();
             _autorepeatWh.WaitOne();
             _dpi620.Close();
+            if(_port!=null)
+                _port.Close();
             _startTime = null;
         }
 
@@ -384,6 +390,8 @@ namespace PressureSensorCheck.Workflow
             _cancellation.Cancel();
             _autorepeatWh.WaitOne(TimeSpan.FromSeconds(10));
             _dpi620.Close();
+            if (_port != null)
+                _port.Close();
         }
 
         #endregion

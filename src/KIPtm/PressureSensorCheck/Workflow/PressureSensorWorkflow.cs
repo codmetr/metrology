@@ -86,7 +86,7 @@ namespace PressureSensorCheck.Workflow
             var chLogicConfVm = new CheckPressureLogicConfigVm(context, conf);/*TODO reverse dependency*/
             var configVm = new PressureSensorCheckConfigVm(context, chLogicConfVm, dpiConfVm);
             var configurator = new PressureSensorCheckConfigurator(id, conf, dpiConf, configArchive, dictConf, configVm);
-
+            
             var dpiLog = NLog.LogManager.GetLogger("Dpi620");
             var dpiCom = new DPI620DriverCom().Setlog((msg) => dpiLog.Trace(msg));
             var dpi = AppVersionHelper.CurrentAppVersionType == AppVersionHelper.AppVersionType.Emulation?

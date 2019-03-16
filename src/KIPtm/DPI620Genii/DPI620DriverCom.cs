@@ -41,45 +41,114 @@ namespace DPI620Genii
             
         }
 
-        //public void Open(string portName)
-        //{
-        //    _serial = new SerialPort(portName);
-        //    _serial.BaudRate = 19200;
-        //    _writer = new StreamWriter(_serial.BaseStream, Encoding.Unicode);
-        //    _reader = new StreamReader(_serial.BaseStream, Encoding.Unicode);
+        /// <inheritdoc />
+        public void Open()
+        {
+            try
+            {
+                Log("Serial \"" + _serial.PortName + "\" open");
+                _writer = new StreamWriter(_serial.BaseStream, Encoding.UTF8);
+                _reader = new StreamReader(_serial.BaseStream, Encoding.UTF8);
+                Write("*km=r\r\n");
+                Write("*su3=1\r\n");
+                Write("*km=r\r\n");
+                var dpiType = Read();
+                if (dpiType.Contains("DPI"))
+                {
+                    var tName = dpiType.Split('=')[1];
+                    Log($"Device {tName} connected");
+                }
+                ReadConf();
+            }
+            catch (IOException ex)
+            {
+                Log(ex.ToString());
+                throw;
+            }
+            catch (Exception e)
+            {
+                Log(e.ToString());
+                throw;
+            }
+        }
 
-        //    Write("*km=r\r\n");
-        //}
+        /// <inheritdoc />
+        public IEnumerable<int> TestSlots()
+        { 
+        
+            IEnumerable<int> res = new int[0];
+            try
+            {
+                Log("Serial \"" + _serial.PortName + "\" open");
+                _writer = new StreamWriter(_serial.BaseStream, Encoding.UTF8);
+                _reader = new StreamReader(_serial.BaseStream, Encoding.UTF8);
+                Write("*km=r\r\n");
+                Write("*su3=1\r\n");
+                Write("*km=r\r\n");
+                var dpiType = Read();
+                if (dpiType.Contains("DPI"))
+                {
+                    var tName = dpiType.Split('=')[1];
+                    Log($"Device {tName} connected");
+                }
+                res = ReadConf();
+                Close();
+            }
+            catch (IOException ex)
+            {
+                Log(ex.ToString());
+                throw;
+            }
+            catch (Exception e)
+            {
+                Log(e.ToString());
+                throw;
+            }
+            return res;
+        }
 
-        //public bool TryToIdentifyCOM(String port)
-        //{
-        //    try
-        //    {
-        //        StringBuilder sb = new StringBuilder();
+        /// <inheritdoc />
+        public double GetValue(int slotId/*, string unitCode*/)
+        {
+            try
+            {
+                //if (("UCMA" == unitCode) || ("UVVO" == unitCode) || ("UVMV" == unitCode))
+                var slotindex = slotId;
+                Write($"*ir{slotindex}?\r\n");
+                Read();
+                var sb = Read();
+                //Log("RAW620: " + unitCode + " " + sb);
+                var valstr = sb.Split("=".ToCharArray())[1].Trim();
+                Log("Value = \"" + valstr + "\"");
+                double val = double.Parse(valstr, NumberStyles.Any, CultureInfo.InvariantCulture);
 
-        //        Open(port);
+                return val;
+            }
+            catch (IOException ex)
+            {
+                Log(ex.ToString());
+                throw;
+            }
+            catch (Exception e)
+            {
+                Log(e.ToString());
+            }
+            return 0.0D;
+        }
 
-        //        Thread.Sleep(100);
-
-        //        Write("*ri?\r\n");
-
-        //        Thread.Sleep(400);
-        //        string readedLine;
-        //        while ((readedLine = Read()).Length > 0) {
-        //            sb.Append(readedLine);
-        //        }
-        //        Write("*km=l\r\n");
-        //        if (sb.ToString().ToLower().Contains("dpi620"))
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        return false;
-        //    }
-        //    return false;
-        //}
+        /// <inheritdoc />
+        public void Close()
+        {
+            try
+            {
+                Write("#km=l\r\n");
+                Log("Serial \"" + _serial.PortName + "\" close");
+            }
+            catch (IOException ex)
+            {
+                Log(ex.ToString());
+            }
+        }
 
         public DPI620DriverCom Setlog(Action<string> toLog)
         {
@@ -95,7 +164,6 @@ namespace DPI620Genii
         private void Write(string data)
         {
             _serial.Write(data);
-            //_writer.Write(data);
             Log($">>{data} | {DataToHex(data)}");
         }
 
@@ -106,50 +174,14 @@ namespace DPI620Genii
             return line;
         }
 
-        public void SetPort(string portName)
+        public void SetPort(SerialPort port)
         {
-            _serial = new SerialPort(portName, 19200, Parity.None, 8, StopBits.One);
+            _serial = port;
             _serial.RtsEnable = false;
             _serial.DtrEnable = true;
             _serial.ReadTimeout = 1000;
             _serial.WriteTimeout = 1000;
-            Log("Set port: " + portName);
-        }
-
-        public void Open()
-        {
-            try
-            {
-                _serial.Open();
-                Log("Serial \"" + _serial.PortName + "\" open");
-                _writer = new StreamWriter(_serial.BaseStream, Encoding.UTF8);
-                _reader = new StreamReader(_serial.BaseStream, Encoding.UTF8);
-                Write("*km=r\r\n");
-                Write("*su3=1\r\n");
-                Write("*km=r\r\n");
-                //Write("*ri?\r\n");
-                var dpiType = Read();
-                if (dpiType.Contains("DPI"))
-                {
-                    var tName = dpiType.Split('=')[1];
-                    Log($"Device {tName} connected");
-                }
-                ReadConf();
-                //Read();
-                //Read();
-                //Read();
-                //Read();
-            }
-            catch (IOException ex)
-            {
-                Log(ex.ToString());
-                throw;
-            }
-            catch (Exception e)
-            {
-                Log(e.ToString());
-                throw;
-            }
+            Log("Set port: " + _serial.PortName);
         }
 
         /// <summary>
@@ -179,13 +211,15 @@ namespace DPI620Genii
         /// 
         /// этот лог обозначает - настроены каналы 0,1, канал 2 - не задействован(видимо источник)
         /// </remarks>
-        private void ReadConf()
+        private IEnumerable<int> ReadConf()
         {
+            var res = new List<int>();
             // канал 0
             Write("*pr0?\r\n");
             try
             {
                 var ch0Descr = Read();//TODO: parce
+                res.Add(0);
             }
             catch (Exception e)
             {
@@ -198,6 +232,7 @@ namespace DPI620Genii
             try
             {
                 var ch1Descr = Read();//TODO: parce
+                res.Add(1);
             }
             catch (Exception e)
             {
@@ -209,11 +244,13 @@ namespace DPI620Genii
             try
             {
                 var ch2Descr = Read();//TODO: parce
+                res.Add(2);
             }
             catch (Exception e)
             {
                 Log($"On read config channel 2 error: {e.ToString()}");
             }
+            return res;
         }
 
         /// <summary>
@@ -242,69 +279,6 @@ namespace DPI620Genii
                 Log(e.ToString());
             }
             return false;
-        }
-
-        //public void SetUnits(int slotId, String unitCode)
-        //{
-        //    Log("DPI620 UNIT CODE " + unitCode);
-
-        //    if (!_dicCmdSetUnit.ContainsKey(unitCode))
-        //        return;
-        //    try
-        //    {
-        //        Write(_dicCmdSetUnit[unitCode]);
-        //    }
-        //    catch (IOException ex)
-        //    {
-        //        Log(ex.ToString());
-        //    }
-        //}
-
-        /// <summary>
-        /// Получить значение
-        /// </summary>
-        /// <param name="slotId">Номер слота (c 1)</param>
-        /// <returns></returns>
-        public double GetValue(int slotId/*, string unitCode*/)
-        {
-            try
-            {
-                //if (("UCMA" == unitCode) || ("UVVO" == unitCode) || ("UVMV" == unitCode))
-                var slotindex = slotId;
-                Write($"*ir{slotindex}?\r\n");
-                Read();
-                var sb = Read();
-                //Log("RAW620: " + unitCode + " " + sb);
-                var valstr = sb.Split("=".ToCharArray())[1].Trim();
-                Log("Value = \"" + valstr + "\"");
-                double val = double.Parse(valstr, NumberStyles.Any, CultureInfo.InvariantCulture);
-
-                return val;
-            }
-            catch (IOException ex)
-            {
-                Log(ex.ToString());
-                throw;
-            }
-            catch (Exception e)
-            {
-                Log(e.ToString());
-            }
-            return 0.0D;
-        }
-
-        public void Close()
-        {
-            try
-            {
-                Write("#km=l\r\n");
-                Log("Serial \"" + _serial.PortName + "\" close");
-                _serial.Close();
-            }
-            catch (IOException ex)
-            {
-                Log(ex.ToString());
-            }
         }
 
         private string DataToHex(string str)

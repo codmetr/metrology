@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 using ArchiveData.DTO;
 using KipTM.Interfaces;
+using Tools.View;
 
 namespace PressureSensorCheck.Workflow
 {
@@ -47,11 +49,15 @@ namespace PressureSensorCheck.Workflow
             }
         }
 
+        public ICommand Refrash { get { return new CommandWrapper(OnRefrashCall); } }
+
         public DpiSlotConfigVm Slot1 { get; set; }
 
         public DpiSlotConfigVm Slot2 { get; set; }
 
         public event Action<string> SelectedPortCanged;
+
+        public event Action RefrashCall;
 
         public void SetPortCollection(IEnumerable<string> ports)
         {
@@ -78,6 +84,11 @@ namespace PressureSensorCheck.Workflow
         protected virtual void OnSelectedPortCanged(string port)
         {
             SelectedPortCanged?.Invoke(port);
+        }
+
+        protected virtual void OnRefrashCall()
+        {
+            RefrashCall?.Invoke();
         }
     }
     public class DpiSlotConfigVm : INotifyPropertyChanged

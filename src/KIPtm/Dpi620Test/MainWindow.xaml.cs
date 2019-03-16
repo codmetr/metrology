@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.IO.Ports;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -49,7 +50,10 @@ namespace Dpi620Test
             Action prepare = () =>
             {
                 if (AppVersionHelper.CurrentAppVersionType != AppVersionHelper.AppVersionType.Emulation)
-                    dpiCom.SetPort(settings.SelectedPort);
+                {
+                    var port = new SerialPort(settings.SelectedPort);
+                    dpiCom.SetPort(port);
+                }
             };
             DataContext = new MainViewModel(dpi, settings, this.Dispatcher, prepare);
         }

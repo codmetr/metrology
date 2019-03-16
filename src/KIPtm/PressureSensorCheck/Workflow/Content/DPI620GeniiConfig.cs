@@ -44,6 +44,12 @@ namespace PressureSensorCheck.Workflow.Content
             else
                 _vm.SetSelectedPort(availablePorts.FirstOrDefault());
             _vm.SelectedPortCanged += VmOnSelectedPortCanged;
+            _vm.RefrashCall += VmOnRefrashCall;
+        }
+
+        private void VmOnRefrashCall()
+        {
+            throw new NotImplementedException();
         }
 
         private void VmOnSelectedPortCanged(string port)
