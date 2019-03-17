@@ -34,7 +34,7 @@ namespace PressureSensorCheck.Workflow
         /// <summary>
         /// Конфигурация логики проверки
         /// </summary>
-        public CheckPressureLogicConfigVm(IContext context, PressureSensorConfig data)
+        public CheckPressureLogicConfigVm(IContext context)
         {
             _context = context;
             _data = new ConfData();

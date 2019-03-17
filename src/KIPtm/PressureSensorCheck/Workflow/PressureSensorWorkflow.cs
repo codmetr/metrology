@@ -83,7 +83,7 @@ namespace PressureSensorCheck.Workflow
             {
                 dictConf.Add(presSource.TypeName, presSource);
             }
-            var chLogicConfVm = new CheckPressureLogicConfigVm(context, conf);/*TODO reverse dependency*/
+            var chLogicConfVm = new CheckPressureLogicConfigVm(context);/*TODO reverse dependency*/
             var configVm = new PressureSensorCheckConfigVm(context, chLogicConfVm, dpiConfVm);
             var configurator = new PressureSensorCheckConfigurator(id, conf, dpiConf, configArchive, dictConf, configVm);
             
