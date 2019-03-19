@@ -32,6 +32,13 @@ namespace DPI620Genii
         private FileStream _file;
         private StreamWriter _writer;
         private StreamReader _reader;
+
+        /// <inheritdoc />
+        public IEnumerable<int> TestSlots()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Open()
         {
             _file = File.Create("\\\\.\\wceusbsh001", 100, FileOptions.RandomAccess);

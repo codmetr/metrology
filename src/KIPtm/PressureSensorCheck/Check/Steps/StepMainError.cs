@@ -84,6 +84,8 @@ namespace PressureSensorCheck.Check.Steps
             var valueVoltage = _etalonVoltage.GetEtalonValue(_pointConf.OutPoint, cancel);
             var valuePressure = _etalonPressure.GetEtalonValue(_pointConf.PressurePoint, cancel);
             Log($"Received I = {valueVoltage} on P = {valuePressure}");
+            if(_result.Result == null)
+                _result.Result = new PressureSensorPointResult();
             _result.Result.PressurePoint = _pointConf.PressurePoint;
             _result.Result.PressureUnit = _pointConf.PressureUnit;
             _result.Result.VoltagePoint = _pointConf.OutPoint;

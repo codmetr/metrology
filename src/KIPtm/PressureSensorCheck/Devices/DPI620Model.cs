@@ -40,7 +40,8 @@ namespace PressureSensorCheck.Devices
         public void Open(string port)
         {
             var dpi620 = _deviceManager.GetDevice<DPI620DriverCom>(null);
-            dpi620.SetPort(port);
+            throw new NotImplementedException("dpi620.SetPort(port)");
+            //dpi620.SetPort(port);
             dpi620.Open();
             _dpi620 = dpi620;
         }

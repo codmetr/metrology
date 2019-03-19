@@ -259,9 +259,10 @@ namespace PressureSensorCheck.Workflow
             _context.Invoke(() =>
             {
                 Points.Clear();
+                int i = 0;
                 foreach (var point in points)
                 {
-                    var pointVm = new PointViewModel(_context) { Result = new PointResultViewModel() };
+                    var pointVm = new PointViewModel(_context) { Result = new PointResultViewModel(), Index = i++ };
                     pointVm.UpdateConf(point);
                     Points.Add(pointVm);
                 }

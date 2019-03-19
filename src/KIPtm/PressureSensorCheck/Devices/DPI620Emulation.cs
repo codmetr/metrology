@@ -16,11 +16,18 @@ namespace PressureSensorCheck.Devices
 
         public double GetValue(int slotId)
         {
+            var dif = new Random().NextDouble()/4;
             if (slotId == 0)
-                return 0.5;
+                return 0d + dif;
             else if (slotId == 1)
-                return 1.5;
-            return 2.5;
+                return 1d + dif;
+            return 2d + dif;
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<int> TestSlots()
+        {
+            throw new NotImplementedException();
         }
 
         public void Open()

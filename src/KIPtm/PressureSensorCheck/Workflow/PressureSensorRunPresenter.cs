@@ -304,7 +304,7 @@ namespace PressureSensorCheck.Workflow
         private void UpdateResult(PressureSensorResult checkResult)
         {
             _result = checkResult;
-            _vm.UpdateResult(checkResult, _pressureSrc == null);
+            _vm.UpdateResult(checkResult, _pressureSrc != null);
             _lastResultTime = DateTime.Now;
         }
 
