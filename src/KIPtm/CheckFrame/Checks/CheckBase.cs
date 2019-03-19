@@ -221,7 +221,7 @@ namespace CheckFrame.Checks
         #endregion
 
         /// <summary>
-        /// Деcтвие перед запуском проверки
+        /// Дейcтвие перед запуском проверки
         /// </summary>
         protected virtual bool PrepareCheck(CancellationToken cancel)
         {

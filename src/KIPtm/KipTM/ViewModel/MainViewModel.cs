@@ -140,6 +140,7 @@ namespace KipTM.ViewModel
             catch (Exception e)
             {
                 _logger.With(l => l.Error(string.Format("Load error: {0}", e.ToString())));
+                throw;
             }
         }
 

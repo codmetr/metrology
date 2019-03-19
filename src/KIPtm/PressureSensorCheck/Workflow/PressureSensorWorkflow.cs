@@ -69,10 +69,15 @@ namespace PressureSensorCheck.Workflow
                     conf.ReportNumber = Properties.Settings.Default.ReportNumber.ToString();
                 }
             }
+            
+            var dpiLog = NLog.LogManager.GetLogger("Dpi620");
+            var dpiCom = new DPI620DriverCom().Setlog((msg) => dpiLog.Trace(msg));
+            var dpi = AppVersionHelper.CurrentAppVersionType == AppVersionHelper.AppVersionType.Emulation?
+                (IDPI620Driver)new DPI620Emulation():dpiCom;
 
             var ports = System.IO.Ports.SerialPort.GetPortNames();
             var dpiConfVm = new DPI620GeniiConfigVm(context);
-            var dpiConf = new DPI620GeniiConfig(dpiConfVm, ports);
+            var dpiConf = new DPI620GeniiConfig(dpiConfVm, ports, dpi);
             var res = new PressureSensorResult();
 
             //набор фабрик эталонных каналов
@@ -86,11 +91,6 @@ namespace PressureSensorCheck.Workflow
             var chLogicConfVm = new CheckPressureLogicConfigVm(context);/*TODO reverse dependency*/
             var configVm = new PressureSensorCheckConfigVm(context, chLogicConfVm, dpiConfVm);
             var configurator = new PressureSensorCheckConfigurator(id, conf, dpiConf, configArchive, dictConf, configVm);
-            
-            var dpiLog = NLog.LogManager.GetLogger("Dpi620");
-            var dpiCom = new DPI620DriverCom().Setlog((msg) => dpiLog.Trace(msg));
-            var dpi = AppVersionHelper.CurrentAppVersionType == AppVersionHelper.AppVersionType.Emulation?
-                (IDPI620Driver)new DPI620Emulation():dpiCom;
             //var run = new PressureSensorRunVm(conf, dpi, dpiConf, result, agregator);
             var runVm = new PressureSensorRunVm(conf.Unit, Units.mA, context);
             var runPresenter = new PressureSensorRunPresenter(runVm, conf, dpi, dpiConf, result, agregator, context);

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ArchiveData.DTO;
+using DPI620Genii;
 using KipTM.Interfaces;
 
 namespace PressureSensorCheck.Workflow.Content
@@ -15,13 +16,15 @@ namespace PressureSensorCheck.Workflow.Content
     public class DPI620GeniiConfig
     {
         private readonly DPI620GeniiConfigVm _vm;
+        private readonly IDPI620Driver _dpi;
 
         /// <summary>
         /// Настройка подключения DPI
         /// </summary>
-        public DPI620GeniiConfig(DPI620GeniiConfigVm vm, IEnumerable<string> ports)
+        public DPI620GeniiConfig(DPI620GeniiConfigVm vm, IEnumerable<string> ports, IDPI620Driver dpi)
         {
             _vm = vm;
+            _dpi = dpi;
             var settings = Properties.Settings.Default;
             Slot1 = new DpiSlotConfig(_vm.Slot1, settings.Slot1Type, settings.Slot1Index);
             _vm.Slot1.SelectedIndex += i =>
@@ -49,7 +52,9 @@ namespace PressureSensorCheck.Workflow.Content
 
         private void VmOnRefrashCall()
         {
-            throw new NotImplementedException();
+            var indexes = _dpi.TestSlots();
+            Slot1.SetSlotIndexes(indexes);
+            Slot2.SetSlotIndexes(indexes);
         }
 
         private void VmOnSelectedPortCanged(string port)
@@ -91,13 +96,12 @@ namespace PressureSensorCheck.Workflow.Content
         {
             _vm = vm;
             ChannelTypes = Enum.GetValues(typeof(ChannelType)).Cast<ChannelType>();
-            SlotIndexes = Enumerable.Range(0, 3);
             ChannelType = type;
             _vm.SetChannels(ChannelTypes);
             _vm.SetSelectedChannel(ChannelType);
             _vm.SetUnits(UnitSet);
             _vm.SetSelectedUnit(SelectedUnit);
-            _vm.SetSlotIndexes(SlotIndexes);
+            _vm.SetSlotIndexes(Enumerable.Range(0, 3));
             _vm.SetSelectedSlotIndex(index);
             _vm.SelectedChannel += VmOnSelectedChannel;
             _vm.SelectedUnut += VmOnSelectedUnut;
@@ -177,11 +181,6 @@ namespace PressureSensorCheck.Workflow.Content
         }
 
         /// <summary>
-        /// Варианты слотов 
-        /// </summary>
-        public IEnumerable<int> SlotIndexes { get; private set; }
-
-        /// <summary>
         /// Выбраный слот
         /// </summary>
         public int SelectedSlotIndex
@@ -191,6 +190,15 @@ namespace PressureSensorCheck.Workflow.Content
             {
                 _selectedSlotIndex = value;
             }
+        }
+
+        /// <summary>
+        /// Обновить набор индексов
+        /// </summary>
+        /// <param name="indexes"></param>
+        public void SetSlotIndexes(IEnumerable<int> indexes)
+        {
+            _vm.SetSlotIndexes(indexes);
         }
     }
 }
