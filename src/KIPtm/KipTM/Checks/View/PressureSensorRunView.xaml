@@ -8,7 +8,7 @@
              xmlns:workflow="clr-namespace:PressureSensorCheck.Workflow;assembly=PressureSensorCheck"
              xmlns:graphic="clr-namespace:Graphic;assembly=Graphic"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="1000"
+             d:DesignHeight="600" d:DesignWidth="1200"
              d:DataContext="{d:DesignInstance workflow:PressureSensorRunVm}">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -103,10 +103,10 @@
                 </Grid.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="ParamName"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" MinWidth="70"/>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="ParamUnit"/>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="ParamName"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" MinWidth="70"/>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="ParamUnit"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
