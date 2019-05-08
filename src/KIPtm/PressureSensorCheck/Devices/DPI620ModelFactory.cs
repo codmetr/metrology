@@ -10,12 +10,12 @@ using MainLoop;
 
 namespace PressureSensorCheck.Devices
 {
-    [DeviceModelFactory(typeof(DPI620Model))]
+    /*[DeviceModelFactory(typeof(DPI620Model))]
     public class DPI620ModelFactory : IDeviceModelFactory
     {
         public object GetModel(ILoops loops, IDeviceManager deviceManager)
         {
             return new DPI620Model(deviceManager);
         }
-    }
+    }*/
 }

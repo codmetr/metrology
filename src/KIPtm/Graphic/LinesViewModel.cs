@@ -50,16 +50,18 @@ namespace Graphic
 
         public void AddPoint(TimeSpan time, double inVal, double outVal)
         {
-            _lineIn.Add(new PointData()
-            {
-                Time = time,
-                Value = inVal
-            });
-            _lineOut.Add(new PointData()
-            {
-                Time = time,
-                Value = outVal
-            });
+            if(!double.IsNaN(inVal))
+                _lineIn.Add(new PointData()
+                {
+                    Time = time,
+                    Value = inVal
+                });
+            if (!double.IsNaN(outVal))
+                _lineOut.Add(new PointData()
+                {
+                    Time = time,
+                    Value = outVal
+                });
         }
 
 

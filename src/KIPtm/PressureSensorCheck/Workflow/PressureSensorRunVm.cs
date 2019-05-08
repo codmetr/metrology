@@ -406,7 +406,8 @@ namespace PressureSensorCheck.Workflow
             _context.Invoke(() =>
             {
                 _inOutLines.AddPoint(value.TimeStamp, value.I, value.Pressure);
-                LastMeasuredPoint = value;
+                if(!double.IsNaN(value.I) && !double.IsNaN(value.Pressure))
+                    LastMeasuredPoint = value;
             });
         }
 

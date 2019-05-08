@@ -13,6 +13,7 @@ using KipTM.EventAggregator;
 using KipTM.Interfaces;
 using KipTM.Interfaces.Channels;
 using KipTM.Model.Checks;
+using KipTM.Model.TransportChannels;
 using NLog;
 using PressureSensorCheck.Check;
 using PressureSensorCheck.Devices;
@@ -31,7 +32,7 @@ namespace PressureSensorCheck.Workflow
         private CancellationTokenSource _cancellation = new CancellationTokenSource();
         private DateTime? _startTime = null;
         private readonly ManualResetEvent _autorepeatWh = new ManualResetEvent(true);
-        private readonly TimeSpan _periodAutoread = TimeSpan.FromMilliseconds(100);
+        private readonly TimeSpan _periodAutoread = TimeSpan.FromMilliseconds(200);
         private readonly PressureSensorConfig _config; //TODO Init
         private AutoUpdater _autoupdater; //TODO Init
         private PressureSensorResult _result;
@@ -41,6 +42,45 @@ namespace PressureSensorCheck.Workflow
         private readonly IContext _context;
         private IEtalonSourceChannel<Units> _pressureSrc;
         private SerialPort _port = null;
+        private InternalEthalon _pressure = new InternalEthalon(true);
+        private InternalEthalon _current = new InternalEthalon(false);
+
+        private class InternalEthalon : IEtalonChannel
+        {
+            private object _locker = new object();
+            private MeasuringPoint last = null;
+            private readonly bool _isPressure;
+
+            public InternalEthalon(bool isPressure)
+            {
+                _isPressure = isPressure;
+            }
+
+            public bool Activate(ITransportChannelType transport)
+            {
+                return true;
+            }
+
+            public void Stop()
+            {
+            }
+
+            public double GetEtalonValue(double point, CancellationToken cancel)
+            {
+                MeasuringPoint theLast = null;
+                lock (_locker)
+                    theLast = last;
+                if (theLast == null)
+                    return double.NaN;
+                return _isPressure ? theLast.Pressure : theLast.I;
+            }
+
+            public void OnNext(MeasuringPoint value)
+            {
+                lock (_locker)
+                    last = value;
+            }
+        }
 
 
         public PressureSensorRunPresenter(PressureSensorRunVm vm, PressureSensorConfig config, IDPI620Driver dpi620, DPI620GeniiConfig dpiConf, PressureSensorResult result, IEventAggregator agregator, IContext context)
@@ -227,6 +267,7 @@ namespace PressureSensorCheck.Workflow
             }
 
             // запуск авточтения состояния
+            Log($"Start autoupdate DPI620 (on port {_dpi620.ToString()}) with period {_periodAutoread}");
             var tUpdate = new Task((arg) => _autoupdater.Start(_dpi620, (AutoUpdater.AutoreadState)arg, _config),
                 new AutoUpdater.AutoreadState(cancel, _periodAutoread, _startTime.Value, _autorepeatWh),
                 cancel, TaskCreationOptions.None);
@@ -235,9 +276,9 @@ namespace PressureSensorCheck.Workflow
                 _startTime.Value.ToString("yy.MM.dd_hh:mm:ss.fff")));
 
             // конфигурирование шагов проверки
-            var check = new PresSensorCheck(checkLogger, _pressureSrc,
-                new Dpi620Etalon(_dpi620, inSlot.SelectedSlotIndex, ChannelType.Pressure, inSlot.SelectedUnit, _config.Unit),
-                new Dpi620Etalon(_dpi620, outSlot.SelectedSlotIndex, ChannelType.Current, outSlot.SelectedUnit, Units.mA), _result);
+            var check = new PresSensorCheck(checkLogger, _pressureSrc, _pressure, _current, _result);
+                //new Dpi620Etalon(_dpi620, inSlot.SelectedSlotIndex, ChannelType.Pressure, inSlot.SelectedUnit, _config.Unit),
+                //new Dpi620Etalon(_dpi620, outSlot.SelectedSlotIndex, ChannelType.Current, outSlot.SelectedUnit, Units.mA), _result);
             check.ChConfig.UsrChannel = new PressureSensorUserChannel(_vm, _context);
             check.FillSteps(_config);
             _vm.ClearAllLines();
@@ -269,6 +310,7 @@ namespace PressureSensorCheck.Workflow
             }
             finally
             {
+                _autoupdater.Stop();
                 _agregator.Send(new EventArgRunState(false));
                 check.ResultUpdated -= CheckOnResultUpdated;
                 check.EndMethod += CheckOnEndMethod;
@@ -320,11 +362,11 @@ namespace PressureSensorCheck.Workflow
             try
             {
                 modal = _vm.ShowModalAsk("", msg, wh);
-                WaitHandle.WaitAny(new[] {cancel.WaitHandle, wh});
+                WaitHandle.WaitAny(new[] { cancel.WaitHandle, wh });
             }
             finally
             {
-                if(modal!=null)
+                if (modal != null)
                     modal.Dispose();
             }
         }
@@ -356,7 +398,7 @@ namespace PressureSensorCheck.Workflow
             _cancellation = new CancellationTokenSource();
             _autorepeatWh.WaitOne();
             _dpi620.Close();
-            if(_port!=null)
+            if (_port != null)
                 _port.Close();
             _startTime = null;
         }
@@ -365,6 +407,8 @@ namespace PressureSensorCheck.Workflow
 
         public void OnNext(MeasuringPoint value)
         {
+            _pressure.OnNext(value);
+            _current.OnNext(value);
             _vm.AddLastMeasured(value);
             Log($"Readed repeat: P:{value.Pressure} {_config.Unit}");
         }

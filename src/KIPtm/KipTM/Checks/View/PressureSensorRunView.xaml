@@ -48,7 +48,7 @@
                                 <TextBlock Text="Шаг" ToolTip="Column A Tooltip"/>
                             </DataGridTextColumn.Header>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="60" Binding="{Binding Result.PressureReal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleStringConverter}}" IsReadOnly="False">
+                        <DataGridTextColumn Width="60" Binding="{Binding Result.PressureReal, Mode=TwoWay, UpdateSourceTrigger=LostFocus, Converter={StaticResource DoubleStringConverter}}" IsReadOnly="False">
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate DataType="workflow:PointViewModel">
                                     <StackPanel Orientation="Horizontal">
@@ -103,10 +103,10 @@
                 </Grid.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="ParamName"/>
-                    <ColumnDefinition Width="*" MinWidth="70"/>
+                    <ColumnDefinition Width="*" MinWidth="20"/>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="ParamUnit"/>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="ParamName"/>
-                    <ColumnDefinition Width="*" MinWidth="70"/>
+                    <ColumnDefinition Width="*" MinWidth="20"/>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="ParamUnit"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>

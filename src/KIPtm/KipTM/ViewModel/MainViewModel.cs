@@ -83,7 +83,7 @@ namespace KipTM.ViewModel
             {
                 _logger = null;
             }
-
+            Log("MainViewModel created");
             _services = new ServiceViewModel(services, new SelectChannelViewModel(features.ChannelFactories.GetChannels()));
             _lib = lib;
             _checkFactory = checkFactory;
@@ -91,16 +91,18 @@ namespace KipTM.ViewModel
             _eventAggregator = eventAggregator;
             _dataService = dataService;
             _deviceManager = deviceManager;
-            _dataService.LoadResults();
-            _dataService.FillDeviceList(features.DeviceTypes, features.EtalonTypes);
 
+            Log("Load result and settings");
+            _dataService.LoadResults();
+            Log("Fill set avalable device types");
+            _dataService.FillDeviceList(features.DeviceTypes, features.EtalonTypes);
             var reportFactories = new Dictionary<string, IReportFactory>()
             {{ PresSensorCheck.CheckKey, new PressureSensorCheck.Report.ReportFactory()}};
-
             var resTypes = new Dictionary<string, Type>() { { PresSensorCheck.CheckKey, typeof(PressureSensorResult) } };
             var confTypes = new Dictionary<string, Type>() { { PresSensorCheck.CheckKey, typeof(PressureSensorConfig) } };
             var dataPool = DataPool.Load(null, resTypes, confTypes, GetDbPath(Properties.Settings.Default.DbName), (msg)=>_logger.With(l=>l.Debug(msg)));
 
+            Log("Init Archive");
             _store = new ArchivesViewModel(dataPool, reportFactories);
             //_store.LoadTests(_dataService.ResultsArchive);
             _workflows = new Dictionary<string, IWorkflow>();
@@ -452,6 +454,11 @@ namespace KipTM.ViewModel
             return image;
         }
 
+        private void Log(string msg)
+        {
+            if(_logger!=null)
+                _logger.Trace(msg);
+        }
         #endregion
 
         #region INotifyPropertyChanged

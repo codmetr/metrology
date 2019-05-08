@@ -22,7 +22,7 @@ namespace KipTM.Interfaces
         IMainSettings Settings { get; }
 
         /// <summary>
-        /// Загрузить настройки
+        /// Загрузить результатаы и настройки
         /// </summary>
         void LoadResults();
 

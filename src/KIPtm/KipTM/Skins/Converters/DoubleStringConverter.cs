@@ -25,7 +25,7 @@ namespace KipTM.Skins.Converters
                 return string.Empty;
             var resString = (string)value;
             double res;
-            if (!double.TryParse(resString.Replace(".", ","), NumberStyles.Any, CultureInfo.InvariantCulture, out res))
+            if (!double.TryParse(resString.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out res))
                 return double.NaN;
             return res;
         }

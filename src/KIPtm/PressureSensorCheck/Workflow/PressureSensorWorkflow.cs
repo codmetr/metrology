@@ -71,7 +71,8 @@ namespace PressureSensorCheck.Workflow
             }
             
             var dpiLog = NLog.LogManager.GetLogger("Dpi620");
-            var dpiCom = new DPI620DriverCom().Setlog((msg) => dpiLog.Trace(msg));
+            var dpiLogTrace = NLog.LogManager.GetLogger("Dpi620Trace");
+            var dpiCom = new DPI620DriverCom().Setlog((msg) => dpiLog.Trace(msg), msgTrace => dpiLogTrace.Trace(msgTrace));
             var dpi = AppVersionHelper.CurrentAppVersionType == AppVersionHelper.AppVersionType.Emulation?
                 (IDPI620Driver)new DPI620Emulation():dpiCom;
 

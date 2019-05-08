@@ -10,7 +10,6 @@ namespace PressureSensorCheck.Workflow
 {
     public class AutoUpdater : IObservable<MeasuringPoint>
     {
-
         internal class AutoreadState
         {
             public AutoreadState(CancellationToken cancel, TimeSpan periodRepeat, DateTime startTime, EventWaitHandle autoreadWh)
@@ -38,6 +37,7 @@ namespace PressureSensorCheck.Workflow
 
         private readonly Logger _logger;
         private List<IObserver<MeasuringPoint>> observers;
+        private int _isStart = 0;
 
         public IDisposable Subscribe(IObserver<MeasuringPoint> observer)
         {
@@ -50,36 +50,51 @@ namespace PressureSensorCheck.Workflow
         {
             try
             {
-                while (!arg.Cancel.WaitHandle.WaitOne(arg.PeriodRepeat))
+                _logger.Debug("Start autoupdate");
+                var token = arg.Cancel;
+                Interlocked.Exchange(ref _isStart, 1);
+                while (!token.WaitHandle.WaitOne(arg.PeriodRepeat) && (Interlocked.Exchange(ref _isStart, 1) != 0))
                 {
                     var outVal = dpi620.GetValue(1);
                     var pressure = dpi620.GetValue(2);
 
-
-                    var outPoint = GetOutForPressure(conf, pressure, outVal);
-                    var dI = outVal - outPoint.Ip;
-                    var qI = dI / outVal * 100.0;
+                    var _In = double.NaN;
+                    var _dIn = double.NaN;
+                    double dI = double.NaN;
+                    double qI = double.NaN;
+                    if (!double.IsNaN(outVal) && !double.IsNaN(pressure))
+                    {
+                        var outPoint = GetOutForPressure(conf, pressure, outVal);
+                        _In = outPoint.Ip;
+                        _dIn = outPoint.dIp;
+                        dI = outVal - outPoint.Ip;
+                        qI = dI / outVal * 100.0;
+                    }
                     var item = new MeasuringPoint()
                     {
                         TimeStamp = DateTime.Now - arg.StartTime,
                         I = outVal,
                         Pressure = pressure,
                         dI = dI,
-                        In = outPoint.Ip,
-                        dIn = outPoint.dIp,
+                        In = _In,
+                        dIn = _dIn,
                         qI = qI,
                         qIn = 0,
                     };
                     Publish(item);
-                    _logger.Trace($"Readed repeat: P:{item.Pressure}");
                 }
             }
             finally
             {
+                _logger.Debug("Stop autoupdate");
                 arg.AutoreadWh.Set();
             }
         }
 
+        internal void Stop()
+        {
+            Interlocked.Exchange(ref _isStart, 0);
+        }
 
         private CheckPressureLogicConfig.PointLimit GetOutForPressure(PressureSensorConfig conf, double pressure, double I)
         {

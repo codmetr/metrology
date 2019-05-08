@@ -12,7 +12,7 @@ namespace PressureSensorCheck.Devices
     /// <summary>
     /// Модель DPI620Genii
     /// </summary>
-    public class DPI620Model
+    /*public class DPI620Model
     {
         /// <summary>
         /// Описатель типа DPI620Genii
@@ -56,5 +56,5 @@ namespace PressureSensorCheck.Devices
             var res = _dpi620.GetValue(slot);
             return res;
         }
-    }
+    }*/
 }

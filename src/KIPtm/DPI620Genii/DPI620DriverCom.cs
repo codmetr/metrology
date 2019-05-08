@@ -32,9 +32,9 @@ namespace DPI620Genii
         };
 
         private SerialPort _serial;
-        private StreamWriter _writer;
-        private StreamReader _reader;
         private Action<string> _toLog = s => { };
+        private Action<string> _toLogTrace = s => { };
+        private bool _isOpen = false;
 
         public DPI620DriverCom()
         {
@@ -44,11 +44,12 @@ namespace DPI620Genii
         /// <inheritdoc />
         public void Open()
         {
+            if(_isOpen)
+                return;
             try
             {
+                Clear();
                 Log("Serial \"" + _serial.PortName + "\" open");
-                _writer = new StreamWriter(_serial.BaseStream, Encoding.UTF8);
-                _reader = new StreamReader(_serial.BaseStream, Encoding.UTF8);
                 Write("*km=r\r\n");
                 Write("*su3=1\r\n");
                 Write("*km=r\r\n");
@@ -70,6 +71,7 @@ namespace DPI620Genii
                 Log(e.ToString());
                 throw;
             }
+            _isOpen = true;
         }
 
         /// <inheritdoc />
@@ -80,8 +82,6 @@ namespace DPI620Genii
             try
             {
                 Log("Serial \"" + _serial.PortName + "\" open");
-                _writer = new StreamWriter(_serial.BaseStream, Encoding.UTF8);
-                _reader = new StreamReader(_serial.BaseStream, Encoding.UTF8);
                 Write("*km=r\r\n");
                 Write("*su3=1\r\n");
                 Write("*km=r\r\n");
@@ -118,10 +118,22 @@ namespace DPI620Genii
                 Read();
                 var sb = Read();
                 //Log("RAW620: " + unitCode + " " + sb);
-                var valstr = sb.Split("=".ToCharArray())[1].Trim();
-                Log("Value = \"" + valstr + "\"");
-                double val = double.Parse(valstr, NumberStyles.Any, CultureInfo.InvariantCulture);
+                var strParts = sb.Split("=".ToCharArray());
+                if (!sb.Contains("=")|| strParts.Length<2)
+                {
+                    Log(string.Format("[ERROR] Receiver error answer: \'{0}\' (not fount simbol \'=\')", sb));
+                    return Double.NaN;
+                }
 
+                var valstr = sb.Split("=".ToCharArray())[1].Trim();
+                Log($"Value[{slotId}] = \"{valstr}\"");
+
+                double val;
+                if (!double.TryParse(valstr, NumberStyles.Any, CultureInfo.InvariantCulture, out val))
+                {
+                    Log("[ERROR] Can not parse \"" + valstr + "\" to string");
+                    return double.NaN;
+                }
                 return val;
             }
             catch (IOException ex)
@@ -133,12 +145,14 @@ namespace DPI620Genii
             {
                 Log(e.ToString());
             }
-            return 0.0D;
+            return Double.NaN;
         }
 
         /// <inheritdoc />
         public void Close()
         {
+            if(!_isOpen)
+                return;
             try
             {
                 Write("#km=l\r\n");
@@ -148,11 +162,13 @@ namespace DPI620Genii
             {
                 Log(ex.ToString());
             }
+            _isOpen = false;
         }
 
-        public DPI620DriverCom Setlog(Action<string> toLog)
+        public DPI620DriverCom Setlog(Action<string> toLog, Action<string> toLogTrace = null)
         {
             _toLog = toLog;
+            _toLogTrace = toLogTrace ?? _toLog;
             return this;
         }
 
@@ -161,16 +177,30 @@ namespace DPI620Genii
             _toLog(msg);
         }
 
+        private void LogTrace(string msg)
+        {
+            _toLogTrace(msg);
+        }
+
+        private void Clear()
+        {
+            _serial.DiscardInBuffer();
+            _serial.DiscardOutBuffer();
+            LogTrace($"clear all buffer");
+        }
+
         private void Write(string data)
         {
             _serial.Write(data);
-            Log($">>{data} | {DataToHex(data)}");
+            var datastr = data.Replace("\r", "\\r").Replace("\n", "\\n");
+            LogTrace($">>{datastr} | {DataToHex(data)}");
         }
 
         private string Read()
         {
             var line = _serial.ReadLine();
-            Log($"<<{line} | {DataToHex(line)}");
+            var datastr = line.Replace("\r", "\\r").Replace("\n", "\\n");
+            LogTrace($"<<{datastr} | {DataToHex(line)}");
             return line;
         }
 
@@ -215,11 +245,14 @@ namespace DPI620Genii
         {
             var res = new List<int>();
             // канал 0
-            Write("*pr0?\r\n");
+            var getCh0Descr = "*pr0?\r\n";
+            Write(getCh0Descr);
             try
             {
-                var ch0Descr = Read();//TODO: parce
-                res.Add(0);
+                var ch0repeat = Read();//TODO: parce
+                var ch0Descr = Read();
+                if(ch0repeat == getCh0Descr && ch0Descr.StartsWith("!PR="))
+                    res.Add(0);
             }
             catch (Exception e)
             {
@@ -228,11 +261,14 @@ namespace DPI620Genii
             }
 
             // канал 1
-            Write("*pr1?\r\n");
+            var getCh1Descr = "*pr1?\r\n";
+            Write(getCh1Descr);
             try
             {
-                var ch1Descr = Read();//TODO: parce
-                res.Add(1);
+                var ch1repeat = Read();//TODO: parce
+                var ch1Descr = Read();
+                if (ch1repeat == getCh1Descr && ch1Descr.StartsWith("!PR="))
+                    res.Add(1);
             }
             catch (Exception e)
             {
@@ -240,11 +276,14 @@ namespace DPI620Genii
             }
 
             // канал 2
-            Write("*pr2?\r\n");
+            var getCh2Descr = "*pr1?\r\n";
+            Write(getCh2Descr);
             try
             {
-                var ch2Descr = Read();//TODO: parce
-                res.Add(2);
+                var ch2repeat = Read();//TODO: parce
+                var ch2Descr = Read();
+                if (ch2repeat == getCh2Descr && ch2Descr.StartsWith("!PR="))
+                    res.Add(2);
             }
             catch (Exception e)
             {
@@ -290,6 +329,13 @@ namespace DPI620Genii
                 sb.Append(" ");
             }
             return sb.ToString();
+        }
+
+        public override string ToString()
+        {
+            if (_serial == null)
+                return $"DPI620";
+            return $"DPI620 (port {_serial.PortName}, rate {_serial.BaudRate}, data {_serial.DataBits}, parity {_serial.Parity})";
         }
     }
 }

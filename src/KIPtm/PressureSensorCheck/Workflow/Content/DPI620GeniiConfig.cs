@@ -101,7 +101,7 @@ namespace PressureSensorCheck.Workflow.Content
             _vm.SetSelectedChannel(ChannelType);
             _vm.SetUnits(UnitSet);
             _vm.SetSelectedUnit(SelectedUnit);
-            _vm.SetSlotIndexes(Enumerable.Range(0, 3));
+            _vm.SetSlotIndexes(Enumerable.Range(1, 2));
             _vm.SetSelectedSlotIndex(index);
             _vm.SelectedChannel += VmOnSelectedChannel;
             _vm.SelectedUnut += VmOnSelectedUnut;
