@@ -32,7 +32,7 @@ namespace PressureSensorCheck.Report
         {
             report.Organization = config.Company;
             report.CertificateNumber = config.CertificateNumber;
-            report.Validity = "";
+            report.Validity = "__________";
             report.Name = config.Name;
             report.Type = config.SensorType;
             report.Model = config.SensorModel;

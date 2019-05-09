@@ -63,7 +63,7 @@
                         <DataGridTextColumn Header="Iпр" Width="50" Binding="{Binding Result.IReal, StringFormat={}{0:F4}, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Iобр" Width="50" Binding="{Binding Result.Iback, StringFormat={}{0:F4}, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="ΔI" Width="50" Binding="{Binding Result.dIReal, StringFormat={}{0:F4}, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="ΔIвар" Width="50" Binding="{Binding Result.dIvar, StringFormat={}{0:F4}, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="ΔIвар" Width="50" Binding="{Binding Result.Ivar, StringFormat={}{0:F4}, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <!--<Grid Grid.Row="2" Visibility="Collapsed">

@@ -73,17 +73,6 @@ namespace PressureSensorCheck.Workflow
         }
 
         /// <summary>
-        /// Фактическая погрешность вариации
-        /// </summary>
-        public double? dIvar
-        {
-            get { return _dIvar; }
-            set { _dIvar = value;
-                OnPropertyChanged("dIvar");
-            }
-        }
-
-        /// <summary>
         /// Напряжение на заданной точке в допуске
         /// </summary>
         public bool IsCorrect

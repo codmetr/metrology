@@ -94,19 +94,14 @@ namespace PressureSensorCheck.Workflow
                 var i = 0;
                 foreach (var point in points)
                 {
-                    var pointVm = new PointViewModel(_context)
-                    {
-                        Index = i++,
-                        Config =
-                        {
-                            PressureUnit = point.Result.PressureUnit,
-                            PressurePoint = point.Result.PressurePoint,
-                            OutUnit = point.Result.VoltageUnit,
-                            OutPoint = point.Result.VoltagePoint,
-                            Tollerance = point.Config.Tollerance
-                        },
-                        Result =new PointResultViewModel()
-                    };
+                    var pointVm = new PointViewModel(_context);
+                    pointVm.Index = i++;
+                    pointVm.Config.PressureUnit = point.Result.PressureUnit;
+                    pointVm.Config.PressurePoint = point.Result.PressurePoint;
+                    pointVm.Config.OutUnit = point.Result.VoltageUnit;
+                    pointVm.Config.OutPoint = point.Result.VoltagePoint;
+                    pointVm.Config.Tollerance = point.Config.Tollerance;
+                    pointVm.Result = new PointResultViewModel();
                     if (point.Result == null)
                     {
                         PointResults.Add(pointVm);
@@ -118,7 +113,7 @@ namespace PressureSensorCheck.Workflow
                     {
                         pointVm.Result.IReal = null;
                         pointVm.Result.dIReal = null;
-                        pointVm.Result.dIvar = null;
+                        pointVm.Result.Ivar = null;
                     }
                     else
                     {
@@ -129,12 +124,12 @@ namespace PressureSensorCheck.Workflow
                     if (double.IsNaN(point.Result.OutPutValueBack))
                     {
                         pointVm.Result.Iback = null;
-                        pointVm.Result.dIvar = null;
+                        pointVm.Result.Ivar = null;
                     }
                     else
                     {
                         pointVm.Result.Iback = point.Result.OutPutValueBack;
-                        pointVm.Result.dIvar = point.Result.OutPutValue - point.Result.OutPutValueBack;
+                        pointVm.Result.Ivar = point.Result.OutPutValue - point.Result.OutPutValueBack;
                     }
                     pointVm.Result.IsCorrect = point.Result.IsCorrect;
                     PointResults.Add(pointVm);

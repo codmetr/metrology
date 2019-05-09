@@ -20,7 +20,7 @@
                     </TextBlock>
                 </StackPanel>
             </DataTemplate>
-            <DataTemplate x:Key="ColumnIsCorrect">
+            <DataTemplate x:Key="ColumnIsCorrect" DataType="workflow:PointViewModel">
                 <CheckBox IsChecked="{Binding Path=Result.IsCorrect, UpdateSourceTrigger=PropertyChanged}"/>
             </DataTemplate>
         </ResourceDictionary>
@@ -75,11 +75,11 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№" Width="Auto" Binding="{Binding Index, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTemplateColumn Header="" Width="Auto" IsReadOnly="True" CellTemplate="{StaticResource ColumnIsCorrect}"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Config.Pressure, UpdateSourceTrigger=PropertyChanged}" HeaderTemplate="{StaticResource HeaderPin}"/>
-                    <DataGridTextColumn Header="I ном, мА" Width="*" Binding="{Binding Config.I, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Config.PressurePoint, UpdateSourceTrigger=PropertyChanged}" HeaderTemplate="{StaticResource HeaderPin}"/>
+                    <DataGridTextColumn Header="I ном, мА" Width="*" Binding="{Binding Config.OutPoint, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="I изм, мА" Width="*" Binding="{Binding Result.IReal, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="ΔI, мА" Width="*" Binding="{Binding Result.dIReal, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="ΔIдопуст, мА" Width="*" Binding="{Binding Config.dI, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="ΔIдопуст, мА" Width="*" Binding="{Binding Config.Tollerance, UpdateSourceTrigger=PropertyChanged}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -98,11 +98,11 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№" Width="Auto" Binding="{Binding Index, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTemplateColumn Header="" Width="Auto" IsReadOnly="True" CellTemplate="{StaticResource ColumnIsCorrect}"/>
-                    <DataGridTextColumn Width="*" Binding="{Binding Config.Pressure, UpdateSourceTrigger=PropertyChanged}" HeaderTemplate="{StaticResource HeaderPin}"/>
+                    <DataGridTextColumn Width="*" Binding="{Binding Config.PressurePoint, UpdateSourceTrigger=PropertyChanged}" HeaderTemplate="{StaticResource HeaderPin}"/>
                     <DataGridTextColumn Header="Iпр, мА" Width="*" Binding="{Binding Result.IReal, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Iобр, мА" Width="*" Binding="{Binding Result.Iback, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Iвар, мА" Width="*" Binding="{Binding Result.Ivar, UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGridTextColumn Header="Iвар допуст, мА" Width="*" Binding="{Binding Config.Ivar, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Iвар допуст, мА" Width="*" Binding="{Binding Config.Tollerance, UpdateSourceTrigger=PropertyChanged}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

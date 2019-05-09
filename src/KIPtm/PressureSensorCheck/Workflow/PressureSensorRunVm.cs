@@ -331,7 +331,7 @@ namespace PressureSensorCheck.Workflow
                 else
                 { // обратный ход
                     point.Result.Iback = res.Result.OutPutValueBack;
-                    point.Result.dIvar = Math.Abs(res.Result.OutPutValue - res.Result.OutPutValueBack);
+                    point.Result.Ivar = Math.Abs(res.Result.OutPutValue - res.Result.OutPutValueBack);
                 }
             }
         }

@@ -79,7 +79,7 @@ namespace PressureSensorCheck.Workflow
             var ports = System.IO.Ports.SerialPort.GetPortNames();
             var dpiConfVm = new DPI620GeniiConfigVm(context);
             var dpiConf = new DPI620GeniiConfig(dpiConfVm, ports, dpi);
-            var res = new PressureSensorResult();
+            //var res = new PressureSensorResult();
 
             //набор фабрик эталонных каналов
             var dictConf = new Dictionary<string, IEtalonSourceCannelFactory<Units>>();
@@ -95,8 +95,8 @@ namespace PressureSensorCheck.Workflow
             //var run = new PressureSensorRunVm(conf, dpi, dpiConf, result, agregator);
             var runVm = new PressureSensorRunVm(conf.Unit, Units.mA, context);
             var runPresenter = new PressureSensorRunPresenter(runVm, conf, dpi, dpiConf, result, agregator, context);
-            var resultVm = new PressureSensorResultVM(res, conf, context);
-            var resultPresenter = new PressureSensorResultPresenter(id, accessor, res, conf, agregator, resultVm);
+            var resultVm = new PressureSensorResultVM(result, conf, context);
+            var resultPresenter = new PressureSensorResultPresenter(id, accessor, result, conf, agregator, resultVm);
 
             var reportUpdater =new ReportUpdater();
             var certificateUpdater = new CertificateUpdater();
