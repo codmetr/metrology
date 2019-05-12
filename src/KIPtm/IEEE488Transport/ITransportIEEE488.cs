@@ -1,6 +1,6 @@
 namespace IEEE488
 {
-    public interface ITransportIEEE488
+    public interface ITransportIEEE488:ITransport
     {
         /// <summary>
         /// Открыть подключение
@@ -15,18 +15,5 @@ namespace IEEE488
         /// <param name="address"></param>
         /// <returns>true - Удалось отключиться без ошибок</returns>
         bool Close(int address);
-        
-        /// <summary>
-        /// Посылка команды
-        /// </summary>
-        /// <param name="data">Команда</param>
-        /// <returns>Удалось послать команду</returns>
-        bool Send(string data);
-
-        /// <summary>
-        /// Чтение ответа
-        /// </summary>
-        /// <returns>Ответ</returns>
-        string Receive();
     }
 }

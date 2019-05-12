@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ag488.cs" />
+    <Compile Include="ITransport.cs" />
     <Compile Include="ITransportIEEE488ByAddress.cs" />
     <Compile Include="VisaIEEE488.cs" />
     <Compile Include="ITransportIEEE488.cs" />

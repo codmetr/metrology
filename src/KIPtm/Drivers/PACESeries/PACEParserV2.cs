@@ -311,7 +311,7 @@ namespace PACESeries
         }
         #endregion
 
-        #region SetPressureAim ":SOUR:PRES"
+        #region SetPressureAim ":SOUR:PRES:LEV:IMM:AMPL"
         /// <summary>
         /// Получить команду "Установка целевого давления"
         /// </summary>
@@ -319,7 +319,7 @@ namespace PACESeries
         /// <returns>Команда</returns>
         public string GetCommandSetAimPressure(double val)
         {
-            return new LexNode<Codes>(Codes.SOUR).Add(Codes.PRESsure).Set(val.ToString("f2"));
+            return new LexNode<Codes>(Codes.SOUR).Add(Codes.PRESsure).Add(Codes.LEV).Add(Codes.IMM).Add(Codes.AMPL).Set(val.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -328,9 +328,33 @@ namespace PACESeries
         /// <param name="channel">Канал</param>
         /// <param name="val">целевое давление</param>
         /// <returns>Команда</returns>
-        public string GetCommandGetAimPressureRange(int channel, double val)
+        public string GetCommandSetAimPressureRange(int channel, double val)
         {
-            return new LexNode<Codes>(Codes.SOUR).Add(channel).Add(Codes.PRESsure).Add(Codes.RANG).Set(val.ToString("f2"));
+            return new LexNode<Codes>(Codes.SOUR).Add(channel).Add(Codes.PRESsure).Add(Codes.LEV).Add(Codes.IMM).Add(Codes.AMPL).Set(val.ToString("f2"));
+        }
+        #endregion
+
+        #region GetPressureAim ":SOUR:PRES:LEV:IMM:AMPL?"
+        /// <summary>
+        /// Получить команду "Прочитать целевого давления"
+        /// </summary>
+        /// <returns>Команда</returns>
+        public string GetCommandGetAimPressure()
+        {
+            return new LexNode<Codes>(Codes.SOUR).Add(Codes.PRESsure).Add(Codes.LEV).Add(Codes.IMM).Add(Codes.AMPL).Get();
+        }
+
+        /// <summary>
+        /// Разобрать результат команды "Прочитать целевого давления"
+        /// </summary>
+        /// <param name="message">Ответ</param>
+        /// <param name="value">целевое давление</param>
+        /// <returns>Удалось разобрать</returns>
+        public bool ParseGetAimPressure(string message, out double value)
+        {
+            var answer = PaceSemanticRule.ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.Real } });
+            value = (double)answer["value"];
+            return true;
         }
         #endregion
 
@@ -434,7 +458,7 @@ namespace PACESeries
         /// <returns>Команда</returns>
         public string GetCommandSetOutputState(bool state)
         {
-            return new LexNode<Codes>(Codes.OUTP).Add(Codes.STAT).Set(state ? "ON" : "OFF");
+            return new LexNode<Codes>(Codes.OUTP).Add(Codes.STAT).Set(state ? "1" : "0");
         }
 
         /// <summary>
@@ -445,7 +469,7 @@ namespace PACESeries
         /// <returns>Команда</returns>
         public string GetCommandSetOutputState(int channel, bool state)
         {
-            return new LexNode<Codes>(Codes.OUTP).Add(Codes.STAT).Add(channel).Set(state ? "ON" : "OFF");
+            return new LexNode<Codes>(Codes.OUTP).Add(Codes.STAT).Add(channel).Set(state ? "1" : "0");
         }
 
         #endregion
@@ -476,11 +500,10 @@ namespace PACESeries
         /// <param name="message">Ответ</param>
         /// <param name="value">Состояние выхода</param>
         /// <returns>Удалось разобрать</returns>
-        public bool ParseGetOutputState(string message, out bool? value)
+        public bool ParseGetOutputState(string message, out bool value)
         {
-            value = null;
-            var answer = PaceSemanticRule.ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.Boolean } });
-            value = (bool)answer["value"];
+            var answer = PaceSemanticRule.ParseAnswer(message, new Dictionary<string, PeremeterTypes>() { { "value", PeremeterTypes.Integer } });
+            value = (int)answer["value"] == 1;
             return true;
         }
         #endregion

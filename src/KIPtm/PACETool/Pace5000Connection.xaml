@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="PACETool.Pace5000Connection"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PACETool"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance local:Pace5000ConnectionVm}"
+             d:DesignHeight="300" d:DesignWidth="650">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <local:ConnectionPannel Grid.Row="0" DataContext="{Binding Connection}" Margin="3"/>
+        <Border Grid.Row="1" IsEnabled="{Binding Connection.IsOpened, UpdateSourceTrigger=PropertyChanged}">
+            <local:Pace5000View DataContext="{Binding Pace}" Margin="3"/>
+        </Border>
+    </Grid>
+</UserControl>

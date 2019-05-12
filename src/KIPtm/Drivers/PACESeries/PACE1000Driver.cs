@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO.Ports;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using IEEE488;
 
 namespace PACESeries
@@ -14,18 +16,15 @@ namespace PACESeries
     {
         private readonly PACEParserV2 _parser;
         //private readonly PACEParser _parser;
-        private readonly ITransportIEEE488 _transport;
-        private readonly int _address;
-
+        private readonly ITransport _transport;
+        
         /// <summary>
         /// Драйвер PACE1000
         /// </summary>
-        /// <param name="address">Адрес</param>
         /// <param name="transport">Канал обмена</param>
-        public PACE1000Driver(int address, ITransportIEEE488 transport)
+        public PACE1000Driver(ITransport transport)
         {
             _transport = transport;
-            _address = address;
             _parser = new PACEParserV2();
             //_parser = new PACEParser();
         }
@@ -33,20 +32,13 @@ namespace PACESeries
         /// <summary>
         /// Драйвер PACE1000
         /// </summary>
-        /// <param name="transport">Канал обмена</param>
-        public PACE1000Driver(ITransportIEEE488 transport):this(default (int), transport)
+        /// <param name="port">Канал обмена</param>
+        /// <param name="log">лог</param>
+        public PACE1000Driver(SerialPort port, Action<string> log = null)
         {
-        }
-
-        /// <summary>
-        /// Открыть подключение
-        /// </summary>
-        /// <returns>true - удалось подключиться</returns>
-        public bool Open()
-        {
-            if (_transport == null)
-                return false;
-            return _transport.Open(_address);
+            _transport = new SerialPortTransport(port, log);
+            _parser = new PACEParserV2();
+            //_parser = new PACEParser();
         }
 
         /// <summary>
@@ -196,7 +188,7 @@ namespace PACESeries
         /// </summary>
         /// <param name="value">Целевая точка давления</param>
         /// <returns>Удалось установить целевую точку давления</returns>
-        [DefModel(Model.PACE6000)]
+        [DefModel(Model.PACE5000|Model.PACE6000)]
         public bool SetPressure(double value)
         {
             Send(_parser.GetCommandSetAimPressure(value));
@@ -204,6 +196,43 @@ namespace PACESeries
             //TODO реализовать проверку установки цели
             //var resUnit = GetPressureUnit();
             //return resUnit != null && resUnit == unit;
+        }
+
+        /// <summary>
+        /// Установить целевой точки давления
+        /// </summary>
+        /// <returns>Удалось установить целевую точку давления</returns>
+        [DefModel(Model.PACE5000|Model.PACE6000)]
+        public bool GetAimPressure(out double aim)
+        {
+            Send(_parser.GetCommandGetAimPressure());
+            return _parser.ParseGetAimPressure(Receive(), out aim);
+        }
+
+        /// <summary>
+        /// Установка режима контроля по каналу
+        /// </summary>
+        /// <param name="state">состояние</param>
+        /// <returns></returns>
+        [DefModel(Model.PACE5000 | Model.PACE6000)]
+        public bool SetOutputState(bool state)
+        {
+            Send(_parser.GetCommandSetOutputState(state));
+            return true;
+            //TODO реализовать проверку установки состояния канала
+        }
+
+        /// <summary>
+        /// Прочитать режим
+        /// </summary>
+        /// <param name="state">состояние</param>
+        /// <returns></returns>
+        [DefModel(Model.PACE5000 | Model.PACE6000)]
+        public bool GetOutputState(out bool state)
+        {
+            Send(_parser.GetCommandGetOutputState());
+            return _parser.ParseGetOutputState(Receive(), out state);
+            //TODO реализовать проверку установки состояния канала
         }
 
         /// <summary>
@@ -332,6 +361,7 @@ namespace PACESeries
         /// <returns></returns>
         private string Receive()
         {
+            Thread.Sleep(50);
             return _transport.Receive();
         }
 
@@ -344,7 +374,6 @@ namespace PACESeries
         /// </summary>
         public void Dispose()
         {
-            _transport.Close(_address);
         }
 
         #endregion
